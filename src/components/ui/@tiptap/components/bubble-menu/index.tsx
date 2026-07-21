@@ -54,11 +54,11 @@ const BubbleMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 	return (
 		<TiptapBubbleMenu
 			editor={editor}
-			className='flex w-[256px] flex-col gap-2 rounded-md border bg-background py-2 shadow-2xl'
+			className='bg-background flex w-[256px] flex-col gap-2 rounded-md border py-2 shadow-2xl'
 			style={{ zIndex: 10, transitionDuration: '200ms' }}
 			shouldShow={(props) => props.editor.isActive('link')}>
 			<Div className='flex items-center gap-x-2 px-2'>
-				<Icon name='Globe' className='basis-[32px] text-muted-foreground' />
+				<Icon name='Globe' className='text-muted-foreground basis-[32px]' />
 				<a
 					href={editor.getAttributes('link').href}
 					target='_blank'

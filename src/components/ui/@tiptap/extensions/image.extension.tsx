@@ -265,25 +265,25 @@ function TiptapImage(props: NodeViewProps) {
 						<Fragment>
 							<Div
 								className={cn(
-									'absolute left-0 top-0 z-20 cursor-nw-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+									'absolute top-0 left-0 z-20 cursor-nw-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
 									resizing && 'opacity-100'
 								)}
 								onMouseDown={(event) => {
 									handleResizingPosition({ e: event, position: 'left' })
 								}}
 								onTouchStart={(event) => handleTouchStart(event, 'left')}>
-								<Div className='size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-active ring-[3px] ring-active/50' />
+								<Div className='bg-active ring-active/50 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-[3px]' />
 							</Div>
 							<Div
 								className={cn(
-									'absolute right-0 top-0 z-20 cursor-ne-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+									'absolute top-0 right-0 z-20 cursor-ne-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
 									resizing && 'opacity-100'
 								)}
 								onMouseDown={(event) => {
 									handleResizingPosition({ e: event, position: 'right' })
 								}}
 								onTouchStart={(event) => handleTouchStart(event, 'right')}>
-								<Div className='size-2 -translate-y-1/2 translate-x-1/2 rounded-full bg-active ring-[3px] ring-active/50' />
+								<Div className='bg-active ring-active/50 size-2 translate-x-1/2 -translate-y-1/2 rounded-full ring-[3px]' />
 							</Div>
 							<Div
 								className={cn(
@@ -294,18 +294,18 @@ function TiptapImage(props: NodeViewProps) {
 									handleResizingPosition({ e: event, position: 'left' })
 								}}
 								onTouchStart={(event) => handleTouchStart(event, 'left')}>
-								<Div className='size-2 -translate-x-1/2 translate-y-1/2 rounded-full bg-active ring-[3px] ring-active/50' />
+								<Div className='bg-active ring-active/50 size-2 -translate-x-1/2 translate-y-1/2 rounded-full ring-[3px]' />
 							</Div>
 							<Div
 								className={cn(
-									'absolute bottom-0 right-0 z-20 cursor-se-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+									'absolute right-0 bottom-0 z-20 cursor-se-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
 									resizing && 'opacity-100'
 								)}
 								onMouseDown={(event) => {
 									handleResizingPosition({ e: event, position: 'right' })
 								}}
 								onTouchStart={(event) => handleTouchStart(event, 'right')}>
-								<Div className='size-2 translate-x-1/2 translate-y-1/2 rounded-full bg-active ring-[3px] ring-active/50' />
+								<Div className='bg-active ring-active/50 size-2 translate-x-1/2 translate-y-1/2 rounded-full ring-[3px]' />
 							</Div>
 						</Fragment>
 					)}
@@ -317,13 +317,13 @@ function TiptapImage(props: NodeViewProps) {
 						onChange={handleCaptionChange}
 						onBlur={handleCaptionBlur}
 						onKeyDown={handleCaptionKeyDown}
-						className='h-9 rounded-none border-0 py-0 text-center text-sm text-muted-foreground shadow-none focus:border-0 focus:ring-offset-0'
+						className='text-muted-foreground h-9 rounded-none border-0 py-0 text-center text-sm shadow-none focus:border-0 focus:ring-offset-0'
 						placeholder={t('ns_common:editor.add_caption')}
 						autoFocus
 					/>
 				) : (
 					<Div
-						className='h-9 cursor-text place-content-center place-items-center text-center text-sm text-muted-foreground'
+						className='text-muted-foreground h-9 cursor-text place-content-center place-items-center text-center text-sm'
 						onClick={() => editor?.isEditable && setEditingCaption(true)}>
 						{caption || 'Add a caption...'}
 					</Div>
@@ -332,7 +332,7 @@ function TiptapImage(props: NodeViewProps) {
 				{editor?.isEditable && (
 					<Div
 						className={cn(
-							'absolute right-2 top-2 flex items-center gap-1 rounded-md border bg-background/80 p-1 opacity-0 backdrop-blur transition-opacity',
+							'bg-background/80 absolute top-2 right-2 flex items-center gap-1 rounded-md border p-1 opacity-0 backdrop-blur transition-opacity',
 							!resizing && 'group-hover:opacity-100',
 							openedMore && 'opacity-100'
 						)}>
@@ -388,7 +388,7 @@ function TiptapImage(props: NodeViewProps) {
 												/>
 												<label
 													htmlFor='replace-image-upload'
-													className='flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-4 hover:bg-accent'>
+													className='hover:bg-accent flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-4'>
 													{isPending ? (
 														<Icon name='LoaderCircle' className='h-4 w-4 animate-spin' />
 													) : (
@@ -400,12 +400,12 @@ function TiptapImage(props: NodeViewProps) {
 														</Fragment>
 													)}
 												</label>
-												{error && <p className='mt-2 text-xs text-destructive'>{error}</p>}
+												{error && <p className='text-destructive mt-2 text-xs'>{error}</p>}
 											</Div>
 											<Separator className='relative'>
 												<Typography
 													variant='small'
-													className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs uppercase'>
+													className='bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs uppercase'>
 													{t('ns_common:others.or')}
 												</Typography>
 											</Separator>

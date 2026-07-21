@@ -107,14 +107,14 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 													? 'border-primary bg-primary text-primary-foreground'
 													: 'border-input [&_svg]:invisible'
 											)}>
-											<CheckIcon className='size-3.5 text-primary-foreground' />
+											<CheckIcon className='text-primary-foreground size-3.5' />
 										</Div>
 										{option.icon && (
-											<Icon name={option.icon} size={18} className='size-[18px] text-muted-foreground' />
+											<Icon name={option.icon} size={18} className='text-muted-foreground size-[18px]' />
 										)}
 										<span>{option.label}</span>
 										{facets?.get(option.value) && (
-											<span className='ml-auto flex size-4 items-center justify-center font-mono text-xs text-muted-foreground'>
+											<span className='text-muted-foreground ml-auto flex size-4 items-center justify-center font-mono text-xs'>
 												{facets.get(option.value)}
 											</span>
 										)}

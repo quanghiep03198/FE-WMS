@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
 	return (
 		<Div
 			as='nav'
-			className='z-20 flex gap-x-1 gap-y-2 overflow-auto bg-background/90 py-6 scrollbar-none xl:absolute xl:top-40 xl:w-80 xl:flex-col'>
+			className='bg-background/90 z-20 flex scrollbar-none gap-x-1 gap-y-2 overflow-auto py-6 xl:absolute xl:top-40 xl:w-80 xl:flex-col'>
 			{navigationConfig.preferences.map((item, index) => (
 				<Link
 					key={index.toString()}

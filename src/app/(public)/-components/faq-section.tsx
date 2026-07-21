@@ -11,7 +11,6 @@ import {
 	Typography
 } from '@/components/ui'
 import ChatBubble from '@/components/ui/@custom/chat-bubble'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
 import generateAvatar from '@common/utils/generate-avatar'
 import { useInViewport } from 'ahooks'
@@ -66,7 +65,7 @@ const FAQsSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={containerRef}
-			className='mx-auto flex w-full max-w-7xl grow flex-col-reverse items-center gap-14 px-3 py-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20 xl:px-0 xxl:max-w-8xl'
+			className='animate-in fade-in-0 slide-in-from-bottom-4 xxl:max-w-8xl mx-auto flex w-full max-w-7xl grow flex-col-reverse items-center gap-14 px-3 py-10 duration-700 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20 xl:px-0'
 			style={{
 				animationFillMode: 'both',
 				animationPlayState: containerInViewPort ? 'running' : 'paused'
@@ -74,7 +73,7 @@ const FAQsSection: React.FunctionComponent = () => {
 			<Div
 				id='faqs'
 				as='section'
-				className='w-full space-y-10 sm:space-y-8 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3 xxl:basis-2/3'>
+				className='xxl:basis-2/3 w-full space-y-10 sm:space-y-8 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3'>
 				<Typography variant='h1'>Frequently asked questions</Typography>
 				<Accordion type='multiple'>
 					{faqs.map((faq, index) => (
@@ -87,8 +86,8 @@ const FAQsSection: React.FunctionComponent = () => {
 					))}
 				</Accordion>
 			</Div>
-			<Div className='flex w-full max-w-xl grow basis-1/3 transform-gpu flex-col items-stretch rounded-lg border bg-background antialiased drop-shadow-[4px_4px_16px_var(--accent)] *:antialiased'>
-				<Div className='flex items-center gap-x-2 border-b bg-accent/50 px-3 py-1'>
+			<Div className='bg-background flex w-full max-w-xl grow basis-1/3 transform-gpu flex-col items-stretch rounded-lg border antialiased drop-shadow-[4px_4px_16px_var(--accent)] *:antialiased'>
+				<Div className='bg-accent/50 flex items-center gap-x-2 border-b px-3 py-1'>
 					<svg
 						xmlns='http://www.w3.org/2000/svg'
 						width='24'
@@ -102,18 +101,18 @@ const FAQsSection: React.FunctionComponent = () => {
 					<Typography variant='small' className='py-2 text-center'>
 						Thread in <strong className='font-medium'>#FAQs</strong>
 					</Typography>
-					<Icon name='Ellipsis' className='ml-auto stroke-muted-foreground' />
+					<Icon name='Ellipsis' className='stroke-muted-foreground ml-auto' />
 				</Div>
-				<ScrollShadow
+				<Div
 					ref={chatBoxRef}
-					className='flex h-80 max-h-80 flex-1 flex-col gap-y-4 overflow-y-auto p-4 scrollbar-none *:select-none'>
+					className='scroll-fade flex h-80 max-h-80 flex-1 scrollbar-none flex-col gap-y-4 overflow-y-auto p-4 *:select-none'>
 					{faqs.map((faq, index) => (
 						<Fragment key={index}>
 							<Div
 								data-viewport={chatInViewPort ? 'visible' : 'invisible'}
-								className='inline-grid auto-cols-auto place-content-end items-end gap-x-2 text-sm duration-500 animate-in fade-in-0 slide-in-from-bottom-4 fill-mode-both data-[viewport=visible]:running data-[viewport=invisible]:paused'
+								className='animate-in fade-in-0 slide-in-from-bottom-4 fill-mode-both data-[viewport=visible]:running data-[viewport=invisible]:paused inline-grid auto-cols-auto place-content-end items-end gap-x-2 text-sm duration-500'
 								style={{ animationDelay: `${index / 2 + 0.35}s` }}>
-								<Avatar className='col-start-2 row-start-1 duration-200 animate-in fade-in-0'>
+								<Avatar className='animate-in fade-in-0 col-start-2 row-start-1 duration-200'>
 									<AvatarImage src={generateAvatar({ name: 'you' })} />
 								</Avatar>
 								<ChatBubble variant='success' className='col-start-1 row-start-1'>
@@ -128,13 +127,13 @@ const FAQsSection: React.FunctionComponent = () => {
 								</Typography>
 							</Div>
 							<Div
-								className='inline-grid auto-cols-auto place-content-end items-end gap-x-1 place-self-start text-sm duration-500 animate-in fade-in-0 slide-in-from-bottom-4'
+								className='animate-in fade-in-0 slide-in-from-bottom-4 inline-grid auto-cols-auto place-content-end items-end gap-x-1 place-self-start text-sm duration-500'
 								style={{
 									animationDelay: `${index / 2 + 0.65}s`,
 									animationFillMode: 'both',
 									animationPlayState: chatInViewPort ? 'running' : 'paused'
 								}}>
-								<Avatar className='col-start-1 row-start-1 duration-200 animate-in fade-in-0'>
+								<Avatar className='animate-in fade-in-0 col-start-1 row-start-1 duration-200'>
 									<AvatarImage src={generateAvatar({ name: 'admin' })} />
 								</Avatar>
 								<ChatBubble variant='secondary' className='col-start-2 row-start-1'>
@@ -146,18 +145,18 @@ const FAQsSection: React.FunctionComponent = () => {
 							</Div>
 						</Fragment>
 					))}
-				</ScrollShadow>
-				<Div className='h-40 select-none p-3'>
-					<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-x-3 rounded-md border bg-accent/20 p-3 text-sm backdrop-blur-sm delay-200 duration-700 animate-in fade-in-0 zoom-in-75 slide-in-from-bottom-4 [&_svg[data-slot=icon-button]:hover]:stroke-foreground [&_svg[data-slot=icon-button]]:stroke-muted-foreground [&_svg[data-slot=icon-button]]:duration-200'>
+				</Div>
+				<Div className='h-40 p-3 select-none'>
+					<Div className='bg-accent/20 animate-in fade-in-0 zoom-in-75 slide-in-from-bottom-4 [&_svg[data-slot=icon-button]:hover]:stroke-foreground [&_svg[data-slot=icon-button]]:stroke-muted-foreground flex h-full w-full flex-1 flex-col items-stretch gap-x-3 rounded-md border p-3 text-sm backdrop-blur-sm delay-200 duration-700 [&_svg[data-slot=icon-button]]:duration-200'>
 						<Typewriter
 							playState={containerInViewPort ? 'running' : 'paused'}
-							className='block h-full flex-1 basis-full text-foreground'
+							className='text-foreground block h-full flex-1 basis-full'
 							text='I have some question, can you help me?'
 						/>
 						<Div className='mt-auto flex items-center gap-x-3'>
 							<Div
 								role='button'
-								className='inline-flex size-8 cursor-pointer items-center justify-center rounded-full bg-secondary text-muted-foreground duration-200 hover:bg-secondary/80 hover:text-foreground'>
+								className='bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground inline-flex size-8 cursor-pointer items-center justify-center rounded-full duration-200'>
 								<Icon name='Plus' size={20} />
 							</Div>
 							<Icon data-slot='icon-button' name='SmilePlus' size={18} />
@@ -168,7 +167,7 @@ const FAQsSection: React.FunctionComponent = () => {
 							<Icon data-slot='icon-button' name='Mic' size={18} />
 							<Div
 								role='button'
-								className='ml-auto inline-flex h-8 items-center gap-x-2 rounded-md bg-success p-2 text-success-foreground duration-200 hover:bg-success/80'>
+								className='bg-success text-success-foreground hover:bg-success/80 ml-auto inline-flex h-8 items-center gap-x-2 rounded-md p-2 duration-200'>
 								<Icon name='Send' size={18} />
 								<Separator orientation='vertical' className='h-4' />
 								<Icon name='ChevronDown' size={18} />

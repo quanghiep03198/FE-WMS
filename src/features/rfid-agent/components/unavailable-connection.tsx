@@ -16,7 +16,7 @@ const UnavailableConnection: React.FC = () => {
 				size={44}
 				stroke='var(--muted-foreground)'
 				strokeWidth={1}
-				className='mb-6 rotate-12 stroke-muted-foreground'
+				className='stroke-muted-foreground mb-6 rotate-12'
 			/>
 			<Typography className='font-medium'>{t('ns_rfid:rfid_agent_connection_failure.title')}</Typography>
 			<Typography variant='small' color='muted' className='mb-3'>

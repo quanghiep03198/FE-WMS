@@ -12,7 +12,7 @@ const OrderDetailTableHeader: React.FC<OrderSizeHeaderProps> = ({ onColumnFilter
 
 	return (
 		<TableHeader className='sticky top-0 z-20'>
-			<TableRow className='sticky top-0 *:bg-table-head [&>th>span]:capitalize'>
+			<TableRow className='*:bg-table-head sticky top-0 [&>th>span]:capitalize'>
 				<TableHead align='left'>
 					<span className='line-clamp-1' title={t('ns_erp:fields.mo_no')}>
 						{t('ns_erp:fields.mo_no')}

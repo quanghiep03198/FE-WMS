@@ -125,7 +125,7 @@ function DataTable<T extends TableRowData>({
 					<DataTableFooter rows={rows} />
 				</Table>
 			</ScrollArea>
-			<Typography aria-labelledby={captionId} className='block text-center text-sm text-muted-foreground'>
+			<Typography aria-labelledby={captionId} className='text-muted-foreground block text-center text-sm'>
 				{caption}
 			</Typography>
 		</Container>

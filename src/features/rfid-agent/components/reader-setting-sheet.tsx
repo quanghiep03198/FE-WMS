@@ -118,7 +118,7 @@ const ReaderSettingSheet: React.FC = () => {
 												{ label: 'Antenna 3', value: ReaderAntenna.ANT_3 },
 												{ label: 'Antenna 4', value: ReaderAntenna.ANT_4 }
 											].map((item) => (
-												<FormItem key={item.value} className='flex items-center gap-x-3 space-y-0'>
+												<FormItem key={item.value} className='flex items-center space-y-0 gap-x-3'>
 													<FormControl>
 														<RadioGroupItem value={item.value} />
 													</FormControl>
@@ -148,7 +148,7 @@ const ReaderSettingSheet: React.FC = () => {
 													name='WifiLow'
 													size={24}
 													strokeWidth={1.5}
-													className='-translate-y-3 rotate-45 stroke-muted-foreground'
+													className='stroke-muted-foreground -translate-y-3 rotate-45'
 												/>
 												<Div className='flex-1 space-y-2'>
 													<Slider

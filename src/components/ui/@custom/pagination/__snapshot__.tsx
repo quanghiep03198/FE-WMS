@@ -208,19 +208,19 @@ const Pagination: React.FC<StorybookPaginationProps> = ({
 		<div className='flex flex-col items-center gap-3'>
 			{/* Current Page Indicator */}
 			<div className='flex items-center gap-4'>
-				<div className='text-sm font-medium text-muted-foreground'>
-					Page <span className='text-base font-bold text-primary'>{currentPage}</span> of {totalPages}
+				<div className='text-muted-foreground text-sm font-medium'>
+					Page <span className='text-primary text-base font-bold'>{currentPage}</span> of {totalPages}
 				</div>
 
 				{/* Progress Bar */}
 				<div className='flex items-center gap-2'>
-					<div className='h-1 w-24 overflow-hidden rounded-full bg-muted'>
+					<div className='bg-muted h-1 w-24 overflow-hidden rounded-full'>
 						<div
-							className='h-full bg-primary transition-all duration-300 ease-out'
+							className='bg-primary h-full transition-all duration-300 ease-out'
 							style={{ width: `${(currentPage / totalPages) * 100}%` }}
 						/>
 					</div>
-					<span className='min-w-[3ch] text-xs text-muted-foreground'>
+					<span className='text-muted-foreground min-w-[3ch] text-xs'>
 						{Math.round((currentPage / totalPages) * 100)}%
 					</span>
 				</div>

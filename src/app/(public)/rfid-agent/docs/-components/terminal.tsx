@@ -24,7 +24,7 @@ const Terminal: React.FC<TerminalProps> = ({
 
 	return (
 		<div
-			className={cn('divide-y divide-border rounded-md bg-accent/50 text-accent-foreground', className)}
+			className={cn('divide-border bg-accent/50 text-accent-foreground divide-y rounded-md', className)}
 			{...props}>
 			<div className='flex items-center justify-between p-3'>
 				<Typography variant='small' className='inline-flex items-center gap-x-2 font-medium'>
@@ -36,7 +36,7 @@ const Terminal: React.FC<TerminalProps> = ({
 					</button>
 				</Tooltip>
 			</div>
-			<div className='p-3 font-jetbrains text-sm leading-relaxed'>{children}</div>
+			<div className='font-jetbrains p-3 text-sm leading-relaxed'>{children}</div>
 		</div>
 	)
 }

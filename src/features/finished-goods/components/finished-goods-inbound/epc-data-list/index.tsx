@@ -1,4 +1,4 @@
-import UploadDataFileDialog from '@/components/shared/upload-dialog'
+import UploadDataFileDialog from '@/features/finished-goods/components/upload-data-dialog'
 import { useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import OrderDetails from '../manufacturing-order-detail'
@@ -29,7 +29,7 @@ const ListBoxWrapper: React.FC<React.ComponentProps<'div'>> = tw.div`
 	[--list-footer-height:52px]
 	relative flex flex-1 divide-y divide-border justify-between h-full flex-col items-stretch max-h-full bg-background
 	group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto group-has-[#toggle-fullscreen[data-state=checked]]:h-full!
-	rounded-(--radius) border md:order-2 
+	rounded-lg border md:order-2 
 	`
 
 const ListBoxHeader = tw.div`relative flex h-(--list-header-height) items-center justify-between md:h-fit`

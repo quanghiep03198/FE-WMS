@@ -2,7 +2,6 @@ import { UserRole } from '@common/constants/enums'
 import ScannedEpcCounter from '@features/finished-goods/components/finished-goods-inbound/epc-counter'
 import InoutboundForm from '@features/finished-goods/components/finished-goods-inbound/inoutbound-form'
 import PageComposition from '@features/finished-goods/components/finished-goods-inbound/page-composition'
-import RemindMessage from '@features/finished-goods/components/finished-goods-inbound/remind-message'
 import ScannerSettings from '@features/finished-goods/components/finished-goods-inbound/side-toolbar'
 import { SocketProvider } from '@stores/socket.store'
 import { createLazyFileRoute } from '@tanstack/react-router'
@@ -54,13 +53,11 @@ function Page() {
 									<div className='flex flex-col gap-6'>
 										<ScannerToolbar />
 										<ScannedEpcCounter />
-										<RemindMessage />
 										<div className='block @[920px]/page-container:hidden'>
 											<EpcListBox />
 										</div>
 										<InoutboundForm />
 									</div>
-
 									<ScannerSettings />
 								</PageComposition.Wrapper>
 							</PageComposition.Container>

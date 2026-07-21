@@ -1,6 +1,6 @@
-import { useBreadcrumbContext } from '@/contexts/breadcrumb-context'
 import { RoleGuard } from '@/components/guards/role-guard'
 import { Div } from '@/components/ui'
+import { useBreadcrumbContext } from '@/contexts/breadcrumb-context'
 import { UserRole } from '@common/constants/enums'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
@@ -44,7 +44,7 @@ function Page() {
 					</PageHeader>
 					<PageSeparator />
 					<Div className='grid grid-cols-12 gap-4 [&_div[data-slot=card-title]]:capitalize!'>
-						<Div className='col-span-full @container/statistics'>
+						<Div className='@container/statistics col-span-full'>
 							<Statistics />
 						</Div>
 						<Div className='col-span-full @[1366px]:col-span-7'>

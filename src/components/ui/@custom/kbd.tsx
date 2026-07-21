@@ -12,7 +12,7 @@ export type KbdProps = ComponentProps<'span'> & {
 export const Kbd = ({ className, separator = <DefaultKbdSeparator />, children, ...props }: KbdProps) => (
 	<span
 		className={cn(
-			'inline-flex select-none items-center gap-1 rounded border bg-muted px-1.5 align-middle font-mono text-sm font-medium leading-loose text-muted-foreground',
+			'bg-muted text-muted-foreground inline-flex items-center gap-1 rounded border px-1.5 align-middle font-mono text-sm leading-loose font-medium select-none',
 			className
 		)}
 		{...props}>

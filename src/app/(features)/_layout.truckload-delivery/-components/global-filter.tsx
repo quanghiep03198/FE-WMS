@@ -226,7 +226,7 @@ const FormItem: React.FC<FieldItemProps> = ({ index, name, label, icon, type }) 
 				htmlFor={id}
 				aria-disabled={!isIncluded}
 				onClick={(e) => e.stopPropagation()}
-				className='font-normal aria-disabled:text-muted-foreground'>
+				className='aria-disabled:text-muted-foreground font-normal'>
 				<Checkbox
 					id={id}
 					checked={isIncluded}

@@ -34,7 +34,7 @@ const OutboundForm: React.FC = () => {
 					</HoverCardTrigger>
 					<HoverCardContent className='w-64' align='start' sideOffset={8}>
 						<Div className='flex justify-between space-x-4'>
-							<Icon name='Info' size={22} className='min-w-5 stroke-active' />
+							<Icon name='Info' size={22} className='stroke-active min-w-5' />
 							<Typography as='small' variant='small' className='flex-1 text-pretty'>
 								{t('ns_erp:descriptions.centralized_po')}
 							</Typography>
@@ -49,7 +49,7 @@ const OutboundForm: React.FC = () => {
 					</HoverCardTrigger>
 					<HoverCardContent className='w-64' align='end' sideOffset={8}>
 						<Div className='flex justify-between space-x-4'>
-							<Icon name='Info' size={22} className='min-w-5 stroke-active' />
+							<Icon name='Info' size={22} className='stroke-active min-w-5' />
 							<Typography as='small' variant='small' className='flex-1 text-pretty'>
 								{t('ns_erp:descriptions.decentralized_po')}
 							</Typography>

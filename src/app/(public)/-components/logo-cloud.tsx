@@ -21,11 +21,11 @@ const LogoCloud: React.FC = () => {
 				animationFillMode: 'both',
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}
-			className='relative w-full bg-linear-to-t from-accent/40 to-transparent to-30% duration-700 animate-in fade-in-0 slide-in-from-bottom-4 sm:px-2'>
-			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 text-center xxl:max-w-8xl'>
-				<Div className='inline-grid size-56 translate-y-12 place-items-center rounded-full border border-foreground/20 mask-[linear-gradient(to_bottom,var(--background)_50%,var(--background)_50%,transparent)]'>
-					<Div className='inline-grid size-40 place-items-center rounded-full border-[1.5px] border-foreground/35'>
-						<Div className='relative inline-grid size-24 place-items-center rounded-full border border-foreground/50'>
+			className='from-accent/40 animate-in fade-in-0 slide-in-from-bottom-4 relative w-full bg-linear-to-t to-transparent to-30% duration-700 sm:px-2'>
+			<Div className='xxl:max-w-8xl mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 text-center'>
+				<Div className='border-foreground/20 inline-grid size-56 translate-y-12 place-items-center rounded-full border mask-[linear-gradient(to_bottom,var(--background)_50%,var(--background)_50%,transparent)]'>
+					<Div className='border-foreground/35 inline-grid size-40 place-items-center rounded-full border-[1.5px]'>
+						<Div className='border-foreground/50 relative inline-grid size-24 place-items-center rounded-full border'>
 							<Icon
 								name='Codesandbox'
 								className='z-20'
@@ -49,7 +49,7 @@ const LogoCloud: React.FC = () => {
 						</Div>
 					</Div>
 				</Div>
-				<Typography variant='h1' className='mb-2 mt-4'>
+				<Typography variant='h1' className='mt-4 mb-2'>
 					Developed with trusted technologies
 				</Typography>
 				<Typography className='text-pretty xl:text-lg'>
@@ -69,7 +69,7 @@ const LogoCloud: React.FC = () => {
 const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 	<div
 		{...props}
-		className='mx-auto flex w-max animate-[marquee_10s_forwards_linear_infinite] flex-nowrap items-center space-x-4 py-8 will-change-transform group-hover/scroll:paused'>
+		className='group-hover/scroll:paused mx-auto flex w-max animate-[marquee_10s_forwards_linear_infinite] flex-nowrap items-center space-x-4 py-8 will-change-transform'>
 		<LinkCard href='#'>
 			<img
 				src='/react.svg'

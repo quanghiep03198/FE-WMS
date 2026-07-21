@@ -22,7 +22,7 @@ const NavUserControl: React.FC = () => {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger className='inline-flex h-full items-center justify-center outline-none ring-0 focus:border-none'>
+			<DropdownMenuTrigger className='inline-flex h-full items-center justify-center ring-0 outline-none focus:border-none'>
 				<Avatar className='size-8'>
 					<AvatarImage src={user?.picture} alt={user?.display_name} />
 					<AvatarFallback>G</AvatarFallback>

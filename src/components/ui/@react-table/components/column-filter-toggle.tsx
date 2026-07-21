@@ -12,7 +12,7 @@ const ColumnFilterToggle: React.FC = () => {
 		<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
 			<Toggle
 				variant='outline'
-				className='size-9 place-content-center p-0 aria-pressed:bg-accent aria-pressed:text-accent-foreground hover:text-foreground'
+				className='aria-pressed:bg-accent aria-pressed:text-accent-foreground hover:text-foreground size-9 place-content-center p-0'
 				pressed={filterOpen}
 				onPressedChange={(pressed) => {
 					setFilterOpen(pressed)

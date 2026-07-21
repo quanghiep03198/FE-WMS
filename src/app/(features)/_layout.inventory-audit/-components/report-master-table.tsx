@@ -70,7 +70,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				header: () => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
 						<button
-							className='absolute inset-0 flex h-full w-full items-center justify-center text-muted-foreground transition-colors duration-200 hover:text-foreground'
+							className='text-muted-foreground hover:text-foreground absolute inset-0 flex h-full w-full items-center justify-center transition-colors duration-200'
 							onClick={() => resetExpanded()}>
 							<Icon name='ListCollapse' size={18} />
 						</button>

@@ -60,9 +60,9 @@ const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 		<ContextMenu>
 			<ContextMenuTrigger
 				className={cn(
-					'flex h-max w-full cursor-auto select-none grid-cols-[14px_auto] items-center px-4 py-2 text-left text-sm capitalize has-[[role=button]]:w-full has-[[role=button]]:justify-center has-[[role=checkbox]]:w-full has-[[role=checkbox]]:justify-center!',
+					'flex h-max w-full cursor-auto grid-cols-[14px_auto] items-center px-4 py-2 text-left text-sm capitalize select-none has-[[role=button]]:w-full has-[[role=button]]:justify-center has-[[role=checkbox]]:w-full has-[[role=checkbox]]:justify-center!',
 					{
-						'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
+						'hover:text-foreground cursor-pointer gap-x-2': columnDef.enableSorting,
 						'cursor-col-resize': getIsResizing(),
 						'justify-center text-center': header.colSpan > 1 || columnDef.meta?.align === 'center',
 						'justify-start text-left': columnDef.meta?.align === 'left',
@@ -84,7 +84,7 @@ const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 					<Icon
 						name={currentSortingState}
 						size={14}
-						className='h-(--icon-size) min-w-(--icon-size) max-w-(--icon-size)'
+						className='h-(--icon-size) max-w-(--icon-size) min-w-(--icon-size)'
 					/>
 				)}
 				<Typography as='small' variant='small' className='line-clamp-1 text-left text-inherit'>
@@ -111,7 +111,7 @@ const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 					<ContextMenuSubTrigger
 						aria-disabled={!header.isPlaceholder && !header.column.columnDef.enablePinning}
 						disabled={!header.isPlaceholder && !header.column.columnDef.enablePinning}
-						className='gap-x-2 aria-disabled:text-muted-foreground'>
+						className='aria-disabled:text-muted-foreground gap-x-2'>
 						<Icon name='Pin' size={14} />
 						{t('ns_common:actions.pin')}
 					</ContextMenuSubTrigger>

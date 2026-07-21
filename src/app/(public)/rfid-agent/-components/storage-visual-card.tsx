@@ -57,13 +57,13 @@ const MarqueeList: React.FC = () => {
 	return range(0, 2).map((_, idx1: number) => (
 		<div
 			key={`row-${idx1}`}
-			className='relative left-0 z-10 flex h-full w-auto animate-[marquee_10s_forwards_linear_infinite] items-end pb-4 transition-transform will-change-transform group-hover:paused'>
+			className='group-hover:paused relative left-0 z-10 flex h-full w-auto animate-[marquee_10s_forwards_linear_infinite] items-end pb-4 transition-transform will-change-transform'>
 			{range(0, 8).map((_, idx2: number) => (
 				<div key={`col-${idx2}`} className='ml-2 flex flex-col gap-2 md:gap-2'>
 					{cols.map((col: any, idx3: number) => (
 						<div
 							key={`icon-${idx3}`}
-							className='bg flex h-[60px] w-[60px] items-center justify-center rounded-lg border bg-card text-muted-foreground duration-100 hover:border-primary hover:text-primary md:h-[62px] md:w-[62px] md:min-w-[62px]'>
+							className='bg bg-card text-muted-foreground hover:border-primary hover:text-primary flex h-[60px] w-[60px] items-center justify-center rounded-lg border duration-100 md:h-[62px] md:w-[62px] md:min-w-[62px]'>
 							{col}
 						</div>
 					))}

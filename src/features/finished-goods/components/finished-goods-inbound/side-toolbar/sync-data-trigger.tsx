@@ -80,7 +80,7 @@ const SyncDataTrigger: React.FC = () => {
 							state={isConnected ? 'active' : 'down'}
 							label={undefined}
 							size='sm'
-							className='absolute right-0 top-0 -translate-y-1/2 translate-x-1/2'
+							className='absolute top-0 right-0 translate-x-1/2 -translate-y-1/2'
 						/>
 						<Button
 							variant='ghost'
@@ -142,7 +142,7 @@ const SyncDataTrigger: React.FC = () => {
 									</Div>
 									<Typewriter
 										delay={(index + 1) * 300}
-										className='line-clamp-1 w-full animate-typing whitespace-pre-wrap'
+										className='animate-typing line-clamp-1 w-full whitespace-pre-wrap'
 										text={t(item.name, { ns: 'ns_rfid', defaultValue: item.name })}
 									/>
 								</StepItem>
@@ -150,7 +150,7 @@ const SyncDataTrigger: React.FC = () => {
 						})}
 					</StepList>
 				) : (
-					<Div className='min-h-48 flex-1 place-content-center place-items-center rounded-md bg-muted text-center text-sm text-muted-foreground xxl:min-h-44'>
+					<Div className='bg-muted text-muted-foreground xxl:min-h-44 min-h-48 flex-1 place-content-center place-items-center rounded-md text-center text-sm'>
 						{t('ns_rfid:no_sync_process')}
 					</Div>
 				)}

@@ -30,14 +30,14 @@ const CTASection: React.FC = () => {
 			as='section'
 			ref={ref}
 			aria-current={isSectionInViewPort}
-			className='group/cta relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 paused @container/cta aria-current:running sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0 xxl:mt-32 xxl:max-w-8xl xxl:p-0'>
+			className='group/cta animate-in fade-in-0 slide-in-from-bottom-4 paused aria-current:running xxl:mt-32 xxl:max-w-8xl xxl:p-0 @container/cta relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 duration-700 sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0'>
 			<Div className='col-span-2 col-start-1 row-span-1 row-start-1 mb-4 flex justify-center @7xl/cta:col-span-1 @7xl/cta:justify-start'>
 				<Button
 					onClick={() => {
 						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
 					}}
 					variant='outline'
-					className='rounded-l-full rounded-r-full px-5 tracking-wide transition-colors duration-200 hover:border-success hover:bg-success hover:text-success-foreground'>
+					className='hover:border-success hover:bg-success hover:text-success-foreground rounded-l-full rounded-r-full px-5 tracking-wide transition-colors duration-200'>
 					<Icon name='Tags' size={20} />
 					Introducing version {env('VITE_APP_VERSION')}
 					<Icon name='ArrowRight' className='ml-auto' />
@@ -45,16 +45,16 @@ const CTASection: React.FC = () => {
 			</Div>
 			<Typography
 				variant='h1'
-				className='col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-pretty text-center duration-700 @7xl/cta:max-w-xl @7xl/cta:text-left lg:col-span-2 lg:max-w-full'>
+				className='col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-center text-pretty duration-700 lg:col-span-2 lg:max-w-full @7xl/cta:max-w-xl @7xl/cta:text-left'>
 				Simplify Warehouse Management with <span className='text-(--primary-alt)'>i-WMS</span>
 			</Typography>
 			<Typography
 				variant='p'
-				className='col-start-1 row-span-1 row-start-3 mx-auto mb-6 max-w-4xl text-pretty text-center leading-relaxed tracking-wide @7xl/cta:text-left lg:col-span-2 lg:max-w-full lg:self-start xl:max-w-6xl xl:text-lg'>
+				className='col-start-1 row-span-1 row-start-3 mx-auto mb-6 max-w-4xl text-center leading-relaxed tracking-wide text-pretty lg:col-span-2 lg:max-w-full lg:self-start xl:max-w-6xl xl:text-lg @7xl/cta:text-left'>
 				Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS. Our
 				comprehensive system provides the tools you need to manage your warehouse effortlessly.
 			</Typography>
-			<List className='col-start-1 row-start-4 mx-auto grid w-full max-w-3xl grid-cols-1 gap-x-10 @xl/cta:grid-cols-2 @7xl/cta:grid-cols-1 lg:col-start-2 lg:row-start-4 lg:mt-10 lg:grid-cols-1 xl:mb-12'>
+			<List className='col-start-1 row-start-4 mx-auto grid w-full max-w-3xl grid-cols-1 gap-x-10 lg:col-start-2 lg:row-start-4 lg:mt-10 lg:grid-cols-1 xl:mb-12 @xl/cta:grid-cols-2 @7xl/cta:grid-cols-1'>
 				{outstandingFeatures.map((feature, index) => (
 					<ListItem key={index.toString()}>
 						<Icon name='Check' size={18} />{' '}
@@ -64,7 +64,7 @@ const CTASection: React.FC = () => {
 					</ListItem>
 				))}
 			</List>
-			<Div className='z-10 col-start-1 row-span-1 row-start-5 flex items-center justify-center gap-x-1 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:col-start-2 lg:row-start-5 lg:justify-start xl:justify-start'>
+			<Div className='animate-in fade-in-0 slide-in-from-bottom-4 z-10 col-start-1 row-span-1 row-start-5 flex items-center justify-center gap-x-1 duration-700 lg:col-start-2 lg:row-start-5 lg:justify-start xl:justify-start'>
 				<Link to='/login' className={cn(buttonVariants())}>
 					Get started
 				</Link>

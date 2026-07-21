@@ -93,7 +93,7 @@ const SearchBox: React.FC = () => {
 				</Form>
 			</FormProvider>
 			{!isEmpty(searchParams) && (
-				<Div className='px-4 duration-300 ease-in animate-in fade-in-0'>
+				<Div className='animate-in fade-in-0 px-4 duration-300 ease-in'>
 					<DownloadExcelButton variant='secondary' />
 				</Div>
 			)}

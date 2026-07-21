@@ -98,13 +98,13 @@ const NavSidebar: React.FC = () => {
 					<Icon name='Radio' size={40} strokeWidth={1.5} />
 					<span className='flex flex-col font-bold'>
 						RFID Agent
-						<small className='font-normal text-muted-foreground'>v{RFID_AGENT_VERSION}</small>
+						<small className='text-muted-foreground font-normal'>v{RFID_AGENT_VERSION}</small>
 					</span>
 				</Link>
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel className='text-base text-foreground'>Eclipse Mosquitto</SidebarGroupLabel>
+					<SidebarGroupLabel className='text-foreground text-base'>Eclipse Mosquitto</SidebarGroupLabel>
 					<SidebarMenu role='menu' aria-label='Eclipse Mosquitto'>
 						{menuGroups.mosquitto.map((item) => (
 							<SidebarMenuLink key={item.hash} {...item} />
@@ -113,7 +113,7 @@ const NavSidebar: React.FC = () => {
 				</SidebarGroup>
 				<SidebarSeparator />
 				<SidebarGroup>
-					<SidebarGroupLabel className='text-base text-foreground'>RFID Agent</SidebarGroupLabel>
+					<SidebarGroupLabel className='text-foreground text-base'>RFID Agent</SidebarGroupLabel>
 					<SidebarMenu role='menu' aria-label='Main menu'>
 						{menuGroups.rfidAgent.map((item) => (
 							<SidebarMenuLink key={item.hash} {...item} />
@@ -122,7 +122,7 @@ const NavSidebar: React.FC = () => {
 				</SidebarGroup>
 				<SidebarSeparator />
 				<SidebarGroup>
-					<SidebarGroupLabel className='text-base text-foreground'>FAQ</SidebarGroupLabel>
+					<SidebarGroupLabel className='text-foreground text-base'>FAQ</SidebarGroupLabel>
 					<SidebarMenu role='menu' aria-label='Eclipse Mosquitto'>
 						{menuGroups.faqs.map((item) => (
 							<SidebarMenuLink key={item.hash} {...item} />

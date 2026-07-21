@@ -9,13 +9,11 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
+import FeedbackFormTrigger from '@/components/ui/@sentry/feedback-form-trigger'
 import type { FallbackRender } from '@sentry/react'
 import { captureException } from '@sentry/react'
-import React, { useEffect } from 'react'
-
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
-import FeedbackFormTrigger from '@/components/ui/@sentry/feedback-form-trigger'
 import { HttpStatusCode } from 'axios'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import InternalServerError from './internal-server-error'
 
@@ -57,11 +55,11 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 						<DialogHeader>
 							<DialogTitle className='text-destructive'>Error</DialogTitle>
 						</DialogHeader>
-						<ScrollShadow className='max-h-96 scrollbar-none!'>
+						<Div className='scroll-fade max-h-96 scrollbar-none!'>
 							<Typography color='muted' className='font-medium'>
 								{error?.stack}
 							</Typography>
-						</ScrollShadow>
+						</Div>
 					</DialogContent>
 				</Dialog>
 				<Div className='mt-6 inline-grid grid-cols-2 gap-x-2'>

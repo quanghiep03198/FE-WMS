@@ -4,7 +4,7 @@ import React, { Fragment } from 'react'
 const GridDotBackground: React.FC = () => {
 	return (
 		<Fragment>
-			<div className='pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background text-foreground mask-[radial-gradient(ellipse_at_center,transparent_5%,black)]'></div>
+			<div className='bg-background text-foreground pointer-events-none absolute inset-0 z-10 flex items-center justify-center mask-[radial-gradient(ellipse_at_center,transparent_5%,black)]'></div>
 			<div
 				className={cn(
 					'absolute inset-0',

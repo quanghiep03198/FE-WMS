@@ -64,7 +64,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 				<PurchaseOrderFieldControl
 					{...(readOnly && { 'aria-haspopup': 'false' })}
 					name={`outbound_purchase_orders.${index}.po`}
-					className='h-8 rounded-sm border-transparent py-1.5 shadow-none read-only:cursor-auto focus:border-primary read-only:focus:border-transparent'
+					className='focus:border-primary h-8 rounded-sm border-transparent py-1.5 shadow-none read-only:cursor-auto read-only:focus:border-transparent'
 					tabIndex={index}
 					autoFocus={true}
 					data-index={index}
@@ -142,7 +142,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 					aria-readonly={readOnly}
 					readOnly={readOnly}
 					name={`outbound_purchase_orders.${index}.outbound_qty`}
-					className='h-8 rounded-sm border-transparent py-1.5 shadow-none read-only:cursor-auto focus:border-primary aria-readonly:focus:border-transparent'
+					className='focus:border-primary h-8 rounded-sm border-transparent py-1.5 shadow-none read-only:cursor-auto aria-readonly:focus:border-transparent'
 					autoFocus={false}
 					autoComplete='off'
 					tabIndex={index + 1}

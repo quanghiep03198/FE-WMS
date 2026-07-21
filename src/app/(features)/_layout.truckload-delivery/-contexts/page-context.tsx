@@ -13,10 +13,7 @@ const _STORAGE_FILTER_KEY = 'truckloadDeliveryFilters'
 const _STORAGE_PARAMS_KEY = 'deliverySearchParams'
 
 export type SignatureType =
-	| 'ie_signature'
-	| 'warehouse_officer_signature'
-	| 'security_1_signature'
-	| 'security_2_signature'
+	'ie_signature' | 'warehouse_officer_signature' | 'security_1_signature' | 'security_2_signature'
 
 type EventPayload =
 	| { action: CommonActions.CREATE; payload: null }

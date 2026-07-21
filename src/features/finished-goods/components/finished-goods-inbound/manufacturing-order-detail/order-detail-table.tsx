@@ -143,7 +143,7 @@ const OrderDetailTable: React.FC = () => {
 							buttonVariants({
 								size: 'lg',
 								className:
-									'items-center bg-transparent text-accent-foreground hover:bg-accent @[920px]/page-container:bg-primary @[920px]/page-container:text-primary-foreground @[920px]/page-container:hover:bg-primary @[920px]/page-container:hover:opacity-80'
+									'text-accent-foreground hover:bg-accent @[920px]/page-container:bg-primary @[920px]/page-container:text-primary-foreground @[920px]/page-container:hover:bg-primary items-center bg-transparent @[920px]/page-container:hover:opacity-80'
 							})
 						)}>
 						{t('ns_common:actions.detail')}
@@ -158,14 +158,14 @@ const OrderDetailTable: React.FC = () => {
 					<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 				</HoverCardContent>
 			</HoverCard>
-			<DialogContent className='static h-screen max-w-[screen] overflow-hidden rounded-none border-none focus-visible:outline-none focus-visible:ring-0'>
+			<DialogContent className='static h-screen max-w-[screen] overflow-hidden rounded-none border-none focus-visible:ring-0 focus-visible:outline-none'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 					<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 				</DialogHeader>
 				<Div className='static flex h-[calc(85vh-2rem)] flex-col items-stretch divide-y overflow-hidden rounded-lg border'>
 					<Div
-						className='relative h-[85vh] overflow-scroll rounded-lg scrollbar-track-accent/20 @container scrollbar-gutter-stable'
+						className='scrollbar-track-accent/20 @container relative h-[85vh] scrollbar-gutter-stable overflow-scroll rounded-lg'
 						style={
 							{
 								'--row-selection-col-width': '50px',
@@ -257,7 +257,7 @@ const OrderDetailTable: React.FC = () => {
 									</TableHead>
 									<TableHead
 										align='right'
-										className='right-(--row-action-col-width) z-20 w-(--sticky-right-col-width) bg-background xl:sticky'>
+										className='bg-background right-(--row-action-col-width) z-20 w-(--sticky-right-col-width) xl:sticky'>
 										<span>{t('ns_common:common_fields.total')}</span>
 									</TableHead>
 									<TableHead>
@@ -317,7 +317,7 @@ const OrderDetailTable: React.FC = () => {
 							)}
 						</Table>
 						{(!Array.isArray(filteredScannedOrders) || filteredScannedOrders.length === 0) && (
-							<Div className='absolute inset-0 grid place-content-center text-center text-sm text-muted-foreground'>
+							<Div className='text-muted-foreground absolute inset-0 grid place-content-center text-center text-sm'>
 								<Typography className='inline-flex items-center gap-x-2'>
 									<Icon name='Inbox' size={20} />
 									{t('ns_common:table.no_data')}
@@ -325,9 +325,9 @@ const OrderDetailTable: React.FC = () => {
 							</Div>
 						)}
 					</Div>
-					<Div className='flex basis-16 items-center justify-between bg-background px-2 pr-4'>
+					<Div className='bg-background flex basis-16 items-center justify-between px-2 pr-4'>
 						<ExchangeOrderDialogTrigger />
-						<Div className='mr-2 flex flex-1 items-center justify-end gap-x-2 bg-background'>
+						<Div className='bg-background mr-2 flex flex-1 items-center justify-end gap-x-2'>
 							<Typography color='muted' className='font-medium'>
 								{t('ns_common:common_fields.total')}
 							</Typography>

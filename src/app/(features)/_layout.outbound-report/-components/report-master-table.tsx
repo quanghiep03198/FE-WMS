@@ -40,7 +40,7 @@ const ReportDatalist: React.FC = () => {
 				header: ({ table }) => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
 						<button
-							className='absolute inset-0 flex h-full w-full items-center justify-center text-muted-foreground transition-colors duration-200 hover:text-foreground'
+							className='text-muted-foreground hover:text-foreground absolute inset-0 flex h-full w-full items-center justify-center transition-colors duration-200'
 							onClick={() => table.toggleAllRowsExpanded(false)}>
 							<Icon name='ListCollapse' size={18} />
 						</button>
@@ -152,7 +152,7 @@ const ReportDatalist: React.FC = () => {
 
 	return (
 		<Div as='section' className='relative'>
-			<Div aria-description='Auto refresh toggle' className='absolute left-0 top-0'>
+			<Div aria-description='Auto refresh toggle' className='absolute top-0 left-0'>
 				<AutoRefreshToggle />
 			</Div>
 			<DataTable

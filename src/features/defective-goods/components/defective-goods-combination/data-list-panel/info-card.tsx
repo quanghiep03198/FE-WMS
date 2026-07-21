@@ -94,16 +94,16 @@ const InfoCard: React.FC<{
 	return (
 		<Card
 			className={cn(
-				'relative min-h-fit gap-4 overflow-hidden rounded-md border pb-2 pt-4 shadow-sm @container/card *:text-left *:text-sm',
-				isTogglingExpand && 'duration-200 animate-out fade-out-50',
+				'@container/card relative min-h-fit gap-4 overflow-hidden rounded-md border pt-4 pb-2 shadow-sm *:text-left *:text-sm',
+				isTogglingExpand && 'animate-out fade-out-50 duration-200',
 				hash === String(data.id) && 'bg-accent/50'
 			)}>
 			<CardHeader className='px-4' onClick={() => setIsOpen(!isOpen)}>
-				<CardAction className='absolute right-3 top-3'>
+				<CardAction className='absolute top-3 right-3'>
 					<DropdownMenu modal>
 						<DropdownMenuTrigger
 							onClick={(e) => e.stopPropagation()}
-							className='m-0! aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
+							className='hover:bg-accent m-0! aspect-square size-6 place-content-center place-items-center rounded'>
 							<Icon name='Ellipsis' />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='start' side='left'>
@@ -126,7 +126,7 @@ const InfoCard: React.FC<{
 										<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 									</DropdownMenuItem>
 									<DropdownMenuItem
-										className='gap-x-2 text-destructive! hover:bg-destructive/20!'
+										className='text-destructive! hover:bg-destructive/20! gap-x-2'
 										onClick={(e) => {
 											e.stopPropagation()
 											event$.emit({ action: CommonActions.DELETE, payload: data.id })
@@ -156,7 +156,7 @@ const InfoCard: React.FC<{
 					</Badge>
 					{data.storage_location && <Badge variant='secondary'>{data.storage_location}</Badge>}
 				</Div>
-				<CardTitle className='group/cart-title inline-flex items-center gap-x-1'>
+				<CardTitle className='group/cart-title row-start-2 inline-flex items-center gap-x-1'>
 					ID: {data.epc}{' '}
 					<Tooltip message='Copy' triggerProps={{ asChild: true }}>
 						<button
@@ -169,7 +169,7 @@ const InfoCard: React.FC<{
 						</button>
 					</Tooltip>
 				</CardTitle>
-				<CardDescription className='first-letter:uppercase'>
+				<CardDescription className='row-start-3 first-letter:uppercase'>
 					{t('ns_common:timestamps.created_at', {
 						timestamp: formatRelative(new Date(data.created), new Date(), { locale: dateLocale }),
 						defaultValue: formatRelative(new Date(data.created), new Date(), { locale: dateLocale })

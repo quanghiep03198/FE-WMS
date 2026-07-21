@@ -10,9 +10,9 @@ const OrderDetailTableFooter: React.FC<OrderDetailTableFooterProps> = ({ totalFi
 	const { t } = useTranslation()
 
 	return (
-		<Div className='flex basis-(--table-footer-height) items-center justify-center gap-x-2 p-3 px-4 text-center text-sm text-muted-foreground'>
+		<Div className='text-muted-foreground flex basis-(--table-footer-height) items-center justify-center gap-x-2 p-3 px-4 text-center text-sm'>
 			<Typography variant='small'>{t('ns_inoutbound:description.inoutbound_table_caption')}</Typography>
-			<Div className='inline-flex flex-1 items-center justify-end gap-x-2 bg-background'>
+			<Div className='bg-background inline-flex flex-1 items-center justify-end gap-x-2'>
 				<Typography color='muted' className='font-medium'>
 					{t('ns_common:common_fields.total')}
 				</Typography>

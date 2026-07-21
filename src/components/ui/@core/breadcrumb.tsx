@@ -14,7 +14,7 @@ Breadcrumb.displayName = 'Breadcrumb'
 const BreadcrumbList: React.FC<React.ComponentProps<'ol'>> = ({ className, ...props }) => (
 	<ol
 		className={cn(
-			'flex flex-wrap items-center gap-1.5 wrap-break-word text-sm text-muted-foreground sm:gap-2.5',
+			'text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm wrap-break-word sm:gap-2.5',
 			className
 		)}
 		{...props}
@@ -34,7 +34,7 @@ const BreadcrumbLink: React.FC<
 > = ({ asChild, className, ...props }) => {
 	const Comp = asChild ? Slot : 'a'
 
-	return <Comp className={cn('transition-colors hover:text-foreground', className)} {...props} />
+	return <Comp className={cn('hover:text-foreground transition-colors', className)} {...props} />
 }
 BreadcrumbLink.displayName = 'BreadcrumbLink'
 
@@ -43,7 +43,7 @@ const BreadcrumbPage: React.FC<React.ComponentProps<'span'>> = ({ className, ...
 		role='link'
 		aria-disabled='true'
 		aria-current='page'
-		className={cn('font-normal text-foreground', className)}
+		className={cn('text-foreground font-normal', className)}
 		{...props}
 	/>
 )

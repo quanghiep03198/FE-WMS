@@ -74,7 +74,7 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 											variant='outline'
 											aria-disabled={disabled}
 											className={cn(
-												'w-full justify-start bg-background text-left font-normal aria-disabled:opacity-50 hover:bg-background focus:border-primary',
+												'bg-background hover:bg-background focus:border-primary w-full justify-start text-left font-normal aria-disabled:opacity-50',
 												!field.value && 'text-muted-foreground',
 												!!getFieldState(name).error && 'border-destructive',
 												triggerProps?.className

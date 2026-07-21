@@ -20,19 +20,19 @@ const RFIDAgentConfiguration: React.FC = () => {
 							alt='RFID Agent Configuration'
 							className='object-contain object-center'
 						/>
-						<figcaption className='text-center text-sm text-muted-foreground'>
+						<figcaption className='text-muted-foreground text-center text-sm'>
 							RFID Agent Configuration
 						</figcaption>
 					</figure>
 				</DialogTrigger>
-				<DialogContent className='max-w-screen relative h-screen rounded-none bg-background/50! backdrop-blur-sm'>
+				<DialogContent className='bg-background/50! relative h-screen max-w-screen rounded-none backdrop-blur-sm'>
 					<figure className='space-y-1'>
 						<img
 							src={RFIDAgentConfigImage}
 							alt='RFID Agent Configuration'
 							className='mx-auto w-full max-w-[90vw] rounded object-contain object-center'
 						/>
-						<figcaption className='text-center text-sm text-muted-foreground'>
+						<figcaption className='text-muted-foreground text-center text-sm'>
 							RFID Agent Configuration
 						</figcaption>
 					</figure>

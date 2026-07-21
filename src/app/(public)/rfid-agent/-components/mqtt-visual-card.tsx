@@ -43,7 +43,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 			</VisualCard.Header>
 			<VisualCard.Content
 				ref={containerRef}
-				className='@md/visual-card:px-6 md:grid md:grid-cols-[1fr_2fr] md:gap-6 md:px-6'>
+				className='md:grid md:grid-cols-[1fr_2fr] md:gap-6 md:px-6 @md/visual-card:px-6'>
 				<figure
 					className={cn('z-0 grid place-items-center', className)}
 					role='img'
@@ -75,7 +75,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 						</defs>
 					</svg>
 				</figure>
-				<div className='mx-auto my-4 w-full max-w-96 space-y-4 @md/visual-card:max-w-full md:max-w-full md:space-y-6 [&_div]:w-full'>
+				<div className='mx-auto my-4 w-full max-w-96 space-y-4 md:max-w-full md:space-y-6 @md/visual-card:max-w-full [&_div]:w-full'>
 					<AnimatedSignalFigure titleLeft='/request/signal' titleRight={`{"action": "connect"}`} />
 					<AnimatedSignalFigure titleLeft='/reply/data' titleRight={`{"data": "[...]"}`} animationReverse />
 					<AnimatedSignalFigure titleLeft='/request/settings' titleRight={`{"ip": "10.xx.xx.xx"}`} />
@@ -117,7 +117,7 @@ const AnimatedSignalFigure: React.FC<{
 			</Badge>
 			<Badge
 				variant='outline'
-				className='z-10 max-w-fit bg-background font-mono text-xs font-normal text-muted-foreground'>
+				className='bg-background text-muted-foreground z-10 max-w-fit font-mono text-xs font-normal'>
 				{titleRight}
 			</Badge>
 			<div
@@ -148,13 +148,7 @@ const DashedLine: React.FC = () => {
 			width={216}
 			preserveAspectRatio='none'
 			xmlns='http://www.w3.org/2000/svg'>
-			<path
-				d='M0 0.5 L100 0.5'
-				stroke='var(--muted-foreground)'
-				strokeWidth='1'
-				strokeDasharray='4,2'
-				fill='none'
-			/>
+			<path d='M0 0.5 L100 0.5' stroke='var(--muted-foreground)' strokeWidth='1' strokeDasharray='4,2' fill='none' />
 		</svg>
 	)
 }

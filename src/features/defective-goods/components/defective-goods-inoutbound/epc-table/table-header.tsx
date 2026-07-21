@@ -10,7 +10,7 @@ export const DataTableHeader: React.FC<{ table: Table<IDefectiveGoods> }> = ({ t
 	'use no memo'
 
 	return (
-		<TableHeader className='sticky top-0 z-50 bg-background [&_tr]:h-(--row-height)'>
+		<TableHeader className='bg-background sticky top-0 z-50 [&_tr]:h-(--row-height)'>
 			{table.getHeaderGroups().map((headerGroup) => (
 				<Fragment key={headerGroup.id}>
 					<TableRow>
@@ -20,7 +20,7 @@ export const DataTableHeader: React.FC<{ table: Table<IDefectiveGoods> }> = ({ t
 								<TableHead
 									key={header.id}
 									colSpan={header.colSpan}
-									className='group relative z-20 border-b border-b-border bg-accent/50 text-accent-foreground'
+									className='group border-b-border bg-accent/50 text-accent-foreground relative z-20 border-b'
 									style={{ width: `var(--header-${header?.id}-size)` }}
 									align={columnDef.meta?.align ?? 'left'}>
 									{header.isPlaceholder ? null : (
@@ -32,7 +32,7 @@ export const DataTableHeader: React.FC<{ table: Table<IDefectiveGoods> }> = ({ t
 										onTouchStart={header.getResizeHandler()}
 										onTouchMove={header.getResizeHandler()}
 										className={cn(
-											'absolute inset-y-0 right-0 z-50 h-(--row-height) w-1 cursor-col-resize touch-none select-none bg-border opacity-0 transition-opacity duration-500 group-hover:opacity-100',
+											'bg-border absolute inset-y-0 right-0 z-50 h-(--row-height) w-1 cursor-col-resize touch-none opacity-0 transition-opacity duration-500 select-none group-hover:opacity-100',
 											header.column.getCanResize() && 'hover:bg-primary',
 											header.column.getIsResizing() && 'bg-primary opacity-10'
 										)}
@@ -47,7 +47,7 @@ export const DataTableHeader: React.FC<{ table: Table<IDefectiveGoods> }> = ({ t
 							return (
 								<TableHead
 									key={header.id}
-									className='border-b border-b-border bg-table-head text-table-head-foreground'
+									className='border-b-border bg-table-head text-table-head-foreground border-b'
 									style={{ width: header.getSize(), padding: 0 }}
 									align={columnDef.meta?.align}>
 									<TableColumnFilter column={header.column} />

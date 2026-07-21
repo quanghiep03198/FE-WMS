@@ -1,5 +1,5 @@
-import { useUpdateProfileMutation } from '@/app/-hooks/use-profile-request'
 import { Button, Div, Form as FormProvider, Icon, InputFieldControl, Typography } from '@/components/ui'
+import { useUpdateProfileMutation } from '@/features/auth/hooks/use-profile-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'
 import React from 'react'

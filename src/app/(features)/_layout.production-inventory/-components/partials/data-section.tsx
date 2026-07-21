@@ -34,7 +34,7 @@ const DataSection: React.FC = () => {
 	else if (!shouldRender) return <EmptyState />
 	else if (shouldRender)
 		return (
-			<Div className='grid grid-cols-1 gap-6 transition-opacity duration-300 ease-out animate-in fade-in-0 @7xl:grid-cols-2'>
+			<Div className='animate-in fade-in-0 grid grid-cols-1 gap-6 transition-opacity duration-300 ease-out @7xl:grid-cols-2'>
 				<Div className='col-span-1'>
 					<InboundOrderTable data={data?.inbound} />
 				</Div>

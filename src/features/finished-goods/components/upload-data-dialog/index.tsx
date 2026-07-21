@@ -12,7 +12,6 @@ import {
 	Input,
 	Typography
 } from '@/components/ui'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import axiosInstance from '@/configs/axios.config'
 import { PresetBreakPoints, RequestHeaders } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
@@ -155,7 +154,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 					<Typography color='muted'>{t('ns_common:actions.csv_upload')}</Typography>
 				</DroppableArea>
 				{files.length > 0 && (
-					<ScrollShadow className='max-h-32'>
+					<Div className='scroll-fade max-h-32'>
 						{files.map((file, idx) => (
 							<FileItem
 								key={file.name + idx}
@@ -164,7 +163,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 								onRemove={() => setFiles((prev) => prev.filter((_, i) => i !== idx))}
 							/>
 						))}
-					</ScrollShadow>
+					</Div>
 				)}
 				<Div className='flex items-center justify-between'>
 					<Typography variant='small' color='muted'>
@@ -178,10 +177,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 					</Typography>
 				</Div>
 				<Button size='lg' disabled={isPending || files.length === 0} onClick={() => mutateAsync()}>
-					<Icon
-						name={isPending ? 'LoaderCircle' : 'Upload'}
-						className={cn({ 'animate-spin': isPending })}
-					/>{' '}
+					<Icon name={isPending ? 'LoaderCircle' : 'Upload'} className={cn({ 'animate-spin': isPending })} />{' '}
 					Upload
 				</Button>
 			</DialogContent>
@@ -193,7 +189,7 @@ const FileItem: React.FC<{ file: File; disabled: boolean; onRemove: () => void }
 	return (
 		<Div
 			aria-disabled={disabled}
-			className='group flex grow items-center gap-x-2 rounded px-3 py-1.5 transition-colors duration-200 aria-disabled:pointer-events-none aria-disabled:opacity-80 hover:bg-accent'>
+			className='group hover:bg-accent flex grow items-center gap-x-2 rounded px-3 py-1.5 transition-colors duration-200 aria-disabled:pointer-events-none aria-disabled:opacity-80'>
 			<Icon name='File' />
 			<Typography variant='small' className='line-clamp-1 block flex-1'>
 				{file.name}

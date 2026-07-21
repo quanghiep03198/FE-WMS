@@ -259,7 +259,7 @@ export const Template = () => {
 											name='skills'
 											render={({ field }) => {
 												return (
-													<FormItem key={skill} className='flex flex-row items-start space-x-3 space-y-0'>
+													<FormItem key={skill} className='flex flex-row items-start space-y-0 space-x-3'>
 														<FormControl>
 															<Checkbox
 																checked={field.value?.includes(skill)}
@@ -284,7 +284,7 @@ export const Template = () => {
 							control={form.control}
 							name='hasExperience'
 							render={({ field }) => (
-								<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+								<FormItem className='flex flex-row items-start space-y-0 space-x-3'>
 									<FormControl>
 										<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 									</FormControl>
@@ -309,7 +309,7 @@ export const Template = () => {
 					</Button>
 				</form>
 			</Form>
-			<pre className='flex flex-col divide-y rounded-md bg-secondary text-sm text-secondary-foreground [&>code:first-child]:py-2 [&>code]:p-4'>
+			<pre className='bg-secondary text-secondary-foreground flex flex-col divide-y rounded-md text-sm [&>code]:p-4 [&>code:first-child]:py-2'>
 				<code>JSON</code>
 				<code>{JSON.stringify(formValues ?? {}, null, 3)}</code>
 			</pre>

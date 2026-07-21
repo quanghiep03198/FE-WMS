@@ -1,4 +1,4 @@
-import UploadDataFileDialog from '@/components/shared/upload-dialog'
+import UploadDataFileDialog from '@/features/finished-goods/components/upload-data-dialog'
 import { Button, Div, Icon } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 

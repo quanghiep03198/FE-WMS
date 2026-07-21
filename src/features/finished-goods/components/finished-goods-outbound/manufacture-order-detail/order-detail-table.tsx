@@ -73,7 +73,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Div
-			className='relative z-20 flex h-(--outlet-wrapper-height) max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border @7xl/layout-wrapper:sticky @7xl/layout-wrapper:top-[calc(var(--header-height)+var(--outlet-padding))] xxl:top-(--header-height)'
+			className='xxl:top-(--header-height) relative z-20 flex h-(--outlet-wrapper-height) max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border @7xl/layout-wrapper:sticky @7xl/layout-wrapper:top-[calc(var(--header-height)+var(--outlet-padding))]'
 			style={
 				{
 					'--table-footer-height': '2rem'
@@ -81,7 +81,7 @@ const OrderSizeDetailTable: React.FC = () => {
 			}>
 			<Div
 				ref={containerRef}
-				className='h-[calc(var(--outlet-wrapper-height,100vh)-var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg scrollbar-track-accent/20 @container'
+				className='scrollbar-track-accent/20 @container h-[calc(var(--outlet-wrapper-height,100vh)-var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg'
 				style={
 					{
 						'--sticky-left-col-width': '130px',

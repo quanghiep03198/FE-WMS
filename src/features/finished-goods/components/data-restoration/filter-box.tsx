@@ -256,11 +256,11 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 
 	return (
 		<Popover open={filterOpen} onOpenChange={setFilterOpen}>
-			<PopoverTrigger className='group relative flex h-10 items-center justify-between gap-x-3 rounded-md border bg-background px-3 py-1'>
+			<PopoverTrigger className='group bg-background relative flex h-10 items-center justify-between gap-x-3 rounded-md border px-3 py-1'>
 				<Icon
 					name='Search'
 					stroke='var(--muted-foreground)'
-					className='absolute left-3 top-1/2 -translate-y-1/2'
+					className='absolute top-1/2 left-3 -translate-y-1/2'
 					size={20}
 				/>
 				<Input
@@ -292,7 +292,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 				<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
 					<GhostButton
 						aria-expanded={filterOpen}
-						className={cn('aspect-square basis-5 aria-expanded:text-active')}>
+						className={cn('aria-expanded:text-active aspect-square basis-5')}>
 						<Icon name='ListFilter' />
 					</GhostButton>
 				</Tooltip>
@@ -303,7 +303,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 				className='relative w-(--radix-popover-trigger-width) p-6'
 				onOpenAutoFocus={(e) => e.preventDefault()}
 				onWheel={(e) => e.stopPropagation()}>
-				<PopoverClose className='absolute right-3 top-3 text-muted-foreground transition-colors duration-200 hover:text-foreground'>
+				<PopoverClose className='text-muted-foreground hover:text-foreground absolute top-3 right-3 transition-colors duration-200'>
 					<Icon name='X' />
 				</PopoverClose>
 				<Form {...form}>
@@ -382,7 +382,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 											value={field.value}
 											onValueChange={field.onChange}
 											className='flex items-center gap-x-10'>
-											<FormItem className='flex items-center gap-x-3 space-y-0'>
+											<FormItem className='flex items-center space-y-0 gap-x-3'>
 												<FormControl>
 													<RadioGroupItem
 														value={
@@ -398,7 +398,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 														: t('ns_rfid:status.scanned')}
 												</FormLabel>
 											</FormItem>
-											<FormItem className='flex items-center gap-x-3 space-y-0'>
+											<FormItem className='flex items-center space-y-0 gap-x-3'>
 												<FormControl>
 													<RadioGroupItem
 														value={

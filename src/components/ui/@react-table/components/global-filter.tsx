@@ -29,7 +29,7 @@ export const GlobalFilterPopover: React.FC<GlobalFilterPopoverProps> = ({
 				</PopoverTrigger>
 			</Tooltip>
 			<PopoverContent align='end' side='left' sideOffset={4} className='relative w-64 p-0'>
-				<Icon name='Search' className='absolute left-2 top-1/2 -translate-y-1/2' />
+				<Icon name='Search' className='absolute top-1/2 left-2 -translate-y-1/2' />
 				<DebouncedInput
 					value={globalFilter}
 					onChange={(value) => {

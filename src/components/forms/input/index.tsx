@@ -92,7 +92,7 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 						)}
 						<FormControl>
 							<Div className='space-y-2'>
-								<Div className='relative overflow-hidden bg-background'>
+								<Div className='bg-background relative overflow-hidden'>
 									<Tooltip
 										message={t(error?.message as ResourceKey) || ''}
 										triggerProps={{ type: 'button', className: 'w-full' }}
@@ -129,7 +129,7 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 									{type === 'password' && (
 										<Toggle
 											type='button'
-											className='absolute right-1 top-1/2 z-20 size-8 -translate-y-1/2 bg-transparent p-0 focus-within:outline-none focus-within:ring-0 data-[state=on]:bg-transparent hover:bg-transparent'
+											className='absolute top-1/2 right-1 z-20 size-8 -translate-y-1/2 bg-transparent p-0 focus-within:ring-0 focus-within:outline-none hover:bg-transparent data-[state=on]:bg-transparent'
 											onPressedChange={(pressed) => setCurrentType(pressed ? 'text' : 'password')}>
 											<Icon name={currentType === 'password' ? 'Eye' : 'EyeOff'} />
 										</Toggle>

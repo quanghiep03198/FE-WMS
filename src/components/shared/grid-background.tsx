@@ -5,7 +5,7 @@ const GridBackground: React.FC<{ className?: ClassNameValue }> = ({ className })
 	return (
 		<svg
 			className={cn(
-				'fixed inset-0 z-0 h-full w-full stroke-border/50 mask-[radial-gradient(100%_100%_at_bottom_right,white,transparent)]',
+				'stroke-border/50 fixed inset-0 z-0 h-full w-full mask-[radial-gradient(100%_100%_at_bottom_right,white,transparent)]',
 				className
 			)}
 			aria-hidden='true'>
@@ -20,7 +20,7 @@ const GridBackground: React.FC<{ className?: ClassNameValue }> = ({ className })
 					<path d='M.5 200V.5H200' fill='none' />
 				</pattern>
 			</defs>
-			<svg x='50%' y={-1} className='overflow-visible fill-border/20'>
+			<svg x='50%' y={-1} className='fill-border/20 overflow-visible'>
 				<path
 					d='M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z'
 					strokeWidth={0}

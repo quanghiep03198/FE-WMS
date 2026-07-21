@@ -49,7 +49,7 @@ export const LicensePlateColumnCell: React.FC<CellContext<ITruckloadDelivery, st
 	if (!value)
 		return (
 			<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-				<Icon name='Truck' className='self-center stroke-muted-foreground' />
+				<Icon name='Truck' className='stroke-muted-foreground self-center' />
 				{t('ns_common:titles.unknown')}
 			</Typography>
 		)

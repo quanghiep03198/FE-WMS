@@ -123,7 +123,7 @@ export function SearchAndReplaceToolbar() {
 							onClick={() => {
 								setOpen(false)
 							}}
-							className='absolute right-3 top-3 h-4 w-4 cursor-pointer'
+							className='absolute top-3 right-3 h-4 w-4 cursor-pointer'
 						/>
 						<Div className='flex w-full items-center gap-3'>
 							<Button
@@ -175,7 +175,7 @@ export function SearchAndReplaceToolbar() {
 								/>
 								<Label
 									htmlFor='match_case'
-									className='text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+									className='text-xs leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
 									{t('ns_common:editor.match_case')}
 								</Label>
 							</Div>

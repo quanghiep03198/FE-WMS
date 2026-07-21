@@ -83,7 +83,7 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 					autoComplete='off'
 					placeholder={placeholder}
 					className={cn(
-						'peer rounded-md py-1 pl-3 pr-9 text-sm shadow-sm transition-colors duration-200 focus-within:border-primary! aria-invalid:border-destructive aria-invalid:focus-within:border-destructive',
+						'peer focus-within:border-primary! aria-invalid:border-destructive aria-invalid:focus-within:border-destructive rounded-md py-1 pr-9 pl-3 text-sm shadow-sm transition-colors duration-200',
 						className
 					)}
 					style={{
@@ -97,7 +97,7 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 					}}
 					{...inputProps}
 				/>
-				<CaretSortIcon className='absolute right-3 top-1/2 ml-auto h-4 w-4 -translate-y-1/2 opacity-50 peer-data-[icon=false]:hidden' />
+				<CaretSortIcon className='absolute top-1/2 right-3 ml-auto h-4 w-4 -translate-y-1/2 opacity-50 peer-data-[icon=false]:hidden' />
 			</PopoverTrigger>
 			<PopoverContent
 				className='max-h-52 w-(--radix-popover-trigger-width) overflow-auto p-1'

@@ -57,7 +57,7 @@ const Template = (args: TagInputFieldControlProps<any>) => {
 					<Button type='submit'>Submit</Button>
 				</form>
 			</Form>
-			<pre className='flex flex-col divide-y rounded-md bg-secondary text-sm text-secondary-foreground [&>code:first-child]:py-2 [&>code]:p-4'>
+			<pre className='bg-secondary text-secondary-foreground flex flex-col divide-y rounded-md text-sm [&>code]:p-4 [&>code:first-child]:py-2'>
 				<code>JSON</code>
 				<code>{JSON.stringify(formValues ?? {}, null, 3)}</code>
 			</pre>

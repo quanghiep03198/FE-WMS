@@ -39,8 +39,8 @@ function Page() {
 				]}>
 				<Div
 					as='section'
-					className='mx-auto flex min-h-(--outlet-wrapper-height) flex-col place-content-center items-stretch gap-y-6 xxl:max-w-7xl'>
-					<Typography variant='h2' className='z-10 bg-background text-center font-medium capitalize'>
+					className='xxl:max-w-7xl mx-auto flex min-h-(--outlet-wrapper-height) flex-col place-content-center items-stretch gap-y-6'>
+					<Typography variant='h2' className='bg-background z-10 text-center font-medium capitalize'>
 						{t('ns_erp:titles.purchase_order_seeking')}
 					</Typography>
 					<SearchForm />

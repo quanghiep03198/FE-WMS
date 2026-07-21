@@ -206,7 +206,7 @@ export const ColorPickerHue = ({ className, ...props }: ColorPickerHueProps) => 
 			<Slider.Track className='relative my-0.5 h-3 w-full grow rounded-full bg-[linear-gradient(90deg,#FF0000,#FFFF00,#00FF00,#00FFFF,#0000FF,#FF00FF,#FF0000)]'>
 				<Slider.Range className='absolute h-full' />
 			</Slider.Track>
-			<Slider.Thumb className='block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50' />
+			<Slider.Thumb className='border-primary/50 bg-background focus-visible:ring-ring block h-4 w-4 rounded-full border shadow transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50' />
 		</Slider.Root>
 	)
 }
@@ -233,7 +233,7 @@ export const ColorPickerAlpha = ({ className, ...props }: ColorPickerAlphaProps)
 				<div className='absolute inset-0 rounded-full bg-linear-to-r from-transparent to-black/50' />
 				<Slider.Range className='absolute h-full rounded-full bg-transparent' />
 			</Slider.Track>
-			<Slider.Thumb className='block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50' />
+			<Slider.Thumb className='border-primary/50 bg-background focus-visible:ring-ring block h-4 w-4 rounded-full border shadow transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50' />
 		</Slider.Root>
 	)
 }
@@ -262,7 +262,7 @@ export const ColorPickerEyeDropper = ({ className, ...props }: ColorPickerEyeDro
 
 	return (
 		<Button
-			className={cn('shrink-0 text-muted-foreground', className)}
+			className={cn('text-muted-foreground shrink-0', className)}
 			onClick={handleEyeDropper}
 			size='icon'
 			variant='outline'
@@ -305,9 +305,9 @@ const PercentageInput = ({ className, ...props }: PercentageInputProps) => {
 				readOnly
 				type='text'
 				{...(props as any)}
-				className={cn('h-8 w-13 rounded-l-none bg-secondary px-2 text-xs shadow-none', className)}
+				className={cn('bg-secondary h-8 w-13 rounded-l-none px-2 text-xs shadow-none', className)}
 			/>
-			<span className='absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground'>%</span>
+			<span className='text-muted-foreground absolute top-1/2 right-2 -translate-y-1/2 text-xs'>%</span>
 		</div>
 	)
 }
@@ -326,7 +326,7 @@ export const ColorPickerFormat = ({ className, ...props }: ColorPickerFormatProp
 				className={cn('relative flex w-full items-center -space-x-px rounded-md shadow-sm', className)}
 				{...(props as any)}>
 				<Input
-					className='h-8 rounded-r-none bg-secondary px-2 text-xs shadow-none'
+					className='bg-secondary h-8 rounded-r-none px-2 text-xs shadow-none'
 					readOnly
 					type='text'
 					value={hex}
@@ -347,7 +347,7 @@ export const ColorPickerFormat = ({ className, ...props }: ColorPickerFormatProp
 				{rgb.map((value, index) => (
 					<Input
 						className={cn(
-							'h-8 rounded-r-none bg-secondary px-2 text-xs shadow-none',
+							'bg-secondary h-8 rounded-r-none px-2 text-xs shadow-none',
 							index && 'rounded-l-none',
 							className
 						)}
@@ -371,7 +371,7 @@ export const ColorPickerFormat = ({ className, ...props }: ColorPickerFormatProp
 		return (
 			<div className={cn('w-full rounded-md shadow-sm', className)} {...(props as any)}>
 				<Input
-					className='h-8 w-full bg-secondary px-2 text-xs shadow-none'
+					className='bg-secondary h-8 w-full px-2 text-xs shadow-none'
 					readOnly
 					type='text'
 					value={`rgba(${rgb.join(', ')}, ${alpha}%)`}
@@ -392,7 +392,7 @@ export const ColorPickerFormat = ({ className, ...props }: ColorPickerFormatProp
 				{hsl.map((value, index) => (
 					<Input
 						className={cn(
-							'h-8 rounded-r-none bg-secondary px-2 text-xs shadow-none',
+							'bg-secondary h-8 rounded-r-none px-2 text-xs shadow-none',
 							index && 'rounded-l-none',
 							className
 						)}

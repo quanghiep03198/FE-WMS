@@ -11,7 +11,7 @@ const RemindMessage: React.FC = () => {
 			<Icon
 				name='BotMessageSquare'
 				size={24}
-				className='mr-2 hidden duration-500 animate-in zoom-in-0 slide-in-from-bottom-2 xxl:block'
+				className='animate-in zoom-in-0 slide-in-from-bottom-2 xxl:block mr-2 hidden duration-500'
 			/>
 			&quot;
 			<Typewriter

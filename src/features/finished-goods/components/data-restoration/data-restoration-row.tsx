@@ -89,7 +89,7 @@ const DataRestorationRow: React.FC<DataRestorationRowProps> = ({ data, dataType,
 						align='start'
 						side='left'
 						sideOffset={8}
-						className='w-full max-w-md rounded-md bg-popover text-popover-foreground'>
+						className='bg-popover text-popover-foreground w-full max-w-md rounded-md'>
 						<ListDetail>
 							<ListDetailItem>
 								{t('ns_erp:fields.mo_no')}: <Typography variant='small'>{data?.mo_no}</Typography>

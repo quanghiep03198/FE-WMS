@@ -13,7 +13,7 @@ const PlaceholderSection: React.FC = () => {
 				<Icon
 					name='BotMessageSquare'
 					size={24}
-					className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
+					className='animate-in zoom-in-0 slide-in-from-bottom-2 mr-2 duration-500'
 				/>
 				&quot;
 				<Typewriter text={t('ns_erp:descriptions.provide_po_info')} delay={200} className='italic' />

@@ -80,7 +80,7 @@ export function Combobox<T extends Record<string, any>>({
 					data-empty={!currentValue}
 					onClick={() => setOpen(true)}
 					className={cn(
-						'w-full max-w-full justify-between font-normal data-[empty=true]:text-muted-foreground hover:bg-background data-[empty=true]:hover:text-muted-foreground',
+						'data-[empty=true]:text-muted-foreground hover:bg-background data-[empty=true]:hover:text-muted-foreground w-full max-w-full justify-between font-normal',
 						triggerProps?.className
 					)}>
 					{currentValueText || placeholder}
@@ -99,7 +99,7 @@ export function Combobox<T extends Record<string, any>>({
 					/>
 					<CommandEmpty>Không có kết quả phù hợp</CommandEmpty>
 
-					<CommandList className='max-h-80 scrollbar'>
+					<CommandList className='scrollbar max-h-80'>
 						<CommandGroup>
 							{options.map((option) => (
 								<CommandItem

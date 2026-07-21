@@ -29,7 +29,7 @@ function Page() {
 				UserRole.FG_WAREHOUSE_STAFF,
 				UserRole.INDUSTRIAL_ENGINEERING_STAFF
 			]}>
-			<Div as='section' className='pt-4 @container xxl:min-h-(--outlet-wrapper-height)'>
+			<Div as='section' className='xxl:min-h-(--outlet-wrapper-height) @container pt-4'>
 				<PageHeader />
 				<SearchBox />
 				<DataSection />

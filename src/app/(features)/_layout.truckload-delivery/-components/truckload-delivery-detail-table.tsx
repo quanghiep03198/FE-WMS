@@ -150,12 +150,12 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	}
 
 	return (
-		<Div className='space-y-6 overflow-clip rounded-md border bg-background'>
+		<Div className='bg-background space-y-6 overflow-clip rounded-md border'>
 			<Div className='relative'>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
 						<FieldSet className='max-h-112 overflow-scroll md:max-h-[500px]'>
-							<Table className='w-full table-auto border-separate border-spacing-0 [&_td:has(input)]:p-0.5! [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
+							<Table className='[&_th]:bg-table-head w-full table-auto border-separate border-spacing-0 [&_td]:h-12 [&_td]:border-x-0 [&_td:has(input)]:p-0.5! [&_td>span]:line-clamp-1 [&_th]:border-x-0 [&_th>span]:line-clamp-1'>
 								<TableHeader className='sticky top-0 z-10'>
 									<TableRow>
 										<TableHead colSpan={isLargeScreen ? 7 : 4} align='center' className='text-foreground'>
@@ -390,7 +390,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								<Icon
 									name='BotMessageSquare'
 									size={24}
-									className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
+									className='animate-in zoom-in-0 slide-in-from-bottom-2 mr-2 duration-500'
 								/>
 								&quot;
 								<Typewriter
@@ -523,7 +523,7 @@ const Signature: React.FC<{
 				{data[type] ? (
 					<img
 						loading='lazy'
-						className='aspect-video max-w-24 cursor-pointer object-contain object-center dark:invert md:max-w-20'
+						className='aspect-video max-w-24 cursor-pointer object-contain object-center md:max-w-20 dark:invert'
 						src={data[type]}
 						alt={type}
 						onClick={handleUpdateSignature}

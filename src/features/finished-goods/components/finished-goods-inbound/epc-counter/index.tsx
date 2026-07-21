@@ -14,12 +14,12 @@ const ScannedEpcCounter: React.FC = () => {
 	return (
 		<Div
 			data-slot='epc-counter'
-			className='relative flex flex-col items-center justify-center overflow-clip rounded-lg border px-4 py-10 @5xl:py-8 lg:py-4'>
+			className='relative flex flex-col items-center justify-center overflow-clip rounded-lg border px-4 py-10 lg:py-4 @5xl:py-8'>
 			<ScanningSkeleton />
 			<ScanningCounter />
 			<Typography
 				variant='small'
-				className='relative z-10 mb-6 whitespace-nowrap text-center text-xs xxl:text-sm'
+				className='xxl:text-sm relative z-10 mb-6 text-center text-xs whitespace-nowrap'
 				color='muted'>
 				{t('ns_inoutbound:counter_box.caption')}
 			</Typography>
@@ -66,7 +66,7 @@ const ScanningCounter: React.FC = () => {
 			<Typography className='inline-flex items-center gap-x-2 font-medium'>
 				{t('ns_inoutbound:counter_box.label')}
 			</Typography>
-			<Separator className='h-0.5 w-1.5 self-center bg-foreground' />
+			<Separator className='bg-foreground h-0.5 w-1.5 self-center' />
 			<Typography className='inline-flex gap-x-1 font-bold'>
 				{formatIntlNumber(count)}
 				<Typography as='small' variant='small' className='text-xs font-medium'>

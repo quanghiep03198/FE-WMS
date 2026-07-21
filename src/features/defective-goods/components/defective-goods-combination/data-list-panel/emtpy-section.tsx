@@ -11,7 +11,7 @@ const EmptySection: React.FC = () => {
 			<Div className='flex flex-col items-center justify-center gap-y-2'>
 				<PlaceHolderItems />
 				<Typography>{t('ns_common:table.no_data')}</Typography>
-				<Typography variant='small' color='muted' className='text-pretty text-center'>
+				<Typography variant='small' color='muted' className='text-center text-pretty'>
 					{t('ns_inoutbound:description.empty_defect_item_caption')}
 				</Typography>
 			</Div>

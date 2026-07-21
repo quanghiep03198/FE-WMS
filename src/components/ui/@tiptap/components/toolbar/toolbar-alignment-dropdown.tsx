@@ -116,7 +116,7 @@ export const AlignmentDropdownMenu: React.FC = () => {
 							<DropdownMenuRadioItem
 								key={option.value}
 								value={option.value}
-								className={cn('p-2 hover:bg-accent hover:text-accent-foreground [&>span]:hidden', {
+								className={cn('hover:bg-accent hover:text-accent-foreground p-2 [&>span]:hidden', {
 									'bg-secondary': alignmentState?.value === option.value
 								})}>
 								<Icon name={option.icon} size={16} />

@@ -165,15 +165,15 @@ const DeviceDataTable: React.FC = () => {
 				enableResizing: true,
 				enableColumnFilter: true,
 				cell: (info) => (
-					<Badge variant='outline' className={cn('justify-center gap-x-2 whitespace-nowrap rounded')}>
+					<Badge variant='outline' className={cn('justify-center gap-x-2 rounded whitespace-nowrap')}>
 						{info.getValue() === RecordStatus.ACTIVE ? (
 							<Fragment>
-								<Icon name='CircleCheck' className='size-4 fill-success stroke-success-foreground' />
+								<Icon name='CircleCheck' className='fill-success stroke-success-foreground size-4' />
 								{t('ns_common:status.active')}
 							</Fragment>
 						) : (
 							<Fragment>
-								<Icon name='CircleMinus' className='size-4 stroke-muted-foreground' />
+								<Icon name='CircleMinus' className='stroke-muted-foreground size-4' />
 								{t('ns_common:status.deactivated')}
 							</Fragment>
 						)}

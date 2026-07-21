@@ -54,7 +54,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 	const metaUniqueValues = column.columnDef.meta?.facetedUniqueValues
 	if (!column.columnDef.enableColumnFilter)
 		return (
-			<Div className='flex h-full select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
+			<Div className='text-muted-foreground/50 flex h-full items-center justify-center px-2 text-xs font-medium select-none'>
 				<Icon name='Minus' />
 			</Div>
 		)
@@ -95,7 +95,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 		case 'autocomplete': {
 			return (
 				<AutoComplete
-					className='h-(--row-height) w-full rounded-none border-none! bg-transparent px-4 text-sm font-normal text-muted-foreground shadow-none outline-none ring-0 placeholder:text-sm hover:text-foreground focus:border-none focus:ring-0'
+					className='text-muted-foreground hover:text-foreground h-(--row-height) w-full rounded-none border-none! bg-transparent px-4 text-sm font-normal shadow-none ring-0 outline-none placeholder:text-sm focus:border-none focus:ring-0'
 					value={currentFilterValue ?? ''}
 					onInput={setCurrentFilterValue}
 					onSelect={setCurrentFilterValue}

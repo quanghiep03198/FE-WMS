@@ -111,7 +111,7 @@ const UserTable: React.FC = () => {
 					return (
 						<Badge
 							variant='outline'
-							className='justify-center gap-x-2 whitespace-nowrap rounded-l-full rounded-r-full'>
+							className='justify-center gap-x-2 rounded-l-full rounded-r-full whitespace-nowrap'>
 							<Icon
 								name={isActive ? 'CircleCheck' : 'CircleMinus'}
 								aria-current={isActive}

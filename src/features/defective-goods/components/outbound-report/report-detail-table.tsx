@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_data'] }> = ({ data }) => {
 	const { t } = useTranslation()
 	return (
-		<Div className='right-0 top-0 w-96 overflow-clip rounded-md border'>
+		<Div className='top-0 right-0 w-96 overflow-clip rounded-md border'>
 			<Table className='table-fixed border-none!'>
 				<TableHeader>
 					<TableRow>

@@ -27,9 +27,9 @@ function RouteComponent() {
 		<SidebarProvider data-state-persistent-key='rfidAgentDocSidebarOpen' className='h-screen overflow-hidden'>
 			<PageProvider>
 				<NavSidebar />
-				<Div id='content' className='relative h-screen flex-1 overflow-y-scroll scroll-smooth @container'>
+				<Div id='content' className='@container relative h-screen flex-1 overflow-y-scroll scroll-smooth'>
 					<NavHeader />
-					<Div as='main' className='container relative flex-1 basis-full space-y-20 p-6 sm:p-4'>
+					<Div as='main' className='relative container flex-1 basis-full space-y-20 p-6 sm:p-4'>
 						<ErrorBoundary
 							fallbackRender={({ error, resetErrorBoundary }) => {
 								return (

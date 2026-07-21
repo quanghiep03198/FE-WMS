@@ -27,10 +27,10 @@ import type { SelectProps } from '@radix-ui/react-select'
 import { capitalize } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDefectiveCategoryChartConfig } from '../hooks/use-defective-category-chart-configs'
-import { useGetDefectiveGoodsInventoryCompositionQuery } from '../hooks/use-statistic-request'
 import { DefectiveCategory } from '../../defective-goods/constants/enums'
 import { useDefectiveCategoryList } from '../../defective-goods/hooks/use-defective-category-list'
+import { useDefectiveCategoryChartConfig } from '../hooks/use-defective-category-chart-configs'
+import { useGetDefectiveGoodsInventoryCompositionQuery } from '../hooks/use-statistic-request'
 
 const DefectiveGoodsInventoryOverview: React.FC = () => {
 	const { t } = useTranslation()
@@ -51,7 +51,7 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 	const isEmpty = !Array.isArray(chartData) || chartData.every((item) => item.qty === 0)
 
 	return (
-		<Card className='h-full @container/card'>
+		<Card className='@container/card h-full'>
 			<CardHeader>
 				<CardTitle>{t('ns_dashboard:defective_goods_inventory_overview')}</CardTitle>
 				<CardDescription className='text-pretty'>
@@ -74,7 +74,7 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 				{isLoading ? (
 					<Skeleton className='mx-auto aspect-square max-h-64 rounded-full @xl/card:max-h-80' />
 				) : isEmpty ? (
-					<Div className='mx-auto flex h-full min-h-64 items-center justify-center gap-2 rounded-lg bg-muted text-muted-foreground'>
+					<Div className='bg-muted text-muted-foreground mx-auto flex h-full min-h-64 items-center justify-center gap-2 rounded-lg'>
 						<Icon name='ChartPie' size={32} strokeWidth={1} />
 						{t('ns_common:table.no_data')}
 					</Div>
@@ -139,11 +139,11 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 				)}
 			</CardContent>
 			<CardFooter className='flex-col items-start gap-2 text-sm'>
-				<Div className='font-medium leading-none'>
+				<Div className='leading-none font-medium'>
 					{t('ns_erp:fields.actual_inventory_qty')} {' : '}
 					{isEmpty ? 0 : chartData.reduce((acc, curr) => acc + curr.qty, 0).toLocaleString()} (prs/pcs)
 				</Div>
-				<Div className='leading-none text-muted-foreground'>
+				<Div className='text-muted-foreground leading-none'>
 					{t('ns_dashboard:all_time_defective_goods_inventory_qty')}
 				</Div>
 			</CardFooter>

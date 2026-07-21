@@ -5,12 +5,12 @@ import React from 'react'
 const Footer: React.FC = () => {
 	return (
 		<footer className='border-t py-3'>
-			<div className='container mx-auto flex items-center justify-between gap-6 sm:flex-col xl:max-w-7xl xxl:max-w-8xl'>
+			<div className='xxl:max-w-8xl container mx-auto flex items-center justify-between gap-6 sm:flex-col xl:max-w-7xl'>
 				<ThemeSwitcher />
 				<Typography variant='small'>© GreenLand Inc, {new Date().getFullYear()}. All rights reserved.</Typography>
 				<a
 					href='https://github.com/quanghiep03198/rfid-agent'
-					className='inline-flex items-center gap-x-2 text-sm text-muted-foreground'>
+					className='text-muted-foreground inline-flex items-center gap-x-2 text-sm'>
 					<svg
 						xmlns='http://www.w3.org/2000/svg'
 						width='24'

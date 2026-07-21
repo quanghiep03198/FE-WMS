@@ -20,7 +20,7 @@ const DataTableSummary: React.FC<{ data: IMonthlyInventoryAudit[]; isLoading: bo
 	return (
 		<Table className='w-full table-fixed'>
 			<TableHeader>
-				<TableRow className='[&_th>span]:line-clamp-1 [&_th]:bg-table-head [&_th]:capitalize [&_th]:text-table-head-foreground'>
+				<TableRow className='[&_th]:bg-table-head [&_th]:text-table-head-foreground [&_th]:capitalize [&_th>span]:line-clamp-1'>
 					<TableHead align='right'>
 						<span>{t('ns_erp:fields.total_init_qty')}</span>
 					</TableHead>

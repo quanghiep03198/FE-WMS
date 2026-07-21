@@ -103,9 +103,9 @@ const EpcDetailTable: React.FC = () => {
 	}, [data])
 
 	return (
-		<Div className='grid grid-rows-[auto_var(--bar-height)] divide-y divide-border overflow-hidden'>
+		<Div className='divide-border grid grid-rows-[auto_var(--bar-height)] divide-y overflow-hidden'>
 			<Div
-				className='relative! h-[calc(var(--detail-table-panel-height)-var(--bar-height))] w-full overflow-scroll scrollbar-track-accent/50 @container/1'
+				className='scrollbar-track-accent/50 @container/1 relative! h-[calc(var(--detail-table-panel-height)-var(--bar-height))] w-full overflow-scroll'
 				style={
 					{
 						'--col-width': '160px'
@@ -113,14 +113,14 @@ const EpcDetailTable: React.FC = () => {
 				}>
 				<Table
 					className={cn(
-						'w-full table-auto [&_span]:line-clamp-1 [&_th]:bg-table-head [&_th]:text-table-head-foreground'
+						'[&_th]:bg-table-head [&_th]:text-table-head-foreground w-full table-auto [&_span]:line-clamp-1'
 					)}>
 					<colgroup>
 						<col style={{ minWidth: 'var(--col-width)', maxWidth: 'var(--col-width)' }} />
 						<col style={{ minWidth: 'var(--col-width)', maxWidth: 'var(--col-width)' }} />
 						<col style={{ minWidth: 'calc(100cqw - 2 * var(--col-width))' }} />
 					</colgroup>
-					<TableHeader className='sticky top-0 z-20 h-[calc(var(--bar-height)+1px)] [&_th]:border-b [&_th]:bg-table-head'>
+					<TableHeader className='[&_th]:bg-table-head sticky top-0 z-20 h-[calc(var(--bar-height)+1px)] [&_th]:border-b'>
 						<TableRow>
 							<TableHead align='left' className='sticky left-0 z-20'>
 								<span>{t('ns_erp:fields.factory_shoes_style')}</span>
@@ -188,11 +188,11 @@ const EpcDetailTable: React.FC = () => {
 					</TableBody>
 				</Table>
 			</Div>
-			<Div className='bg-table-header flex h-(--bar-height) basis-(--bar-height) items-center justify-between p-4 text-table-head-foreground'>
+			<Div className='bg-table-header text-table-head-foreground flex h-(--bar-height) basis-(--bar-height) items-center justify-between p-4'>
 				<Typography variant='small'>{t('ns_inoutbound:description.inoutbound_table_caption')}</Typography>
-				<Typography className='inline-flex items-center gap-x-1.5 font-medium text-foreground'>
+				<Typography className='text-foreground inline-flex items-center gap-x-1.5 font-medium'>
 					<span>{t('ns_common:common_fields.total')}</span>
-					<Separator className='h-px basis-1.5 bg-foreground' />
+					<Separator className='bg-foreground h-px basis-1.5' />
 					<span>{formatIntlNumber(totalQty)}</span>
 					<small className='place-self-start self-start text-xs'>prs</small>
 				</Typography>

@@ -21,10 +21,7 @@ type TStepState = {
 }
 
 type TStepAction =
-	| { type: 'PREV_STEP' }
-	| { type: 'NEXT_STEP' }
-	| { type: 'GO_TO_STEP'; payload: number }
-	| { type: 'COMPLETE' }
+	{ type: 'PREV_STEP' } | { type: 'NEXT_STEP' } | { type: 'GO_TO_STEP'; payload: number } | { type: 'COMPLETE' }
 
 type TStepContext = {
 	steps: TStepState
@@ -152,7 +149,7 @@ const Steps: React.FC<TStepsProps> = ({ enableChangeStep }) => {
 	}
 
 	return (
-		<Div as='nav' aria-label='Progress' className='sticky top-0 z-20 w-full bg-background'>
+		<Div as='nav' aria-label='Progress' className='bg-background sticky top-0 z-20 w-full'>
 			<StepList role='list'>
 				{data.map((step: TStep) => {
 					const stepTitle = t(step.title, { defaultValue: step.title, ns: undefined })
@@ -161,7 +158,7 @@ const Steps: React.FC<TStepsProps> = ({ enableChangeStep }) => {
 						<StepItem key={step.index} onClick={() => handleChangeStep(step)}>
 							{step.status === 'completed' ? (
 								<StepTrigger>
-									<StepIndicator className='border-success bg-success duration-200 group-hover:bg-success/80'>
+									<StepIndicator className='border-success bg-success group-hover:bg-success/80 duration-200'>
 										<Icon name='Check' size={20} className='text-success-foreground' aria-hidden='true' />
 									</StepIndicator>
 									<Div>
@@ -210,8 +207,8 @@ const Steps: React.FC<TStepsProps> = ({ enableChangeStep }) => {
 }
 
 const StepSeparator: React.FC = () => (
-	<div className='absolute right-0 top-0 h-full w-5 translate-x-1/2 sm:hidden md:hidden' aria-hidden='true'>
-		<svg className='h-full w-full text-border' viewBox='0 0 22 80' fill='none' preserveAspectRatio='none'>
+	<div className='absolute top-0 right-0 h-full w-5 translate-x-1/2 sm:hidden md:hidden' aria-hidden='true'>
+		<svg className='text-border h-full w-full' viewBox='0 0 22 80' fill='none' preserveAspectRatio='none'>
 			<path d='M0 -2L20 40L0 82' vectorEffect='non-scaling-stroke' stroke='currentcolor' strokeLinejoin='round' />
 		</svg>
 	</div>

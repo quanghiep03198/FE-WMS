@@ -16,13 +16,13 @@ const PlaceholderItem: React.FC<React.ComponentProps<'div'>> = ({ className, ...
 	return (
 		<Div
 			className={cn(
-				'grid w-full max-w-48 grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2 rounded-md border bg-background p-2 shadow-md',
+				'bg-background grid w-full max-w-48 grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2 rounded-md border p-2 shadow-md',
 				className
 			)}
 			{...props}>
-			<Div className='col-start-1 row-span-2 aspect-square size-8 rounded bg-accent' />
-			<Div className='col-start-2 row-start-1 aspect-square h-3 w-full rounded bg-accent' />
-			<Div className='col-start-2 row-start-2 aspect-square h-3 w-2/3 rounded bg-accent' />
+			<Div className='bg-accent col-start-1 row-span-2 aspect-square size-8 rounded' />
+			<Div className='bg-accent col-start-2 row-start-1 aspect-square h-3 w-full rounded' />
+			<Div className='bg-accent col-start-2 row-start-2 aspect-square h-3 w-2/3 rounded' />
 		</Div>
 	)
 }

@@ -99,7 +99,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 			role='navigation'
 			className='ml-auto flex items-center space-x-2 py-0.5 sm:space-x-2 lg:space-x-4 xl:space-x-4'>
 			<Div className='flex items-center space-x-2'>
-				<Label className='whitespace-nowrap font-medium'>{t('ns_common:table.rows_per_page')}</Label>
+				<Label className='font-medium whitespace-nowrap'>{t('ns_common:table.rows_per_page')}</Label>
 				<AutoComplete
 					type='number'
 					value={pageSize === 1 ? null : pageSize}
@@ -116,15 +116,15 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 					valueField='value'
 				/>
 			</Div>
-			<Separator orientation='vertical' className='h-6 w-1 bg-border sm:hidden md:hidden' />
-			<Typography variant='small' className='whitespace-nowrap text-center font-medium'>
+			<Separator orientation='vertical' className='bg-border h-6 w-1 sm:hidden md:hidden' />
+			<Typography variant='small' className='text-center font-medium whitespace-nowrap'>
 				{t('table.page', {
 					ns: 'ns_common',
 					defaultValue: pageIndexContext,
 					page: pageIndexContext
 				})}
 			</Typography>
-			<Separator orientation='vertical' className='h-6 w-1 bg-border sm:hidden md:hidden' />
+			<Separator orientation='vertical' className='bg-border h-6 w-1 sm:hidden md:hidden' />
 			<ButtonGroup>
 				<Tooltip
 					message={t('pagination.first_page', { defaultValue: 'First page' })}

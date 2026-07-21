@@ -43,5 +43,5 @@ export const PageWrapper: React.FC<React.ComponentProps<'section'>> = ({ childre
 }
 
 export const PageSeparator: React.FC<React.ComponentProps<typeof Separator>> = ({ className, ...props }) => (
-	<Separator {...props} className={cn('hidden xxl:block', className)} />
+	<Separator {...props} className={cn('xxl:block hidden', className)} />
 )

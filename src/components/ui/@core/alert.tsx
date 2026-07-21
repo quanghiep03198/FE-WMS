@@ -27,7 +27,7 @@ const Alert: React.FC<React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof
 Alert.displayName = 'Alert'
 
 const AlertTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({ className, ...props }) => (
-	<h5 className={cn('mb-1 font-medium leading-none tracking-tight', className)} {...props} />
+	<h5 className={cn('mb-1 leading-none font-medium tracking-tight', className)} {...props} />
 )
 AlertTitle.displayName = 'AlertTitle'
 

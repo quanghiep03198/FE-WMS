@@ -121,7 +121,7 @@ const AlreadyScannedEpcsAlert: React.FC = () => {
 				meta: { align: 'center' },
 				cell: ({ row }) => (
 					<GhostButton
-						className='w-full hover:text-destructive'
+						className='hover:text-destructive w-full'
 						data-pending={isPending}
 						onClick={() => handleDeleteEpcs(row.original.epc)}>
 						<Icon name='Trash2' />

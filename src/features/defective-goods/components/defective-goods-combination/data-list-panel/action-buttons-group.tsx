@@ -22,7 +22,7 @@ const ActionButtonsGroup: React.FC = () => {
 					variant='default'
 					className={cn(
 						'aspect-square size-8 p-0',
-						isTogglingExpand && 'duration-200 ease-in-out animate-out fade-out-50'
+						isTogglingExpand && 'animate-out fade-out-50 duration-200 ease-in-out'
 					)}
 					pressed={!isAllCardsExpanded}
 					onPressedChange={toggleAllCardExpaned}>

@@ -88,7 +88,7 @@ const DataSection: React.FC = () => {
 	if (!Array.isArray(data) || !data.length) return <EmptySearchResult />
 
 	return (
-		<Div className='relative max-h-96 overflow-auto rounded-lg border scrollbar-track-accent/50 @container'>
+		<Div className='scrollbar-track-accent/50 @container relative max-h-96 overflow-auto rounded-lg border'>
 			<Table
 				className='table-auto [&_span]:line-clamp-1'
 				style={{ '--column-width': '200px' } as React.CSSProperties}>
@@ -142,7 +142,7 @@ const DataSection: React.FC = () => {
 							<TableHead
 								key={column.accessorKey}
 								title={column.header}
-								className='bg-table-row-active! capitalize text-table-head-foreground first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+								className='bg-table-row-active! text-table-head-foreground capitalize first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>{column.header}</span>
 							</TableHead>
@@ -158,7 +158,7 @@ const DataSection: React.FC = () => {
 							return (
 								<TableHead
 									key={column.accessorKey}
-									className='font-normal text-foreground first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+									className='text-foreground font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 									{...column.meta}>
 									<span data-empty={!cellValue} className='data-[empty=true]:text-muted-foreground'>
 										{cellValue ?? t('ns_common:titles.unknown')}

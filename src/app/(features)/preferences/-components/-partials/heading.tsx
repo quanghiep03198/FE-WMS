@@ -9,7 +9,7 @@ const Heading: React.FC = () => {
 	const router = useRouter()
 
 	return (
-		<Div className='sticky top-0 z-20 mx-auto flex w-full max-w-7xl basis-40 items-start justify-between border-b border-border bg-background/85 py-10 backdrop-blur xxl:max-w-8xl'>
+		<Div className='border-border bg-background/85 xxl:max-w-8xl sticky top-0 z-20 mx-auto flex w-full max-w-7xl basis-40 items-start justify-between border-b py-10 backdrop-blur'>
 			<Div className='space-y-2'>
 				<Typography variant='h1' className='font-bold tracking-tight'>
 					{t('ns_common:navigation.settings')}

@@ -55,7 +55,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 	const metaUniqueValues = column.columnDef.meta?.facetedUniqueValues
 	if (!column.columnDef.enableColumnFilter)
 		return (
-			<Div className='flex h-full select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
+			<Div className='text-muted-foreground/50 flex h-full items-center justify-center px-2 text-xs font-medium select-none'>
 				<Icon name='Minus' />
 			</Div>
 		)

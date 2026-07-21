@@ -22,7 +22,7 @@ const SupportSection: React.FunctionComponent = () => {
 				animationFillMode: 'both',
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}
-			className='relative w-full border-y px-3 py-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xl:px-0'>
+			className='animate-in fade-in-0 slide-in-from-bottom-4 relative w-full border-y px-3 py-10 duration-700 xl:px-0'>
 			<GridBackground className='absolute inset-0 z-[-1] mask-[radial-gradient(50%_100%_at_top_center,white,transparent)]' />
 			<Div className='mx-auto my-20 w-full max-w-3xl gap-10 space-y-8 pb-10 xl:space-y-12'>
 				<Div className='relative space-y-3 overflow-hidden text-center'>
@@ -33,13 +33,13 @@ const SupportSection: React.FunctionComponent = () => {
 					</Typography>
 				</Div>
 				<Div className='group/support flex gap-x-6'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-accent'>
+					<Div className='bg-accent grid aspect-square size-12 place-content-center rounded-lg'>
 						<Icon
 							name='MessagesSquare'
 							size={24}
 							strokeWidth={1.5}
 							aria-hidden='true'
-							className='transition-colors duration-200 group-hover/support:stroke-active'
+							className='group-hover/support:stroke-active transition-colors duration-200'
 						/>
 					</Div>
 					<Div>
@@ -50,19 +50,19 @@ const SupportSection: React.FunctionComponent = () => {
 						</Typography>
 						<a
 							href='#chat'
-							className='inline-flex items-center gap-x-2 text-sm font-medium text-primary underline-offset-4 hover:underline'>
+							className='text-primary inline-flex items-center gap-x-2 text-sm font-medium underline-offset-4 hover:underline'>
 							{`Let's talk`} <Icon name='ArrowRight' size={12} />
 						</a>
 					</Div>
 				</Div>
 				<Div className='group/support flex gap-x-6'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-accent'>
+					<Div className='bg-accent grid aspect-square size-12 place-content-center rounded-lg'>
 						<Icon
 							name='Bug'
 							size={24}
 							strokeWidth={1.5}
 							aria-hidden='true'
-							className='transition-colors duration-200 group-hover/support:stroke-destructive'
+							className='group-hover/support:stroke-destructive transition-colors duration-200'
 						/>
 					</Div>
 					<Div>
@@ -78,7 +78,7 @@ const SupportSection: React.FunctionComponent = () => {
 					</Div>
 				</Div>
 				<Div className='group/support flex gap-x-6'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-accent'>
+					<Div className='bg-accent grid aspect-square size-12 place-content-center rounded-lg'>
 						<Icon
 							name='Computer'
 							size={24}
@@ -95,7 +95,7 @@ const SupportSection: React.FunctionComponent = () => {
 						</Typography>
 						<a
 							href='#wechat'
-							className='inline-flex items-center gap-x-2 text-sm font-medium text-primary underline-offset-4 hover:underline'>
+							className='text-primary inline-flex items-center gap-x-2 text-sm font-medium underline-offset-4 hover:underline'>
 							Join our WeChat <Icon name='ArrowRight' size={12} />
 						</a>
 					</Div>

@@ -78,7 +78,7 @@ const Statistics: React.FC = () => {
 						{t(getAnalysisSentence(data?.inbound_percentage_change), { ns: 'ns_dashboard', defaultValue: null })}{' '}
 						<Icon name={getTrendingIcon(data?.inbound_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='lowercase text-muted-foreground first-letter:uppercase'>
+					<Typography variant='small' className='text-muted-foreground lowercase first-letter:uppercase'>
 						{t(
 							...getDetailDescription(
 								data?.inbound_percentage_change,
@@ -104,7 +104,7 @@ const Statistics: React.FC = () => {
 						{t(getAnalysisSentence(data?.outbound_percentage_change), { ns: 'ns_dashboard', defaultValue: null })}{' '}
 						<Icon name={getTrendingIcon(data?.outbound_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='lowercase text-muted-foreground first-letter:uppercase'>
+					<Typography variant='small' className='text-muted-foreground lowercase first-letter:uppercase'>
 						{t(
 							...getDetailDescription(
 								data?.outbound_percentage_change,
@@ -133,7 +133,7 @@ const Statistics: React.FC = () => {
 						})}
 						<Icon name={getTrendingIcon(data?.inventory_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='lowercase text-muted-foreground first-letter:uppercase'>
+					<Typography variant='small' className='text-muted-foreground lowercase first-letter:uppercase'>
 						{t(
 							...getDetailDescription(
 								data?.inventory_percentage_change,
@@ -162,7 +162,7 @@ const Statistics: React.FC = () => {
 						})}
 						<Icon name={getTrendingIcon(data?.turnover_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='lowercase text-muted-foreground first-letter:uppercase'>
+					<Typography variant='small' className='text-muted-foreground lowercase first-letter:uppercase'>
 						{t(
 							...getDetailDescription(
 								data?.turnover_percentage_change,

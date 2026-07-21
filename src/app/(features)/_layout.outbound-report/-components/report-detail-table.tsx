@@ -20,7 +20,7 @@ const OutboundReportDetailTable: React.FC<Pick<IOutboundReport, 'detail' | 'over
 							{t('ns_erp:fields.mo_no')}
 						</TableHead>
 						<TableHead align='center'>Size</TableHead>
-						<TableHead align='right' className='right-0 z-20 w-28 min-w-28 bg-background xl:sticky'>
+						<TableHead align='right' className='bg-background right-0 z-20 w-28 min-w-28 xl:sticky'>
 							{t('ns_common:common_fields.total')}
 						</TableHead>
 					</TableRow>
@@ -30,7 +30,7 @@ const OutboundReportDetailTable: React.FC<Pick<IOutboundReport, 'detail' | 'over
 						detail.map((item) => <ReportDetailRow key={item.mo_no} data={item} />)
 					) : (
 						<TableRow>
-							<TableCell align='center' colSpan={4} className='border-b! p-20 text-muted-foreground'>
+							<TableCell align='center' colSpan={4} className='text-muted-foreground border-b! p-20'>
 								<Div className='inline-flex items-center justify-center gap-x-2'>
 									<Icon name='Inbox' size={24} strokeWidth={1} />
 									{t('ns_common:table.no_data')}

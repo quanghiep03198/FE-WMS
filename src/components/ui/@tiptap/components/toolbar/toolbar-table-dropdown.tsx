@@ -69,10 +69,10 @@ const TableDropdownMenu: React.FC = () => {
 						<DropdownMenuSubContent className='p-4'>
 							<Div className='grid gap-4'>
 								<Div className='space-y-2'>
-									<h4 className='text-base font-medium leading-none'>
+									<h4 className='text-base leading-none font-medium'>
 										{t('ns_common:editor.table_option_title')}
 									</h4>
-									<p className='text-sm text-muted-foreground'>
+									<p className='text-muted-foreground text-sm'>
 										{t('ns_common:editor.table_option_description')}
 									</p>
 								</Div>

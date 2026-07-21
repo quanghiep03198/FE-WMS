@@ -242,7 +242,7 @@ const DefectiveGoodsForm: React.FC = () => {
 				{/* Form controls */}
 				<Div
 					id='combination-form-header'
-					className='col-span-full flex h-max max-h-full min-h-(--bar-height) items-center justify-between gap-x-6 bg-background px-2'>
+					className='bg-background col-span-full flex h-max max-h-full min-h-(--bar-height) items-center justify-between gap-x-6 px-2'>
 					<ListPanelToggle />
 					<DataListPanelSheetTrigger />
 					<RoleBaseAccessControl
@@ -297,10 +297,7 @@ const DefectiveGoodsForm: React.FC = () => {
 												: 'animate-in fade-in-100 slide-in-from-left-2'
 										)
 									)}>
-									<Icon
-										name={isPending ? 'LoaderCircle' : 'Check'}
-										className={isPending && 'animate-spin'}
-									/>{' '}
+									<Icon name={isPending ? 'LoaderCircle' : 'Check'} className={isPending && 'animate-spin'} />{' '}
 									{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 								</Button>
 							</Div>
@@ -427,7 +424,7 @@ const DefectiveGoodsForm: React.FC = () => {
 						<ShoeSourceFieldControl disabled={isNil(formAction)} />
 					</Div>
 					<Div className='relative col-span-full'>
-						<Div className='absolute right-0 top-0 inline-flex items-center gap-x-3'>
+						<Div className='absolute top-0 right-0 inline-flex items-center gap-x-3'>
 							<Label htmlFor='toggle-use-desc-template' className='inline-flex items-center gap-x-2'>
 								<Icon name='Sparkles' strokeWidth={1.5} />
 								{t('ns_common:editor.use_available_template')}
@@ -453,7 +450,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 				</Div>
 				{/* Footer bar */}
-				<Div className='flex max-h-full min-h-(--bar-height) items-center justify-between gap-x-2 bg-background px-4'>
+				<Div className='bg-background flex max-h-full min-h-(--bar-height) items-center justify-between gap-x-2 px-4'>
 					<MobileReaderPlaygroundTrigger />
 					<ToggleFullscreen />
 					<CombinationStrategySelect disabled={formAction === CommonActions.UPDATE} />

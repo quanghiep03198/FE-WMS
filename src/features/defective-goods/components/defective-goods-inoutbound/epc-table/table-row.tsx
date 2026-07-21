@@ -20,9 +20,7 @@ export const DataTableRow: React.FC<{
 						key={cell.id}
 						style={{ width: `var(--column-${cell.column.id}-size)` }}
 						align={columnDef.meta?.align ?? 'left'}>
-						<span className='line-clamp-1 text-ellipsis'>
-							{flexRender(columnDef.cell, cell.getContext())}
-						</span>
+						<span className='line-clamp-1 text-ellipsis'>{flexRender(columnDef.cell, cell.getContext())}</span>
 					</TableCell>
 				)
 			})}

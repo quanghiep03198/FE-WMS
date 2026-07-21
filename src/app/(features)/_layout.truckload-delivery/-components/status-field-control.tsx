@@ -82,9 +82,9 @@ const StatusFieldControl: React.FC<StatusFieldControlProps> = ({ name, disabled 
 									<SelectTrigger
 										disabled={field.disabled}
 										className={cn(
-											'w-full bg-background focus:border-primary',
+											'bg-background focus:border-primary w-full',
 											isError &&
-												'w-full border-destructive focus:border-destructive active:border-destructive',
+												'border-destructive focus:border-destructive active:border-destructive w-full',
 											!field.value && 'text-muted-foreground'
 										)}>
 										<SelectValue placeholder={!field.value && t('ns_erp:fields.status_approve')} />

@@ -35,7 +35,7 @@ const AutoRefreshToggle: React.FC = () => {
 
 	return (
 		<HoverCard>
-			<HoverCardTrigger className='inline-flex items-center justify-center gap-x-3 rounded-md bg-accent/60 px-4 py-2 shadow'>
+			<HoverCardTrigger className='bg-accent/60 inline-flex items-center justify-center gap-x-3 rounded-md px-4 py-2 shadow'>
 				<Label htmlFor={id}>{t('ns_common:table.auto_refresh')}</Label>
 				<Switch
 					id={id}

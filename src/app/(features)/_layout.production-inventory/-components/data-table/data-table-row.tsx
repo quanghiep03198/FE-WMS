@@ -32,7 +32,7 @@ const DataTableRow: React.FC<DataTableRowProps> = ({ row, size }) => {
 								...getCanSticky(cell.column.id)
 							}}>
 							<Div
-								className={cn('w-full max-w-full place-content-center truncate text-ellipsis text-sm', {
+								className={cn('w-full max-w-full place-content-center truncate text-sm text-ellipsis', {
 									'text-left!': meta?.align === 'left',
 									'text-center!': meta?.align === 'center',
 									'text-right!': meta?.align === 'right'
@@ -48,7 +48,7 @@ const DataTableRow: React.FC<DataTableRowProps> = ({ row, size }) => {
 					colSpan={row.getVisibleCells()?.length}
 					className={cn('p-0', !isExpanded ? 'border-none shadow-none' : 'shadow-[inset_0_0px_4px_#17171725]')}>
 					<Collapsible open={isExpanded} data-state={isExpanded ? 'open' : 'closed'}>
-						<CollapsibleContent className='sticky left-0 w-[calc(100cqw-10px)] overflow-hidden bg-accent/50 transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+						<CollapsibleContent className='bg-accent/50 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down sticky left-0 w-[calc(100cqw-10px)] overflow-hidden transition-none'>
 							<Div className='p-3'>
 								<SizeTable
 									data={row.original.inv_sizes}

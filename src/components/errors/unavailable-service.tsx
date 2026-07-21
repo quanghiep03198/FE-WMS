@@ -16,7 +16,7 @@ const UnavailableService: React.FC = () => {
 					<Separator orientation='vertical' className='h-5 w-0.5' />
 					<Typography variant='h4'>{t('ns_common:errors.503')}</Typography>
 				</Div>
-				<Typography variant='p' className='mb-6 mt-2 text-base leading-7' color='muted'>
+				<Typography variant='p' className='mt-2 mb-6 text-base leading-7' color='muted'>
 					{t('ns_common:errors.503_message')}
 				</Typography>
 			</Div>

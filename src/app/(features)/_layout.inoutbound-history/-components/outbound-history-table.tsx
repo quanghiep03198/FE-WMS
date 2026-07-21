@@ -82,7 +82,7 @@ const OutboundHistoryTable: React.FC = () => {
 
 	if (isLoading)
 		return (
-			<Div className='grid h-20 w-full place-items-center text-center text-muted-foreground'>
+			<Div className='text-muted-foreground grid h-20 w-full place-items-center text-center'>
 				<Icon name='LoaderCircle' className='animate-spin' />
 			</Div>
 		)
@@ -90,7 +90,7 @@ const OutboundHistoryTable: React.FC = () => {
 	if (!data) return <EmptyHistory />
 
 	return (
-		<Div className='relative overflow-auto rounded-lg border scrollbar-track-accent/50 @container xxl:max-h-[65vh]'>
+		<Div className='scrollbar-track-accent/50 xxl:max-h-[65vh] @container relative overflow-auto rounded-lg border'>
 			<Table
 				className='table-fixed [&_span]:line-clamp-1'
 				style={{ '--column-width': '200px' } as React.CSSProperties}>
@@ -100,7 +100,7 @@ const OutboundHistoryTable: React.FC = () => {
 							<TableHead
 								key={column.accessorKey}
 								title={column.header}
-								className='w-(--column-width) bg-table-row-active! capitalize text-table-head-foreground first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+								className='bg-table-row-active! text-table-head-foreground w-(--column-width) capitalize first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>{column.header}</span>
 							</TableHead>
@@ -110,7 +110,7 @@ const OutboundHistoryTable: React.FC = () => {
 						{columns.map((column) => (
 							<TableHead
 								key={column.accessorKey}
-								className='w-(--column-width) font-normal text-foreground first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+								className='text-foreground w-(--column-width) font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>
 									{typeof column.cell === 'function'
@@ -157,7 +157,7 @@ const OutboundHistoryTable: React.FC = () => {
 										style={{ boxShadow: '1px 0px var(--border)' }}>
 										<span>{date}</span>
 									</TableCell>
-									<TableCell colSpan={7} className='divide-y divide-border p-0'>
+									<TableCell colSpan={7} className='divide-border divide-y p-0'>
 										{order.map((item) => (
 											<NestedTable key={item.mo_no}>
 												<NestedColumn className='basis-32'>
@@ -198,7 +198,7 @@ const OutboundHistoryTable: React.FC = () => {
 						<TableCell
 							colSpan={9}
 							align='left'
-							className='border-b-0! bg-table-row-active p-0 text-table-head-foreground'>
+							className='bg-table-row-active text-table-head-foreground border-b-0! p-0'>
 							<Div className='sticky left-0 max-w-[calc(100cqw-10px)] px-4 py-2 text-center'>
 								{t('ns_common:titles.overall')}
 							</Div>

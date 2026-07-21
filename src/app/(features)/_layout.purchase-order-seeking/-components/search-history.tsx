@@ -1,5 +1,4 @@
 import { Badge, Div, Icon, Typography } from '@/components/ui'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import React, { useRef } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -49,17 +48,17 @@ const SearchHistory: React.FC = () => {
 					<GhostButton type='button' onClick={scrollLeft}>
 						<Icon name='ChevronLeft' />
 					</GhostButton>
-					<ScrollShadow
+					<div
 						ref={scrollRef}
-						orientation='horizontal'
-						className='flex max-w-sm snap-mandatory items-center gap-x-2 scroll-smooth px-1 scrollbar-none md:max-w-xs xxl:max-w-lg'>
+
+						className='scroll-fade-x xxl:max-w-lg flex max-w-sm snap-mandatory scrollbar-none items-center gap-x-2 scroll-smooth px-1 md:max-w-xs'>
 						{recentlySearch.map((term) => (
 							<Badge
 								key={term}
 								variant='outline'
 								className='min-w-28 cursor-pointer justify-between overflow-hidden'
 								onClick={() => setValue('po', term)}>
-								<span className='line-clamp-1 text-ellipsis text-left' title={term}>
+								<span className='line-clamp-1 text-left text-ellipsis' title={term}>
 									{term}
 								</span>
 								<GhostButton
@@ -69,7 +68,7 @@ const SearchHistory: React.FC = () => {
 								</GhostButton>
 							</Badge>
 						))}
-					</ScrollShadow>
+					</div>
 					<GhostButton type='button' onClick={scrollRight}>
 						<Icon name='ChevronRight' />
 					</GhostButton>

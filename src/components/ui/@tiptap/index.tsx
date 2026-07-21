@@ -92,7 +92,7 @@ export const Editor: React.FC<EditorProps> = memo(
 		return (
 			<Div
 				className={cn(
-					'relative flex w-full max-w-full flex-col items-stretch divide-y divide-border overflow-clip rounded-lg border shadow-sm',
+					'divide-border relative flex w-full max-w-full flex-col items-stretch divide-y overflow-clip rounded-lg border shadow-sm',
 					disabled && 'cursor-not-allowed opacity-50 [&>nav]:pointer-events-none'
 				)}>
 				<EditorContextProvider editor={editor}>

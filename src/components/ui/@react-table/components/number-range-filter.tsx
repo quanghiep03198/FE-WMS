@@ -19,7 +19,7 @@ export const NumberRangeFilter: React.FC<NumberRangeFilterProps> = ({ column }) 
 			<DebouncedInput
 				type='number'
 				tabIndex={0}
-				className='rounded-none border-none px-3 text-xs shadow-none placeholder:text-xs placeholder:text-muted-foreground/80 hover:text-foreground'
+				className='placeholder:text-muted-foreground/80 hover:text-foreground rounded-none border-none px-3 text-xs shadow-none placeholder:text-xs'
 				min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 				max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
 				value={(isAllFiltersCleared ? '' : (column.getFilterValue() as [number, number]))?.[0] ?? ''}
@@ -30,7 +30,7 @@ export const NumberRangeFilter: React.FC<NumberRangeFilterProps> = ({ column }) 
 			<DebouncedInput
 				type='number'
 				tabIndex={0}
-				className='rounded-none border-none px-3 text-xs shadow-none placeholder:text-xs placeholder:text-muted-foreground/80 hover:text-foreground'
+				className='placeholder:text-muted-foreground/80 hover:text-foreground rounded-none border-none px-3 text-xs shadow-none placeholder:text-xs'
 				min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 				max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
 				value={(isAllFiltersCleared ? '' : (column.getFilterValue() as [number, number]))?.[1] ?? ''}

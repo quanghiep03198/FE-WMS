@@ -14,7 +14,7 @@ const DataRestoration: React.FC = () => {
 				{t('ns_inoutbound:scanner_setting.data_restoration')}
 			</Typography>
 			<Div className='grid min-h-24 grid-cols-[3fr_1fr] items-center rounded-md border p-4'>
-				<Div className='text-pretty leading-none'>
+				<Div className='leading-none text-pretty'>
 					<Typography variant='small' as='h5' className='mb-1 font-medium'>
 						{t('ns_inoutbound:scanner_setting.restore_deleted_epcs')}
 					</Typography>

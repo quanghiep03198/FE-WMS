@@ -16,11 +16,11 @@ const DeploymentGlobe: React.FC = () => {
 		<div
 			ref={ref}
 			className='relative inset-0 mx-auto aspect-978/678 w-full max-w-2xl xl:max-w-3xl xl:translate-y-12'>
-			<div className='group absolute left-[calc(50%+0.5rem)] top-[5%] z-20 flex w-72 -translate-x-1/2 items-center gap-x-3 whitespace-nowrap rounded-md border border-primary/50 bg-background px-3 py-2 shadow-2xl transition-colors duration-200 hover:border-primary sm:top-0 sm:w-60 sm:gap-2 sm:px-2 sm:py-1'>
+			<div className='group border-primary/50 bg-background hover:border-primary absolute top-[5%] left-[calc(50%+0.5rem)] z-20 flex w-72 -translate-x-1/2 items-center gap-x-3 rounded-md border px-3 py-2 whitespace-nowrap shadow-2xl transition-colors duration-200 sm:top-0 sm:w-60 sm:gap-2 sm:px-2 sm:py-1'>
 				<div className='inline-flex flex-1 items-center gap-x-2'>
 					<Icon name='Globe' strokeWidth={1} size={18} stroke='var(--muted-foreground)' />
 					<Typewriter
-						className='align-middle font-jetbrains text-xs leading-relaxed text-foreground sm:text-[10px]'
+						className='font-jetbrains text-foreground align-middle text-xs leading-relaxed sm:text-[10px]'
 						playState={inViewport ? 'running' : 'paused'}
 						text='Available in 2 regions'
 					/>
@@ -34,7 +34,7 @@ const DeploymentGlobe: React.FC = () => {
 				fill='none'
 				viewBox='0 0 155 284'
 				data-viewport={inViewport ? 'visible' : 'invisible'}
-				className='absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both] data-[viewport=visible]:running data-[viewport=invisible]:paused'
+				className='data-[viewport=visible]:running data-[viewport=invisible]:paused absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both]'
 				style={{ width: '15.244%', height: '41.24%', left: '38.8%', top: '31.2%' }}>
 				<path
 					stroke='url(#lg-svg1)'
@@ -56,7 +56,7 @@ const DeploymentGlobe: React.FC = () => {
 				fill='none'
 				viewBox='0 0 272 235'
 				data-viewport={inViewport ? 'visible' : 'invisible'}
-				className='absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both] data-[viewport=visible]:running data-[viewport=invisible]:paused'
+				className='data-[viewport=visible]:running data-[viewport=invisible]:paused absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both]'
 				style={{ width: '27.458%', height: '34.045%', left: '50.8%', top: '31.4%' }}>
 				<path
 					stroke='url(#lg-svg2)'
@@ -78,7 +78,7 @@ const DeploymentGlobe: React.FC = () => {
 				fill='none'
 				viewBox='0 0 261 144'
 				data-viewport={inViewport ? 'visible' : 'invisible'}
-				className='absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both] data-[viewport=visible]:running data-[viewport=invisible]:paused'
+				className='data-[viewport=visible]:running data-[viewport=invisible]:paused absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both]'
 				style={{ width: '26.687%', height: '20.49%', left: '25.1%', top: '31.4%' }}>
 				<path
 					stroke='url(#lg-svg3)'
@@ -95,19 +95,19 @@ const DeploymentGlobe: React.FC = () => {
 			<div
 				id='dot1'
 				data-viewport={inViewport ? 'visible' : 'invisible'}
-				className='before:w absolute flex h-[3.5%] w-[2.5%] origin-center animate-[fade-in_0.75s_ease-out_1.25s_both] items-center justify-center opacity-0 transition-opacity data-[viewport=visible]:running data-[viewport=invisible]:paused'
+				className='before:w data-[viewport=visible]:running data-[viewport=invisible]:paused absolute flex h-[3.5%] w-[2.5%] origin-center animate-[fade-in_0.75s_ease-out_1.25s_both] items-center justify-center opacity-0 transition-opacity'
 				style={{ left: '50%', top: '29.9%' }}>
-				<span className='absolute inset-0 h-full w-full rounded-full bg-foreground bg-opacity-20'></span>
-				<span className='absolute h-4/5 w-4/5 animate-[ping_2s_ease-in-out_2s_infinite] rounded-full bg-foreground bg-opacity-90'></span>
+				<span className='bg-foreground bg-opacity-20 absolute inset-0 h-full w-full rounded-full'></span>
+				<span className='bg-foreground bg-opacity-90 absolute h-4/5 w-4/5 animate-[ping_2s_ease-in-out_2s_infinite] rounded-full'></span>
 			</div>
 			<HoverCard>
 				<HoverCardTrigger
 					id='dot2'
 					data-viewport={inViewport ? 'visible' : 'invisible'}
-					className='absolute flex h-[3.5%] w-[2.5%] origin-center animate-[fade-in_0.875s_ease-out_1.75s_both] items-center justify-center opacity-0 transition-opacity data-[viewport=visible]:running data-[viewport=invisible]:paused'
+					className='data-[viewport=visible]:running data-[viewport=invisible]:paused absolute flex h-[3.5%] w-[2.5%] origin-center animate-[fade-in_0.875s_ease-out_1.75s_both] items-center justify-center opacity-0 transition-opacity'
 					style={{ left: '24.3%', top: '50.2%' }}>
-					<span className='absolute inset-0 rounded-full bg-foreground bg-opacity-20'></span>
-					<span className='absolute h-4/5 w-4/5 animate-[ping_2s_ease-in-out_2s_infinite] rounded-full bg-foreground bg-opacity-90'></span>
+					<span className='bg-foreground bg-opacity-20 absolute inset-0 rounded-full'></span>
+					<span className='bg-foreground bg-opacity-90 absolute h-4/5 w-4/5 animate-[ping_2s_ease-in-out_2s_infinite] rounded-full'></span>
 				</HoverCardTrigger>
 				<HoverCardContent className='bg-background/50 backdrop-blur-sm'>
 					<ul className='space-y-2 text-sm'>
@@ -126,10 +126,10 @@ const DeploymentGlobe: React.FC = () => {
 				<HoverCardTrigger
 					id='dot3'
 					data-viewport={inViewport ? 'visible' : 'invisible'}
-					className='absolute flex h-[3.5%] w-[2.5%] origin-center animate-[fade-in_0.875s_ease-out_1.75s_both] items-center justify-center opacity-0 transition-opacity data-[viewport=visible]:running data-[viewport=invisible]:paused'
+					className='data-[viewport=visible]:running data-[viewport=invisible]:paused absolute flex h-[3.5%] w-[2.5%] origin-center animate-[fade-in_0.875s_ease-out_1.75s_both] items-center justify-center opacity-0 transition-opacity'
 					style={{ left: '77.8%', top: '63.4%' }}>
-					<span className='absolute inset-0 h-full w-full rounded-full bg-foreground bg-opacity-20'></span>
-					<span className='absolute h-4/5 w-4/5 animate-[ping_2s_ease-in-out_2s_infinite] rounded-full bg-foreground bg-opacity-90'></span>
+					<span className='bg-foreground bg-opacity-20 absolute inset-0 h-full w-full rounded-full'></span>
+					<span className='bg-foreground bg-opacity-90 absolute h-4/5 w-4/5 animate-[ping_2s_ease-in-out_2s_infinite] rounded-full'></span>
 				</HoverCardTrigger>
 				<HoverCardContent className='bg-background/50 bg-opacity-50 backdrop-blur-sm'>
 					<ul className='space-y-2 text-sm'>
@@ -140,10 +140,10 @@ const DeploymentGlobe: React.FC = () => {
 				</HoverCardContent>
 			</HoverCard>
 
-			<div className='absolute left-[51.15%] top-[10%] h-[20%] w-[2px] overflow-hidden'>
+			<div className='absolute top-[10%] left-[51.15%] h-[20%] w-[2px] overflow-hidden'>
 				<span
 					data-viewport={inViewport ? 'visible' : 'invisible'}
-					className='absolute inset-0 h-full w-full animate-[slide-in_0.25s_ease-out_1s_both] bg-linear-to-t from-current to-transparent origin-center data-[viewport=visible]:running data-[viewport=invisible]:paused'
+					className='data-[viewport=visible]:running data-[viewport=invisible]:paused absolute inset-0 h-full w-full origin-center animate-[slide-in_0.25s_ease-out_1s_both] bg-linear-to-t from-current to-transparent'
 				/>
 			</div>
 			<img

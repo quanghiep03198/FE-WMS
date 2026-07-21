@@ -21,7 +21,7 @@ const RFIDAgentInstructionDialog: React.FC = () => {
 					{t('ns_common:actions.learn_more')} <Icon name='ArrowUpRight' />
 				</Button>
 			</DialogTrigger>
-			<DialogContent className='h-full max-h-[90vh] max-w-8xl'>
+			<DialogContent className='max-w-8xl h-full max-h-[90vh]'>
 				<Carousel>
 					<CarouselContent>
 						<CarouselItem className='h-full'>RFID Agent</CarouselItem>

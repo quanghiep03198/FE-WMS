@@ -45,7 +45,7 @@ export const PlaygroundEpcList: React.FC = () => {
 		<Div
 			ref={containerRef}
 			className={cn(
-				'z-10 flex w-full flex-col items-stretch justify-start divide-y divide-border overflow-y-scroll bg-background p-2 will-change-transform contain-paint scrollbar-track-accent/50',
+				'divide-border bg-background scrollbar-track-accent/50 z-10 flex w-full flex-col items-stretch justify-start divide-y overflow-y-scroll p-2 will-change-transform contain-paint',
 				'h-full'
 			)}>
 			<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
@@ -63,7 +63,7 @@ const ReaderVirtualRow: React.FC<{ data: string } & VirtualItem> = memo(({ data,
 		<Div
 			key={index}
 			data-index={index}
-			className='absolute left-auto right-auto top-0 w-full whitespace-nowrap border-b px-4 py-2 font-medium uppercase last:border-none hover:bg-accent'
+			className='hover:bg-accent absolute top-0 right-auto left-auto w-full border-b px-4 py-2 font-medium whitespace-nowrap uppercase last:border-none'
 			style={{
 				height: size,
 				transform: `translateY(${start}px)`

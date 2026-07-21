@@ -120,13 +120,13 @@ const InoutboundForm: React.FC = () => {
 				defaultValue={searchParams.action}
 				value={searchParams.action}
 				className='hidden items-center gap-x-6 @4xl:flex'>
-				<Div className='flex items-center space-x-3 space-y-0'>
+				<Div className='flex items-center space-y-0 space-x-3'>
 					<RadioGroupItem value={StockFlow.INBOUND} id='action-inbound' />
 					<Label className='font-normal' htmlFor='action-inbound'>
 						{t('ns_inoutbound:action_types.warehouse_input')}
 					</Label>
 				</Div>
-				<Div className='flex items-center space-x-3 space-y-0'>
+				<Div className='flex items-center space-y-0 space-x-3'>
 					<RadioGroupItem value={StockFlow.OUTBOUND} id='action-outbound' />
 					<Label className='font-normal' htmlFor='action-outbound'>
 						{t('ns_inoutbound:action_types.warehouse_output')}

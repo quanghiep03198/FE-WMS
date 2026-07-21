@@ -107,7 +107,7 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 												'bg-background focus:border-primary',
 												className,
 												isError &&
-													'w-full border-destructive focus:border-destructive active:border-destructive',
+													'border-destructive focus:border-destructive active:border-destructive w-full',
 												!field.value && 'text-muted-foreground'
 											)}>
 											<SelectValue placeholder={!field.value && placeholder} />

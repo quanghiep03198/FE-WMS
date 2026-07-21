@@ -49,7 +49,7 @@ const InboundReportMasterTable: React.FC = () => {
 				header: ({ table }) => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
 						<button
-							className='absolute inset-0 flex h-full w-full items-center justify-center text-muted-foreground transition-colors duration-200 hover:text-foreground'
+							className='text-muted-foreground hover:text-foreground absolute inset-0 flex h-full w-full items-center justify-center transition-colors duration-200'
 							onClick={() => table.toggleAllRowsExpanded(false)}>
 							<Icon name='ListCollapse' size={18} />
 						</button>
@@ -129,7 +129,7 @@ const InboundReportMasterTable: React.FC = () => {
 								.filter((item) => !!item)
 								.sort((a, b) => a.localeCompare(b))}
 							template={({ data }) => (
-								<Badge variant='outline' className='max-h-fit whitespace-nowrap font-normal'>
+								<Badge variant='outline' className='max-h-fit font-normal whitespace-nowrap'>
 									{data}
 								</Badge>
 							)}

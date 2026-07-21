@@ -21,7 +21,7 @@ const DetailDialog: React.FC = () => {
 	return (
 		<Dialog open={open} onOpenChange={setOpen} defaultOpen={false}>
 			<DialogContent className='max-w-3xl overflow-hidden'>
-				<Div className='prose mx-auto max-h-[60vh] w-full max-w-full overflow-y-auto p-2 *:text-foreground prose-p:text-sm prose-strong:text-inherit prose-li:p-0 [&_*:not(button)]:pointer-events-none [&_table]:table-fixed [&_table_*:has(img)]:border-0 [&_table_*:has(img)]:p-1'>
+				<Div className='prose *:text-foreground prose-p:text-sm prose-strong:text-inherit prose-li:p-0 mx-auto max-h-[60vh] w-full max-w-full overflow-y-auto p-2 [&_*:not(button)]:pointer-events-none [&_table]:table-fixed [&_table_*:has(img)]:border-0 [&_table_*:has(img)]:p-1'>
 					<Div
 						className='w-full'
 						dangerouslySetInnerHTML={{

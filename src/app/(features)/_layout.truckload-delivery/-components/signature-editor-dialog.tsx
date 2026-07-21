@@ -154,7 +154,7 @@ const SignatureEditorDialog: React.FC = () => {
 									)
 									if (value === TruckloadDeliveryStatus.REQUEST_CHANGE) handleReset()
 								}}>
-								<FieldLabel htmlFor='confirm-radio' className='p-4 duration-200 hover:border-primary'>
+								<FieldLabel htmlFor='confirm-radio' className='hover:border-primary p-4 duration-200'>
 									<Field orientation='horizontal'>
 										<FieldContent>
 											<FieldTitle>{t('ns_common:actions.confirm')}</FieldTitle>
@@ -165,7 +165,7 @@ const SignatureEditorDialog: React.FC = () => {
 										<RadioGroupItem value={TruckloadDeliveryStatus.CONFIRMED} id='confirm-radio' />
 									</Field>
 								</FieldLabel>
-								<FieldLabel htmlFor='request-change-radio' className='p-4 duration-200 hover:border-primary'>
+								<FieldLabel htmlFor='request-change-radio' className='hover:border-primary p-4 duration-200'>
 									<Field orientation='horizontal'>
 										<FieldContent>
 											<FieldTitle>{t('ns_common:actions.request_change')}</FieldTitle>
@@ -188,7 +188,7 @@ const SignatureEditorDialog: React.FC = () => {
 						</Label>
 						<Div
 							id='signature'
-							className='relative cursor-crosshair overflow-clip rounded-lg border bg-white duration-200 @container group-aria-invalid/signature:border-2 group-aria-invalid/signature:border-destructive'>
+							className='group-aria-invalid/signature:border-destructive @container relative cursor-crosshair overflow-clip rounded-lg border bg-white duration-200 group-aria-invalid/signature:border-2'>
 							{isCompressing && <OptimizingLoader />}
 							<SignatureCanvas
 								ref={canvasRef}
@@ -229,7 +229,7 @@ const DialogBody = tw.div`flex-1 space-y-6`
 
 const OptimizingLoader: React.FC = () => {
 	return (
-		<div className='absolute inset-0 z-10 grid flex-col place-items-center gap-x-2 bg-muted/50 backdrop-blur duration-200 animate-in fade-in-0'>
+		<div className='bg-muted/50 animate-in fade-in-0 absolute inset-0 z-10 grid flex-col place-items-center gap-x-2 backdrop-blur duration-200'>
 			<Icon name='LoaderCircle' className='animate-spin' />
 		</div>
 	)

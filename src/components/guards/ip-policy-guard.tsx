@@ -29,7 +29,7 @@ const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 					</Div>
 					<Typography
 						variant='p'
-						className='mb-6 mt-2 max-w-3xl text-pretty text-base leading-7'
+						className='mt-2 mb-6 max-w-3xl text-base leading-7 text-pretty'
 						color='muted'
 						dangerouslySetInnerHTML={{
 							__html: t('ns_common:errors.502_message', {

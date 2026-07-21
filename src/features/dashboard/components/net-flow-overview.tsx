@@ -48,7 +48,7 @@ export function NetFlowOverview() {
 				{isLoading ? (
 					<Skeleton className='w-full place-content-center place-items-center @xs:h-72 @xl:h-80' />
 				) : isEmpty ? (
-					<Div className='flex h-full min-h-80 w-full flex-1 items-center justify-center gap-x-2 rounded-lg bg-muted text-base text-muted-foreground'>
+					<Div className='bg-muted text-muted-foreground flex h-full min-h-80 w-full flex-1 items-center justify-center gap-x-2 rounded-lg text-base'>
 						<Icon name='ChartSpline' size={32} strokeWidth={1} />
 						{t('ns_common:table.no_data')}
 					</Div>
@@ -96,13 +96,13 @@ export function NetFlowOverview() {
 				!isEmpty && (
 					<CardFooter>
 						<Div className='space-y-1 *:text-sm'>
-							<Typography className='flex items-center gap-2 font-medium leading-loose'>
+							<Typography className='flex items-center gap-2 leading-loose font-medium'>
 								{t(...getTrendingPercentageChange(percentageChange))}
 								<Icon name={getTrendingIcon(percentageChange)} />
 							</Typography>
 							<Typography
 								color='muted'
-								className='flex items-center gap-2 capitalize leading-none text-muted-foreground'>
+								className='text-muted-foreground flex items-center gap-2 leading-none capitalize'>
 								{format(new Date(new Date().getFullYear(), data.at(0).month - 1, 1), 'PPP', {
 									locale: dateLocale
 								})}

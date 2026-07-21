@@ -35,7 +35,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 			<TableRow className='sticky bottom-0 z-10 *:shadow-[1px_-1px_0px_var(--border)]'>
 				<TableCell
 					align='left'
-					className='group/cell sticky left-0 z-10 w-(--sticky-left-col-width) min-w-(--sticky-left-col-width) space-y-1 p-0! text-left text-table-head-foreground'>
+					className='group/cell text-table-head-foreground sticky left-0 z-10 w-(--sticky-left-col-width) min-w-(--sticky-left-col-width) space-y-1 p-0! text-left'>
 					<NestedColumn className='w-full grid-rows-4! *:lowercase *:first-letter:uppercase'>
 						<NestedCell>Size</NestedCell>
 						<NestedCell>{t('ns_erp:fields.order_qty')}</NestedCell>
@@ -50,7 +50,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 						{Array.isArray(data) &&
 							sortBy(data, 'size_numcode').map((size) => (
 								<NestedColumn key={size?.size_numcode} className='grid-rows-3!'>
-									<NestedCell className='px-4 py-2 font-medium text-table-head-foreground first:border-l-0 last:border-r-0 group-hover:bg-table-row-active aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted data-[type=number]:text-right has-[[role=button]]:text-center has-[[role=checkbox]]:text-center has-[[role=combobox]]:p-0 has-[[role=listbox]]:p-0 has-[[role=textbox]]:p-0'>
+									<NestedCell className='text-table-head-foreground group-hover:bg-table-row-active aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted px-4 py-2 font-medium first:border-l-0 last:border-r-0 has-[[role=button]]:text-center has-[[role=checkbox]]:text-center has-[[role=combobox]]:p-0 has-[[role=listbox]]:p-0 has-[[role=textbox]]:p-0 data-[type=number]:text-right'>
 										{size?.size_numcode}
 									</NestedCell>
 									<NestedCell className='font-normal'>{formatIntlNumber(size?.po_size_qty ?? 0)}</NestedCell>
@@ -62,7 +62,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 				</TableCell>
 				<TableCell className='sticky right-0 w-24 min-w-24 p-0! font-medium' align='right'>
 					<NestedColumn className='w-full grid-rows-4!'>
-						<NestedCell className='row-span-2 flex h-full items-center justify-end text-table-head-foreground'>
+						<NestedCell className='text-table-head-foreground row-span-2 flex h-full items-center justify-end'>
 							{capitalize(t('ns_common:common_fields.total'))}
 						</NestedCell>
 						<NestedCell>{formatIntlNumber(totalAccumulatedQty)}</NestedCell>

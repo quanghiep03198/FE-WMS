@@ -55,7 +55,7 @@ function RouteComponent() {
 									} as React.CSSProperties
 								}
 								className={cn(
-									'flex h-(--outlet-wrapper-height) border-collapse flex-col divide-y divide-border rounded-md border @container',
+									'divide-border @container flex h-(--outlet-wrapper-height) border-collapse flex-col divide-y rounded-md border',
 									!isSmallScreen && 'overflow-hidden'
 								)}>
 								<InoutboundController />

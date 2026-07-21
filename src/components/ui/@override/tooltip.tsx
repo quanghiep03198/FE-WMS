@@ -23,7 +23,7 @@ export const Tooltip = ({
 				<TooltipContent
 					{...contentProps}
 					className={cn(
-						'z-50 whitespace-nowrap aria-invalid:bg-destructive aria-invalid:text-destructive-foreground',
+						'aria-invalid:bg-destructive aria-invalid:text-destructive-foreground z-50 whitespace-nowrap',
 						contentProps.className
 					)}>
 					{message}

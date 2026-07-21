@@ -97,7 +97,7 @@ export function OrderSearchFieldControl() {
 							<Popover open={open} onOpenChange={setOpen} modal={false}>
 								<FormControl>
 									<PopoverTrigger
-										className='relative flex h-10 w-full flex-1 items-center rounded-lg border px-3 py-1 transition-colors duration-200 focus-within:border-primary aria-invalid:border-destructive aria-invalid:focus-within:border-destructive'
+										className='focus-within:border-primary aria-invalid:border-destructive aria-invalid:focus-within:border-destructive relative flex h-10 w-full flex-1 items-center rounded-lg border px-3 py-1 transition-colors duration-200'
 										onClick={(e) => e.preventDefault()}>
 										<Icon name='Search' size={20} className={cn('stroke-muted-foreground')} />
 										<Input
@@ -126,7 +126,7 @@ export function OrderSearchFieldControl() {
 											<Icon
 												name='LoaderCircle'
 												size={18}
-												className={cn('animate-spin stroke-muted-foreground')}
+												className={cn('stroke-muted-foreground animate-spin')}
 											/>
 										)}
 									</PopoverTrigger>

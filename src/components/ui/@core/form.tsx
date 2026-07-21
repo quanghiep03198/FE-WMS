@@ -100,14 +100,13 @@ FormControl.displayName = 'FormControl'
 const FormDescription: React.FC<React.ComponentProps<'p'>> = ({ className, ...props }) => {
 	const { formDescriptionId } = useFormField()
 
-	return <p id={formDescriptionId} className={cn('text-[0.8rem] text-muted-foreground', className)} {...props} />
+	return <p id={formDescriptionId} className={cn('text-muted-foreground text-[0.8rem]', className)} {...props} />
 }
 
 FormDescription.displayName = 'FormDescription'
 
 type FormErrorMessage =
-	| Extract<ResourceKey, 'string'>
-	| { key: ResourceKey; bindings?: Record<string, string | number> }
+	Extract<ResourceKey, 'string'> | { key: ResourceKey; bindings?: Record<string, string | number> }
 
 const FormMessage: React.FC<React.ComponentProps<'p'>> = ({ className, children, ...props }) => {
 	const { error, formMessageId } = useFormField()
@@ -128,7 +127,7 @@ const FormMessage: React.FC<React.ComponentProps<'p'>> = ({ className, children,
 	return (
 		<p
 			id={formMessageId}
-			className={cn('inline-flex items-center gap-x-1 text-[0.8rem] font-medium text-destructive', className)}
+			className={cn('text-destructive inline-flex items-center gap-x-1 text-[0.8rem] font-medium', className)}
 			{...props}>
 			<Icon name='TriangleAlert' />
 			{message}

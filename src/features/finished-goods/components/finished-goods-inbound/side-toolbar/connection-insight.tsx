@@ -74,7 +74,7 @@ export const ConnectionInsight: React.FC<React.ComponentProps<'div'>> = ({ class
 	return (
 		<Div
 			data-slot='connection-insight'
-			className={cn('grid grid-cols-2 rounded-md border bg-background p-4 shadow-none', className)}
+			className={cn('bg-background grid grid-cols-2 rounded-md border p-4 shadow-none', className)}
 			{...props}>
 			<NetworkInsight className='grid-cols-1 *:data-[slot=detail]:gap-x-2 *:data-[slot=label]:hidden' />
 			<JobStatus className='grid-cols-1 *:data-[slot=detail]:gap-x-2 *:data-[slot=label]:hidden' />

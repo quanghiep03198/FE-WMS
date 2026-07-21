@@ -29,7 +29,6 @@ import { CommandLoading } from 'cmdk'
 import { CheckIcon, XCircle } from 'lucide-react'
 import React, { Fragment, useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import ScrollShadow from './scroll-shadow'
 
 type SelectItem = { disabled?: boolean; [key: string]: any }
 
@@ -253,14 +252,12 @@ export function MultiSelect<D extends SelectItem>({
 				onClick={() => setIsPopoverOpen(!isPopoverOpen)}
 				className={cn(
 					buttonVariants({ variant: 'outline' }),
-					'grid w-full grid-cols-[1fr_auto] items-center overflow-hidden bg-background px-3 py-0 scrollbar-none! aria-invalid:border-destructive! hover:bg-inherit [&_svg]:pointer-events-auto',
+					'bg-background aria-invalid:border-destructive! grid w-full scrollbar-none! grid-cols-[1fr_auto] items-center overflow-hidden px-3 py-0 hover:bg-inherit [&_svg]:pointer-events-auto',
 					classNames?.popoverTrigger
 				)}>
 				{Array.isArray(datalist) && Array.isArray(selectedValues) && selectedValues?.length > 0 ? (
 					<>
-						<ScrollShadow
-							orientation='horizontal'
-							className='flex items-center gap-x-1 overflow-x-auto overflow-y-hidden scrollbar-none!'>
+						<Div className='scroll-fade-x flex scrollbar-none! items-center gap-x-1 overflow-x-auto overflow-y-hidden'>
 							{Array.isArray(selectedValues) &&
 								selectedValues.slice(0, maxCount).map((value) => {
 									const option = datalist.find((item) => item?.[valueField] === value)
@@ -313,25 +310,25 @@ export function MultiSelect<D extends SelectItem>({
 									</HoverCardContent>
 								</HoverCard>
 							)}
-						</ScrollShadow>
-						<Div className='flex items-center justify-end gap-x-2 bg-background'>
+						</Div>
+						<Div className='bg-background flex items-center justify-end gap-x-2'>
 							<Cross2Icon
-								className='size-3.5 cursor-pointer text-muted-foreground'
+								className='text-muted-foreground size-3.5 cursor-pointer'
 								onClick={(event) => {
 									event.stopPropagation()
 									handleClear()
 								}}
 							/>
 							<Separator orientation='vertical' className='flex h-full min-h-4' />
-							<CaretSortIcon className='size-4 cursor-pointer text-muted-foreground' />
+							<CaretSortIcon className='text-muted-foreground size-4 cursor-pointer' />
 						</Div>
 					</>
 				) : (
 					<>
-						<Typography variant='small' className='block text-left text-sm font-normal text-muted-foreground'>
+						<Typography variant='small' className='text-muted-foreground block text-left text-sm font-normal'>
 							{placeholder}
 						</Typography>
-						<CaretSortIcon className='ml-auto size-4 cursor-pointer text-muted-foreground' />
+						<CaretSortIcon className='text-muted-foreground ml-auto size-4 cursor-pointer' />
 					</>
 				)}
 			</PopoverTrigger>
@@ -381,7 +378,7 @@ export function MultiSelect<D extends SelectItem>({
 											className='cursor-pointer'>
 											<Div
 												className={cn(
-													'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+													'border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border',
 													selectedValues?.length === datalist?.length && datalist?.length > 0
 														? 'bg-primary text-primary-foreground'
 														: 'opacity-50 [&_svg]:invisible'
@@ -444,7 +441,7 @@ function Checkbox({ checked }: { checked: boolean }) {
 	return (
 		<Div
 			className={cn(
-				'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary transition-all duration-100',
+				'border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border transition-all duration-100',
 				checked ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible'
 			)}>
 			<CheckIcon className='size-3!' />

@@ -58,7 +58,7 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 				<figure
 					ref={cardRef}
 					className={cn(
-						'group pointer-events-auto relative z-0 h-full min-h-64 w-full overflow-hidden mask-[linear-gradient(to_bottom,transparent,var(--background)_10%,var(--background)_100%)] @2xl/visual-card:min-h-80 xl:-bottom-2 2xl:bottom-0 xxl:h-80',
+						'group xxl:h-80 pointer-events-auto relative z-0 h-full min-h-64 w-full overflow-hidden mask-[linear-gradient(to_bottom,transparent,var(--background)_10%,var(--background)_100%)] xl:-bottom-2 2xl:bottom-0 @2xl/visual-card:min-h-80',
 						"hover:cursor-[url('/realtime-cursor-light.svg'),auto]!",
 						"dark:hover:cursor-[url('/realtime-cursor-dark.svg'),auto]!",
 						className
@@ -72,14 +72,14 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 						src='/realtime-dark.svg'
 						alt='Realtime'
 						sizes='100%'
-						className='absolute inset-0 hidden w-full object-cover dark:block xl:object-center'
+						className='absolute inset-0 hidden w-full object-cover xl:object-center dark:block'
 						width='100%'
 					/>
 					<img
 						src='/realtime-light.svg'
 						alt='Realtime'
 						sizes='100%'
-						className='absolute inset-0 w-full object-cover dark:hidden xl:object-center'
+						className='absolute inset-0 w-full object-cover xl:object-center dark:hidden'
 						width='100%'
 					/>
 					{/* User 1 */}
@@ -101,10 +101,10 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 							/>
 						</svg>
 
-						<div className='absolute -top-6 left-full flex h-[33.35px]! w-[66.70px]! items-center justify-center gap-1 rounded-full border bg-muted/50'>
-							<div className='pause group-hover:run h-1.5 w-1.5 rounded-full bg-muted-foreground group-hover:animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_infinite]' />
-							<div className='pause group-hover:run h-1.5 w-1.5 rounded-full bg-muted-foreground group-hover:animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_200ms_infinite]' />
-							<div className='pause group-hover:run h-1.5 w-1.5 rounded-full bg-muted-foreground group-hover:animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_400ms_infinite]' />
+						<div className='bg-muted/50 absolute -top-6 left-full flex h-[33.35px]! w-[66.70px]! items-center justify-center gap-1 rounded-full border'>
+							<div className='pause group-hover:run bg-muted-foreground h-1.5 w-1.5 rounded-full group-hover:animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_infinite]' />
+							<div className='pause group-hover:run bg-muted-foreground h-1.5 w-1.5 rounded-full group-hover:animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_200ms_infinite]' />
+							<div className='pause group-hover:run bg-muted-foreground h-1.5 w-1.5 rounded-full group-hover:animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_400ms_infinite]' />
 						</div>
 					</div>
 					{/* User 2 */}
@@ -126,10 +126,10 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 							/>
 						</svg>
 
-						<div className='absolute -top-6 left-full flex h-[28px]! w-[55px]! items-center justify-center gap-1 rounded-full border border-border bg-muted/50 opacity-0 transition-opacity group-hover:opacity-100'>
-							<div className='pause group-hover:run h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_infinite] rounded-full bg-muted-foreground' />
-							<div className='pause group-hover:run h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_200ms_infinite] rounded-full bg-muted-foreground' />
-							<div className='pause group-hover:run h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_400ms_infinite] rounded-full bg-muted-foreground' />
+						<div className='border-border bg-muted/50 absolute -top-6 left-full flex h-[28px]! w-[55px]! items-center justify-center gap-1 rounded-full border opacity-0 transition-opacity group-hover:opacity-100'>
+							<div className='pause group-hover:run bg-muted-foreground h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_infinite] rounded-full' />
+							<div className='pause group-hover:run bg-muted-foreground h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_200ms_infinite] rounded-full' />
+							<div className='pause group-hover:run bg-muted-foreground h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_400ms_infinite] rounded-full' />
 						</div>
 					</div>
 					{/* Self */}
@@ -142,10 +142,10 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 							transform: `${svgTransformSelf} translate(-50%, -50%)`, // Center the SVG
 							transition: 'transform 0.1s ease-out' // Smooth transition
 						}}>
-						<div className='absolute -top-6 left-full flex h-auto w-auto items-center justify-center gap-1 rounded-full border bg-success/20 px-2.5 py-1.5'>
-							<div className='pause group-hover:run h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_infinite] rounded-full bg-success' />
-							<div className='pause group-hover:run h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_200ms_infinite] rounded-full bg-success' />
-							<div className='pause group-hover:run h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_400ms_infinite] rounded-full bg-success' />
+						<div className='bg-success/20 absolute -top-6 left-full flex h-auto w-auto items-center justify-center gap-1 rounded-full border px-2.5 py-1.5'>
+							<div className='pause group-hover:run bg-success h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_infinite] rounded-full' />
+							<div className='pause group-hover:run bg-success h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_200ms_infinite] rounded-full' />
+							<div className='pause group-hover:run bg-success h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_400ms_infinite] rounded-full' />
 						</div>
 					</div>
 					{/* Gradient to hide animation under text to maintain readability */}

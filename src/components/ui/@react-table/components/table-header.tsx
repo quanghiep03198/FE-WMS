@@ -24,7 +24,7 @@ const DataTableHeader: React.FC = () => {
 	})
 
 	return (
-		<TableHeader className='sticky top-0 z-20 bg-background'>
+		<TableHeader className='bg-background sticky top-0 z-20'>
 			{table.getHeaderGroups().map((headerGroup) => {
 				return (
 					<Fragment key={headerGroup.id}>
@@ -59,7 +59,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 						key={header.id}
 						colSpan={header.colSpan}
 						rowSpan={rowSpan}
-						className={cn('group relative z-50 border-x-0 bg-table-head p-0')}
+						className={cn('group bg-table-head relative z-50 border-x-0 p-0')}
 						align={header.column.columnDef.meta?.align}
 						ref={(node) => columnSizingHandler(node, table, header.column)}
 						style={{
@@ -104,7 +104,7 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({
 							<Div
 								data-state={filterOpen ? 'open' : 'closed'}
 								className={
-									'overflow-hidden transition-height duration-200 transition-allow-discrete data-[state=closed]:h-0 data-[state=open]:h-(--header-row-height)'
+									'transition-height transition-allow-discrete overflow-hidden duration-200 data-[state=closed]:h-0 data-[state=open]:h-(--header-row-height)'
 								}>
 								<Div className='h-(--header-row-height)'>
 									<TableColumnFilter column={header.column} />

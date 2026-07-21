@@ -80,67 +80,64 @@ export function OrderSearchFieldControl() {
 						<Div className='space-y-2'>
 							<Popover open={open} onOpenChange={setOpen} modal={false}>
 								<FormControl>
-									<PopoverTrigger
-										className='relative flex w-full flex-1 flex-col items-stretch gap-6 rounded-lg border px-6 py-3 transition-colors duration-200 focus-within:border-primary aria-invalid:border-destructive aria-invalid:focus-within:border-destructive'
-										onClick={(e) => e.preventDefault()}>
-										<Div className='flex items-center gap-x-2'>
-											<Input
-												id={id}
-												ref={ref}
-												value={field.value}
-												autoComplete='off'
-												placeholder={capitalize(
-													t('ns_common:form_placeholder.fill', {
-														object: t('ns_erp:fields.po'),
-														defaultValue: null
-													})
-												)}
-												aria-invalid={!!getFieldState('po').error}
-												className={cn(
-													'focus-border-0 rounded-none border-0 px-0 text-base shadow-none',
-													isLoading && 'animate-pulse'
-												)}
-												onKeyDown={handleKeyDown}
-												onClick={() => setOpen(true)}
-												onChange={(e) => field.onChange(e)}
-											/>
+									<PopoverTrigger onClick={(e) => e.preventDefault()} asChild={true}>
+										<Div className='focus-within:border-primary aria-invalid:border-destructive aria-invalid:focus-within:border-destructive relative flex w-full flex-1 flex-col items-stretch gap-6 rounded-lg border px-6 py-3 transition-colors duration-200'>
+											<Div className='flex items-center gap-x-2'>
+												<Input
+													id={id}
+													ref={ref}
+													value={field.value}
+													autoComplete='off'
+													placeholder={capitalize(
+														t('ns_common:form_placeholder.fill', {
+															object: t('ns_erp:fields.po'),
+															defaultValue: null
+														})
+													)}
+													aria-invalid={!!getFieldState('po').error}
+													className={cn(
+														'focus-border-0 rounded-none border-0 px-0 text-base shadow-none',
+														isLoading && 'animate-pulse'
+													)}
+													onKeyDown={handleKeyDown}
+													onClick={() => setOpen(true)}
+													onChange={(e) => field.onChange(e)}
+												/>
 
-											<Tooltip message={t('ns_common:actions.reset')} triggerProps={{ asChild: true }}>
-												<GhostButton
-													type='button'
-													onClick={() => setValue('po', '')}
-													disabled={!field.value}>
-													<Icon name='X' />
-												</GhostButton>
-											</Tooltip>
-											<Separator orientation='vertical' className='h-4 w-0.5' />
-											<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-												<GhostButton onClick={() => refetch()} disabled={isLoading}>
-													<Icon
-														name='RefreshCcw'
-														className={isLoading && 'animate-spin'}
-													/>
-												</GhostButton>
-											</Tooltip>
-										</Div>
-										<Div className='flex items-center justify-between'>
-											<SearchHistory />
-											<Label
-												htmlFor='search-po-button'
-												className={cn(buttonVariants({ size: isMobile ? 'default' : 'lg' }))}
-												onClick={(e) => {
-													e.stopPropagation()
-													setOpen(false)
-												}}>
-												<Icon name='Search' />
-												{t('ns_common:actions.search')}
-											</Label>
+												<Tooltip message={t('ns_common:actions.reset')} triggerProps={{ asChild: true }}>
+													<GhostButton
+														type='button'
+														onClick={() => setValue('po', '')}
+														disabled={!field.value}>
+														<Icon name='X' />
+													</GhostButton>
+												</Tooltip>
+												<Separator orientation='vertical' className='h-4 w-0.5' />
+												<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+													<GhostButton onClick={() => refetch()} disabled={isLoading}>
+														<Icon name='RefreshCcw' className={isLoading && 'animate-spin'} />
+													</GhostButton>
+												</Tooltip>
+											</Div>
+											<Div className='flex items-center justify-between'>
+												<SearchHistory />
+												<Label
+													htmlFor='search-po-button'
+													className={cn(buttonVariants({ size: isMobile ? 'default' : 'lg' }))}
+													onClick={(e) => {
+														e.stopPropagation()
+														setOpen(false)
+													}}>
+													<Icon name='Search' />
+													{t('ns_common:actions.search')}
+												</Label>
+											</Div>
 										</Div>
 									</PopoverTrigger>
 								</FormControl>
 								<PopoverContent
 									sideOffset={8}
-									className='max-h-52 w-(--radix-popover-trigger-width) overflow-auto p-1'
+									className='max-h-52 w-[var(--radix-popover-trigger-width)] overflow-auto p-1'
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{Array.isArray(filteredDatalist) && filteredDatalist?.length > 0 ? (
 										filteredDatalist?.map((item) => {

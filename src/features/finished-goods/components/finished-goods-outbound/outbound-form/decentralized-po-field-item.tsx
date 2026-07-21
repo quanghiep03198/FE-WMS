@@ -46,7 +46,7 @@ const DroppableFieldItem: React.FC<{
 						onRemove(index)
 					}}
 					className={cn(
-						'inline-flex h-9 basis-4 items-center justify-center rounded text-muted-foreground transition-colors duration-200 hover:text-foreground',
+						'text-muted-foreground hover:text-foreground inline-flex h-9 basis-4 items-center justify-center rounded transition-colors duration-200',
 						isDragging ? 'cursor-grabbing' : 'cursor-grab'
 					)}>
 					<Icon name='GripVertical' size={14} />
@@ -79,7 +79,7 @@ const DroppableFieldItem: React.FC<{
 				<button
 					type='button'
 					onClick={() => onRemove(index)}
-					className='inline-flex h-9 basis-4 items-center justify-center text-muted-foreground transition-colors duration-200 hover:text-destructive'>
+					className='text-muted-foreground hover:text-destructive inline-flex h-9 basis-4 items-center justify-center transition-colors duration-200'>
 					<Icon name='X' size={14} strokeWidth={3} />
 				</button>
 			</Div>

@@ -10,7 +10,7 @@ const ScannerToolbar: React.FC = () => {
 	const isLargeScreen = useMediaQuery('(min-width: 960px)')
 
 	return (
-		<Div className='flex items-start justify-between gap-2 bg-background group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto'>
+		<Div className='bg-background flex items-start justify-between gap-2 group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto'>
 			<DeviceSelect />
 			<ScannerActions />
 			<Tooltip

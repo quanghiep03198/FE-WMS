@@ -25,11 +25,11 @@ const Header: React.FunctionComponent = () => {
 	return (
 		<Div
 			className={cn(
-				'peer sticky top-10 z-40 h-20 border-b bg-background/90 p-6 bg-blend-screen backdrop-blur-2xl sm:top-16 sm:p-4'
+				'peer bg-background/90 sticky top-10 z-40 h-20 border-b p-6 bg-blend-screen backdrop-blur-2xl sm:top-16 sm:p-4'
 			)}>
 			<Div
 				as='nav'
-				className='mx-auto flex h-full max-w-7xl items-center justify-between xxl:max-w-8xl'
+				className='xxl:max-w-8xl mx-auto flex h-full max-w-7xl items-center justify-between'
 				aria-label='Global'>
 				<Div className='inline-flex items-center gap-x-2'>
 					<NavHeaderDrawerMenu />
@@ -57,7 +57,7 @@ const NavHeaderMenu: React.FC = () => {
 						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(index)
 					}}
 					className={cn(
-						'text-sm text-muted-foreground transition-[colors,opacity] duration-500 hover:no-underline hover:opacity-80',
+						'text-muted-foreground text-sm transition-[colors,opacity] duration-500 hover:no-underline hover:opacity-80',
 						pageContext?.activeMenu === item.href && 'text-(--primary-alt)'
 					)}>
 					{item.title}

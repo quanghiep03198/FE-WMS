@@ -4,10 +4,10 @@ import { Separator } from '@radix-ui/react-context-menu'
 
 const Footer: React.FC = () => {
 	return (
-		<Div as='footer' className='relative border-t bg-background/90 bg-opacity-90 px-6 mix-blend-screen'>
+		<Div as='footer' className='bg-background/90 bg-opacity-90 relative border-t px-6 mix-blend-screen'>
 			{/* <Separator className='mx-auto h-px max-w-7xl rounded-full bg-success mask-[linear-gradient(90deg,transparent,white_50%,white_50%,transparent)]' /> */}
 
-			<Div className='mx-auto max-w-7xl divide-y xxl:max-w-8xl'>
+			<Div className='xxl:max-w-8xl mx-auto max-w-7xl divide-y'>
 				<Div className='flex flex-wrap items-start gap-y-10 py-12'>
 					<Div className='basis-1/5 space-y-4 sm:basis-full md:basis-1/3'>
 						<Typography className='text-lg font-semibold'>Solutions</Typography>
@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
 					</Typography>
 					<a
 						href='https://github.com/quanghiep03198'
-						className='inline-flex items-center gap-x-2 text-sm text-muted-foreground'>
+						className='text-muted-foreground inline-flex items-center gap-x-2 text-sm'>
 						<svg
 							xmlns='http://www.w3.org/2000/svg'
 							width='24'

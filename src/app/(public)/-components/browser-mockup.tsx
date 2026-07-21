@@ -50,16 +50,11 @@ const BrowserMockup: React.FC = () => {
 						</ContentGridItem>
 						<ContentGridItem className='col-span-6 grid grid-cols-4 items-center gap-x-2 gap-y-3 p-6 sm:gap-x-4 sm:p-4'>
 							{Array.from(new Array(12)).map((_, index) => (
-								<Skeleton className='h-1.5 bg-secondary' key={index} />
+								<Skeleton className='bg-secondary h-1.5' key={index} />
 							))}
 						</ContentGridItem>
 						<ContentGridItem className='col-span-4 flex items-center justify-center'>
-							<Icon
-								name='ChartPie'
-								strokeWidth={0.75}
-								stroke='var(--border)'
-								className='size-16 sm:size-14'
-							/>
+							<Icon name='ChartPie' strokeWidth={0.75} stroke='var(--border)' className='size-16 sm:size-14' />
 						</ContentGridItem>
 					</ContentGrid>
 				</LayoutContent>

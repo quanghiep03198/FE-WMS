@@ -1,8 +1,7 @@
 'use no memo'
 
-import UploadDataFileDialog from '@/components/shared/upload-dialog'
+import UploadDataFileDialog from '@/features/finished-goods/components/upload-data-dialog'
 import { Button, buttonVariants, Div, Icon, Label, Typography } from '@/components/ui'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/features/auth/services/auth.service'
 import { StockFlow } from '@/features/finished-goods/constants/enums'
@@ -222,16 +221,16 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	return (
-		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md rounded-t-none border border-t-0 @4xl/playground:rounded-md @4xl/playground:border @4xl:sticky @4xl:top-(--header-height) @4xl:h-(--outlet-wrapper-height) @7xl/layout-wrapper:rounded-t-none @7xl/layout-wrapper:border-t-0'>
+		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md rounded-t-none border border-t-0 @4xl:sticky @4xl:top-(--header-height) @4xl:h-(--outlet-wrapper-height) @4xl/playground:rounded-md @4xl/playground:border @7xl/layout-wrapper:rounded-t-none @7xl/layout-wrapper:border-t-0'>
 			{/* Datalist header */}
-			<Div className='grid w-full auto-cols-auto grid-flow-col items-center border-b @container/toolbar [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
+			<Div className='@container/toolbar grid w-full auto-cols-auto grid-flow-col items-center border-b [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
 				<ConnectionInsight />
 				<Button
 					variant='ghost'
 					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @xl/toolbar:flex-row'
 					onClick={() => fetchServerEvent()}>
 					<Icon name='RefreshCcw' />
-					<Typography variant='small' className='text-xs text-muted-foreground @xl/toolbar:text-sm'>
+					<Typography variant='small' className='text-muted-foreground text-xs @xl/toolbar:text-sm'>
 						{t('ns_common:actions.reload')}
 					</Typography>
 				</Button>
@@ -243,7 +242,7 @@ const ScannedEpcList: React.FC = () => {
 					})}
 					htmlFor='data-restoration-sheet-trigger'>
 					<Icon name='Archive' size={18} />
-					<Typography variant='small' className='text-xs text-muted-foreground @xl/toolbar:text-sm'>
+					<Typography variant='small' className='text-muted-foreground text-xs @xl/toolbar:text-sm'>
 						{t('ns_common:actions.archived')}
 					</Typography>
 				</Label>
@@ -256,7 +255,7 @@ const ScannedEpcList: React.FC = () => {
 					})}
 					htmlFor='epc-data-upload-dialog-trigger'>
 					<Icon name='Upload' size={18} />
-					<Typography variant='small' className='text-xs text-muted-foreground @xl/toolbar:text-sm'>
+					<Typography variant='small' className='text-muted-foreground text-xs @xl/toolbar:text-sm'>
 						{t('ns_common:actions.upload')}
 					</Typography>
 				</Label>
@@ -269,19 +268,19 @@ const ScannedEpcList: React.FC = () => {
 					})}
 					htmlFor='order-detail-dialog-trigger'>
 					<Icon name='ArrowUpRight' size={18} />
-					<Typography variant='small' className='text-xs text-muted-foreground @xl/toolbar:text-sm'>
+					<Typography variant='small' className='text-muted-foreground text-xs @xl/toolbar:text-sm'>
 						{t('ns_common:actions.detail')}
 					</Typography>
 				</Label>
 			</Div>
 			{/* Datalist body */}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
-				<ScrollShadow
+				<Div
 					ref={containerRef}
 					aria-expanded={isExpanded}
 					data-mounted={hasMounted.current}
 					className={cn(
-						'linear relative z-10 h-0 divide-y bg-background p-0 transition-height will-change-transform contain-size',
+						'linear bg-background scroll-fade-y transition-height relative z-10 h-0 divide-y p-0 will-change-transform contain-size',
 						'data-[mounted=true]:duration-100',
 						'aria-expanded:h-64 aria-expanded:p-2 @4xl/playground:aria-expanded:h-(--outlet-wrapper-height)'
 					)}>
@@ -290,7 +289,7 @@ const ScannedEpcList: React.FC = () => {
 						return (
 							<Div
 								key={virtualItem.index}
-								className='absolute inset-x-0 top-0 flex h-10 w-full justify-between whitespace-nowrap px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
+								className='hover:bg-secondary absolute inset-x-0 top-0 flex h-10 w-full justify-between px-4 py-2 whitespace-nowrap uppercase transition-all duration-75 last:border-none'
 								style={{
 									height: virtualItem.size,
 									transform: `translateY(${virtualItem.start}px)`
@@ -298,7 +297,7 @@ const ScannedEpcList: React.FC = () => {
 								<Typography variant='small' className='font-medium sm:text-sm'>
 									{item.epc}
 								</Typography>
-								<Typography variant='small' className='capitalize text-foreground'>
+								<Typography variant='small' className='text-foreground capitalize'>
 									{item.mo_no}
 								</Typography>
 							</Div>
@@ -327,7 +326,7 @@ const ScannedEpcList: React.FC = () => {
 							)}
 						</Button>
 					)}
-				</ScrollShadow>
+				</Div>
 			) : (
 				<Div
 					aria-expanded={isExpanded}
@@ -344,13 +343,13 @@ const ScannedEpcList: React.FC = () => {
 				</Div>
 			)}
 			{/* Datalist footer */}
-			<Div aria-expanded={isExpanded} className='basis-auto bg-background p-1.5 aria-expanded:border-t'>
-				<Div className='[&>button[aria-haspopup=dialog]]:hidden [&>button[aria-haspopup=dialog]]:w-full @4xl/playground:[&>button[aria-haspopup=dialog]]:flex! @7xl/layout-wrapper:[&>button[aria-haspopup=dialog]]:hidden md:[&>button[aria-haspopup=dialog]]:hidden'>
+			<Div aria-expanded={isExpanded} className='bg-background basis-auto p-1.5 aria-expanded:border-t'>
+				<Div className='[&>button[aria-haspopup=dialog]]:hidden [&>button[aria-haspopup=dialog]]:w-full md:[&>button[aria-haspopup=dialog]]:hidden @4xl/playground:[&>button[aria-haspopup=dialog]]:flex! @7xl/layout-wrapper:[&>button[aria-haspopup=dialog]]:hidden'>
 					<OrderDetailTableDialog />
 				</Div>
 				<Button
 					variant='secondary'
-					className='flex w-full @4xl/playground:hidden @[1440px]/playground:flex'
+					className='flex w-full @[1440px]/playground:flex @4xl/playground:hidden'
 					onClick={() => setIsExpanded(!isExpanded)}>
 					<Icon name={isExpanded ? 'ChevronUp' : 'ChevronDown'} />{' '}
 					{isExpanded ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}

@@ -116,7 +116,7 @@ const WarehouseFormDialog: React.FC = () => {
 			onOpenChange={(open) => {
 				if (!open) dispatch({ type: 'RESET' })
 			}}>
-			<DialogContent className='w-full max-w-3xl bg-popover'>
+			<DialogContent className='bg-popover w-full max-w-3xl'>
 				<DialogHeader>
 					<DialogTitle>{t(dialogTitle, { ns: 'ns_warehouse', defaultValue: dialogTitle })}</DialogTitle>
 				</DialogHeader>

@@ -19,7 +19,6 @@ import {
 	SelectFieldControl,
 	Typography
 } from '@/components/ui'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { useUpsertEpcsMatchMutation } from '@/features/finished-goods/hooks/use-finished-goods-mo-request'
 import { useSocketContext } from '@/stores/socket.store'
 import { type ExchangeEpcFormValue, exchangeEpcSchema } from '@features/finished-goods/schemas/exchange-epc.schema'
@@ -176,7 +175,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 				</DialogHeader>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleExchangeEpc)}>
-						<ScrollShadow className='grid max-h-[70vh] grid-cols-6 gap-x-2 gap-y-10 py-4 scrollbar-none! xxl:max-h-[90vh]'>
+						<Div className='scroll-fade-y xxl:max-h-[90vh] grid max-h-[70vh] scrollbar-none! grid-cols-6 gap-x-2 gap-y-10 py-4'>
 							<Fieldset as='fieldset'>
 								<Legend as='legend'>{t('ns_common:titles.original_data')}</Legend>
 								<InputFieldControl label={t('ns_erp:fields.mo_no')} name='mo_no' readOnly={true} />
@@ -251,7 +250,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 									readOnly={Boolean(isExchangeAll)}
 									min={1}
 								/>
-								<Div className='col-span-full flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm'>
+								<Div className='col-span-full flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4 shadow-sm'>
 									<Checkbox checked={isExchangeAll} onCheckedChange={handleToggleSelectAll} />
 									<Div className='space-y-1.5 leading-none'>
 										<FormLabel>{t('ns_inoutbound:labels.exchange_all')}</FormLabel>
@@ -259,7 +258,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 									</Div>
 								</Div>
 							</Fieldset>
-						</ScrollShadow>
+						</Div>
 						<DialogFooter className='col-span-full'>
 							<DialogClose asChild>
 								<Button variant='secondary' onClick={() => form.reset()} disabled={isPending}>

@@ -51,7 +51,7 @@ const CellEditor: React.FC<CellEditorProps> = ({
 				<Input
 					role='textbox'
 					placeholder={cellEditorProps.placeholder ?? 'Type ...'}
-					className='focus-within:ring-offset-transparen h-full rounded-none p-0 px-4 py-0 outline-none ring-0 focus-within:ring-0'
+					className='focus-within:ring-offset-transparen h-full rounded-none p-0 px-4 py-0 ring-0 outline-none focus-within:ring-0'
 					onChange={(e) => {
 						setValue(e.target.value)
 						table.options.meta?.updateRow(row.index, column.id, value)

@@ -11,12 +11,12 @@ const ScannedEpcCounter: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='relative flex h-full basis-auto flex-col items-center justify-center overflow-clip rounded-lg rounded-b-none border p-4 py-6 @md:py-8 @4xl/playground:rounded-b-md @4xl:h-60 @7xl/layout-wrapper:rounded-b-none @7xl/layout-wrapper:px-6'>
+		<Div className='relative flex h-full basis-auto flex-col items-center justify-center overflow-clip rounded-lg rounded-b-none border p-4 py-6 @md:py-8 @4xl:h-60 @4xl/playground:rounded-b-md @7xl/layout-wrapper:rounded-b-none @7xl/layout-wrapper:px-6'>
 			<ScanningSkeleton />
 			<ScanningCounter />
 			<Typography
 				variant='small'
-				className='relative z-10 mb-6 line-clamp-1 text-pretty text-center text-xs @md:text-sm'
+				className='relative z-10 mb-6 line-clamp-1 text-center text-xs text-pretty @md:text-sm'
 				color='muted'>
 				{t('ns_inoutbound:counter_box.caption')}
 			</Typography>
@@ -66,7 +66,7 @@ const ScanningCounter: React.FC = () => {
 			<Typography className='inline-flex items-center gap-x-2 text-lg @md:text-xl'>
 				{t('ns_inoutbound:counter_box.label')}
 			</Typography>
-			<Separator className='h-0.5 w-1.5 bg-foreground' />
+			<Separator className='bg-foreground h-0.5 w-1.5' />
 			<Typography variant='h4' className='inline-flex gap-x-1 self-baseline text-xl tracking-wide @3xl:text-2xl'>
 				{formatIntlNumber(count)}
 				<Typography as='small' variant='small' className='text-xs @3xl:text-sm'>

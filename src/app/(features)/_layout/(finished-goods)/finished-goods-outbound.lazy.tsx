@@ -35,9 +35,9 @@ function Page() {
 					{/* <PageNavigationBlocker /> */}
 					<PageProvider>
 						<Div className='static gap-4 @7xl/layout-wrapper:grid @7xl/layout-wrapper:grid-cols-12 @7xl/layout-wrapper:p-0'>
-							<Div className='h-full @container/playground @7xl/layout-wrapper:col-span-4'>
+							<Div className='@container/playground h-full @7xl/layout-wrapper:col-span-4'>
 								<Div className='flex flex-col items-stretch gap-0 @4xl/playground:grid @4xl/playground:grid-flow-col @4xl/playground:auto-rows-auto @4xl/playground:grid-cols-2 @4xl/playground:gap-4 @7xl/layout-wrapper:gap-0'>
-									<Div className='order-first col-span-full @4xl/playground:col-span-1 @[1400px]/playground:hidden'>
+									<Div className='order-first col-span-full @[1400px]/playground:hidden @4xl/playground:col-span-1'>
 										<ScannedEpcCounter />
 									</Div>
 									<Div className='col-span-full mb-4 flex-1 @4xl/playground:order-last @4xl/playground:col-span-1 @4xl/playground:col-start-2 @4xl/playground:row-span-6 @4xl/playground:mb-0 @7xl/layout-wrapper:order-first @7xl/layout-wrapper:mb-6'>

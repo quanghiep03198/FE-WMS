@@ -117,7 +117,7 @@ const ToolbarColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) =
 				</Tooltip>
 				<PopoverContent align='end' className='h-auto p-0'>
 					<Activity mode={colorPaletteType === 'preset' ? 'visible' : 'hidden'}>
-						<Div className='grid grid-cols-10 gap-2 p-2 transition-allow-discrete animate-in fade-in-0 slide-in-from-right-2'>
+						<Div className='transition-allow-discrete animate-in fade-in-0 slide-in-from-right-2 grid grid-cols-10 gap-2 p-2'>
 							{PresetColors.map((color) => (
 								<button
 									key={color}
@@ -138,7 +138,7 @@ const ToolbarColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) =
 						</Div>
 					</Activity>
 					<Activity mode={colorPaletteType === 'custom' ? 'visible' : 'hidden'}>
-						<Div className='h-80 max-w-sm p-4 transition-allow-discrete animate-in fade-in-0 slide-in-from-left-2'>
+						<Div className='transition-allow-discrete animate-in fade-in-0 slide-in-from-left-2 h-80 max-w-sm p-4'>
 							<ColorPicker
 								value={handleGetPickerValue()}
 								onChange={handleSetCustomColor}

@@ -18,7 +18,7 @@ const StorageRowActions: React.FC<WarehouseRowActionsProps> = (props) => {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger className='border-none outline-none ring-0 focus-within:outline-none' role='button'>
+			<DropdownMenuTrigger className='border-none ring-0 outline-none focus-within:outline-none' role='button'>
 				<DotsHorizontalIcon />
 				<span className='sr-only'>Open menu</span>
 			</DropdownMenuTrigger>

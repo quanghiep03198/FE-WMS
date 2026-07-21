@@ -139,14 +139,14 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 												<TableCell
 													key={field.id}
 													aria-invalid={!!error}
-													className='p-0 aria-invalid:bg-destructive'>
+													className='aria-invalid:bg-destructive p-0'>
 													<InputFieldControl
 														name={`data.${index}.mn_ist_qty`}
 														type='number'
 														errorMessageVariant='tooltip'
 														disabled={!isEditing || isLoading}
 														className={cn(
-															'h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none aria-invalid:bg-destructive/20 focus:outline-none',
+															'aria-invalid:bg-destructive/20 h-auto w-full rounded-none border-none bg-transparent p-0 whitespace-nowrap shadow-none focus:outline-none',
 															form.watch(`data.${index}.mn_ist_qty`) !== 0
 																? 'text-destructive disabled:text-destructive/80'
 																: 'text-foreground'
@@ -169,14 +169,14 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 												<TableCell
 													key={field.id}
 													aria-invalid={!!error}
-													className='p-0 aria-invalid:bg-destructive/20'>
+													className='aria-invalid:bg-destructive/20 p-0'>
 													<InputFieldControl
 														name={`data.${index}.mn_ost_qty`}
 														type='number'
 														errorMessageVariant='tooltip'
 														disabled={!isEditing || isLoading}
 														className={cn(
-															'h-auto w-full whitespace-nowrap rounded-none border-none p-0 shadow-none aria-invalid:bg-destructive/20 focus:outline-none',
+															'aria-invalid:bg-destructive/20 h-auto w-full rounded-none border-none p-0 whitespace-nowrap shadow-none focus:outline-none',
 															form.watch(`data.${index}.mn_ost_qty`) !== 0
 																? 'text-destructive disabled:text-destructive/80'
 																: 'text-foreground'

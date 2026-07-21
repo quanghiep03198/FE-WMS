@@ -85,7 +85,7 @@ const InoutboundOverview: React.FC = () => {
 					{isLoading ? (
 						<Skeleton className='w-full place-content-center place-items-center @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-104' />
 					) : isEmpty ? (
-						<Div className='flex w-full items-center justify-center gap-x-2 rounded-lg bg-muted text-muted-foreground @xs:h-72 @xl:h-96 @3xl:min-h-104'>
+						<Div className='bg-muted text-muted-foreground flex w-full items-center justify-center gap-x-2 rounded-lg @xs:h-72 @xl:h-96 @3xl:min-h-104'>
 							<Icon name='ChartColumnBig' size={32} strokeWidth={1} />
 							{t('ns_common:table.no_data')}
 						</Div>

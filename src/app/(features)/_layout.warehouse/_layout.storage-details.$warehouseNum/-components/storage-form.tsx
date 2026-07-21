@@ -93,7 +93,7 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 
 	return (
 		<Dialog open={open} onOpenChange={() => dispatch({ type: undefined })}>
-			<DialogContent className='w-full max-w-2xl bg-popover'>
+			<DialogContent className='bg-popover w-full max-w-2xl'>
 				<DialogHeader>
 					<DialogTitle className='lowercase first-letter:uppercase'>
 						{t(dialogTitle, { ns: 'ns_warehouse', defaultValue: dialogTitle })}

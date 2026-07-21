@@ -19,7 +19,7 @@ const DataTableGlobalFilter: React.FC<DataTableGlobalFilterProps> = ({
 	const { t } = useTranslation()
 
 	return (
-		<Div className='flex h-9 w-full max-w-[280px] items-center space-x-2 rounded-md border px-2 py-1 transition-colors duration-200 focus-within:border-primary'>
+		<Div className='focus-within:border-primary flex h-9 w-full max-w-[280px] items-center space-x-2 rounded-md border px-2 py-1 transition-colors duration-200'>
 			<Icon name='Search' size={18} />
 			<DebouncedInput
 				type='search'

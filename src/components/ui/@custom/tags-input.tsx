@@ -164,7 +164,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 		<Div
 			className={cn(
 				className,
-				'flex w-full flex-wrap items-center gap-1 overflow-hidden rounded-md border bg-background p-1 shadow-sm duration-200 aria-invalid:border-destructive aria-invalid:focus-within:border-destructive',
+				'bg-background aria-invalid:border-destructive aria-invalid:focus-within:border-destructive flex w-full flex-wrap items-center gap-1 overflow-hidden rounded-md border p-1 shadow-sm duration-200',
 				activeIndex === -1 && 'focus-within:border-primary'
 			)}
 			{...props}>
@@ -180,8 +180,8 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 							aria-current={inputValue === item}
 							className={cn(
 								'relative flex items-center gap-2 truncate rounded px-1',
-								'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-current:animate-[pulse_1s_ease_forwards]',
-								'data-[active=true]:ring-2 data-[active=true]:ring-primary'
+								'aria-current:animate-[pulse_1s_ease_forwards] aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
+								'data-[active=true]:ring-primary data-[active=true]:ring-2'
 							)}>
 							<Typography variant='small' className='align-middle leading-none'>
 								{item}
@@ -214,7 +214,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 				onChange={activeIndex === -1 ? handleChange : undefined}
 				onFocus={() => setActiveIndex(-1)}
 				className={cn(
-					'h-max min-w-fit flex-1 border-none px-1 shadow-none outline-0 placeholder:text-muted-foreground focus-visible:border-0 focus-visible:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0',
+					'placeholder:text-muted-foreground h-max min-w-fit flex-1 border-none px-1 shadow-none outline-0 focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-0',
 					activeIndex !== -1 && 'caret-transparent'
 				)}
 			/>

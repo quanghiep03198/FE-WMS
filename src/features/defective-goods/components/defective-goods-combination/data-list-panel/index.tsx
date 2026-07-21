@@ -31,7 +31,7 @@ const DatalistPanel: React.FC = () => {
 	return (
 		<Fragment>
 			{/* Combination history list panel (Display on large screen).  Hidden by default, display when viewport >= 1440px */}
-			<Div className='hidden h-full grid-rows-[var(--bar-height)_var(--bar-height)_auto_var(--bar-height)] items-stretch divide-y divide-border @7xl:grid'>
+			<Div className='divide-border hidden h-full grid-rows-[var(--bar-height)_var(--bar-height)_auto_var(--bar-height)] items-stretch divide-y @7xl:grid'>
 				<Div className='place-content-stretch place-items-center p-4'>
 					<SearchBox />
 				</Div>
@@ -60,7 +60,7 @@ const DatalistPanel: React.FC = () => {
 						<SearchBox />
 					</Div>
 					<ListPanelProvider>
-						<Div className='flex w-full items-center justify-between rounded-md bg-table-head px-3 py-2 shadow-sm'>
+						<Div className='bg-table-head flex w-full items-center justify-between rounded-md px-3 py-2 shadow-sm'>
 							<ItemSelectionCheckbox
 								{...pick(data, ['data', 'totalDocs', 'limit'])}
 								disabled={isLoading || !Array.isArray(data.data) || data.data.length === 0}

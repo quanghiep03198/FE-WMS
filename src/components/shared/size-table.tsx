@@ -14,7 +14,7 @@ const SizeTable: React.FC<SizeTableProps> = ({ data, total, ...props }) => {
 
 	if (!Array.isArray(data) || data.length === 0)
 		return (
-			<Div className='h-20 place-content-center text-center text-muted-foreground'>
+			<Div className='text-muted-foreground h-20 place-content-center text-center'>
 				{t('ns_common:table.no_data')}
 			</Div>
 		)
@@ -35,7 +35,7 @@ const SizeTable: React.FC<SizeTableProps> = ({ data, total, ...props }) => {
 					</TableCellHead>
 				))}
 				{total && (
-					<TableCellHead className='sticky right-0 bg-background font-medium text-foreground'>
+					<TableCellHead className='bg-background text-foreground sticky right-0 font-medium'>
 						{t('ns_common:common_fields.total')}
 					</TableCellHead>
 				)}

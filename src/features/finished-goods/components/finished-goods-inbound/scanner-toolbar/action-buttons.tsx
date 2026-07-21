@@ -61,7 +61,7 @@ const ScannerActions: React.FC = () => {
 			if (previousStatus === 'connected')
 				toast.custom(
 					() => (
-						<Div className='rounded-lg border bg-background p-4 shadow-lg'>
+						<Div className='bg-background rounded-lg border p-4 shadow-lg'>
 							<Typography variant='small' className='font-medium'>
 								{t('ns_inoutbound:notification.browser_tab_resumed')} 🖐
 							</Typography>

@@ -60,7 +60,7 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
 				)}
 				<span className={cn('relative inline-flex rounded-full', sizeClasses.dot, colors.dot)} />
 			</div>
-			{label && <p className={cn('text-sm text-foreground', labelClassName)}>{label}</p>}
+			{label && <p className={cn('text-foreground text-sm', labelClassName)}>{label}</p>}
 		</div>
 	)
 }

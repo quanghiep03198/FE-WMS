@@ -17,7 +17,7 @@ export default function NotFoundPage() {
 					<Separator orientation='vertical' className='h-5 w-0.5' />
 					<Typography variant='h4'> {t('ns_common:errors.404')}</Typography>
 				</Div>
-				<Typography variant='p' className='mb-6 mt-2 text-base leading-7' color='muted'>
+				<Typography variant='p' className='mt-2 mb-6 text-base leading-7' color='muted'>
 					{t('ns_common:errors.404_message')}
 				</Typography>
 				<Button variant='link' onClick={() => router.history.back()} className='p-0'>

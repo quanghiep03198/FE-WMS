@@ -15,7 +15,6 @@ import {
 	SheetTrigger,
 	Typography
 } from '@/components/ui'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { PresetBreakPoints } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import useMediaQuery from '@hooks/use-media-query'
@@ -84,7 +83,7 @@ export const Header: React.FC = () => {
 
 	return (
 		<Div as='header' className='sticky top-0 z-50 p-2 sm:p-2'>
-			<NavigationMenu className='mx-auto w-full list-none rounded-lg border bg-background/50 p-1 backdrop-blur-sm sm:w-full sm:max-w-full sm:rounded-none sm:border-none sm:bg-transparent sm:p-0'>
+			<NavigationMenu className='bg-background/50 mx-auto w-full list-none rounded-lg border p-1 backdrop-blur-sm sm:w-full sm:max-w-full sm:rounded-none sm:border-none sm:bg-transparent sm:p-0'>
 				<NavigationMenuItem className='sm:bg-transparent!'>
 					<Link to='/'>
 						<NavigationMenuLink
@@ -103,12 +102,12 @@ export const Header: React.FC = () => {
 									<li className='row-span-3'>
 										<NavigationMenuLink asChild>
 											<a
-												className='flex h-full w-full select-none flex-col justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md'
+												className='from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-none select-none focus:shadow-md'
 												href='/'>
 												{/* <Icons. className="h-6 w-6" /> */}
 												<Icon name='Radio' size={40} strokeWidth={1.5} />
-												<div className='mb-2 mt-4 text-lg font-medium'>RFID Agent</div>
-												<p className='text-sm leading-tight text-muted-foreground'>
+												<div className='mt-4 mb-2 text-lg font-medium'>RFID Agent</div>
+												<p className='text-muted-foreground text-sm leading-tight'>
 													Connect your RFID reader to our web application with ease.
 												</p>
 											</a>
@@ -162,12 +161,12 @@ export const Header: React.FC = () => {
 									<Icon name='Radio' size={40} strokeWidth={1.5} />
 									<span className='flex flex-col text-left font-bold'>
 										RFID Agent
-										<small className='font-normal text-muted-foreground'>v1.0.0</small>
+										<small className='text-muted-foreground font-normal'>v1.0.0</small>
 									</span>
 								</Link>
 							</SheetHeader>
 							<Separator className='my-4' />
-							<ScrollShadow className='flex flex-col overflow-y-auto scrollbar-none'>
+							<Div className='scroll-fade flex scrollbar-none flex-col overflow-y-auto'>
 								<Typography className='mb-2! font-medium'>Getting started</Typography>
 								<ul>
 									{navigationGroup.rfidAgent.map((externalLink) => (
@@ -195,7 +194,7 @@ export const Header: React.FC = () => {
 										</ListItem>
 									))}
 								</ul>
-							</ScrollShadow>
+							</Div>
 						</SheetContent>
 					</Sheet>
 				)}
@@ -218,12 +217,12 @@ const ListItem: React.FC<React.PropsWithChildren & React.ComponentProps<typeof L
 					ref={ref}
 					preload='intent'
 					className={cn(
-						'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+						'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none',
 						className
 					)}
 					{...props}>
-					<div className='text-sm font-medium leading-none'>{title}</div>
-					<p className='line-clamp-2 text-sm leading-snug text-muted-foreground'>{children}</p>
+					<div className='text-sm leading-none font-medium'>{title}</div>
+					<p className='text-muted-foreground line-clamp-2 text-sm leading-snug'>{children}</p>
 				</Link>
 			</NavigationMenuLink>
 		</li>

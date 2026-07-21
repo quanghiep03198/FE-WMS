@@ -261,7 +261,7 @@ const InoutboundForm: React.FC = () => {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>{t('ns_common:common_fields.actions')}</FormLabel>
-										<Div className='flex h-9 w-full items-center rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm aria-disabled:text-muted-foreground'>
+										<Div className='border-input bg-background aria-disabled:text-muted-foreground flex h-9 w-full items-center rounded-md border px-3 py-1 text-sm shadow-sm'>
 											{form.watch('rfid_use') === FinishedGoodsOutboundReason.NORMAL_IMPORT
 												? t('ns_inoutbound:inoutbound_actions.normal_import')
 												: t('ns_inoutbound:inoutbound_actions.recycle')}
@@ -269,7 +269,7 @@ const InoutboundForm: React.FC = () => {
 												readOnly={true}
 												type='hidden'
 												placeholder={t('ns_common:actions.select_database')}
-												className='h-max w-full border-none px-0 text-foreground shadow-none focus-within:outline-none focus:border-none'
+												className='text-foreground h-max w-full border-none px-0 shadow-none focus-within:outline-none focus:border-none'
 												onChange={field.onChange}
 												value={field.value}
 											/>

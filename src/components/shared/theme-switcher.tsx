@@ -60,13 +60,13 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
 	return (
 		<div
 			className={cn(
-				'relative isolate grid h-8 grid-cols-3 rounded-full bg-background p-1 ring-1 ring-border',
+				'bg-background ring-border relative isolate grid h-8 grid-cols-3 rounded-full p-1 ring-1',
 				className
 			)}>
 			<div className='absolute inset-x-1 top-1/2 z-[-1] w-full -translate-y-1/2'>
 				<div
 					ref={activeRef}
-					className='aspect-square size-6 rounded-full bg-accent transition-all duration-200 ease-in-out'
+					className='bg-accent aspect-square size-6 rounded-full transition-all duration-200 ease-in-out'
 				/>
 			</div>
 			{themes.map(({ key, icon: Icon, label }) => {

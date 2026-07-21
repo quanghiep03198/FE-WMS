@@ -38,7 +38,7 @@ const ActionDropdown: React.FC<
 	return (
 		<RoleBaseAccessControl mode='mask' authorizedRoles={[UserRole.ADMIN]}>
 			<DropdownMenu>
-				<DropdownMenuTrigger className='text-muted-foreground transition-colors duration-200 ease-in-out hover:text-foreground'>
+				<DropdownMenuTrigger className='text-muted-foreground hover:text-foreground transition-colors duration-200 ease-in-out'>
 					<Icon name='Ellipsis' />
 				</DropdownMenuTrigger>
 				<DropdownMenuContent side='left' align='start'>

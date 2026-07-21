@@ -2,7 +2,6 @@
 
 import { Button, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/features/auth/services/auth.service'
 import { DEFAULT_PROPS, usePageContext } from '@/features/finished-goods/contexts/finished-goods-inbound/page-context'
@@ -314,29 +313,29 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 				document.body
 			)}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
-				<ScrollShadow
+				<Div
 					ref={containerRef}
 					aria-expanded={isExpanded}
 					className={cn(
-						'group/scrollable z-10 flex h-0 w-full flex-col items-stretch justify-start divide-y divide-border bg-background contain-size',
+						'scroll-fade-y group/scrollable divide-border bg-background z-10 flex h-0 w-full flex-col items-stretch justify-start divide-y overflow-y-auto contain-size',
 						'transition-height aria-expanded:h-72 aria-expanded:p-2 @[920px]/page-container:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]',
 						'group-has-[#toggle-fullscreen[data-state=checked]]:aria-expanded:h-[calc(100dvh-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)]'
 					)}>
 					<Div
-						className='relative w-full duration-200 ease-in group-aria-expanded/scrollable:animate-in group-aria-expanded/scrollable:fade-in-0 group-aria-[expanded=false]/scrollable:animate-out group-aria-[expanded=false]/scrollable:fade-out-0'
+						className='group-aria-expanded/scrollable:animate-in group-aria-expanded/scrollable:fade-in-0 group-aria-[expanded=false]/scrollable:animate-out group-aria-[expanded=false]/scrollable:fade-out-0 relative w-full duration-200 ease-in'
 						style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
 							const item = scannedEpc.data[virtualItem.index]
 							return (
 								<Div
 									key={virtualItem.index}
-									className='absolute left-auto right-auto top-0 flex h-10 w-full justify-between whitespace-nowrap border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
+									className='hover:bg-secondary absolute top-0 right-auto left-auto flex h-10 w-full justify-between border-b px-4 py-2 whitespace-nowrap uppercase transition-all duration-75 last:border-none'
 									style={{
 										height: virtualItem.size,
 										transform: `translateY(${virtualItem.start}px)`
 									}}>
 									<Typography className='font-medium'>{item.epc}</Typography>
-									<Typography variant='small' className='capitalize text-foreground'>
+									<Typography variant='small' className='text-foreground capitalize'>
 										{item.mo_no}
 									</Typography>
 								</Div>
@@ -368,11 +367,11 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 							</Button>
 						)}
 					</Div>
-				</ScrollShadow>
+				</Div>
 			) : (
 				<Div
 					aria-expanded={isExpanded}
-					className='grid h-0 place-items-center overflow-clip transition-height duration-200 group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)] aria-expanded:h-64 @[920px]/page-container:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]'>
+					className='transition-height grid h-0 place-items-center overflow-clip duration-200 group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)] aria-expanded:h-64 @[920px]/page-container:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='var(--muted-foreground)' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>

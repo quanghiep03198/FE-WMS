@@ -11,7 +11,6 @@ import {
 	PopoverTrigger,
 	Separator
 } from '@/components/ui'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { useGetProductSpecsQuery } from '@/features/product-specification/hooks/use-product-specs-request'
 import { cn } from '@common/utils/cn'
 import useQueryParams from '@hooks/use-query-params'
@@ -111,21 +110,21 @@ const SearchBox: React.FC = () => {
 			<GhostButton
 				onClick={handleResetAllSearchTerms}
 				className={cn(
-					'duration-300 transition-allow-discrete',
-					isFilterDirty ? 'animate-in fade-in-0' : 'hidden animate-out fade-out-0'
+					'transition-allow-discrete duration-300',
+					isFilterDirty ? 'animate-in fade-in-0' : 'animate-out fade-out-0 hidden'
 				)}>
 				<Icon name='X' />
 			</GhostButton>
 			<Separator
 				orientation='vertical'
 				className={cn(
-					'mx-1 w-0.5 duration-300 transition-allow-discrete',
-					isFilterDirty ? 'animate-in fade-in-0' : 'hidden animate-out fade-out-0'
+					'transition-allow-discrete mx-1 w-0.5 duration-300',
+					isFilterDirty ? 'animate-in fade-in-0' : 'animate-out fade-out-0 hidden'
 				)}
 			/>
 			<FormProvider {...{ ...form, productSpecification }}>
 				<Popover>
-					<PopoverTrigger className='aspect-square text-muted-foreground transition-colors duration-200 aria-expanded:text-active hover:text-foreground aria-expanded:hover:text-active'>
+					<PopoverTrigger className='text-muted-foreground aria-expanded:text-active hover:text-foreground aria-expanded:hover:text-active aspect-square transition-colors duration-200'>
 						<Icon name='ListFilter' />
 					</PopoverTrigger>
 					<PopoverContent
@@ -134,7 +133,7 @@ const SearchBox: React.FC = () => {
 						style={{ width: size?.width + 16 }}
 						alignOffset={-8}
 						className='relative'>
-						<PopoverClose className='absolute right-4 top-4 text-muted-foreground transition-colors duration-200 hover:text-foreground'>
+						<PopoverClose className='text-muted-foreground hover:text-foreground absolute top-4 right-4 transition-colors duration-200'>
 							<Icon name='X' />
 						</PopoverClose>
 						<form
@@ -142,9 +141,9 @@ const SearchBox: React.FC = () => {
 							onSubmit={form.handleSubmit(handleSearchSubmission)}>
 							<fieldset className='space-y-6'>
 								<legend className='text-base font-semibold'>{t('ns_common:titles.advanced_search')}</legend>
-								<ScrollShadow
+								<Div
 									className={cn(
-										'grid max-h-96 overflow-y-auto scrollbar-none',
+										'scroll-fade grid max-h-96 scrollbar-none overflow-y-auto',
 										formFieldOrientation === 'horizontal' ? 'gap-y-3' : 'gap-y-6'
 									)}>
 									<DatePickerFieldControl
@@ -163,7 +162,7 @@ const SearchBox: React.FC = () => {
 									<SizeFieldControl name='size_code' orientation={formFieldOrientation} />
 									<SewingLineFieldControl orientation={formFieldOrientation} />
 									<AssemblyLineFieldControl orientation={formFieldOrientation} />
-								</ScrollShadow>
+								</Div>
 							</fieldset>
 							<fieldset className='flex items-center justify-end gap-x-2'>
 								<Button type='submit' size='sm'>

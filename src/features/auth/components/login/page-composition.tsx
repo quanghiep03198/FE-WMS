@@ -14,7 +14,7 @@ const FormSection = tw.section`mx-auto flex max-w-xl w-full flex-col items-stret
 
 const ThemeSelector: React.FC = () => {
 	return (
-		<Div className='fixed right-2 top-2 z-50'>
+		<Div className='fixed top-2 right-2 z-50'>
 			<ThemeToggle tooltipProps={{ contentProps: { side: 'left' } }} />
 		</Div>
 	)
@@ -22,7 +22,7 @@ const ThemeSelector: React.FC = () => {
 
 const HomeNavigator: React.FC = () => {
 	return (
-		<Div className='fixed! left-2 top-2 z-10'>
+		<Div className='fixed! top-2 left-2 z-10'>
 			<Tooltip message='Home' contentProps={{ side: 'right' }}>
 				<Link to='/' className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}>
 					<Icon name='ArrowLeft' />
@@ -49,7 +49,7 @@ const FormFieldset: React.FC = () => {
 			<Stepper.Panel value={1}>
 				<LoginForm />
 			</Stepper.Panel>
-			<Stepper.Panel value={2} className='duration-500 animate-in fade-in-0 slide-in-from-left-4'>
+			<Stepper.Panel value={2} className='animate-in fade-in-0 slide-in-from-left-4 duration-500'>
 				<WorkplaceSelectionForm />
 			</Stepper.Panel>
 		</Stepper.Provider>
@@ -61,7 +61,7 @@ const FormHeading: React.FC = () => {
 
 	return (
 		<Div className='w-full space-y-2 text-center *:text-pretty'>
-			<Typography variant='h3' className='whitespace-nowrap text-center'>
+			<Typography variant='h3' className='text-center whitespace-nowrap'>
 				{t('ns_auth:texts.title')}
 			</Typography>
 			<Typography color='muted'>{t('ns_auth:texts.description')}</Typography>

@@ -74,7 +74,7 @@ const RoleBaseAccessControl: React.FC<RoleBaseAccessControlProps> = ({
 						className='ease absolute inset-0 z-20 flex items-center justify-center gap-x-2 opacity-0 transition-opacity duration-200 group-hover/rbac:opacity-100 group-aria-disabled/rbac:cursor-not-allowed group-aria-disabled/rbac:select-none'>
 						<Icon
 							name='Lock'
-							className='ease-in-out group-hover/rbac:duration-200 group-hover/rbac:animate-in group-hover/rbac:zoom-in-0'
+							className='group-hover/rbac:animate-in group-hover/rbac:zoom-in-0 ease-in-out group-hover/rbac:duration-200'
 						/>
 					</div>
 				)}

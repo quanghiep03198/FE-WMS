@@ -184,7 +184,7 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 										<ArrayFieldControl fields={fields} onAppend={append} />
 									</Div>
 									<DragOverlay
-										className='min-w-(--draggable-item-width) max-w-(--draggable-item-width)'
+										className='max-w-(--draggable-item-width) min-w-(--draggable-item-width)'
 										dropAnimation={{
 											duration: 300,
 											easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)'
@@ -237,7 +237,7 @@ const ArrayFieldControl: React.FC<{
 					size='sm'
 					type='button'
 					aria-disabled={shouldAllowAdditionalSizes}
-					className='aria-disalbed:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:hover:opacity-50!'
+					className='aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:hover:opacity-50! aria-disalbed:pointer-events-none'
 					onClick={handleAppendField}>
 					<Icon name='Plus' /> {t('ns_common:actions.add')}
 				</Button>
@@ -261,14 +261,8 @@ const EmptyState: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='col-span-full flex flex-col items-center justify-center animate-in fade-in-0 zoom-in-90'>
-			<Icon
-				name='CircleFadingPlus'
-				size={40}
-				strokeWidth={1}
-				stroke='var(--muted-foreground)'
-				className='mb-4'
-			/>
+		<Div className='animate-in fade-in-0 zoom-in-90 col-span-full flex flex-col items-center justify-center'>
+			<Icon name='CircleFadingPlus' size={40} strokeWidth={1} stroke='var(--muted-foreground)' className='mb-4' />
 			<Typography className='mb-1 font-medium'>{t('ns_inoutbound:description.no_added_size')}</Typography>
 			<Typography variant='small' color='muted' className='col-span-full text-center'>
 				{t('ns_inoutbound:description.add_outbound_size')}

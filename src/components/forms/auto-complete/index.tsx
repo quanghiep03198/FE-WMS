@@ -176,7 +176,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 												placeholder={placeholder}
 												aria-invalid={!!getFieldState(name).error}
 												className={cn(
-													'peer pr-9 transition-colors aria-invalid:border-destructive aria-invalid:focus-within:border-destructive',
+													'peer aria-invalid:border-destructive aria-invalid:focus-within:border-destructive pr-9 transition-colors',
 													className
 												)}
 												data-icon={props['data-icon']}
@@ -189,7 +189,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 												disabled={disabled}
 												readOnly={readOnly}
 											/>
-											<CaretSortIcon className='absolute right-3 top-1/2 ml-auto h-4 w-4 -translate-y-1/2 opacity-50 peer-data-[icon=false]:hidden' />
+											<CaretSortIcon className='absolute top-1/2 right-3 ml-auto h-4 w-4 -translate-y-1/2 opacity-50 peer-data-[icon=false]:hidden' />
 										</PopoverTrigger>
 									</Tooltip>
 								</FormControl>

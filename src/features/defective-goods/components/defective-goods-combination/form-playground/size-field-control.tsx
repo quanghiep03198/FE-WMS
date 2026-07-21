@@ -13,7 +13,6 @@ import {
 	InputFieldControl,
 	Label
 } from '@/components/ui'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { cn } from '@common/utils/cn'
 import { useLocation } from '@tanstack/react-router'
 import { uniqBy } from 'lodash-es'
@@ -95,7 +94,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 				<Div
 					aria-disabled={disabled}
 					className='flex-1 space-y-4 rounded-md border border-dashed py-3 aria-disabled:opacity-50'>
-					<ScrollShadow ref={scrollRef} className={cn('px-3', fields.length > 0 && 'max-h-40')}>
+					<Div ref={scrollRef} className={cn('px-3', fields.length > 0 && 'scroll-fade max-h-40')}>
 						{fields.length === 0 ? (
 							<Empty>
 								<EmptyHeader>
@@ -149,7 +148,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 								</Div>
 							))
 						)}
-					</ScrollShadow>
+					</Div>
 					{fields.length > 0 && (
 						<Div className='grid place-content-center place-items-center'>
 							<Button

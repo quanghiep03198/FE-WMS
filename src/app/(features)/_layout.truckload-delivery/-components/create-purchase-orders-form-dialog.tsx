@@ -21,8 +21,6 @@ import {
 	InputFieldControl,
 	Typography
 } from '@/components/ui'
-import type { ScrollShadowProps } from '@/components/ui/@custom/scroll-shadow'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { CommonActions } from '@common/constants/enums'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -188,7 +186,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 													<Icon
 														name='BotMessageSquare'
 														size={24}
-														className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
+														className='animate-in zoom-in-0 slide-in-from-bottom-2 mr-2 duration-500'
 													/>
 													&quot;
 													<Typewriter
@@ -267,7 +265,7 @@ const Table = tw.div`flex flex-col relative`
 const TableHeader = tw.div`sticky top-0 z-10 bg-accent text-accent-foreground`
 const TableRow = tw.div`grid grid-cols-[2.5rem_1fr_1fr_2.5rem] items-start gap-x-2 *:first:px-3`
 const TableHead = tw.div`py-2 h-9 font-medium bg-accent`
-const TableBody = tw(ScrollShadow)<ScrollShadowProps>`max-h-[40vh] flex-1`
+const TableBody = tw.div`max-h-[40vh] scroll-fade flex-1`
 const TableCell = tw.div`py-2 min-h-9 has-[input]:px-0`
 const TableFooter = tw.div`rounded-md border border-dashed place-content-center place-items-center p-6 mt-6 flex flex-col justify-center items-center space-y-6`
 

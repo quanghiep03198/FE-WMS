@@ -185,7 +185,7 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 						/>
 						<Div className='col-span-full space-y-4'>
 							<Div className='flex flex-col space-y-1.5 leading-none'>
-								<Typography className='inline-flex items-center gap-x-2 font-semibold text-warning'>
+								<Typography className='text-warning inline-flex items-center gap-x-2 font-semibold'>
 									<Icon name='TriangleAlert' /> {t('ns_common:titles.caution')}
 								</Typography>
 								<Typography variant='small' className='text-pretty'>

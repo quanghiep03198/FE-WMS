@@ -45,7 +45,7 @@ const DeviceSelect: React.FC = () => {
 				setSelectedDevice(value)
 				handleResetScanningAction()
 			}}>
-			<SelectTrigger className='h-9 items-center gap-x-2 rounded-md border px-3 py-2 @[1366px]:flex sm:hidden'>
+			<SelectTrigger className='h-9 items-center gap-x-2 rounded-md border px-3 py-2 sm:hidden @[1366px]:flex'>
 				<SelectValue placeholder={t('ns_inoutbound:placeholders.select_rfid_device')} />
 			</SelectTrigger>
 			<SelectContent>
@@ -62,7 +62,7 @@ const DeviceSelect: React.FC = () => {
 									name={isNil(device.device_ant) || device.device_ant === '0' ? 'SmartphoneNfc' : 'Router'}
 								/>
 								{deviceNameLocalization[i18n.language] ?? (
-									<Div className='text-sm text-muted-foreground'>{t('ns_common:titles.unknown')}</Div>
+									<Div className='text-muted-foreground text-sm'>{t('ns_common:titles.unknown')}</Div>
 								)}
 								<Typography variant='small' color='muted'>
 									({device.device_sn})

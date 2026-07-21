@@ -15,7 +15,7 @@ export const PlaygroundActions: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='grid grid-cols-3 items-center gap-x-2 p-2 @container/playground-actions'>
+		<Div className='@container/playground-actions grid grid-cols-3 items-center gap-x-2 p-2'>
 			<Button
 				size='sm'
 				disabled={!connectionStatus.isMQTTConnectionReady}

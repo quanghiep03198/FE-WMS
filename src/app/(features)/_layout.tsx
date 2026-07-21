@@ -12,8 +12,8 @@ import { type RegisteredServiceWorker } from 'virtual:pwa-register/react'
 import { ErrorBoundaryFallback } from '../../components/errors/error-boundary-fallback'
 import UnsupportedScreen from '../../components/errors/unsupported-screen'
 import AuthGuard from '../../components/guards/auth-guard'
-import NavSidebar from './-components/partials/nav-sidebar'
-import Navbar from './-components/partials/navbar'
+import NavSidebar from '../../components/partials/app-layout/nav-sidebar'
+import Navbar from '../../components/partials/app-layout/navbar'
 import { BreadcrumbProvider } from '../../contexts/breadcrumb-context'
 
 export const Route = createFileRoute('/(features)/_layout')({

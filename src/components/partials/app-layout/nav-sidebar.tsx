@@ -27,7 +27,6 @@ import {
 	SidebarSeparator,
 	useSidebar
 } from '@/components/ui'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import useAuth from '@hooks/use-auth'
@@ -62,7 +61,7 @@ const NavSidebar: React.FC = () => {
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('ns_common:navigation.main_menu_label')}</SidebarGroupLabel>
-					<ScrollShadow className='max-h-[40vh] overflow-y-auto overflow-x-hidden scrollbar-none!'>
+					<div className='scroll-fade max-h-[40vh] scrollbar-none! overflow-x-hidden overflow-y-auto'>
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{navigationConfig.main.map((item, index) => {
 								if (!Array.isArray(item.items))
@@ -95,7 +94,7 @@ const NavSidebar: React.FC = () => {
 												/>
 											</SidebarMenuButton>
 										</CollapsibleTrigger>
-										<CollapsibleContent className='w-full overflow-auto transition-none scrollbar-none! data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+										<CollapsibleContent className='data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down w-full scrollbar-none! overflow-auto transition-none'>
 											<SidebarMenuSub>
 												{item.items?.map((subItem, subIndex) => (
 													<SidebarMenuSubLink
@@ -110,7 +109,7 @@ const NavSidebar: React.FC = () => {
 								)
 							})}
 						</SidebarMenu>
-					</ScrollShadow>
+					</div>
 				</SidebarGroup>
 				<SidebarSeparator />
 				<SidebarGroup>
@@ -134,8 +133,8 @@ const NavSidebar: React.FC = () => {
 						</SidebarGroup>
 					</Fragment>
 				)}
-				<SidebarSeparator className={cn(user?.roles?.includes(UserRole.ADMIN) && 'hidden xxl:block')} />
-				<SidebarGroup className={cn(user?.roles?.includes(UserRole.ADMIN) && 'hidden xxl:flex')}>
+				<SidebarSeparator className={cn(user?.roles?.includes(UserRole.ADMIN) && 'xxl:block hidden')} />
+				<SidebarGroup className={cn(user?.roles?.includes(UserRole.ADMIN) && 'xxl:flex hidden')}>
 					<SidebarGroupLabel>{t('ns_common:navigation.preference_menu_label')}</SidebarGroupLabel>
 					<SidebarMenu role='menu' aria-label='Preferences menu'>
 						{navigationConfig.preferences
@@ -198,7 +197,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 					<Icon name={icon} size={18} className='size-[18px]!' />
 					<SidebarMenuTitle data-indice={indice}>{t(title, { defaultValue: title })}</SidebarMenuTitle>
 					{!isLinkActive && (
-						<Icon name='Lock' size={14} className='ml-auto size-[14px]! stroke-muted-foreground' />
+						<Icon name='Lock' size={14} className='stroke-muted-foreground ml-auto size-[14px]!' />
 					)}
 				</Link>
 			</SidebarMenuButton>
@@ -259,7 +258,7 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 				<Icon
 					name='Lock'
 					size={14}
-					className='absolute right-0 top-1/2 -translate-y-1/2 translate-x-3.5 stroke-muted-foreground'
+					className='stroke-muted-foreground absolute top-1/2 right-0 translate-x-3.5 -translate-y-1/2'
 				/>
 			)}
 		</SidebarMenuSubItem>

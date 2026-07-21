@@ -28,7 +28,7 @@ const DebouncedLimitInput: React.FC<{ dataType: StockFlow }> = ({ dataType }) =>
 				min={10}
 				step={10}
 				aria-invalid={value <= 0}
-				className='h-8 w-16 text-center aria-invalid:border-destructive'
+				className='aria-invalid:border-destructive h-8 w-16 text-center'
 				onChange={(e) => {
 					const val = e.currentTarget.value
 					const formatted = val.replace(/[^0-9]/g, '')

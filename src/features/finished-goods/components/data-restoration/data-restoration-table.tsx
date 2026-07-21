@@ -112,7 +112,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 
 	return (
 		<Div
-			className='flex-1 space-y-1 overflow-y-auto scrollbar-track-accent/10'
+			className='scrollbar-track-accent/10 flex-1 space-y-1 overflow-y-auto'
 			style={{
 				container: 'table / size'
 			}}
@@ -127,7 +127,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 						'--footer-height': '3rem'
 					} as React.CSSProperties
 				}>
-				<TableHeader className='sticky top-0 z-10 border-b [&_th]:h-(--header-height) [&_th]:bg-table-head [&_th]:text-table-head-foreground'>
+				<TableHeader className='[&_th]:bg-table-head [&_th]:text-table-head-foreground sticky top-0 z-10 border-b [&_th]:h-(--header-height)'>
 					<TableRow>
 						<TableHead className='w-(--row-selection-width)'>
 							<Checkbox
@@ -197,7 +197,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 							})}
 							{hasNextPage && (
 								<TableRow>
-									<TableCell colSpan={4} align='center' className='h-10 text-muted-foreground'>
+									<TableCell colSpan={4} align='center' className='text-muted-foreground h-10'>
 										{isFetchingNextPage ? (
 											<Icon name='LoaderCircle' className='animate-spin' />
 										) : (
@@ -218,7 +218,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 					)}
 				</TableBody>
 				<TableFooter>
-					<TableRow className='sticky bottom-0 z-10 [&_td]:h-(--footer-height) [&_td]:border-x-0 [&_td]:border-t [&_td]:bg-table-head'>
+					<TableRow className='[&_td]:bg-table-head sticky bottom-0 z-10 [&_td]:h-(--footer-height) [&_td]:border-x-0 [&_td]:border-t'>
 						<TableCell colSpan={2}>
 							<DebouncedLimitInput dataType={dataType} />
 						</TableCell>

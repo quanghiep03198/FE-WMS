@@ -22,7 +22,7 @@ AvatarImage.displayName = AvatarPrimitive.Image.displayName
 
 const AvatarFallback: React.FC<React.ComponentProps<typeof AvatarPrimitive.Fallback>> = ({ className, ...props }) => (
 	<AvatarPrimitive.Fallback
-		className={cn('flex h-full w-full items-center justify-center rounded-full bg-muted', className)}
+		className={cn('bg-muted flex h-full w-full items-center justify-center rounded-full', className)}
 		{...props}
 	/>
 )

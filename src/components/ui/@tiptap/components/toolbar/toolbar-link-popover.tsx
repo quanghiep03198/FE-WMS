@@ -55,10 +55,10 @@ export const LinkPopover: React.FC = () => {
 			<PopoverContent className='w-80'>
 				<Div className='grid gap-4'>
 					<Div className='space-y-2'>
-						<Typography className='font-medium leading-none'>
+						<Typography className='leading-none font-medium'>
 							{t('ns_common:editor.insert_link_title')}
 						</Typography>
-						<Typography className='text-sm text-muted-foreground'>
+						<Typography className='text-muted-foreground text-sm'>
 							{t('ns_common:editor.insert_link_description')}
 						</Typography>
 					</Div>

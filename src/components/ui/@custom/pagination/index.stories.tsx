@@ -298,7 +298,7 @@ const MockApiTemplate: React.FC<{ totalPages: number }> = ({ totalPages }) => {
 				<h4 className='mb-2 text-sm font-semibold text-gray-700'>📋 Activity Logs:</h4>
 				<div className='space-y-1 text-xs'>
 					{logs.length === 0 ? (
-						<p className='italic text-gray-500'>No activity yet...</p>
+						<p className='text-gray-500 italic'>No activity yet...</p>
 					) : (
 						logs.map((log, index) => (
 							<div

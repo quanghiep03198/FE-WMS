@@ -1,7 +1,7 @@
 'use no memo'
 
-
 import { Button, Div, Form as FormProvider, Icon, InputFieldControl, Typography } from '@/components/ui'
+import { useUpdatePasswordMutation } from '@/features/auth/hooks/use-profile-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'
 import { useDebounceEffect } from 'ahooks'
@@ -11,7 +11,6 @@ import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { type UpdatePasswordFormValues, updatePasswordFormValues } from '../-schemas/update-password.schema'
-import { useUpdatePasswordMutation } from '@/features/auth/hooks/use-profile-request'
 
 const ChangePasswordForm: React.FC = () => {
 	const { mutateAsync, isPending, isError } = useUpdatePasswordMutation()

@@ -11,7 +11,7 @@ function TableFooter({ hidden, slot: Slot, rtl }: TableFooterProps) {
 	return (
 		<Fragment>
 			<Separator />
-			<Div className={cn('flex items-center gap-x-1 bg-background', rtl ? 'justify-start' : 'justify-end')}>
+			<Div className={cn('bg-background flex items-center gap-x-1', rtl ? 'justify-start' : 'justify-end')}>
 				<Slot table={table} />
 			</Div>
 		</Fragment>

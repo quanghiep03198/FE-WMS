@@ -95,19 +95,19 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 						fill='#404040'></path>
 					<path
 						d='M578.45 518.11c-.6 0-14.71-.6-20-4.18a2.65 2.65 0 01-1.47-2.56c.45-3 8-5.5 8.86-5.77a.48.48 0 01.38.03.49.49 0 01.24.3.5.5 0 01-.03.38.5.5 0 01-.29.24c-3 .95-7.9 3.13-8.17 5 0 .2-.12.8 1 1.58 5 3.42 19.32 4 19.46 4a.5.5 0 01.35.15.5.5 0 010 .7.5.5 0 01-.35.15l.02-.02z'
-						className='animate-[pulse_0.75s_ease-out_0.25s_infinite] fill-muted dark:fill-muted-foreground'></path>
+						className='fill-muted dark:fill-muted-foreground animate-[pulse_0.75s_ease-out_0.25s_infinite]'></path>
 					<path
 						d='M613.02 518.71h-1.28a.5.5 0 01-.35-.16.5.5 0 01-.14-.36.53.53 0 01.52-.48c.16 0 15.92.48 18.89-5a1.62 1.62 0 00.08-1.55c-1.2-2.63-8.55-4.76-11.28-5.35a.5.5 0 01-.4-.6.5.5 0 01.61-.4c.43.1 10.33 2.29 12 5.92a2.61 2.61 0 01-.11 2.44c-2.79 5.1-14.58 5.54-18.54 5.54z'
-						className='animate-[pulse_0.75s_ease-out_0.25s_infinite] fill-muted dark:fill-muted-foreground'></path>
+						className='fill-muted dark:fill-muted-foreground animate-[pulse_0.75s_ease-out_0.25s_infinite]'></path>
 					<path
 						d='M596.72 515.39h-3.77c-8.85-.26-22.34-1.77-23.26-4.85-.15-.48-.09-1.23 1-2 2.94-2.06 10.52-2.76 14.06-3a32.26 32.26 0 01-4.41-2.92 22.76 22.76 0 01-4.77-5.53.51.51 0 01.36-.75h.2a.5.5 0 01.3.24 22.15 22.15 0 004.54 5.26 34.26 34.26 0 005.85 3.66.5.5 0 01-.2.95c-.11 0-11.8.4-15.35 2.89-.35.24-.75.6-.65.91.5 1.69 9.6 3.76 22.33 4.13 12.73.37 26.58-1.08 28.54-3a.38.38 0 00.15-.24c-.1-.85-5.79-1.83-12.17-2.11a.5.5 0 01.04-1c11.43.5 13.13 2.16 13.13 3.11a1.34 1.34 0 01-.45 1c-2.32 2.22-15.37 3.25-25.47 3.25z'
-						className='animate-[pulse_0.5s_ease-out_0.25s_infinite] fill-muted dark:fill-muted-foreground'></path>
+						className='fill-muted dark:fill-muted-foreground animate-[pulse_0.5s_ease-out_0.25s_infinite]'></path>
 					<path
 						d='M600.03 509.94h-.13a.5.5 0 01-.35-.61s1.15-4.13-.35-6.19a3.04 3.04 0 00-2.53-1.18 3.72 3.72 0 00-3 1.11c-1.63 1.75-1.3 5-1.3 5a.5.5 0 01-.1.37.5.5 0 01-.9-.26c0-.16-.38-3.75 1.56-5.83a4.77 4.77 0 013.79-1.43 4.06 4.06 0 013.31 1.59c1.79 2.46.56 6.87.5 7.05a.5.5 0 01-.5.38z'
-						className='animate-[pulse_0.5s_ease-out_0.25s_infinite] fill-muted dark:fill-muted-foreground'></path>
+						className='fill-muted dark:fill-muted-foreground animate-[pulse_0.5s_ease-out_0.25s_infinite]'></path>
 					<path
 						d='M605.22 504.92a.5.5 0 01-.46-.31.5.5 0 01.11-.54s3.9-3.91 5-5.18a.48.48 0 01.34-.18.5.5 0 01.53.46.52.52 0 01-.11.37c-1.12 1.3-4.89 5.07-5 5.23a.5.5 0 01-.41.15z'
-						className='animate-[pulse_0.75s_ease-out_0.25s_infinite] fill-muted dark:fill-muted-foreground'></path>
+						className='fill-muted dark:fill-muted-foreground animate-[pulse_0.75s_ease-out_0.25s_infinite]'></path>
 				</g>
 				<g
 					data-sentry-element='MainWindows'

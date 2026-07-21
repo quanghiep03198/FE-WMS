@@ -2,9 +2,11 @@
 @import url('./sentry.css') layer(base);
 @import 'tailwindcss';
 @import 'shadcn/tailwind.css';
+@import 'tw-animate-css';
 
-@plugin 'tailwind-scrollbar';
-@plugin 'tailwindcss-animate';
+@plugin 'tailwind-scrollbar' {
+	nocompatible: true;
+}
 @plugin '@tailwindcss/container-queries';
 @plugin '@tailwindcss/typography';
 @plugin '@tailwindcss/forms' {
@@ -491,7 +493,7 @@
 
 	/* Global styles */
 	* {
-		@apply border-border scrollbar-thumb-scrollbar scrollbar-thin scrollbar-track-transparent antialiased selection:bg-neutral-300 dark:selection:bg-neutral-600;
+		@apply border-border scrollbar-thumb-scrollbar scrollbar-thin scrollbar-track-transparent antialiased selection:bg-neutral-300 dark:selection:bg-neutral-600 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-button]:size-px [&::-webkit-scrollbar-thumb]:rounded-full;
 	}
 
 	*,

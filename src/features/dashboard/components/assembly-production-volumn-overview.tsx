@@ -96,8 +96,8 @@ export function AssemblyProductivityOverview() {
 							value={activePeriod}
 							onValueChange={setActivePeriod}
 							className={cn(
-								'isolate hidden grid-cols-3 gap-0 divide-x overflow-clip rounded-lg border @4xl/card:inline-grid **:cursor-pointer!',
-								'[&>div:has([data-state=checked])]:bg-accent [&>div:has([data-state=checked])]:text-accent-foreground [&>div]:h-9 [&>div]:px-3 [&>div]:py-1.5 [&>div]:text-center [&_button[role=radio]]:hidden'
+								'isolate hidden grid-cols-3 gap-0 divide-x overflow-clip rounded-lg border **:cursor-pointer! @4xl/card:inline-grid',
+								'[&>div:has([data-state=checked])]:bg-accent [&>div:has([data-state=checked])]:text-accent-foreground [&_button[role=radio]]:hidden [&>div]:h-9 [&>div]:px-3 [&>div]:py-1.5 [&>div]:text-center'
 							)}>
 							<Div role='radio'>
 								<Label htmlFor='last-3m-option'>{t('ns_dashboard:period_options.last_3_months')}</Label>
@@ -145,7 +145,7 @@ export function AssemblyProductivityOverview() {
 										key={chart}
 										data-active={activeChart === chart}
 										onClick={() => setActiveChart(chart)}>
-										<Typography variant='small' className='text-xs uppercase text-muted-foreground'>
+										<Typography variant='small' className='text-muted-foreground text-xs uppercase'>
 											{chartConfig[chart].label}
 										</Typography>
 										<Typography variant='h3' as='span'>
@@ -160,12 +160,12 @@ export function AssemblyProductivityOverview() {
 				{isLoading ? (
 					<Skeleton className='h-[250px] w-full' />
 				) : !Array.isArray(chartData) || chartData.length === 0 ? (
-					<Div className='mx-3 flex h-64 items-center justify-center gap-x-2 rounded-lg bg-muted text-muted-foreground'>
+					<Div className='bg-muted text-muted-foreground mx-3 flex h-64 items-center justify-center gap-x-2 rounded-lg'>
 						<Icon name='ChartArea' size={32} strokeWidth={1} />
 						{t('ns_common:table.no_data')}
 					</Div>
 				) : (
-					<ChartContainer config={chartConfig} className='aspect-auto h-72 w-full xxl:h-80'>
+					<ChartContainer config={chartConfig} className='xxl:h-80 aspect-auto h-72 w-full'>
 						<AreaChart
 							accessibilityLayer
 							data={chartData}

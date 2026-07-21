@@ -26,8 +26,8 @@ const PurchaseOrderAutoComplete: React.FC = () => {
 			template={({ value }) => (
 				<Div
 					className={cn(
-						'flex h-8 cursor-pointer items-center justify-between rounded-md p-2 text-sm hover:bg-secondary hover:text-secondary-foreground',
-						value.is_completed && 'cursor-auto text-muted-foreground opacity-80'
+						'hover:bg-secondary hover:text-secondary-foreground flex h-8 cursor-pointer items-center justify-between rounded-md p-2 text-sm',
+						value.is_completed && 'text-muted-foreground cursor-auto opacity-80'
 					)}
 					onClick={(e) => {
 						if (value.is_completed) {

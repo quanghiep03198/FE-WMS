@@ -60,5 +60,5 @@ export const Typewriter = ({
 		setDisplayedText(text)
 	}, [i18n.language])
 
-	return <span className={cn('whitespace-pre-wrap leading-7', className)}>{displayedText}</span>
+	return <span className={cn('leading-7 whitespace-pre-wrap', className)}>{displayedText}</span>
 }

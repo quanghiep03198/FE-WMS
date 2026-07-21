@@ -123,7 +123,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 											variant='outline'
 											className={cn(
 												triggerProps?.className,
-												'w-full justify-between bg-background px-3 font-normal aria-invalid:border-destructive aria-invalid:focus-within:border-destructive hover:bg-background focus:border-primary'
+												'bg-background aria-invalid:border-destructive aria-invalid:focus-within:border-destructive hover:bg-background focus:border-primary w-full justify-between px-3 font-normal'
 											)}>
 											<Typography variant='small' className='line-clamp-1'>
 												{field.value || placeholder}

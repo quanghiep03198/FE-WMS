@@ -33,7 +33,7 @@ const RFIDReaderPlayground: React.FC<React.ComponentProps<'div'> & { resetOnUnmo
 	return (
 		<Div
 			className={cn(
-				'grid h-full w-full grid-rows-[var(--playground-header-height)_auto_var(--playground-actions-height)] divide-y @container/playground',
+				'@container/playground grid h-full w-full grid-rows-[var(--playground-header-height)_auto_var(--playground-actions-height)] divide-y',
 				className
 			)}
 			style={

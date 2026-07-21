@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import HostCompatibleGuard from '@/components/guards/host-compatible-guard'
 import { RoleGuard } from '@/components/guards/role-guard'
 import { UserRole } from '@common/constants/enums'
-import { useBreadcrumbContext } from '../../../contexts/breadcrumb-context'
 import {
 	PageAction,
 	PageDescription,
@@ -14,6 +13,7 @@ import {
 	PageTitle,
 	PageWrapper
 } from '../../../components/shared/page'
+import { useBreadcrumbContext } from '../../../contexts/breadcrumb-context'
 import DeviceDataTable from '../../../features/rfid-device/components/device-data-table'
 import RFIDDeviceFormDialog from '../../../features/rfid-device/components/rfid-device-form-dialog'
 import { PageContextProvider } from './-contexts/page-context'

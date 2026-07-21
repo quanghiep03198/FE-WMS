@@ -30,7 +30,7 @@ const RFIDAgentInstallation: React.FC = () => {
 									<Icon
 										name='CircleAlert'
 										size={18}
-										className='absolute right-0 top-0 -translate-y-1/2 translate-x-1/2 fill-destructive stroke-destructive-foreground'
+										className='fill-destructive stroke-destructive-foreground absolute top-0 right-0 translate-x-1/2 -translate-y-1/2'
 									/>
 								)}
 							</DownloadButton>
@@ -47,7 +47,7 @@ const RFIDAgentInstallation: React.FC = () => {
 									<Icon
 										name='CircleAlert'
 										size={18}
-										className='absolute right-0 top-0 -translate-y-1/2 translate-x-1/2 fill-destructive stroke-destructive-foreground'
+										className='fill-destructive stroke-destructive-foreground absolute top-0 right-0 translate-x-1/2 -translate-y-1/2'
 									/>
 								)}
 							</DownloadButton>

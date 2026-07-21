@@ -27,7 +27,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 				<Icon
 					name='BotMessageSquare'
 					size={24}
-					className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
+					className='animate-in zoom-in-0 slide-in-from-bottom-2 mr-2 duration-500'
 				/>
 				&quot;
 				<Typewriter text={t('ns_common:others.lookup_question')} delay={200} className='italic' />
@@ -55,14 +55,14 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 										<Typography> {t('ns_inoutbound:action_types.warehouse_input')}</Typography>
 										<Typography
 											variant='small'
-											className='block w-full max-w-3/4 font-normal text-muted-foreground'>
+											className='text-muted-foreground block w-full max-w-3/4 font-normal'>
 											{t('ns_inoutbound:description.inbound_history_lookup')}
 										</Typography>
 									</Div>
 									<CheckIcon
 										name='Check'
 										size={28}
-										className='absolute right-4 top-4'
+										className='absolute top-4 right-4'
 										aria-checked={field.value === StockFlow.INBOUND}
 									/>
 								</StyledFormLabel>
@@ -77,7 +77,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 										<Typography>{t('ns_inoutbound:action_types.warehouse_output')}</Typography>
 										<Typography
 											variant='small'
-											className='block w-full max-w-3/4 font-normal text-muted-foreground'>
+											className='text-muted-foreground block w-full max-w-3/4 font-normal'>
 											{t('ns_inoutbound:description.outbound_history_lookup')}
 										</Typography>
 									</Div>
@@ -85,7 +85,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 										name='Check'
 										size={28}
 										aria-checked={field.value === StockFlow.OUTBOUND}
-										className='absolute right-4 top-4'
+										className='absolute top-4 right-4'
 									/>
 								</StyledFormLabel>
 							</FormItem>

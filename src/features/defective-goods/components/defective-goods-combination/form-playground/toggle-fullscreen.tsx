@@ -26,7 +26,7 @@ const ToggleFullscreen: React.FC = () => {
 				variant='ghost'
 				type='button'
 				onClick={() => toggleFullscreen()}
-				className='h-8 rounded-md px-3 text-xs aria-pressed:text-foreground'>
+				className='aria-pressed:text-foreground h-8 rounded-md px-3 text-xs'>
 				<Icon name={isFullscreen ? 'Minimize2' : 'Maximize2'} size={14} />
 				{t('ns_inoutbound:scanner_setting.toggle_fullscreen')}
 			</Button>
