@@ -1,9 +1,9 @@
 'use no memo'
 
-import UploadDataFileDialog from '@/features/finished-goods/components/upload-data-dialog'
 import { Button, buttonVariants, Div, Icon, Label, Typography } from '@/components/ui'
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/features/auth/services/auth.service'
+import UploadDataFileDialog from '@/features/finished-goods/components/upload-data-dialog'
 import { StockFlow } from '@/features/finished-goods/constants/enums'
 import type { IElectronicProductCode } from '@/features/finished-goods/types'
 import { type RFIDStreamEventData } from '@/features/finished-goods/types'

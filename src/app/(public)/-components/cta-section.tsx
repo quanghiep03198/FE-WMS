@@ -54,7 +54,7 @@ const CTASection: React.FC = () => {
 				Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS. Our
 				comprehensive system provides the tools you need to manage your warehouse effortlessly.
 			</Typography>
-			<List className='col-start-1 row-start-4 mx-auto grid w-full max-w-3xl grid-cols-1 gap-x-10 lg:col-start-2 lg:row-start-4 lg:mt-10 lg:grid-cols-1 xl:mb-12 @xl/cta:grid-cols-2 @7xl/cta:grid-cols-1'>
+			<List className='col-start-1 row-start-4 mx-auto grid w-full max-w-3xl gap-x-10 lg:col-start-1 lg:mt-10'>
 				{outstandingFeatures.map((feature, index) => (
 					<ListItem key={index.toString()}>
 						<Icon name='Check' size={18} />{' '}
@@ -64,7 +64,7 @@ const CTASection: React.FC = () => {
 					</ListItem>
 				))}
 			</List>
-			<Div className='animate-in fade-in-0 slide-in-from-bottom-4 z-10 col-start-1 row-span-1 row-start-5 flex items-center justify-center gap-x-1 duration-700 lg:col-start-2 lg:row-start-5 lg:justify-start xl:justify-start'>
+			<Div className='animate-in fade-in-0 slide-in-from-bottom-4 z-10 col-start-1 row-span-1 row-start-5 flex items-center justify-center gap-x-1 duration-700 lg:col-start-1 lg:row-start-5 lg:justify-start xl:justify-start'>
 				<Link to='/login' className={cn(buttonVariants())}>
 					Get started
 				</Link>
@@ -76,7 +76,7 @@ const CTASection: React.FC = () => {
 					Learn more <Icon name='ArrowRight' size={12} />
 				</Button>
 			</Div>
-			<Div className='z-[-1] col-start-2 row-span-6 row-start-1 animate-none sm:inset-0 sm:col-start-1 sm:row-start-6 md:col-span-2 md:col-start-1 md:row-start-6 lg:z-[-1] lg:col-start-1 lg:row-start-4'>
+			<Div className='z-[-1] col-start-2 row-span-6 row-start-1 animate-none sm:inset-0 sm:col-start-1 sm:row-start-6 md:col-span-2 md:col-start-1 md:row-start-6 lg:z-[-1] lg:col-start-2 lg:row-start-4'>
 				<AnimatedScreen />
 			</Div>
 		</Div>

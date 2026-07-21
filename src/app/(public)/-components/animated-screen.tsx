@@ -74,11 +74,11 @@ const AnimatedScreen: React.FC = () => {
 				}}
 				className={cn(
 					'bg-background pointer-events-none relative grid aspect-square h-auto max-h-240 rotate-45 grid-cols-[18rem_auto] grid-rows-[80px_auto] gap-y-4 overflow-visible rounded-xl border antialiased select-none *:pointer-events-none *:select-none',
-					'xxl:zoom-[1] sm:zoom-[0.5] md:zoom-[0.8] lg:zoom-[0.6] xl:zoom-[0.8]',
-					'transform-[perspective(1920px)_translateX(15%)_translateY(-20%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
-					'lg:transform-[perspective(1920px)_translateX(10%)_translateY(-30%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
-					'md:transform-[perspective(1920px)_translateX(10%)_translateY(-35%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
-					'sm:transform-[perspective(1920px)_translateX(15%)_translateY(-40%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
+					'xxl:zoom-[1] sm:zoom-[0.5] md:zoom-[0.8] lg:zoom-[0.6] xl:zoom-[0.8] w-full',
+					'xl:transform-[perspective(1920px)_translateX(5%)_translateY(-15%)_rotateX(45deg)_rotateY(-10deg)_rotateZ(-45deg)]',
+					'lg:transform-[perspective(1920px)_translateX(-5%)_translateY(-10%)_rotateX(45deg)_rotateY(-15deg)_rotateZ(-45deg)]',
+					'md:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)]',
+					'sm:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)]',
 					'after:from-background after:via-background/80 md:after:to-background/50 lg:after:via-background via-25% to-50% after:absolute after:inset-0 after:z-10 after:h-[calc(100%+4px)] after:w-[200%] after:-translate-y-px after:bg-linear-to-l after:to-transparent md:via-65% lg:after:via-60% lg:after:to-70%'
 				)}>
 				<aside className='paused group-aria-current/cta:running z-0 col-start-1 row-span-full animate-[fly-down_0.7s_ease_forwards] space-y-10 border-r p-4 text-sm'>
@@ -87,7 +87,7 @@ const AnimatedScreen: React.FC = () => {
 					</div>
 					<div
 						data-slot='sidebar-menu'
-						className='[&_*[data-slot=menu-label]]:text-muted-foreground space-y-8 [&_*[data-slot=menu-item]]:flex [&_*[data-slot=menu-item]]:items-center [&_*[data-slot=menu-item]]:gap-x-2 [&_*[data-slot=menu-item]>svg]:size-[18px] [&_*[data-slot=menu-label]]:text-xs [&_*[data-slot=menu-label]]:font-medium [&_*[data-slot=menu]]:space-y-3 [&>*[data-slot=sidebar-menu-group]]:space-y-4'>
+						className='[&_*[data-slot=menu-label]]:text-muted-foreground space-y-8 [&_*[data-slot=menu-item]]:flex [&_*[data-slot=menu-item]]:items-center [&_*[data-slot=menu-item]]:gap-x-2 [&_*[data-slot=menu-item]>svg]:size-4.5 [&_*[data-slot=menu-label]]:text-xs [&_*[data-slot=menu-label]]:font-medium [&_*[data-slot=menu]]:space-y-3 [&>*[data-slot=sidebar-menu-group]]:space-y-4'>
 						<div data-slot='sidebar-menu-group'>
 							<h4 data-slot='menu-label'>Main</h4>
 							<ul data-slot='menu'>

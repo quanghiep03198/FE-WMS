@@ -12,9 +12,9 @@ const ACTIVE_CLUSTERED_CUBE_CLASS =
 	'translate-y-0 delay-500 ease-linear [&_path:nth-child(odd)]:fill-(--yellow) [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
 const INACTIVE_CUBE_CLASS = '-translate-y-10 [&_path:nth-child(odd)]:fill-muted'
 const ACTIVE_WMS_CARD_CLASS =
-	'-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_500ms_ease-in-out_1400ms,transform_350ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1400ms,box-shadow_300ms_ease-out_1400ms] sm:-translate-x-2.5 sm:-translate-y-2.5 sm:border sm:shadow-[16px_16px_12px_#0a0a0a98]'
+	'-translate-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98]'
 const INACTIVE_WMS_CARD_CLASS =
-	'translate-x-0 translate-y-0 border-neutral-600! bg-neutral-500 text-neutral-700 shadow-none'
+	'translate-0 border-neutral-600! bg-neutral-500 text-neutral-700 shadow-none'
 const VISIBLE_GLOW_CLASS = 'opacity-100'
 const HIDDEN_GLOW_CLASS = 'opacity-0'
 
@@ -41,7 +41,7 @@ const BeamAnimated: React.FC = () => {
 	const standaloneConnectionColor = getStandaloneConnectionColor(renderCount)
 	const [inViewport] = useInViewport(containerRef, {
 		root: () => pageContext?.contentScrollRef?.current,
-		threshold: 0.75
+		threshold: 1
 	})
 
 	useEffect(() => {
@@ -60,7 +60,7 @@ const BeamAnimated: React.FC = () => {
 					'--yellow': '#eab308'
 				} as React.CSSProperties
 			}
-			className='group/chip relative container mx-auto w-full sm:w-full sm:max-w-xs sm:zoom-[1.1] md:max-w-[650px] lg:max-w-3xl xl:max-w-3xl'>
+			className='group/chip relative container mx-auto w-full sm:w-full sm:max-w-xs sm:zoom-[1.1] md:max-w-162.5 lg:max-w-3xl xl:max-w-3xl'>
 			<svg
 				width='100%'
 				height='200'
@@ -274,18 +274,20 @@ const BeamAnimated: React.FC = () => {
 				}}
 				className={cn(
 					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl border-2 border-neutral-200 sm:rounded-md dark:border-neutral-700',
-					'from-background to-accent left-[calc(50%+2.5rem)] -translate-y-1/2 bg-linear-to-br to-30%',
-					'sm:left-[calc(50%+6px)] sm:zoom-[0.85] @xs:max-w-[96px] @sm:max-w-[112px]!',
-					'md:left-[calc(50%+0.5rem)] md:max-w-[208px]! @[520px]:zoom-[0.85] @[620px]:zoom-[1]',
-					'lg:left-[calc(50%+1rem)] lg:max-w-[208px]!',
-					'xxl:max-w-[216px]! xl:left-[calc(50%+1rem)] xl:max-w-[192px]!'
+					'from-background to-accent left-[calc(50%+2.5rem)] bg-linear-to-br to-30%',
+					'sm:left-[calc(50%+6px)] sm:zoom-[0.85] @xs:max-w-24 @sm:max-w-28!',
+					'md:left-[calc(50%+0.5rem)] md:min-w-52! @[520px]:zoom-[0.85] @[620px]:zoom-[1]',
+					'lg:left-[calc(50%+1rem)] lg:min-w-52!',
+					'xxl:min-w-54! xl:left-[calc(50%+1rem)] xl:min-w-48!'
 				)}>
 				<div className='relative grid h-full w-full flex-1 place-content-center'>
 					<div
 						className={cn(
-							'flex aspect-square size-24 flex-col items-center justify-center gap-y-6 rounded-lg p-4 select-none sm:size-12 sm:gap-y-2 sm:rounded-sm sm:p-2 sm:text-lg md:p-4',
+							'flex aspect-square size-24 delay-1000 flex-col items-center justify-center gap-y-6 rounded-lg p-4 select-none sm:size-12 sm:gap-y-2 sm:rounded-sm sm:p-2 sm:text-lg md:p-4',
+							'transition-[transform_500ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1500ms,background-color_500ms_ease-out_1500ms,box-shadow_300ms_ease-in_1500ms]',
 							isAnimated ? ACTIVE_WMS_CARD_CLASS : INACTIVE_WMS_CARD_CLASS
-						)}>
+						)}
+						>
 						<span className='font-jetbrains h-6 text-center text-2xl font-semibold tracking-wider transition-none duration-0 sm:text-sm md:text-2xl xl:text-2xl'>
 							WMS
 						</span>
