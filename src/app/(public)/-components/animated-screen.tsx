@@ -74,7 +74,7 @@ const AnimatedScreen: React.FC = () => {
 				}}
 				className={cn(
 					'bg-background pointer-events-none relative grid aspect-square h-auto max-h-240 rotate-45 grid-cols-[18rem_auto] grid-rows-[80px_auto] gap-y-4 overflow-visible rounded-xl border antialiased select-none *:pointer-events-none *:select-none',
-					'xxl:zoom-[1] sm:zoom-[0.5] md:zoom-[0.8] lg:zoom-[0.6] xl:zoom-[0.8] w-full',
+					'xxl:zoom-[1] w-full sm:zoom-[0.5] md:zoom-[0.8] lg:zoom-[0.6] xl:zoom-[0.8]',
 					'xl:transform-[perspective(1920px)_translateX(5%)_translateY(-15%)_rotateX(45deg)_rotateY(-10deg)_rotateZ(-45deg)]',
 					'lg:transform-[perspective(1920px)_translateX(-5%)_translateY(-10%)_rotateX(45deg)_rotateY(-15deg)_rotateZ(-45deg)]',
 					'md:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)]',
