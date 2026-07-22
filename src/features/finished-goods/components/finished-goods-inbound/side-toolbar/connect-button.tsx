@@ -1,13 +1,11 @@
 import type { ButtonProps } from '@/components/ui'
 import { Button, Div, Icon, Typography } from '@/components/ui'
 import { useBrowserTabStatus } from '@hooks/use-browser-tab-status'
-import { useQueryClient } from '@tanstack/react-query'
 import { usePrevious } from 'ahooks'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
-import { FinishedGoodsInboundQueryKeys } from '../../../hooks/use-inbound-request'
 
 interface TScanningButtonProps extends Pick<ButtonProps, 'children' | 'variant'> {
 	icon: React.ComponentProps<typeof Icon>['name']
@@ -15,16 +13,15 @@ interface TScanningButtonProps extends Pick<ButtonProps, 'children' | 'variant'>
 
 const INACTIVE_TIME = 1000 * 60 * 15 // 15 minutes
 
-const ScannerActions: React.FC = () => {
+const ConnectButton: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const queryClient = useQueryClient()
-	const {
-		selectedDevice,
-		scanningStatus,
-		setScanningStatus,
-		reset: resetScanningAction,
-		handleToggleScanning
-	} = usePageContext('scanningStatus', 'selectedDevice', 'setScanningStatus', 'handleToggleScanning', 'reset')
+	const { selectedDevice, scanningStatus, setScanningStatus, handleToggleScanning } = usePageContext(
+		'scanningStatus',
+		'selectedDevice',
+		'setScanningStatus',
+		'handleToggleScanning',
+		'reset'
+	)
 	const previousStatus = usePrevious(scanningStatus)
 
 	const scanningButtonProps = useMemo<TScanningButtonProps>(() => {
@@ -33,20 +30,6 @@ const ScannerActions: React.FC = () => {
 		if (scanningStatus === 'connected')
 			return { children: t('ns_common:actions.disconnect'), variant: 'destructive', icon: 'Unplug' }
 	}, [scanningStatus, i18n.language])
-
-	const handleResetScanningAction = () => {
-		queryClient.removeQueries({
-			queryKey: [FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO],
-			exact: false,
-			type: 'all'
-		})
-		queryClient.removeQueries({
-			queryKey: [FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS],
-			exact: false,
-			type: 'all'
-		})
-		resetScanningAction()
-	}
 
 	useBrowserTabStatus({
 		idleTime: INACTIVE_TIME,
@@ -90,11 +73,11 @@ const ScannerActions: React.FC = () => {
 	})
 
 	return (
-		<Button disabled={!selectedDevice} onClick={handleToggleScanning} variant={scanningButtonProps.variant}>
+		<Button size='sm' disabled={!selectedDevice} onClick={handleToggleScanning} variant={scanningButtonProps.variant}>
 			<Icon name={scanningButtonProps.icon} />
 			{scanningButtonProps.children}
 		</Button>
 	)
 }
 
-export default ScannerActions
+export default ConnectButton

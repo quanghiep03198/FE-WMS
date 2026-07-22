@@ -45,8 +45,8 @@ const DeviceSelect: React.FC = () => {
 				setSelectedDevice(value)
 				handleResetScanningAction()
 			}}>
-			<SelectTrigger className='h-9 items-center gap-x-2 rounded-md border px-3 py-2 sm:hidden @[1366px]:flex'>
-				<SelectValue placeholder={t('ns_inoutbound:placeholders.select_rfid_device')} />
+			<SelectTrigger className='h-9 max-w-full items-center gap-x-2 rounded-md border px-3 py-2 sm:hidden @[1366px]:flex'>
+				<SelectValue placeholder={t('ns_inoutbound:placeholders.select_rfid_device')} className='truncate' />
 			</SelectTrigger>
 			<SelectContent>
 				{inboundDevices.map((device) => {

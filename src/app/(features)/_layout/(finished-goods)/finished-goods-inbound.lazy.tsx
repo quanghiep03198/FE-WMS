@@ -12,7 +12,6 @@ import HostCompatibleGuard from '@components/guards/host-compatible-guard'
 import { RoleGuard } from '@components/guards/role-guard'
 import AlreadyScannedEpcsAlert from '@features/finished-goods/components/finished-goods-inbound/already-scanned-epcs-alert'
 import EpcListBox from '@features/finished-goods/components/finished-goods-inbound/epc-data-list'
-import ScannerToolbar from '@features/finished-goods/components/finished-goods-inbound/scanner-toolbar'
 import { useBreadcrumbContext } from '../../../../contexts/breadcrumb-context'
 import { PageProvider } from '../../../../features/finished-goods/contexts/finished-goods-inbound/page-context'
 
@@ -51,7 +50,6 @@ function Page() {
 										<EpcListBox />
 									</div>
 									<div className='flex flex-col gap-6'>
-										<ScannerToolbar />
 										<ScannedEpcCounter />
 										<div className='block @[920px]/page-container:hidden'>
 											<EpcListBox />

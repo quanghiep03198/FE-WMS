@@ -8,8 +8,10 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
+import ConnectButton from './connect-button'
+import DeviceSelect from './device-select'
 
-export const NetworkInsight: React.FC<React.ComponentProps<'div'>> = (props) => {
+export const NetworkInsight: React.FC<React.ComponentProps<'div'>> = () => {
 	const { t } = useTranslation()
 	const [isNetworkAvailable, setIsNetworkAvailable] = useState<boolean>(true)
 
@@ -18,21 +20,18 @@ export const NetworkInsight: React.FC<React.ComponentProps<'div'>> = (props) => 
 	})
 
 	return (
-		<StatusItem {...props}>
-			<Typography data-slot='label' variant='small' className='font-medium'>
-				{t('ns_inoutbound:scanner_setting.server_connection')}
-			</Typography>
-			<StatusItemDetail data-slot='detail'>
-				{isNetworkAvailable ? (
-					<Icon name='Server' className='stroke-success' />
-				) : (
-					<Icon name='ServerCrash' className='stroke-muted-foreground' />
-				)}
-				<Typography variant='small' className='font-medium'>
-					{isNetworkAvailable ? t('ns_common:status.connected') : t('ns_common:status.disconnected')}
-				</Typography>
-			</StatusItemDetail>
-		</StatusItem>
+		<Div className='relative'>
+			{isNetworkAvailable ? (
+				<Icon name='Server' size={18} />
+			) : (
+				<Icon name='ServerCrash' className='stroke-muted-foreground' size={18} />
+			)}
+			<StatusIndicator
+				className='absolute top-0 right-0 translate-x-1 -translate-y-1'
+				size='sm'
+				state={isNetworkAvailable ? 'active' : 'down'}
+			/>
+		</Div>
 	)
 }
 
@@ -70,19 +69,17 @@ export const JobStatus: React.FC<React.ComponentProps<'div'>> = (props) => {
 	)
 }
 
-export const ConnectionInsight: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {
+export const ConnectionController: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {
 	return (
-		<Div
-			data-slot='connection-insight'
-			className={cn('bg-background grid grid-cols-2 rounded-md border p-4 shadow-none', className)}
-			{...props}>
-			<NetworkInsight className='grid-cols-1 *:data-[slot=detail]:gap-x-2 *:data-[slot=label]:hidden' />
-			<JobStatus className='grid-cols-1 *:data-[slot=detail]:gap-x-2 *:data-[slot=label]:hidden' />
+		<Div data-slot='connection-insight' className={cn('flex items-center gap-x-2 gap-y-4', className)} {...props}>
+			<DeviceSelect />
+			<ConnectButton />
+
 			{/* <Watchers className='grid-cols-1 *:data-[slot=detail]:gap-x-2 *:data-[slot=label]:hidden' /> */}
 		</Div>
 	)
 }
 
-const StatusItem: React.FC<React.ComponentProps<'div'>> = tw.div`grid grid-cols-[2fr_3fr] gap-x-6`
+const StatusItem: React.FC<React.ComponentProps<'div'>> = tw.div`inline-grid grid-cols-[2fr_3fr] gap-x-6`
 const StatusItemDetail: React.FC<React.ComponentProps<'div'>> =
 	tw.div`inline-grid grid-cols-[18px_auto] items-center gap-x-3 text-sm`

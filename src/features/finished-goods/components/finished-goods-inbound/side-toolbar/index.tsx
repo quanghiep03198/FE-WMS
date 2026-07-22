@@ -1,7 +1,7 @@
 import { Div, Sheet, SheetContent, SheetTrigger, Typography } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { ConnectionInsight } from './connection-insight'
+import { ConnectionController, NetworkInsight } from './connection-controller'
 import DataRestoration from './data-restoration'
 import EpcDeduplicationToggleBox from './epc-deduplication-toggle-box'
 import FullscreenToggleBox from './fullscreen-toggle-box'
@@ -23,7 +23,7 @@ const ScannerSettings: React.FC = () => {
 							<Typography className='text-lg font-semibold sm:text-base md:text-base'>
 								{t('ns_common:titles.general_settings')}
 							</Typography>
-							<ConnectionInsight />
+							<ConnectionController />
 							<EpcDeduplicationToggleBox />
 							<FullscreenToggleBox />
 						</Div>
@@ -34,10 +34,11 @@ const ScannerSettings: React.FC = () => {
 			</Sheet>
 			<ToolbarWrapper>
 				<Div className='w-full space-y-3 @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
-					<Typography className='text-lg font-semibold sm:text-base md:text-base'>
-						{t('ns_inoutbound:scanner_setting.network_status')}
-					</Typography>
-					<ConnectionInsight />
+					<Div className='flex items-center justify-between text-lg font-semibold sm:text-base md:text-base'>
+						{t('ns_inoutbound:scanner_setting.server_connection')}
+						<NetworkInsight />
+					</Div>
+					<ConnectionController />
 				</Div>
 				<Div className='w-full space-y-3 @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
 					<Typography className='text-lg font-semibold sm:text-base md:text-base'>

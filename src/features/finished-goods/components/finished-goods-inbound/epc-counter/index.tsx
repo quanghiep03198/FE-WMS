@@ -1,4 +1,4 @@
-import { Badge, Div, Skeleton, Typography } from '@/components/ui'
+import { Badge, buttonVariants, Div, Icon, Label, Skeleton, Typography } from '@/components/ui'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Separator } from '@radix-ui/react-context-menu'
 import { useInterval, useResetState, useUnmount } from 'ahooks'
@@ -24,6 +24,17 @@ const ScannedEpcCounter: React.FC = () => {
 				{t('ns_inoutbound:counter_box.caption')}
 			</Typography>
 			<ScanningTimer />
+
+			<Label
+				htmlFor='side-toolbar-sheet-trigger'
+				className={buttonVariants({
+					variant: 'secondary',
+					size: 'sm',
+					className: 'absolute top-1 right-1 z-10 @[1366px]/page-container:hidden'
+				})}>
+				<Icon name='Settings2' />
+				<span>{t('ns_common:navigation.settings')}</span>
+			</Label>
 		</Div>
 	)
 }
