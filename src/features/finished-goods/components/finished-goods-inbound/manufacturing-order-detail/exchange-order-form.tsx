@@ -1,4 +1,6 @@
-import { InputFieldControl } from '@/components/forms/input'
+import { usePageContext } from '@/features/finished-goods/contexts/finished-goods-inbound/page-context'
+import { FALLBACK_VALUE } from '@common/constants/constants'
+import { InputFieldControl } from '@components/forms/input'
 import {
 	Button,
 	Checkbox,
@@ -16,9 +18,7 @@ import {
 	Label,
 	Separator,
 	Typography
-} from '@/components/ui'
-import { usePageContext } from '@/features/finished-goods/contexts/finished-goods-inbound/page-context'
-import { FALLBACK_VALUE } from '@common/constants/constants'
+} from '@components/ui'
 import { useOrderDetailContext } from '@features/finished-goods/contexts/finished-goods-inbound/order-detail-context'
 import {
 	useExchangeEpcMutation,

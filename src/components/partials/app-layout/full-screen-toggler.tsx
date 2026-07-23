@@ -1,5 +1,5 @@
-import type { ButtonProps } from '@/components/ui'
-import { Button, Icon } from '@/components/ui'
+import type { ButtonProps } from '@components/ui'
+import { Button, Icon } from '@components/ui'
 import { useFullscreen } from 'ahooks'
 import React from 'react'
 

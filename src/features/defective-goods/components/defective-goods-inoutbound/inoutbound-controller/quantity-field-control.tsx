@@ -1,4 +1,4 @@
-import { Input } from '@/components/ui'
+import { Input } from '@components/ui'
 import { useDebounceEffect } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

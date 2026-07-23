@@ -1,5 +1,5 @@
-import { Div, Icon } from '@/components/ui'
-import { Typewriter } from '@/components/ui/@custom/type-writter'
+import { Div, Icon } from '@components/ui'
+import { Typewriter } from '@components/ui/@custom/type-writter'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

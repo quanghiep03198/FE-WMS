@@ -1,5 +1,6 @@
-import { navigationConfig, type NavigationConfig } from '@/app/(features)/-configs/navigation.config'
-import AppLogo from '@/components/shared/app-logo'
+import { UserRole } from '@common/constants/enums'
+import { cn } from '@common/utils/cn'
+import AppLogo from '@components/shared/app-logo'
 import {
 	Button,
 	Collapsible,
@@ -26,9 +27,8 @@ import {
 	SidebarRail,
 	SidebarSeparator,
 	useSidebar
-} from '@/components/ui'
-import { UserRole } from '@common/constants/enums'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
+import { navigationConfig, type NavigationConfig } from '@configs/navigation.config'
 import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'
 import { CollapsibleTrigger } from '@radix-ui/react-collapsible'

@@ -1,5 +1,5 @@
-import { Button, Icon } from '@/components/ui'
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import { Button, Icon } from '@components/ui'
 import { useReportPageQueryParams } from '@features/report/hooks/use-report-page-query-params'
 import { useGetTenantByFactory } from '@features/tenancy/hooks/use-tenacy-request'
 import useAuth from '@hooks/use-auth'

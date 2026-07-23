@@ -1,5 +1,5 @@
-import { TableCell, TableRow } from '@/components/ui'
 import type { IDefectiveGoods } from '@/features/defective-goods/types'
+import { TableCell, TableRow } from '@components/ui'
 import type { Row } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import type { VirtualItem } from '@tanstack/react-virtual'

@@ -1,5 +1,5 @@
-import { AutoCompleteFieldControl } from '@/components/ui'
 import { useGetSewingProductLineQuery } from '@/features/department/hooks/use-department-request'
+import { AutoCompleteFieldControl } from '@components/ui'
 import { capitalize } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

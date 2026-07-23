@@ -1,4 +1,4 @@
-import { Div, Separator, Typography } from '@/components/ui'
+import { Div, Separator, Typography } from '@components/ui'
 import React from 'react'
 
 const AppLogo: React.FC = () => {

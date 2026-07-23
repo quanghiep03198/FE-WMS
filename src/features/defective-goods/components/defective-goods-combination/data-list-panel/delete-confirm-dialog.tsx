@@ -1,5 +1,5 @@
-import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { CommonActions } from '@common/constants/enums'
+import ConfirmDialog from '@components/ui/@override/confirm-dialog'
 import { useResetState } from 'ahooks'
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

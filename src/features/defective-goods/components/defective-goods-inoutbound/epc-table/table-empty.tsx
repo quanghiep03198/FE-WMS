@@ -1,4 +1,4 @@
-import { Div, Icon, TableBody, TableCell, TableRow } from '@/components/ui'
+import { Div, Icon, TableBody, TableCell, TableRow } from '@components/ui'
 import React from 'react'
 
 const DataTableEmpty: React.FC<{ colSpan: number }> = ({ colSpan }) => {

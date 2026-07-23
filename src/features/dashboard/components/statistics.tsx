@@ -1,3 +1,4 @@
+import formatIntlNumber from '@common/utils/format-intl-number'
 import {
 	Badge,
 	Card,
@@ -10,8 +11,7 @@ import {
 	Icon,
 	Skeleton,
 	Typography
-} from '@/components/ui'
-import formatIntlNumber from '@common/utils/format-intl-number'
+} from '@components/ui'
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'

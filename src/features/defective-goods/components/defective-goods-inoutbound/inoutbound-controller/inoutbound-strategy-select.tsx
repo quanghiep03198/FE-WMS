@@ -1,4 +1,4 @@
-import { Div, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui'
+import { Div, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui'
 import { capitalize } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

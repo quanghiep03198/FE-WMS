@@ -1,4 +1,5 @@
-import type { ButtonProps } from '@/components/ui'
+import { LOCALES } from '@common/constants/constants'
+import type { ButtonProps } from '@components/ui'
 import {
 	Button,
 	DropdownMenu,
@@ -15,8 +16,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 	Tooltip
-} from '@/components/ui'
-import { LOCALES } from '@common/constants/constants'
+} from '@components/ui'
 
 import { useTranslation } from 'react-i18next'
 

@@ -1,4 +1,4 @@
-import { Button, Icon, Tooltip, useSidebar } from '@/components/ui'
+import { Button, Icon, Tooltip, useSidebar } from '@components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

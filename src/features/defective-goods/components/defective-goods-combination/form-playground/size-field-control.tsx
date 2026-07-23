@@ -1,4 +1,5 @@
-import { GhostButton } from '@/components/shared/ghost-button'
+import { cn } from '@common/utils/cn'
+import { GhostButton } from '@components/shared/ghost-button'
 import {
 	AutoCompleteFieldControl,
 	Button,
@@ -12,8 +13,7 @@ import {
 	Icon,
 	InputFieldControl,
 	Label
-} from '@/components/ui'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import { useLocation } from '@tanstack/react-router'
 import { uniqBy } from 'lodash-es'
 import React, { useMemo, useRef } from 'react'

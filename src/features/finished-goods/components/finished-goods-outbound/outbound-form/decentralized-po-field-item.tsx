@@ -1,7 +1,7 @@
 'use no memo'
 
-import { Div, Icon, InputFieldControl, SelectFieldControl } from '@/components/ui'
 import { cn } from '@common/utils/cn'
+import { Div, Icon, InputFieldControl, SelectFieldControl } from '@components/ui'
 import { defaultAnimateLayoutChanges, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { use } from 'react'

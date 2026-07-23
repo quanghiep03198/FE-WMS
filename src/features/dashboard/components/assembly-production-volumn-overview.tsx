@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
-import type { ChartConfig } from '@/components/ui'
+import type { ChartConfig } from '@components/ui'
 import {
 	Card,
 	CardAction,
@@ -24,7 +24,7 @@ import {
 	SelectValue,
 	Skeleton,
 	Typography
-} from '@/components/ui'
+} from '@components/ui'
 
 import { cn } from '@common/utils/cn'
 import { format, subDays, subMonths } from 'date-fns'

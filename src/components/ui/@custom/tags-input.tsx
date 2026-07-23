@@ -1,5 +1,5 @@
-import { Badge, Div, Icon, Input, Typography } from '@/components/ui'
 import { cn } from '@common/utils/cn'
+import { Badge, Div, Icon, Input, Typography } from '@components/ui'
 
 import { useCallback, useState } from 'react'
 import tw from 'tailwind-styled-components'

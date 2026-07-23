@@ -1,0 +1,220 @@
+import { useGetDepartmentQuery } from '@/features/department/hooks/use-department-request'
+import { EmployeeService } from '@/features/employee/services/employee.service'
+import type { IEmployee } from '@/features/employee/types'
+import { WarehouseService } from '@/features/warehouse/services/warehouse.service'
+import { type IWarehouse } from '@/features/warehouse/types'
+import { CommonActions } from '@common/constants/enums'
+import {
+	Button,
+	ComboboxFieldControl,
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	Div,
+	Form as FormProvider,
+	InputFieldControl,
+	SelectFieldControl,
+	TextareaFieldControl,
+	Typography
+} from '@components/ui'
+import { zodResolver } from '@hookform/resolvers/zod'
+import useAuth from '@hooks/use-auth'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useDeepCompareEffect } from 'ahooks'
+import { debounce } from 'lodash-es'
+import React, { useState } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import tw from 'tailwind-styled-components'
+import { warehouseTypes } from '../../constants/warehouse.const'
+import { usePageContext } from '../../contexts/page-context'
+import { WarehouseQueryKeys } from '../../hooks/use-warehouse-request'
+import type { PartialWarehouseFormValue } from '../../schemas/warehouse.schema'
+import { warehouseFormSchema, type WarehouseFormValue } from '../../schemas/warehouse.schema'
+
+export type FormValues<T> = (T extends CommonActions.CREATE
+	? Required<WarehouseFormValue>
+	: PartialWarehouseFormValue) &
+	Pick<IWarehouse, 'id'>
+
+const WarehouseFormDialog: React.FC = () => {
+	const queryClient = useQueryClient()
+	const {
+		dialogFormState: { open, type, dialogTitle, defaultFormValues },
+		dispatch
+	} = usePageContext()
+	const { user } = useAuth()
+	const [employeeSearchTerm, setEmployeeSearchTerm] = useState<string>('')
+	const { t } = useTranslation()
+
+	const form = useForm<FormValues<typeof type>>({
+		resolver: zodResolver(warehouseFormSchema)
+	})
+
+	const department = useWatch({ control: form.control, name: 'dept_code' })
+
+	// Get department field values
+	const { data: departments } = useGetDepartmentQuery()
+
+	// Get employee field values
+	const { data: employees, isFetching } = useQuery({
+		queryKey: ['EMPLOYEES', employeeSearchTerm, department],
+		queryFn: () => EmployeeService.searchEmployee({ dept_code: department, search: employeeSearchTerm }),
+		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
+	})
+
+	// Create/Update action
+	const { mutateAsync, isPending } = useMutation({
+		mutationKey: [WarehouseQueryKeys.WAREHOUSE],
+		mutationFn: (payload: FormValues<typeof type>) => {
+			switch (type) {
+				case CommonActions.CREATE: {
+					return WarehouseService.createWarehouse(payload as WarehouseFormValue)
+				}
+				case CommonActions.UPDATE: {
+					const id = defaultFormValues.id
+					return WarehouseService.updateWarehouse({ id, payload })
+				}
+				default: {
+					throw new Error('Invalid actions')
+				}
+			}
+		},
+		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
+		onSuccess: (_data, _variables, context) => {
+			dispatch({ type: 'RESET' })
+			queryClient.invalidateQueries({ queryKey: [WarehouseQueryKeys.WAREHOUSE] })
+			return toast.success(t('ns_common:notification.success'), { id: context })
+		},
+		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
+	})
+
+	useDeepCompareEffect(() => {
+		defaultFormValues.employee_code ??= ''
+		form.reset({
+			...defaultFormValues,
+			company_code: user?.current_factory_code
+		})
+	}, [type, defaultFormValues, open])
+
+	const warehouseTypeOptions = Object.entries(warehouseTypes).map(([key, value]) => ({
+		label: t(value, { ns: 'ns_warehouse', defaultValue: value }) as string,
+		value: key
+	}))
+
+	const upsertedBy =
+		type === CommonActions.CREATE
+			? { user_name_created: user?.display_name, user_code_created: user?.username }
+			: { user_name_updated: user?.display_name, user_code_updated: user?.username }
+
+	return (
+		<Dialog
+			open={open}
+			onOpenChange={(open) => {
+				if (!open) dispatch({ type: 'RESET' })
+			}}>
+			<DialogContent className='bg-popover w-full max-w-3xl'>
+				<DialogHeader>
+					<DialogTitle>{t(dialogTitle, { ns: 'ns_warehouse', defaultValue: dialogTitle })}</DialogTitle>
+				</DialogHeader>
+				<FormProvider {...form}>
+					<Form onSubmit={form.handleSubmit((data) => mutateAsync({ ...data, ...upsertedBy }))}>
+						<FormItem>
+							<InputFieldControl
+								placeholder='Some warehouse name ...'
+								name='warehouse_name'
+								label={t('ns_warehouse:fields.warehouse_name')}
+							/>
+						</FormItem>
+						<FormItem>
+							<SelectFieldControl
+								name='type_warehouse'
+								label={t('ns_warehouse:fields.type_warehouse')}
+								datalist={warehouseTypeOptions}
+								labelField='label'
+								valueField='value'
+							/>
+						</FormItem>
+						<FormItem>
+							<InputFieldControl
+								disabled
+								placeholder='Some warehouse name ...'
+								name='company_code'
+								label={t('ns_company:factory')}
+								defaultValue={user?.current_factory_code}
+							/>
+						</FormItem>
+						<FormItem>
+							<ComboboxFieldControl
+								name='dept_code'
+								placeholder='Search department ...'
+								label={t('ns_company:department')}
+								datalist={departments}
+								shouldFilter={false}
+								labelField='dept_name'
+								valueField='dept_code'
+							/>
+						</FormItem>
+						<FormItem>
+							<InputFieldControl
+								name='area'
+								placeholder='1,000 (m²)'
+								type='number'
+								label={t('ns_warehouse:fields.area')}
+							/>
+						</FormItem>
+						<FormItem>
+							<ComboboxFieldControl
+								name='employee_code'
+								placeholder='Search employee ...'
+								label={t('ns_warehouse:fields.manager')}
+								loading={isFetching}
+								datalist={employees ?? []}
+								disabled={!department}
+								shouldFilter={false}
+								labelField='employee_name'
+								valueField='employee_code'
+								onInput={debounce((value) => setEmployeeSearchTerm(value), 500)}
+								template={EmployeeComboboxSelection}
+							/>
+						</FormItem>
+						<FormItem className='col-span-full'>
+							<TextareaFieldControl
+								name='remark'
+								label={t('ns_common:common_fields.remark')}
+								placeholder='Aditional remark ...'
+								rows={5}
+							/>
+						</FormItem>
+						{/* Form actions */}
+						<DialogFooter className='col-span-full'>
+							<Button type='button' variant='outline' onClick={() => dispatch({ type: 'RESET' })}>
+								{t('ns_common:actions.cancel')}
+							</Button>
+							<Button type='submit' disabled={isPending}>
+								{t('ns_common:actions.submit')}
+							</Button>
+						</DialogFooter>
+					</Form>
+				</FormProvider>
+			</DialogContent>
+		</Dialog>
+	)
+}
+
+const EmployeeComboboxSelection: React.FC<{ data: IEmployee }> = ({ data }) => (
+	<Div className='space-y-1'>
+		<Typography className='line-clamp-1'>{data?.employee_name}</Typography>
+		<Typography variant='small' className='line-clamp-1' color='muted'>
+			{data?.employee_code}
+		</Typography>
+	</Div>
+)
+
+const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
+const FormItem = tw.div`col-span-1 sm:col-span-full md:col-span-full`
+
+export default WarehouseFormDialog

@@ -1,3 +1,4 @@
+import { CommonActions, FactoryCode, UserRole } from '@common/constants/enums'
 import {
 	Button,
 	buttonVariants,
@@ -13,8 +14,7 @@ import {
 	Icon,
 	InputFieldControl,
 	MultiSelectFieldControl
-} from '@/components/ui'
-import { CommonActions, FactoryCode, UserRole } from '@common/constants/enums'
+} from '@components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { capitalize } from 'lodash-es'
 import React, { useMemo, useRef, useState } from 'react'

@@ -1,6 +1,6 @@
 'use no memo'
 
-import { Button, Div, Icon, Input, Separator } from '@/components/ui'
+import { Button, Div, Icon, Input, Separator } from '@components/ui'
 import { useDebounce } from 'ahooks'
 import React, { useEffect, useState } from 'react'
 import { useEditorContext } from '../../context/editor-context'

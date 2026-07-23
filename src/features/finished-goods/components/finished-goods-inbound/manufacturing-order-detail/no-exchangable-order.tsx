@@ -1,4 +1,4 @@
-import { Div, Typography } from '@/components/ui'
+import { Div, Typography } from '@components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

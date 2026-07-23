@@ -6,7 +6,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger
-} from '@/components/ui'
+} from '@components/ui'
 import { useTranslation } from 'react-i18next'
 import type { StockFlow } from '../../constants/enums'
 import { DataRestorationProvider } from '../../contexts/data-restoration-context'

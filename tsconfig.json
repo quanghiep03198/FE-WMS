@@ -23,15 +23,15 @@
 		/* Alias */
 		"ignoreDeprecations": "6.0",
 		"paths": {
-			"@/*": ["./src/*"],
 			"@features/*": ["./src/features/*"],
 			"@assets/*": ["./src/assets/*"],
 			"@hooks/*": ["./src/hooks/*"],
 			"@components/*": ["./src/components/*"],
 			"@common/*": ["./src/common/*"],
 			"@configs/*": ["./src/configs/*"],
+			"@contexts/*": ["./src/contexts/*"],
 			"@i18n/*": ["./src/i18n/*"],
-			"@providers": ["./src/providers/*"],
+			"@providers/*": ["./src/providers/*"],
 			"@stores/*": ["./src/stores/*"],
 			"@styles/*": ["./src/styles/*"],
 			"@tests/*": ["./tests/*"]

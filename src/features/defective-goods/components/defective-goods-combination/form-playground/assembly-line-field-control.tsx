@@ -1,4 +1,4 @@
-import { AutoCompleteFieldControl } from '@/components/ui'
+import { AutoCompleteFieldControl } from '@components/ui'
 import { useGetShapingProductLineQuery } from '@features/department/hooks/use-department-request'
 import { capitalize } from 'lodash-es'
 import { useMemo } from 'react'

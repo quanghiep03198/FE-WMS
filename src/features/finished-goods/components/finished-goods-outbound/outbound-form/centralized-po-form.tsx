@@ -1,7 +1,7 @@
 'use no memo'
 
-import { Form as FormProvider, Icon, MultiSelectFieldControl, Tooltip } from '@/components/ui'
-import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
+import { Form as FormProvider, Icon, MultiSelectFieldControl, Tooltip } from '@components/ui'
+import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@components/ui/@custom/alert'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useResetState } from 'ahooks'
 import type { AxiosError } from 'axios'

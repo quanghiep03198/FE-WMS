@@ -1,4 +1,4 @@
-import axiosInstance from '@/configs/axios.config'
+import axiosInstance from '@configs/axios.config'
 import { useQuery } from '@tanstack/react-query'
 
 enum AgentIPv4QueryKey {

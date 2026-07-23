@@ -1,5 +1,5 @@
-import { Button, Icon, Tooltip, type ButtonProps } from '@/components/ui'
-import '@/components/ui/@tiptap/index'
+import { Button, Icon, Tooltip, type ButtonProps } from '@components/ui'
+import '@components/ui/@tiptap/index'
 import { cn } from '@common/utils/cn'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

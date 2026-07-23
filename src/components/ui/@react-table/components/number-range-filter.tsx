@@ -1,4 +1,4 @@
-import { Div, Separator } from '@/components/ui'
+import { Div, Separator } from '@components/ui'
 import type { Column } from '@tanstack/react-table'
 import { useState } from 'react'
 import { DebouncedInput } from '../../@custom/debounced-input'

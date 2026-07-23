@@ -1,5 +1,5 @@
-import type { DivProps } from '@/components/ui'
-import { Div } from '@/components/ui'
+import type { DivProps } from '@components/ui'
+import { Div } from '@components/ui'
 import React, { memo } from 'react'
 
 export const TableHeadCaption: React.FC<DivProps & React.PropsWithChildren> = memo(

@@ -22,7 +22,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 	Skeleton
-} from '@/components/ui'
+} from '@components/ui'
 import type { SelectProps } from '@radix-ui/react-select'
 import { capitalize } from 'lodash-es'
 import { useMemo, useState } from 'react'

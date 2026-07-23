@@ -1,4 +1,4 @@
-import { buttonVariants, Icon, Popover, PopoverContent, PopoverTrigger, Typography } from '@/components/ui'
+import { buttonVariants, Icon, Popover, PopoverContent, PopoverTrigger, Typography } from '@components/ui'
 import { cn } from '@common/utils/cn'
 import React from 'react'
 

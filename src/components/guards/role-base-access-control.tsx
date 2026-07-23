@@ -1,6 +1,6 @@
-import { Icon } from '@/components/ui'
 import { UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import { Icon } from '@components/ui'
 import useAuth from '@hooks/use-auth'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +13,7 @@ type RoleBaseAccessControlVariant =
 			mode?: Exclude<VisibilityMode, 'fallback'>
 			fallbackComponent?: undefined
 	  }
-	| { mode?: Extract<VisibilityMode, 'fallback'>; fallbackComponent: Required<React.ReactNode> }
+	| { mode?: Extract<VisibilityMode, 'fallback'>; fallbackComponent: React.ReactNode }
 
 type RoleBaseAccessControlProps = React.PropsWithChildren &
 	RoleBaseAccessControlVariant & {

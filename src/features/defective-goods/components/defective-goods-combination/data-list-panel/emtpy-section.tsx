@@ -1,5 +1,5 @@
-import PlaceHolderItems from '@/components/shared/placeholder-items'
-import { Div, Typography } from '@/components/ui'
+import PlaceHolderItems from '@components/shared/placeholder-items'
+import { Div, Typography } from '@components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

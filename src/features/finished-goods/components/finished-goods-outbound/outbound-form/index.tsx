@@ -9,7 +9,7 @@ import {
 	TabsList,
 	TabsTrigger,
 	Typography
-} from '@/components/ui'
+} from '@components/ui'
 
 import { useTranslation } from 'react-i18next'
 import CentralizedPoOutboundForm from './centralized-po-form'

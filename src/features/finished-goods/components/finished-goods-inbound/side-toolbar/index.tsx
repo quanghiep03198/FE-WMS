@@ -1,4 +1,4 @@
-import { Div, Sheet, SheetContent, SheetTrigger, Typography } from '@/components/ui'
+import { Div, Sheet, SheetContent, SheetTrigger, Typography } from '@components/ui'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { ConnectionController, NetworkInsight } from './connection-controller'

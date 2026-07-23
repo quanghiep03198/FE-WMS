@@ -1,8 +1,8 @@
 import env from '@common/utils/env'
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
-import PageComposition from './-components/page-composition'
-import { PageProvider } from './-contexts/page-context'
+import PageComposition from '../../features/landing/components/page-composition'
+import { PageProvider } from '../../features/landing/contexts/page-context'
 
 export const Route = createFileRoute('/(public)/')({
 	component: Page

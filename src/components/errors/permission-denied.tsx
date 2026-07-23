@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Div, Separator, Typography } from '@/components/ui'
+import { Div, Separator, Typography } from '@components/ui'
 import { HttpStatusCode } from 'axios'
 import { useTranslation } from 'react-i18next'
 

@@ -1,6 +1,6 @@
-import type { IconProps } from '@/components/ui'
-import { Badge, Icon } from '@/components/ui'
 import { UserRole } from '@common/constants/enums'
+import type { IconProps } from '@components/ui'
+import { Badge, Icon } from '@components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

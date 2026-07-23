@@ -14,7 +14,7 @@
 // 	ChartLegendContent,
 // 	ChartTooltip,
 // 	ChartTooltipContent
-// } from '@/components/ui'
+// } from '@components/ui'
 // import { format } from 'date-fns'
 // import { capitalize } from 'lodash-es'
 // import { useDefectiveCategoryChartConfig } from '../-hooks/use-defective-category-chart-configs'

@@ -1,3 +1,5 @@
+import { PresetBreakPoints, RequestHeaders } from '@common/constants/enums'
+import { cn } from '@common/utils/cn'
 import {
 	Button,
 	buttonVariants,
@@ -11,10 +13,8 @@ import {
 	Icon,
 	Input,
 	Typography
-} from '@/components/ui'
-import axiosInstance from '@/configs/axios.config'
-import { PresetBreakPoints, RequestHeaders } from '@common/constants/enums'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
+import axiosInstance from '@configs/axios.config'
 import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'
 import { useMutation } from '@tanstack/react-query'

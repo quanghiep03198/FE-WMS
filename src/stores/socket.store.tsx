@@ -1,5 +1,5 @@
-import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/features/auth/services/auth.service'
+import { AppConfigs } from '@configs/app.config'
 import useAuth from '@hooks/use-auth'
 import { createStoreSelector } from '@hooks/use-store-selector'
 import { useUpdateEffect } from 'ahooks'

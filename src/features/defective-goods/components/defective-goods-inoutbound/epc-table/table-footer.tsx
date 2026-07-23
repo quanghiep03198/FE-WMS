@@ -1,5 +1,5 @@
-import { Button, Div, Icon, Separator, Typography } from '@/components/ui'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { Button, Div, Icon, Separator, Typography } from '@components/ui'
 import { useGetCanInoutboundEpcQuery } from '@features/defective-goods/hooks/use-defective-goods-request'
 import { useFilterQuery } from '@features/defective-goods/hooks/use-filter-query'
 import { omit } from 'lodash-es'

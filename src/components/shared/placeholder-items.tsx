@@ -1,5 +1,5 @@
-import { Div } from '@/components/ui'
 import { cn } from '@common/utils/cn'
+import { Div } from '@components/ui'
 import React from 'react'
 
 const PlaceHolderItems: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {

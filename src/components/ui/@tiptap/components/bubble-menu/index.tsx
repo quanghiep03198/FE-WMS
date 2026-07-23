@@ -9,7 +9,7 @@ import {
 	PopoverTrigger,
 	Separator,
 	Tooltip
-} from '@/components/ui'
+} from '@components/ui'
 import useCopyToClipboard from '@hooks/use-copy-to-clipboard'
 
 import { zodResolver } from '@hookform/resolvers/zod'

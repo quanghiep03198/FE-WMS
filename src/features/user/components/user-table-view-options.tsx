@@ -9,7 +9,7 @@ import {
 	DropdownMenuSeparator,
 	Icon,
 	Tooltip
-} from '@/components/ui'
+} from '@components/ui'
 import useMediaQuery from '@hooks/use-media-query'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { type Table } from '@tanstack/react-table'

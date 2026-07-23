@@ -1,5 +1,5 @@
-import { Button, Icon } from '@/components/ui'
 import { useGetTenantByFactory } from '@/features/tenancy/hooks/use-tenacy-request'
+import { Button, Icon } from '@components/ui'
 import useMediaQuery from '@hooks/use-media-query'
 import useQueryParams from '@hooks/use-query-params'
 import { useQueryClient } from '@tanstack/react-query'

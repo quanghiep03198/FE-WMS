@@ -1,4 +1,3 @@
-import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
 import {
 	Avatar,
 	AvatarFallback,
@@ -11,7 +10,8 @@ import {
 	DropdownMenuShortcut,
 	DropdownMenuTrigger,
 	Icon
-} from '@/components/ui'
+} from '@components/ui'
+import { navigationConfig } from '@configs/navigation.config'
 import useAuth from '@hooks/use-auth'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'

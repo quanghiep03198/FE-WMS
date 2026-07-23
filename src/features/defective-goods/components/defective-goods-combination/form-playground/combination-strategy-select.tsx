@@ -9,7 +9,7 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue
-} from '@/components/ui'
+} from '@components/ui'
 import { capitalize } from 'lodash-es'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'

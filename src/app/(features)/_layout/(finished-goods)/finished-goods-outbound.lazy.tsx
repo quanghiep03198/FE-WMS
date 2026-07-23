@@ -1,7 +1,7 @@
-import { Div } from '@/components/ui'
 import { UserRole } from '@common/constants/enums'
 import HostCompatibleGuard from '@components/guards/host-compatible-guard'
 import { RoleGuard } from '@components/guards/role-guard'
+import { Div } from '@components/ui'
 import ScannedEpcCounter from '@features/finished-goods/components/finished-goods-outbound/epc-counter'
 import ScannedEpcList from '@features/finished-goods/components/finished-goods-outbound/epc-data-list'
 import OrderSizeDetailTable from '@features/finished-goods/components/finished-goods-outbound/manufacture-order-detail/order-detail-table'

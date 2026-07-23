@@ -1,7 +1,3 @@
-import { Button, DataTable, Icon, Tooltip } from '@/components/ui'
-import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
-import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import type { RenderSubComponent } from '@/components/ui/@react-table/types'
 import {
 	DefectiveGoodsOutboundPurpose,
 	TRANSLATED_DEFECTIVE_CATEGORY
@@ -9,6 +5,10 @@ import {
 import formatIntlNumber from '@common/utils/format-intl-number'
 import AutoRefreshToggle from '@components/shared/auto-refresh-toggle'
 import SizeTable from '@components/shared/size-table'
+import { Button, DataTable, Icon, Tooltip } from '@components/ui'
+import TableCellText from '@components/ui/@react-table/components/table-cell-text'
+import { ROW_EXPANSION_COLUMN_ID } from '@components/ui/@react-table/constants'
+import type { RenderSubComponent } from '@components/ui/@react-table/types'
 import ReportTableSummary from '@features/defective-goods/components/report-table-footer'
 import { useDefectiveCategoryList } from '@features/defective-goods/hooks/use-defective-category-list'
 import { useGetDefectiveGoodsOutboundReportQuery } from '@features/defective-goods/hooks/use-defective-goods-request'

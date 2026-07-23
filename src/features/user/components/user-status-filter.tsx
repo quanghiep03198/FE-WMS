@@ -1,6 +1,9 @@
 'use no memo'
 
-import type { IconProps } from '@/components/ui'
+import type { IUser } from '@/features/auth/types'
+import { RecordStatus } from '@common/constants/enums'
+import { cn } from '@common/utils/cn'
+import type { IconProps } from '@components/ui'
 import {
 	Badge,
 	buttonVariants,
@@ -14,10 +17,7 @@ import {
 	DropdownMenuTrigger,
 	Icon,
 	Separator
-} from '@/components/ui'
-import type { IUser } from '@/features/auth/types'
-import { RecordStatus } from '@common/constants/enums'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import type { Table } from '@tanstack/react-table'
 import { isNil } from 'lodash-es'
 import React, { useMemo } from 'react'

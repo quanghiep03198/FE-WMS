@@ -1,0 +1,31 @@
+import type { StockFlow } from '@/features/finished-goods/constants/enums'
+import { Button, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle, Icon } from '@components/ui'
+import useQueryParams from '@hooks/use-query-params'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import PlaceHolderItems from '../../../../components/shared/placeholder-items'
+
+const EmptyHistory: React.FC = () => {
+	const { t } = useTranslation()
+	const { removeParam } = useQueryParams<{ order?: string; type: StockFlow }>()
+
+	return (
+		<Empty className='mx-auto h-full max-w-4xl'>
+			<EmptyHeader>
+				<PlaceHolderItems className='w-full' />
+				<EmptyTitle>{t('ns_common:table.no_data')}</EmptyTitle>
+				<EmptyDescription className='text-pretty'>
+					{t('ns_inoutbound:description.inoutbound_history_not_found')}
+				</EmptyDescription>
+			</EmptyHeader>
+			<EmptyContent>
+				<Button variant='outline' size='sm' onClick={() => removeParam('order')}>
+					<Icon name='Undo2' />
+					{t('ns_common:actions.retry')}
+				</Button>
+			</EmptyContent>
+		</Empty>
+	)
+}
+
+export default EmptyHistory

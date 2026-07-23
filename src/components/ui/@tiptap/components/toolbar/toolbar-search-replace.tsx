@@ -10,7 +10,7 @@ import {
 	PopoverTrigger,
 	Separator,
 	Typography
-} from '@/components/ui'
+} from '@components/ui'
 import { cn } from '@common/utils/cn'
 import { ArrowLeftIcon, ArrowRightIcon, Repeat, X } from 'lucide-react'
 import { useEffect, useState } from 'react'

@@ -1,4 +1,6 @@
-import { GhostButton } from '@/components/shared/ghost-button'
+import { useGetProductSpecsQuery } from '@/features/product-specification/hooks/use-product-specs-request'
+import { cn } from '@common/utils/cn'
+import { GhostButton } from '@components/shared/ghost-button'
 import {
 	Button,
 	DatePickerFieldControl,
@@ -10,9 +12,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 	Separator
-} from '@/components/ui'
-import { useGetProductSpecsQuery } from '@/features/product-specification/hooks/use-product-specs-request'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import useQueryParams from '@hooks/use-query-params'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useResetState, useSessionStorageState, useSize } from 'ahooks'
@@ -21,7 +21,7 @@ import { isEmpty } from 'lodash-es'
 import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import PurchaseOrderFieldControl from '../../../../rfid-agent/components/purchase-order-field-control'
+import PurchaseOrderFieldControl from '../../../../rfid-agent/components/playground/purchase-order-field-control'
 import type { DefectiveCategory } from '../../../constants/enums'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../../../constants/storage-keys'
 import type { DefectiveGoodQueryParams } from '../../../schemas/defective-goods.schema'

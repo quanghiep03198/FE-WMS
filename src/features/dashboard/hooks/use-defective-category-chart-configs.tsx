@@ -1,4 +1,4 @@
-import type { ChartConfig } from '@/components/ui'
+import type { ChartConfig } from '@components/ui'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DefectiveCategory, TRANSLATED_DEFECTIVE_CATEGORY } from '../../defective-goods/constants/enums'

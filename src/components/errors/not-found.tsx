@@ -1,4 +1,4 @@
-import { Button, Div, Icon, Separator, Typography } from '@/components/ui'
+import { Button, Div, Icon, Separator, Typography } from '@components/ui'
 import { useRouter } from '@tanstack/react-router'
 import { HttpStatusCode } from 'axios'
 import { useTranslation } from 'react-i18next'

@@ -1,6 +1,6 @@
-import { Separator, TableHead, TableHeader, TableRow } from '@/components/ui'
 import type { IDefectiveGoods } from '@/features/defective-goods/types'
 import { cn } from '@common/utils/cn'
+import { Separator, TableHead, TableHeader, TableRow } from '@components/ui'
 import type { Table } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import { Fragment, memo } from 'react'

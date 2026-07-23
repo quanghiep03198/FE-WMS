@@ -1,4 +1,4 @@
-import { Div } from '@/components/ui'
+import { Div } from '@components/ui'
 import InoutboundForm from './inoutbound-form'
 import InoutboundStrategySelect from './inoutbound-strategy-select'
 

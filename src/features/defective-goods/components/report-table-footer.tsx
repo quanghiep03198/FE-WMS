@@ -1,6 +1,6 @@
 'use no memo'
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

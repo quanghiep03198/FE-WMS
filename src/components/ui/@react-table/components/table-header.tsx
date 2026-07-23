@@ -1,5 +1,5 @@
-import { Div, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { cn } from '@common/utils/cn'
+import { Div, TableHead, TableHeader, TableRow } from '@components/ui'
 import type { RowData } from '@tanstack/react-table'
 import { type HeaderGroup } from '@tanstack/react-table'
 import { useMemoizedFn, useUpdate } from 'ahooks'

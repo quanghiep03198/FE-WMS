@@ -1,5 +1,5 @@
-import { buttonVariants, Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Icon } from '@/components/ui'
 import { cn } from '@common/utils/cn'
+import { buttonVariants, Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Icon } from '@components/ui'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { useTranslation } from 'react-i18next'
 import OrderSizeDetailTable from './order-detail-table'

@@ -1,4 +1,4 @@
-import { ContextMenuItem, ContextMenuSeparator, Icon } from '@/components/ui'
+import { ContextMenuItem, ContextMenuSeparator, Icon } from '@components/ui'
 import useCopyToClipboard from '@hooks/use-copy-to-clipboard'
 import type { Editor } from '@tiptap/react'
 import { Fragment, useMemo } from 'react'

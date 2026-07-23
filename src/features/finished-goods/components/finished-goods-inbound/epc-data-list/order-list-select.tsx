@@ -1,3 +1,5 @@
+import { usePageContext } from '@/features/finished-goods/contexts/finished-goods-inbound/page-context'
+import { useGetScanningInboundEpcQuery } from '@/features/finished-goods/hooks/use-inbound-request'
 import {
 	Div,
 	HoverCard,
@@ -11,9 +13,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 	Typography
-} from '@/components/ui'
-import { usePageContext } from '@/features/finished-goods/contexts/finished-goods-inbound/page-context'
-import { useGetScanningInboundEpcQuery } from '@/features/finished-goods/hooks/use-inbound-request'
+} from '@components/ui'
 import { useDeepCompareEffect, usePrevious } from 'ahooks'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'

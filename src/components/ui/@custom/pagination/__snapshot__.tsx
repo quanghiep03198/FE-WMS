@@ -3,7 +3,7 @@
  * This version doesn't depend on Tanstack Router and can work independently
  */
 
-import { Button, Div, Icon } from '@/components/ui'
+import { Button, Div, Icon } from '@components/ui'
 import type { LucideProps } from 'lucide-react'
 import { EllipsisIcon } from 'lucide-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'

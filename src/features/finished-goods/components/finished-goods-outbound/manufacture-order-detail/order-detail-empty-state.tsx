@@ -1,4 +1,4 @@
-import { Div, Icon, Typography } from '@/components/ui'
+import { Div, Icon, Typography } from '@components/ui'
 import { useTranslation } from 'react-i18next'
 
 const OrderDetailTableEmptyState: React.FC = () => {

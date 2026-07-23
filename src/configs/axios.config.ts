@@ -1,8 +1,8 @@
 import { AuthService } from '@/features/auth/services/auth.service'
 import { i18n } from '@/i18n'
-import { StorageService } from '@/services/storage.service'
-import { RequestHeaders } from '@common/constants/enums'
+import { Languages, RequestHeaders } from '@common/constants/enums'
 import { UnauthorizedError } from '@common/errors'
+import { Json } from '@common/utils/json'
 import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
 import qs from 'qs'
 import { toast } from 'sonner'
@@ -50,7 +50,8 @@ export class AxiosClient {
 		// * Instance request interceptor
 		this.instance.interceptors.request.use(
 			(config) => {
-				const locale = StorageService.getLocale()
+				const storedLocale = localStorage.getItem(AppConfigs.I18N_STORAGE_KEY)
+				const locale = storedLocale ? Json.parse<Languages>(storedLocale) : Languages.ENGLISH
 				const user = AuthService.getCredentials()
 				config.headers[RequestHeaders.USER_REQUEST] = user?.username
 				config.headers[RequestHeaders.FACTORY_CODE] = user?.current_factory_code

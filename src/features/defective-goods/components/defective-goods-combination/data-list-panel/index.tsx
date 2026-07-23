@@ -1,4 +1,5 @@
-import type { Label } from '@/components/ui'
+import { cn } from '@common/utils/cn'
+import type { Label } from '@components/ui'
 import {
 	buttonVariants,
 	Div,
@@ -9,9 +10,8 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger
-} from '@/components/ui'
-import Pagination from '@/components/ui/@custom/pagination'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
+import Pagination from '@components/ui/@custom/pagination'
 import { omit, pick } from 'lodash-es'
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'

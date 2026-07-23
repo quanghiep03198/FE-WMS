@@ -1,6 +1,8 @@
 'use no memo'
 
-import type { IconProps } from '@/components/ui'
+import type { IUser } from '@/features/auth/types'
+import { cn } from '@common/utils/cn'
+import type { IconProps } from '@components/ui'
 import {
 	Badge,
 	Button,
@@ -17,9 +19,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 	Separator
-} from '@/components/ui'
-import type { IUser } from '@/features/auth/types'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import { CheckIcon } from '@radix-ui/react-icons'
 import { type Column } from '@tanstack/react-table'
 import { Fragment } from 'react'

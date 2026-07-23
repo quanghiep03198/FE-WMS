@@ -1,4 +1,4 @@
-import useAuth from '@/hooks/use-auth'
+import useAuth from '@hooks/use-auth'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { DEFAULT_PROPS, usePageContext } from '../contexts/finished-goods-inbound/page-context'
 import type { ExchangeEpcPayload, ExchangeOrderFormValue } from '../schemas/exchange-epc.schema'

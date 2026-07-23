@@ -1,4 +1,4 @@
-import { MonthPicker } from '@/components/ui'
+import { MonthPicker } from '@components/ui'
 import useQueryParams from '@hooks/use-query-params'
 import { format, subYears } from 'date-fns'
 

@@ -1,3 +1,5 @@
+import type { OrderItem } from '@/features/finished-goods/types'
+import { cn } from '@common/utils/cn'
 import {
 	Button,
 	buttonVariants,
@@ -9,9 +11,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 	Typography
-} from '@/components/ui'
-import type { OrderItem } from '@/features/finished-goods/types'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useMemoizedFn } from 'ahooks'
 import { useEffect, useId, useState } from 'react'

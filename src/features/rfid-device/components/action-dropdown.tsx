@@ -1,3 +1,5 @@
+import type { IRFIDReaderDevice } from '@/features/rfid-device/types'
+import { CommonActions, RecordStatus, UserRole } from '@common/constants/enums'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -5,16 +7,14 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 	Icon
-} from '@/components/ui'
-import type { IRFIDReaderDevice } from '@/features/rfid-device/types'
-import { CommonActions, RecordStatus, UserRole } from '@common/constants/enums'
+} from '@components/ui'
 import type { CellContext } from '@tanstack/react-table'
 import { isNil, pick } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
-import { usePageContext } from '../../../app/(features)/_layout.rfid-devices-management/-contexts/page-context'
+import RoleBaseAccessControl from '@components/guards/role-base-access-control'
+import { usePageContext } from '../contexts/page-context'
 
 type UpdateStatusHandler = (payload: { device_sn: string; is_active: RecordStatus }) =>
 	| (string & {

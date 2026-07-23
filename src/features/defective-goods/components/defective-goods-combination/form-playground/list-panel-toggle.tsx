@@ -1,4 +1,4 @@
-import { Button, Icon } from '@/components/ui'
+import { Button, Icon } from '@components/ui'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useToggleListPanel } from '../../../hooks/use-toggle-list-panel'

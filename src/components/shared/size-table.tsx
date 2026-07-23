@@ -1,5 +1,5 @@
-import { Div } from '@/components/ui'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { Div } from '@components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'

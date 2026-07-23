@@ -9,8 +9,8 @@ import {
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger
-} from '@/components/ui'
-import { useBreadcrumbContext } from '@/contexts/breadcrumb-context'
+} from '@components/ui'
+import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
 import { HomeIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
 import { Fragment } from 'react'

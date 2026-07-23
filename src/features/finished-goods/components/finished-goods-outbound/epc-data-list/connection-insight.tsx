@@ -1,4 +1,4 @@
-import { StatusIndicator } from '@/components/ui/@custom/status-indicator'
+import { StatusIndicator } from '@components/ui/@custom/status-indicator'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../../contexts/finished-goods-outbound/page-context'
 

@@ -14,7 +14,7 @@ import {
 	Separator,
 	TextareaFieldControl,
 	Typography
-} from '@/components/ui'
+} from '@components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { Meta } from '@storybook/react'
 import { useState } from 'react'

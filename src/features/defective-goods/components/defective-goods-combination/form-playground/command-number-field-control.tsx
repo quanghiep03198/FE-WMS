@@ -1,5 +1,5 @@
-import { AutoCompleteFieldControl, type AutoCompleteFieldControlProps } from '@/components/ui'
 import { useSearchCommandNumberQuery } from '@/features/order/hooks/use-order-request'
+import { AutoCompleteFieldControl, type AutoCompleteFieldControlProps } from '@components/ui'
 import { useDebounce } from 'ahooks'
 import { capitalize } from 'lodash-es'
 import React from 'react'

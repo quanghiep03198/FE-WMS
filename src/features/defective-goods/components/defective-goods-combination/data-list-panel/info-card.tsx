@@ -1,4 +1,6 @@
-import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
+import { CommonActions, UserRole } from '@common/constants/enums'
+import { cn } from '@common/utils/cn'
+import RoleBaseAccessControl from '@components/guards/role-base-access-control'
 import {
 	Badge,
 	Card,
@@ -19,9 +21,7 @@ import {
 	Separator,
 	Tooltip,
 	Typography
-} from '@/components/ui'
-import { CommonActions, UserRole } from '@common/constants/enums'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import type { IDefectiveGoods } from '@features/defective-goods/types'
 import useCopyToClipboard from '@hooks/use-copy-to-clipboard'
 import { useDateLocale } from '@hooks/use-date-locale'

@@ -1,6 +1,6 @@
-import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
-import { useStepContext } from '@/components/ui/@custom/stepper'
 import { AuthService } from '@/features/auth/services/auth.service'
+import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@components/ui'
+import { useStepContext } from '@components/ui/@custom/stepper'
 import { AuthQueryKeys } from '@features/auth/hooks/use-profile-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'

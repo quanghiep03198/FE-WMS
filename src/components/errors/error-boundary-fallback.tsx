@@ -8,8 +8,8 @@ import {
 	Div,
 	Separator,
 	Typography
-} from '@/components/ui'
-import FeedbackFormTrigger from '@/components/ui/@sentry/feedback-form-trigger'
+} from '@components/ui'
+import FeedbackFormTrigger from '@components/ui/@sentry/feedback-form-trigger'
 import type { FallbackRender } from '@sentry/react'
 import { captureException } from '@sentry/react'
 import { HttpStatusCode } from 'axios'

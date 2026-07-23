@@ -1,4 +1,4 @@
-import { DatePicker } from '@/components/ui'
+import { DatePicker } from '@components/ui'
 import { format } from 'date-fns'
 import { useReportPageQueryParams } from '../../features/report/hooks/use-report-page-query-params'
 

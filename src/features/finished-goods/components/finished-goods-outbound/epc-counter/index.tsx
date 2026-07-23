@@ -1,5 +1,5 @@
-import { Badge, Div, Separator, Skeleton, Typography } from '@/components/ui'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { Badge, Div, Separator, Skeleton, Typography } from '@components/ui'
 import { useInterval, useResetState, useUnmount } from 'ahooks'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

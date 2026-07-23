@@ -1,7 +1,7 @@
-import { Div, Table } from '@/components/ui'
 import type { OrderItem } from '@/features/finished-goods/types'
 import { cn } from '@common/utils/cn'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { Div, Table } from '@components/ui'
 import useMeasureElement from '@hooks/use-measure-element'
 import useScrollToFn from '@hooks/use-scroll-fn'
 import { useVirtualizer } from '@tanstack/react-virtual'

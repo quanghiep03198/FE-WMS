@@ -1,3 +1,4 @@
+import { cn } from '@common/utils/cn'
 import {
 	Button,
 	buttonVariants,
@@ -9,8 +10,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 	Typography
-} from '@/components/ui'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useMemoizedFn } from 'ahooks'
 import { useId, useState } from 'react'

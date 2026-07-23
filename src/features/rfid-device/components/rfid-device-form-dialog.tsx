@@ -1,4 +1,6 @@
-import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/components/guards/role-base-access-control'
+import { CommonActions, UserRole } from '@common/constants/enums'
+import { cn } from '@common/utils/cn'
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
 import {
 	Button,
 	buttonVariants,
@@ -23,9 +25,7 @@ import {
 	RadioGroupItem,
 	SelectFieldControl,
 	Separator
-} from '@/components/ui'
-import { CommonActions, UserRole } from '@common/constants/enums'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'
 import { useResetState } from 'ahooks'
@@ -35,7 +35,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { usePageContext } from '../../../app/(features)/_layout.rfid-devices-management/-contexts/page-context'
+import { usePageContext } from '../contexts/page-context'
 import { useCreateRFIDDeviceMutation, useUpdateRFIDDeviceMutation } from '../hooks/use-rfid-device-request'
 import {
 	type CreateRFIDReaderFormValues,

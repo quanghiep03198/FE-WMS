@@ -1,5 +1,5 @@
-import { Badge, buttonVariants, Div, Icon, Label, Skeleton, Typography } from '@/components/ui'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { Badge, buttonVariants, Div, Icon, Label, Skeleton, Typography } from '@components/ui'
 import { Separator } from '@radix-ui/react-context-menu'
 import { useInterval, useResetState, useUnmount } from 'ahooks'
 import React, { useEffect, useRef, useState } from 'react'

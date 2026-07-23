@@ -1,5 +1,5 @@
-import type { SelectFieldControlProps } from '@/components/ui'
-import { SelectFieldControl } from '@/components/ui'
+import type { SelectFieldControlProps } from '@components/ui'
+import { SelectFieldControl } from '@components/ui'
 import { useTranslation } from 'react-i18next'
 import { DefectiveGoodsSource } from '../../../constants/enums'
 import type { DefectiveGoodsCombinationFormValues } from '../../../schemas/defective-goods.schema'

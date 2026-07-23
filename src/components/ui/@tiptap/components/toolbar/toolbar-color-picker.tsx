@@ -8,7 +8,7 @@ import {
 	ColorPickerHue,
 	ColorPickerOutput,
 	ColorPickerSelection
-} from '@/components/ui/@custom/color-picker'
+} from '@components/ui/@custom/color-picker'
 import { Theme } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import useTheme from '@hooks/use-theme'

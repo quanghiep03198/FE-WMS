@@ -1,11 +1,11 @@
-import AuthGuard from '@/components/guards/auth-guard'
-import Loading from '@/components/shared/loading'
+import AuthGuard from '@components/guards/auth-guard'
+import Loading from '@components/shared/loading'
 import useAuth from '@hooks/use-auth'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import LayoutComposition from './-components/-partials/layout-composition'
+import LayoutComposition from '../../../components/partials/preference-layout/layout-composition'
 
 export const Route = createFileRoute('/(features)/preferences/_layout')({
 	component: Layout,

@@ -1,6 +1,6 @@
-import type { TooltipProps } from '@/components/ui'
-import { Button, Icon, Tooltip } from '@/components/ui'
 import { Theme } from '@common/constants/enums'
+import type { TooltipProps } from '@components/ui'
+import { Button, Icon, Tooltip } from '@components/ui'
 import useTheme from '@hooks/use-theme'
 import { useKeyPress, useUpdateEffect } from 'ahooks'
 import React, { useRef } from 'react'

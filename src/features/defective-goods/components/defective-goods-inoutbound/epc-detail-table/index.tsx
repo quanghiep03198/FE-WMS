@@ -1,4 +1,4 @@
-import { NestedCell, NestedColumn, NestedTable } from '@/components/shared/horizontal-nested-table'
+import { NestedCell, NestedColumn, NestedTable } from '@components/shared/horizontal-nested-table'
 import {
 	Div,
 	Icon,
@@ -10,13 +10,13 @@ import {
 	TableHeader,
 	TableRow,
 	Typography
-} from '@/components/ui'
+} from '@components/ui'
 
-import axiosInstance from '@/configs/axios.config'
 import { FALLBACK_VALUE } from '@common/constants/constants'
 import { CommonActions } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import axiosInstance from '@configs/axios.config'
 import { useMemoizedFn, useResetState, useThrottleFn, useUpdateEffect } from 'ahooks'
 import { useMemo, useRef } from 'react'
 import isEqual from 'react-fast-compare'

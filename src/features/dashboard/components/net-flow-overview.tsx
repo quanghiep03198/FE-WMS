@@ -14,7 +14,7 @@ import {
 	Icon,
 	Skeleton,
 	Typography
-} from '@/components/ui'
+} from '@components/ui'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'

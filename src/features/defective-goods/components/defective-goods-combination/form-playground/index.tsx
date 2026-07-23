@@ -1,4 +1,8 @@
-import { EditorFieldControl } from '@/components/forms/editor'
+import { useGetCommandNumberDetailQuery } from '@/features/order/hooks/use-order-request'
+import { CommonActions, UserRole } from '@common/constants/enums'
+import type { IBaseEntity } from '@common/types/entities'
+import { cn } from '@common/utils/cn'
+import { EditorFieldControl } from '@components/forms/editor'
 import {
 	Button,
 	Checkbox,
@@ -8,11 +12,7 @@ import {
 	InputFieldControl,
 	Label,
 	SelectFieldControl
-} from '@/components/ui'
-import { useGetCommandNumberDetailQuery } from '@/features/order/hooks/use-order-request'
-import { CommonActions, UserRole } from '@common/constants/enums'
-import type { IBaseEntity } from '@common/types/entities'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useLocalStorageState, usePrevious, useResetState, useUpdateEffect } from 'ahooks'
@@ -27,11 +27,11 @@ import { DefectDescriptionTemplate } from '../../../constants/templates'
 import type { CreateDefectiveGoodsFormValues } from '../../../schemas/defective-goods.schema'
 import { createDefectiveGoodsSchema, updateDefectiveGoodsSchema } from '../../../schemas/defective-goods.schema'
 
-import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/components/guards/role-base-access-control'
 import { useGetProductSpecsQuery } from '@/features/product-specification/hooks/use-product-specs-request'
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
 import type { IDefectiveGoods } from '@features/defective-goods/types'
-import { MobileReaderPlaygroundTrigger } from '../../../../rfid-agent/components/mobile-playground'
-import PurchaseOrderFieldControl from '../../../../rfid-agent/components/purchase-order-field-control'
+import { MobileReaderPlaygroundTrigger } from '../../../../rfid-agent/components/playground/mobile-playground'
+import PurchaseOrderFieldControl from '../../../../rfid-agent/components/playground/purchase-order-field-control'
 import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../../constants/enums'
 import { usePageContext } from '../../../contexts/page-context'
 import {

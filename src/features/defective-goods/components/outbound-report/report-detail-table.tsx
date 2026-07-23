@@ -1,6 +1,6 @@
-import { Div, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import type { IInboundReport } from '@common/types/entities'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { Div, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui'
 import { useTranslation } from 'react-i18next'
 
 const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_data'] }> = ({ data }) => {

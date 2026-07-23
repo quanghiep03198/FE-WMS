@@ -1,3 +1,6 @@
+import { type OrderItem } from '@/features/finished-goods/types'
+import { cn } from '@common/utils/cn'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import {
 	Button,
 	Checkbox,
@@ -21,10 +24,7 @@ import {
 	TableRow,
 	Typography,
 	buttonVariants
-} from '@/components/ui'
-import { type OrderItem } from '@/features/finished-goods/types'
-import { cn } from '@common/utils/cn'
-import formatIntlNumber from '@common/utils/format-intl-number'
+} from '@components/ui'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
 import { useEffect, useMemo, useState } from 'react'

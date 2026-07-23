@@ -1,5 +1,5 @@
-import type { SelectFieldControlProps } from '@/components/forms/select'
-import { SelectFieldControl } from '@/components/ui'
+import type { SelectFieldControlProps } from '@components/forms/select'
+import { SelectFieldControl } from '@components/ui'
 import { omit } from 'lodash-es'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'

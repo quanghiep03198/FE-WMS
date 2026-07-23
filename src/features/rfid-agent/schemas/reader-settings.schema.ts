@@ -1,5 +1,5 @@
 import { enum as enums, ipv4, number, object, string, type infer as Infer } from 'zod'
-import { ReaderAntenna } from '../constants'
+import { ReaderAntenna } from '../constants/rfid-reader'
 
 export const readerSettingsFormSchema = object({
 	readerIP: ipv4({ error: 'ns_validation:invalid_ipv4' }),

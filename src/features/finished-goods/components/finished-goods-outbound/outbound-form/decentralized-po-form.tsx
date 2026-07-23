@@ -1,8 +1,8 @@
 'use no memo'
 
-import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Tooltip, Typography } from '@/components/ui'
-import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
 import { cn } from '@common/utils/cn'
+import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Tooltip, Typography } from '@components/ui'
+import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@components/ui/@custom/alert'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import {
 	closestCenter,

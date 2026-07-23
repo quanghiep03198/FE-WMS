@@ -1,6 +1,6 @@
 'use no memo'
 
-import { Button, Div, Icon, Separator, Tooltip } from '@/components/ui'
+import { Button, Div, Icon, Separator, Tooltip } from '@components/ui'
 import { cn } from '@common/utils/cn'
 import { useTranslation } from 'react-i18next'
 import { useEditorContext } from '../../context/editor-context'

@@ -8,7 +8,7 @@ import {
 	Slider,
 	Switch,
 	Typography
-} from '@/components/ui'
+} from '@components/ui'
 import useQueryParams from '@hooks/use-query-params'
 import { HoverCardPortal } from '@radix-ui/react-hover-card'
 import { useDebounce, usePrevious } from 'ahooks'

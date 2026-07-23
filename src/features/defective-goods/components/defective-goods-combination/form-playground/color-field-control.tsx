@@ -1,4 +1,4 @@
-import { AutoCompleteFieldControl } from '@/components/ui'
+import { AutoCompleteFieldControl } from '@components/ui'
 import { uniqBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'

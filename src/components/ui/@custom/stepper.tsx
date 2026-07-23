@@ -1,4 +1,4 @@
-import { Div, Icon, Typography } from '@/components/ui'
+import { Div, Icon, Typography } from '@components/ui'
 import type { TFunction } from 'i18next'
 import React, { createContext, use, useReducer } from 'react'
 import { useTranslation } from 'react-i18next'

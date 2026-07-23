@@ -1,8 +1,8 @@
 'use no memo'
 
-import { Button, Icon, Tooltip } from '@/components/ui'
 import type { IUser } from '@/features/auth/types'
 import { UserRole } from '@common/constants/enums'
+import { Button, Icon, Tooltip } from '@components/ui'
 import useMediaQuery from '@hooks/use-media-query'
 import type { Table } from '@tanstack/react-table'
 import type { EventEmitter } from 'ahooks/lib/useEventEmitter'

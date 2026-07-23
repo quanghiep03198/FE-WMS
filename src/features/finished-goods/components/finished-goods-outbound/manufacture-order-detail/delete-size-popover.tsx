@@ -1,3 +1,8 @@
+import { StockFlow } from '@/features/finished-goods/constants/enums'
+import { useGetScanningEpcs } from '@/features/finished-goods/hooks/use-finished-goods-epc-request'
+import type { DeleteScannedEpcsFormValues } from '@/features/finished-goods/schemas/delete-epc.schema'
+import { deleteScannedEpcsSchema } from '@/features/finished-goods/schemas/delete-epc.schema'
+import { cn } from '@common/utils/cn'
 import {
 	Button,
 	buttonVariants,
@@ -13,12 +18,7 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger
-} from '@/components/ui'
-import { StockFlow } from '@/features/finished-goods/constants/enums'
-import { useGetScanningEpcs } from '@/features/finished-goods/hooks/use-finished-goods-epc-request'
-import type { DeleteScannedEpcsFormValues } from '@/features/finished-goods/schemas/delete-epc.schema'
-import { deleteScannedEpcsSchema } from '@/features/finished-goods/schemas/delete-epc.schema'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useQueryClient } from '@tanstack/react-query'

@@ -1,4 +1,4 @@
-import { Button, Div, Icon } from '@/components/ui'
+import { Button, Div, Icon } from '@components/ui'
 import useQueryParams from '@hooks/use-query-params'
 import type { LucideProps } from 'lucide-react'
 import { EllipsisIcon } from 'lucide-react'

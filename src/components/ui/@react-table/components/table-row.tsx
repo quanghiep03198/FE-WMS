@@ -1,5 +1,5 @@
-import { Collapsible, CollapsibleContent, Div } from '@/components/ui'
 import { cn } from '@common/utils/cn'
+import { Collapsible, CollapsibleContent, Div } from '@components/ui'
 import { flexRender, type Row } from '@tanstack/react-table'
 import { useMemoizedFn } from 'ahooks'
 import { Fragment, memo } from 'react'

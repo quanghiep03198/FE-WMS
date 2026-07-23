@@ -1,3 +1,4 @@
+import formatIntlNumber from '@common/utils/format-intl-number'
 import {
 	Card,
 	CardAction,
@@ -18,8 +19,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 	Skeleton
-} from '@/components/ui'
-import formatIntlNumber from '@common/utils/format-intl-number'
+} from '@components/ui'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'

@@ -1,5 +1,6 @@
 'use no memo'
 
+import { cn } from '@common/utils/cn'
 import {
 	Button,
 	Checkbox,
@@ -14,10 +15,9 @@ import {
 	TableRow,
 	Tooltip,
 	Typography
-} from '@/components/ui'
-import Skeleton from '@/components/ui/@custom/skeleton'
-import { VirtualPlaceholderRow } from '@/components/ui/@react-table/components/table-row'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
+import Skeleton from '@components/ui/@custom/skeleton'
+import { VirtualPlaceholderRow } from '@components/ui/@react-table/components/table-row'
 import useScrollToFn from '@hooks/use-scroll-fn'
 import useVirtualScrollPadding from '@hooks/use-virtual-scroll-padding'
 import type { CheckedState } from '@radix-ui/react-checkbox'

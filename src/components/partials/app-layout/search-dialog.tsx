@@ -1,4 +1,4 @@
-import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
+import { PresetBreakPoints } from '@common/constants/enums'
 import {
 	Button,
 	Command,
@@ -13,9 +13,9 @@ import {
 	Icon,
 	Tooltip,
 	Typography
-} from '@/components/ui'
-import { Kbd, KbdKey } from '@/components/ui/@custom/kbd'
-import { PresetBreakPoints } from '@common/constants/enums'
+} from '@components/ui'
+import { Kbd, KbdKey } from '@components/ui/@custom/kbd'
+import { navigationConfig } from '@configs/navigation.config'
 import useMediaQuery from '@hooks/use-media-query'
 import { Link } from '@tanstack/react-router'
 import { useKeyPress, useResetState } from 'ahooks'

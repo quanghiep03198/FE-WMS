@@ -1,4 +1,4 @@
-import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import ConfirmDialog from '@components/ui/@override/confirm-dialog'
 import useAuth from '@hooks/use-auth'
 import { useBlocker } from '@tanstack/react-router'
 import React, { useCallback } from 'react'

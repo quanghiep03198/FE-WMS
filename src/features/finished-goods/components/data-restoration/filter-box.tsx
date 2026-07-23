@@ -1,3 +1,4 @@
+import { cn } from '@common/utils/cn'
 import {
 	AutoCompleteFieldControl,
 	Button,
@@ -17,8 +18,7 @@ import {
 	Separator,
 	Tooltip,
 	Typography
-} from '@/components/ui'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useResetState } from 'ahooks'
 import { capitalize, isEmpty } from 'lodash-es'

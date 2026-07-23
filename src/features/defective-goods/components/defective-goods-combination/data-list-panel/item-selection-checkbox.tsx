@@ -1,6 +1,6 @@
-import { Checkbox, Div, Typography } from '@/components/ui'
 import { UserRole } from '@common/constants/enums'
 import RoleBaseAccessControl from '@components/guards/role-base-access-control'
+import { Checkbox, Div, Typography } from '@components/ui'
 import type Pagination from '@components/ui/@custom/pagination'
 import type { IDefectiveGoods } from '@features/defective-goods/types'
 import type { CheckedState } from '@radix-ui/react-checkbox'

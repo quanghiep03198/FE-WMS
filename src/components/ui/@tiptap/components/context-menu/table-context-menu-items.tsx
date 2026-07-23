@@ -1,4 +1,4 @@
-import { ContextMenuItem, ContextMenuSeparator, Icon } from '@/components/ui'
+import { ContextMenuItem, ContextMenuSeparator, Icon } from '@components/ui'
 import type { Editor } from '@tiptap/react'
 import React, { Fragment, useMemo } from 'react'
 

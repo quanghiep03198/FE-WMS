@@ -1,5 +1,5 @@
-import type { SelectFieldControlProps } from '@/components/forms/select'
-import { SelectFieldControl } from '@/components/ui'
+import type { SelectFieldControlProps } from '@components/forms/select'
+import { SelectFieldControl } from '@components/ui'
 import React, { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

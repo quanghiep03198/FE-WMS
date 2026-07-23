@@ -9,7 +9,7 @@ import {
 	TableCell,
 	TableRow,
 	Typography
-} from '@/components/ui'
+} from '@components/ui'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StockFlow } from '../../constants/enums'

@@ -16,7 +16,7 @@ import {
 	Icon,
 	InputFieldControl,
 	Tooltip
-} from '@/components/ui'
+} from '@components/ui'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'

@@ -3,6 +3,7 @@ import { mergeAttributes, type NodeViewProps, NodeViewWrapper, ReactNodeViewRend
 import { AlignCenter, AlignLeft, AlignRight, Edit, ImageIcon, Maximize, MoreVertical, Trash } from 'lucide-react'
 import { Fragment, useEffect, useRef, useState } from 'react'
 
+import { cn } from '@common/utils/cn'
 import {
 	Button,
 	Div,
@@ -19,8 +20,7 @@ import {
 	Label,
 	Separator,
 	Typography
-} from '@/components/ui'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import { useTranslation } from 'react-i18next'
 import { useImageUpload } from '../hooks/use-image-upload'
 

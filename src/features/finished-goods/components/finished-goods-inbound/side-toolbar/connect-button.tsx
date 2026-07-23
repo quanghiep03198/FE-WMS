@@ -1,5 +1,5 @@
-import type { ButtonProps } from '@/components/ui'
-import { Button, Div, Icon, Typography } from '@/components/ui'
+import type { ButtonProps } from '@components/ui'
+import { Button, Div, Icon, Typography } from '@components/ui'
 import { useBrowserTabStatus } from '@hooks/use-browser-tab-status'
 import { usePrevious } from 'ahooks'
 import React, { useMemo } from 'react'

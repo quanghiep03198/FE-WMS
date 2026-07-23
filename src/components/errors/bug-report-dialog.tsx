@@ -1,3 +1,4 @@
+import { cn } from '@common/utils/cn'
 import {
 	Button,
 	buttonVariants,
@@ -7,8 +8,7 @@ import {
 	Icon,
 	InputFieldControl,
 	TextareaFieldControl
-} from '@/components/ui'
-import { cn } from '@common/utils/cn'
+} from '@components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogContent } from '@radix-ui/react-dialog'
 import { captureFeedback } from '@sentry/react'
