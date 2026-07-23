@@ -163,7 +163,7 @@
 		"@tanstack/eslint-plugin-query": "^5.68.0",
 		"@tanstack/eslint-plugin-router": "^1.114.29",
 		"@tanstack/react-query-devtools": "^5.101.2",
-		"@tanstack/router-cli": "^1.114.29",
+		"@tanstack/router-cli": "^1.167.21",
 		"@tanstack/router-devtools": "^1.114.29",
 		"@tanstack/router-generator": "^1.114.29",
 		"@tanstack/router-plugin": "^1.114.30",
