@@ -73,7 +73,7 @@ const ConnectButton: React.FC = () => {
 	})
 
 	return (
-		<Button size='sm' disabled={!selectedDevice} onClick={handleToggleScanning} variant={scanningButtonProps.variant}>
+		<Button disabled={!selectedDevice} onClick={handleToggleScanning} variant={scanningButtonProps.variant}>
 			<Icon name={scanningButtonProps.icon} />
 			{scanningButtonProps.children}
 		</Button>

@@ -1,3 +1,5 @@
+import { cn } from '@common/utils/cn'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import AppLogo from '@components/shared/app-logo'
 import {
 	Badge,
@@ -19,8 +21,6 @@ import {
 	Separator,
 	Typography
 } from '@components/ui'
-import { cn } from '@common/utils/cn'
-import formatIntlNumber from '@common/utils/format-intl-number'
 import { HomeIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'
@@ -74,11 +74,11 @@ const AnimatedScreen: React.FC = () => {
 				}}
 				className={cn(
 					'bg-background pointer-events-none relative grid aspect-square h-auto max-h-240 rotate-45 grid-cols-[18rem_auto] grid-rows-[80px_auto] gap-y-4 overflow-visible rounded-xl border antialiased select-none *:pointer-events-none *:select-none',
-					'xxl:zoom-[1] w-full sm:zoom-[0.5] md:zoom-[0.8] lg:zoom-[0.6] xl:zoom-[0.8]',
-					'xl:transform-[perspective(1920px)_translateX(5%)_translateY(-15%)_rotateX(45deg)_rotateY(-10deg)_rotateZ(-45deg)]',
-					'lg:transform-[perspective(1920px)_translateX(-5%)_translateY(-10%)_rotateX(45deg)_rotateY(-15deg)_rotateZ(-45deg)]',
-					'md:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)]',
-					'sm:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)]',
+					'xxl:zoom-[1] w-full -translate-1/12',
+					'xl:transform-[perspective(1920px)_translateX(5%)_translateY(-15%)_rotateX(45deg)_rotateY(-10deg)_rotateZ(-45deg)] xl:zoom-[0.8]',
+					'lg:transform-[perspective(1920px)_translateX(-5%)_translateY(-10%)_rotateX(45deg)_rotateY(-15deg)_rotateZ(-45deg)] lg:zoom-[0.6]',
+					'md:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)] md:zoom-[0.8]',
+					'sm:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)] sm:zoom-[0.5]',
 					'after:from-background after:via-background/80 md:after:to-background/50 lg:after:via-background via-25% to-50% after:absolute after:inset-0 after:z-10 after:h-[calc(100%+4px)] after:w-[200%] after:-translate-y-px after:bg-linear-to-l after:to-transparent md:via-65% lg:after:via-60% lg:after:to-70%'
 				)}>
 				<aside className='paused group-aria-current/cta:running z-0 col-start-1 row-span-full animate-[fly-down_0.7s_ease_forwards] space-y-10 border-r p-4 text-sm'>
