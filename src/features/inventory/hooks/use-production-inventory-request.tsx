@@ -1,4 +1,4 @@
-import { InventoryService } from '@/features/inventory/services/inventory.service'
+import { InventoryService } from '@features/inventory/services/inventory.service'
 import useQueryParams from '@hooks/use-query-params'
 import { useQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash-es'

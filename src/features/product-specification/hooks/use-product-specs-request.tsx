@@ -1,5 +1,5 @@
-import type { IProductSpecification } from '@/features/product-specification/types'
 import axiosInstance from '@configs/axios.config'
+import type { IProductSpecification } from '@features/product-specification/types'
 import { useQuery } from '@tanstack/react-query'
 
 export enum ProductSpecificationQueryKey {

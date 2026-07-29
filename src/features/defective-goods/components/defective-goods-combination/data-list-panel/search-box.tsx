@@ -1,4 +1,3 @@
-import { useGetProductSpecsQuery } from '@/features/product-specification/hooks/use-product-specs-request'
 import { cn } from '@common/utils/cn'
 import { GhostButton } from '@components/shared/ghost-button'
 import {
@@ -13,6 +12,7 @@ import {
 	PopoverTrigger,
 	Separator
 } from '@components/ui'
+import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
 import useQueryParams from '@hooks/use-query-params'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useResetState, useSessionStorageState, useSize } from 'ahooks'

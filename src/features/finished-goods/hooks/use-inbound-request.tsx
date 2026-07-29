@@ -1,10 +1,10 @@
-import { FinishedGoodsStockService } from '@/features/finished-goods/services/finished-goods-stock.service'
 import type { DeleteScannedEpcsFormValues } from '@features/finished-goods/schemas/delete-epc.schema'
+import { FinishedGoodsStockService } from '@features/finished-goods/services/finished-goods-stock.service'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { StockFlow } from '../constants/enums'
+import { FinishedGoodsAction, StockFlow } from '../constants/enums'
 import { DEFAULT_PROPS, usePageContext } from '../contexts/finished-goods-inbound/page-context'
-import type { InoutboundPayload } from '../schemas/inoutbound.schema'
+import type { StockVariationPayload } from '../schemas/inoutbound.schema'
 import { FinishedGoodsSharedService } from '../services/finished-goods-shared.service'
 import { DeletedFinishedGoodsQueryKey } from './use-deleted-epc-request'
 
@@ -125,12 +125,17 @@ export const useDeleteScanningMoMutation = () => {
 	})
 }
 
-export const useUpdateStockInMutation = () => {
+export const useUpdateStockVariationMutation = () => {
 	const { selectedDevice, setSelectedOrder, setCurrentPage } = usePageContext(
 		'selectedDevice',
 		'setSelectedOrder',
 		'setCurrentPage'
 	)
+
+	const handler = {
+		[FinishedGoodsAction.IMPORT]: FinishedGoodsStockService.stockIn,
+		[FinishedGoodsAction.EXPORT]: FinishedGoodsStockService.recallFromStock
+	}
 
 	return useMutation({
 		meta: {
@@ -139,8 +144,9 @@ export const useUpdateStockInMutation = () => {
 				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice]
 			]
 		},
-		mutationFn: (payload: InoutboundPayload) => {
-			return FinishedGoodsStockService.stockIn(payload)
+		mutationFn: (payload: StockVariationPayload) => {
+			const mutationFn = handler[payload.rfid_status]
+			if (typeof mutationFn === 'function') return mutationFn(payload)
 		},
 		onSuccess: () => {
 			setCurrentPage(null)

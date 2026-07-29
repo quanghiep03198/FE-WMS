@@ -1,4 +1,4 @@
-import UploadDataFileDialog from '@/features/finished-goods/components/upload-data-dialog'
+import UploadDataFileDialog from '@features/finished-goods/components/upload-data-dialog'
 import { useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import OrderDetails from '../manufacturing-order-detail'

@@ -1,6 +1,6 @@
-import { PackingService } from '@/features/packing-manifest/services/packing.service'
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import { Button, Icon } from '@components/ui'
+import { PackingService } from '@features/packing-manifest/services/packing.service'
 import useAuth from '@hooks/use-auth'
 import { format } from 'date-fns'
 import saveAs from 'file-saver'

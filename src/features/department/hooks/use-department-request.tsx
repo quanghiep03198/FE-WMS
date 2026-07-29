@@ -1,4 +1,4 @@
-import { DepartmentService } from '@/features/department/services/department.service'
+import { DepartmentService } from '@features/department/services/department.service'
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
 import type { IDepartment } from '../types'

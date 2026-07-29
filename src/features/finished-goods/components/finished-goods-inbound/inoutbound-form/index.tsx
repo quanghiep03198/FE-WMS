@@ -1,8 +1,3 @@
-import { useGetShapingProductLineQuery } from '@/features/department/hooks/use-department-request'
-import { FinishedGoodsAction, FinishedGoodsOutboundReason } from '@/features/finished-goods/constants/enums'
-import { useGetWarehouseQuery } from '@/features/warehouse/hooks/use-warehouse-request'
-import { useGetWarehouseStorageQuery } from '@/features/warehouse/hooks/use-warehouse-storage-request'
-import type { IWarehouse, IWarehouseStorage } from '@/features/warehouse/types'
 import { FALLBACK_VALUE } from '@common/constants/constants'
 import { cn } from '@common/utils/cn'
 import type { IconProps } from '@components/ui'
@@ -25,6 +20,11 @@ import {
 	Typography
 } from '@components/ui'
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@components/ui/@custom/alert'
+import { useGetShapingProductLineQuery } from '@features/department/hooks/use-department-request'
+import { FinishedGoodsAction, FinishedGoodsOutboundReason } from '@features/finished-goods/constants/enums'
+import { useGetWarehouseQuery } from '@features/warehouse/hooks/use-warehouse-request'
+import { useGetWarehouseStorageQuery } from '@features/warehouse/hooks/use-warehouse-storage-request'
+import type { IWarehouse, IWarehouseStorage } from '@features/warehouse/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useMediaQuery from '@hooks/use-media-query'
 import { useMemoizedFn } from 'ahooks'
@@ -38,9 +38,9 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
-import { useGetScanningInboundEpcQuery, useUpdateStockInMutation } from '../../../hooks/use-inbound-request'
-import type { FormValues, InoutboundPayload } from '../../../schemas/inoutbound.schema'
-import { inboundSchema, outboundSchema } from '../../../schemas/inoutbound.schema'
+import { useGetScanningInboundEpcQuery, useUpdateStockVariationMutation } from '../../../hooks/use-inbound-request'
+import type { FormValues, StockVariationPayload } from '../../../schemas/inoutbound.schema'
+import { outboundSchema, stockVariationSchema } from '../../../schemas/inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
 	const { selectedDevice, selectedOrder, scanningStatus, setScannedEpc } = usePageContext(
@@ -54,7 +54,7 @@ const InoutboundForm: React.FC = () => {
 	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 
 	const form = useForm<FormValues>({
-		resolver: zodResolver(action === FinishedGoodsAction.IMPORT ? inboundSchema : outboundSchema),
+		resolver: zodResolver(action === FinishedGoodsAction.IMPORT ? stockVariationSchema : outboundSchema),
 		defaultValues: {
 			rfid_status: FinishedGoodsAction.IMPORT,
 			rfid_use: FinishedGoodsOutboundReason.NORMAL_IMPORT,
@@ -79,7 +79,7 @@ const InoutboundForm: React.FC = () => {
 		select: (response) => response.metadata
 	})
 
-	const { mutateAsync, isError, error, reset } = useUpdateStockInMutation()
+	const { mutateAsync, isError, error, reset } = useUpdateStockVariationMutation()
 
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({
@@ -98,19 +98,6 @@ const InoutboundForm: React.FC = () => {
 		}
 	}, [scanningStatus])
 
-	// useEffect(() => {
-	// 	if (connection) form.setValue('default_tenant', connection)
-	// }, [connection])
-
-	// useEffect(() => {
-	// 	if (Array.isArray(writableTenants)) {
-	// 		const currentTenant = writableTenants.find((item) => {
-	// 			return item.factory.includes(currentFactoryProduce)
-	// 		})
-	// 		form.setValue('target_tenant', currentTenant?.id ?? '')
-	// 	}
-	// }, [currentFactoryProduce])
-
 	useEffect(() => {
 		form.setValue(
 			'rfid_use',
@@ -120,12 +107,6 @@ const InoutboundForm: React.FC = () => {
 		)
 	}, [action])
 
-	// const currentWritableTenant = useMemo<Partial<ITenancy>>(() => {
-	// 	return Array.isArray(writableTenants)
-	// 		? writableTenants.find((item) => item.id === form.getValues('target_tenant'))
-	// 		: null
-	// }, [writableTenants, form.watch('target_tenant')])
-
 	const handleSubmit = async (data: FormValues) => {
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })
 		try {
@@ -133,7 +114,7 @@ const InoutboundForm: React.FC = () => {
 				...omit(data, ['warehouse_num']),
 				mo_no: selectedOrder === FALLBACK_VALUE ? null : selectedOrder,
 				inbound_device_sn: selectedDevice
-			} as InoutboundPayload)
+			} as StockVariationPayload)
 			// * Always select all scanned order after performing update stock
 			setScannedEpc(currentEpcData)
 			toast.success(t('ns_common:notification.success'), { id: 'UPDATE_STOCK' })

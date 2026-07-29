@@ -1,4 +1,4 @@
-import { OrderService } from '@/features/order/services/order.service'
+import { OrderService } from '@features/order/services/order.service'
 import { queryOptions, useQuery } from '@tanstack/react-query'
 import { useGetTenantByFactory } from '../../tenancy/hooks/use-tenacy-request'
 

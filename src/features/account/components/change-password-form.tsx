@@ -1,7 +1,7 @@
 'use no memo'
 
-import { useUpdatePasswordMutation } from '@/features/auth/hooks/use-profile-request'
 import { Button, Div, Form as FormProvider, Icon, InputFieldControl, Typography } from '@components/ui'
+import { useUpdatePasswordMutation } from '@features/auth/hooks/use-profile-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'
 import { useDebounceEffect } from 'ahooks'

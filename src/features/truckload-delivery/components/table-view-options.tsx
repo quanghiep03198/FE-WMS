@@ -1,6 +1,5 @@
 'use no memo'
 
-import { type ITruckloadDelivery } from '@/features/truckload-delivery/services/truckload-delivery.service'
 import {
 	Button,
 	DropdownMenu,
@@ -11,6 +10,7 @@ import {
 	Icon,
 	Tooltip
 } from '@components/ui'
+import { type ITruckloadDelivery } from '@features/truckload-delivery/services/truckload-delivery.service'
 import useMediaQuery from '@hooks/use-media-query'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { type Table } from '@tanstack/react-table'

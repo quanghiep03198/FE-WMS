@@ -2,8 +2,8 @@ import type {
 	ITruckloadDelivery,
 	ITruckloadDeliveryDetail,
 	TruckloadDeliveryDispatchOrder
-} from '@/features/truckload-delivery/services/truckload-delivery.service'
-import { TruckloadDeliveryService } from '@/features/truckload-delivery/services/truckload-delivery.service'
+} from '@features/truckload-delivery/services/truckload-delivery.service'
+import { TruckloadDeliveryService } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { keepPreviousData, queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import type { TruckloadDeliveryStatus } from '../constants'

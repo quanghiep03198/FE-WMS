@@ -1,6 +1,6 @@
-import { TruckloadDeliveryService } from '@/features/truckload-delivery/services/truckload-delivery.service'
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import { Button, Icon } from '@components/ui'
+import { TruckloadDeliveryService } from '@features/truckload-delivery/services/truckload-delivery.service'
 import useAuth from '@hooks/use-auth'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'

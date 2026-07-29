@@ -1,4 +1,4 @@
-import { StockFlow } from '@/features/finished-goods/constants/enums'
+import { StockFlow } from '@features/finished-goods/constants/enums'
 import type { IconProps } from '@components/ui'
 import {
 	Div,

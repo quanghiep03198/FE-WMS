@@ -1,6 +1,6 @@
 'use no memo'
 
-import { StockFlow } from '@/features/finished-goods/constants/enums'
+import { StockFlow } from '@features/finished-goods/constants/enums'
 import { cn } from '@common/utils/cn'
 import {
 	Div,

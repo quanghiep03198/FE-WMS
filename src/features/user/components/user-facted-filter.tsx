@@ -1,6 +1,5 @@
 'use no memo'
 
-import type { IUser } from '@/features/auth/types'
 import { cn } from '@common/utils/cn'
 import type { IconProps } from '@components/ui'
 import {
@@ -20,6 +19,7 @@ import {
 	PopoverTrigger,
 	Separator
 } from '@components/ui'
+import type { IUser } from '@features/auth/types'
 import { CheckIcon } from '@radix-ui/react-icons'
 import { type Column } from '@tanstack/react-table'
 import { Fragment } from 'react'

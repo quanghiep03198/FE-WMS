@@ -1,6 +1,6 @@
-import type { IUser } from '@/features/auth/types'
 import { CommonActions } from '@common/constants/enums'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@components/ui'
+import type { IUser } from '@features/auth/types'
 import type { CellContext } from '@tanstack/react-table'
 import { pick } from 'lodash-es'
 import { useState } from 'react'

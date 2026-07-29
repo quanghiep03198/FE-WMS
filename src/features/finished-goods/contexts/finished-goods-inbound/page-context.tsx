@@ -1,6 +1,6 @@
 'use no memo'
 
-import type { IElectronicProductCode, OrderItem } from '@/features/finished-goods/types'
+import type { IElectronicProductCode, OrderItem } from '@features/finished-goods/types'
 import { createStoreSelector } from '@hooks/use-store-selector'
 import React, { createContext, useRef } from 'react'
 import type { StoreApi } from 'zustand'

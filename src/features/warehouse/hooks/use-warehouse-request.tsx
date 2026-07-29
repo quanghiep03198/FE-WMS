@@ -1,4 +1,4 @@
-import type { IWarehouse } from '@/features/warehouse/types'
+import type { IWarehouse } from '@features/warehouse/types'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import { keepPreviousData, queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'

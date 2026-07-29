@@ -5,9 +5,9 @@ import React from 'react'
 const PlaceHolderItems: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {
 	return (
 		<Div {...props} className={cn('relative grid h-28 w-full place-content-center place-items-center', className)}>
-			<PlaceholderItem className='absolute top-0 z-20 dark:brightness-95' />
-			<PlaceholderItem className='absolute top-6 z-10 scale-[0.8] dark:brightness-75' />
-			<PlaceholderItem className='absolute top-12 z-0 scale-[0.6] dark:brightness-50' />
+			<PlaceholderItem className='absolute top-0 z-20' />
+			<PlaceholderItem className='to-background absolute top-6 z-10 scale-[0.8] bg-linear-to-b from-neutral-400 to-75% dark:from-neutral-800' />
+			<PlaceholderItem className='absolute top-12 z-0 scale-[0.6] bg-linear-to-b from-neutral-400/50 to-50% dark:from-neutral-800' />
 		</Div>
 	)
 }

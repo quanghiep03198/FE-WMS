@@ -1,7 +1,5 @@
 'use no memo'
 
-import { StockFlow } from '@/features/finished-goods/constants/enums'
-import { useGetScanningEpcs } from '@/features/finished-goods/hooks/use-finished-goods-epc-request'
 import { cn } from '@common/utils/cn'
 import {
 	Button,
@@ -20,6 +18,8 @@ import {
 	PopoverTrigger,
 	Separator
 } from '@components/ui'
+import { StockFlow } from '@features/finished-goods/constants/enums'
+import { useGetScanningEpcs } from '@features/finished-goods/hooks/use-finished-goods-epc-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useQueryClient } from '@tanstack/react-query'

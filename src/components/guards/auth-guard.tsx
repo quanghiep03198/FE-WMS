@@ -1,6 +1,6 @@
-import { AuthService } from '@/features/auth/services/auth.service'
 import { Div, Icon, Typography } from '@components/ui'
 import { useGetUserProfileQuery } from '@features/auth/hooks/use-profile-request'
+import { AuthService } from '@features/auth/services/auth.service'
 import useAuth from '@hooks/use-auth'
 import { useRouter } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'

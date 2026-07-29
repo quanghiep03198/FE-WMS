@@ -1,5 +1,5 @@
-import type { StockFlow } from '@/features/finished-goods/constants/enums'
 import { Button, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle, Icon } from '@components/ui'
+import type { StockFlow } from '@features/finished-goods/constants/enums'
 import useQueryParams from '@hooks/use-query-params'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

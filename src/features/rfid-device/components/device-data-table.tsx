@@ -1,3 +1,5 @@
+import { Languages, RecordStatus, UserRole } from '@common/constants/enums'
+import { cn } from '@common/utils/cn'
 import { Badge, Button, DataTable, Icon, Tooltip, Typography } from '@components/ui'
 import ConfirmDialog from '@components/ui/@override/confirm-dialog'
 import {
@@ -6,9 +8,7 @@ import {
 } from '@components/ui/@react-table/components/row-selection-checkbox'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@components/ui/@react-table/constants'
 import { notNullFilter } from '@components/ui/@react-table/utils/not-null-filter.util'
-import type { IRFIDReaderDevice } from '@/features/rfid-device/types'
-import { Languages, RecordStatus, UserRole } from '@common/constants/enums'
-import { cn } from '@common/utils/cn'
+import type { IRFIDReaderDevice } from '@features/rfid-device/types'
 import useAuth from '@hooks/use-auth'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { useReactiveRef } from '@hooks/use-reactive-ref'

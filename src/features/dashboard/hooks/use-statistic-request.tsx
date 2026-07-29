@@ -1,4 +1,4 @@
-import type { IAnnuallyInOutboundStatistics } from '@/features/dashboard/types'
+import type { IAnnuallyInOutboundStatistics } from '@features/dashboard/types'
 import { useQuery } from '@tanstack/react-query'
 import { useGetTenantByFactory } from '../../tenancy/hooks/use-tenacy-request'
 import { StatisticsService } from '../services/statistics.service'

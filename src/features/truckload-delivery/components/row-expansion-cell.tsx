@@ -1,5 +1,5 @@
-import type { ITruckloadDelivery } from '@/features/truckload-delivery/services/truckload-delivery.service'
 import { Icon } from '@components/ui'
+import type { ITruckloadDelivery } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useQueryClient } from '@tanstack/react-query'
 import type { CellContext } from '@tanstack/react-table'
 import { useRef, useTransition } from 'react'

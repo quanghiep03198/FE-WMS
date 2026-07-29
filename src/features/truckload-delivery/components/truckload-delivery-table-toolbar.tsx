@@ -1,7 +1,7 @@
 'use no memo'
 
-import { type ITruckloadDelivery } from '@/features/truckload-delivery/services/truckload-delivery.service'
 import { Button, Div, Icon } from '@components/ui'
+import { type ITruckloadDelivery } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useQueryClient } from '@tanstack/react-query'
 import { type Table } from '@tanstack/react-table'
 import React from 'react'

@@ -1,5 +1,5 @@
-import type { OrderItem } from '@/features/finished-goods/types'
 import { TableBody, TableCell, TableRow } from '@components/ui'
+import type { OrderItem } from '@features/finished-goods/types'
 import type { Virtualizer } from '@tanstack/react-virtual'
 import { notUndefined } from '@tanstack/react-virtual'
 import TableDataRow from './order-detail-row'

@@ -1,4 +1,4 @@
-import { UserService } from '@/features/user/services/user.service'
+import { UserService } from '@features/user/services/user.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'

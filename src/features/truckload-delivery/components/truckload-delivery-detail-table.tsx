@@ -1,7 +1,3 @@
-import type {
-	ITruckloadDelivery,
-	ITruckloadDeliveryDetail
-} from '@/features/truckload-delivery/services/truckload-delivery.service'
 import { CommonActions, PresetBreakPoints, UserRole } from '@common/constants/enums'
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
 import {
@@ -21,6 +17,10 @@ import {
 } from '@components/ui'
 import { Typewriter } from '@components/ui/@custom/type-writter'
 import { useTableContext } from '@components/ui/@react-table/context/table.context'
+import type {
+	ITruckloadDelivery,
+	ITruckloadDeliveryDetail
+} from '@features/truckload-delivery/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'

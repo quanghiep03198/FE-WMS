@@ -1,4 +1,3 @@
-import { InventoryService } from '@/features/inventory/services/inventory.service'
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import type { IMonthlyInventoryAudit } from '@common/types/entities'
 import formatIntlNumber from '@common/utils/format-intl-number'
@@ -12,6 +11,7 @@ import TableCellText from '@components/ui/@react-table/components/table-cell-tex
 import { ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@components/ui/@react-table/constants'
 import { useTableContext } from '@components/ui/@react-table/context/table.context'
 import type { RenderSubComponentProps } from '@components/ui/@react-table/types'
+import { InventoryService } from '@features/inventory/services/inventory.service'
 import useAuth from '@hooks/use-auth'
 import useQueryParams from '@hooks/use-query-params'
 import { useQueryClient } from '@tanstack/react-query'

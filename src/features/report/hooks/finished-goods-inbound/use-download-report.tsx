@@ -1,6 +1,6 @@
-import { ReportService } from '@/features/report/services/report.service'
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import type { UrlQueryParams } from '@features/report/components/finished-goods-inbound/report-master-table'
+import { ReportService } from '@features/report/services/report.service'
 import { useGetTenantByFactory } from '@features/tenancy/hooks/use-tenacy-request'
 import useAuth from '@hooks/use-auth'
 import useQueryParams from '@hooks/use-query-params'

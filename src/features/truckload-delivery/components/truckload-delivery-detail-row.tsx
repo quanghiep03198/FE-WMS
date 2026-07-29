@@ -1,5 +1,3 @@
-import type { IPurchaseOrderResult } from '@/features/order/services/order.service'
-import type { ITruckloadDelivery } from '@/features/truckload-delivery/services/truckload-delivery.service'
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import generateAvatar from '@common/utils/generate-avatar'
@@ -15,6 +13,8 @@ import {
 	Tooltip,
 	Typography
 } from '@components/ui'
+import type { IPurchaseOrderResult } from '@features/order/services/order.service'
+import type { ITruckloadDelivery } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { format } from 'date-fns'
 import { isNil, pick } from 'lodash-es'

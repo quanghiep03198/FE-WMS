@@ -1,4 +1,4 @@
-import { AuthService } from '@/features/auth/services/auth.service'
+import { AuthService } from '@features/auth/services/auth.service'
 import type { ErrorComponentProps } from '@tanstack/react-router'
 import { useRouter } from '@tanstack/react-router'
 

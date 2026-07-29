@@ -1,5 +1,5 @@
-import type { IUser } from '@/features/auth/types'
 import type { FactoryCode } from '@common/constants/enums'
+import type { IUser } from '@features/auth/types'
 import { shared } from 'use-broadcast-ts'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'

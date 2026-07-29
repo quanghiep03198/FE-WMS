@@ -1,4 +1,4 @@
-import type { DeleteScannedEpcsFormValues } from '@/features/finished-goods/schemas/delete-epc.schema'
+import type { DeleteScannedEpcsFormValues } from '@features/finished-goods/schemas/delete-epc.schema'
 import { useSocketContext } from '@/stores/socket.store'
 import { Json } from '@common/utils/json'
 import {

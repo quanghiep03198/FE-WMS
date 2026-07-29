@@ -1,6 +1,6 @@
-import type { StockFlow } from '@/features/finished-goods/constants/enums'
 import { Div, Icon } from '@components/ui'
 import { DebouncedInput } from '@components/ui/@custom/debounced-input'
+import type { StockFlow } from '@features/finished-goods/constants/enums'
 import type { Updater } from '@tanstack/react-table'
 import { capitalize } from 'lodash-es'
 import { useTranslation } from 'react-i18next'

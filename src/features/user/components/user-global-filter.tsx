@@ -1,6 +1,6 @@
-import type { IUser } from '@/features/auth/types'
 import { ButtonGroup, buttonVariants, Icon } from '@components/ui'
 import { DebouncedInput } from '@components/ui/@custom/debounced-input'
+import type { IUser } from '@features/auth/types'
 import type { Table } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

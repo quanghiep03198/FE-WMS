@@ -1,4 +1,4 @@
-import { ScanCapability, ScannedStatus, StockFlow } from '@/features/finished-goods/constants/enums'
+import { ScanCapability, ScannedStatus, StockFlow } from '@features/finished-goods/constants/enums'
 import { useSessionStorageState } from 'ahooks'
 import { useMemo } from 'react'
 

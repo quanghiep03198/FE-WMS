@@ -1,4 +1,4 @@
-import { StockFlow } from '@/features/finished-goods/constants/enums'
+import { StockFlow } from '@features/finished-goods/constants/enums'
 import { cn } from '@common/utils/cn'
 import { Button, Div, Form as FormProvider, Icon, SelectFieldControl } from '@components/ui'
 import useQueryParams from '@hooks/use-query-params'

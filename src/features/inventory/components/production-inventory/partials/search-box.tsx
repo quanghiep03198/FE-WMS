@@ -1,6 +1,6 @@
-import { InventoryService } from '@/features/inventory/services/inventory.service'
 import { cn } from '@common/utils/cn'
 import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon } from '@components/ui'
+import { InventoryService } from '@features/inventory/services/inventory.service'
 import useMediaQuery from '@hooks/use-media-query'
 import useQueryParams from '@hooks/use-query-params'
 import { useQuery } from '@tanstack/react-query'

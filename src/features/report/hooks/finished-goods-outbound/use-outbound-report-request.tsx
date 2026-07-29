@@ -1,4 +1,4 @@
-import { ReportService } from '@/features/report/services/report.service'
+import { ReportService } from '@features/report/services/report.service'
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { pick } from 'lodash-es'

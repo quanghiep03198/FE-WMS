@@ -1,6 +1,6 @@
-import { InventoryService } from '@/features/inventory/services/inventory.service'
 import { FactoryAgencyCode } from '@common/constants/enums'
 import { Button, Icon } from '@components/ui'
+import { InventoryService } from '@features/inventory/services/inventory.service'
 import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'
 import { saveAs } from 'file-saver'

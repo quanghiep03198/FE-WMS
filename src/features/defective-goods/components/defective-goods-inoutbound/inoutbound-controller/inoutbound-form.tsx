@@ -1,4 +1,3 @@
-import { StockFlow } from '@/features/finished-goods/constants/enums'
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
@@ -15,6 +14,7 @@ import {
 	SelectFieldControl,
 	Separator
 } from '@components/ui'
+import { StockFlow } from '@features/finished-goods/constants/enums'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateEffect } from 'ahooks'
 import { Fragment, useRef } from 'react'
@@ -23,9 +23,9 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 
-import { DefectiveGoodsOutboundPurpose } from '@/features/defective-goods/constants/enums'
-import PurchaseOrderFieldControl from '@/features/rfid-agent/components/playground/purchase-order-field-control'
+import { DefectiveGoodsOutboundPurpose } from '@features/defective-goods/constants/enums'
 import { usePageContext } from '@features/defective-goods/contexts/page-context'
+import PurchaseOrderFieldControl from '@features/rfid-agent/components/playground/purchase-order-field-control'
 import { useUpdateDefectiveGoodsStockMutation } from '../../../hooks/use-defective-goods-request'
 import { useFilterQuery } from '../../../hooks/use-filter-query'
 import {

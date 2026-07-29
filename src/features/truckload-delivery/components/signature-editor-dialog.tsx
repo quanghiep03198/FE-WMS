@@ -1,4 +1,3 @@
-import type { ITruckloadDelivery } from '@/features/truckload-delivery/services/truckload-delivery.service'
 import compressBase64 from '@common/libs/compress-base64'
 import { cn } from '@common/utils/cn'
 import env from '@common/utils/env'
@@ -23,6 +22,7 @@ import {
 	Typography
 } from '@components/ui'
 import { SignatureCanvas, type SignatureCanvasInstance } from '@components/ui/@custom/signature'
+import type { ITruckloadDelivery } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { useReactiveRef } from '@hooks/use-reactive-ref'
 import { useWorkerFn } from '@hooks/use-worker-fn'
