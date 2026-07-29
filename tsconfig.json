@@ -23,15 +23,16 @@
 		/* Alias */
 		"ignoreDeprecations": "6.0",
 		"paths": {
-			"@features/*": ["./src/features/*"],
 			"@assets/*": ["./src/assets/*"],
-			"@hooks/*": ["./src/hooks/*"],
+			"@configs/*": ["./src/configs/*"],
 			"@components/*": ["./src/components/*"],
 			"@common/*": ["./src/common/*"],
-			"@configs/*": ["./src/configs/*"],
 			"@contexts/*": ["./src/contexts/*"],
+			"@features/*": ["./src/features/*"],
+			"@hooks/*": ["./src/hooks/*"],
 			"@i18n/*": ["./src/i18n/*"],
 			"@providers/*": ["./src/providers/*"],
+			"@routes/*": ["./src/routes/*"],
 			"@stores/*": ["./src/stores/*"],
 			"@styles/*": ["./src/styles/*"],
 			"@tests/*": ["./tests/*"]
