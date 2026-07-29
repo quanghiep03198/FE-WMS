@@ -1,5 +1,5 @@
 // #region Modules
-import { WarehouseService } from '@/features/warehouse/services/warehouse.service'
+import { WarehouseService } from '@features/warehouse/services/warehouse.service'
 import { UserRole } from '@common/constants/enums'
 import { RoleGuard } from '@components/guards/role-guard'
 import { PageSeparator, PageWrapper } from '@components/shared/page'

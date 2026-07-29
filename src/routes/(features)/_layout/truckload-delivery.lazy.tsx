@@ -1,27 +1,27 @@
+import { UserRole } from '@common/constants/enums'
 import HostCompatibleGuard from '@components/guards/host-compatible-guard'
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
 import { RoleGuard } from '@components/guards/role-guard'
-import { Button, Icon } from '@components/ui'
-import CreateTruckloadDialogButton from '@/features/truckload-delivery/components/create-truckload-delivery-button'
-import TruckloadDeliveryMasterTable from '@/features/truckload-delivery/components/truckload-delivery-master-table'
-import { PageContextProvider } from '@/features/truckload-delivery/contexts/page-context'
-import { STORED_DELIVERY_PAGE_QUERY_KEY } from '@/features/truckload-delivery/hooks/use-page-query-params'
-import { STORAGE_DELIVERY_FILTER_KEY } from '@/features/truckload-delivery/hooks/use-store-filter-params'
-import { UserRole } from '@common/constants/enums'
 import { PageAction, PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '@components/shared/page'
+import { Button, Icon } from '@components/ui'
 import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
+import CreateTruckloadDialogButton from '@features/truckload-delivery/components/create-truckload-delivery-button'
+import TruckloadDeliveryMasterTable from '@features/truckload-delivery/components/truckload-delivery-master-table'
+import { PageContextProvider } from '@features/truckload-delivery/contexts/page-context'
+import { STORED_DELIVERY_PAGE_QUERY_KEY } from '@features/truckload-delivery/hooks/use-page-query-params'
+import { STORAGE_DELIVERY_FILTER_KEY } from '@features/truckload-delivery/hooks/use-store-filter-params'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, lazy, Suspense, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-const DeleteConfirmDialog = lazy(() => import('@/features/truckload-delivery/components/delete-confirm-dialog'))
-const SignatureEditorDialog = lazy(() => import('@/features/truckload-delivery/components/signature-editor-dialog'))
+const DeleteConfirmDialog = lazy(() => import('@features/truckload-delivery/components/delete-confirm-dialog'))
+const SignatureEditorDialog = lazy(() => import('@features/truckload-delivery/components/signature-editor-dialog'))
 const UpdateDispatchOrderFormDialog = lazy(
-	() => import('@/features/truckload-delivery/components/update-dispatch-order-form-dialog')
+	() => import('@features/truckload-delivery/components/update-dispatch-order-form-dialog')
 )
 const CreatePurchaseOrdersFormDialog = lazy(
-	() => import('@/features/truckload-delivery/components/create-purchase-orders-form-dialog')
+	() => import('@features/truckload-delivery/components/create-purchase-orders-form-dialog')
 )
 
 export const Route = createLazyFileRoute('/(features)/_layout/truckload-delivery')({

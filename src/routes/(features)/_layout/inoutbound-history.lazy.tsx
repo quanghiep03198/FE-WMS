@@ -1,7 +1,7 @@
-import { StockFlow } from '@/features/finished-goods/constants/enums'
 import { UserRole } from '@common/constants/enums'
 import { RoleGuard } from '@components/guards/role-guard'
 import { Div } from '@components/ui'
+import { StockFlow } from '@features/finished-goods/constants/enums'
 import DataSection from '@features/report/components/inoutbound-history/data-section'
 import PageHeader from '@features/report/components/inoutbound-history/header'
 import SearchForm from '@features/report/components/inoutbound-history/search-form'

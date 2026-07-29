@@ -1,5 +1,4 @@
 {
-	"routesDirectory": "./src/app",
 	"generatedRouteTree": "./src/route-tree.gen.ts",
 	"routeFileIgnorePrefix": "-",
 	"routeFileIgnorePattern": "((api|schema|const|worker|d|util).ts)|((api|schema|const|util).tsx)",

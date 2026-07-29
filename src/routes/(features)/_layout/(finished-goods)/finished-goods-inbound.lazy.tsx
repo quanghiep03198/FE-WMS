@@ -1,19 +1,19 @@
 import { UserRole } from '@common/constants/enums'
+import HostCompatibleGuard from '@components/guards/host-compatible-guard'
+import { RoleGuard } from '@components/guards/role-guard'
+import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
+import AlreadyScannedEpcsAlert from '@features/finished-goods/components/finished-goods-inbound/already-scanned-epcs-alert'
 import ScannedEpcCounter from '@features/finished-goods/components/finished-goods-inbound/epc-counter'
+import EpcListBox from '@features/finished-goods/components/finished-goods-inbound/epc-data-list'
 import InoutboundForm from '@features/finished-goods/components/finished-goods-inbound/inoutbound-form'
 import PageComposition from '@features/finished-goods/components/finished-goods-inbound/page-composition'
 import ScannerSettings from '@features/finished-goods/components/finished-goods-inbound/side-toolbar'
+import Toolbar from '@features/finished-goods/components/finished-goods-inbound/toolbar'
+import { PageProvider } from '@features/finished-goods/contexts/finished-goods-inbound/page-context'
 import { SocketProvider } from '@stores/socket.store'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import HostCompatibleGuard from '@components/guards/host-compatible-guard'
-import { RoleGuard } from '@components/guards/role-guard'
-import AlreadyScannedEpcsAlert from '@features/finished-goods/components/finished-goods-inbound/already-scanned-epcs-alert'
-import EpcListBox from '@features/finished-goods/components/finished-goods-inbound/epc-data-list'
-import { useBreadcrumbContext } from '../../../../contexts/breadcrumb-context'
-import { PageProvider } from '../../../../features/finished-goods/contexts/finished-goods-inbound/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(finished-goods)/finished-goods-inbound')({
 	component: Page
@@ -50,6 +50,7 @@ function Page() {
 										<EpcListBox />
 									</div>
 									<div className='flex flex-col gap-6'>
+										<Toolbar />
 										<ScannedEpcCounter />
 										<div className='block @[920px]/page-container:hidden'>
 											<EpcListBox />
