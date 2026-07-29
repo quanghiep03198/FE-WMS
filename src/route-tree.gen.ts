@@ -12,14 +12,14 @@ import { createFileRoute } from '@tanstack/react-router'
 
 // Import Routes
 
-import { Route as rootRoute } from './app/__root'
-import { Route as publicIndexImport } from './app/(public)/index'
-import { Route as publicRfidAgentImport } from './app/(public)/rfid-agent'
-import { Route as featuresLayoutImport } from './app/(features)/_layout'
-import { Route as authLoginImport } from './app/(auth)/login'
-import { Route as authAuthorizationImport } from './app/(auth)/authorization'
-import { Route as publicRfidAgentDocsImport } from './app/(public)/rfid-agent.docs'
-import { Route as featuresPreferencesLayoutImport } from './app/(features)/preferences/_layout'
+import { Route as rootRoute } from './routes/__root'
+import { Route as publicIndexImport } from './routes/(public)/index'
+import { Route as publicRfidAgentImport } from './routes/(public)/rfid-agent'
+import { Route as featuresLayoutImport } from './routes/(features)/_layout'
+import { Route as authLoginImport } from './routes/(auth)/login'
+import { Route as authAuthorizationImport } from './routes/(auth)/authorization'
+import { Route as publicRfidAgentDocsImport } from './routes/(public)/rfid-agent.docs'
+import { Route as featuresPreferencesLayoutImport } from './routes/(features)/preferences/_layout'
 
 // Create Virtual Routes
 
@@ -155,7 +155,7 @@ const featuresLayoutTruckloadDeliveryLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/truckload-delivery.lazy').then(
+      import('./routes/(features)/_layout/truckload-delivery.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -168,7 +168,7 @@ const featuresLayoutRfidDevicesManagementLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/rfid-devices-management.lazy').then(
+      import('./routes/(features)/_layout/rfid-devices-management.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -181,7 +181,7 @@ const featuresLayoutPurchaseOrderSeekingLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/purchase-order-seeking.lazy').then(
+      import('./routes/(features)/_layout/purchase-order-seeking.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -194,7 +194,7 @@ const featuresLayoutProductionInventoryLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/production-inventory.lazy').then(
+      import('./routes/(features)/_layout/production-inventory.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -207,7 +207,7 @@ const featuresLayoutPackingManifestLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/packing-manifest.lazy').then(
+      import('./routes/(features)/_layout/packing-manifest.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -220,7 +220,7 @@ const featuresLayoutOutboundReportLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/outbound-report.lazy').then(
+      import('./routes/(features)/_layout/outbound-report.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -233,7 +233,7 @@ const featuresLayoutInventoryAuditLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/inventory-audit.lazy').then(
+      import('./routes/(features)/_layout/inventory-audit.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -246,7 +246,7 @@ const featuresLayoutInoutboundHistoryLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/inoutbound-history.lazy').then(
+      import('./routes/(features)/_layout/inoutbound-history.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -259,7 +259,7 @@ const featuresLayoutInboundReportLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/inbound-report.lazy').then(
+      import('./routes/(features)/_layout/inbound-report.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -271,7 +271,7 @@ const featuresLayoutDashboardLazyRoute = featuresLayoutDashboardLazyImport
     getParentRoute: () => featuresLayoutRoute,
   } as any)
   .lazy(() =>
-    import('./app/(features)/_layout/dashboard.lazy').then((d) => d.Route),
+    import('./routes/(features)/_layout/dashboard.lazy').then((d) => d.Route),
   )
 
 const featuresLayoutCargoWeightCheckLazyRoute =
@@ -282,7 +282,7 @@ const featuresLayoutCargoWeightCheckLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/cargo-weight-check.lazy').then(
+      import('./routes/(features)/_layout/cargo-weight-check.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -306,7 +306,7 @@ const featuresPreferencesLayoutKeybindingsLazyRoute =
       getParentRoute: () => featuresPreferencesLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/preferences/_layout.keybindings.lazy').then(
+      import('./routes/(features)/preferences/_layout.keybindings.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -319,7 +319,7 @@ const featuresPreferencesLayoutAppearanceSettingsLazyRoute =
       getParentRoute: () => featuresPreferencesLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/preferences/_layout.appearance-settings.lazy').then(
+      import('./routes/(features)/preferences/_layout.appearance-settings.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -332,7 +332,7 @@ const featuresPreferencesLayoutAccountLazyRoute =
       getParentRoute: () => featuresPreferencesLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/preferences/_layout.account.lazy').then(
+      import('./routes/(features)/preferences/_layout.account.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -345,7 +345,7 @@ const featuresLayoutwarehouseWarehouseLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/(warehouse)/warehouse.lazy').then(
+      import('./routes/(features)/_layout/(warehouse)/warehouse.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -358,7 +358,7 @@ const featuresLayoutfinishedGoodsFinishedGoodsOutboundLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/(finished-goods)/finished-goods-outbound.lazy').then(
+      import('./routes/(features)/_layout/(finished-goods)/finished-goods-outbound.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -371,7 +371,7 @@ const featuresLayoutfinishedGoodsFinishedGoodsInboundLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/(finished-goods)/finished-goods-inbound.lazy').then(
+      import('./routes/(features)/_layout/(finished-goods)/finished-goods-inbound.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -384,7 +384,7 @@ const featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/(defective-goods)/defective-goods-outbound-report.lazy').then(
+      import('./routes/(features)/_layout/(defective-goods)/defective-goods-outbound-report.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -397,7 +397,7 @@ const featuresLayoutdefectiveGoodsDefectiveGoodsInventoryLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/(defective-goods)/defective-goods-inventory.lazy').then(
+      import('./routes/(features)/_layout/(defective-goods)/defective-goods-inventory.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -410,7 +410,7 @@ const featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/(defective-goods)/defective-goods-inoutbound.lazy').then(
+      import('./routes/(features)/_layout/(defective-goods)/defective-goods-inoutbound.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -423,7 +423,7 @@ const featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/(defective-goods)/defective-goods-inbound-report.lazy').then(
+      import('./routes/(features)/_layout/(defective-goods)/defective-goods-inbound-report.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -436,7 +436,7 @@ const featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/(defective-goods)/defective-goods-epc-combination.lazy').then(
+      import('./routes/(features)/_layout/(defective-goods)/defective-goods-epc-combination.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -449,7 +449,7 @@ const featuresLayoutadminAccessManagementLazyRoute =
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/(admin)/access-management.lazy').then(
+      import('./routes/(features)/_layout/(admin)/access-management.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -462,7 +462,7 @@ const featuresLayoutwarehouseWarehouseWarehouseNumLazyRoute =
       getParentRoute: () => featuresLayoutwarehouseWarehouseLazyRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout/(warehouse)/warehouse.$warehouseNum.lazy').then(
+      import('./routes/(features)/_layout/(warehouse)/warehouse.$warehouseNum.lazy').then(
         (d) => d.Route,
       ),
     )
