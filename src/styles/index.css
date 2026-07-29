@@ -13,6 +13,8 @@
 	strategy: class;
 }
 
+@custom-variant dark (&:is(.dark *));
+
 @custom-variant sm (@media (min-width: 360px) and (max-width: 599px));
 @custom-variant md (@media (min-width: 600px) and (max-width: 919px));
 @custom-variant lg (@media (min-width: 920px) and (max-width: 1365px));
