@@ -1,8 +1,8 @@
-import axiosInstance from '@/configs/axios.config'
-import type { UpdatePasswordFormValues } from '@/features/account/schemas/update-password.schema'
-import type { UpdateProfileFormValues } from '@/features/account/schemas/update-profile.schema'
-import type { IUser } from '@/features/auth/types'
-import type { CreateUserFormValues, UpdateUserFormValues } from '@/features/user/schemas/user.schema'
+import axiosInstance from '@configs/axios.config'
+import type { UpdatePasswordFormValues } from '@features/account/schemas/update-password.schema'
+import type { UpdateProfileFormValues } from '@features/account/schemas/update-profile.schema'
+import type { IUser } from '@features/auth/types'
+import type { CreateUserFormValues, UpdateUserFormValues } from '@features/user/schemas/user.schema'
 import type { AxiosRequestConfig } from 'axios'
 
 export class UserService {

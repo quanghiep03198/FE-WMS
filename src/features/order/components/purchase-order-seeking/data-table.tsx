@@ -1,6 +1,6 @@
-import type { IPurchaseOrderDetail } from '@common/types/entities'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '@components/ui'
+import type { IPurchaseOrderDetail } from '@features/order/types'
 import { groupBy, orderBy, sortBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

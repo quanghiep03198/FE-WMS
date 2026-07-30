@@ -1,7 +1,7 @@
-import type { IOutboundHistory } from '@common/types/entities'
 import { coalesce } from '@common/utils/common'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Div, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@components/ui'
+import type { IOutboundHistory } from '@features/report/types'
 import { groupBy, orderBy, sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

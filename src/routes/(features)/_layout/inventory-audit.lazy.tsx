@@ -1,8 +1,10 @@
-import { SocketProvider } from '@/stores/socket.store'
 import { UserRole } from '@common/constants/enums'
 import HostCompatibleGuard from '@components/guards/host-compatible-guard'
 import { RoleGuard } from '@components/guards/role-guard'
 import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
+import { MonthPickerFilter } from '@features/inventory/components/inventory-audit/month-picker-filter'
+import { InventoryReportMasterTable } from '@features/inventory/components/inventory-audit/report-master-table'
+import { SocketProvider } from '@stores/socket.store'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -14,8 +16,6 @@ import {
 	PageTitle,
 	PageWrapper
 } from '../../../components/shared/page'
-import { MonthPickerFilter } from '../../../features/inventory/components/inventory-audit/month-picker-filter'
-import { InventoryReportMasterTable } from '../../../features/inventory/components/inventory-audit/report-master-table'
 
 export const Route = createLazyFileRoute('/(features)/_layout/inventory-audit')({
 	component: Page

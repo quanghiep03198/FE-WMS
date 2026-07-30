@@ -53,3 +53,13 @@ export type FilterDeletedEpcParams = {
 	'scanned:eq'?: boolean
 	'scannable:eq'?: boolean
 }
+export interface IArchivedFilterFeature {
+	factory_shoes_style: string
+	colorways: Array<{
+		color_sn: string
+		batches: Array<{
+			mo_no: string
+			sizes: Array<string>
+		}>
+	}>
+}

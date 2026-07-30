@@ -1,5 +1,5 @@
-import type { IOutboundReport } from '@common/types/entities'
 import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui'
+import type { IOutboundReport } from '@features/report/types'
 import { useTranslation } from 'react-i18next'
 import ReportDetailFooter from './report-detail-footer'
 import { ReportDetailRow } from './report-detail-row'

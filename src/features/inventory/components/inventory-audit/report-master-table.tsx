@@ -1,5 +1,4 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
-import type { IMonthlyInventoryAudit } from '@common/types/entities'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Badge, Button, DataTable, Div, Icon, Tooltip, Typography } from '@components/ui'
 import EllipsisList from '@components/ui/@custom/ellipsis-list'
@@ -12,6 +11,7 @@ import { ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@components/ui
 import { useTableContext } from '@components/ui/@react-table/context/table.context'
 import type { RenderSubComponentProps } from '@components/ui/@react-table/types'
 import { InventoryService } from '@features/inventory/services/inventory.service'
+import type { IMonthlyInventoryAudit } from '@features/inventory/types'
 import useAuth from '@hooks/use-auth'
 import useQueryParams from '@hooks/use-query-params'
 import { useQueryClient } from '@tanstack/react-query'

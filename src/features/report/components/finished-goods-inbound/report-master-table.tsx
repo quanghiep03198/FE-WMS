@@ -1,11 +1,11 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
-import type { IInboundReport } from '@common/types/entities'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Badge, Button, DataTable, Icon, Tooltip } from '@components/ui'
 import EllipsisList from '@components/ui/@custom/ellipsis-list'
 import TableCellText from '@components/ui/@react-table/components/table-cell-text'
 import { ROW_EXPANSION_COLUMN_ID } from '@components/ui/@react-table/constants'
 import type { RenderSubComponent } from '@components/ui/@react-table/types'
+import type { IInboundReport } from '@features/report/types'
 import useMediaQuery from '@hooks/use-media-query'
 import useQueryParams from '@hooks/use-query-params'
 import type { Table as TTable } from '@tanstack/react-table'
@@ -216,7 +216,7 @@ const InboundReportMasterTable: React.FC = () => {
 			getRowId={(originalRow: IInboundReport) => originalRow.mo_no}
 			renderSubComponent={
 				(({ row }) => {
-					return <SizeTable data={row.original?.size_data} />
+					return <SizeTable data={row.original?.variation_details} />
 				}) satisfies RenderSubComponent<IInboundReport>
 			}
 			toolbarProps={{

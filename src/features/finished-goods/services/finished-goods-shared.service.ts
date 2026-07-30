@@ -1,10 +1,15 @@
-import type { IArchivedFilterFeature } from '@/common/types/entities'
 import { RequestHeaders } from '@common/constants/enums'
 import axiosInstance from '@configs/axios.config'
 import type { AxiosRequestConfig } from 'axios'
 import { omitBy } from 'lodash-es'
 import type { StockFlow } from '../constants/enums'
-import type { FilterDeletedEpcParams, IElectronicProductCode, OrderItem, SearchEpcParams } from '../types'
+import type {
+	FilterDeletedEpcParams,
+	IArchivedFilterFeature,
+	IElectronicProductCode,
+	OrderItem,
+	SearchEpcParams
+} from '../types'
 
 export class FinishedGoodsSharedService {
 	static async getPaginatedScanningEpcs(

@@ -1,4 +1,3 @@
-import { useSocketContext } from '@/stores/socket.store'
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import { cn } from '@common/utils/cn'
 import { Json } from '@common/utils/json'
@@ -18,6 +17,7 @@ import {
 import { StatusIndicator } from '@components/ui/@custom/status-indicator'
 import { Typewriter } from '@components/ui/@custom/type-writter'
 import { useEffectOnce } from '@hooks/use-effect-once'
+import { useSocketContext } from '@stores/socket.store'
 import { hasIn } from 'lodash-es'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'

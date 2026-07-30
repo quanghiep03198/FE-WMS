@@ -1,13 +1,13 @@
-import axiosInstance from '@/configs/axios.config'
 import { RequestHeaders } from '@common/constants/enums'
+import axiosInstance from '@configs/axios.config'
+import type { AxiosRequestConfig } from 'axios'
 import type {
 	IInboundInventory,
 	IMonthlyInventoryAudit,
 	IOutboundEstimation,
 	IProductionInventoryFeature,
 	IProductSizeInventory
-} from '@common/types/entities'
-import type { AxiosRequestConfig } from 'axios'
+} from '../types'
 
 export class InventoryService {
 	static async getInventoryAuditReport(params: { 'month:eq': string }) {

@@ -1,7 +1,7 @@
-import type { SizeQuantity } from '@common/types/entities'
 import { Table, TableCaption, Typography } from '@components/ui'
 import { fuzzyFilter } from '@components/ui/@react-table/utils'
 import type { StockFlow } from '@features/finished-goods/constants/enums'
+import type { SizeQuantity } from '@features/inventory/types'
 import useScrollToFn from '@hooks/use-scroll-fn'
 import type { ColumnDef, ColumnFiltersState, ExpandedState, Row, SortingState } from '@tanstack/react-table'
 import {

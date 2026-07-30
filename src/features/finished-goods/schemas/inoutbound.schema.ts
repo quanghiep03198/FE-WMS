@@ -8,7 +8,8 @@ export const outboundSchema = object({
 
 export const stockVariationSchema = outboundSchema.extend({
 	warehouse_num: string().trim().nonempty({ message: 'ns_validation:required' }),
-	storage: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+	storage_num: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+	storage_name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	dept_code: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	dept_name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })
 })

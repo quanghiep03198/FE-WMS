@@ -1,4 +1,4 @@
-import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '@/features/defective-goods/constants/enums'
+import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '@features/defective-goods/constants/enums'
 import { isEmpty, isNil } from 'lodash-es'
 import { array, enum as enums, number, object, string, type infer as Infer } from 'zod'
 

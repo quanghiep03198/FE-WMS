@@ -1,15 +1,15 @@
 // import { CreateDefectiveGoodsFormValues } from '@/app/(features)/_layout.b-grade-goods-inbound/-schemas/defective-goods.schema'
-import axiosInstance from '@/configs/axios.config'
+import { RequestHeaders } from '@common/constants/enums'
+import axiosInstance from '@configs/axios.config'
 import type {
 	DefectiveGoodsInboundFormValues,
 	DefectiveGoodsOutboundFormValues
-} from '@/features/defective-goods/schemas/defective-goods-inoutbound.schema'
+} from '@features/defective-goods/schemas/defective-goods-inoutbound.schema'
 import type {
 	CreateDefectiveGoodsFormValues,
 	DefectiveGoodQueryParams,
 	UpdateDefectiveGoodsFormValues
-} from '@/features/defective-goods/schemas/defective-goods.schema'
-import { RequestHeaders } from '@common/constants/enums'
+} from '@features/defective-goods/schemas/defective-goods.schema'
 import { omitBy } from 'lodash-es'
 import type {
 	IDefectiveGoods,

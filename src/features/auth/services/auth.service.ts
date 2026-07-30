@@ -1,10 +1,10 @@
-import type { LoginFormValues } from '@/features/auth/schemas/login.schema'
+import type { LoginFormValues } from '@features/auth/schemas/login.schema'
 // import { destroySharedSocket } from '@common/hooks/use-socket-io'
-import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/integrations/tanstack-query'
+import axiosInstance from '@configs/axios.config'
 
-import type { IAuthState } from '@/stores/auth.store'
-import { useAuthStore } from '@/stores/auth.store'
+import type { IAuthState } from '@stores/auth.store'
+import { useAuthStore } from '@stores/auth.store'
 import type { GenericAbortSignal } from 'axios'
 
 export type RefreshTokenResponse = ResponseBody<{ newAccessToken: string; newRefreshToken: string }>

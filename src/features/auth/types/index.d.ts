@@ -1,5 +1,5 @@
-import type { FactoryCode, UserRole } from '@/common/constants/enums'
-import type { IBaseEntity } from '@/common/types/entities'
+import type { FactoryCode, UserRole } from '@common/constants/enums'
+import type { IBaseEntity } from '@common/types/entities'
 
 export interface IUser extends IBaseEntity {
 	username: string

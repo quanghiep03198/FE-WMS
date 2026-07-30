@@ -1,5 +1,5 @@
-import type { IconProps } from '@/components/ui'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import type { IconProps } from '@components/ui'
 import type { ResourceKeys } from 'i18next'
 import { isNil } from 'lodash-es'
 

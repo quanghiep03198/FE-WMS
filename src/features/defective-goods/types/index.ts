@@ -1,4 +1,4 @@
-import type { IBaseEntity } from '@/common/types/entities'
+import type { IBaseEntity } from '@common/types/entities'
 import type { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../constants/enums'
 
 export interface IDefectiveGoods extends IBaseEntity {

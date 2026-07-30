@@ -1,7 +1,7 @@
-import type { IMonthlyInventoryAudit } from '@common/types/entities'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui'
 import Skeleton from '@components/ui/@custom/skeleton'
+import type { IMonthlyInventoryAudit } from '@features/inventory/types'
 import { useTranslation } from 'react-i18next'
 
 const DataTableSummary: React.FC<{ data: IMonthlyInventoryAudit[]; isLoading: boolean }> = ({ data, isLoading }) => {

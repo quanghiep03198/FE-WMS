@@ -1,4 +1,4 @@
-import { AppConfigs } from '@/configs/app.config'
+import { AppConfigs } from '@configs/app.config'
 import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import type { QueryKey } from '@tanstack/react-query'

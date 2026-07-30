@@ -1,4 +1,4 @@
-import type { RecordStatus } from '@/common/constants/enums'
+import type { RecordStatus } from '@common/constants/enums'
 
 export interface IRFIDReaderDevice {
 	device_name_vi: string | null

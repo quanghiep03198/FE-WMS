@@ -1,5 +1,5 @@
-import axiosInstance from '@/configs/axios.config'
-import type { IEmployee } from '@/features/employee/types'
+import axiosInstance from '@configs/axios.config'
+import type { IEmployee } from '@features/employee/types'
 import type { AxiosRequestConfig } from 'axios'
 
 export class EmployeeService {

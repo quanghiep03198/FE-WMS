@@ -59,7 +59,8 @@ const InoutboundForm: React.FC = () => {
 			rfid_status: FinishedGoodsAction.IMPORT,
 			rfid_use: FinishedGoodsOutboundReason.NORMAL_IMPORT,
 			warehouse_num: '',
-			storage: '',
+			storage_num: '',
+			storage_name: '',
 			dept_code: '',
 			dept_name: ''
 		},
@@ -87,7 +88,8 @@ const InoutboundForm: React.FC = () => {
 			dept_code: '',
 			dept_name: '',
 			warehouse_num: '',
-			storage: ''
+			storage_num: '',
+			storage_name: ''
 		})
 	})
 
@@ -288,7 +290,7 @@ const InoutboundForm: React.FC = () => {
 								</Div>
 								<Div className='col-span-1 sm:col-span-full'>
 									<ComboboxFieldControl
-										name='storage'
+										name='storage_num'
 										datalist={storageAreaOptions}
 										labelField='storage_name'
 										valueField='storage_num'
@@ -296,6 +298,12 @@ const InoutboundForm: React.FC = () => {
 										disabled={warehouseOptions?.length === 0}
 										label={t('ns_inoutbound:labels.io_storage_location')}
 										template={WarehouseComboboxSelection}
+										onSelect={(value) => {
+											form.setValue(
+												'storage_name',
+												storageAreaOptions.find((item) => item.storage_num === value)?.storage_name
+											)
+										}}
 									/>
 								</Div>
 							</Fragment>

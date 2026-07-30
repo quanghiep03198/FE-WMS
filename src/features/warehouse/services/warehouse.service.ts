@@ -1,7 +1,7 @@
-import type { IDepartment } from '@/common/types'
-import axiosInstance from '@/configs/axios.config'
-import type { PartialWarehouseFormValue, WarehouseFormValue } from '@/features/warehouse/schemas/warehouse.schema'
-import type { IWarehouse } from '@/features/warehouse/types'
+import type { IDepartment } from '@common/types'
+import axiosInstance from '@configs/axios.config'
+import type { PartialWarehouseFormValue, WarehouseFormValue } from '@features/warehouse/schemas/warehouse.schema'
+import type { IWarehouse } from '@features/warehouse/types'
 
 export class WarehouseService {
 	static async getWarehouseList() {

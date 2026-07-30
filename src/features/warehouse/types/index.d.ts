@@ -1,6 +1,6 @@
 import type { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
 import type { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
-import type { IBaseEntity } from '@/common/types/entities'
+import type { IBaseEntity } from '@common/types/entities'
 
 export interface IWarehouse extends IBaseEntity {
 	company_code: string

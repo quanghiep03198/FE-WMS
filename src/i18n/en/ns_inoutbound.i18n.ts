@@ -1,5 +1,5 @@
-import { DefectiveGoodsSource } from '@/features/defective-goods/constants/enums'
 import { OrderStatus } from '@common/constants/enums'
+import { DefectiveGoodsSource } from '@features/defective-goods/constants/enums'
 
 export default {
 	action_types: {

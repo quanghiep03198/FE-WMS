@@ -1,5 +1,5 @@
-import axiosInstance from '@/configs/axios.config'
-import type { ITenancy } from '@/features/tenancy/types'
+import axiosInstance from '@configs/axios.config'
+import type { ITenancy } from '@features/tenancy/types'
 
 export class TenancyService {
 	static async getAllTenants() {

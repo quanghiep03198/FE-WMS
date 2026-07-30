@@ -1,4 +1,4 @@
-import axiosInstance from '@/configs/axios.config'
+import axiosInstance from '@configs/axios.config'
 import type { IDepartment } from '../types'
 
 export class DepartmentService {
