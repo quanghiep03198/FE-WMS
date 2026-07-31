@@ -1,4 +1,4 @@
-import { IBaseEntity } from '@common/types/entities'
+import type { IBaseEntity } from '@common/types/entities'
 
 export interface IPurchaseOrderDetail {
 	po: string

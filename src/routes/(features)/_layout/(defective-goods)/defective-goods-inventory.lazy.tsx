@@ -1,5 +1,5 @@
-import { RoleGuard } from '@components/guards/role-guard'
 import { UserRole } from '@common/constants/enums'
+import { RoleGuard } from '@components/guards/role-guard'
 import { PageAction, PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '@components/shared/page'
 import DownloadExcelButton from '@features/defective-goods/components/defective-goods-inventory/download-excel-button'
 import DefectiveGoodsInventoryTable from '@features/defective-goods/components/defective-goods-inventory/report-table'

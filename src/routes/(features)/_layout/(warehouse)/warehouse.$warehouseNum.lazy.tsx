@@ -1,5 +1,4 @@
 // #region Modules
-import { WarehouseService } from '@features/warehouse/services/warehouse.service'
 import { UserRole } from '@common/constants/enums'
 import { RoleGuard } from '@components/guards/role-guard'
 import { PageSeparator, PageWrapper } from '@components/shared/page'
@@ -10,6 +9,7 @@ import WarehouseStorageFormDialog from '@features/warehouse/components/storage-l
 import { PageProvider } from '@features/warehouse/contexts/page-context'
 import { WarehouseQueryKeys } from '@features/warehouse/hooks/use-warehouse-request'
 import { getWarehouseStorageOptions } from '@features/warehouse/hooks/use-warehouse-storage-request'
+import { WarehouseService } from '@features/warehouse/services/warehouse.service'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'

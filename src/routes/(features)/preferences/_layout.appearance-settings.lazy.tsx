@@ -1,5 +1,5 @@
-import { Div } from '@components/ui'
 import { PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '@components/shared/page'
+import { Div } from '@components/ui'
 import FontSelect from '@features/appearence-settings/components/font-select'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'

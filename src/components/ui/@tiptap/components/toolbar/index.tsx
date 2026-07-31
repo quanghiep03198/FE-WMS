@@ -1,7 +1,7 @@
 'use no memo'
 
-import { Button, Div, Icon, Separator, Tooltip } from '@components/ui'
 import { cn } from '@common/utils/cn'
+import { Button, Div, Icon, Separator, Tooltip } from '@components/ui'
 import { useTranslation } from 'react-i18next'
 import { useEditorContext } from '../../context/editor-context'
 import { AlignmentDropdownMenu } from './toolbar-alignment-dropdown'

@@ -1,5 +1,5 @@
 import axiosInstance from '@configs/axios.config'
-import { StockVariationPayload } from '../schemas/inoutbound.schema'
+import type { StockVariationPayload } from '../schemas/inoutbound.schema'
 import type { OutboundFormValues } from '../schemas/outbound.schema'
 
 export class FinishedGoodsStockService {

@@ -1,4 +1,3 @@
-import { StockFlow } from '@features/finished-goods/constants/enums'
 import type { IconProps } from '@components/ui'
 import {
 	Div,
@@ -12,6 +11,7 @@ import {
 	Typography
 } from '@components/ui'
 import { Typewriter } from '@components/ui/@custom/type-writter'
+import { StockFlow } from '@features/finished-goods/constants/enums'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
