@@ -100,7 +100,7 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 				<CaretSortIcon className='absolute top-1/2 right-3 ml-auto h-4 w-4 -translate-y-1/2 opacity-50 peer-data-[icon=false]:hidden' />
 			</PopoverTrigger>
 			<PopoverContent
-				className='max-h-52 w-(--radix-popover-trigger-width) overflow-auto p-1'
+				className='w-radix-popover max-h-52 overflow-auto p-1'
 				onOpenAutoFocus={(e) => e.preventDefault()}>
 				{loading ? (
 					<Div className='flex items-center justify-center p-10 text-center'>

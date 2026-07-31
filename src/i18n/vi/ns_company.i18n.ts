@@ -1,4 +1,5 @@
 export default {
+	assembly_line: 'Thành hình {{name}}',
 	factory: 'Nhà máy',
 	company: 'Nhà máy',
 	department: 'Bộ phận',

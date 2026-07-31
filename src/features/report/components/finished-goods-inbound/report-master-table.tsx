@@ -11,7 +11,7 @@ import useQueryParams from '@hooks/use-query-params'
 import type { Table as TTable } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { isNil, split } from 'lodash-es'
+import { isNil } from 'lodash-es'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import AutoRefreshToggle from '../../../../components/shared/auto-refresh-toggle'
@@ -116,7 +116,7 @@ const InboundReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				cell: TableCellText
 			}),
-			columnHelper.accessor('shaping_dept_name', {
+			columnHelper.accessor('assembly_lines', {
 				header: t('ns_erp:fields.shaping_dept_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -125,9 +125,7 @@ const InboundReportMasterTable: React.FC = () => {
 					return (
 						<EllipsisList
 							threshhold={3}
-							data={split(getValue(), ',')
-								.filter((item) => !!item)
-								.sort((a, b) => a.localeCompare(b))}
+							data={getValue().map((name) => t('ns_company:assembly_line', { name, defaultValue: name }))}
 							template={({ data }) => (
 								<Badge variant='outline' className='max-h-fit font-normal whitespace-nowrap'>
 									{data}
@@ -137,7 +135,7 @@ const InboundReportMasterTable: React.FC = () => {
 					)
 				}
 			}),
-			columnHelper.accessor('storage', {
+			columnHelper.accessor('storage_locations', {
 				header: t('ns_warehouse:fields.storage_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -146,9 +144,7 @@ const InboundReportMasterTable: React.FC = () => {
 					return (
 						<EllipsisList
 							threshhold={3}
-							data={split(getValue(), ',')
-								.filter((item) => !!item)
-								.sort((a, b) => a.localeCompare(b))}
+							data={getValue()}
 							template={({ data }) => (
 								<Badge variant='secondary' className='whitespace-nowrap'>
 									{data.trim()}

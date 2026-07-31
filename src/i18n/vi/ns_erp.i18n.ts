@@ -79,6 +79,7 @@ export default {
 		moist_container: 'Container bị ẩm',
 		warehouse_officer_signature: 'Chữ ký KTP',
 		security_guard_signature: 'Chữ ký Bảo Vệ {{number}}',
+		recalled_qty: 'Số Lượng Đã Thu Hồi', // Recalled Quantity
 		required_date: 'Ngày Yêu Cầu', // Required Date
 		returned_qty: 'Số Lượng Đã Trả Hàng', // Returned Quantity
 		decentralized_po: 'PO phân tách',

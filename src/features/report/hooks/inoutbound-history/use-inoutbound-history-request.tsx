@@ -20,7 +20,8 @@ export const useGetInboundHistoryQuery = () => {
 		queryFn: async () =>
 			await axiosInstance.get<void, ResponseBody<IInboundHistory>>(`/report/inbound-history/${searchParams.order}`, {
 				headers: {
-					[RequestHeaders.TENANT_ID]: currentTenant?.id
+					[RequestHeaders.TENANT_ID]: currentTenant?.id,
+					[RequestHeaders.API_VERSION]: '2'
 				}
 			}),
 		enabled: searchParams.type === StockFlow.INBOUND,

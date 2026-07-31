@@ -52,7 +52,7 @@ const NavSidebar: React.FC = () => {
 	const { setOpen } = useSidebar()
 
 	return (
-		<Sidebar variant='sidebar' side='left' collapsible='icon'>
+		<Sidebar variant='sidebar' side='left' collapsible='icon' className='max-w-96'>
 			<SidebarHeader className='overflow-hidden'>
 				<Link to='/dashboard' preload='intent' className='max-w-full'>
 					<AppLogo />
@@ -83,7 +83,7 @@ const NavSidebar: React.FC = () => {
 													setOpen(true)
 												}}>
 												{item.icon && (
-													<Icon name={item.icon} size={18} className='size-[18px]!' strokeWidth={2} />
+													<Icon name={item.icon} size={18} className='size-4.5!' strokeWidth={2} />
 												)}
 												<SidebarMenuTitle data-indice={index + 1}>
 													{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
@@ -194,11 +194,9 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10 '
 					}}>
-					<Icon name={icon} size={18} className='size-[18px]!' />
+					<Icon name={icon} size={18} className='size-4.5!' />
 					<SidebarMenuTitle data-indice={indice}>{t(title, { defaultValue: title })}</SidebarMenuTitle>
-					{!isLinkActive && (
-						<Icon name='Lock' size={14} className='stroke-muted-foreground ml-auto size-[14px]!' />
-					)}
+					{!isLinkActive && <Icon name='Lock' size={14} className='stroke-muted-foreground ml-auto size-3.5!' />}
 				</Link>
 			</SidebarMenuButton>
 		</SidebarMenuItem>
@@ -291,10 +289,7 @@ const SwitchUserCompany: React.FC = () => {
 					)}
 				</Button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent
-				className='w-(--radix-dropdown-menu-trigger-width) min-w-60'
-				side={open ? 'top' : 'right'}
-				align='end'>
+			<DropdownMenuContent className='w-radix-dropdown-menu min-w-60' side={open ? 'top' : 'right'} align='end'>
 				<DropdownMenuLabel>{t('ns_company:factory')}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{Array.isArray(user?.authorized_factory_codes) &&

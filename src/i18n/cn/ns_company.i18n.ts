@@ -1,4 +1,5 @@
 export default {
+	assembly_line: '成型{{name}}',
 	factory: '廠別',
 	company_code: '廠別',
 	department: '部門',

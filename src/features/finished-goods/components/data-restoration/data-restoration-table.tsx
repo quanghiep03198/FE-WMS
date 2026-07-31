@@ -58,11 +58,10 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 	} = useGetDeletedEpcQuery(dataType, {
 		...persistentFormValues,
 		...(dataType === StockFlow.INBOUND && {
-			scannable:
-				persistentFormValues.scanned === 'all' ? null : persistentFormValues.scannable === ScanCapability.SCANNABLE
+			scannable: persistentFormValues.scannable === ScanCapability.SCANNABLE
 		}),
 		...(dataType === StockFlow.OUTBOUND && {
-			scanned: persistentFormValues.scanned === 'all' ? null : persistentFormValues.scanned === ScannedStatus.SCANNED
+			scanned: persistentFormValues.scanned === ScannedStatus.SCANNED
 		})
 	} as SearchFormValues & {
 		limit: number

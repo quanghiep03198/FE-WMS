@@ -150,11 +150,7 @@ const OrderDetailTable: React.FC = () => {
 						<Icon name='ArrowUpRight' />
 					</DialogTrigger>
 				</HoverCardTrigger>
-				<HoverCardContent
-					side='top'
-					align='start'
-					sideOffset={8}
-					className='w-(--radix-hover-card-trigger-width) text-pretty'>
+				<HoverCardContent side='top' align='start' sideOffset={8} className='w-radix-hover-card text-pretty'>
 					<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 				</HoverCardContent>
 			</HoverCard>

@@ -98,6 +98,7 @@ export default {
 		factory_shoes_style: '工廠形體',
 		sno_car_number: '車號',
 		container_number: '货柜号',
+		recalled_qty: '已回收數量',
 		ri_type: '配件类型',
 		sno_date: '驗收日期',
 		sno_location: '存放位置',

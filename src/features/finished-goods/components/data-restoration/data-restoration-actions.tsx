@@ -11,10 +11,10 @@ type RestorationDataActionsProps = {
 	stockFlow: StockFlow
 }
 
-const RestorationDataActions: React.FC<RestorationDataActionsProps> = () => {
+const RestorationDataActions: React.FC<RestorationDataActionsProps> = ({ stockFlow }) => {
 	const { t } = useTranslation()
 	const { selectedItems, removeAllItemsFromSet } = useDataRestorationContext('selectedItems', 'removeAllItemsFromSet')
-	const { mutateAsync, isPending, isError } = useRestoreDeletedEpcsMutation()
+	const { mutateAsync, isPending, isError } = useRestoreDeletedEpcsMutation(stockFlow)
 
 	const handleRestoreArchivedEpcs = async () => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))

@@ -57,7 +57,7 @@ const MonthPicker: React.FC<MonthCalendarProps> = (props) => {
 					</span>
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className='w-(--radix-popover-trigger-width) space-y-4'>
+			<PopoverContent className='w-radix-popover space-y-4'>
 				<MonthCalendar {...props} />
 			</PopoverContent>
 		</Popover>

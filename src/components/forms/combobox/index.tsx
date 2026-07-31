@@ -132,7 +132,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 										</Button>
 									</FormControl>
 								</PopoverTrigger>
-								<PopoverContent className='w-(--radix-popover-trigger-width) p-0' {...popoverContentProps}>
+								<PopoverContent className='w-radix-popover p-0' {...popoverContentProps}>
 									<Command value={field.value} shouldFilter={shouldFilter}>
 										<CommandInput
 											value={searchTerm ?? ''}

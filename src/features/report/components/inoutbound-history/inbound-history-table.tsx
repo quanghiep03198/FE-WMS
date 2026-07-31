@@ -3,7 +3,6 @@ import formatIntlNumber from '@common/utils/format-intl-number'
 import { NestedCell, NestedCellHead, NestedColumn, NestedTable } from '@components/shared/horizontal-nested-table'
 import { Div, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@components/ui'
 import type { IInboundHistory } from '@features/report/types'
-import { groupBy, orderBy, sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundHistoryQuery } from '../../hooks/inoutbound-history/use-inoutbound-history-request'
@@ -28,28 +27,23 @@ const InboundHistoryTable: React.FC = () => {
 				accessorKey: 'factory_shoes_style',
 				meta: { align: 'left' }
 			},
-			{
-				header: t('ns_erp:fields.cust_shoes_style'),
-				accessorKey: 'cust_shoes_style',
-				meta: { align: 'left' },
-				cell: (value: string) => {
-					if (!value) return t('ns_common:titles.unknown')
-					return value
-						.split('/')
-						.map((part) => part.trim())
-						.join('/')
-				}
-			},
-			{ header: t('ns_erp:fields.color_sn'), accessorKey: 'color', meta: { align: 'left' } },
+
+			{ header: t('ns_erp:fields.color_sn'), accessorKey: 'color_sn', meta: { align: 'left' } },
 			{
 				header: t('ns_erp:fields.order_qty'),
-				accessorKey: 'mo_qty',
+				accessorKey: 'total_target_qty',
 				meta: { align: 'left' },
 				cell: (value) => formatIntlNumber(value)
 			},
 			{
 				header: t('ns_erp:fields.accumulated_qty'),
 				accessorKey: 'accumulated_inbound_qty',
+				meta: { align: 'left' },
+				cell: (value) => formatIntlNumber(value)
+			},
+			{
+				header: t('ns_erp:fields.recalled_qty'),
+				accessorKey: 'recalled_qty',
 				meta: { align: 'left' },
 				cell: (value) => formatIntlNumber(value)
 			},
@@ -68,18 +62,6 @@ const InboundHistoryTable: React.FC = () => {
 		[i18n.language]
 	)
 
-	const inboundHistoryByDate = useMemo(() => {
-		if (!data) return []
-		return Object.entries(
-			groupBy(orderBy(data.daily_inbound_history, 'inbound_date', 'desc'), (item) => item.inbound_date)
-		)
-	}, [data])
-
-	const inboundHistoryBySize = useMemo(() => {
-		if (!data) return []
-		return orderBy(data.inbound_history_by_size, 'size_numcode', 'asc')
-	}, [data])
-
 	if (isLoading)
 		return (
 			<Div className='text-muted-foreground grid h-20 w-full place-items-center text-center'>
@@ -90,9 +72,9 @@ const InboundHistoryTable: React.FC = () => {
 	if (!data) return <EmptyHistory />
 
 	return (
-		<Div className='scrollbar-track-accent/50 xxl:max-h-[65vh] @container relative max-h-[600px] overflow-auto rounded-lg border'>
+		<Div className='scrollbar-track-accent/50 xxl:max-h-[65vh] @container relative max-h-150 overflow-auto rounded-lg border'>
 			<Table
-				className='table-fixed [&_span]:line-clamp-1'
+				className='table-fixed [--column-width:200px] [&_span]:line-clamp-1'
 				style={{ '--column-width': '200px' } as React.CSSProperties}>
 				<TableHeader className='sticky top-0 z-20'>
 					<TableRow>
@@ -100,7 +82,7 @@ const InboundHistoryTable: React.FC = () => {
 							<TableHead
 								key={column.accessorKey}
 								title={column.header}
-								className='bg-table-row-active! text-table-head-foreground w-(--column-width) capitalize first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+								className='bg-table-row-active! text-table-head-foreground w-[var(--column-width)] capitalize first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>{column.header}</span>
 							</TableHead>
@@ -110,7 +92,7 @@ const InboundHistoryTable: React.FC = () => {
 						{columns.map((column) => (
 							<TableHead
 								key={column.accessorKey}
-								className='text-foreground w-(--column-width) font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+								className='text-foreground w-[var(--column-width)] font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>
 									{typeof column.cell === 'function'
@@ -132,32 +114,48 @@ const InboundHistoryTable: React.FC = () => {
 								{t('ns_erp:fields.daily_inbound_qty')}
 							</span>
 						</TableHead>
+
 						<TableHead align='left' className='sticky! right-0 z-10'>
 							<span>{t('ns_common:common_fields.total')}</span>
 						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{inboundHistoryByDate.length > 0 ? (
-						inboundHistoryByDate.map(([date, history]) => {
-							const totalQty = history.reduce((acc, curr) => acc + coalesce(curr?.qty, 0), 0)
+					{data.daily_inbound_history.length > 0 ? (
+						data.daily_inbound_history.map((item) => {
+							const totalQty = Object.values(item.inventory_variation).reduce(
+								(acc, curr) =>
+									acc +
+									coalesce(curr?.stocked_in_qty, 0) -
+									coalesce(curr?.total_recall_tx, 0) +
+									coalesce(curr?.total_return_tx, 0),
+								0
+							)
 							return (
-								<TableRow key={date}>
+								<TableRow key={item.date}>
 									<TableCell
 										align='left'
 										colSpan={1}
 										className='sticky left-0 z-10'
 										style={{ boxShadow: '1px 0px var(--border)' }}>
-										<span>{date}</span>
+										<span>{item.date}</span>
 									</TableCell>
 									<TableCell colSpan={7} className='p-0'>
 										<NestedTable>
-											{sortBy(history, 'size_numcode').map((item) => (
-												<NestedColumn key={item.size_numcode} className='*:h-9'>
-													<NestedCellHead>{item.size_numcode}</NestedCellHead>
-													<NestedCell>{formatIntlNumber(item?.qty)}</NestedCell>
-												</NestedColumn>
-											))}
+											{Object.entries(item.inventory_variation)
+												.sort((a, b) => a[0].localeCompare(b[0]))
+												.map(([size, variation]) => (
+													<NestedColumn key={size} className='*:h-9'>
+														<NestedCellHead>{size}</NestedCellHead>
+														<NestedCell>
+															{formatIntlNumber(
+																variation?.stocked_in_qty -
+																	variation?.total_recall_tx +
+																	variation?.total_return_tx
+															)}
+														</NestedCell>
+													</NestedColumn>
+												))}
 										</NestedTable>
 									</TableCell>
 									<TableCell colSpan={1} align='left' className='sticky! right-0 z-10 font-medium'>
@@ -190,7 +188,7 @@ const InboundHistoryTable: React.FC = () => {
 					<TableRow>
 						<TableCell colSpan={9} align='left' className='border-t p-0 font-normal'>
 							<NestedTable className='w-full'>
-								<NestedColumn className='sticky left-0 z-20 min-w-(--column-width) shadow-[1px_0px_var(--border)] *:h-9 *:capitalize'>
+								<NestedColumn className='sticky left-0 z-20 min-w-[var(--column-width)] shadow-[1px_0px_var(--border)] *:h-9 *:capitalize'>
 									<NestedCellHead>Size</NestedCellHead>
 									<NestedCellHead>
 										<span>{t('ns_erp:fields.mo_size_qty')}</span>
@@ -199,19 +197,29 @@ const InboundHistoryTable: React.FC = () => {
 										<span>{t('ns_erp:fields.inbound_qty')}</span>
 									</NestedCellHead>
 									<NestedCellHead>
+										<span>{t('ns_erp:fields.recalled_qty')}</span>
+									</NestedCellHead>
+									<NestedCellHead>
 										<span>{t('ns_erp:fields.missing_qty')}</span>
 									</NestedCellHead>
 								</NestedColumn>
-								{sortBy(data.order_size_run, 'size_numcode').map((item) => {
-									const matchedSizeQty = inboundHistoryBySize.find((s) => s.size_numcode === item.size_numcode)
-									if (!matchedSizeQty && coalesce(item?.qty, 0) === 0) return null
-									const sizeInboundQty = coalesce(matchedSizeQty?.qty, 0)
+								{}
+								{Object.entries(data.inventory_variation).map(([size, variation]) => {
+									const targetQty = coalesce(variation?.target_qty, 0)
+									const stockedInQty =
+										coalesce(variation?.stocked_in_qty, 0) -
+										coalesce(variation?.total_recall_tx, 0) +
+										coalesce(variation?.total_return_tx, 0)
+									const recalledQty =
+										coalesce(variation?.total_recall_tx, 0) - coalesce(variation?.total_return_tx, 0)
+									const missingQty = targetQty - stockedInQty
 									return (
-										<NestedColumn key={item.size_numcode} className='w-full *:h-9'>
-											<NestedCellHead>{item.size_numcode}</NestedCellHead>
-											<NestedCell>{formatIntlNumber(item?.qty)}</NestedCell>
-											<NestedCell>{formatIntlNumber(sizeInboundQty)}</NestedCell>
-											<NestedCell>{formatIntlNumber(item?.qty - sizeInboundQty)}</NestedCell>
+										<NestedColumn key={size} className='w-full *:h-9'>
+											<NestedCellHead>{size}</NestedCellHead>
+											<NestedCell>{formatIntlNumber(targetQty)}</NestedCell>
+											<NestedCell>{formatIntlNumber(stockedInQty)}</NestedCell>
+											<NestedCell>{formatIntlNumber(recalledQty)}</NestedCell>
+											<NestedCell>{formatIntlNumber(missingQty)}</NestedCell>
 										</NestedColumn>
 									)
 								})}

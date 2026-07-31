@@ -1,8 +1,8 @@
 import { keepPreviousData, useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import { omitBy, uniqBy } from 'lodash-es'
-import type { StockFlow } from '../constants/enums'
+import { ScanCapability, ScannedStatus, StockFlow } from '../constants/enums'
 import { FinishedGoodsSharedService } from '../services/finished-goods-shared.service'
-import type { SearchFormValues } from './use-persistent-filter-state'
+import { usePersistentFilterState, type SearchFormValues } from './use-persistent-filter-state'
 
 export enum DeletedFinishedGoodsQueryKey {
 	DELETED_EPCS = 'DELETED_FINISHED_GOODS_EPCS',
@@ -54,10 +54,26 @@ export const useGetDeletedEpcSpecsQuery = () => {
 	})
 }
 
-export const useRestoreDeletedEpcsMutation = () => {
+export const useRestoreDeletedEpcsMutation = (stockFlow: StockFlow) => {
+	const [persistentFormValues] = usePersistentFilterState(stockFlow)
+
+	const mutationParamsKey = {
+		...persistentFormValues,
+		...(stockFlow === StockFlow.INBOUND && {
+			scannable: persistentFormValues.scannable === ScanCapability.SCANNABLE
+		}),
+		...(stockFlow === StockFlow.OUTBOUND && {
+			scanned: persistentFormValues.scanned === ScannedStatus.SCANNED
+		})
+	}
+
 	return useMutation({
+		// mutationKey: [DeletedFinishedGoodsQueryKey.DELETED_EPCS, stockFlow, mutationParamsKey],
 		meta: {
-			invalidates: [[DeletedFinishedGoodsQueryKey.DELETED_EPCS, DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]]
+			invalidates: [
+				[DeletedFinishedGoodsQueryKey.DELETED_EPCS, stockFlow, mutationParamsKey],
+				[DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]
+			]
 		},
 		mutationFn: async (epcs: Array<string>) => await FinishedGoodsSharedService.restoreDeletedEpcs(epcs)
 	})

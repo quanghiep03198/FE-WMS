@@ -1,4 +1,5 @@
 export default {
+	assembly_line: 'Assembly {{name}}',
 	factory: 'Company',
 	company_code: 'Company code',
 	department: 'Department',

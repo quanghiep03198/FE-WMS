@@ -13,8 +13,8 @@ export interface IInOutBoundReport {
 }
 
 export interface IInboundReport extends IInOutBoundReport {
-	assembly_lines: string
-	storage_locations: string
+	assembly_lines: Array<string>
+	storage_locations: Array<string>
 	daily_inbound_qty: number
 }
 
@@ -37,26 +37,45 @@ export interface IInboundHistory {
 	mo_no: string
 	brand_name: string
 	factory_shoes_style: string
-	cust_shoes_style: string
-	color: string
-	mo_qty: number
+	// cust_shoes_style: string
+	color_sn: string
+	total_target_qty: number
 	accumulated_inbound_qty: number
+	recalled_qty: number
 	missing_qty: number
 	progress: `${number}%`
-	order_size_run: Array<{
-		size_numcode: string
-		qty: number
-	}>
-	inbound_history_by_size: Array<{
-		size_numcode: string
-		qty: number
-	}>
+	// order_size_run: Array<{
+	// 	size_numcode: string
+	// 	qty: number
+	// }>
+	// inbound_history_by_size: Array<{
+	// 	size_numcode: string
+	// 	qty: number
+	// }>
 	daily_inbound_history: Array<{
-		size_numcode: string
-		qty: number
-		inbound_date: Date
+		mo_no: string
+		date: string
+		inventory_variation: Record<
+			string,
+			{
+				stocked_in_qty: number
+				total_recall_tx: number
+				total_return_tx: number
+				shipped_out_qty: number
+			}
+		>
 	}>
-	progress: `${number}%`
+	inventory_variation: Record<
+		string,
+		{
+			target_qty: number
+			stocked_in_qty: number
+			total_recall_tx: number
+			total_return_tx: number
+			shipped_out_qty: number
+		}
+	>
+	// progress: `${number}%`
 }
 
 export interface IOutboundHistory {

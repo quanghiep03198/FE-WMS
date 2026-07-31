@@ -300,7 +300,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 			<PopoverContent
 				side='bottom'
 				sideOffset={8}
-				className='relative w-(--radix-popover-trigger-width) p-6'
+				className='w-radix-popover relative p-6'
 				onOpenAutoFocus={(e) => e.preventDefault()}
 				onWheel={(e) => e.stopPropagation()}>
 				<PopoverClose className='text-muted-foreground hover:text-foreground absolute top-3 right-3 transition-colors duration-200'>

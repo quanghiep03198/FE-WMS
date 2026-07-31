@@ -1,6 +1,5 @@
 'use no memo'
 
-import { StockFlow } from '@features/finished-goods/constants/enums'
 import { cn } from '@common/utils/cn'
 import {
 	Div,
@@ -14,6 +13,7 @@ import {
 	PopoverTrigger,
 	Typography
 } from '@components/ui'
+import { StockFlow } from '@features/finished-goods/constants/enums'
 import { CheckIcon } from '@radix-ui/react-icons'
 import { capitalize } from 'lodash-es'
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react'
@@ -130,7 +130,7 @@ export function OrderSearchFieldControl() {
 								</FormControl>
 								<PopoverContent
 									sideOffset={8}
-									className='max-h-52 w-(--radix-popover-trigger-width) overflow-auto p-1'
+									className='w-radix-popover max-h-52 overflow-auto p-1'
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{Array.isArray(filteredDatalist) && filteredDatalist?.length > 0 ? (
 										filteredDatalist?.map((item) => {

@@ -87,7 +87,7 @@ export function Combobox<T extends Record<string, any>>({
 					<CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className='w-(--radix-popover-trigger-width) p-0' {...contentProps}>
+			<PopoverContent className='w-radix-popover p-0' {...contentProps}>
 				<Command shouldFilter={false} value={currentValue}>
 					<CommandInput
 						placeholder={placeholder ?? `${t('ns_common:actions.search')} ...`}

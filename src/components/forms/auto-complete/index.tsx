@@ -195,7 +195,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 								</FormControl>
 								<PopoverContent
 									ref={refCallback}
-									className='max-h-52 w-(--radix-popover-trigger-width) overflow-auto scroll-auto p-1'
+									className='w-radix-popover max-h-52 overflow-auto scroll-auto p-1'
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{loading ? (
 										<Div className='flex items-center justify-center p-10 text-center'>

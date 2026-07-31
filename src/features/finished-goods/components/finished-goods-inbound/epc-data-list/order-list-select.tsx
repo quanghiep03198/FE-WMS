@@ -77,7 +77,7 @@ const OrderListSelect: React.FC = () => {
 					<HoverCardContent
 						side='bottom'
 						sideOffset={10}
-						className='inline-grid w-(--radix-hover-card-trigger-width) auto-cols-auto grid-flow-col gap-x-2 *:text-pretty'>
+						className='w-radix-hover-card inline-grid auto-cols-auto grid-flow-col gap-x-2 *:text-pretty'>
 						<Icon name='Info' className='stroke-active my-0.5' size={18} />
 						<Typography variant='small'>{t('ns_inoutbound:description.select_order')}</Typography>
 					</HoverCardContent>

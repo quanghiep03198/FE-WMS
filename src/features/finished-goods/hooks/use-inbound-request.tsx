@@ -1,6 +1,6 @@
 import type { DeleteScannedEpcsFormValues } from '@features/finished-goods/schemas/delete-epc.schema'
 import { FinishedGoodsStockService } from '@features/finished-goods/services/finished-goods-stock.service'
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, type Register, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { FinishedGoodsAction, StockFlow } from '../constants/enums'
 import { DEFAULT_PROPS, usePageContext } from '../contexts/finished-goods-inbound/page-context'
@@ -17,8 +17,6 @@ export enum FinishedGoodsInboundQueryKeys {
 export type FetchEpcQueryKey = [typeof FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, number, string]
 
 export const useGetScanningInboundEpcQuery = () => {
-	const queryClient = useQueryClient()
-
 	const { selectedDevice, currentPage, selectedOrder, scanningStatus } = usePageContext(
 		'selectedDevice',
 		'selectedOrder',
@@ -30,15 +28,6 @@ export const useGetScanningInboundEpcQuery = () => {
 		_page: currentPage,
 		'mo_no:eq': selectedOrder
 	}
-
-	useEffect(() => {
-		if (typeof scanningStatus === 'undefined') {
-			queryClient.removeQueries({
-				predicate: (query) =>
-					query.queryKey.some((key) => key === FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS)
-			})
-		}
-	}, [scanningStatus])
 
 	return useQuery({
 		queryKey: [FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice, params],
@@ -74,21 +63,18 @@ export const useGetScanningInboundMoQuery = () => {
 }
 
 export const useDeleteEpcMutation = () => {
-	const { selectedDevice, setCurrentPage, setSelectedOrder } = usePageContext(
-		'selectedDevice',
-		'setCurrentPage',
-		'setSelectedOrder'
+	const { setSelectedOrder, setCurrentPage } = usePageContext('setSelectedOrder', 'setCurrentPage')
+
+	const mutationMeta = useMutationMeta()
+
+	mutationMeta.invalidates.push(
+		['SCANNING_EPCS', StockFlow.INBOUND],
+		[DeletedFinishedGoodsQueryKey.DELETED_EPCS],
+		[DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]
 	)
 
 	return useMutation({
-		meta: {
-			invalidates: [
-				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice],
-				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice],
-				[DeletedFinishedGoodsQueryKey.DELETED_EPCS],
-				[DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]
-			]
-		},
+		meta: mutationMeta,
 		mutationFn: async ({ rescannable, epcs }: DeleteScannedEpcsFormValues) =>
 			await FinishedGoodsSharedService.deleteScanningEpcs(epcs, { rescannable: !rescannable }),
 		onSuccess: () => {
@@ -99,21 +85,17 @@ export const useDeleteEpcMutation = () => {
 }
 
 export const useDeleteScanningMoMutation = () => {
-	const { selectedDevice, setCurrentPage, setSelectedOrder } = usePageContext(
-		'selectedDevice',
-		'setCurrentPage',
-		'setSelectedOrder'
+	const { setSelectedOrder, setCurrentPage } = usePageContext('setSelectedOrder', 'setCurrentPage')
+
+	const mutationMeta = useMutationMeta()
+
+	mutationMeta.invalidates.push(
+		[DeletedFinishedGoodsQueryKey.DELETED_EPCS],
+		[DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]
 	)
 
 	return useMutation({
-		meta: {
-			invalidates: [
-				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice],
-				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice],
-				[DeletedFinishedGoodsQueryKey.DELETED_EPCS],
-				[DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]
-			]
-		},
+		meta: mutationMeta,
 		mutationFn: async ({ commandNumber, rescannable }: { commandNumber: string; rescannable: boolean }) =>
 			await FinishedGoodsSharedService.deleteScanningMo(StockFlow.INBOUND, commandNumber, {
 				rescannable: !rescannable
@@ -126,24 +108,22 @@ export const useDeleteScanningMoMutation = () => {
 }
 
 export const useUpdateStockVariationMutation = () => {
-	const { selectedDevice, setSelectedOrder, setCurrentPage } = usePageContext(
+	const { setSelectedOrder, setCurrentPage } = usePageContext(
 		'selectedDevice',
+		'currentPage',
+		'selectedOrder',
 		'setSelectedOrder',
 		'setCurrentPage'
 	)
+
+	const mutationMeta = useMutationMeta()
 
 	const handler = {
 		[FinishedGoodsAction.IMPORT]: FinishedGoodsStockService.stockIn,
 		[FinishedGoodsAction.EXPORT]: FinishedGoodsStockService.recallFromStock
 	}
-
 	return useMutation({
-		meta: {
-			invalidates: [
-				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice],
-				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice]
-			]
-		},
+		meta: mutationMeta,
 		mutationFn: (payload: StockVariationPayload) => {
 			const mutationFn = handler[payload.rfid_status]
 			if (typeof mutationFn === 'function') return mutationFn(payload)
@@ -153,4 +133,24 @@ export const useUpdateStockVariationMutation = () => {
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
 		}
 	})
+}
+
+const useMutationMeta = (): Register['mutationMeta'] => {
+	const { selectedDevice, currentPage, selectedOrder } = usePageContext(
+		'selectedDevice',
+		'currentPage',
+		'selectedOrder'
+	)
+
+	const params = {
+		_page: currentPage,
+		'mo_no:eq': selectedOrder
+	}
+
+	return {
+		invalidates: [
+			[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice, params],
+			[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice]
+		]
+	}
 }

@@ -334,7 +334,7 @@ export function MultiSelect<D extends SelectItem>({
 			</PopoverTrigger>
 			<PopoverContent
 				ref={popoverContentRef}
-				className={cn('w-(--radix-popover-trigger-width) p-0', classNames?.popoverContent)}
+				className={cn('w-radix-popover p-0', classNames?.popoverContent)}
 				align='start'
 				onEscapeKeyDown={() => setIsPopoverOpen(false)}
 				onOpenAutoFocus={(e) => e.preventDefault()}>
