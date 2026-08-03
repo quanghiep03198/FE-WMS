@@ -31,7 +31,7 @@ const InboundHistoryTable: React.FC = () => {
 			{ header: t('ns_erp:fields.color_sn'), accessorKey: 'color_sn', meta: { align: 'left' } },
 			{
 				header: t('ns_erp:fields.order_qty'),
-				accessorKey: 'total_target_qty',
+				accessorKey: 'order_qty',
 				meta: { align: 'left' },
 				cell: (value) => formatIntlNumber(value)
 			},
@@ -143,7 +143,7 @@ const InboundHistoryTable: React.FC = () => {
 									<TableCell colSpan={7} className='p-0'>
 										<NestedTable>
 											{Object.entries(item.inventory_variation)
-												.sort((a, b) => a[0].localeCompare(b[0]))
+												.toSorted((a, b) => Number.parseFloat(a[0]) - Number.parseFloat(b[0]))
 												.map(([size, variation]) => (
 													<NestedColumn key={size} className='*:h-9'>
 														<NestedCellHead>{size}</NestedCellHead>
@@ -204,25 +204,27 @@ const InboundHistoryTable: React.FC = () => {
 									</NestedCellHead>
 								</NestedColumn>
 								{}
-								{Object.entries(data.inventory_variation).map(([size, variation]) => {
-									const targetQty = coalesce(variation?.target_qty, 0)
-									const stockedInQty =
-										coalesce(variation?.stocked_in_qty, 0) -
-										coalesce(variation?.total_recall_tx, 0) +
-										coalesce(variation?.total_return_tx, 0)
-									const recalledQty =
-										coalesce(variation?.total_recall_tx, 0) - coalesce(variation?.total_return_tx, 0)
-									const missingQty = targetQty - stockedInQty
-									return (
-										<NestedColumn key={size} className='w-full *:h-9'>
-											<NestedCellHead>{size}</NestedCellHead>
-											<NestedCell>{formatIntlNumber(targetQty)}</NestedCell>
-											<NestedCell>{formatIntlNumber(stockedInQty)}</NestedCell>
-											<NestedCell>{formatIntlNumber(recalledQty)}</NestedCell>
-											<NestedCell>{formatIntlNumber(missingQty)}</NestedCell>
-										</NestedColumn>
-									)
-								})}
+								{Object.entries(data.inventory_variation)
+									.toSorted((a, b) => Number.parseFloat(a[0]) - Number.parseFloat(b[0]))
+									.map(([size, variation]) => {
+										const targetQty = coalesce(variation?.order_qty, 0)
+										const stockedInQty =
+											coalesce(variation?.stocked_in_qty, 0) -
+											coalesce(variation?.total_recall_tx, 0) +
+											coalesce(variation?.total_return_tx, 0)
+										const recalledQty =
+											coalesce(variation?.total_recall_tx, 0) - coalesce(variation?.total_return_tx, 0)
+										const missingQty = targetQty - stockedInQty
+										return (
+											<NestedColumn key={size} className='w-full *:h-9'>
+												<NestedCellHead>{size}</NestedCellHead>
+												<NestedCell>{formatIntlNumber(targetQty)}</NestedCell>
+												<NestedCell>{formatIntlNumber(stockedInQty)}</NestedCell>
+												<NestedCell>{formatIntlNumber(recalledQty)}</NestedCell>
+												<NestedCell>{formatIntlNumber(missingQty)}</NestedCell>
+											</NestedColumn>
+										)
+									})}
 							</NestedTable>
 						</TableCell>
 					</TableRow>

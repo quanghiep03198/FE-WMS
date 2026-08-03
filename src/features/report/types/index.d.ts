@@ -39,7 +39,7 @@ export interface IInboundHistory {
 	factory_shoes_style: string
 	// cust_shoes_style: string
 	color_sn: string
-	total_target_qty: number
+	order_qty: number
 	accumulated_inbound_qty: number
 	recalled_qty: number
 	missing_qty: number
@@ -68,7 +68,7 @@ export interface IInboundHistory {
 	inventory_variation: Record<
 		string,
 		{
-			target_qty: number
+			order_qty: number
 			stocked_in_qty: number
 			total_recall_tx: number
 			total_return_tx: number
