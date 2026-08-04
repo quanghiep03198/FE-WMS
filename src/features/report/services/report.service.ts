@@ -6,7 +6,7 @@ import type { IInboundReport, IOutboundReport } from '../types'
 export class ReportService {
 	static async getInboundReport(tenantId: string, params?: { 'date:eq': string }) {
 		return await axiosInstance.get<void, ResponseBody<IInboundReport[]>>('/report/daily-inbound', {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId, [RequestHeaders.API_VERSION]: '2' },
+			headers: { [RequestHeaders.API_VERSION]: '2' },
 			params: params
 		})
 	}
@@ -26,7 +26,7 @@ export class ReportService {
 	}
 
 	static async downloadInboundReport(
-		reportType: 'daily-productivity' | 'shaping-department-productivity',
+		reportType: 'daily-productivity' | 'assembly-productivity',
 		tenantId: string,
 		filter: { 'date:eq': string }
 	) {

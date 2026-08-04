@@ -43,9 +43,7 @@ const DownloadExcelDropdown: React.FC = () => {
 					<DropdownMenuItem className='gap-x-2' onClick={() => handleDownloadReport('daily-productivity')}>
 						{t('ns_erp:fields.daily_productivity')}
 					</DropdownMenuItem>
-					<DropdownMenuItem
-						className='gap-x-2'
-						onClick={() => handleDownloadReport('shaping-department-productivity')}>
+					<DropdownMenuItem className='gap-x-2' onClick={() => handleDownloadReport('assembly-productivity')}>
 						{t('ns_erp:fields.shaping_dept_productivity')}
 					</DropdownMenuItem>
 				</DropdownMenuGroup>

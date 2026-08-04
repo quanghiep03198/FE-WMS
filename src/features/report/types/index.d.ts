@@ -3,7 +3,7 @@ export interface IInOutBoundReport {
 	mat_code: string
 	factory_shoes_style: string | null
 	order_qty: number
-	factory_code: string
+	factory_code_produce: string
 	color_sn: string
 	accumulated_qty: number
 	variation_details: Array<{

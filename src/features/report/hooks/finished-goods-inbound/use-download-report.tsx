@@ -15,7 +15,7 @@ export const useDownloadReport = () => {
 	const { t } = useTranslation()
 	const { user } = useAuth()
 
-	return useMemoizedFn(async (reportType: 'daily-productivity' | 'shaping-department-productivity') => {
+	return useMemoizedFn(async (reportType: 'daily-productivity' | 'assembly-productivity') => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
 		const translatedFactory = t(TRANSLATED_FACTORY[user?.current_factory_code], { ns: 'ns_common' })
 		const fallbackFileTitle =

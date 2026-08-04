@@ -69,7 +69,7 @@ const InboundReportMasterTable: React.FC = () => {
 					</button>
 				)
 			}),
-			columnHelper.accessor('factory_code', {
+			columnHelper.accessor('factory_code_produce', {
 				header: t('ns_common:common_fields.factory_code'),
 				enableColumnFilter: true,
 				enableSorting: true,
