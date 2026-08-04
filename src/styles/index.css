@@ -94,6 +94,11 @@
 	--animate-slide-in: slide-in 0.3s ease-out 0.75s both;
 	--animate-shimmer: shimmer 1.5s linear infinite;
 	--animate-typing: typing 1.125s steps(25), 0.65s step-end 0s infinite alternate;
+
+	--width-radix-popover: var(--radix-popover-trigger-width);
+	--width-radix-select: var(--radix-select-trigger-width);
+	--width-radix-dropdown-menu: var(--radix-dropdown-menu-trigger-width);
+	--width-radix-hover-card: var(--radix-hover-card-trigger-width);
 }
 
 @keyframes accordion-down {
