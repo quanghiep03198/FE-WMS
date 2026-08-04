@@ -111,13 +111,13 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 
 	return (
 		<Div
-			className='scrollbar-track-accent/10 flex-1 space-y-1 overflow-y-auto'
+			className='scrollbar-track-accent/10 scroll-fade-y flex-1 space-y-1'
 			style={{
 				container: 'table / size'
 			}}
 			ref={refCallback}>
 			<Table
-				className='border-separate border-spacing-0 [&_td]:border-x-0 [&_th]:border-x-0'
+				className='table-auto border-separate border-spacing-0 [&_td]:border-x-0 [&_th]:border-x-0'
 				style={
 					{
 						'--row-selection-width': '4rem',
@@ -128,7 +128,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 				}>
 				<TableHeader className='[&_th]:bg-table-head [&_th]:text-table-head-foreground sticky top-0 z-10 border-b [&_th]:h-(--header-height)'>
 					<TableRow>
-						<TableHead className='w-(--row-selection-width)'>
+						<TableHead className='w-[var(--row-selection-width)]'>
 							<Checkbox
 								role='checkbox'
 								checked={(isAllItemsSelected || (isSomeItemsSelected && 'indeterminate')) as CheckedState}
@@ -138,7 +138,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 								}}
 							/>
 						</TableHead>
-						<TableHead align='left' className='w-(--second-col-width)'>
+						<TableHead align='left' className='w-[var(--second-col-width)]'>
 							EPC
 						</TableHead>
 						<TableHead align='center'>{t('ns_common:common_fields.status')}</TableHead>
