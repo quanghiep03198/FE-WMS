@@ -8,7 +8,7 @@ export class FinishedGoodsStockService {
 	}
 
 	static async stockOut(payload: OutboundFormValues) {
-		return await axiosInstance.put<OutboundFormValues, ResponseBody<unknown>>('/finished-goods/update-stock', payload)
+		return await axiosInstance.put<OutboundFormValues, ResponseBody<unknown>>('/finished-goods/stock-out', payload)
 	}
 
 	static async recallFromStock(payload: StockVariationPayload) {

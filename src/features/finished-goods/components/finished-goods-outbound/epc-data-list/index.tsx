@@ -280,7 +280,7 @@ const ScannedEpcList: React.FC = () => {
 					aria-expanded={isExpanded}
 					data-mounted={hasMounted.current}
 					className={cn(
-						'linear bg-background scroll-fade-y transition-height relative z-10 h-0 divide-y p-0 will-change-transform contain-size',
+						'linear bg-background scroll-fade-y transition-height relative z-10 h-0 divide-y overflow-y-auto p-0 will-change-transform contain-size',
 						'data-[mounted=true]:duration-100',
 						'aria-expanded:h-64 aria-expanded:p-2 @4xl/playground:aria-expanded:h-(--outlet-wrapper-height)'
 					)}>
