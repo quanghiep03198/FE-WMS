@@ -80,6 +80,16 @@ const ReportDatalist: React.FC = () => {
 				filterFn: 'includesString',
 				cell: TableCellText
 			}),
+			columnHelper.accessor('cust_shoes_style', {
+				header: t('ns_erp:fields.cust_shoes_style'),
+				enableGlobalFilter: true,
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				enableHiding: false,
+				filterFn: 'includesString',
+				cell: TableCellText
+			}),
 			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
 				enableGlobalFilter: true,

@@ -53,7 +53,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 									<NestedCell className='text-table-head-foreground group-hover:bg-table-row-active aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted px-4 py-2 font-medium first:border-l-0 last:border-r-0 has-[[role=button]]:text-center has-[[role=checkbox]]:text-center has-[[role=combobox]]:p-0 has-[[role=listbox]]:p-0 has-[[role=textbox]]:p-0 data-[type=number]:text-right'>
 										{size?.size_numcode}
 									</NestedCell>
-									<NestedCell className='font-normal'>{formatIntlNumber(size?.po_size_qty ?? 0)}</NestedCell>
+									<NestedCell className='font-normal'>{formatIntlNumber(size?.order_qty ?? 0)}</NestedCell>
 									<NestedCell className='font-normal'>{formatIntlNumber(size?.daily_qty ?? 0)}</NestedCell>
 									<NestedCell className='font-normal'>{formatIntlNumber(size?.missing_qty ?? 0)}</NestedCell>
 								</NestedColumn>

@@ -2,6 +2,7 @@ export interface IInOutBoundReport {
 	mo_no: string
 	mat_code: string
 	factory_shoes_style: string | null
+	cust_shoes_style: string | null
 	order_qty: number
 	factory_code_produce: string
 	color_sn: string
@@ -24,13 +25,12 @@ export interface IOutboundReport extends Omit<IInOutBoundReport, 'size_data'> {
 	daily_outbound_qty: number
 	detail: Array<{
 		mo_no: string
-		color_sn: string
 		sizes: Array<{
 			size_numcode: string
 			qty: number
 		}>
 	}>
-	overall: Array<{ size_numcode: string; po_size_qty: number; daily_qty: number; missing_qty: number }>
+	overall: Array<{ size_numcode: string; order_qty: number; daily_qty: number; missing_qty: number }>
 }
 export interface IInboundHistory {
 	factory_code_produce: string
@@ -80,25 +80,27 @@ export interface IInboundHistory {
 
 export interface IOutboundHistory {
 	po: string
-	po_qty: number
-	accumulated_outbound_qty: number
+	order_qty: number
+	total_shipped_out_qty: number
 	missing_qty: number
 	brand_name: string
 	factory_shoes_style: string
 	cust_shoes_style: string
 	color_sn: string
 	outbound_history: Array<{
-		outbound_date: string
-		mo_no: string
-		sizes: Array<{
-			size_numcode: string
-			qty: number
+		date: string
+		data: Array<{
+			mo_no: string
+			shipping_details: Array<{
+				size_numcode: string
+				shipped_out_qty: number
+			}>
 		}>
 	}>
 	overall: Array<{
 		size_numcode: string
-		po_size_qty: number
-		acc_qty: number
+		order_qty: number
+		shipped_out_qty: number
 		missing_qty: number
 	}>
 	progress: `${number}%`

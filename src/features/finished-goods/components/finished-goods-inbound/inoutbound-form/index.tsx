@@ -31,7 +31,7 @@ import { useMemoizedFn } from 'ahooks'
 import type { AxiosError } from 'axios'
 import { HttpStatusCode } from 'axios'
 import { omit } from 'lodash-es'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -49,7 +49,7 @@ const InoutboundForm: React.FC = () => {
 		'scanningStatus',
 		'setScannedEpc'
 	)
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 	const [action, setAction] = useState<FinishedGoodsAction>(FinishedGoodsAction.IMPORT)
 	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 
@@ -73,12 +73,22 @@ const InoutboundForm: React.FC = () => {
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 
-	const { data: inoutboundDepts } = useGetShapingProductLineQuery()
+	const { data: assemblyLines } = useGetShapingProductLineQuery()
 	const { data: currentEpcData } = useGetScanningInboundEpcQuery()
 	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
 		enabled: Boolean(warehouseNum),
 		select: (response) => response.metadata
 	})
+
+	const translatedAssemblyLines = useMemo(() => {
+		return assemblyLines.map((item) => ({
+			dept_code: item.dept_code,
+			dept_name: t('ns_company:assembly_line', {
+				name: item.dept_name.replace(/[^A-Za-z0-9]/g, ''),
+				defaultValue: item.dept_name
+			})
+		}))
+	}, [assemblyLines, i18n.language])
 
 	const { mutateAsync, isError, error, reset } = useUpdateStockVariationMutation()
 
@@ -267,13 +277,13 @@ const InoutboundForm: React.FC = () => {
 									<SelectFieldControl
 										name='dept_code'
 										label={t('ns_erp:fields.shaping_dept_code')}
-										datalist={inoutboundDepts}
+										datalist={translatedAssemblyLines}
 										labelField='dept_name'
 										valueField='dept_code'
 										onValueChange={(value) =>
 											form.setValue(
 												'dept_name',
-												inoutboundDepts.find((item) => item.dept_code === value)?.dept_name
+												assemblyLines.find((item) => item.dept_code === value)?.dept_name
 											)
 										}
 									/>

@@ -1,16 +1,10 @@
-import { coalesce } from '@common/utils/common'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { NestedCell, NestedCellHead, NestedColumn, NestedTable } from '@components/shared/horizontal-nested-table'
 import { Div, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@components/ui'
 import type { IOutboundHistory } from '@features/report/types'
-import { groupBy, orderBy, sortBy } from 'lodash-es'
+import { sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-	NestedCell,
-	NestedCellHead,
-	NestedColumn,
-	NestedTable
-} from '../../../../components/shared/horizontal-nested-table'
 import { useGetOutboundHistoryQuery } from '../../hooks/inoutbound-history/use-inoutbound-history-request'
 import EmptyHistory from './empty-history'
 
@@ -48,13 +42,13 @@ const OutboundHistoryTable: React.FC = () => {
 			{ header: t('ns_erp:fields.color_sn'), accessorKey: 'color_sn', meta: { align: 'left' } },
 			{
 				header: t('ns_erp:fields.order_qty'),
-				accessorKey: 'po_qty',
+				accessorKey: 'order_qty',
 				meta: { align: 'left' },
 				cell: (value) => formatIntlNumber(value)
 			},
 			{
 				header: t('ns_erp:fields.accumulated_qty'),
-				accessorKey: 'accumulated_outbound_qty',
+				accessorKey: 'total_shipped_out_qty',
 				meta: { align: 'left' },
 				cell: (value) => formatIntlNumber(value)
 			},
@@ -73,12 +67,10 @@ const OutboundHistoryTable: React.FC = () => {
 		[i18n.language]
 	)
 
-	const outboundHistoryByDate = useMemo(() => {
-		if (!data?.outbound_history) return []
-		return Object.entries(
-			groupBy(orderBy(data.outbound_history, 'outbound_date', 'desc'), (item) => item.outbound_date)
-		)
-	}, [data])
+	// const outboundHistoryByDate = useMemo(() => {
+	// 	if (!data?.outbound_history) return []
+	// 	return Object.entries(groupBy(orderBy(data.outbound_history, 'date', 'desc'), (item) => item.date))
+	// }, [data])
 
 	if (isLoading)
 		return (
@@ -100,7 +92,7 @@ const OutboundHistoryTable: React.FC = () => {
 							<TableHead
 								key={column.accessorKey}
 								title={column.header}
-								className='bg-table-row-active! text-table-head-foreground w-(--column-width) capitalize first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+								className='bg-table-row-active! text-table-head-foreground w-[var(--column-width)] capitalize first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>{column.header}</span>
 							</TableHead>
@@ -110,7 +102,7 @@ const OutboundHistoryTable: React.FC = () => {
 						{columns.map((column) => (
 							<TableHead
 								key={column.accessorKey}
-								className='text-foreground w-(--column-width) font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+								className='text-foreground w-[var(--column-width)] font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>
 									{typeof column.cell === 'function'
@@ -128,7 +120,7 @@ const OutboundHistoryTable: React.FC = () => {
 							<span>{t('ns_erp:fields.outbound_date')}</span>
 						</TableHead>
 						<TableHead colSpan={7} align='left' className='p-0'>
-							<span className='sticky left-(--column-width) block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
+							<span className='sticky left-[var(--column-width)] block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
 								{t('ns_erp:fields.daily_outbound_qty')}
 							</span>
 						</TableHead>
@@ -138,27 +130,23 @@ const OutboundHistoryTable: React.FC = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{outboundHistoryByDate.length > 0 ? (
-						outboundHistoryByDate.map(([date, order]) => {
-							const totalQty = order.reduce(
-								(acc, curr) =>
-									acc +
-									curr.sizes.reduce((_acc, _curr) => {
-										return _acc + coalesce(_curr?.qty, 0)
-									}, 0),
-								0
-							)
+					{data.outbound_history.length > 0 ? (
+						data.outbound_history.map((item) => {
+							const totalShippedOutQty = 0
+
+							console.log(item)
+
 							return (
-								<TableRow key={date}>
+								<TableRow key={item.date}>
 									<TableCell
 										align='left'
 										colSpan={1}
 										className='sticky left-0 z-10'
 										style={{ boxShadow: '1px 0px var(--border)' }}>
-										<span>{date}</span>
+										<span>{item.date}</span>
 									</TableCell>
 									<TableCell colSpan={7} className='divide-border divide-y p-0'>
-										{order.map((item) => (
+										{item.data.map((item) => (
 											<NestedTable key={item.mo_no}>
 												<NestedColumn className='basis-32'>
 													<NestedCell
@@ -167,18 +155,18 @@ const OutboundHistoryTable: React.FC = () => {
 														{item.mo_no}
 													</NestedCell>
 												</NestedColumn>
-												{Array.isArray(item.sizes) &&
-													item.sizes.map((size) => (
+												{Array.isArray(item.shipping_details) &&
+													item.shipping_details.map((size) => (
 														<NestedColumn key={size.size_numcode}>
 															<NestedCellHead>{size.size_numcode}</NestedCellHead>
-															<NestedCell>{formatIntlNumber(size.qty)}</NestedCell>
+															<NestedCell>{formatIntlNumber(size.shipped_out_qty)}</NestedCell>
 														</NestedColumn>
 													))}
 											</NestedTable>
 										))}
 									</TableCell>
 									<TableCell colSpan={1} align='left' className='sticky! right-0 z-10 font-medium'>
-										<span>{formatIntlNumber(totalQty)}</span>
+										<span>{formatIntlNumber(totalShippedOutQty)}</span>
 									</TableCell>
 								</TableRow>
 							)
@@ -207,7 +195,7 @@ const OutboundHistoryTable: React.FC = () => {
 					<TableRow>
 						<TableCell colSpan={9} align='left' className='border-t p-0 font-normal'>
 							<NestedTable className='w-full'>
-								<NestedColumn className='sticky left-0 z-20 min-w-(--column-width) shadow-[1px_0px_var(--border)] *:h-9 *:capitalize'>
+								<NestedColumn className='sticky left-0 z-20 min-w-[var(--column-width)] shadow-[1px_0px_var(--border)] *:h-9 *:capitalize'>
 									<NestedCellHead>Size</NestedCellHead>
 									<NestedCellHead>
 										<span>{t('ns_erp:fields.mo_size_qty')}</span>
@@ -224,8 +212,8 @@ const OutboundHistoryTable: React.FC = () => {
 										return (
 											<NestedColumn key={item.size_numcode} className='w-full *:h-9'>
 												<NestedCellHead>{item.size_numcode}</NestedCellHead>
-												<NestedCell>{formatIntlNumber(item?.po_size_qty)}</NestedCell>
-												<NestedCell>{formatIntlNumber(item?.acc_qty)}</NestedCell>
+												<NestedCell>{formatIntlNumber(item?.order_qty)}</NestedCell>
+												<NestedCell>{formatIntlNumber(item?.shipped_out_qty)}</NestedCell>
 												<NestedCell>{formatIntlNumber(item?.missing_qty)}</NestedCell>
 											</NestedColumn>
 										)

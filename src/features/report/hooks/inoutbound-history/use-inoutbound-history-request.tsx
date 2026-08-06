@@ -36,12 +36,7 @@ export const useGetOutboundHistoryQuery = () => {
 		queryKey: [InOutBoundHistoryQueryKeys.OUTBOUND_HISTORY, searchParams.order, currentTenant?.id],
 		queryFn: async () =>
 			await axiosInstance.get<void, ResponseBody<IOutboundHistory>>(
-				`/report/outbound-history/${searchParams.order}`,
-				{
-					headers: {
-						[RequestHeaders.TENANT_ID]: currentTenant?.id
-					}
-				}
+				`/report/outbound-history/${searchParams.order}`
 			),
 		enabled: searchParams.type === StockFlow.OUTBOUND,
 		select: (response) => response.metadata
