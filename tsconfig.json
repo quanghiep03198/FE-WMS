@@ -31,6 +31,7 @@
 			"@features/*": ["./src/features/*"],
 			"@hooks/*": ["./src/hooks/*"],
 			"@i18n/*": ["./src/i18n/*"],
+			"@integrations/*": ["./src/integrations/*"],
 			"@providers/*": ["./src/providers/*"],
 			"@routes/*": ["./src/routes/*"],
 			"@stores/*": ["./src/stores/*"],
