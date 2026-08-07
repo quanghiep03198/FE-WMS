@@ -28,7 +28,7 @@ export default {
 		exchange_all: 'You can exchange the entire EPC belonging to the selected size.',
 		exchange_epc_dialog_desc:
 			'Allows users to replace or update EPC tags on a product with a new manufacturing order.',
-		inoutbound_form_note: 'Stop reading from RFID device and disconnect before updating stock moves.',
+		inoutbound_form_note: 'Stop reading from RFID device before updating stock moves.',
 		list_of_already_scanned_epcs: 'List of EPCs that have been previously scanned for inbound.',
 		license_plate_field:
 			'License plate that coresponding to container number. Also skip entering license plate if container number is unknown.',

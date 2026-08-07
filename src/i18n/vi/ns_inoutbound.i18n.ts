@@ -46,7 +46,7 @@ export default {
 		exchange_all: 'Bạn có thể hoán đổi toàn bộ EPC thuộc mã thành phẩm kích cỡ đã chọn',
 		exchange_epc_dialog_desc: 'Cho phép người dùng thay thế hoặc cập nhật tem EPC hiện tại sang chỉ lệnh mới.',
 		exchange_qty: 'Số lượng sản phẩm được hoán đổi cho đơn hàng thực tế',
-		inoutbound_form_note: 'Dừng thiết bị RFID và ngắt kết nối trước khi thao tác nhập/xuất',
+		inoutbound_form_note: 'Dừng thiết bị RFID trước khi thao tác nhập/xuất',
 		list_of_already_scanned_epcs: 'Danh sách các EPC đã quét nhập kho trước đây.',
 		license_plate_field:
 			'Biển số xe tương ứng với số container. Cũng bỏ qua việc nhập biển số xe nếu không biết số container.',

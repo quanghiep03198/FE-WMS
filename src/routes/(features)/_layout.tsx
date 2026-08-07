@@ -3,12 +3,11 @@ import NetworkDetector from '@components/shared/network-detector'
 import { SidebarProvider } from '@components/ui'
 import { AuthQueryKeys } from '@features/auth/hooks/use-profile-request'
 import { useEffectOnce } from '@hooks/use-effect-once'
-import { Outlet, createFileRoute, redirect, useRouteContext } from '@tanstack/react-router'
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import { Fragment } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import tw from 'tailwind-styled-components'
-import { type RegisteredServiceWorker } from 'virtual:pwa-register/react'
 import { ErrorBoundaryFallback } from '../../components/errors/error-boundary-fallback'
 import UnsupportedScreen from '../../components/errors/unsupported-screen'
 import AuthGuard from '../../components/guards/auth-guard'
@@ -28,11 +27,6 @@ export const Route = createFileRoute('/(features)/_layout')({
 })
 
 function Layout() {
-	const { updateServiceWorker }: RegisteredServiceWorker = useRouteContext({
-		from: '',
-		select: (context) => context.serviceWorker
-	})
-
 	const [font] = useLocalStorageState<string>('font', {
 		defaultValue: '*:font-sans!',
 		listenStorageChange: true
@@ -63,7 +57,6 @@ function Layout() {
 												error={error as Error}
 												resetError={(args) => {
 													resetErrorBoundary(args)
-													updateServiceWorker()
 												}}
 											/>
 										)

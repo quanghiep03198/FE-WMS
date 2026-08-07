@@ -24,7 +24,10 @@ import {
 	Typography
 } from '@components/ui'
 import { useUpsertEpcsMatchMutation } from '@features/finished-goods/hooks/use-finished-goods-mo-request'
-import { useGetCommandNumberDetailQuery, useSearchCommandNumberQuery } from '@features/order/hooks/use-order-request'
+import {
+	useGetManufacturingOrderQuery,
+	useSearchManufacturingOrderQuery
+} from '@features/order/hooks/use-order-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
@@ -76,8 +79,8 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 	const currCommandNumberSeq = useWatch({ control: form.control, name: 'mo_noseq' })
 	const currentSizeQty = useWatch({ control: form.control, name: 'size_qty' })
 
-	const { data: commandNumbers } = useSearchCommandNumberQuery(searchTerm)
-	const { data: orderDetail } = useGetCommandNumberDetailQuery(currCommandNumber)
+	const { data: commandNumbers } = useSearchManufacturingOrderQuery(searchTerm)
+	const { data: orderDetail } = useGetManufacturingOrderQuery(currCommandNumber)
 	const { mutateAsync } = useUpsertEpcsMatchMutation()
 
 	useEffect(() => {

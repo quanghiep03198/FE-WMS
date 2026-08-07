@@ -35,23 +35,20 @@ export class OrderService {
 		>(`/order/purchase-order/${purchaseOrder}`)
 	}
 
-	static async searchPurchaseOrder(tenantId: string, params: { q: string; filter_all_brands: boolean }) {
+	static async searchPurchaseOrder(params: { q: string; filter_all_brands: boolean }) {
 		return await axiosInstance.get<unknown, ResponseBody<Array<IPurchaseOrderResult>>>(
 			'/order/purchase-order/search',
 			{
-				headers: {
-					[RequestHeaders.TENANT_ID]: tenantId
-				},
 				params
 			}
 		)
 	}
 
-	static async getCommandNumberDetail(commandNumber: string) {
+	static async getCommandNumberDetail(manufacturingOrder: string) {
 		return await axiosInstance.get<
 			unknown,
-			ResponseBody<{ orders: Array<IManufacturingOrder>; sizes: Array<{ size_numcode: string; size_qty: number }> }>
-		>(`/order/command-number/${commandNumber}`)
+			ResponseBody<IManufacturingOrder & { sizes: Array<{ size_numcode: string; size_qty: number }> }>
+		>(`/order/manufacturing-order/${manufacturingOrder}`)
 	}
 
 	static async getPurchaseOrderSizeRun(purchaseOrder: string) {

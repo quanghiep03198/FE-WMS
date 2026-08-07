@@ -16,12 +16,14 @@ import {
 	Form as FormProvider,
 	Icon,
 	InputFieldControl,
-	SelectFieldControl,
 	Typography
 } from '@components/ui'
 import { useUpsertEpcsMatchMutation } from '@features/finished-goods/hooks/use-finished-goods-mo-request'
 import { type ExchangeEpcFormValue, exchangeEpcSchema } from '@features/finished-goods/schemas/exchange-epc.schema'
-import { useGetCommandNumberDetailQuery, useSearchCommandNumberQuery } from '@features/order/hooks/use-order-request'
+import {
+	useGetManufacturingOrderQuery,
+	useSearchManufacturingOrderQuery
+} from '@features/order/hooks/use-order-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import type { CheckedState } from '@radix-ui/react-checkbox'
@@ -40,7 +42,6 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	const { t } = useTranslation()
 	const { scannedOrders } = usePageContext('scannedOrders')
 	const [searchTerm, setSearchTerm] = useState<string>('')
-	const [availableCmdSequence, setAvailableCmdSequence] = useState([])
 	const [isExchangeAll, setIsExchangeAll] = useState<CheckedState>(false)
 	const { mutateAsync, isPending, isError } = useUpsertEpcsMatchMutation()
 
@@ -66,8 +67,9 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	const scannedSizeQuantity = useWatch({ control: form.control, name: 'scanned_size_qty' })
 
 	const previousQuantity = usePrevious(quantity)
-	const { data: availableCommandNumbers, refetch: fetchExchangableOrder } = useSearchCommandNumberQuery(searchTerm)
-	const { data: orderDetail } = useGetCommandNumberDetailQuery(actualOrder)
+	const { data: availableCommandNumbers, refetch: fetchExchangableOrder } =
+		useSearchManufacturingOrderQuery(searchTerm)
+	const { data: orderDetail } = useGetManufacturingOrderQuery(actualOrder)
 	const { io } = useSocketContext('io')
 
 	const exchangableOrders = useMemo(() => {
@@ -95,40 +97,23 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	}, [searchTerm])
 
 	useEffect(() => {
-		if (orderDetail && orderDetail.orders && orderDetail.sizes) {
-			setAvailableCmdSequence(
-				orderDetail.orders.map((item) => ({
-					label: item.mo_noseq,
-					value: item.mo_noseq
-				}))
-			)
-		}
-	}, [orderDetail])
-
-	const handleSelectSubCommandNumber = (value: string) => {
-		const currOrderInfo = orderDetail?.orders?.find((item) => item?.mo_noseq === value)
-		if (currOrderInfo) {
-			const matchedSize = orderDetail.sizes.find((item) => item.size_numcode === defaultValues?.size_numcode)
+		if (orderDetail) {
 			form.reset({
 				...form.getValues(),
-				color_sn_actual: currOrderInfo.color_sn,
-				cust_shoes_style: currOrderInfo.cust_shoes_style,
-				factory_shoes_style_actual: currOrderInfo.factory_shoes_style,
-				mat_code: currOrderInfo.mat_code,
-				mo_no_actual: currOrderInfo.mo_no,
-				or_no: currOrderInfo.or_no,
-				or_cust_po: currOrderInfo.or_cust_po,
-				size_code: currOrderInfo.size_code,
-				size_qty: currOrderInfo.size_sumqty,
-				size_numcode_actual: matchedSize?.size_numcode ?? 'N/A',
-				// filter values
-				factory_shoes_style: defaultValues.factory_shoes_style,
-				color_sn: defaultValues.color_sn,
-				mo_no: defaultValues.mo_no,
-				size_numcode: defaultValues.size_numcode
+				cust_shoes_style: orderDetail.cust_shoes_style,
+				factory_shoes_style_actual: orderDetail.factory_shoes_style,
+				color_sn_actual: orderDetail.color_sn,
+				mo_noseq: orderDetail.mo_noseq,
+				mat_code: orderDetail.mat_code,
+				or_no: orderDetail.or_no,
+				or_cust_po: orderDetail.or_cust_po,
+				size_code: orderDetail.size_code,
+				size_qty: orderDetail.sizes.find((size) => size.size_numcode === defaultValues.size_numcode)?.size_qty ?? 0,
+				size_numcode_actual:
+					orderDetail.sizes.find((size) => size.size_numcode === defaultValues.size_numcode)?.size_numcode ?? 'N/A'
 			})
 		}
-	}
+	}, [orderDetail])
 
 	const handleToggleSelectAll = (checked: CheckedState) => {
 		setIsExchangeAll(checked)
@@ -149,12 +134,12 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	useEffectOnce(() => {
 		const notifySuccess = (message: string) => toast.success(message, { id: toastId.current })
 		const notifyError = (message: string) => toast.error(message, { id: toastId.current })
-		io.on('exchange_mo.success', notifySuccess)
-		io.on('exchange_mo.error', notifyError)
+		io.on('finished_goods:upserted_epcs_match:success', notifySuccess)
+		io.on('finished_goods:upserted_epcs_match:failed', notifyError)
 
 		return () => {
-			io.off('exchange_mo.success', notifySuccess)
-			io.off('exchange_mo.error', notifyError)
+			io.off('finished_goods:upserted_epcs_match:success', notifySuccess)
+			io.off('finished_goods:upserted_epcs_match:failed', notifyError)
 		}
 	})
 
@@ -202,28 +187,11 @@ const ExchangeEpcFormDialog: React.FC = () => {
 									onSelect={(value) => {
 										form.reset({
 											...form.getValues(),
-											mo_no_actual: value,
-											factory_shoes_style_actual: '',
-											color_sn_actual: '',
-											size_numcode_actual: '',
-											mo_noseq: '',
-											mat_code: '',
-											or_no: '',
-											or_cust_po: '',
-											cust_shoes_style: '',
-											size_code: '',
-											size_qty: 0
+											mo_no_actual: value
 										})
 									}}
 								/>
-								<SelectFieldControl
-									name='mo_noseq'
-									label={t('ns_erp:fields.mo_noseq')}
-									datalist={availableCmdSequence}
-									labelField='label'
-									valueField='value'
-									onValueChange={handleSelectSubCommandNumber}
-								/>
+								<InputFieldControl name='mo_noseq' label={t('ns_erp:fields.mo_noseq')} readOnly={true} />
 								<InputFieldControl
 									label={t('ns_erp:fields.factory_shoes_style')}
 									name='factory_shoes_style_actual'
@@ -252,7 +220,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 								/>
 								<Div className='col-span-full flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4 shadow-sm'>
 									<Checkbox checked={isExchangeAll} onCheckedChange={handleToggleSelectAll} />
-									<Div className='space-y-1.5 leading-none'>
+									<Div className='space-y-2 leading-none'>
 										<FormLabel>{t('ns_inoutbound:labels.exchange_all')}</FormLabel>
 										<FormDescription>{t('ns_inoutbound:description.exchange_all')}</FormDescription>
 									</Div>

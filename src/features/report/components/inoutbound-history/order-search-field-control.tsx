@@ -20,7 +20,7 @@ import React, { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useSearchCommandNumberQuery, useSearchPurchaseOrderQuery } from '../../../order/hooks/use-order-request'
+import { useSearchManufacturingOrderQuery, useSearchPurchaseOrderQuery } from '../../../order/hooks/use-order-request'
 
 export function OrderSearchFieldControl() {
 	const { t } = useTranslation()
@@ -33,7 +33,7 @@ export function OrderSearchFieldControl() {
 	const currentDataType = useWatch({ control, name: 'type' })
 	const currentOrderValue = useWatch({ control, name: 'order' })
 
-	const { data: availableCommandNumbers, isLoading: isLoadingCommandNumber } = useSearchCommandNumberQuery(
+	const { data: availableCommandNumbers, isLoading: isLoadingCommandNumber } = useSearchManufacturingOrderQuery(
 		currentOrderValue,
 		currentDataType === StockFlow.INBOUND
 	)

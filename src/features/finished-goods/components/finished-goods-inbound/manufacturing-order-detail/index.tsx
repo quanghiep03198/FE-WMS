@@ -13,12 +13,12 @@ const OrderDetails: React.FC = () => {
 	useEffectOnce(() => {
 		const onSuccess = (message: string) => toast.success(message)
 		const onError = (message: string) => toast.error(message)
-		io.on('exchange_mo:success', onSuccess)
-		io.on('exchange_mo:error', onError)
+		io.on('finished_goods:upserted_epcs_match:success', onSuccess)
+		io.on('finished_goods:upserted_epcs_match:failed', onError)
 
 		return () => {
-			io.off('exchange_mo:success', onSuccess)
-			io.off('exchange_mo:error', onError)
+			io.off('finished_goods:upserted_epcs_match:success', onSuccess)
+			io.off('finished_goods:upserted_epcs_match:failed', onError)
 		}
 	})
 

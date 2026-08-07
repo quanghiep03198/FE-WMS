@@ -7,6 +7,7 @@ import ScannedEpcCounter from '@features/finished-goods/components/finished-good
 import EpcListBox from '@features/finished-goods/components/finished-goods-inbound/epc-data-list'
 import InoutboundForm from '@features/finished-goods/components/finished-goods-inbound/inoutbound-form'
 import PageComposition from '@features/finished-goods/components/finished-goods-inbound/page-composition'
+import RemindMessage from '@features/finished-goods/components/finished-goods-inbound/remind-message'
 import ScannerSettings from '@features/finished-goods/components/finished-goods-inbound/side-toolbar'
 import Toolbar from '@features/finished-goods/components/finished-goods-inbound/toolbar'
 import { PageProvider } from '@features/finished-goods/contexts/finished-goods-inbound/page-context'
@@ -55,6 +56,7 @@ function Page() {
 										<div className='block @[920px]/page-container:hidden'>
 											<EpcListBox />
 										</div>
+										<RemindMessage />
 										<InoutboundForm />
 									</div>
 									<ScannerSettings />

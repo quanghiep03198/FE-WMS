@@ -1,4 +1,4 @@
-import { buttonVariants, Div, Icon, Label, Separator } from '@components/ui'
+import { buttonVariants, Div, Icon, Label } from '@components/ui'
 import { useTranslation } from 'react-i18next'
 
 import ConnectButton from './connect-button'
@@ -12,7 +12,6 @@ const Toolbar: React.FC = () => {
 		<Div className='flex items-center gap-x-2'>
 			<NetworkInsight />
 			<DeviceSelect />
-			<Separator orientation='vertical' />
 			<ConnectButton />
 			<Label
 				htmlFor='side-toolbar-sheet-trigger'

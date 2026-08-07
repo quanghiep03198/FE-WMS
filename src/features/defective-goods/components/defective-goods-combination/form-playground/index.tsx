@@ -12,7 +12,7 @@ import {
 	Label,
 	SelectFieldControl
 } from '@components/ui'
-import { useGetCommandNumberDetailQuery } from '@features/order/hooks/use-order-request'
+import { useGetManufacturingOrderQuery } from '@features/order/hooks/use-order-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useLocalStorageState, usePrevious, useResetState, useUpdateEffect } from 'ahooks'
@@ -87,7 +87,7 @@ const DefectiveGoodsForm: React.FC = () => {
 	const currentCategory = useWatch({ control: form.control, name: 'defective_category' })
 
 	const { data: productSpecification, isLoading } = useGetProductSpecsQuery()
-	const { data: orderDetail } = useGetCommandNumberDetailQuery(currentManufacturingOrder)
+	const { data: orderDetail } = useGetManufacturingOrderQuery(currentManufacturingOrder)
 
 	const {
 		mutateAsync: createAsync,

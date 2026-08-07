@@ -19,7 +19,7 @@ export interface IManufacturingOrder extends IBaseEntity {
 	or_no: string
 	or_custpo: string
 	color_sn: string
-	shoestyle_codefactory: string
+	factory_shoes_style: string
 	cust_shoes_style: string
 	size_code: string
 	size_sumqty: number

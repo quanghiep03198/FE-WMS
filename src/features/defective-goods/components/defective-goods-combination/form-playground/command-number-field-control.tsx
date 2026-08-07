@@ -1,5 +1,5 @@
 import { AutoCompleteFieldControl, type AutoCompleteFieldControlProps } from '@components/ui'
-import { useSearchCommandNumberQuery } from '@features/order/hooks/use-order-request'
+import { useSearchManufacturingOrderQuery } from '@features/order/hooks/use-order-request'
 import { useDebounce } from 'ahooks'
 import { capitalize } from 'lodash-es'
 import React from 'react'
@@ -14,7 +14,7 @@ const CommandNumberFieldControl: React.FC<CommandNumberFieldControlProps> = (pro
 	const { t } = useTranslation()
 	const value = useWatch({ control, name: 'mo_no' })
 	const debouncedSearchTerm = useDebounce(value, { wait: 200 })
-	const { data, isLoading } = useSearchCommandNumberQuery(debouncedSearchTerm)
+	const { data, isLoading } = useSearchManufacturingOrderQuery(debouncedSearchTerm)
 
 	return (
 		<AutoCompleteFieldControl

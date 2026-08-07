@@ -27,11 +27,12 @@ import { useGetWarehouseStorageQuery } from '@features/warehouse/hooks/use-wareh
 import type { IWarehouse, IWarehouseStorage } from '@features/warehouse/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useMediaQuery from '@hooks/use-media-query'
+import { useSocketContext } from '@stores/socket.store'
 import { useMemoizedFn } from 'ahooks'
 import type { AxiosError } from 'axios'
 import { HttpStatusCode } from 'axios'
 import { omit } from 'lodash-es'
-import React, { Fragment, useEffect, useMemo, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -81,6 +82,7 @@ const InoutboundForm: React.FC = () => {
 	})
 
 	const translatedAssemblyLines = useMemo(() => {
+		if (!Array.isArray(assemblyLines)) return []
 		return assemblyLines.map((item) => ({
 			dept_code: item.dept_code,
 			dept_name: t('ns_company:assembly_line', {
@@ -119,8 +121,12 @@ const InoutboundForm: React.FC = () => {
 		)
 	}, [action])
 
+	const { io } = useSocketContext('io')
+
+	const toastRef = useRef<string | number | null>(null)
+
 	const handleSubmit = async (data: FormValues) => {
-		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })
+		toastRef.current = toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK_VARIATION' })
 		try {
 			await mutateAsync({
 				...omit(data, ['warehouse_num']),
@@ -129,11 +135,28 @@ const InoutboundForm: React.FC = () => {
 			} as StockVariationPayload)
 			// * Always select all scanned order after performing update stock
 			setScannedEpc(currentEpcData)
-			toast.success(t('ns_common:notification.success'), { id: 'UPDATE_STOCK' })
+			// toast.success(t('ns_common:notification.success'), { id: 'UPDATE_STOCK' })
 		} catch {
-			toast.error(t('ns_common:notification.error'), { id: 'UPDATE_STOCK' })
+			// toast.error(t('ns_common:notification.error'), { id: 'UPDATE_STOCK' })
 		}
 	}
+
+	useEffect(() => {
+		const onSuccess = (message: string) => toast.success(message, { id: 'UPDATE_STOCK_VARIATION' })
+		const onFailed = (message: string) => toast.error(message, { id: 'UPDATE_STOCK_VARIATION' })
+
+		io.on('finished_goods:stock_in:success', onSuccess)
+		io.on('finished_goods:recall:success', onSuccess)
+		io.on('finished_goods:stock_in:failed', onFailed)
+		io.on('finished_goods:recall:failed', onFailed)
+
+		return () => {
+			io.off('finished_goods:stock_in:success', onSuccess)
+			io.off('finished_goods:recall:success', onSuccess)
+			io.off('finished_goods:stock_in:failed', onFailed)
+			io.off('finished_goods:recall:failed', onFailed)
+		}
+	}, [])
 
 	return (
 		<Fragment>

@@ -208,13 +208,10 @@ const InboundHistoryTable: React.FC = () => {
 									.toSorted((a, b) => Number.parseFloat(a[0]) - Number.parseFloat(b[0]))
 									.map(([size, variation]) => {
 										const targetQty = coalesce(variation?.order_qty, 0)
-										const stockedInQty =
-											coalesce(variation?.stocked_in_qty, 0) -
-											coalesce(variation?.total_recall_tx, 0) +
-											coalesce(variation?.total_return_tx, 0)
+										const stockedInQty = coalesce(variation?.stocked_in_qty, 0)
 										const recalledQty =
 											coalesce(variation?.total_recall_tx, 0) - coalesce(variation?.total_return_tx, 0)
-										const missingQty = targetQty - stockedInQty
+										const missingQty = targetQty - (stockedInQty - recalledQty)
 										return (
 											<NestedColumn key={size} className='w-full *:h-9'>
 												<NestedCellHead>{size}</NestedCellHead>
