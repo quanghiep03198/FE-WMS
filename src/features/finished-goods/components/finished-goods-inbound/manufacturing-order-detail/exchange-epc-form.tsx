@@ -160,7 +160,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 				</DialogHeader>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleExchangeEpc)}>
-						<Div className='scroll-fade-y xxl:max-h-[90vh] grid max-h-[70vh] scrollbar-none! grid-cols-6 gap-x-2 gap-y-10 py-4'>
+						<Div className='scroll-fade-y xxl:max-h-[90vh] grid max-h-[70vh] scrollbar-none! grid-cols-6 gap-x-2 gap-y-10 overflow-y-auto py-4'>
 							<Fieldset as='fieldset'>
 								<Legend as='legend'>{t('ns_common:titles.original_data')}</Legend>
 								<InputFieldControl label={t('ns_erp:fields.mo_no')} name='mo_no' readOnly={true} />
@@ -220,7 +220,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 								/>
 								<Div className='col-span-full flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4 shadow-sm'>
 									<Checkbox checked={isExchangeAll} onCheckedChange={handleToggleSelectAll} />
-									<Div className='space-y-2 leading-none'>
+									<Div className='flex flex-col gap-1'>
 										<FormLabel>{t('ns_inoutbound:labels.exchange_all')}</FormLabel>
 										<FormDescription>{t('ns_inoutbound:description.exchange_all')}</FormDescription>
 									</Div>
