@@ -44,7 +44,7 @@ export class OrderService {
 		)
 	}
 
-	static async getCommandNumberDetail(manufacturingOrder: string) {
+	static async getManufacturingOrderDetail(manufacturingOrder: string) {
 		return await axiosInstance.get<
 			unknown,
 			ResponseBody<IManufacturingOrder & { sizes: Array<{ size_numcode: string; size_qty: number }> }>

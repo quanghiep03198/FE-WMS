@@ -31,17 +31,16 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
-import { omit } from 'lodash-es'
 import { useEffect, useId, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../../contexts/finished-goods-inbound/order-detail-context'
-import type { UpdateEpcFormValues } from '../../../schemas/fill-epc-data.schema'
+import type { UpsertEpcFormValues } from '../../../schemas/fill-epc-data.schema'
 import { updateEpcFormSchema } from '../../../schemas/fill-epc-data.schema'
 
-const DEFAULT_FORM_VALUES: UpdateEpcFormValues = {
+const DEFAULT_FORM_VALUES: UpsertEpcFormValues = {
 	mo_no: FALLBACK_VALUE,
 	mo_no_actual: '',
 	color_sn: FALLBACK_VALUE,
@@ -64,55 +63,44 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 	const { t } = useTranslation()
 	const [searchTerm, setSearchTerm, resetSearchTerm] = useResetState<string>('')
 	const [availableSizes, setAvailableSizes] = useState([])
-	const [availableCmdSequence, setAvailableCmdSequence] = useState([])
 	const [isConfirmed, setIsConfirmed, resetConfirmation] = useResetState<CheckedState>(false)
 	const { fillEpcDataDialogOpen, setFillEpcDataDialogOpen } = useOrderDetailContext(
 		'fillEpcDataDialogOpen',
 		'setFillEpcDataDialogOpen'
 	)
-	const form = useForm<UpdateEpcFormValues>({
+	const form = useForm({
 		resolver: zodResolver(updateEpcFormSchema),
-		defaultValues: DEFAULT_FORM_VALUES
+		defaultValues: DEFAULT_FORM_VALUES,
+		reValidateMode: 'onChange',
+		criteriaMode: 'all',
+		mode: 'onChange'
 	})
 	const checkboxId = useId()
-	const currCommandNumber = useWatch({ control: form.control, name: 'mo_no_actual' })
-	const currCommandNumberSeq = useWatch({ control: form.control, name: 'mo_noseq' })
-	const currentSizeQty = useWatch({ control: form.control, name: 'size_qty' })
+	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no_actual' })
 
 	const { data: commandNumbers } = useSearchManufacturingOrderQuery(searchTerm)
-	const { data: orderDetail } = useGetManufacturingOrderQuery(currCommandNumber)
+	const { data: orderDetail } = useGetManufacturingOrderQuery(currentManufacturingOrder)
 	const { mutateAsync } = useUpsertEpcsMatchMutation()
 
 	useEffect(() => {
-		if (orderDetail && orderDetail.orders && orderDetail.sizes) {
+		if (orderDetail && orderDetail.sizes) {
 			setAvailableSizes(orderDetail.sizes)
-			setAvailableCmdSequence(
-				orderDetail.orders.map((item) => ({
-					label: item.mo_noseq,
-					value: item.mo_noseq
-				}))
-			)
-		}
-	}, [orderDetail])
-
-	useEffect(() => {
-		const currOrderInfo = orderDetail?.orders?.find((item) => item?.mo_noseq === currCommandNumberSeq)
-		if (currOrderInfo) {
 			form.reset({
-				...omit(currOrderInfo, ['mo_no', 'color_sn', 'factory_shoes_style']),
 				...form.getValues(),
+				...orderDetail,
 				mo_no: FALLBACK_VALUE,
+				mo_noseq: orderDetail.mo_noseq,
 				factory_shoes_style: FALLBACK_VALUE,
 				color_sn: FALLBACK_VALUE,
 				size_numcode: FALLBACK_VALUE,
-				mo_no_actual: currOrderInfo.mo_no,
-				color_sn_actual: currOrderInfo.color_sn,
-				factory_shoes_style_actual: currOrderInfo.factory_shoes_style
+				mo_no_actual: orderDetail.mo_no,
+				factory_shoes_style_actual: orderDetail.factory_shoes_style,
+				color_sn_actual: orderDetail.color_sn
 			})
 		}
-	}, [currCommandNumberSeq])
+	}, [orderDetail])
 
-	const handleCombineEpcInfo = async (data: UpdateEpcFormValues) => {
+	const handleCombineEpcInfo = async (data: UpsertEpcFormValues) => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 		try {
 			await mutateAsync({ ...data, mo_no: FALLBACK_VALUE })
@@ -150,12 +138,11 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 							onInput={setSearchTerm}
 							onSelect={(value) => form.reset({ mo_no_actual: value })}
 						/>
-						<SelectFieldControl
+						<InputFieldControl
 							label={t('ns_erp:fields.mo_noseq')}
 							name='mo_noseq'
-							datalist={availableCmdSequence}
-							labelField='label'
-							valueField='value'
+							placeholder='001'
+							readOnly={true}
 						/>
 						<InputFieldControl
 							label={t('ns_erp:fields.factory_shoes_style')}

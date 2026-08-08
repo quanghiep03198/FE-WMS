@@ -29,10 +29,13 @@ export const useInventoryAuditMutation = (
 	const { searchParams } = useQueryParams<{ 'month:eq': string }>({ 'month:eq': format(new Date(), 'yyyy-MM') })
 
 	return useMutation({
+		meta: {
+			invalidates: [[InventoryAuditQueryKeys.INVENTORY_AUDIT, searchParams]]
+		},
 		mutationFn: async (payload: InventoryAuditFormValues['data']) => {
 			return await InventoryService.updateInventoryAuditReport(
 				signal,
-				{ ...queries, po: queries.actual_po, inv_year_month: searchParams['month:eq'] },
+				{ ...queries, year_month: searchParams['month:eq'] },
 				payload
 			)
 		},
@@ -55,13 +58,6 @@ export const useInventoryAuditMutation = (
 		onError: (_error, _variable, context) => {
 			toast.error(t('ns_common:notification.error'))
 			queryClient.setQueryData([InventoryAuditQueryKeys.INVENTORY_AUDIT, searchParams], context.previousData)
-		},
-		onSettled: () => {
-			queryClient.invalidateQueries({
-				predicate: ({ queryKey }) => {
-					return queryKey.some((key) => key === InventoryAuditQueryKeys.INVENTORY_AUDIT)
-				}
-			})
 		}
 	})
 }

@@ -9,6 +9,13 @@ export class WarehouseStorageService {
 		)
 	}
 
+	static async getWarehouseStorageSummary() {
+		return await axiosInstance.get<
+			void,
+			ResponseBody<{ total_storage_capacity: number; total_number_of_storage: number }>
+		>(`/warehouse/storage-detail/summary`)
+	}
+
 	static async createWarehouseStorage(payload: Required<StorageFormValue>) {
 		return axiosInstance.post<Required<StorageFormValue>, ResponseBody<null>>(`/warehouse/storage-detail`, payload)
 	}

@@ -47,7 +47,7 @@ export default function NetworkDetector() {
 					}
 				})
 		},
-		env<RuntimeEnvironment>('VITE_NODE_ENV') === 'production' ? 5000 : 60000,
+		env<RuntimeEnvironment>('VITE_NODE_ENV') === 'production' ? 5000 : 1000,
 		{ immediate: true }
 	)
 

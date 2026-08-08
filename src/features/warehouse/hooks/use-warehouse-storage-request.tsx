@@ -14,7 +14,8 @@ import { WarehouseStorageService } from '../services/warehouse-storage.service'
 import type { IWarehouseStorage } from '../types'
 
 export enum WarehouseStorageQueryKeys {
-	WAREHOUSE_STORAGE = 'WAREHOUSE_STORAGE'
+	WAREHOUSE_STORAGE = 'WAREHOUSE_STORAGE',
+	WAREHOUSE_STORAGE_SUMMARY = 'WAREHOUSE_STORAGE_SUMMARY'
 }
 
 type TQueryKey = [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, string]
@@ -47,6 +48,14 @@ export function getWarehouseStorageOptions<T>(
 	} as Required<UseGetWarehouseStorageQueryOptions<T>>
 }
 
+export function useGetWarehouseStorageSummaryQuery() {
+	return useQuery({
+		queryKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE_SUMMARY],
+		queryFn: WarehouseStorageService.getWarehouseStorageSummary,
+		select: (response) => response.metadata
+	})
+}
+
 export function useGetWarehouseStorageQuery<T>(
 	warehouseNum: string,
 	options?: Partial<UseGetWarehouseStorageQueryOptions<T>>
@@ -66,7 +75,12 @@ export function useUpdateStorageMutation({ warehouseNum }: { warehouseNum: strin
 	const { t } = useTranslation()
 
 	return useMutation({
-		mutationKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum],
+		meta: {
+			invalidates: [
+				[WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum],
+				[WarehouseStorageQueryKeys.WAREHOUSE_STORAGE_SUMMARY]
+			]
+		},
 		mutationFn: (data: { id: number; payload: PartialStorageFormValue }) =>
 			WarehouseStorageService.updateWarehouseStorage(data.id, data.payload),
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
@@ -93,7 +107,12 @@ export function useDeleteStorageMutation(
 	const { t } = useTranslation()
 
 	return useMutation({
-		mutationKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum],
+		meta: {
+			invalidates: [
+				[WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum],
+				[WarehouseStorageQueryKeys.WAREHOUSE_STORAGE_SUMMARY]
+			]
+		},
 		mutationFn: WarehouseStorageService.deleteWarehouseStorage,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {

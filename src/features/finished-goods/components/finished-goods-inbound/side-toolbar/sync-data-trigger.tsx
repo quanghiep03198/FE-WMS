@@ -19,6 +19,8 @@ import { Typewriter } from '@components/ui/@custom/type-writter'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { useSocketContext } from '@stores/socket.store'
 import { hasIn } from 'lodash-es'
+import { CircleCheckBig, CircleDot, CircleMinus, CircleX, IconNode, LoaderCircle } from 'lucide'
+import { MorphIcon } from 'morphicons/react'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -115,13 +117,16 @@ const SyncDataTrigger: React.FC = () => {
 						{data.metadata.map((item, index) => {
 							const icon: Record<
 								SyncProcessState['status'],
-								{ icon: React.ComponentProps<typeof Icon>['name']; color: string }
+								{
+									icon: IconNode
+									color: string
+								}
 							> = {
-								processing: { icon: 'LoaderCircle', color: 'var(--foreground)' },
-								completed: { icon: 'CircleCheckBig', color: 'var(--success)' },
-								failed: { icon: 'CircleX', color: 'var(--destructive)' },
-								cancelled: { icon: 'CircleMinus', color: 'var(--muted-foreground)' },
-								waiting: { icon: 'CircleDot', color: 'var(--foreground)' }
+								processing: { icon: LoaderCircle, color: 'var(--foreground)' },
+								completed: { icon: CircleCheckBig, color: 'var(--success)' },
+								failed: { icon: CircleX, color: 'var(--destructive)' },
+								cancelled: { icon: CircleMinus, color: 'var(--muted-foreground)' },
+								waiting: { icon: CircleDot, color: 'var(--foreground)' }
 							}
 							return (
 								<StepItem
@@ -131,13 +136,14 @@ const SyncDataTrigger: React.FC = () => {
 										animationDelay: (index + 1) * 300 + 'ms'
 									}}>
 									<Div className='translate-y-1.5'>
-										<Icon
-											name={icon[item.status].icon}
+										<MorphIcon
+											icon={icon[item.status].icon}
+											size={18}
 											stroke={icon[item.status].color}
 											className={cn({
 												'animate-spin': item.status === 'processing'
 											})}
-											size={18}
+											spring='bouncy'
 										/>
 									</Div>
 									<Typewriter

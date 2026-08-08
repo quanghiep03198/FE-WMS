@@ -23,4 +23,4 @@ export const updateEpcFormSchema = object({
 		.default(0)
 })
 
-export type UpdateEpcFormValues = Infer<typeof updateEpcFormSchema>
+export type UpsertEpcFormValues = Infer<typeof updateEpcFormSchema>

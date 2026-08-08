@@ -52,7 +52,7 @@ export const useSearchPurchaseOrderQuery = (searchTerm: string, shouldFetch = tr
 export const useGetManufacturingOrderQuery = (manufacturingOrder: string) => {
 	return useQuery({
 		queryKey: [OrderQueryKeys.MANUFACTURING_ORDER_INFO, manufacturingOrder],
-		queryFn: async () => await OrderService.getCommandNumberDetail(manufacturingOrder),
+		queryFn: async () => await OrderService.getManufacturingOrderDetail(manufacturingOrder),
 		enabled: !!manufacturingOrder,
 		refetchOnMount: true,
 		select: (response) => response.metadata

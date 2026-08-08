@@ -191,7 +191,12 @@ const ExchangeEpcFormDialog: React.FC = () => {
 										})
 									}}
 								/>
-								<InputFieldControl name='mo_noseq' label={t('ns_erp:fields.mo_noseq')} readOnly={true} />
+								<InputFieldControl
+									name='mo_noseq'
+									label={t('ns_erp:fields.mo_noseq')}
+									readOnly={true}
+									placeholder='001'
+								/>
 								<InputFieldControl
 									label={t('ns_erp:fields.factory_shoes_style')}
 									name='factory_shoes_style_actual'

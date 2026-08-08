@@ -20,10 +20,11 @@ import type { BaseUpdateUpdateQuery } from '../../types'
 
 type InventoryReportDetailTableProps = {
 	queries: Omit<BaseUpdateUpdateQuery, 'size_numcode'>
-	data: IMonthlyInventoryAudit['detail']
+	data: IMonthlyInventoryAudit['inventory_variation']
+	canUpdate: boolean
 }
 
-export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProps> = ({ queries, data }) => {
+export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProps> = ({ queries, data, canUpdate }) => {
 	const { t, i18n } = useTranslation()
 
 	const { searchParams } = useQueryParams<{ 'month:eq': string }>({ 'month:eq': format(new Date(), 'yyyy-MM') })
@@ -38,9 +39,9 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		resolver: zodResolver(reportDataSchema),
 		defaultValues: {
 			data: data.map((item) => ({
-				size_numcode: item.size,
-				mn_ist_qty: item.actual_instock_qty,
-				mn_ost_qty: item.actual_outstock_qty
+				size_numcode: item.size_numcode,
+				supplemental_stocked_in_qty: item.supplemental_stocked_in_qty ?? 0,
+				supplemental_shipped_out_qty: item.supplemental_shipped_out_qty ?? 0
 			}))
 		}
 	})
@@ -60,9 +61,9 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		disableEditing()
 		form.reset({
 			data: data.map((item) => ({
-				size_numcode: item.size,
-				mn_ist_qty: item.actual_instock_qty,
-				mn_ost_qty: item.actual_outstock_qty
+				size_numcode: item.size_numcode,
+				supplemental_stocked_in_qty: item.supplemental_stocked_in_qty,
+				supplemental_shipped_out_qty: item.supplemental_shipped_out_qty
 			}))
 		})
 	}
@@ -99,31 +100,31 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 								<TableRow>
 									<TableVerticalHeader>Size</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCellHead key={item.size}>{item.size}</TableCellHead>
+										<TableCellHead key={item.size_numcode}>{item.size_numcode}</TableCellHead>
 									))}
 								</TableRow>
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.mo_size_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size}>{item.order_qty_by_size}</TableCell>
+										<TableCell key={item.size_numcode}>{item.order_qty}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.total_init_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size}>{item.initial_stock_qty}</TableCell>
+										<TableCell key={item.size_numcode}>{item.beginning_inventory_qty}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.inbound_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size}>{item.instock_qty}</TableCell>
+										<TableCell key={item.size_numcode}>{item.stocked_in_qty}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.outbound_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size}>{item.outstock_qty}</TableCell>
+										<TableCell key={item.size_numcode}>{item.shipped_out_qty}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
@@ -134,20 +135,20 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 									</TableVerticalHeader>
 									{fields.length > 0 &&
 										fields.map((field, index) => {
-											const error = form.getFieldState(`data.${index}.mn_ist_qty`).error
+											const error = form.getFieldState(`data.${index}.supplemental_stocked_in_qty`).error
 											return (
 												<TableCell
 													key={field.id}
 													aria-invalid={!!error}
 													className='aria-invalid:bg-destructive p-0'>
 													<InputFieldControl
-														name={`data.${index}.mn_ist_qty`}
+														name={`data.${index}.supplemental_stocked_in_qty`}
 														type='number'
 														errorMessageVariant='tooltip'
 														disabled={!isEditing || isLoading}
 														className={cn(
 															'aria-invalid:bg-destructive/20 h-auto w-full rounded-none border-none bg-transparent p-0 whitespace-nowrap shadow-none focus:outline-none',
-															form.watch(`data.${index}.mn_ist_qty`) !== 0
+															form.watch(`data.${index}.supplemental_stocked_in_qty`) !== 0
 																? 'text-destructive disabled:text-destructive/80'
 																: 'text-foreground'
 														)}
@@ -164,20 +165,20 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 									</TableVerticalHeader>
 									{fields.length > 0 &&
 										fields.map((field, index) => {
-											const error = form.getFieldState(`data.${index}.mn_ost_qty`).error
+											const error = form.getFieldState(`data.${index}.supplemental_shipped_out_qty`).error
 											return (
 												<TableCell
 													key={field.id}
 													aria-invalid={!!error}
 													className='aria-invalid:bg-destructive/20 p-0'>
 													<InputFieldControl
-														name={`data.${index}.mn_ost_qty`}
+														name={`data.${index}.supplemental_shipped_out_qty`}
 														type='number'
 														errorMessageVariant='tooltip'
 														disabled={!isEditing || isLoading}
 														className={cn(
 															'aria-invalid:bg-destructive/20 h-auto w-full rounded-none border-none p-0 whitespace-nowrap shadow-none focus:outline-none',
-															form.watch(`data.${index}.mn_ost_qty`) !== 0
+															form.watch(`data.${index}.supplemental_shipped_out_qty`) !== 0
 																? 'text-destructive disabled:text-destructive/80'
 																: 'text-foreground'
 														)}
@@ -189,8 +190,8 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.final_inventory_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size} className='hover:ring-primary!'>
-											{item.final_stock_qty}
+										<TableCell key={item.size_numcode} className='hover:ring-primary!'>
+											{item.final_inventory_qty}
 										</TableCell>
 									))}
 								</TableRow>
@@ -223,8 +224,18 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 												<span>{t('ns_common:actions.cancel')}</span>
 											</Button>
 										) : (
-											<Button type='button' size='sm' variant='outline' onClick={() => handleStartUpdate()}>
-												<Icon name='Pencil' /> {t('ns_common:actions.update')}
+											<Button
+												type='button'
+												size='sm'
+												variant='outline'
+												onClick={() => handleStartUpdate()}
+												disabled={!canUpdate}>
+												{canUpdate ? (
+													<Icon name='Pencil' />
+												) : (
+													<Icon name='Check' className='stroke-success' />
+												)}{' '}
+												{canUpdate ? t('ns_common:actions.update') : t('ns_common:status.confirmed')}
 											</Button>
 										)}
 										{isEditing && (

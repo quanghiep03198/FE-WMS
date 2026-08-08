@@ -20,7 +20,7 @@ import { createColumnHelper, type Table } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
-import { pick, split } from 'lodash-es'
+import { pick } from 'lodash-es'
 import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -49,15 +49,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 	const renderSubComponents = useCallback(
 		({ row }: RenderSubComponentProps<IMonthlyInventoryAudit>): React.ReactElement => (
 			<InventoryReportDetailTable
-				queries={pick(row.original, [
-					'actual_po',
-					'mo_no',
-					'cust_shoes_style',
-					'factory_shoes_style',
-					'inv_type',
-					'inv_year_month'
-				])}
-				data={row.original?.detail}
+				queries={pick(row.original, ['mo_no', 'year_month'])}
+				data={row.original?.inventory_variation}
+				canUpdate={row.original.inventory_closure_status === 'pending'}
 			/>
 		),
 		[]
@@ -148,7 +142,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				cell: TableCellText
 			}),
-			columnHelper.accessor('storage', {
+			columnHelper.accessor('storage_locations', {
 				header: t('ns_warehouse:fields.storage_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -166,9 +160,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 					return (
 						<EllipsisList
 							threshhold={2}
-							data={split(value, ',')
-								.filter((item) => !!item)
-								.sort((a, b) => a.localeCompare(b))}
+							data={value.filter((item) => !!item).sort((a, b) => a.localeCompare(b))}
 							template={({ data }) => (
 								<Badge variant='secondary' className='whitespace-nowrap'>
 									{data.trim()}
@@ -189,7 +181,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
-			columnHelper.accessor('init_inv_qty', {
+			columnHelper.accessor('beginning_inventory_qty', {
 				header: t('ns_erp:fields.total_init_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -199,7 +191,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
-			columnHelper.accessor('total_instock_qty', {
+			columnHelper.accessor('total_stocked_in_qty', {
 				header: t('ns_erp:fields.inbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -209,7 +201,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
-			columnHelper.accessor('total_outstock_qty', {
+			columnHelper.accessor('total_shipped_out_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -219,7 +211,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
-			columnHelper.accessor('actual_inv_qty', {
+			columnHelper.accessor('total_supplemental_qty', {
 				header: t('ns_erp:fields.actual_inventory_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -229,7 +221,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
-			columnHelper.accessor('final_inv_qty', {
+			columnHelper.accessor('final_inventory_qty', {
 				header: t('ns_erp:fields.final_inventory_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,

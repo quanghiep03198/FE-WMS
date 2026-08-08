@@ -1,7 +1,6 @@
-export declare type BaseUpdateUpdateQuery = Pick<
-	IMonthlyInventoryAudit,
-	'actual_po' | 'mo_no' | 'factory_shoes_style' | 'cust_shoes_style' | 'inv_type' | 'inv_year_month'
-> & { size_numcode: string }
+export declare type BaseUpdateUpdateQuery = Pick<IMonthlyInventoryAudit, 'mo_no' | 'year_month'> & {
+	size_numcode: string
+}
 export interface IMonthlyInventoryAudit {
 	brand_name: string
 	actual_po: string
@@ -11,27 +10,28 @@ export interface IMonthlyInventoryAudit {
 	or_no: string
 	color_sn: string
 	factory_shoes_style: string | null
-	storage: string
+	storage_locations: Array<string>
+	inventory_closure_status: 'pending' | 'completed'
 	cust_shoes_style: string
-	init_inv_qty: number
-	total_instock_qty: number
-	total_outstock_qty: number
-	actual_inv_qty: number
-	final_inv_qty: number
+	beginning_inventory_qty: number
+	total_stocked_in_qty: number
+	total_shipped_out_qty: number
+	total_supplemental_qty: number
+	final_inventory_qty: number
 	inv_type: 'FG' | 'IH' // Finished goods | Insole house
-	inv_year_month: string
+	year_month: string
 	total_number_of_storage: number
 	total_storage_capacity: number
 	// prettier-ignore
-	detail: Array<{
-		size: string // * Size code
-		order_qty_by_size: number // * Order quantity by size 
-		initial_stock_qty: number // * Initial stock quantity
-		instock_qty: number // * Instock quantity
-		outstock_qty: number // * Outstock quantity
-		actual_instock_qty: number // * Actual instock quantity
-		actual_outstock_qty: number // * Actual outstock quantity
-		final_stock_qty: number // * Final stock quantity
+	inventory_variation: Array<{
+		size_numcode: string // * Size code
+		order_qty: number // * Order quantity by size 
+		beginning_inventory_qty: number // * Initial stock quantity
+		stocked_in_qty: number // * Instock quantity
+		shipped_out_qty: number // * Outstock quantity
+		supplemental_stocked_in_qty: number // * Actual instock quantity
+		supplemental_shipped_out_qty: number // * Actual outstock quantity
+		final_inventory_qty: number // * Final stock quantity
 	}>
 }
 
