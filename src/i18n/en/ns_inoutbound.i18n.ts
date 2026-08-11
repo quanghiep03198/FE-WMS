@@ -85,6 +85,7 @@ export default {
 		wrong_stamp: 'Wrong stamp.'
 	},
 	inoutbound_actions: {
+		close_monthly_inventory: 'Close inventory',
 		downgrade: 'B to C-Grade',
 		giveaway: 'Giveaway',
 		lab: 'Lab',

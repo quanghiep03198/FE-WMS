@@ -100,6 +100,7 @@ export default {
 		wrong_stamp: 'Dán sai tem'
 	},
 	inoutbound_actions: {
+		close_monthly_inventory: 'Kết đơn tồn kho',
 		downgrade: 'B chuyển C',
 		lab: 'Phòng thí nghiệm',
 		normal_export: 'Xuất kho bình thường',

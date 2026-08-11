@@ -79,7 +79,7 @@ const AnimatedScreen: React.FC = () => {
 					'lg:transform-[perspective(1920px)_translateX(-5%)_translateY(-10%)_rotateX(45deg)_rotateY(-15deg)_rotateZ(-45deg)] lg:zoom-[0.6]',
 					'md:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)] md:zoom-[0.8]',
 					'sm:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)] sm:zoom-[0.5]',
-					'after:from-background after:via-background/80 md:after:to-background/50 lg:after:via-background via-25% to-50% after:absolute after:inset-0 after:z-10 after:h-[calc(100%+4px)] after:w-[200%] after:-translate-y-px after:bg-linear-to-l after:to-transparent md:via-65% lg:after:via-60% lg:after:to-70%'
+					'after:from-background after:via-background/80 md:after:to-background/50 lg:after:via-background via-25% to-50% after:absolute after:inset-0 after:z-10 after:h-[calc(100%+4px)] after:w-[200%] after:-translate-y-px after:bg-linear-to-l after:to-transparent md:via-65% lg:after:via-60% lg:after:to-80%'
 				)}>
 				<aside className='paused group-aria-current/cta:running z-0 col-start-1 row-span-full animate-[fly-down_0.7s_ease_forwards] space-y-10 border-r p-4 text-sm'>
 					<div data-slot='sidebar-header'>

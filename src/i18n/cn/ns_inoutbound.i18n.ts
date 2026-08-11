@@ -71,6 +71,7 @@ export default {
 		wrong_stamp: '错误的标签'
 	},
 	inoutbound_actions: {
+		close_monthly_inventory: '月末结账',
 		downgrade: 'B转C',
 		giveaway: '給客人',
 		lab: '实验室检验',

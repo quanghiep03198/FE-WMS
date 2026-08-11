@@ -25,9 +25,9 @@ import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { InventoryAuditQueryKeys, useGetInventoryAuditReport } from '../../hooks/use-inventory-audit-request'
+import CheckoutInventoryAuditButton from './checkout-button'
 import { InventoryReportDetailTable } from './report-detail-table'
 import DataTableSummary from './report-summary-table'
-import SyncDataTrigger from './sync-data-trigger'
 
 export const InventoryReportMasterTable: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'month:eq': string }>({ 'month:eq': format(new Date(), 'yyyy-MM') })
@@ -264,7 +264,11 @@ export const InventoryReportMasterTable: React.FC = () => {
 				}}
 				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
 				toolbarProps={{
-					slotLeft: () => <SyncDataTrigger />,
+					slotLeft: () => (
+						<CheckoutInventoryAuditButton
+							isClosed={data.every((item) => item.inventory_closure_status === 'completed')}
+						/>
+					),
 					slotRight: () => <DataTableSlotRight downloadable={data?.length > 0} />
 				}}
 			/>
@@ -286,7 +290,7 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 		try {
 			const blob = await InventoryService.downloadInventoryAuditReport({
 				...pick(searchParams, 'month:eq'),
-				'mo_no:in': selectedRows.map((row) => row.original.mo_no)
+				'mo_no:in': selectedRows.map((row) => row.original.mo_no).join(',')
 			})
 			saveAs(
 				blob,

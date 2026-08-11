@@ -189,73 +189,84 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 								</TableRow>
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.final_inventory_qty')}</TableVerticalHeader>
-									{data.map((item) => (
-										<TableCell key={item.size_numcode} className='hover:ring-primary!'>
-											{item.final_inventory_qty}
-										</TableCell>
-									))}
+									{data.map((item) => {
+										const finalInventoryQty = item.final_inventory_qty
+
+										const supplementalStockedInQty = form.watch(
+											`data.${data.findIndex((d) => d.size_numcode === item.size_numcode)}.supplemental_stocked_in_qty`
+										)
+
+										const supplementalShippedOutQty = form.watch(
+											`data.${data.findIndex((d) => d.size_numcode === item.size_numcode)}.supplemental_shipped_out_qty`
+										)
+
+										return (
+											<TableCell
+												key={item.size_numcode}
+												className={cn('hover:ring-primary!', { 'opacity-50': isError })}>
+												{finalInventoryQty + supplementalStockedInQty - supplementalShippedOutQty}
+											</TableCell>
+										)
+									})}
 								</TableRow>
 							</Fragment>
 						) : (
 							<Div className='p-10 font-medium'>{t('ns_common:table.no_data')}</Div>
 						)}
-						<TableRow className='*:border-none'>
-							<TableVerticalHeader className='sticky left-0 w-full! flex-1'>
-								<RoleBaseAccessControl
-									mode='fallback'
-									authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}
-									fallbackComponent={
-										<Typography
-											variant='small'
-											color='destructive'
-											className='inline-flex items-center gap-x-2 font-normal normal-case'>
-											<Icon name='TriangleAlert' />
-											{t('ns_auth:notification.viewonly')}
-										</Typography>
-									}>
-									<Div className='inline-grid grid-cols-2 gap-x-2'>
-										{isEditing ? (
-											<Button
-												type='button'
-												size='sm'
-												variant='secondary'
-												onClick={() => handleCancelUpdate()}>
-												<Icon name='X' />
-												<span>{t('ns_common:actions.cancel')}</span>
-											</Button>
-										) : (
-											<Button
-												type='button'
-												size='sm'
-												variant='outline'
-												onClick={() => handleStartUpdate()}
-												disabled={!canUpdate}>
-												{canUpdate ? (
+						{canUpdate && (
+							<TableRow className='*:border-none'>
+								<TableVerticalHeader className='sticky left-0 w-full! flex-1'>
+									<RoleBaseAccessControl
+										mode='fallback'
+										authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}
+										fallbackComponent={
+											<Typography
+												variant='small'
+												color='destructive'
+												className='inline-flex items-center gap-x-2 font-normal normal-case'>
+												<Icon name='TriangleAlert' />
+												{t('ns_auth:notification.viewonly')}
+											</Typography>
+										}>
+										<Div className='inline-grid grid-cols-2 gap-x-2'>
+											{isEditing ? (
+												<Button
+													type='button'
+													size='sm'
+													variant='secondary'
+													onClick={() => handleCancelUpdate()}>
+													<Icon name='X' />
+													<span>{t('ns_common:actions.cancel')}</span>
+												</Button>
+											) : (
+												<Button
+													type='button'
+													size='sm'
+													variant='outline'
+													onClick={() => handleStartUpdate()}>
 													<Icon name='Pencil' />
-												) : (
-													<Icon name='Check' className='stroke-success' />
-												)}{' '}
-												{canUpdate ? t('ns_common:actions.update') : t('ns_common:status.confirmed')}
-											</Button>
-										)}
-										{isEditing && (
-											<Button type='submit' size='sm' disabled={isLoading}>
-												<Icon
-													name={isPending ? 'LoaderCircle' : 'Check'}
-													className={isPending && 'animate-spin'}
-												/>{' '}
-												{isPending
-													? t('ns_common:status.processing')
-													: isError
-														? t('ns_common:actions.retry')
-														: t('ns_common:actions.save')}
-											</Button>
-										)}
-									</Div>
-								</RoleBaseAccessControl>
-							</TableVerticalHeader>
-							<TableCell className='flex-1' />
-						</TableRow>
+													{t('ns_common:actions.update')}
+												</Button>
+											)}
+											{isEditing && (
+												<Button type='submit' size='sm' disabled={isLoading}>
+													<Icon
+														name={isPending ? 'LoaderCircle' : 'Check'}
+														className={isPending && 'animate-spin'}
+													/>{' '}
+													{isPending
+														? t('ns_common:status.processing')
+														: isError
+															? t('ns_common:actions.retry')
+															: t('ns_common:actions.save')}
+												</Button>
+											)}
+										</Div>
+									</RoleBaseAccessControl>
+								</TableVerticalHeader>
+								<TableCell className='flex-1' />
+							</TableRow>
+						)}
 					</Table>
 				</form>
 			</Form>
@@ -263,7 +274,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 	)
 }
 
-const ScrollArea = tw.div`relative h-fit max-w-full overflow-auto overflow-x-scroll rounded-md border bg-background`
+const ScrollArea = tw.div`relative max-w-full overflow-x-scroll rounded-md border bg-background`
 const Table = tw.div`[&>*>:first-child]:top-0 [&>*>:first-child]:font-medium [&>*>:first-child]:text-table-head-foreground`
 const TableVerticalHeader = tw.div`sticky left-0 z-10 lowercase first-letter:uppercase`
 const TableRow = tw.div`flex *:px-4 *:border-b *:bg-background *:py-2 *:whitespace-nowrap *:border-r *:last:border-r-0 *:last:flex-1 *:first:basis-52 *:first:min-w-52 [&>:not(:first-child)]:basis-24 [&>:not(:first-child)]:min-w-24`

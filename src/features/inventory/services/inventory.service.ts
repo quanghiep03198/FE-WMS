@@ -16,7 +16,7 @@ export class InventoryService {
 		})
 	}
 
-	static async downloadInventoryAuditReport(filter: { 'month:eq': string; 'mo_no:in': string[] }) {
+	static async downloadInventoryAuditReport(filter: { 'month:eq': string; 'mo_no:in': string }) {
 		return await axiosInstance.get<void, Blob>('/inventory/audit/export', {
 			params: filter,
 			responseType: 'blob'
@@ -28,6 +28,10 @@ export class InventoryService {
 			signal,
 			params
 		})
+	}
+
+	public static async checkoutMonthlyInventory(month: string) {
+		return await axiosInstance.put(`/inventory/audit/checkout/${month}`)
 	}
 
 	static async getProductionInventoryReport(
