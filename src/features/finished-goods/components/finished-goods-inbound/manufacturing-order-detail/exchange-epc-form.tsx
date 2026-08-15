@@ -25,7 +25,6 @@ import {
 	useSearchManufacturingOrderQuery
 } from '@features/order/hooks/use-order-request'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffectOnce } from '@hooks/use-effect-once'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useSocketContext } from '@stores/socket.store'
 import { usePrevious } from 'ahooks'
@@ -33,7 +32,6 @@ import { debounce, uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../../contexts/finished-goods-inbound/order-detail-context'
 import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
@@ -121,27 +119,12 @@ const ExchangeEpcFormDialog: React.FC = () => {
 		else form.setValue('quantity', previousQuantity ?? 0)
 	}
 
-	const toastId = useRef<string | number>(null)
-
 	const handleExchangeEpc = async (data: ExchangeEpcFormValue) => {
-		toastId.current = toast.loading(t('ns_common:notification.processing_request'))
 		await mutateAsync(data)
 
 		resetSelectedRows()
 		setOpen(!open)
 	}
-
-	useEffectOnce(() => {
-		const notifySuccess = (message: string) => toast.success(message, { id: toastId.current })
-		const notifyError = (message: string) => toast.error(message, { id: toastId.current })
-		io.on('finished_goods:upserted_epcs_match:success', notifySuccess)
-		io.on('finished_goods:upserted_epcs_match:failed', notifyError)
-
-		return () => {
-			io.off('finished_goods:upserted_epcs_match:success', notifySuccess)
-			io.off('finished_goods:upserted_epcs_match:failed', notifyError)
-		}
-	})
 
 	const handleOpenChange = (open: boolean) => {
 		setOpen(open)

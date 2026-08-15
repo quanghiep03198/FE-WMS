@@ -111,7 +111,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 
 	return (
 		<Div
-			className='scrollbar-track-accent/10 scroll-fade-y flex-1 space-y-1'
+			className='scrollbar-track-accent/10 flex-1 space-y-1 overflow-y-auto'
 			style={{
 				container: 'table / size'
 			}}

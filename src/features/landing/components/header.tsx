@@ -1,6 +1,7 @@
 import { PresetBreakPoints } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import AppLogo from '@components/shared/app-logo'
+import { InstallPwaDialog } from '@components/shared/install-pwa-dialog'
 import { ThemeSwitcher } from '@components/shared/theme-switcher'
 import {
 	Button,
@@ -63,6 +64,7 @@ const NavHeaderMenu: React.FC = () => {
 					{item.title}
 				</Button>
 			))}
+			<InstallPwaDialog />
 		</Div>
 	)
 }

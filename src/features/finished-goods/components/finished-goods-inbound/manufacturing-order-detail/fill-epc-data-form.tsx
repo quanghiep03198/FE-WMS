@@ -101,14 +101,13 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 	}, [orderDetail])
 
 	const handleCombineEpcInfo = async (data: UpsertEpcFormValues) => {
-		const id = toast.loading(t('ns_common:notification.processing_request'))
 		try {
 			await mutateAsync({ ...data, mo_no: FALLBACK_VALUE })
-			toast.success(t('ns_common:notification.success'), { id })
+			toast.success(t('ns_common:notification.success'))
 			setFillEpcDataDialogOpen(false)
 			form.reset(DEFAULT_FORM_VALUES)
 		} catch {
-			toast.error(t('ns_common:notification.error'), { id })
+			toast.error(t('ns_common:notification.error'))
 		}
 	}
 

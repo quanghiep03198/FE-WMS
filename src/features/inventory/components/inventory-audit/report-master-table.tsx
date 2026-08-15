@@ -266,7 +266,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 				toolbarProps={{
 					slotLeft: () => (
 						<CheckoutInventoryAuditButton
-							isClosed={data.every((item) => item.inventory_closure_status === 'completed')}
+							isClosed={
+								Array.isArray(data) && data.every((item) => item.inventory_closure_status === 'completed')
+							}
 						/>
 					),
 					slotRight: () => <DataTableSlotRight downloadable={data?.length > 0} />

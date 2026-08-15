@@ -26,6 +26,7 @@ import { createPortal } from 'react-dom'
 import type { FieldArrayWithId, UseFieldArrayAppend } from 'react-hook-form'
 import { useFieldArray, useForm, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../../../contexts/finished-goods-outbound/page-context'
 import {
@@ -114,6 +115,19 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 		return 0
 	}, [fieldsetRef.current])
 
+	const handleSubmit = async (data: DetailedOutBoundFormValues) => {
+		try {
+			await mutateAsync({
+				...data,
+				sizes: data.sizes.map((item) => ({ size_numcode: item.size_numcode, qty: item.qty }))
+			}).then()
+			form.reset()
+			toast.success(t('ns_common:notification.success'))
+		} catch {
+			toast.error(t('ns_common:notification.error'))
+		}
+	}
+
 	return (
 		<Fragment>
 			{createPortal(
@@ -143,13 +157,7 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 			)}
 			<DecentralizedPoFormProvider value={{ sizes: availableSizes }}>
 				<FormProvider {...form}>
-					<Form
-						onSubmit={form.handleSubmit((data) => {
-							mutateAsync({
-								...data,
-								sizes: data.sizes.map((item) => ({ size_numcode: item.size_numcode, qty: item.qty }))
-							}).then(() => form.reset())
-						})}>
+					<Form onSubmit={form.handleSubmit(handleSubmit)}>
 						<Div className='col-span-1'>
 							<PurchaseOrderAutoComplete />
 						</Div>

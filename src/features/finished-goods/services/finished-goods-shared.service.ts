@@ -60,7 +60,7 @@ export class FinishedGoodsSharedService {
 
 	static async getDeletedEpcs(stockFlow: StockFlow, params: Partial<FilterDeletedEpcParams>) {
 		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode & { scanned: boolean }>>>(
-			`/rfid/${stockFlow}/deleted-epcs`,
+			`/rfid/${stockFlow}/archived-epcs`,
 			{ params }
 		)
 	}
@@ -74,10 +74,10 @@ export class FinishedGoodsSharedService {
 	}
 
 	static async getDeletedEpcSepcs() {
-		return await axiosInstance.get<unknown, ResponseBody<IArchivedFilterFeature[]>>(`/rfid/deleted-epc-specs`)
+		return await axiosInstance.get<unknown, ResponseBody<IArchivedFilterFeature[]>>(`/rfid/archived-epc-specs`)
 	}
 
 	static async restoreDeletedEpcs(payload: Array<string>) {
-		return await axiosInstance.patch<Array<string>, ResponseBody<unknown>>(`/rfid/restore-deleted-epcs`, payload)
+		return await axiosInstance.patch<Array<string>, ResponseBody<unknown>>(`/rfid/restore-archived-epcs`, payload)
 	}
 }

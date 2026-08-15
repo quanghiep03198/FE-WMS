@@ -239,11 +239,13 @@ const OrderDetailTable: React.FC = () => {
 											onCheckedChange={toggleAllMatchedRowsSelected}
 										/>
 									</TableHead>
-									<TableHead align='left'>{t('ns_erp:fields.mo_no')}</TableHead>
-									<TableHead align='left'>
+									<TableHead align='left' title={t('ns_erp:fields.mo_no')}>
+										<span>{t('ns_erp:fields.mo_no')}</span>
+									</TableHead>
+									<TableHead align='left' title={t('ns_erp:fields.factory_shoes_style')}>
 										<span>{t('ns_erp:fields.factory_shoes_style')}</span>
 									</TableHead>
-									<TableHead align='left'>
+									<TableHead align='left' title={t('ns_erp:fields.color_sn')}>
 										<span>{t('ns_erp:fields.color_sn')}</span>
 									</TableHead>
 									<TableHead align='left' className='p-0'>

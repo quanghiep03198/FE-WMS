@@ -11,6 +11,7 @@ import { Fragment, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../../../contexts/finished-goods-outbound/page-context'
 import { useStockOutMutation } from '../../../hooks/use-outbound-request'
@@ -43,6 +44,14 @@ const CentralizedPoOutboundForm: React.FC = () => {
 		return sortedUniqBy([...result, ...selectedOrders], (item) => item.mo_no)
 	}, [searchTerm, scannedOrders])
 
+	const handleSubmit = (data: StandardOutboundFormValues) => {
+		mutateAsync(data).then(() => {
+			form.reset()
+			resetSearchTerm()
+			toast.success(t('ns_common:notification.success'))
+		})
+	}
+
 	return (
 		<Fragment>
 			{createPortal(
@@ -71,13 +80,7 @@ const CentralizedPoOutboundForm: React.FC = () => {
 				document.body
 			)}
 			<FormProvider {...form}>
-				<Form
-					onSubmit={form.handleSubmit((data) =>
-						mutateAsync(data).then(() => {
-							form.reset()
-							resetSearchTerm()
-						})
-					)}>
+				<Form onSubmit={form.handleSubmit(handleSubmit)}>
 					<PurchaseOrderAutoComplete />
 					<MultiSelectFieldControl
 						name='mo_no'

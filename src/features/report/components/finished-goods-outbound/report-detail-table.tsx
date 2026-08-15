@@ -16,7 +16,7 @@ const OutboundReportDetailTable: React.FC<Pick<IOutboundReport, 'detail' | 'over
 					<TableRow className='sticky'>
 						<TableHead
 							align='left'
-							className='left-0 z-20 w-(--sticky-left-col-width) min-w-(--sticky-left-col-width) whitespace-nowrap shadow-[1px_0px_0px_var(--border)] xl:sticky'>
+							className='left-0 z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap shadow-[1px_0px_0px_var(--border)] xl:sticky'>
 							{t('ns_erp:fields.mo_no')}
 						</TableHead>
 						<TableHead align='center'>Size</TableHead>

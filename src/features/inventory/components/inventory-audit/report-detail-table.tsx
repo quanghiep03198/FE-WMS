@@ -6,7 +6,7 @@ import type { IMonthlyInventoryAudit } from '@features/inventory/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useQueryParams from '@hooks/use-query-params'
 import { useIsFetching } from '@tanstack/react-query'
-import { useBoolean, useUpdateEffect } from 'ahooks'
+import { useBoolean } from 'ahooks'
 import { format } from 'date-fns'
 import React, { Fragment, useMemo, useRef } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -51,10 +51,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 	const { data: currentTenant } = useGetTenantByFactory()
 
 	// * Implement optimistic update on save manual changes
-	const { mutateAsync, isPending, isError, isSuccess } = useInventoryAuditMutation(
-		queries,
-		abortControllerRef?.current?.signal
-	)
+	const { mutateAsync, isPending, isError } = useInventoryAuditMutation(queries, abortControllerRef?.current?.signal)
 
 	const handleCancelUpdate = () => {
 		abortControllerRef.current.abort()
@@ -73,10 +70,6 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		enableEditing()
 	}
 
-	useUpdateEffect(() => {
-		if (isSuccess) disableEditing()
-	}, [isSuccess])
-
 	const fetchingQueries = useIsFetching({
 		queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, currentTenant?.id, searchParams],
 		exact: true,
@@ -90,10 +83,15 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		[isPending, fetchingQueries, form.formState]
 	)
 
+	const handleSaveChanges = async ({ data }: InventoryAuditFormValues) => {
+		await mutateAsync(data)
+		disableEditing()
+	}
+
 	return (
 		<ScrollArea>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(async ({ data }) => await mutateAsync(data))}>
+				<form onSubmit={form.handleSubmit(handleSaveChanges)}>
 					<Table>
 						{Array.isArray(data) && data.length > 0 ? (
 							<Fragment>
@@ -189,22 +187,18 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 								</TableRow>
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.final_inventory_qty')}</TableVerticalHeader>
-									{data.map((item) => {
-										const finalInventoryQty = item.final_inventory_qty
-
-										const supplementalStockedInQty = form.watch(
-											`data.${data.findIndex((d) => d.size_numcode === item.size_numcode)}.supplemental_stocked_in_qty`
-										)
-
-										const supplementalShippedOutQty = form.watch(
-											`data.${data.findIndex((d) => d.size_numcode === item.size_numcode)}.supplemental_shipped_out_qty`
-										)
-
+									{data.map((item, index) => {
+										const supplementalStockedInQty = form.watch(`data.${index}.supplemental_stocked_in_qty`)
+										const supplementalShippedOutQty = form.watch(`data.${index}.supplemental_shipped_out_qty`)
 										return (
 											<TableCell
 												key={item.size_numcode}
 												className={cn('hover:ring-primary!', { 'opacity-50': isError })}>
-												{finalInventoryQty + supplementalStockedInQty - supplementalShippedOutQty}
+												{item.beginning_inventory_qty +
+													item.stocked_in_qty +
+													supplementalStockedInQty -
+													item.shipped_out_qty -
+													supplementalShippedOutQty}
 											</TableCell>
 										)
 									})}

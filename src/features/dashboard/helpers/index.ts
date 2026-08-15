@@ -94,8 +94,8 @@ export function formatPercentageChange(percentage: number | null): string {
  * @returns CSS color value using design system variables
  */
 export function getIconColor(percentage: number | null): string {
-	if (isNil(percentage) || percentage === 0) return 'hsl(var(--muted-foreground))'
-	return percentage > 0 ? 'hsl(var(--success))' : 'hsl(var(--destructive))'
+	if (isNil(percentage) || percentage === 0) return 'var(--muted-foreground)'
+	return percentage > 0 ? 'var(--success)' : 'var(--destructive)'
 }
 
 /**

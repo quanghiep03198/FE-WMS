@@ -27,12 +27,11 @@ import { useGetWarehouseStorageQuery } from '@features/warehouse/hooks/use-wareh
 import type { IWarehouse, IWarehouseStorage } from '@features/warehouse/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useMediaQuery from '@hooks/use-media-query'
-import { useSocketContext } from '@stores/socket.store'
 import { useMemoizedFn } from 'ahooks'
 import type { AxiosError } from 'axios'
 import { HttpStatusCode } from 'axios'
 import { omit } from 'lodash-es'
-import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -92,7 +91,7 @@ const InoutboundForm: React.FC = () => {
 		}))
 	}, [assemblyLines, i18n.language])
 
-	const { mutateAsync, isError, error, reset } = useUpdateStockVariationMutation()
+	const { mutateAsync, isPending, isError, error, reset } = useUpdateStockVariationMutation()
 
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({
@@ -121,12 +120,7 @@ const InoutboundForm: React.FC = () => {
 		)
 	}, [action])
 
-	const { io } = useSocketContext('io')
-
-	const toastRef = useRef<string | number | null>(null)
-
 	const handleSubmit = async (data: FormValues) => {
-		toastRef.current = toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK_VARIATION' })
 		try {
 			await mutateAsync({
 				...omit(data, ['warehouse_num']),
@@ -135,28 +129,11 @@ const InoutboundForm: React.FC = () => {
 			} as StockVariationPayload)
 			// * Always select all scanned order after performing update stock
 			setScannedEpc(currentEpcData)
-			// toast.success(t('ns_common:notification.success'), { id: 'UPDATE_STOCK' })
+			toast.success(t('ns_common:notification.success'))
 		} catch {
-			// toast.error(t('ns_common:notification.error'), { id: 'UPDATE_STOCK' })
+			toast.error(t('ns_common:notification.error'))
 		}
 	}
-
-	useEffect(() => {
-		const onSuccess = (message: string) => toast.success(message, { id: 'UPDATE_STOCK_VARIATION' })
-		const onFailed = (message: string) => toast.error(message, { id: 'UPDATE_STOCK_VARIATION' })
-
-		io.on('finished_goods:stock_in:success', onSuccess)
-		io.on('finished_goods:recall:success', onSuccess)
-		io.on('finished_goods:stock_in:failed', onFailed)
-		io.on('finished_goods:recall:failed', onFailed)
-
-		return () => {
-			io.off('finished_goods:stock_in:success', onSuccess)
-			io.off('finished_goods:recall:success', onSuccess)
-			io.off('finished_goods:stock_in:failed', onFailed)
-			io.off('finished_goods:recall:failed', onFailed)
-		}
-	}, [])
 
 	return (
 		<Fragment>
@@ -187,7 +164,7 @@ const InoutboundForm: React.FC = () => {
 			)}
 			<Div className='space-y-6'>
 				<FormProvider {...form}>
-					<Form onSubmit={form.handleSubmit((data) => handleSubmit(data))}>
+					<Form onSubmit={form.handleSubmit(handleSubmit)}>
 						<Div className='col-span-full'>
 							<FormField
 								name='rfid_status'
@@ -250,23 +227,6 @@ const InoutboundForm: React.FC = () => {
 								)}
 							/>
 						</Div>
-						{/* <Div className='col-span-full'>
-							<Div className='flex h-9 items-center gap-x-2 rounded border px-3 py-1'>
-								<Icon name='Database' size={20} stroke='var(--muted-foreground)' />
-								<Input
-									readOnly={true}
-									placeholder='Database'
-									className='h-max w-full border-none bg-background px-0 text-sm text-foreground shadow-none transition-none focus:border-none focus:outline-none'
-									value={
-										currentWritableTenant && selectedOrder !== DEFAULT_PROPS.selectedOrder
-											? t(`ns_warehouse:tenancy_warehouse.${currentWritableTenant?.alias}`, {
-													defaultValue: ''
-												})
-											: ''
-									}
-								/>
-							</Div>
-						</Div> */}
 						<Div
 							className={cn(
 								'sm:col-span-full',
@@ -347,7 +307,12 @@ const InoutboundForm: React.FC = () => {
 								size={isMobileScreen ? 'lg' : 'default'}
 								className='w-full'
 								disabled={selectedOrder === 'all'}>
-								<Icon name='Check' /> {t('ns_common:actions.save')}
+								<Icon
+									name={isPending ? 'LoaderCircle' : 'Check'}
+									aria-busy={isPending}
+									className='aria-busy:animate-spin'
+								/>
+								{t('ns_common:actions.save')}
 							</Button>
 							<Button
 								type='reset'

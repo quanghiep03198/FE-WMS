@@ -95,7 +95,8 @@ export default defineConfig(({ mode }) => {
 						{
 							// API calls - never cache
 							urlPattern: ({ url }) => url.pathname.startsWith('/api'),
-							handler: 'NetworkOnly'
+							handler: 'NetworkFirst',
+							options: { cacheName: 'wms-api-cache' }
 						}
 					],
 					cleanupOutdatedCaches: true,
