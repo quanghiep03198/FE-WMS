@@ -1,5 +1,5 @@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@components/ui'
-import { StockFlow } from '@features/finished-goods/constants/enums'
+import type { StockFlow } from '@features/finished-goods/constants/enums'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import StockTransactionHistoryTable from './stock-transaction-history-table'

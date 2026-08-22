@@ -1,5 +1,5 @@
 import { Button, Div, Icon, Popover, PopoverContent, PopoverTrigger, Typography } from '@components/ui'
-import { StockFlow } from '@features/finished-goods/constants/enums'
+import type { StockFlow } from '@features/finished-goods/constants/enums'
 import { useRollbackStockTransactionMutation } from '@features/finished-goods/hooks/use-stock-transaction-request'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
