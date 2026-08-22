@@ -83,7 +83,7 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 					autoComplete='off'
 					placeholder={placeholder}
 					className={cn(
-						'peer focus-within:border-primary! aria-invalid:border-destructive aria-invalid:focus-within:border-destructive rounded-md py-1 pr-9 pl-3 text-sm shadow-sm transition-colors duration-200',
+						'peer focus-within:border-primary! aria-invalid:border-destructive aria-invalid:focus-within:border-destructive rounded-md py-1 pr-9 pl-3 text-sm shadow-sm transition-colors duration-200 placeholder:text-sm',
 						className
 					)}
 					style={{
