@@ -22,7 +22,7 @@ export function getStickyOffsetPosition<TData = any, TValue = any>(column: Colum
 				position: 'sticky',
 				zIndex: 10,
 				left: column.getStart('left'),
-				boxShadow: '1px 0px hsl(var(--border))'
+				boxShadow: '1px 0px var(--border)'
 			}
 		}
 		case 'right': {
@@ -30,7 +30,7 @@ export function getStickyOffsetPosition<TData = any, TValue = any>(column: Colum
 				position: 'sticky',
 				zIndex: 10,
 				right: column.getAfter('right'),
-				boxShadow: '-1px 0px hsl(var(--border))',
+				boxShadow: '-1px 0px var(--border)',
 				borderLeft: 'none'
 			}
 		}

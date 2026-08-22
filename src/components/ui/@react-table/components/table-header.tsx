@@ -46,7 +46,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 	const computeStickyOffsetPosition = useMemoizedFn(getStickyOffsetPosition)
 
 	return (
-		<TableRow data-role='data-grid-row' className='h-(--header-row-height,40px) divide-x [&_th]:border-x-0'>
+		<TableRow data-role='data-grid-row' className='h-(--header-row-height,40px)'>
 			{headerGroup.headers.map((header) => {
 				const rowSpan = header.column.columnDef.meta?.rowSpan
 				if (!header.isPlaceholder && rowSpan !== undefined && header.id === header.column.id) {
@@ -59,7 +59,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 						key={header.id}
 						colSpan={header.colSpan}
 						rowSpan={rowSpan}
-						className={cn('group bg-table-head relative z-50 border-x-0 p-0')}
+						className={cn('group bg-table-head relative z-50 p-0')}
 						align={header.column.columnDef.meta?.align}
 						ref={(node) => columnSizingHandler(node, table, header.column)}
 						style={{

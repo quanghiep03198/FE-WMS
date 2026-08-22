@@ -23,7 +23,7 @@ const DataTable: React.FC<TableProps> = (props) => {
 	const captionId = useId()
 
 	const {
-		containerProps = { className: cn('h-[350px] xxl:h-[500px]') },
+		containerProps = { className: cn('h-87.5 xxl:h-125') },
 		footerProps = { hidden: true, slot: null },
 		caption,
 		loading,
@@ -103,7 +103,7 @@ const DataTable: React.FC<TableProps> = (props) => {
 }
 
 const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
-const ScrollArea = tw.div`@container-size relative flex flex-col items-stretch overflow-scroll will-change-scroll scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent backface-hidden`
+const ScrollArea = tw.div`@container-size relative flex flex-col items-stretch overflow-scroll scrollbar-thin will-change-scroll scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent backface-hidden`
 
 DataTable.displayName = 'DataTable'
 
