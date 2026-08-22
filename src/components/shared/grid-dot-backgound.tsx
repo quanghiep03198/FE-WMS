@@ -9,7 +9,7 @@ const GridDotBackground: React.FC = () => {
 				className={cn(
 					'absolute inset-0',
 					'bg-size-[40px_40px]',
-					'bg-[linear-gradient(to_right,hsl(var(--border)/50%)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/50%)_1px,transparent_1px)]'
+					'bg-[linear-gradient(to_right,var(--border)/50%)_1px,,linear-gradient(to_bottom,var(--border)/50%)_1px,]'
 				)}
 			/>
 		</Fragment>
