@@ -1,5 +1,6 @@
 import { RequestHeaders, RequestMethod } from '@common/constants/enums'
 import { FatalError, RetriableError } from '@common/errors'
+import env from '@common/utils/env'
 import { Json } from '@common/utils/json'
 import { Div, Label, Switch, Typography } from '@components/ui'
 import { AppConfigs } from '@configs/app.config'
@@ -34,7 +35,11 @@ const EpcDeduplicationToggleBox: React.FC = () => {
 				[RequestHeaders.FACTORY_CODE]: user?.current_factory_code
 			},
 			async onopen(response) {
-				if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
+				if (
+					response.ok &&
+					response.headers.get('content-type') === EventStreamContentType &&
+					env<RuntimeEnvironment>('VITE_NODE_ENV') === 'production'
+				) {
 					console.log(response.ok)
 				} else if (response.status === HttpStatusCode.Unauthorized) {
 					await AuthService.refreshToken(abortControllerRef.current?.signal).catch((error) => {

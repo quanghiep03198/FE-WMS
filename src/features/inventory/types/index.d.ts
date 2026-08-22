@@ -23,7 +23,7 @@ export interface IMonthlyInventoryAudit {
 	total_number_of_storage: number
 	total_storage_capacity: number
 	// prettier-ignore
-	inventory_variation: Array<{
+	size_ledger: Array<{
 		size_numcode: string // * Size code
 		order_qty: number // * Order quantity by size 
 		beginning_inventory_qty: number // * Initial stock quantity

@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { StockFlow } from '../../constants/enums'
 import { useDataRestorationContext } from '../../contexts/data-restoration-context'
 import type { IElectronicProductCode } from '../../types'
-import { GhostButton, ListDetail, ListDetailItem } from './styled'
+import { GhostButton, ListDetail, ListDetailItem } from '../styled'
 
 type DataRestorationRowProps = {
 	data: IElectronicProductCode & { scanned: boolean }

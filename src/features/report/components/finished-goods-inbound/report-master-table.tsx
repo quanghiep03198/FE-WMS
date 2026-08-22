@@ -212,7 +212,7 @@ const InboundReportMasterTable: React.FC = () => {
 			getRowId={(originalRow: IInboundReport) => originalRow.mo_no}
 			renderSubComponent={
 				(({ row }) => {
-					return <SizeTable data={row.original?.variation_details} />
+					return <SizeTable data={row.original?.size_ledger} />
 				}) satisfies RenderSubComponent<IInboundReport>
 			}
 			toolbarProps={{

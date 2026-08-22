@@ -49,6 +49,7 @@ export default {
 		restore: '恢复',
 		retry: '重试',
 		revert_changes: '恢复更改',
+		rollback: '回滚',
 		save: '保存',
 		save_changes: '保存更改',
 		select_all: '全选',

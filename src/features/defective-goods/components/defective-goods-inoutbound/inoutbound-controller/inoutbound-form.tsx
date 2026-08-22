@@ -98,8 +98,8 @@ const InoutboundForm: React.FC = () => {
 		<Div className='flex w-full flex-row items-center justify-between gap-x-3 @4xl:gap-x-6 @6xl:flex-1 @6xl:justify-end'>
 			<DropdownSelect
 				datalist={[
-					{ label: t('ns_inoutbound:action_types.warehouse_input'), value: StockFlow.INBOUND },
-					{ label: t('ns_inoutbound:action_types.warehouse_output'), value: StockFlow.OUTBOUND }
+					{ label: t('ns_inoutbound:action_types.stock_in'), value: StockFlow.INBOUND },
+					{ label: t('ns_inoutbound:action_types.stock_out'), value: StockFlow.OUTBOUND }
 				]}
 				labelField='label'
 				valueField='value'
@@ -123,13 +123,13 @@ const InoutboundForm: React.FC = () => {
 				<Div className='flex items-center space-y-0 space-x-3'>
 					<RadioGroupItem value={StockFlow.INBOUND} id='action-inbound' />
 					<Label className='font-normal' htmlFor='action-inbound'>
-						{t('ns_inoutbound:action_types.warehouse_input')}
+						{t('ns_inoutbound:action_types.stock_in')}
 					</Label>
 				</Div>
 				<Div className='flex items-center space-y-0 space-x-3'>
 					<RadioGroupItem value={StockFlow.OUTBOUND} id='action-outbound' />
 					<Label className='font-normal' htmlFor='action-outbound'>
-						{t('ns_inoutbound:action_types.warehouse_output')}
+						{t('ns_inoutbound:action_types.stock_out')}
 					</Label>
 				</Div>
 			</RadioGroup>

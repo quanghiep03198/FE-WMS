@@ -8,7 +8,7 @@ import EpcListBox from '@features/finished-goods/components/finished-goods-inbou
 import InoutboundForm from '@features/finished-goods/components/finished-goods-inbound/inoutbound-form'
 import PageComposition from '@features/finished-goods/components/finished-goods-inbound/page-composition'
 import RemindMessage from '@features/finished-goods/components/finished-goods-inbound/remind-message'
-import ScannerSettings from '@features/finished-goods/components/finished-goods-inbound/side-toolbar'
+import SideToolbar from '@features/finished-goods/components/finished-goods-inbound/side-toolbar'
 import Toolbar from '@features/finished-goods/components/finished-goods-inbound/toolbar'
 import { PageProvider } from '@features/finished-goods/contexts/finished-goods-inbound/page-context'
 import { SocketProvider } from '@stores/socket.store'
@@ -59,7 +59,7 @@ function Page() {
 										<RemindMessage />
 										<InoutboundForm />
 									</div>
-									<ScannerSettings />
+									<SideToolbar />
 								</PageComposition.Wrapper>
 							</PageComposition.Container>
 							{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}

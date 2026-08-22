@@ -7,7 +7,7 @@ export interface IInOutBoundReport {
 	factory_code_produce: string
 	color_sn: string
 	accumulated_qty: number
-	variation_details: Array<{
+	size_ledger: Array<{
 		size_numcode: string
 		qty: number
 	}>
@@ -55,7 +55,7 @@ export interface IInboundHistory {
 	daily_inbound_history: Array<{
 		mo_no: string
 		date: string
-		inventory_variation: Record<
+		size_ledger: Record<
 			string,
 			{
 				stocked_in_qty: number
@@ -65,7 +65,7 @@ export interface IInboundHistory {
 			}
 		>
 	}>
-	inventory_variation: Record<
+	size_ledger: Record<
 		string,
 		{
 			order_qty: number

@@ -72,7 +72,7 @@ const InboundHistoryTable: React.FC = () => {
 	if (!data) return <EmptyHistory />
 
 	return (
-		<Div className='scrollbar-track-accent/50 xxl:max-h-[65vh] @container relative max-h-150 overflow-auto rounded-lg border'>
+		<Div className='scrollbar-track-accent/50 xxl:max-h-[65vh] @container relative max-h-150 scrollbar-thin overflow-auto rounded-lg border'>
 			<Table
 				className='table-fixed [--column-width:200px] [&_span]:line-clamp-1'
 				style={{ '--column-width': '200px' } as React.CSSProperties}>
@@ -82,7 +82,8 @@ const InboundHistoryTable: React.FC = () => {
 							<TableHead
 								key={column.accessorKey}
 								title={column.header}
-								className='bg-table-row-active! text-table-head-foreground w-[var(--column-width)] capitalize first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+								style={{ width: 'var(--column-width)' }}
+								className='bg-table-row-active! text-table-head-foreground capitalize first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>{column.header}</span>
 							</TableHead>
@@ -92,7 +93,8 @@ const InboundHistoryTable: React.FC = () => {
 						{columns.map((column) => (
 							<TableHead
 								key={column.accessorKey}
-								className='text-foreground w-[var(--column-width)] font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+								style={{ width: 'var(--column-width)' }}
+								className='text-foreground font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>
 									{typeof column.cell === 'function'
@@ -123,7 +125,7 @@ const InboundHistoryTable: React.FC = () => {
 				<TableBody>
 					{data.daily_inbound_history.length > 0 ? (
 						data.daily_inbound_history.map((item) => {
-							const totalQty = Object.values(item.inventory_variation).reduce(
+							const totalQty = Object.values(item.size_ledger).reduce(
 								(acc, curr) =>
 									acc +
 									coalesce(curr?.stocked_in_qty, 0) -
@@ -142,7 +144,7 @@ const InboundHistoryTable: React.FC = () => {
 									</TableCell>
 									<TableCell colSpan={7} className='p-0'>
 										<NestedTable>
-											{Object.entries(item.inventory_variation)
+											{Object.entries(item.size_ledger)
 												.toSorted((a, b) => Number.parseFloat(a[0]) - Number.parseFloat(b[0]))
 												.map(([size, variation]) => (
 													<NestedColumn key={size} className='*:h-9'>
@@ -188,7 +190,9 @@ const InboundHistoryTable: React.FC = () => {
 					<TableRow>
 						<TableCell colSpan={9} align='left' className='border-t p-0 font-normal'>
 							<NestedTable className='w-full'>
-								<NestedColumn className='sticky left-0 z-20 min-w-[var(--column-width)] shadow-[1px_0px_var(--border)] *:h-9 *:capitalize'>
+								<NestedColumn
+									style={{ minWidth: 'var(--column-width)' }}
+									className='sticky left-0 z-20 shadow-[1px_0px_var(--border)] *:h-9 *:capitalize'>
 									<NestedCellHead>Size</NestedCellHead>
 									<NestedCellHead>
 										<span>{t('ns_erp:fields.mo_size_qty')}</span>
@@ -204,7 +208,7 @@ const InboundHistoryTable: React.FC = () => {
 									</NestedCellHead>
 								</NestedColumn>
 								{}
-								{Object.entries(data.inventory_variation)
+								{Object.entries(data.size_ledger)
 									.toSorted((a, b) => Number.parseFloat(a[0]) - Number.parseFloat(b[0]))
 									.map(([size, variation]) => {
 										const targetQty = coalesce(variation?.order_qty, 0)

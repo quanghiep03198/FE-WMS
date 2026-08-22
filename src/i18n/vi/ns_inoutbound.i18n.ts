@@ -3,8 +3,9 @@ import { DefectiveGoodsSource } from '@features/defective-goods/constants/enums'
 
 export default {
 	action_types: {
-		warehouse_input: 'Nhập kho',
-		warehouse_output: 'Xuất kho'
+		stock_in: 'Nhập kho',
+		recall: 'Thu hồi',
+		stock_out: 'Xuất kho'
 	},
 	notification: {
 		already_inbound_epcs:
@@ -37,6 +38,7 @@ export default {
 		container_number_field:
 			'Định dạng mã container BIC. Bỏ qua trường này trong trường hợp không có số container hiện tại.',
 		create_truckload_delivery: 'Tạo mới thông tin đóng container xuất hàng khỏi nhà máy',
+		current_stock_transaction: 'Các giao dịch nhập/xuất kho hiện tại',
 		daily_inbound_report: 'Theo dõi và quản lý tiến độ nhập hàng kho thành phẩm hàng ngày',
 		daily_outbound_report: 'Theo dõi và quản lý tiến độ xuất hàng kho thành phẩm hàng ngày',
 		defective_goods_inventory_report: 'Quản lý và theo dõi tồn kho hàng loại 2',
@@ -94,7 +96,9 @@ export default {
 			'Phát hiện sự sai lệch trong thông tin xuất hàng; XNK và nhân viên kho cần cập nhật lại dữ liệu.',
 		confirm_dispatch_order_info:
 			'Xác nhận thông tin xuất hàng là chính xác và phê duyệt cho lô hàng rời khỏi nhà máy.',
-		update_dispatch_order_signature_info: 'Cập nhật chữ ký xác nhận thông tin xuất hàng'
+		update_dispatch_order_signature_info: 'Cập nhật chữ ký xác nhận thông tin xuất hàng',
+		rollback_stock_transaction:
+			'Sau khi hoàn tác, các giao dịch nhập/xuất kho sẽ được khôi phục về trạng thái trước đó. Bạn có chắc chắn muốn thực hiện thao tác này không?'
 	},
 	errors: {
 		wrong_stamp: 'Dán sai tem'
@@ -174,6 +178,7 @@ export default {
 		combination_history: 'Lịch sử phối tem',
 		container_condition_assessment: 'Đánh giá tình trạng container',
 		create_truckload_delivery: 'Tạo mới thông tin đóng container',
+		current_stock_transaction: 'Giao dịch gần đây',
 		daily_inbound_report: 'Báo cáo nhập kho hàng ngày',
 		daily_outbound_report: 'Báo cáo xuất kho hàng ngày',
 		file_daily_inbound_report: 'Báo biểu nhập kho {{factory}} - {{date}}',
@@ -195,7 +200,8 @@ export default {
 		production_inventory_summary: 'Tổng quan tồn kho thành phẩm',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
 		transfer_order_list: 'Danh sách đơn chuyển kho',
-		update_truckload_delivery: 'Cập nhật thông tin đóng container'
+		update_truckload_delivery: 'Cập nhật thông tin đóng container',
+		rollback_stock_transaction: 'Hoàn tác giao dịch này ?'
 	},
 	shoes_category: {
 		b_grade: 'Loại B',

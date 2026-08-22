@@ -161,7 +161,7 @@ const OrderDetailTable: React.FC = () => {
 				</DialogHeader>
 				<Div className='static flex h-[calc(85vh-2rem)] flex-col items-stretch divide-y overflow-hidden rounded-lg border'>
 					<Div
-						className='scrollbar-track-accent/20 @container relative h-[85vh] scrollbar-gutter-stable overflow-scroll rounded-lg'
+						className='scrollbar-track-accent/20 @container relative h-[85vh] scrollbar-thin scrollbar-gutter-stable overflow-scroll rounded-lg'
 						style={
 							{
 								'--row-selection-col-width': '50px',

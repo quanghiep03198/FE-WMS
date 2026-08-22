@@ -29,7 +29,7 @@ import { ScanCapability, ScannedStatus, StockFlow } from '../../constants/enums'
 import { useGetDeletedEpcSpecsQuery } from '../../hooks/use-deleted-epc-request'
 import type { SearchFormValues } from '../../hooks/use-persistent-filter-state'
 import { usePersistentFilterState } from '../../hooks/use-persistent-filter-state'
-import { FilterForm, GhostButton } from './styled'
+import { FilterForm, GhostButton } from '../styled'
 
 type ArchivedEpcFilterProps = {
 	stockFlow: StockFlow

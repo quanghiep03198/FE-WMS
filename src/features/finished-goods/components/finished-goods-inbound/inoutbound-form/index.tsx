@@ -39,8 +39,8 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
 import { useGetScanningInboundEpcQuery, useUpdateStockVariationMutation } from '../../../hooks/use-inbound-request'
-import type { FormValues, StockVariationPayload } from '../../../schemas/inoutbound.schema'
-import { outboundSchema, stockVariationSchema } from '../../../schemas/inoutbound.schema'
+import type { FormValues, StockBalancesPayload } from '../../../schemas/inoutbound.schema'
+import { outboundSchema, stockBalancesSchema } from '../../../schemas/inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
 	const { selectedDevice, selectedOrder, scanningStatus, setScannedEpc } = usePageContext(
@@ -54,7 +54,7 @@ const InoutboundForm: React.FC = () => {
 	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 
 	const form = useForm<FormValues>({
-		resolver: zodResolver(action === FinishedGoodsAction.IMPORT ? stockVariationSchema : outboundSchema),
+		resolver: zodResolver(action === FinishedGoodsAction.IMPORT ? stockBalancesSchema : outboundSchema),
 		defaultValues: {
 			rfid_status: FinishedGoodsAction.IMPORT,
 			rfid_use: FinishedGoodsOutboundReason.NORMAL_IMPORT,
@@ -126,7 +126,7 @@ const InoutboundForm: React.FC = () => {
 				...omit(data, ['warehouse_num']),
 				mo_no: selectedOrder === FALLBACK_VALUE ? null : selectedOrder,
 				inbound_device_sn: selectedDevice
-			} as StockVariationPayload)
+			} as StockBalancesPayload)
 			// * Always select all scanned order after performing update stock
 			setScannedEpc(currentEpcData)
 			toast.success(t('ns_common:notification.success'))
@@ -193,7 +193,7 @@ const InoutboundForm: React.FC = () => {
 															className='hidden'
 														/>
 													</FormControl>
-													{t('ns_inoutbound:action_types.warehouse_input')}
+													{t('ns_inoutbound:action_types.stock_in')}
 													<CheckIcon
 														name='Check'
 														size={24}
@@ -214,7 +214,7 @@ const InoutboundForm: React.FC = () => {
 															className='sr-only'
 														/>
 													</FormControl>
-													{t('ns_inoutbound:action_types.warehouse_output')}
+													{t('ns_inoutbound:action_types.stock_out')}
 													<CheckIcon
 														name='Check'
 														size={24}
@@ -306,7 +306,7 @@ const InoutboundForm: React.FC = () => {
 								type='submit'
 								size={isMobileScreen ? 'lg' : 'default'}
 								className='w-full'
-								disabled={selectedOrder === 'all'}>
+								disabled={selectedOrder === 'all' || isPending}>
 								<Icon
 									name={isPending ? 'LoaderCircle' : 'Check'}
 									aria-busy={isPending}

@@ -3,8 +3,9 @@ import { DefectiveGoodsSource } from '@features/defective-goods/constants/enums'
 
 export default {
 	action_types: {
-		warehouse_input: '入庫',
-		warehouse_output: '出庫'
+		stock_in: '入庫',
+		recall: '召回',
+		stock_out: '出庫'
 	},
 	counter_box: {
 		label: '本次出入庫數量',
@@ -16,6 +17,7 @@ export default {
 		container_condition_assessment: '请评估以下集装箱状况（如有）',
 		container_number_field: 'BIC 集装箱代码格式. 如果当前无法提供集装箱编号, 请跳过此字段.',
 		create_truckload_delivery: '创建卡车装运信息以从工厂出货',
+		current_stock_transaction: '查看所选库存流的当前库存交易.',
 		daily_inbound_report: '跟踪和管理每日成品仓库入库进度',
 		daily_outbound_report: '跟踪和管理每日成品仓库出库进度',
 		defective_goods_inbound_report: '管理和跟踪仓库中次品的入库',
@@ -65,7 +67,8 @@ export default {
 		update_truckload_delivery: '更新卡车装运信息以反映任何更改或修改.',
 		request_change_dispatch_order_info: '已发现出货信息存在差异; 品管和仓库人员必须更新相关记录.',
 		confirm_dispatch_order_info: '确认出货信息准确无误, 并批准货物离开工厂.',
-		update_dispatch_order_signature_info: '更新确认出货信息的签名'
+		update_dispatch_order_signature_info: '更新确认出货信息的签名',
+		rollback_stock_transaction: '回滚此交易后, 库存数量将恢复到之前的状态. 您确定要继续吗？'
 	},
 	errors: {
 		wrong_stamp: '错误的标签'
@@ -161,6 +164,7 @@ export default {
 		container_condition_assessment: '集装箱状况评估',
 		combination_history: '配标历史',
 		create_truckload_delivery: '创建卡车装运',
+		current_stock_transaction: '当前库存交易',
 		daily_inbound_report: '入庫报表',
 		daily_outbound_report: '出庫报表',
 		defective_goods_inventory_report: '二级鞋存库报表',
@@ -183,7 +187,8 @@ export default {
 		production_inventory_summary: '成品库存总表',
 		transfer_order_datalist: '转移订单数据列表',
 		transfer_order_list: '转移订单列表',
-		update_truckload_delivery: '更新卡车装运.'
+		update_truckload_delivery: '更新卡车装运.',
+		rollback_stock_transaction: '回滚库存交易'
 	},
 	shoes_category: {
 		b_grade: 'B级品',

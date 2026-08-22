@@ -6,7 +6,7 @@ export const outboundSchema = object({
 	rfid_use: enums(FinishedGoodsOutboundReason)
 })
 
-export const stockVariationSchema = outboundSchema.extend({
+export const stockBalancesSchema = outboundSchema.extend({
 	warehouse_num: string().trim().nonempty({ message: 'ns_validation:required' }),
 	storage_num: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	storage_name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
@@ -14,7 +14,7 @@ export const stockVariationSchema = outboundSchema.extend({
 	dept_name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })
 })
 
-export type InboundFormValues = Infer<typeof stockVariationSchema>
+export type InboundFormValues = Infer<typeof stockBalancesSchema>
 export type OutboundFormValues = Infer<typeof outboundSchema>
 export type FormValues = InboundFormValues | OutboundFormValues
-export type StockVariationPayload = FormValues & { mo_no: string; inbound_device_sn: string }
+export type StockBalancesPayload = FormValues & { mo_no: string; inbound_device_sn: string }

@@ -10,10 +10,10 @@ import {
 import { useTranslation } from 'react-i18next'
 import type { StockFlow } from '../../constants/enums'
 import { DataRestorationProvider } from '../../contexts/data-restoration-context'
+import { SheetBody } from '../styled'
 import RestorationDataActions from './data-restoration-actions'
 import DataRestorationTable from './data-restoration-table'
 import ArchivedEpcFilter from './filter-box'
-import { SheetBody } from './styled'
 
 type ArchivedRestorationSheetProps = {
 	dataType: StockFlow

@@ -52,7 +52,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 									</FormControl>
 									<Icon name='Forklift' size={32} strokeWidth={1} className='mr-2' />
 									<Div className='space-y-1.5'>
-										<Typography> {t('ns_inoutbound:action_types.warehouse_input')}</Typography>
+										<Typography> {t('ns_inoutbound:action_types.stock_in')}</Typography>
 										<Typography
 											variant='small'
 											className='text-muted-foreground block w-full max-w-3/4 font-normal'>
@@ -74,7 +74,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 									</FormControl>
 									<Icon name='Truck' size={32} strokeWidth={1} className='mr-2 scale-x-[-1]' />
 									<Div className='space-y-1.5'>
-										<Typography>{t('ns_inoutbound:action_types.warehouse_output')}</Typography>
+										<Typography>{t('ns_inoutbound:action_types.stock_out')}</Typography>
 										<Typography
 											variant='small'
 											className='text-muted-foreground block w-full max-w-3/4 font-normal'>

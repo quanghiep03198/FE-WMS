@@ -184,6 +184,7 @@ export default {
 		edit_caption: 'Chỉnh sửa chú thích',
 		replace_image: 'Thay thế hình ảnh',
 		replace_with_url: 'Thay thế bằng URL',
+		rollback: 'Hoàn tác',
 		full_width: 'Toàn chiều rộng',
 		delete_image: 'Xóa hình ảnh',
 		click_to_upload: 'Nhấp để tải lên tệp hình ảnh',

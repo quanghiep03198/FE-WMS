@@ -29,9 +29,9 @@ import { useDataRestorationContext } from '../../contexts/data-restoration-conte
 import { useGetDeletedEpcQuery, useGetDeletedEpcSpecsQuery } from '../../hooks/use-deleted-epc-request'
 import type { SearchFormValues } from '../../hooks/use-persistent-filter-state'
 import { usePersistentFilterState } from '../../hooks/use-persistent-filter-state'
+import { GhostButton } from '../styled'
 import { DataRestorationRow, MemoizedDataRestorationRow } from './data-restoration-row'
 import DebouncedLimitInput from './debounced-limit-input'
-import { GhostButton } from './styled'
 
 type DataRestorationTableProps = { dataType: StockFlow }
 

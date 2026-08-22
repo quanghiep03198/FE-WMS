@@ -20,7 +20,7 @@ import type { BaseUpdateUpdateQuery } from '../../types'
 
 type InventoryReportDetailTableProps = {
 	queries: Omit<BaseUpdateUpdateQuery, 'size_numcode'>
-	data: IMonthlyInventoryAudit['inventory_variation']
+	data: IMonthlyInventoryAudit['size_ledger']
 	canUpdate: boolean
 }
 

@@ -4,9 +4,10 @@ import { keepPreviousData, type Register, useMutation, useQuery, useQueryClient 
 import { useEffect } from 'react'
 import { FinishedGoodsAction, StockFlow } from '../constants/enums'
 import { DEFAULT_PROPS, usePageContext } from '../contexts/finished-goods-inbound/page-context'
-import type { StockVariationPayload } from '../schemas/inoutbound.schema'
+import type { StockBalancesPayload } from '../schemas/inoutbound.schema'
 import { FinishedGoodsSharedService } from '../services/finished-goods-shared.service'
 import { DeletedFinishedGoodsQueryKey } from './use-deleted-epc-request'
+import { StockTransactionQueryKey } from './use-stock-transaction-request'
 
 // * API Query Keys
 export enum FinishedGoodsInboundQueryKeys {
@@ -122,9 +123,12 @@ export const useUpdateStockVariationMutation = () => {
 		[FinishedGoodsAction.IMPORT]: FinishedGoodsStockService.stockIn,
 		[FinishedGoodsAction.EXPORT]: FinishedGoodsStockService.recallFromStock
 	}
+
+	mutationMeta.invalidates.push([StockTransactionQueryKey.STOCK_TRANSACTION, StockFlow.INBOUND])
+
 	return useMutation({
 		meta: mutationMeta,
-		mutationFn: (payload: StockVariationPayload) => {
+		mutationFn: (payload: StockBalancesPayload) => {
 			const mutationFn = handler[payload.rfid_status]
 			if (typeof mutationFn === 'function') return mutationFn(payload)
 		},

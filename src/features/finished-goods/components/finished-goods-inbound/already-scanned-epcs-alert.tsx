@@ -30,7 +30,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageContext } from '../../contexts/finished-goods-inbound/page-context'
 import { useDeleteEpcMutation } from '../../hooks/use-inbound-request'
-import { GhostButton } from '../data-restoration/styled'
+import { GhostButton } from '../styled'
 
 type AlreadyScannedEpc = {
 	epc: string

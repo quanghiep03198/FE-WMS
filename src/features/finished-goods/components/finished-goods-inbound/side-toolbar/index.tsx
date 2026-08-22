@@ -4,9 +4,10 @@ import tw from 'tailwind-styled-components'
 import DataRestoration from './data-restoration'
 import EpcDeduplicationToggleBox from './epc-deduplication-toggle-box'
 import FullscreenToggleBox from './fullscreen-toggle-box'
+import StockTransactionHistory from './stock-transaction-history'
 import SyncDataTrigger from './sync-data-trigger'
 
-const ScannerSettings: React.FC = () => {
+const SideToolbar: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
@@ -22,37 +23,41 @@ const ScannerSettings: React.FC = () => {
 							<Typography className='text-lg font-semibold sm:text-base md:text-base'>
 								{t('ns_common:titles.general_settings')}
 							</Typography>
-							{/* <ConnectionController /> */}
 							<EpcDeduplicationToggleBox />
 							<FullscreenToggleBox />
 						</Div>
+						<StockTransactionHistory />
 						<DataRestoration />
 						<SyncDataTrigger />
 					</Div>
 				</SheetContent>
 			</Sheet>
-			<ToolbarWrapper>
-				<Div className='w-full space-y-3 @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
-					<Typography className='text-lg font-semibold sm:text-base md:text-base'>
-						{t('ns_common:titles.general_settings')}
-					</Typography>
-					<EpcDeduplicationToggleBox />
-					<FullscreenToggleBox />
-				</Div>
-
-				<DataRestoration />
-				<SyncDataTrigger />
-			</ToolbarWrapper>
+			<Aside>
+				<ScrollArea>
+					<Div className='w-full space-y-3 @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
+						<Typography className='text-lg font-semibold sm:text-base md:text-base'>
+							{t('ns_common:titles.general_settings')}
+						</Typography>
+						<EpcDeduplicationToggleBox />
+						<FullscreenToggleBox />
+					</Div>
+					<StockTransactionHistory />
+					<DataRestoration />
+					<SyncDataTrigger />
+				</ScrollArea>
+			</Aside>
 		</>
 	)
 }
 
-const ToolbarWrapper = tw.div`
-	@container @[1366px]/page-container:flex flex-col grow basis-full hidden sticky xl:top-(--header-height) top-auto group
-	max-h-(--outlet-wrapper-height) scroll-fade overflow-y-auto scrollbar-none  border rounded-lg bg-sidebar 
+const Aside = tw.div`bg-sidebar overflow-hidden rounded-lg border`
+
+const ScrollArea = tw.div`
+	@container @[1366px]/page-container:flex flex-col grow basis-full hidden sticky group
+	max-h-(--outlet-wrapper-height) scrollbar-none overflow-y-auto scroll-fade-y
 	sm:rounded-none sm:border-none items-stretch gap-x-4 gap-y-6 p-4
 	group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto 
 	
 `
 
-export default ScannerSettings
+export default SideToolbar

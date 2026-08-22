@@ -63,3 +63,23 @@ export interface IArchivedFilterFeature {
 		}>
 	}>
 }
+
+export type StockTransactionType = 'stock_in' | 'recall' | 'stock_out'
+
+export interface IStockTransaction<T extends StockFlow> {
+	id: string
+	mo_no: string
+	po: T extends 'outbound' ? string : never
+	qty: number
+	tx_at: string
+	tx_type: StockTransactionType
+	detail: Record<
+		string,
+		{
+			stocked_in_qty: number
+			total_recall_tx: number
+			total_return_tx: number
+			shipped_out_qty: number
+		}
+	>
+}

@@ -50,7 +50,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 		({ row }: RenderSubComponentProps<IMonthlyInventoryAudit>): React.ReactElement => (
 			<InventoryReportDetailTable
 				queries={pick(row.original, ['mo_no', 'year_month'])}
-				data={row.original?.inventory_variation}
+				data={row.original?.size_ledger}
 				canUpdate={row.original.inventory_closure_status === 'pending'}
 			/>
 		),

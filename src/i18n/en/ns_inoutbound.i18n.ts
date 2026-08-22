@@ -3,8 +3,9 @@ import { DefectiveGoodsSource } from '@features/defective-goods/constants/enums'
 
 export default {
 	action_types: {
-		warehouse_input: 'Inbound',
-		warehouse_output: 'Outbound'
+		stock_in: 'Stock In',
+		recall: 'Recall',
+		stock_out: 'Stock Out'
 	},
 	counter_box: {
 		label: 'Scanned EPCs',
@@ -18,6 +19,7 @@ export default {
 		container_number_field:
 			'BIC container code format. Skip this field in case container number is not available now.',
 		create_truckload_delivery: 'Create new container loading information for outbound shipments from the factory',
+		current_stock_transaction: 'View the current stock transaction for the selected stock flow.',
 		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations daily.',
 		daily_outbound_report: 'View the scanned EPC data and perform warehouse outbound operations daily.',
 		defective_goods_inbound_report: 'Manage and track the inbound of defective goods in the warehouse.',
@@ -79,7 +81,9 @@ export default {
 			'A discrepancy in the shipment information has been detected; Import-Export department and warehouse officer must update the records.',
 		confirm_dispatch_order_info:
 			'Confirm that the dispatch information is accurate and authorize the shipment to leave the factory.',
-		update_dispatch_order_signature_info: 'Update the signature confirming the dispatch information'
+		update_dispatch_order_signature_info: 'Update the signature confirming the dispatch information',
+		rollback_stock_transaction:
+			'After rolling back this transaction, the stock quantity will be reverted to its previous state. Are you sure you want to proceed?'
 	},
 	errors: {
 		wrong_stamp: 'Wrong stamp.'
@@ -177,6 +181,7 @@ export default {
 		combination_history: 'Combination history',
 		container_condition_assessment: 'Container condition assessment',
 		create_truckload_delivery: 'Create truckload delivery',
+		current_stock_transaction: 'Current stock transaction',
 		daily_inbound_report: 'Daily inbound report',
 		daily_outbound_report: 'Daily outbound report',
 		defective_goods_inventory_report: 'Defective goods inventory report',
@@ -198,7 +203,8 @@ export default {
 		production_inventory_summary: 'Production inventory summary',
 		transfer_order_datalist: 'Transfer order datalist',
 		transfer_order_list: 'Transfer orders list',
-		update_truckload_delivery: 'Update truckload delivery'
+		update_truckload_delivery: 'Update truckload delivery',
+		rollback_stock_transaction: 'Rollback this transaction?'
 	},
 	shoes_category: {
 		b_grade: 'B Grade',

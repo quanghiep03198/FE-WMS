@@ -49,6 +49,7 @@ export default {
 		restore: 'Restore',
 		retry: 'Retry',
 		revert_changes: 'Revert changes',
+		rollback: 'Rollback',
 		save: 'Save',
 		save_changes: 'Save changes',
 		search: 'Search',

@@ -53,8 +53,8 @@ const SearchForm: React.FC = () => {
 						<SelectFieldControl
 							name='type'
 							datalist={[
-								{ label: t('ns_inoutbound:action_types.warehouse_input'), value: StockFlow.INBOUND },
-								{ label: t('ns_inoutbound:action_types.warehouse_output'), value: StockFlow.OUTBOUND }
+								{ label: t('ns_inoutbound:action_types.stock_in'), value: StockFlow.INBOUND },
+								{ label: t('ns_inoutbound:action_types.stock_out'), value: StockFlow.OUTBOUND }
 							]}
 							onValueChange={() => {
 								form.setValue('order', '')
