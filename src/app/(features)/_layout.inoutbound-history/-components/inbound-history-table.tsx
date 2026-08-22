@@ -1,9 +1,21 @@
 import type { IInboundHistory } from '@/common/types/entities'
 import { coalesce } from '@/common/utils/common'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Div, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui'
-import { groupBy, orderBy, sortBy } from 'lodash-es'
-import { useMemo } from 'react'
+import {
+	Collapsible,
+	CollapsibleContent,
+	Div,
+	Icon,
+	Table,
+	TableBody,
+	TableCell,
+	TableFooter,
+	TableHead,
+	TableHeader,
+	TableRow
+} from '@/components/ui'
+import { orderBy, sortBy } from 'lodash-es'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundHistoryQuery } from '../-hooks/use-inoutbound-history-asm'
 import { NestedCell, NestedCellHead, NestedColumn, NestedTable } from '../../-components/shared/horizontal-nested-table'
@@ -68,12 +80,12 @@ const InboundHistoryTable: React.FC = () => {
 		[i18n.language]
 	)
 
-	const inboundHistoryByDate = useMemo(() => {
-		if (!data) return []
-		return Object.entries(
-			groupBy(orderBy(data.daily_inbound_history, 'inbound_date', 'desc'), (item) => item.inbound_date)
-		)
-	}, [data])
+	// const inboundHistoryByDate = useMemo(() => {
+	// 	if (!data) return []
+	// 	return Object.entries(
+	// 		groupBy(orderBy(data.daily_inbound_history, 'inbound_date', 'desc'), (item) => item.inbound_date)
+	// 	)
+	// }, [data])
 
 	const inboundHistoryBySize = useMemo(() => {
 		if (!data) return []
@@ -138,33 +150,9 @@ const InboundHistoryTable: React.FC = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{inboundHistoryByDate.length > 0 ? (
-						inboundHistoryByDate.map(([date, history]) => {
-							const totalQty = history.reduce((acc, curr) => acc + coalesce(curr?.qty, 0), 0)
-							return (
-								<TableRow key={date}>
-									<TableCell
-										align='left'
-										colSpan={1}
-										className='sticky left-0 z-10'
-										style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
-										<span>{date}</span>
-									</TableCell>
-									<TableCell colSpan={7} className='p-0'>
-										<NestedTable>
-											{sortBy(history, 'size_numcode').map((item) => (
-												<NestedColumn key={item.size_numcode} className='[&>*]:h-9'>
-													<NestedCellHead>{item.size_numcode}</NestedCellHead>
-													<NestedCell>{formatIntlNumber(item?.qty)}</NestedCell>
-												</NestedColumn>
-											))}
-										</NestedTable>
-									</TableCell>
-									<TableCell colSpan={1} align='left' className='!sticky right-0 z-10 font-medium'>
-										<span>{formatIntlNumber(totalQty)}</span>
-									</TableCell>
-								</TableRow>
-							)
+					{data.daily_inbound_history?.length > 0 ? (
+						data.daily_inbound_history?.map((history) => {
+							return <InboundHistoryRow key={history.date} data={history} />
 						})
 					) : (
 						<TableRow>
@@ -221,6 +209,109 @@ const InboundHistoryTable: React.FC = () => {
 				</TableFooter>
 			</Table>
 		</Div>
+	)
+}
+
+const InboundHistoryRow: React.FC<{
+	data: {
+		date: string
+		size_ledger: Array<{
+			size_numcode: string
+			qty: number
+		}>
+		timeline: Array<{
+			inbound_time: string
+			assembly_line: string
+			storage_location: string
+			size_ledger: Array<{
+				size_numcode: string
+				qty: number
+			}>
+		}>
+	}
+}> = ({ data }) => {
+	const [isExpanded, setIsExpanded] = useState<boolean>(false)
+
+	const totalQuantity = useMemo(
+		() =>
+			Array.isArray(data.size_ledger) ? data.size_ledger.reduce((acc, curr) => acc + coalesce(curr?.qty, 0), 0) : 0,
+		[data.size_ledger]
+	)
+
+	return (
+		<>
+			<TableRow key={data.date}>
+				<TableCell
+					align='left'
+					colSpan={1}
+					className='sticky left-0 z-10 hover:cursor-pointer'
+					style={{ boxShadow: '1px 0px hsl(var(--border))' }}
+					onClick={() => setIsExpanded((prev) => !prev)}>
+					<span>{data.date}</span>
+				</TableCell>
+				<TableCell colSpan={7} className='p-0'>
+					<NestedTable>
+						{sortBy(data.size_ledger, 'size_numcode').map((item) => (
+							<NestedColumn key={item.size_numcode} className='[&>*]:h-9'>
+								<NestedCellHead>{item.size_numcode}</NestedCellHead>
+								<NestedCell>{formatIntlNumber(item?.qty)}</NestedCell>
+							</NestedColumn>
+						))}
+					</NestedTable>
+				</TableCell>
+				<TableCell colSpan={1} align='left' className='!sticky right-0 z-10 font-medium'>
+					<span>{formatIntlNumber(totalQuantity)}</span>
+				</TableCell>
+			</TableRow>
+			{data.timeline?.length > 0 && (
+				<TableRow>
+					<TableCell colSpan={9} className='!border-b-0 !p-0 aria-expanded:border-b' aria-expanded={isExpanded}>
+						<Collapsible open={isExpanded}>
+							<CollapsibleContent className='group/detail sticky left-0 w-[100cqw] overflow-auto bg-secondary/50 [scrollbar-gutter:stable]'>
+								<Div className='p-3'>
+									{Array.isArray(data.timeline) &&
+										sortBy(data.timeline, (item) => item.inbound_time).map((timeline) => {
+											const totalQty = Array.isArray(timeline.size_ledger)
+												? timeline.size_ledger.reduce((acc, curr) => acc + coalesce(curr?.qty, 0), 0)
+												: 0
+											return (
+												<Div
+													key={timeline.inbound_time}
+													className='flex items-stretch divide-x border-b bg-background last:border-b-0'>
+													<Div
+														className='sticky left-0 z-10 flex w-28 items-center px-4 py-2'
+														style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
+														<span>{timeline.inbound_time}</span>
+													</Div>
+													<Div align='left' className='flex w-28 items-center px-4 py-2'>
+														{timeline.assembly_line}
+													</Div>
+													<Div align='left' className='flex w-28 items-center px-4 py-2'>
+														{timeline.storage_location}
+													</Div>
+													<NestedTable>
+														{sortBy(timeline.size_ledger, 'size_numcode').map((item) => (
+															<NestedColumn key={item.size_numcode} className='[&>*]:h-9'>
+																<NestedCellHead>{item.size_numcode}</NestedCellHead>
+																<NestedCell>{formatIntlNumber(item?.qty)}</NestedCell>
+															</NestedColumn>
+														))}
+													</NestedTable>
+													<Div
+														align='left'
+														className='!sticky right-0 z-10 flex w-28 items-center px-4 py-2 font-medium'>
+														<span>{formatIntlNumber(totalQty)}</span>
+													</Div>
+												</Div>
+											)
+										})}
+								</Div>
+							</CollapsibleContent>
+						</Collapsible>
+					</TableCell>
+				</TableRow>
+			)}
+		</>
 	)
 }
 

@@ -258,9 +258,14 @@ export interface IInboundHistory {
 		qty: number
 	}>
 	daily_inbound_history: Array<{
-		size_numcode: string
-		qty: number
-		inbound_date: Date
+		date: string
+		size_ledger: Array<{ size_numcode: string; qty: number }>
+		timeline: Array<{
+			inbound_time: string
+			assembly_line: string
+			storage_location: string
+			size_ledger: Array<{ size_numcode: string; qty: number }>
+		}>
 	}>
 	progress: `${number}%`
 }
