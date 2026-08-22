@@ -500,7 +500,7 @@
 
 	/* Global styles */
 	* {
-		@apply border-border scrollbar-thumb-scrollbar scrollbar-thin scrollbar-track-transparent antialiased selection:bg-neutral-300 dark:selection:bg-neutral-600 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-button]:size-px [&::-webkit-scrollbar-thumb]:rounded-full;
+		@apply border-border scrollbar-thumb-scrollbar scrollbar-track-transparent antialiased selection:bg-neutral-300 dark:selection:bg-neutral-600 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-button]:size-px [&::-webkit-scrollbar-thumb]:rounded-full;
 	}
 
 	*,
