@@ -257,7 +257,7 @@ export function MultiSelect<D extends SelectItem>({
 				)}>
 				{Array.isArray(datalist) && Array.isArray(selectedValues) && selectedValues?.length > 0 ? (
 					<>
-						<Div className='scroll-fade-x flex scrollbar-none! items-center gap-x-1 overflow-x-auto overflow-y-hidden'>
+						<Div className='scroll-fade-x overflow-x flex scrollbar-none! items-center gap-x-1 overflow-x-auto overflow-y-hidden'>
 							{Array.isArray(selectedValues) &&
 								selectedValues.slice(0, maxCount).map((value) => {
 									const option = datalist.find((item) => item?.[valueField] === value)
@@ -359,7 +359,7 @@ export function MultiSelect<D extends SelectItem>({
 							if (typeof onInput === 'function') onInput(String(e.currentTarget.value))
 						}}
 					/>
-					<CommandList ref={refCallback}>
+					<CommandList ref={refCallback} className='scroll-fade-y'>
 						{loading ? (
 							<CommandLoading className='flex items-center justify-center p-6'>
 								<Icon name='LoaderCircle' className='animate-spin' />
