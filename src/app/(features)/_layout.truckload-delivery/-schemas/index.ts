@@ -82,7 +82,14 @@ export const upsertPurchaseOrdersSchema = object({
 			keyid: number().or(string()).nullish(),
 			po: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 			outbound_qty: number({ message: 'ns_validation:required' }).int().positive(),
-			max_outbound_qty: number().nonnegative().default(Infinity)
+			max_outbound_qty: any()
+				.nullish()
+				.refine((value) => {
+					if (value === null || value === undefined) return true
+					return !Number.isNaN(+value)
+				})
+				.default(Infinity)
+				.transform((value) => (isNil(value) ? Infinity : +value))
 		})
 	)
 }).superRefine((values, context) => {
@@ -100,7 +107,7 @@ export const upsertPurchaseOrdersSchema = object({
 		if (values.outbound_purchase_orders.findIndex((otherItem) => otherItem.po === item.po) !== index)
 			context.addIssue({
 				code: 'custom',
-				message: 'This PO has been added already',
+				message: 'Do not select the same PO',
 				fatal: true,
 				path: [`outbound_purchase_orders.${index}.po`]
 			})
