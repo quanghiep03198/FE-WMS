@@ -10,291 +10,122 @@
 
 import { createFileRoute } from '@tanstack/react-router'
 
-// Import Routes
+import { Route as rootRouteImport } from './app/__root'
+import { Route as featuresLayoutRouteImport } from './app/(features)/_layout'
+import { Route as publicIndexRouteImport } from './app/(public)/index'
+import { Route as authAuthorizationIndexRouteImport } from './app/(auth)/authorization/index'
+import { Route as authLoginIndexRouteImport } from './app/(auth)/login/index'
+import { Route as featuresPreferencesLayoutRouteImport } from './app/(features)/preferences/_layout'
+import { Route as publicRfidAgentIndexRouteImport } from './app/(public)/rfid-agent/index'
+import { Route as publicRfidAgentDocsIndexRouteImport } from './app/(public)/rfid-agent/docs/index'
 
-import { Route as rootRoute } from './app/__root'
-import { Route as publicIndexImport } from './app/(public)/index'
-import { Route as featuresLayoutImport } from './app/(features)/_layout'
-import { Route as publicRfidAgentIndexImport } from './app/(public)/rfid-agent/index'
-import { Route as authLoginIndexImport } from './app/(auth)/login/index'
-import { Route as authAuthorizationIndexImport } from './app/(auth)/authorization/index'
-import { Route as featuresPreferencesLayoutImport } from './app/(features)/preferences/_layout'
-import { Route as publicRfidAgentDocsIndexImport } from './app/(public)/rfid-agent/docs/index'
-
-// Create Virtual Routes
-
-const featuresImport = createFileRoute('/(features)')()
-const featuresPreferencesImport = createFileRoute('/(features)/preferences')()
-const featuresLayoutWarehouseIndexLazyImport = createFileRoute(
-  '/(features)/_layout/warehouse/',
-)()
-const featuresLayoutTruckloadDeliveryIndexLazyImport = createFileRoute(
-  '/(features)/_layout/truckload-delivery/',
-)()
-const featuresLayoutRfidDevicesManagementIndexLazyImport = createFileRoute(
-  '/(features)/_layout/rfid-devices-management/',
-)()
-const featuresLayoutPurchaseOrderSeekingIndexLazyImport = createFileRoute(
-  '/(features)/_layout/purchase-order-seeking/',
-)()
-const featuresLayoutProductionInventoryIndexLazyImport = createFileRoute(
-  '/(features)/_layout/production-inventory/',
-)()
-const featuresLayoutPackingManifestIndexLazyImport = createFileRoute(
-  '/(features)/_layout/packing-manifest/',
-)()
-const featuresLayoutOutboundReportIndexLazyImport = createFileRoute(
-  '/(features)/_layout/outbound-report/',
-)()
-const featuresLayoutInventoryAuditIndexLazyImport = createFileRoute(
-  '/(features)/_layout/inventory-audit/',
-)()
-const featuresLayoutInoutboundHistoryIndexLazyImport = createFileRoute(
-  '/(features)/_layout/inoutbound-history/',
-)()
-const featuresLayoutInboundReportIndexLazyImport = createFileRoute(
-  '/(features)/_layout/inbound-report/',
-)()
-const featuresLayoutDashboardIndexLazyImport = createFileRoute(
-  '/(features)/_layout/dashboard/',
-)()
-const featuresLayoutCargoWeightCheckIndexLazyImport = createFileRoute(
+const featuresLayoutCargoWeightCheckIndexLazyRouteImport = createFileRoute(
   '/(features)/_layout/cargo-weight-check/',
 )()
-const featuresPreferencesLayoutKeybindingsIndexLazyImport = createFileRoute(
-  '/(features)/preferences/_layout/keybindings/',
+const featuresLayoutDashboardIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/dashboard/',
 )()
-const featuresPreferencesLayoutAppearanceSettingsIndexLazyImport =
-  createFileRoute('/(features)/preferences/_layout/appearance-settings/')()
-const featuresPreferencesLayoutAccountIndexLazyImport = createFileRoute(
-  '/(features)/preferences/_layout/account/',
+const featuresLayoutInboundReportIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/inbound-report/',
 )()
-const featuresLayoutrfidFinishedGoodsOutboundIndexLazyImport = createFileRoute(
-  '/(features)/_layout/(rfid)/finished-goods-outbound/',
+const featuresLayoutInoutboundHistoryIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/inoutbound-history/',
 )()
-const featuresLayoutrfidFinishedGoodsInboundIndexLazyImport = createFileRoute(
-  '/(features)/_layout/(rfid)/finished-goods-inbound/',
+const featuresLayoutInventoryAuditIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/inventory-audit/',
 )()
-const featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyImport =
-  createFileRoute(
-    '/(features)/_layout/(defective-goods)/defective-goods-outbound-report/',
-  )()
-const featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyImport =
-  createFileRoute(
-    '/(features)/_layout/(defective-goods)/defective-goods-inventory/',
-  )()
-const featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyImport =
-  createFileRoute(
-    '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/',
-  )()
-const featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyImport =
-  createFileRoute(
-    '/(features)/_layout/(defective-goods)/defective-goods-inbound-report/',
-  )()
-const featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyImport =
+const featuresLayoutOutboundReportIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/outbound-report/',
+)()
+const featuresLayoutPackingManifestIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/packing-manifest/',
+)()
+const featuresLayoutProductionInventoryIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/production-inventory/',
+)()
+const featuresLayoutPurchaseOrderSeekingIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/purchase-order-seeking/',
+)()
+const featuresLayoutRfidDevicesManagementIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/rfid-devices-management/',
+)()
+const featuresLayoutTruckloadDeliveryIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/truckload-delivery/',
+)()
+const featuresLayoutWarehouseIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/warehouse/',
+)()
+const featuresLayoutadminAccessManagementIndexLazyRouteImport = createFileRoute(
+  '/(features)/_layout/(admin)/access-management/',
+)()
+const featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRouteImport =
   createFileRoute(
     '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/',
   )()
-const featuresLayoutadminAccessManagementIndexLazyImport = createFileRoute(
-  '/(features)/_layout/(admin)/access-management/',
+const featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyRouteImport =
+  createFileRoute(
+    '/(features)/_layout/(defective-goods)/defective-goods-inbound-report/',
+  )()
+const featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRouteImport =
+  createFileRoute(
+    '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/',
+  )()
+const featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRouteImport =
+  createFileRoute(
+    '/(features)/_layout/(defective-goods)/defective-goods-inventory/',
+  )()
+const featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyRouteImport =
+  createFileRoute(
+    '/(features)/_layout/(defective-goods)/defective-goods-outbound-report/',
+  )()
+const featuresLayoutrfidFinishedGoodsInboundIndexLazyRouteImport =
+  createFileRoute('/(features)/_layout/(rfid)/finished-goods-inbound/')()
+const featuresLayoutrfidFinishedGoodsOutboundIndexLazyRouteImport =
+  createFileRoute('/(features)/_layout/(rfid)/finished-goods-outbound/')()
+const featuresPreferencesLayoutAccountIndexLazyRouteImport = createFileRoute(
+  '/(features)/preferences/_layout/account/',
 )()
-const featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyImport =
+const featuresPreferencesLayoutAppearanceSettingsIndexLazyRouteImport =
+  createFileRoute('/(features)/preferences/_layout/appearance-settings/')()
+const featuresPreferencesLayoutKeybindingsIndexLazyRouteImport =
+  createFileRoute('/(features)/preferences/_layout/keybindings/')()
+const featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRouteImport =
   createFileRoute(
     '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/',
   )()
 
-// Create/Update Routes
-
-const featuresRoute = featuresImport.update({
-  id: '/(features)',
-  getParentRoute: () => rootRoute,
+const featuresLayoutRoute = featuresLayoutRouteImport.update({
+  id: '/(features)/_layout',
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const featuresPreferencesRoute = featuresPreferencesImport.update({
-  id: '/preferences',
-  path: '/preferences',
-  getParentRoute: () => featuresRoute,
-} as any)
-
-const publicIndexRoute = publicIndexImport.update({
+const publicIndexRoute = publicIndexRouteImport.update({
   id: '/(public)/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const featuresLayoutRoute = featuresLayoutImport.update({
-  id: '/_layout',
-  getParentRoute: () => featuresRoute,
-} as any)
-
-const publicRfidAgentIndexRoute = publicRfidAgentIndexImport.update({
-  id: '/(public)/rfid-agent/',
-  path: '/rfid-agent/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const authLoginIndexRoute = authLoginIndexImport.update({
-  id: '/(auth)/login/',
-  path: '/login/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const authAuthorizationIndexRoute = authAuthorizationIndexImport.update({
+const authAuthorizationIndexRoute = authAuthorizationIndexRouteImport.update({
   id: '/(auth)/authorization/',
   path: '/authorization/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const featuresPreferencesLayoutRoute = featuresPreferencesLayoutImport.update({
-  id: '/_layout',
-  getParentRoute: () => featuresPreferencesRoute,
+const authLoginIndexRoute = authLoginIndexRouteImport.update({
+  id: '/(auth)/login/',
+  path: '/login/',
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const featuresLayoutWarehouseIndexLazyRoute =
-  featuresLayoutWarehouseIndexLazyImport
-    .update({
-      id: '/warehouse/',
-      path: '/warehouse/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/_layout.warehouse/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
-
-const featuresLayoutTruckloadDeliveryIndexLazyRoute =
-  featuresLayoutTruckloadDeliveryIndexLazyImport
-    .update({
-      id: '/truckload-delivery/',
-      path: '/truckload-delivery/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/_layout.truckload-delivery/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
-
-const featuresLayoutRfidDevicesManagementIndexLazyRoute =
-  featuresLayoutRfidDevicesManagementIndexLazyImport
-    .update({
-      id: '/rfid-devices-management/',
-      path: '/rfid-devices-management/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import(
-        './app/(features)/_layout.rfid-devices-management/index.lazy'
-      ).then((d) => d.Route),
-    )
-
-const featuresLayoutPurchaseOrderSeekingIndexLazyRoute =
-  featuresLayoutPurchaseOrderSeekingIndexLazyImport
-    .update({
-      id: '/purchase-order-seeking/',
-      path: '/purchase-order-seeking/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/_layout.purchase-order-seeking/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
-
-const featuresLayoutProductionInventoryIndexLazyRoute =
-  featuresLayoutProductionInventoryIndexLazyImport
-    .update({
-      id: '/production-inventory/',
-      path: '/production-inventory/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/_layout.production-inventory/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
-
-const featuresLayoutPackingManifestIndexLazyRoute =
-  featuresLayoutPackingManifestIndexLazyImport
-    .update({
-      id: '/packing-manifest/',
-      path: '/packing-manifest/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/_layout.packing-manifest/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
-
-const featuresLayoutOutboundReportIndexLazyRoute =
-  featuresLayoutOutboundReportIndexLazyImport
-    .update({
-      id: '/outbound-report/',
-      path: '/outbound-report/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/_layout.outbound-report/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
-
-const featuresLayoutInventoryAuditIndexLazyRoute =
-  featuresLayoutInventoryAuditIndexLazyImport
-    .update({
-      id: '/inventory-audit/',
-      path: '/inventory-audit/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/_layout.inventory-audit/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
-
-const featuresLayoutInoutboundHistoryIndexLazyRoute =
-  featuresLayoutInoutboundHistoryIndexLazyImport
-    .update({
-      id: '/inoutbound-history/',
-      path: '/inoutbound-history/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/_layout.inoutbound-history/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
-
-const featuresLayoutInboundReportIndexLazyRoute =
-  featuresLayoutInboundReportIndexLazyImport
-    .update({
-      id: '/inbound-report/',
-      path: '/inbound-report/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/_layout.inbound-report/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
-
-const featuresLayoutDashboardIndexLazyRoute =
-  featuresLayoutDashboardIndexLazyImport
-    .update({
-      id: '/dashboard/',
-      path: '/dashboard/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/_layout.dashboard/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
-
+const featuresPreferencesLayoutRoute =
+  featuresPreferencesLayoutRouteImport.update({
+    id: '/(features)/preferences/_layout',
+    path: '/preferences',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const publicRfidAgentIndexRoute = publicRfidAgentIndexRouteImport.update({
+  id: '/(public)/rfid-agent/',
+  path: '/rfid-agent/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const featuresLayoutCargoWeightCheckIndexLazyRoute =
-  featuresLayoutCargoWeightCheckIndexLazyImport
+  featuresLayoutCargoWeightCheckIndexLazyRouteImport
     .update({
       id: '/cargo-weight-check/',
       path: '/cargo-weight-check/',
@@ -305,41 +136,242 @@ const featuresLayoutCargoWeightCheckIndexLazyRoute =
         (d) => d.Route,
       ),
     )
-
-const publicRfidAgentDocsIndexRoute = publicRfidAgentDocsIndexImport.update({
-  id: '/(public)/rfid-agent/docs/',
-  path: '/rfid-agent/docs/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const featuresPreferencesLayoutKeybindingsIndexLazyRoute =
-  featuresPreferencesLayoutKeybindingsIndexLazyImport
+const featuresLayoutDashboardIndexLazyRoute =
+  featuresLayoutDashboardIndexLazyRouteImport
     .update({
-      id: '/keybindings/',
-      path: '/keybindings/',
-      getParentRoute: () => featuresPreferencesLayoutRoute,
+      id: '/dashboard/',
+      path: '/dashboard/',
+      getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import(
-        './app/(features)/preferences/_layout.keybindings/index.lazy'
-      ).then((d) => d.Route),
+      import('./app/(features)/_layout.dashboard/index.lazy').then(
+        (d) => d.Route,
+      ),
     )
-
-const featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute =
-  featuresPreferencesLayoutAppearanceSettingsIndexLazyImport
+const featuresLayoutInboundReportIndexLazyRoute =
+  featuresLayoutInboundReportIndexLazyRouteImport
     .update({
-      id: '/appearance-settings/',
-      path: '/appearance-settings/',
-      getParentRoute: () => featuresPreferencesLayoutRoute,
+      id: '/inbound-report/',
+      path: '/inbound-report/',
+      getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import(
-        './app/(features)/preferences/_layout.appearance-settings/index.lazy'
-      ).then((d) => d.Route),
+      import('./app/(features)/_layout.inbound-report/index.lazy').then(
+        (d) => d.Route,
+      ),
     )
-
+const featuresLayoutInoutboundHistoryIndexLazyRoute =
+  featuresLayoutInoutboundHistoryIndexLazyRouteImport
+    .update({
+      id: '/inoutbound-history/',
+      path: '/inoutbound-history/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.inoutbound-history/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutInventoryAuditIndexLazyRoute =
+  featuresLayoutInventoryAuditIndexLazyRouteImport
+    .update({
+      id: '/inventory-audit/',
+      path: '/inventory-audit/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.inventory-audit/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutOutboundReportIndexLazyRoute =
+  featuresLayoutOutboundReportIndexLazyRouteImport
+    .update({
+      id: '/outbound-report/',
+      path: '/outbound-report/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.outbound-report/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutPackingManifestIndexLazyRoute =
+  featuresLayoutPackingManifestIndexLazyRouteImport
+    .update({
+      id: '/packing-manifest/',
+      path: '/packing-manifest/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.packing-manifest/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutProductionInventoryIndexLazyRoute =
+  featuresLayoutProductionInventoryIndexLazyRouteImport
+    .update({
+      id: '/production-inventory/',
+      path: '/production-inventory/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.production-inventory/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutPurchaseOrderSeekingIndexLazyRoute =
+  featuresLayoutPurchaseOrderSeekingIndexLazyRouteImport
+    .update({
+      id: '/purchase-order-seeking/',
+      path: '/purchase-order-seeking/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.purchase-order-seeking/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutRfidDevicesManagementIndexLazyRoute =
+  featuresLayoutRfidDevicesManagementIndexLazyRouteImport
+    .update({
+      id: '/rfid-devices-management/',
+      path: '/rfid-devices-management/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.rfid-devices-management/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutTruckloadDeliveryIndexLazyRoute =
+  featuresLayoutTruckloadDeliveryIndexLazyRouteImport
+    .update({
+      id: '/truckload-delivery/',
+      path: '/truckload-delivery/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.truckload-delivery/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutWarehouseIndexLazyRoute =
+  featuresLayoutWarehouseIndexLazyRouteImport
+    .update({
+      id: '/warehouse/',
+      path: '/warehouse/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.warehouse/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const publicRfidAgentDocsIndexRoute =
+  publicRfidAgentDocsIndexRouteImport.update({
+    id: '/(public)/rfid-agent/docs/',
+    path: '/rfid-agent/docs/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const featuresLayoutadminAccessManagementIndexLazyRoute =
+  featuresLayoutadminAccessManagementIndexLazyRouteImport
+    .update({
+      id: '/(admin)/access-management/',
+      path: '/access-management/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.(admin)/access-management/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute =
+  featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRouteImport
+    .update({
+      id: '/(defective-goods)/defective-goods-epc-combination/',
+      path: '/defective-goods-epc-combination/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.(defective-goods)/defective-goods-epc-combination/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyRoute =
+  featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyRouteImport
+    .update({
+      id: '/(defective-goods)/defective-goods-inbound-report/',
+      path: '/defective-goods-inbound-report/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.(defective-goods)/defective-goods-inbound-report/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute =
+  featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRouteImport
+    .update({
+      id: '/(defective-goods)/defective-goods-inoutbound/',
+      path: '/defective-goods-inoutbound/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.(defective-goods)/defective-goods-inoutbound/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRoute =
+  featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRouteImport
+    .update({
+      id: '/(defective-goods)/defective-goods-inventory/',
+      path: '/defective-goods-inventory/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.(defective-goods)/defective-goods-inventory/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyRoute =
+  featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyRouteImport
+    .update({
+      id: '/(defective-goods)/defective-goods-outbound-report/',
+      path: '/defective-goods-outbound-report/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.(defective-goods)/defective-goods-outbound-report/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutrfidFinishedGoodsInboundIndexLazyRoute =
+  featuresLayoutrfidFinishedGoodsInboundIndexLazyRouteImport
+    .update({
+      id: '/(rfid)/finished-goods-inbound/',
+      path: '/finished-goods-inbound/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.(rfid)/finished-goods-inbound/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const featuresLayoutrfidFinishedGoodsOutboundIndexLazyRoute =
+  featuresLayoutrfidFinishedGoodsOutboundIndexLazyRouteImport
+    .update({
+      id: '/(rfid)/finished-goods-outbound/',
+      path: '/finished-goods-outbound/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.(rfid)/finished-goods-outbound/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
 const featuresPreferencesLayoutAccountIndexLazyRoute =
-  featuresPreferencesLayoutAccountIndexLazyImport
+  featuresPreferencesLayoutAccountIndexLazyRouteImport
     .update({
       id: '/account/',
       path: '/account/',
@@ -350,363 +382,472 @@ const featuresPreferencesLayoutAccountIndexLazyRoute =
         (d) => d.Route,
       ),
     )
-
-const featuresLayoutrfidFinishedGoodsOutboundIndexLazyRoute =
-  featuresLayoutrfidFinishedGoodsOutboundIndexLazyImport
+const featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute =
+  featuresPreferencesLayoutAppearanceSettingsIndexLazyRouteImport
     .update({
-      id: '/(rfid)/finished-goods-outbound/',
-      path: '/finished-goods-outbound/',
-      getParentRoute: () => featuresLayoutRoute,
+      id: '/appearance-settings/',
+      path: '/appearance-settings/',
+      getParentRoute: () => featuresPreferencesLayoutRoute,
     } as any)
     .lazy(() =>
-      import(
-        './app/(features)/_layout.(rfid)/finished-goods-outbound/index.lazy'
-      ).then((d) => d.Route),
+      import('./app/(features)/preferences/_layout.appearance-settings/index.lazy').then(
+        (d) => d.Route,
+      ),
     )
-
-const featuresLayoutrfidFinishedGoodsInboundIndexLazyRoute =
-  featuresLayoutrfidFinishedGoodsInboundIndexLazyImport
+const featuresPreferencesLayoutKeybindingsIndexLazyRoute =
+  featuresPreferencesLayoutKeybindingsIndexLazyRouteImport
     .update({
-      id: '/(rfid)/finished-goods-inbound/',
-      path: '/finished-goods-inbound/',
-      getParentRoute: () => featuresLayoutRoute,
+      id: '/keybindings/',
+      path: '/keybindings/',
+      getParentRoute: () => featuresPreferencesLayoutRoute,
     } as any)
     .lazy(() =>
-      import(
-        './app/(features)/_layout.(rfid)/finished-goods-inbound/index.lazy'
-      ).then((d) => d.Route),
+      import('./app/(features)/preferences/_layout.keybindings/index.lazy').then(
+        (d) => d.Route,
+      ),
     )
-
-const featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyRoute =
-  featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyImport
-    .update({
-      id: '/(defective-goods)/defective-goods-outbound-report/',
-      path: '/defective-goods-outbound-report/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import(
-        './app/(features)/_layout.(defective-goods)/defective-goods-outbound-report/index.lazy'
-      ).then((d) => d.Route),
-    )
-
-const featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRoute =
-  featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyImport
-    .update({
-      id: '/(defective-goods)/defective-goods-inventory/',
-      path: '/defective-goods-inventory/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import(
-        './app/(features)/_layout.(defective-goods)/defective-goods-inventory/index.lazy'
-      ).then((d) => d.Route),
-    )
-
-const featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute =
-  featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyImport
-    .update({
-      id: '/(defective-goods)/defective-goods-inoutbound/',
-      path: '/defective-goods-inoutbound/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import(
-        './app/(features)/_layout.(defective-goods)/defective-goods-inoutbound/index.lazy'
-      ).then((d) => d.Route),
-    )
-
-const featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyRoute =
-  featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyImport
-    .update({
-      id: '/(defective-goods)/defective-goods-inbound-report/',
-      path: '/defective-goods-inbound-report/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import(
-        './app/(features)/_layout.(defective-goods)/defective-goods-inbound-report/index.lazy'
-      ).then((d) => d.Route),
-    )
-
-const featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute =
-  featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyImport
-    .update({
-      id: '/(defective-goods)/defective-goods-epc-combination/',
-      path: '/defective-goods-epc-combination/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import(
-        './app/(features)/_layout.(defective-goods)/defective-goods-epc-combination/index.lazy'
-      ).then((d) => d.Route),
-    )
-
-const featuresLayoutadminAccessManagementIndexLazyRoute =
-  featuresLayoutadminAccessManagementIndexLazyImport
-    .update({
-      id: '/(admin)/access-management/',
-      path: '/access-management/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import(
-        './app/(features)/_layout.(admin)/access-management/index.lazy'
-      ).then((d) => d.Route),
-    )
-
 const featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute =
-  featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyImport
+  featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRouteImport
     .update({
       id: '/warehouse/_layout/storage-details/$warehouseNum/',
       path: '/warehouse/storage-details/$warehouseNum/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import(
-        './app/(features)/_layout.warehouse/_layout.storage-details.$warehouseNum/index.lazy'
-      ).then((d) => d.Route),
+      import('./app/(features)/_layout.warehouse/_layout.storage-details.$warehouseNum/index.lazy').then(
+        (d) => d.Route,
+      ),
     )
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof publicIndexRoute
+  '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
+  '/authorization/': typeof authAuthorizationIndexRoute
+  '/login/': typeof authLoginIndexRoute
+  '/rfid-agent/': typeof publicRfidAgentIndexRoute
+  '/rfid-agent/docs/': typeof publicRfidAgentDocsIndexRoute
+  '/cargo-weight-check/': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
+  '/dashboard/': typeof featuresLayoutDashboardIndexLazyRoute
+  '/inbound-report/': typeof featuresLayoutInboundReportIndexLazyRoute
+  '/inoutbound-history/': typeof featuresLayoutInoutboundHistoryIndexLazyRoute
+  '/inventory-audit/': typeof featuresLayoutInventoryAuditIndexLazyRoute
+  '/outbound-report/': typeof featuresLayoutOutboundReportIndexLazyRoute
+  '/packing-manifest/': typeof featuresLayoutPackingManifestIndexLazyRoute
+  '/production-inventory/': typeof featuresLayoutProductionInventoryIndexLazyRoute
+  '/purchase-order-seeking/': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
+  '/rfid-devices-management/': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
+  '/truckload-delivery/': typeof featuresLayoutTruckloadDeliveryIndexLazyRoute
+  '/warehouse/': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/access-management/': typeof featuresLayoutadminAccessManagementIndexLazyRoute
+  '/defective-goods-epc-combination/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
+  '/defective-goods-inbound-report/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyRoute
+  '/defective-goods-inoutbound/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
+  '/defective-goods-inventory/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRoute
+  '/defective-goods-outbound-report/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyRoute
+  '/finished-goods-inbound/': typeof featuresLayoutrfidFinishedGoodsInboundIndexLazyRoute
+  '/finished-goods-outbound/': typeof featuresLayoutrfidFinishedGoodsOutboundIndexLazyRoute
+  '/preferences/account/': typeof featuresPreferencesLayoutAccountIndexLazyRoute
+  '/preferences/appearance-settings/': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
+  '/preferences/keybindings/': typeof featuresPreferencesLayoutKeybindingsIndexLazyRoute
+  '/warehouse/storage-details/$warehouseNum/': typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof publicIndexRoute
+  '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
+  '/authorization': typeof authAuthorizationIndexRoute
+  '/login': typeof authLoginIndexRoute
+  '/rfid-agent': typeof publicRfidAgentIndexRoute
+  '/rfid-agent/docs': typeof publicRfidAgentDocsIndexRoute
+  '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
+  '/dashboard': typeof featuresLayoutDashboardIndexLazyRoute
+  '/inbound-report': typeof featuresLayoutInboundReportIndexLazyRoute
+  '/inoutbound-history': typeof featuresLayoutInoutboundHistoryIndexLazyRoute
+  '/inventory-audit': typeof featuresLayoutInventoryAuditIndexLazyRoute
+  '/outbound-report': typeof featuresLayoutOutboundReportIndexLazyRoute
+  '/packing-manifest': typeof featuresLayoutPackingManifestIndexLazyRoute
+  '/production-inventory': typeof featuresLayoutProductionInventoryIndexLazyRoute
+  '/purchase-order-seeking': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
+  '/rfid-devices-management': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
+  '/truckload-delivery': typeof featuresLayoutTruckloadDeliveryIndexLazyRoute
+  '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/access-management': typeof featuresLayoutadminAccessManagementIndexLazyRoute
+  '/defective-goods-epc-combination': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
+  '/defective-goods-inbound-report': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyRoute
+  '/defective-goods-inoutbound': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
+  '/defective-goods-inventory': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRoute
+  '/defective-goods-outbound-report': typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyRoute
+  '/finished-goods-inbound': typeof featuresLayoutrfidFinishedGoodsInboundIndexLazyRoute
+  '/finished-goods-outbound': typeof featuresLayoutrfidFinishedGoodsOutboundIndexLazyRoute
+  '/preferences/account': typeof featuresPreferencesLayoutAccountIndexLazyRoute
+  '/preferences/appearance-settings': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
+  '/preferences/keybindings': typeof featuresPreferencesLayoutKeybindingsIndexLazyRoute
+  '/warehouse/storage-details/$warehouseNum': typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/(features)/_layout': typeof featuresLayoutRouteWithChildren
+  '/(public)/': typeof publicIndexRoute
+  '/(features)/preferences/_layout': typeof featuresPreferencesLayoutRouteWithChildren
+  '/(auth)/authorization/': typeof authAuthorizationIndexRoute
+  '/(auth)/login/': typeof authLoginIndexRoute
+  '/(public)/rfid-agent/': typeof publicRfidAgentIndexRoute
+  '/(public)/rfid-agent/docs/': typeof publicRfidAgentDocsIndexRoute
+  '/(features)/_layout/cargo-weight-check/': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
+  '/(features)/_layout/dashboard/': typeof featuresLayoutDashboardIndexLazyRoute
+  '/(features)/_layout/inbound-report/': typeof featuresLayoutInboundReportIndexLazyRoute
+  '/(features)/_layout/inoutbound-history/': typeof featuresLayoutInoutboundHistoryIndexLazyRoute
+  '/(features)/_layout/inventory-audit/': typeof featuresLayoutInventoryAuditIndexLazyRoute
+  '/(features)/_layout/outbound-report/': typeof featuresLayoutOutboundReportIndexLazyRoute
+  '/(features)/_layout/packing-manifest/': typeof featuresLayoutPackingManifestIndexLazyRoute
+  '/(features)/_layout/production-inventory/': typeof featuresLayoutProductionInventoryIndexLazyRoute
+  '/(features)/_layout/purchase-order-seeking/': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
+  '/(features)/_layout/rfid-devices-management/': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
+  '/(features)/_layout/truckload-delivery/': typeof featuresLayoutTruckloadDeliveryIndexLazyRoute
+  '/(features)/_layout/warehouse/': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/(features)/_layout/(admin)/access-management/': typeof featuresLayoutadminAccessManagementIndexLazyRoute
+  '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
+  '/(features)/_layout/(defective-goods)/defective-goods-inbound-report/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyRoute
+  '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
+  '/(features)/_layout/(defective-goods)/defective-goods-inventory/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRoute
+  '/(features)/_layout/(defective-goods)/defective-goods-outbound-report/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyRoute
+  '/(features)/_layout/(rfid)/finished-goods-inbound/': typeof featuresLayoutrfidFinishedGoodsInboundIndexLazyRoute
+  '/(features)/_layout/(rfid)/finished-goods-outbound/': typeof featuresLayoutrfidFinishedGoodsOutboundIndexLazyRoute
+  '/(features)/preferences/_layout/account/': typeof featuresPreferencesLayoutAccountIndexLazyRoute
+  '/(features)/preferences/_layout/appearance-settings/': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
+  '/(features)/preferences/_layout/keybindings/': typeof featuresPreferencesLayoutKeybindingsIndexLazyRoute
+  '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/': typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/preferences'
+    | '/authorization/'
+    | '/login/'
+    | '/rfid-agent/'
+    | '/rfid-agent/docs/'
+    | '/cargo-weight-check/'
+    | '/dashboard/'
+    | '/inbound-report/'
+    | '/inoutbound-history/'
+    | '/inventory-audit/'
+    | '/outbound-report/'
+    | '/packing-manifest/'
+    | '/production-inventory/'
+    | '/purchase-order-seeking/'
+    | '/rfid-devices-management/'
+    | '/truckload-delivery/'
+    | '/warehouse/'
+    | '/access-management/'
+    | '/defective-goods-epc-combination/'
+    | '/defective-goods-inbound-report/'
+    | '/defective-goods-inoutbound/'
+    | '/defective-goods-inventory/'
+    | '/defective-goods-outbound-report/'
+    | '/finished-goods-inbound/'
+    | '/finished-goods-outbound/'
+    | '/preferences/account/'
+    | '/preferences/appearance-settings/'
+    | '/preferences/keybindings/'
+    | '/warehouse/storage-details/$warehouseNum/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/preferences'
+    | '/authorization'
+    | '/login'
+    | '/rfid-agent'
+    | '/rfid-agent/docs'
+    | '/cargo-weight-check'
+    | '/dashboard'
+    | '/inbound-report'
+    | '/inoutbound-history'
+    | '/inventory-audit'
+    | '/outbound-report'
+    | '/packing-manifest'
+    | '/production-inventory'
+    | '/purchase-order-seeking'
+    | '/rfid-devices-management'
+    | '/truckload-delivery'
+    | '/warehouse'
+    | '/access-management'
+    | '/defective-goods-epc-combination'
+    | '/defective-goods-inbound-report'
+    | '/defective-goods-inoutbound'
+    | '/defective-goods-inventory'
+    | '/defective-goods-outbound-report'
+    | '/finished-goods-inbound'
+    | '/finished-goods-outbound'
+    | '/preferences/account'
+    | '/preferences/appearance-settings'
+    | '/preferences/keybindings'
+    | '/warehouse/storage-details/$warehouseNum'
+  id:
+    | '__root__'
+    | '/(features)/_layout'
+    | '/(public)/'
+    | '/(features)/preferences/_layout'
+    | '/(auth)/authorization/'
+    | '/(auth)/login/'
+    | '/(public)/rfid-agent/'
+    | '/(public)/rfid-agent/docs/'
+    | '/(features)/_layout/cargo-weight-check/'
+    | '/(features)/_layout/dashboard/'
+    | '/(features)/_layout/inbound-report/'
+    | '/(features)/_layout/inoutbound-history/'
+    | '/(features)/_layout/inventory-audit/'
+    | '/(features)/_layout/outbound-report/'
+    | '/(features)/_layout/packing-manifest/'
+    | '/(features)/_layout/production-inventory/'
+    | '/(features)/_layout/purchase-order-seeking/'
+    | '/(features)/_layout/rfid-devices-management/'
+    | '/(features)/_layout/truckload-delivery/'
+    | '/(features)/_layout/warehouse/'
+    | '/(features)/_layout/(admin)/access-management/'
+    | '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/'
+    | '/(features)/_layout/(defective-goods)/defective-goods-inbound-report/'
+    | '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/'
+    | '/(features)/_layout/(defective-goods)/defective-goods-inventory/'
+    | '/(features)/_layout/(defective-goods)/defective-goods-outbound-report/'
+    | '/(features)/_layout/(rfid)/finished-goods-inbound/'
+    | '/(features)/_layout/(rfid)/finished-goods-outbound/'
+    | '/(features)/preferences/_layout/account/'
+    | '/(features)/preferences/_layout/appearance-settings/'
+    | '/(features)/preferences/_layout/keybindings/'
+    | '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  featuresLayoutRoute: typeof featuresLayoutRouteWithChildren
+  publicIndexRoute: typeof publicIndexRoute
+  featuresPreferencesLayoutRoute: typeof featuresPreferencesLayoutRouteWithChildren
+  authAuthorizationIndexRoute: typeof authAuthorizationIndexRoute
+  authLoginIndexRoute: typeof authLoginIndexRoute
+  publicRfidAgentIndexRoute: typeof publicRfidAgentIndexRoute
+  publicRfidAgentDocsIndexRoute: typeof publicRfidAgentDocsIndexRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(features)': {
-      id: '/(features)'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof featuresImport
-      parentRoute: typeof rootRoute
-    }
     '/(features)/_layout': {
       id: '/(features)/_layout'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof featuresLayoutImport
-      parentRoute: typeof featuresRoute
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof featuresLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(public)/': {
       id: '/(public)/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof publicIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof publicIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/(features)/preferences': {
-      id: '/(features)/preferences'
-      path: '/preferences'
-      fullPath: '/preferences'
-      preLoaderRoute: typeof featuresPreferencesImport
-      parentRoute: typeof featuresImport
+    '/(auth)/authorization/': {
+      id: '/(auth)/authorization/'
+      path: '/authorization'
+      fullPath: '/authorization/'
+      preLoaderRoute: typeof authAuthorizationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/login/': {
+      id: '/(auth)/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof authLoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(features)/preferences/_layout': {
       id: '/(features)/preferences/_layout'
       path: '/preferences'
       fullPath: '/preferences'
-      preLoaderRoute: typeof featuresPreferencesLayoutImport
-      parentRoute: typeof featuresPreferencesRoute
-    }
-    '/(auth)/authorization/': {
-      id: '/(auth)/authorization/'
-      path: '/authorization'
-      fullPath: '/authorization'
-      preLoaderRoute: typeof authAuthorizationIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/(auth)/login/': {
-      id: '/(auth)/login/'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof authLoginIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof featuresPreferencesLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(public)/rfid-agent/': {
       id: '/(public)/rfid-agent/'
       path: '/rfid-agent'
-      fullPath: '/rfid-agent'
-      preLoaderRoute: typeof publicRfidAgentIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/(public)/rfid-agent/docs/': {
-      id: '/(public)/rfid-agent/docs/'
-      path: '/rfid-agent/docs'
-      fullPath: '/rfid-agent/docs'
-      preLoaderRoute: typeof publicRfidAgentDocsIndexImport
-      parentRoute: typeof rootRoute
+      fullPath: '/rfid-agent/'
+      preLoaderRoute: typeof publicRfidAgentIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(features)/_layout/cargo-weight-check/': {
       id: '/(features)/_layout/cargo-weight-check/'
       path: '/cargo-weight-check'
-      fullPath: '/cargo-weight-check'
-      preLoaderRoute: typeof featuresLayoutCargoWeightCheckIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/cargo-weight-check/'
+      preLoaderRoute: typeof featuresLayoutCargoWeightCheckIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/dashboard/': {
       id: '/(features)/_layout/dashboard/'
       path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof featuresLayoutDashboardIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof featuresLayoutDashboardIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/inbound-report/': {
       id: '/(features)/_layout/inbound-report/'
       path: '/inbound-report'
-      fullPath: '/inbound-report'
-      preLoaderRoute: typeof featuresLayoutInboundReportIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/inbound-report/'
+      preLoaderRoute: typeof featuresLayoutInboundReportIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/inoutbound-history/': {
       id: '/(features)/_layout/inoutbound-history/'
       path: '/inoutbound-history'
-      fullPath: '/inoutbound-history'
-      preLoaderRoute: typeof featuresLayoutInoutboundHistoryIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/inoutbound-history/'
+      preLoaderRoute: typeof featuresLayoutInoutboundHistoryIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/inventory-audit/': {
       id: '/(features)/_layout/inventory-audit/'
       path: '/inventory-audit'
-      fullPath: '/inventory-audit'
-      preLoaderRoute: typeof featuresLayoutInventoryAuditIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/inventory-audit/'
+      preLoaderRoute: typeof featuresLayoutInventoryAuditIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/outbound-report/': {
       id: '/(features)/_layout/outbound-report/'
       path: '/outbound-report'
-      fullPath: '/outbound-report'
-      preLoaderRoute: typeof featuresLayoutOutboundReportIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/outbound-report/'
+      preLoaderRoute: typeof featuresLayoutOutboundReportIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/packing-manifest/': {
       id: '/(features)/_layout/packing-manifest/'
       path: '/packing-manifest'
-      fullPath: '/packing-manifest'
-      preLoaderRoute: typeof featuresLayoutPackingManifestIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/packing-manifest/'
+      preLoaderRoute: typeof featuresLayoutPackingManifestIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/production-inventory/': {
       id: '/(features)/_layout/production-inventory/'
       path: '/production-inventory'
-      fullPath: '/production-inventory'
-      preLoaderRoute: typeof featuresLayoutProductionInventoryIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/production-inventory/'
+      preLoaderRoute: typeof featuresLayoutProductionInventoryIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/purchase-order-seeking/': {
       id: '/(features)/_layout/purchase-order-seeking/'
       path: '/purchase-order-seeking'
-      fullPath: '/purchase-order-seeking'
-      preLoaderRoute: typeof featuresLayoutPurchaseOrderSeekingIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/purchase-order-seeking/'
+      preLoaderRoute: typeof featuresLayoutPurchaseOrderSeekingIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/rfid-devices-management/': {
       id: '/(features)/_layout/rfid-devices-management/'
       path: '/rfid-devices-management'
-      fullPath: '/rfid-devices-management'
-      preLoaderRoute: typeof featuresLayoutRfidDevicesManagementIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/rfid-devices-management/'
+      preLoaderRoute: typeof featuresLayoutRfidDevicesManagementIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/truckload-delivery/': {
       id: '/(features)/_layout/truckload-delivery/'
       path: '/truckload-delivery'
-      fullPath: '/truckload-delivery'
-      preLoaderRoute: typeof featuresLayoutTruckloadDeliveryIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/truckload-delivery/'
+      preLoaderRoute: typeof featuresLayoutTruckloadDeliveryIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/warehouse/': {
       id: '/(features)/_layout/warehouse/'
       path: '/warehouse'
-      fullPath: '/warehouse'
-      preLoaderRoute: typeof featuresLayoutWarehouseIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/warehouse/'
+      preLoaderRoute: typeof featuresLayoutWarehouseIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
+    }
+    '/(public)/rfid-agent/docs/': {
+      id: '/(public)/rfid-agent/docs/'
+      path: '/rfid-agent/docs'
+      fullPath: '/rfid-agent/docs/'
+      preLoaderRoute: typeof publicRfidAgentDocsIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(features)/_layout/(admin)/access-management/': {
       id: '/(features)/_layout/(admin)/access-management/'
       path: '/access-management'
-      fullPath: '/access-management'
-      preLoaderRoute: typeof featuresLayoutadminAccessManagementIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/access-management/'
+      preLoaderRoute: typeof featuresLayoutadminAccessManagementIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/': {
       id: '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/'
       path: '/defective-goods-epc-combination'
-      fullPath: '/defective-goods-epc-combination'
-      preLoaderRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/defective-goods-epc-combination/'
+      preLoaderRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/(defective-goods)/defective-goods-inbound-report/': {
       id: '/(features)/_layout/(defective-goods)/defective-goods-inbound-report/'
       path: '/defective-goods-inbound-report'
-      fullPath: '/defective-goods-inbound-report'
-      preLoaderRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/defective-goods-inbound-report/'
+      preLoaderRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/': {
       id: '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/'
       path: '/defective-goods-inoutbound'
-      fullPath: '/defective-goods-inoutbound'
-      preLoaderRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/defective-goods-inoutbound/'
+      preLoaderRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/(defective-goods)/defective-goods-inventory/': {
       id: '/(features)/_layout/(defective-goods)/defective-goods-inventory/'
       path: '/defective-goods-inventory'
-      fullPath: '/defective-goods-inventory'
-      preLoaderRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/defective-goods-inventory/'
+      preLoaderRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/(defective-goods)/defective-goods-outbound-report/': {
       id: '/(features)/_layout/(defective-goods)/defective-goods-outbound-report/'
       path: '/defective-goods-outbound-report'
-      fullPath: '/defective-goods-outbound-report'
-      preLoaderRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/defective-goods-outbound-report/'
+      preLoaderRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/(rfid)/finished-goods-inbound/': {
       id: '/(features)/_layout/(rfid)/finished-goods-inbound/'
       path: '/finished-goods-inbound'
-      fullPath: '/finished-goods-inbound'
-      preLoaderRoute: typeof featuresLayoutrfidFinishedGoodsInboundIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/finished-goods-inbound/'
+      preLoaderRoute: typeof featuresLayoutrfidFinishedGoodsInboundIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/_layout/(rfid)/finished-goods-outbound/': {
       id: '/(features)/_layout/(rfid)/finished-goods-outbound/'
       path: '/finished-goods-outbound'
-      fullPath: '/finished-goods-outbound'
-      preLoaderRoute: typeof featuresLayoutrfidFinishedGoodsOutboundIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/finished-goods-outbound/'
+      preLoaderRoute: typeof featuresLayoutrfidFinishedGoodsOutboundIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/preferences/_layout/account/': {
       id: '/(features)/preferences/_layout/account/'
       path: '/account'
-      fullPath: '/preferences/account'
-      preLoaderRoute: typeof featuresPreferencesLayoutAccountIndexLazyImport
-      parentRoute: typeof featuresPreferencesLayoutImport
+      fullPath: '/preferences/account/'
+      preLoaderRoute: typeof featuresPreferencesLayoutAccountIndexLazyRouteImport
+      parentRoute: typeof featuresPreferencesLayoutRoute
     }
     '/(features)/preferences/_layout/appearance-settings/': {
       id: '/(features)/preferences/_layout/appearance-settings/'
       path: '/appearance-settings'
-      fullPath: '/preferences/appearance-settings'
-      preLoaderRoute: typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyImport
-      parentRoute: typeof featuresPreferencesLayoutImport
+      fullPath: '/preferences/appearance-settings/'
+      preLoaderRoute: typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRouteImport
+      parentRoute: typeof featuresPreferencesLayoutRoute
     }
     '/(features)/preferences/_layout/keybindings/': {
       id: '/(features)/preferences/_layout/keybindings/'
       path: '/keybindings'
-      fullPath: '/preferences/keybindings'
-      preLoaderRoute: typeof featuresPreferencesLayoutKeybindingsIndexLazyImport
-      parentRoute: typeof featuresPreferencesLayoutImport
+      fullPath: '/preferences/keybindings/'
+      preLoaderRoute: typeof featuresPreferencesLayoutKeybindingsIndexLazyRouteImport
+      parentRoute: typeof featuresPreferencesLayoutRoute
     }
     '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/': {
       id: '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/'
       path: '/warehouse/storage-details/$warehouseNum'
-      fullPath: '/warehouse/storage-details/$warehouseNum'
-      preLoaderRoute: typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
+      fullPath: '/warehouse/storage-details/$warehouseNum/'
+      preLoaderRoute: typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface featuresLayoutRouteChildren {
   featuresLayoutCargoWeightCheckIndexLazyRoute: typeof featuresLayoutCargoWeightCheckIndexLazyRoute
@@ -800,434 +941,15 @@ const featuresPreferencesLayoutRouteWithChildren =
     featuresPreferencesLayoutRouteChildren,
   )
 
-interface featuresPreferencesRouteChildren {
-  featuresPreferencesLayoutRoute: typeof featuresPreferencesLayoutRouteWithChildren
-}
-
-const featuresPreferencesRouteChildren: featuresPreferencesRouteChildren = {
-  featuresPreferencesLayoutRoute: featuresPreferencesLayoutRouteWithChildren,
-}
-
-const featuresPreferencesRouteWithChildren =
-  featuresPreferencesRoute._addFileChildren(featuresPreferencesRouteChildren)
-
-interface featuresRouteChildren {
-  featuresLayoutRoute: typeof featuresLayoutRouteWithChildren
-  featuresPreferencesRoute: typeof featuresPreferencesRouteWithChildren
-}
-
-const featuresRouteChildren: featuresRouteChildren = {
-  featuresLayoutRoute: featuresLayoutRouteWithChildren,
-  featuresPreferencesRoute: featuresPreferencesRouteWithChildren,
-}
-
-const featuresRouteWithChildren = featuresRoute._addFileChildren(
-  featuresRouteChildren,
-)
-
-export interface FileRoutesByFullPath {
-  '/': typeof publicIndexRoute
-  '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
-  '/authorization': typeof authAuthorizationIndexRoute
-  '/login': typeof authLoginIndexRoute
-  '/rfid-agent': typeof publicRfidAgentIndexRoute
-  '/rfid-agent/docs': typeof publicRfidAgentDocsIndexRoute
-  '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
-  '/dashboard': typeof featuresLayoutDashboardIndexLazyRoute
-  '/inbound-report': typeof featuresLayoutInboundReportIndexLazyRoute
-  '/inoutbound-history': typeof featuresLayoutInoutboundHistoryIndexLazyRoute
-  '/inventory-audit': typeof featuresLayoutInventoryAuditIndexLazyRoute
-  '/outbound-report': typeof featuresLayoutOutboundReportIndexLazyRoute
-  '/packing-manifest': typeof featuresLayoutPackingManifestIndexLazyRoute
-  '/production-inventory': typeof featuresLayoutProductionInventoryIndexLazyRoute
-  '/purchase-order-seeking': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
-  '/rfid-devices-management': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
-  '/truckload-delivery': typeof featuresLayoutTruckloadDeliveryIndexLazyRoute
-  '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
-  '/access-management': typeof featuresLayoutadminAccessManagementIndexLazyRoute
-  '/defective-goods-epc-combination': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
-  '/defective-goods-inbound-report': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyRoute
-  '/defective-goods-inoutbound': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
-  '/defective-goods-inventory': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRoute
-  '/defective-goods-outbound-report': typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyRoute
-  '/finished-goods-inbound': typeof featuresLayoutrfidFinishedGoodsInboundIndexLazyRoute
-  '/finished-goods-outbound': typeof featuresLayoutrfidFinishedGoodsOutboundIndexLazyRoute
-  '/preferences/account': typeof featuresPreferencesLayoutAccountIndexLazyRoute
-  '/preferences/appearance-settings': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
-  '/preferences/keybindings': typeof featuresPreferencesLayoutKeybindingsIndexLazyRoute
-  '/warehouse/storage-details/$warehouseNum': typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof publicIndexRoute
-  '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
-  '/authorization': typeof authAuthorizationIndexRoute
-  '/login': typeof authLoginIndexRoute
-  '/rfid-agent': typeof publicRfidAgentIndexRoute
-  '/rfid-agent/docs': typeof publicRfidAgentDocsIndexRoute
-  '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
-  '/dashboard': typeof featuresLayoutDashboardIndexLazyRoute
-  '/inbound-report': typeof featuresLayoutInboundReportIndexLazyRoute
-  '/inoutbound-history': typeof featuresLayoutInoutboundHistoryIndexLazyRoute
-  '/inventory-audit': typeof featuresLayoutInventoryAuditIndexLazyRoute
-  '/outbound-report': typeof featuresLayoutOutboundReportIndexLazyRoute
-  '/packing-manifest': typeof featuresLayoutPackingManifestIndexLazyRoute
-  '/production-inventory': typeof featuresLayoutProductionInventoryIndexLazyRoute
-  '/purchase-order-seeking': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
-  '/rfid-devices-management': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
-  '/truckload-delivery': typeof featuresLayoutTruckloadDeliveryIndexLazyRoute
-  '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
-  '/access-management': typeof featuresLayoutadminAccessManagementIndexLazyRoute
-  '/defective-goods-epc-combination': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
-  '/defective-goods-inbound-report': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyRoute
-  '/defective-goods-inoutbound': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
-  '/defective-goods-inventory': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRoute
-  '/defective-goods-outbound-report': typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyRoute
-  '/finished-goods-inbound': typeof featuresLayoutrfidFinishedGoodsInboundIndexLazyRoute
-  '/finished-goods-outbound': typeof featuresLayoutrfidFinishedGoodsOutboundIndexLazyRoute
-  '/preferences/account': typeof featuresPreferencesLayoutAccountIndexLazyRoute
-  '/preferences/appearance-settings': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
-  '/preferences/keybindings': typeof featuresPreferencesLayoutKeybindingsIndexLazyRoute
-  '/warehouse/storage-details/$warehouseNum': typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/(features)': typeof featuresRouteWithChildren
-  '/(features)/_layout': typeof featuresLayoutRouteWithChildren
-  '/(public)/': typeof publicIndexRoute
-  '/(features)/preferences': typeof featuresPreferencesRouteWithChildren
-  '/(features)/preferences/_layout': typeof featuresPreferencesLayoutRouteWithChildren
-  '/(auth)/authorization/': typeof authAuthorizationIndexRoute
-  '/(auth)/login/': typeof authLoginIndexRoute
-  '/(public)/rfid-agent/': typeof publicRfidAgentIndexRoute
-  '/(public)/rfid-agent/docs/': typeof publicRfidAgentDocsIndexRoute
-  '/(features)/_layout/cargo-weight-check/': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
-  '/(features)/_layout/dashboard/': typeof featuresLayoutDashboardIndexLazyRoute
-  '/(features)/_layout/inbound-report/': typeof featuresLayoutInboundReportIndexLazyRoute
-  '/(features)/_layout/inoutbound-history/': typeof featuresLayoutInoutboundHistoryIndexLazyRoute
-  '/(features)/_layout/inventory-audit/': typeof featuresLayoutInventoryAuditIndexLazyRoute
-  '/(features)/_layout/outbound-report/': typeof featuresLayoutOutboundReportIndexLazyRoute
-  '/(features)/_layout/packing-manifest/': typeof featuresLayoutPackingManifestIndexLazyRoute
-  '/(features)/_layout/production-inventory/': typeof featuresLayoutProductionInventoryIndexLazyRoute
-  '/(features)/_layout/purchase-order-seeking/': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
-  '/(features)/_layout/rfid-devices-management/': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
-  '/(features)/_layout/truckload-delivery/': typeof featuresLayoutTruckloadDeliveryIndexLazyRoute
-  '/(features)/_layout/warehouse/': typeof featuresLayoutWarehouseIndexLazyRoute
-  '/(features)/_layout/(admin)/access-management/': typeof featuresLayoutadminAccessManagementIndexLazyRoute
-  '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
-  '/(features)/_layout/(defective-goods)/defective-goods-inbound-report/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInboundReportIndexLazyRoute
-  '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
-  '/(features)/_layout/(defective-goods)/defective-goods-inventory/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRoute
-  '/(features)/_layout/(defective-goods)/defective-goods-outbound-report/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportIndexLazyRoute
-  '/(features)/_layout/(rfid)/finished-goods-inbound/': typeof featuresLayoutrfidFinishedGoodsInboundIndexLazyRoute
-  '/(features)/_layout/(rfid)/finished-goods-outbound/': typeof featuresLayoutrfidFinishedGoodsOutboundIndexLazyRoute
-  '/(features)/preferences/_layout/account/': typeof featuresPreferencesLayoutAccountIndexLazyRoute
-  '/(features)/preferences/_layout/appearance-settings/': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
-  '/(features)/preferences/_layout/keybindings/': typeof featuresPreferencesLayoutKeybindingsIndexLazyRoute
-  '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/': typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/preferences'
-    | '/authorization'
-    | '/login'
-    | '/rfid-agent'
-    | '/rfid-agent/docs'
-    | '/cargo-weight-check'
-    | '/dashboard'
-    | '/inbound-report'
-    | '/inoutbound-history'
-    | '/inventory-audit'
-    | '/outbound-report'
-    | '/packing-manifest'
-    | '/production-inventory'
-    | '/purchase-order-seeking'
-    | '/rfid-devices-management'
-    | '/truckload-delivery'
-    | '/warehouse'
-    | '/access-management'
-    | '/defective-goods-epc-combination'
-    | '/defective-goods-inbound-report'
-    | '/defective-goods-inoutbound'
-    | '/defective-goods-inventory'
-    | '/defective-goods-outbound-report'
-    | '/finished-goods-inbound'
-    | '/finished-goods-outbound'
-    | '/preferences/account'
-    | '/preferences/appearance-settings'
-    | '/preferences/keybindings'
-    | '/warehouse/storage-details/$warehouseNum'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/preferences'
-    | '/authorization'
-    | '/login'
-    | '/rfid-agent'
-    | '/rfid-agent/docs'
-    | '/cargo-weight-check'
-    | '/dashboard'
-    | '/inbound-report'
-    | '/inoutbound-history'
-    | '/inventory-audit'
-    | '/outbound-report'
-    | '/packing-manifest'
-    | '/production-inventory'
-    | '/purchase-order-seeking'
-    | '/rfid-devices-management'
-    | '/truckload-delivery'
-    | '/warehouse'
-    | '/access-management'
-    | '/defective-goods-epc-combination'
-    | '/defective-goods-inbound-report'
-    | '/defective-goods-inoutbound'
-    | '/defective-goods-inventory'
-    | '/defective-goods-outbound-report'
-    | '/finished-goods-inbound'
-    | '/finished-goods-outbound'
-    | '/preferences/account'
-    | '/preferences/appearance-settings'
-    | '/preferences/keybindings'
-    | '/warehouse/storage-details/$warehouseNum'
-  id:
-    | '__root__'
-    | '/(features)'
-    | '/(features)/_layout'
-    | '/(public)/'
-    | '/(features)/preferences'
-    | '/(features)/preferences/_layout'
-    | '/(auth)/authorization/'
-    | '/(auth)/login/'
-    | '/(public)/rfid-agent/'
-    | '/(public)/rfid-agent/docs/'
-    | '/(features)/_layout/cargo-weight-check/'
-    | '/(features)/_layout/dashboard/'
-    | '/(features)/_layout/inbound-report/'
-    | '/(features)/_layout/inoutbound-history/'
-    | '/(features)/_layout/inventory-audit/'
-    | '/(features)/_layout/outbound-report/'
-    | '/(features)/_layout/packing-manifest/'
-    | '/(features)/_layout/production-inventory/'
-    | '/(features)/_layout/purchase-order-seeking/'
-    | '/(features)/_layout/rfid-devices-management/'
-    | '/(features)/_layout/truckload-delivery/'
-    | '/(features)/_layout/warehouse/'
-    | '/(features)/_layout/(admin)/access-management/'
-    | '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/'
-    | '/(features)/_layout/(defective-goods)/defective-goods-inbound-report/'
-    | '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/'
-    | '/(features)/_layout/(defective-goods)/defective-goods-inventory/'
-    | '/(features)/_layout/(defective-goods)/defective-goods-outbound-report/'
-    | '/(features)/_layout/(rfid)/finished-goods-inbound/'
-    | '/(features)/_layout/(rfid)/finished-goods-outbound/'
-    | '/(features)/preferences/_layout/account/'
-    | '/(features)/preferences/_layout/appearance-settings/'
-    | '/(features)/preferences/_layout/keybindings/'
-    | '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  featuresRoute: typeof featuresRouteWithChildren
-  publicIndexRoute: typeof publicIndexRoute
-  authAuthorizationIndexRoute: typeof authAuthorizationIndexRoute
-  authLoginIndexRoute: typeof authLoginIndexRoute
-  publicRfidAgentIndexRoute: typeof publicRfidAgentIndexRoute
-  publicRfidAgentDocsIndexRoute: typeof publicRfidAgentDocsIndexRoute
-}
-
 const rootRouteChildren: RootRouteChildren = {
-  featuresRoute: featuresRouteWithChildren,
+  featuresLayoutRoute: featuresLayoutRouteWithChildren,
   publicIndexRoute: publicIndexRoute,
+  featuresPreferencesLayoutRoute: featuresPreferencesLayoutRouteWithChildren,
   authAuthorizationIndexRoute: authAuthorizationIndexRoute,
   authLoginIndexRoute: authLoginIndexRoute,
   publicRfidAgentIndexRoute: publicRfidAgentIndexRoute,
   publicRfidAgentDocsIndexRoute: publicRfidAgentDocsIndexRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/(features)",
-        "/(public)/",
-        "/(auth)/authorization/",
-        "/(auth)/login/",
-        "/(public)/rfid-agent/",
-        "/(public)/rfid-agent/docs/"
-      ]
-    },
-    "/(features)": {
-      "filePath": "(features)",
-      "children": [
-        "/(features)/_layout",
-        "/(features)/preferences"
-      ]
-    },
-    "/(features)/_layout": {
-      "filePath": "(features)/_layout.tsx",
-      "parent": "/(features)",
-      "children": [
-        "/(features)/_layout/cargo-weight-check/",
-        "/(features)/_layout/dashboard/",
-        "/(features)/_layout/inbound-report/",
-        "/(features)/_layout/inoutbound-history/",
-        "/(features)/_layout/inventory-audit/",
-        "/(features)/_layout/outbound-report/",
-        "/(features)/_layout/packing-manifest/",
-        "/(features)/_layout/production-inventory/",
-        "/(features)/_layout/purchase-order-seeking/",
-        "/(features)/_layout/rfid-devices-management/",
-        "/(features)/_layout/truckload-delivery/",
-        "/(features)/_layout/warehouse/",
-        "/(features)/_layout/(admin)/access-management/",
-        "/(features)/_layout/(defective-goods)/defective-goods-epc-combination/",
-        "/(features)/_layout/(defective-goods)/defective-goods-inbound-report/",
-        "/(features)/_layout/(defective-goods)/defective-goods-inoutbound/",
-        "/(features)/_layout/(defective-goods)/defective-goods-inventory/",
-        "/(features)/_layout/(defective-goods)/defective-goods-outbound-report/",
-        "/(features)/_layout/(rfid)/finished-goods-inbound/",
-        "/(features)/_layout/(rfid)/finished-goods-outbound/",
-        "/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/"
-      ]
-    },
-    "/(public)/": {
-      "filePath": "(public)/index.tsx"
-    },
-    "/(features)/preferences": {
-      "filePath": "(features)/preferences",
-      "parent": "/(features)",
-      "children": [
-        "/(features)/preferences/_layout"
-      ]
-    },
-    "/(features)/preferences/_layout": {
-      "filePath": "(features)/preferences/_layout.tsx",
-      "parent": "/(features)/preferences",
-      "children": [
-        "/(features)/preferences/_layout/account/",
-        "/(features)/preferences/_layout/appearance-settings/",
-        "/(features)/preferences/_layout/keybindings/"
-      ]
-    },
-    "/(auth)/authorization/": {
-      "filePath": "(auth)/authorization/index.tsx"
-    },
-    "/(auth)/login/": {
-      "filePath": "(auth)/login/index.tsx"
-    },
-    "/(public)/rfid-agent/": {
-      "filePath": "(public)/rfid-agent/index.tsx"
-    },
-    "/(public)/rfid-agent/docs/": {
-      "filePath": "(public)/rfid-agent/docs/index.tsx"
-    },
-    "/(features)/_layout/cargo-weight-check/": {
-      "filePath": "(features)/_layout.cargo-weight-check/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/dashboard/": {
-      "filePath": "(features)/_layout.dashboard/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/inbound-report/": {
-      "filePath": "(features)/_layout.inbound-report/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/inoutbound-history/": {
-      "filePath": "(features)/_layout.inoutbound-history/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/inventory-audit/": {
-      "filePath": "(features)/_layout.inventory-audit/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/outbound-report/": {
-      "filePath": "(features)/_layout.outbound-report/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/packing-manifest/": {
-      "filePath": "(features)/_layout.packing-manifest/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/production-inventory/": {
-      "filePath": "(features)/_layout.production-inventory/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/purchase-order-seeking/": {
-      "filePath": "(features)/_layout.purchase-order-seeking/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/rfid-devices-management/": {
-      "filePath": "(features)/_layout.rfid-devices-management/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/truckload-delivery/": {
-      "filePath": "(features)/_layout.truckload-delivery/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/warehouse/": {
-      "filePath": "(features)/_layout.warehouse/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/(admin)/access-management/": {
-      "filePath": "(features)/_layout.(admin)/access-management/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/(defective-goods)/defective-goods-epc-combination/": {
-      "filePath": "(features)/_layout.(defective-goods)/defective-goods-epc-combination/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/(defective-goods)/defective-goods-inbound-report/": {
-      "filePath": "(features)/_layout.(defective-goods)/defective-goods-inbound-report/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/(defective-goods)/defective-goods-inoutbound/": {
-      "filePath": "(features)/_layout.(defective-goods)/defective-goods-inoutbound/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/(defective-goods)/defective-goods-inventory/": {
-      "filePath": "(features)/_layout.(defective-goods)/defective-goods-inventory/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/(defective-goods)/defective-goods-outbound-report/": {
-      "filePath": "(features)/_layout.(defective-goods)/defective-goods-outbound-report/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/(rfid)/finished-goods-inbound/": {
-      "filePath": "(features)/_layout.(rfid)/finished-goods-inbound/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/(rfid)/finished-goods-outbound/": {
-      "filePath": "(features)/_layout.(rfid)/finished-goods-outbound/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/preferences/_layout/account/": {
-      "filePath": "(features)/preferences/_layout.account/index.lazy.tsx",
-      "parent": "/(features)/preferences/_layout"
-    },
-    "/(features)/preferences/_layout/appearance-settings/": {
-      "filePath": "(features)/preferences/_layout.appearance-settings/index.lazy.tsx",
-      "parent": "/(features)/preferences/_layout"
-    },
-    "/(features)/preferences/_layout/keybindings/": {
-      "filePath": "(features)/preferences/_layout.keybindings/index.lazy.tsx",
-      "parent": "/(features)/preferences/_layout"
-    },
-    "/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/": {
-      "filePath": "(features)/_layout.warehouse/_layout.storage-details.$warehouseNum/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
