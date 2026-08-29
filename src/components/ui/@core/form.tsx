@@ -106,8 +106,7 @@ const FormDescription: React.FC<React.ComponentProps<'p'>> = ({ className, ...pr
 FormDescription.displayName = 'FormDescription'
 
 type FormErrorMessage =
-	| Extract<ResourceKey, 'string'>
-	| { key: ResourceKey; bindings?: Record<string, string | number> }
+	Extract<ResourceKey, 'string'> | { key: ResourceKey; bindings?: Record<string, string | number> }
 
 const FormMessage: React.FC<React.ComponentProps<'p'>> = ({ className, children, ...props }) => {
 	const { error, formMessageId } = useFormField()

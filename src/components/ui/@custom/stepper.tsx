@@ -21,10 +21,7 @@ type TStepState = {
 }
 
 type TStepAction =
-	| { type: 'PREV_STEP' }
-	| { type: 'NEXT_STEP' }
-	| { type: 'GO_TO_STEP'; payload: number }
-	| { type: 'COMPLETE' }
+	{ type: 'PREV_STEP' } | { type: 'NEXT_STEP' } | { type: 'GO_TO_STEP'; payload: number } | { type: 'COMPLETE' }
 
 type TStepContext = {
 	steps: TStepState

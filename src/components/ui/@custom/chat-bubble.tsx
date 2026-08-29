@@ -18,9 +18,7 @@ const chatBubbleVariant = cva(
 )
 
 export interface ChatBubbleProps
-	extends React.PropsWithChildren,
-		React.ComponentProps<'div'>,
-		VariantProps<typeof chatBubbleVariant> {}
+	extends React.PropsWithChildren, React.ComponentProps<'div'>, VariantProps<typeof chatBubbleVariant> {}
 
 const ChatBubble: React.FC<ChatBubbleProps> = ({ children, variant, className }) => {
 	return <div className={cn(chatBubbleVariant({ variant, className }))}>{children}</div>

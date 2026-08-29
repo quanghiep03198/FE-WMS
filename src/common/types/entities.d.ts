@@ -60,8 +60,7 @@ export interface IWarehouse extends IBaseEntity {
 }
 
 export interface IWarehouseStorage
-	extends IBaseEntity,
-		Pick<IWarehouse, 'warehouse_num' | 'warehouse_name' | 'is_disabled' | 'is_default' | 'remark'> {
+	extends IBaseEntity, Pick<IWarehouse, 'warehouse_num' | 'warehouse_name' | 'is_disabled' | 'is_default' | 'remark'> {
 	storage_name: string
 	storage_num: string
 	storage_capacity: number

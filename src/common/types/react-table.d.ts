@@ -30,8 +30,11 @@ declare module '@tanstack/react-table' {
 		validate?: (value: any) => boolean
 	}
 
-	interface ColumnMetaWithFilterProps<TData extends RowData, TValue, Variant extends ColumnFilterVariant>
-		extends ColumnMeta<TData, TValue> {
+	interface ColumnMetaWithFilterProps<
+		TData extends RowData,
+		TValue,
+		Variant extends ColumnFilterVariant
+	> extends ColumnMeta<TData, TValue> {
 		filterComponentProps?: Partial<FilterComponentProps[Variant]>
 	}
 
