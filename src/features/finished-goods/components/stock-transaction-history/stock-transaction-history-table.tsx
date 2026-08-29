@@ -108,22 +108,22 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 					}>
 					<TableHeader className='[&_th]:bg-table-head [&_th]:text-table-head-foreground sticky top-0 z-10 border-b [&_th]:h-(--header-height)'>
 						<TableRow>
-							<TableHead align='left' style={{ width: '10%' }}>
-								#ID
+							<TableHead align='left' style={{ width: '20%' }}>
+								ID
 							</TableHead>
 							<TableHead align='left' style={{ width: '20%' }} title={t(`ns_erp:fields.${orderField}`)}>
 								<span className='line-clamp-1'>{t(`ns_erp:fields.${orderField}`)}</span>
 							</TableHead>
 							<TableHead align='left' style={{ width: '20%' }}>
-								{t('ns_common:common_fields.created_at')}
-							</TableHead>
-							<TableHead align='left' style={{ width: '20%' }}>
 								{t('ns_common:common_fields.quantity')}
 							</TableHead>
 							<TableHead align='left' style={{ width: '20%' }}>
-								{t('ns_common:common_fields.actions')}
+								{t('ns_common:common_fields.created_at')}
 							</TableHead>
 							<TableHead align='left' style={{ width: '10%' }}>
+								{t('ns_common:common_fields.actions')}
+							</TableHead>
+							<TableHead align='right' style={{ width: '10%' }}>
 								<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 									<GhostButton onClick={() => refetch()}>
 										<Icon
@@ -139,7 +139,7 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 						{isLoading ? (
 							Array.from({ length: 10 }, (_, i) => (
 								<TableRow key={i.toString()}>
-									{Array.from({ length: 4 }, (_, j) => (
+									{Array.from({ length: 6 }, (_, j) => (
 										<TableCell key={`${i}.${j}`} className='h-9'>
 											<Skeleton />
 										</TableCell>

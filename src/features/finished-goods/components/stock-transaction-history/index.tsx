@@ -16,7 +16,7 @@ const StockTransactionHistorySheet: React.FC<StockTransactionHistoryProps> = ({ 
 			<SheetTrigger id='stock-transaction-sheet-trigger' />
 			<SheetContent className='max-w-3xl'>
 				<SheetHeader>
-					<SheetTitle>{t('ns_inoutbound:titles.inoutbound_history_lookup')}</SheetTitle>
+					<SheetTitle>{t('ns_inoutbound:titles.current_stock_transaction')}</SheetTitle>
 					<SheetDescription>{t('ns_inoutbound:description.current_stock_transaction')}</SheetDescription>
 				</SheetHeader>
 				<StockTransactionHistoryTable stockFlow={stockFlow} />

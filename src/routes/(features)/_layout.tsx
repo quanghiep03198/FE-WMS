@@ -1,7 +1,7 @@
 import Loading from '@components/shared/loading'
 import NetworkDetector from '@components/shared/network-detector'
 import { SidebarProvider } from '@components/ui'
-import { AuthQueryKeys } from '@features/auth/hooks/use-profile-request'
+import { getUserProfileQuery } from '@features/auth/hooks/use-profile-request'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
@@ -21,8 +21,8 @@ export const Route = createFileRoute('/(features)/_layout')({
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated) throw redirect({ to: '/login' })
 	},
-	loader: async ({ context: { queryClient } }) => {
-		return await queryClient.prefetchQuery({ queryKey: [AuthQueryKeys.PROFILE] })
+	loader: async ({ context: { queryClient, isAuthenticated } }) => {
+		return await queryClient.query(getUserProfileQuery(isAuthenticated))
 	}
 })
 

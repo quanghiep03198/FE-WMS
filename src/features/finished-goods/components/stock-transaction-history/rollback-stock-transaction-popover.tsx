@@ -4,10 +4,11 @@ import { useRollbackStockTransactionMutation } from '@features/finished-goods/ho
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-const RollbackStockTransactionPopover: React.FC<{ stockFlow: StockFlow; transactionId: string }> = ({
-	stockFlow,
-	transactionId
-}) => {
+const RollbackStockTransactionPopover: React.FC<{
+	stockFlow: StockFlow
+	transactionId: string
+	canRollback: boolean
+}> = ({ stockFlow, transactionId, canRollback }) => {
 	const { t } = useTranslation()
 
 	const { mutateAsync, isPending, isError } = useRollbackStockTransactionMutation(stockFlow)
@@ -15,10 +16,11 @@ const RollbackStockTransactionPopover: React.FC<{ stockFlow: StockFlow; transact
 	return (
 		<Popover modal>
 			<PopoverTrigger asChild>
-				<Button variant='destructive' size='xs'>
+				<Button variant='destructive' size='xs' disabled={!canRollback || isPending}>
 					{t('ns_common:actions.rollback')}
 				</Button>
 			</PopoverTrigger>
+
 			<PopoverContent className='flex w-full max-w-sm items-start gap-6' align='end'>
 				<Div className='bg-destructive/10 text-destructive flex aspect-square size-12 items-center justify-center rounded-full'>
 					<Icon name='TriangleAlert' size={20} />
@@ -32,7 +34,7 @@ const RollbackStockTransactionPopover: React.FC<{ stockFlow: StockFlow; transact
 						variant='destructive'
 						size='sm'
 						className='mt-3'
-						disabled={isPending}
+						disabled={!canRollback || isPending}
 						onClick={() => mutateAsync(transactionId)}>
 						{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
 						{t(isError ? 'ns_common:actions.retry' : 'ns_common:actions.confirm')}

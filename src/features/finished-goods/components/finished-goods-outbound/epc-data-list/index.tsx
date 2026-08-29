@@ -37,8 +37,8 @@ import { toast } from 'sonner'
 import { DEFAULT_PROPS, usePageContext } from '../../../contexts/finished-goods-outbound/page-context'
 import { useGetScanningOutboundEpcQuery } from '../../../hooks/use-outbound-request'
 import DataRestorationSheet from '../../data-restoration'
+import StockTransactionHistorySheet from '../../stock-transaction-history'
 import OrderDetailTableDialog from '../manufacture-order-detail/order-detail-dialog'
-import ConnectionInsight from './connection-insight'
 
 const VIRTUAL_ITEM_SIZE = 40
 const DEFAULT_NEXT_CURSOR = 2
@@ -224,7 +224,18 @@ const ScannedEpcList: React.FC = () => {
 		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md rounded-t-none border border-t-0 @4xl:sticky @4xl:top-(--header-height) @4xl:h-(--outlet-wrapper-height) @4xl/playground:rounded-md @4xl/playground:border @7xl/layout-wrapper:rounded-t-none @7xl/layout-wrapper:border-t-0'>
 			{/* Datalist header */}
 			<Div className='@container/toolbar grid w-full auto-cols-auto grid-flow-col items-center border-b [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
-				<ConnectionInsight />
+				<Label
+					role='button'
+					className={buttonVariants({
+						variant: 'ghost',
+						className: 'flex h-full w-full flex-col py-1 font-normal @xl/toolbar:flex-row'
+					})}
+					htmlFor='stock-transaction-sheet-trigger'>
+					<Icon name='ClockFading' size={18} />
+					<Typography variant='small' className='text-muted-foreground text-xs @xl/toolbar:text-sm'>
+						{t('ns_inoutbound:titles.current_stock_transaction')}
+					</Typography>
+				</Label>
 				<Button
 					variant='ghost'
 					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @xl/toolbar:flex-row'
@@ -247,6 +258,7 @@ const ScannedEpcList: React.FC = () => {
 					</Typography>
 				</Label>
 				<DataRestorationSheet dataType={StockFlow.OUTBOUND} />
+				<StockTransactionHistorySheet stockFlow={StockFlow.OUTBOUND} />
 				<Label
 					role='button'
 					className={buttonVariants({

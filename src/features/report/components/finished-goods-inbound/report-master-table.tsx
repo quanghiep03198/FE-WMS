@@ -145,11 +145,13 @@ const InboundReportMasterTable: React.FC = () => {
 						<EllipsisList
 							threshhold={3}
 							data={getValue()}
-							template={({ data }) => (
-								<Badge variant='secondary' className='whitespace-nowrap'>
-									{data.trim()}
-								</Badge>
-							)}
+							template={({ data }) =>
+								data && (
+									<Badge variant='secondary' className='whitespace-nowrap'>
+										{data}
+									</Badge>
+								)
+							}
 						/>
 					)
 				}

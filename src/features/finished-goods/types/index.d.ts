@@ -73,7 +73,9 @@ export interface IStockTransaction<T extends StockFlow> {
 	qty: number
 	tx_at: string
 	tx_type: StockTransactionType
-	detail: Record<
+	can_rollback: boolean
+	reversed: boolean
+	changes: Record<
 		string,
 		{
 			stocked_in_qty: number
