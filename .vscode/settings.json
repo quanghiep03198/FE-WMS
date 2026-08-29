@@ -5,15 +5,15 @@
 		"deprecated": true
 	},
 	"files.readonlyInclude": {
-		"**/route-tree.gen.ts": true,
+		// "**/route-tree.gen.ts": true,
 		"pnpm-lock.yaml": true
 	},
 	"files.watcherExclude": {
-		"**/route-tree.gen.ts": true,
+		// "**/route-tree.gen.ts": true,
 		"pnpm-lock.yaml": true
 	},
 	"search.exclude": {
-		"**/route-tree.gen.ts": true,
+		// "**/route-tree.gen.ts": true,
 		"pnpm-lock.yaml": true
 	},
 	"material-icon-theme.folders.associations": {
@@ -42,5 +42,6 @@
 	"editor.tabSize": 3,
 	"[yaml]": {
 		"editor.defaultFormatter": "redhat.vscode-yaml"
-	}
+	},
+	"typescript.tsdk": "node_modules\\typescript\\lib"
 }

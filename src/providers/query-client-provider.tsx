@@ -3,7 +3,6 @@ import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimen
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import type { QueryKey } from '@tanstack/react-query'
 import { matchQuery, MutationCache, QueryClient } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import type { AxiosError } from 'axios'
 import { compress, decompress } from 'lz-string'
@@ -28,7 +27,6 @@ export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
 			staleTime: 1000 * 60 * 15,
-			experimental_prefetchInRender: true,
 			networkMode: 'always'
 		},
 		mutations: {
@@ -58,6 +56,5 @@ export const QueryClientProvider: React.FC<React.PropsWithChildren> = ({ childre
 		client={queryClient}
 		persistOptions={{ persister: localStoragePersister, maxAge: 60 * 1000 * 15 }}>
 		{children}
-		<ReactQueryDevtools initialIsOpen={false} buttonPosition='bottom-right' />
 	</PersistQueryClientProvider>
 )

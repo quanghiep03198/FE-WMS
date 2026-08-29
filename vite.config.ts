@@ -3,25 +3,36 @@
 
 import babel from '@rolldown/plugin-babel'
 import { sentryVitePlugin as sentry } from '@sentry/vite-plugin'
-import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
+import { devtools } from '@tanstack/devtools-vite'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, loadEnv, normalizePath } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { VitePWA as pwa, type VitePWAOptions } from 'vite-plugin-pwa'
 import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
+
 /**
  * @see https://vitejs.dev/config/
  */
 export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
-	normalizePath(path.resolve(__dirname, './infrastructure'))
+	normalizePath(path.resolve(import.meta.dirname, './infrastructure'))
 
 	return {
+		resolve: {
+			tsconfigPaths: true,
+			alias: {
+				'@': path.resolve(import.meta.dirname, './src')
+			}
+		},
 		plugins: [
+			devtools({ removeDevtoolsOnBuild: true, consolePiping: { enabled: mode === 'development' } }),
+			tanstackRouter({
+				target: 'react'
+			}),
 			react(),
 			babel({ presets: [reactCompilerPreset()] }),
-			reactRouter(),
 			staticCopy({
 				targets: [
 					{
@@ -82,7 +93,8 @@ export default defineConfig(({ mode }) => {
 						{
 							// API calls - never cache
 							urlPattern: ({ url }) => url.pathname.startsWith('/api'),
-							handler: 'NetworkOnly'
+							handler: 'NetworkFirst',
+							options: { cacheName: 'wms-api-cache' }
 						}
 					],
 					cleanupOutdatedCaches: true,
@@ -112,11 +124,7 @@ export default defineConfig(({ mode }) => {
 			},
 			include: ['buffer', 'zlib']
 		},
-		resolve: {
-			alias: {
-				'@': path.resolve(__dirname, './src')
-			}
-		},
+
 		envDir: '.',
 		test: {
 			globals: true,
@@ -174,29 +182,7 @@ export default defineConfig(({ mode }) => {
 						groups: [
 							{ name: '@dnd-kit', test: /@dnd-kit/ },
 							{ name: '@radix-ui', test: /@radix-ui/ },
-							{ name: '@tanstack/react-query', test: /@tanstack\/react-query/ },
-							{ name: '@tanstack/react-router', test: /@tanstack\/react-router/ },
-							{ name: '@tanstack/react-table', test: /@tanstack\/react-table/ },
-							{ name: '@tanstack/react-virtual', test: /@tanstack\/react-virtual/ },
-							{ name: '@tiptap/core', test: /@tiptap\/core/ },
-							{ name: '@tiptap/extension-color', test: /@tiptap\/extension-color/ },
-							{ name: '@tiptap/extension-file-handler', test: /@tiptap\/extension-file-handler/ },
-							{ name: '@tiptap/extension-gapcursor', test: /@tiptap\/extension-gapcursor/ },
-							{ name: '@tiptap/extension-heading', test: /@tiptap\/extension-heading/ },
-							{ name: '@tiptap/extension-highlight', test: /@tiptap\/extension-highlight/ },
-							{ name: '@tiptap/extension-image', test: /@tiptap\/extension-image/ },
-							{ name: '@tiptap/extension-link', test: /@tiptap\/extension-link/ },
-							{ name: '@tiptap/extension-placeholder', test: /@tiptap\/extension-placeholder/ },
-							{ name: '@tiptap/extension-table', test: /@tiptap\/extension-table/ },
-							{ name: '@tiptap/extension-table-cell', test: /@tiptap\/extension-table-cell/ },
-							{ name: '@tiptap/extension-table-header', test: /@tiptap\/extension-table-header/ },
-							{ name: '@tiptap/extension-table-row', test: /@tiptap\/extension-table-row/ },
-							{ name: '@tiptap/extension-text-align', test: /@tiptap\/extension-text-align/ },
-							{ name: '@tiptap/extension-text-style', test: /@tiptap\/extension-text-style/ },
-							{ name: '@tiptap/extension-underline', test: /@tiptap\/extension-underline/ },
-							{ name: '@tiptap/pm', test: /@tiptap\/pm/ },
-							{ name: '@tiptap/react', test: /@tiptap\/react/ },
-							{ name: '@tiptap/starter-kit', test: /@tiptap\/starter-kit/ },
+							{ name: '@tiptap', test: /@tiptap/ },
 							{ name: 'ahooks', test: /ahooks/ },
 							{ name: 'axios', test: /axios/ },
 							{ name: 'bcryptjs-react', test: /bcryptjs-react/ },
@@ -222,7 +208,7 @@ export default defineConfig(({ mode }) => {
 							{ name: 'react-hook-form', test: /react-hook-form/ },
 							{ name: 'react-resizable-panels', test: /react-resizable-panels/ },
 							{ name: 'recharts', test: /recharts/ },
-							{ name: '@sentry/react', test: /@sentry\/react/ },
+							{ name: '@sentry', test: /@sentry/ },
 							{ name: 'sonner', test: /sonner/ },
 							{ name: 'socket.io-client', test: /socket.io-client/ },
 							{ name: 'tailwind-merge', test: /tailwind-merge/ },
