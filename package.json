@@ -219,5 +219,10 @@
 	},
 	"optionalDependencies": {
 		"@rolldown/binding-win32-x64-msvc": "1.0.0-beta.43"
+	},
+	"pnpm": {
+		"overrides": {
+			"sharp": "^0.35.4"
+		}
 	}
 }
