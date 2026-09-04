@@ -210,7 +210,9 @@ const InboundReportMasterTable: React.FC = () => {
 			containerProps={{
 				style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' }
 			}}
-			getRowId={(originalRow: IInboundReport) => originalRow.mo_no}
+			getRowId={(originalRow: IInboundReport) =>
+				`${originalRow.factory_code}-${originalRow.mo_no}-${originalRow.shaping_dept_name}`
+			}
 			renderSubComponent={
 				(({ row }) => {
 					return <SizeTable data={row.original?.size_data} />
