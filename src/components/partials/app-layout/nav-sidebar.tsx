@@ -42,7 +42,7 @@ import { v4 as uuid } from 'uuid'
 
 type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon' | 'authorizedRoles'> & {
 	indice: `${number}` | `${number}.${number}` | 'none'
-	viewTransition?: boolean
+	viewTransition?: React.ComponentProps<typeof Link>['viewTransition']
 }
 
 const NavSidebar: React.FC = () => {
@@ -60,7 +60,7 @@ const NavSidebar: React.FC = () => {
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>{t('ns_common:navigation.main_menu_label')}</SidebarGroupLabel>
+					<SidebarGroupLabel>{t('navigation.main_menu_label')}</SidebarGroupLabel>
 					<div className='scroll-fade max-h-[40vh] scrollbar-none! overflow-x-hidden overflow-y-auto'>
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{navigationConfig.main.map((item, index) => {
@@ -76,7 +76,11 @@ const NavSidebar: React.FC = () => {
 												aria-disabled={item.items.every(
 													(subItem) =>
 														subItem.authorizedRoles !== '*' &&
-														!user?.roles?.some((role) => subItem.authorizedRoles.includes(role))
+														!user?.roles?.some(
+															(role) =>
+																Array.isArray(subItem.authorizedRoles) &&
+																subItem.authorizedRoles.includes(role)
+														)
 												)}
 												onClick={() => {
 													if (isMobile) return
@@ -98,6 +102,7 @@ const NavSidebar: React.FC = () => {
 											<SidebarMenuSub>
 												{item.items?.map((subItem, subIndex) => (
 													<SidebarMenuSubLink
+														viewTransition={{ types: ['fade'] }}
 														indice={`${index + 1}.${subIndex + 1}`}
 														key={`${index + 1}.${subIndex + 1}`}
 														{...subItem}
@@ -113,10 +118,12 @@ const NavSidebar: React.FC = () => {
 				</SidebarGroup>
 				<SidebarSeparator />
 				<SidebarGroup>
-					<SidebarGroupLabel>{t('ns_common:navigation.integration_menu_label')}</SidebarGroupLabel>
+					<SidebarGroupLabel>{t('navigation.integration_menu_label')}</SidebarGroupLabel>
 					<SidebarMenu role='menu' aria-label='Administration'>
 						{navigationConfig.integrations.map((item) => {
-							return <SidebarMenuLink indice='none' key={uuid()} {...item} />
+							return (
+								<SidebarMenuLink indice='none' key={uuid()} {...item} viewTransition={{ types: ['fade'] }} />
+							)
 						})}
 					</SidebarMenu>
 				</SidebarGroup>
@@ -124,7 +131,7 @@ const NavSidebar: React.FC = () => {
 					<Fragment>
 						<SidebarSeparator />
 						<SidebarGroup>
-							<SidebarGroupLabel>{t('ns_common:navigation.administration_menu_label')}</SidebarGroupLabel>
+							<SidebarGroupLabel>{t('navigation.administration_menu_label')}</SidebarGroupLabel>
 							<SidebarMenu role='menu' aria-label='Administration'>
 								{navigationConfig.administration.map((item) => {
 									return <SidebarMenuLink indice='none' key={uuid()} {...item} />
@@ -135,7 +142,7 @@ const NavSidebar: React.FC = () => {
 				)}
 				<SidebarSeparator className={cn(user?.roles?.includes(UserRole.ADMIN) && 'xxl:block hidden')} />
 				<SidebarGroup className={cn(user?.roles?.includes(UserRole.ADMIN) && 'xxl:flex hidden')}>
-					<SidebarGroupLabel>{t('ns_common:navigation.preference_menu_label')}</SidebarGroupLabel>
+					<SidebarGroupLabel>{t('navigation.preference_menu_label')}</SidebarGroupLabel>
 					<SidebarMenu role='menu' aria-label='Preferences menu'>
 						{navigationConfig.preferences
 							.filter((item) => item.url !== '/preferences/account')
@@ -162,7 +169,9 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 	const { user } = useAuth()
 
 	const isLinkActive =
-		(user && Array.isArray(user.roles) && user.roles.some((role) => authorizedRoles.includes(role))) ||
+		(user &&
+			Array.isArray(user.roles) &&
+			user.roles.some((role) => Array.isArray(authorizedRoles) && authorizedRoles.includes(role))) ||
 		authorizedRoles === '*'
 
 	const isActive = location.pathname.match(new RegExp(`^${url}$`))
@@ -194,7 +203,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10 '
 					}}>
-					<Icon name={icon} size={18} className='size-4.5!' />
+					<Icon name={icon!} size={18} className='size-4.5!' />
 					<SidebarMenuTitle data-indice={indice}>{t(title, { defaultValue: title })}</SidebarMenuTitle>
 					{!isLinkActive && <Icon name='Lock' size={14} className='stroke-muted-foreground ml-auto size-3.5!' />}
 				</Link>
@@ -203,13 +212,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 	)
 }
 
-const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
-	indice,
-	url,
-	title,
-	viewTransition,
-	authorizedRoles
-}) => {
+const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url, title, authorizedRoles }) => {
 	const { t } = useTranslation('ns_common')
 	const ref = useRef<HTMLLIElement>(null)
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
@@ -218,7 +221,9 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 	const { user } = useAuth()
 
 	const isAccessible =
-		(user && Array.isArray(user?.roles) && user?.roles?.some((role) => authorizedRoles.includes(role))) ||
+		(user &&
+			Array.isArray(user?.roles) &&
+			user?.roles?.some((role) => Array.isArray(authorizedRoles) && authorizedRoles.includes(role))) ||
 		authorizedRoles === '*'
 
 	const isActive = location.pathname.match(new RegExp(`^${url}$`))
