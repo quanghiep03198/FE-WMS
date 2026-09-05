@@ -106,8 +106,8 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 					<Div className='flex items-center justify-center p-10 text-center'>
 						<Icon name='LoaderCircle' size={18} className='animate-[spin_1s_linear_infinite]' />
 					</Div>
-				) : filteredDatalist?.length > 0 ? (
-					filteredDatalist?.map((item) => {
+				) : Array.isArray(filteredDatalist) && filteredDatalist?.length > 0 ? (
+					filteredDatalist.map((item) => {
 						return (
 							<AutoCompleteItem
 								key={uuidv4()}

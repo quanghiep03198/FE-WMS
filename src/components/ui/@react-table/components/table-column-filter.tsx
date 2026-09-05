@@ -6,6 +6,7 @@ import type { DateRange } from 'react-day-picker'
 import { useTranslation } from 'react-i18next'
 import { Div, DropdownSelect, Icon } from '../..'
 import { DateRangePicker } from '../../@core/date-range-picker'
+import AutoComplete from '../../@custom/auto-complete'
 import type { DebouncedInputProps } from '../../@custom/debounced-input'
 import { DebouncedInput } from '../../@custom/debounced-input'
 import { DEFAULT_ESTIMATE_SIZE } from '../constants'
@@ -81,6 +82,30 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 							rerender()
 						}
 					}}
+				/>
+			)
+		}
+		case 'autocomplete': {
+			return (
+				<AutoComplete
+					datalist={
+						Array.isArray(metaUniqueValues)
+							? metaUniqueValues
+							: getSortedUniqueValues()
+									.filter((value) => Boolean(value))
+									.map((value: any) => ({
+										label: value,
+										value: value
+									}))
+					}
+					labelField='label'
+					valueField='value'
+					shouldFilter={true}
+					value={(column.getFilterValue() as string) ?? ''}
+					placeholder={t('ns_common:table.search_in_column')}
+					className='h-[var(--row-height)] w-full rounded-none !border-none bg-transparent px-4 text-xs font-medium text-muted-foreground shadow-none outline-none ring-0 hover:text-foreground focus:border-none focus:ring-0'
+					onSelect={(value) => column.setFilterValue(value)}
+					onInput={(value) => column.setFilterValue(value)}
 				/>
 			)
 		}

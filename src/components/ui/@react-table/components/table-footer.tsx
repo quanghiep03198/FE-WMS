@@ -1,6 +1,8 @@
+'use no memo'
+
 import { cn } from '@/common/utils/cn'
 import { Div, Separator } from '@/components/ui'
-import { Fragment, memo } from 'react'
+import { Fragment } from 'react'
 import { useTableContext } from '../context/table.context'
 import { type TableFooterProps } from '../types'
 
@@ -18,4 +20,4 @@ function TableFooter({ hidden, slot: Slot, rtl }: TableFooterProps) {
 	)
 }
 
-export default memo(TableFooter)
+export default TableFooter

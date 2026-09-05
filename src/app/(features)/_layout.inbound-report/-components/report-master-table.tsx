@@ -11,7 +11,7 @@ import type { RenderSubComponent } from '@/components/ui/@react-table/types'
 import type { Table as TTable } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { isNil, split } from 'lodash-es'
+import { isNil, split, uniqBy } from 'lodash-es'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundReport } from '../-hooks/use-inbound-report-asm'
@@ -41,6 +41,14 @@ const InboundReportMasterTable: React.FC = () => {
 	useEffect(() => {
 		if (dataTableRef.current) dataTableRef.current.toggleAllRowsExpanded(false)
 	}, [data])
+
+	const factedUniqMo = useMemo(
+		() =>
+			Array.isArray(data)
+				? uniqBy(data, (item) => item.mo_no).map((item) => ({ label: item.mo_no, value: item.mo_no }))
+				: [],
+		[data]
+	)
 
 	const columns = useMemo(
 		() => [
@@ -92,8 +100,13 @@ const InboundReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableResizing: true,
 				enableHiding: false,
-				filterFn: 'includesString'
+				meta: {
+					align: 'left',
+					filterVariant: 'autocomplete',
+					facetedUniqueValues: factedUniqMo
+				}
 			}),
 			columnHelper.accessor('factory_shoes_style', {
 				header: t('ns_erp:fields.factory_shoes_style'),
@@ -196,7 +209,7 @@ const InboundReportMasterTable: React.FC = () => {
 				}
 			})
 		],
-		[i18n.language]
+		[i18n.language, data]
 	)
 
 	return (
@@ -232,7 +245,12 @@ const InboundReportMasterTable: React.FC = () => {
 				)
 			}}
 			footerProps={{
-				slot: () => <ReportTableSummary data={data} />
+				slot: ({ table }) => (
+					<ReportTableSummary
+						table={table}
+						data={table.getFilteredRowModel().flatRows.map((row) => row.original)}
+					/>
+				)
 			}}
 		/>
 	)
