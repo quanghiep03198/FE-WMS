@@ -212,7 +212,13 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 	)
 }
 
-const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url, title, authorizedRoles }) => {
+const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
+	viewTransition,
+	indice,
+	url,
+	title,
+	authorizedRoles
+}) => {
 	const { t } = useTranslation('ns_common')
 	const ref = useRef<HTMLLIElement>(null)
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')

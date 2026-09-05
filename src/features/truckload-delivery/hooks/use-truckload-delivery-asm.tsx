@@ -9,7 +9,7 @@ import { useMemo } from 'react'
 import type { TruckloadDeliveryStatus } from '../constants'
 import type { SignatureType } from '../contexts/page-context'
 import type { UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../schemas'
-import type { PageQueryParams} from './use-page-query-params';
+import type { PageQueryParams } from './use-page-query-params'
 import { usePageQueryParams } from './use-page-query-params'
 
 export enum TruckloadDeliveryQueryKeys {

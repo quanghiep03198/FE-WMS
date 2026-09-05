@@ -29,7 +29,7 @@ import { useDeepCompareEffect, useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { isNil, pick, sortBy, uniqBy } from 'lodash-es'
 import React, { Fragment } from 'react'
-import type { Resolver} from 'react-hook-form';
+import type { Resolver } from 'react-hook-form'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
