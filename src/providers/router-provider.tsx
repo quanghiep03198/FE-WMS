@@ -5,8 +5,6 @@ import type { RouterProps } from '@tanstack/react-router'
 import { RouterProvider as BrowserRouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from '../route-tree.gen'
 
-type CreateRouterOptions = FirstParameter<typeof createRouter>
-
 const RELOAD_STORAGE_KEY = 'chunk-reload-retry'
 
 /**
@@ -34,12 +32,13 @@ function isChunkLoadError(error: unknown): boolean {
 export const router = createRouter({
 	routeTree,
 	// InnerWrap: ({ children }) => <>{children}</>,
-	context: { queryClient, isAuthenticated: false, serviceWorker: {} },
+	context: { queryClient, isAuthenticated: false },
 	defaultPreload: 'intent',
 	defaultNotFoundComponent: NotFoundPage,
 	defaultPreloadStaleTime: 0,
 	defaultStructuralSharing: true,
 	scrollRestoration: true,
+
 	defaultOnCatch: (error) => {
 		// Handle stale chunk errors after new deployment (dynamic import 404)
 		if (isChunkLoadError(error)) {
@@ -56,7 +55,7 @@ export const router = createRouter({
 
 		throw error
 	}
-} as unknown as CreateRouterOptions)
+})
 
 // Register things for typesafety
 declare module '@tanstack/react-router' {

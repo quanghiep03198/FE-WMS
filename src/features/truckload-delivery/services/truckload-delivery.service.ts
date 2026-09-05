@@ -94,22 +94,32 @@ export class TruckloadDeliveryService {
 	}
 
 	static async upsertPurchaseOrders({ dispatch_order, ...update }: UpsertPurchaseOrdersFormValues) {
-		update.outbound_purchase_orders = update.outbound_purchase_orders.map((item) => {
-			delete item.keyid
-			return {
-				...item,
-				id: typeof item.id === 'number' ? item.id : null
-			}
-		})
+		const payload = {
+			...update,
+			outbound_purchase_orders: update.outbound_purchase_orders.map(({ keyid, ...item }) => {
+				return {
+					...item,
+					id: typeof item.id === 'number' ? item.id : null
+				}
+			})
+		}
 
-		return await axiosInstance.put(`/truckload-delivery/upsert-purchase-orders/${dispatch_order}`, update)
+		return await axiosInstance.put(`/truckload-delivery/upsert-purchase-orders/${dispatch_order}`, payload)
 	}
 
 	static async bulkDelete(dispatchOrder: TruckloadDeliveryDispatchOrder) {
 		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/bulk-delete/${dispatchOrder}`)
 	}
 
-	static async updateContainerCondition({ dispatch_order, ...update }) {
+	static async updateContainerCondition({
+		dispatch_order,
+		...update
+	}: {
+		dispatch_order: TruckloadDeliveryDispatchOrder
+		punctured_container?: boolean
+		smelling_container?: boolean
+		moist_container?: boolean
+	}) {
 		return await axiosInstance.patch(`/truckload-delivery/update-container-condition/${dispatch_order}`, update)
 	}
 

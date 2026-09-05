@@ -78,7 +78,7 @@ export const upsertPurchaseOrdersSchema = object({
 	dispatch_order: string({ error: 'ns_validation:required' }).trim().nonempty({ error: 'ns_validation:required' }),
 	outbound_purchase_orders: array(
 		object({
-			id: number().or(string()).default(null),
+			id: number().or(string()),
 			keyid: number().or(string()).nullish(),
 			po: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 			outbound_qty: number({ message: 'ns_validation:required' }).int().positive(),

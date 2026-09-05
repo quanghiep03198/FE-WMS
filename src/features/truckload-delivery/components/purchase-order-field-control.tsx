@@ -21,10 +21,9 @@ type PurchaseOrderFieldControlProps = Partial<
 	>
 > & {
 	onValueChange?: (
-		selectedItem: Pick<
-			ITruckloadDeliveryDetail,
-			'po' | 'brand_name' | 'factory_shoes_style' | 'color_sn' | 'max_outbound_qty'
-		>
+		selectedItem: Pick<ITruckloadDeliveryDetail, 'po' | 'brand_name' | 'factory_shoes_style' | 'color_sn'> & {
+			max_outbound_qty?: number
+		}
 	) => any
 	['data-action']: CommonActions.CREATE | CommonActions.UPDATE
 	['data-index']?: number

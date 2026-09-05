@@ -26,7 +26,7 @@ const NavHeader: React.FC = () => {
 	const { toggleSidebar } = useSidebar()
 
 	return (
-		<header className='bg-background/80 sticky top-0 z-50 flex h-14 items-center justify-between border-b px-6 py-2 backdrop-blur-sm sm:px-4'>
+		<header className='bg-background/80 flex h-14 items-center justify-between border-b px-6 py-2 backdrop-blur-sm sm:px-4'>
 			<nav className='flex items-center gap-x-2'>
 				{!isLargeScreen && (
 					<Button variant='ghost' size='icon' onClick={() => toggleSidebar()}>

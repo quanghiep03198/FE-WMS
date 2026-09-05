@@ -9,6 +9,7 @@ import { useMemo } from 'react'
 import type { TruckloadDeliveryStatus } from '../constants'
 import type { SignatureType } from '../contexts/page-context'
 import type { UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../schemas'
+import type { PageQueryParams} from './use-page-query-params';
 import { usePageQueryParams } from './use-page-query-params'
 
 export enum TruckloadDeliveryQueryKeys {
@@ -23,7 +24,7 @@ export enum TruckloadDeliveryMutationKeys {
 	UPSERT_PURCHASE_ORDERS = 'UPSERT_PURCHASE_ORDERS'
 }
 
-export const getTruckloadDeliveryQueryOptions = (searchParams) =>
+export const getTruckloadDeliveryQueryOptions = (searchParams: PageQueryParams) =>
 	queryOptions({
 		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams],
 		queryFn: async () => await TruckloadDeliveryService.getDispatchOrders(searchParams),
@@ -158,25 +159,29 @@ export const useUpsertPurchaseOrdersMutation = (dispatchOrder: string) => {
 										return item
 									})
 						}
-					}
+					} as ResponseBody<Pagination<ITruckloadDelivery>>
 				}
 			)
 
 			queryClient.setQueryData<ResponseBody<ITruckloadDeliveryDetail[]>>(
 				[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY_DETAIL, dispatchOrder],
-				(oldData) => ({
-					...oldData,
-					metadata: oldData.metadata.map((item) => {
-						const matched = variables.outbound_purchase_orders.find((order) => order.po === item.po)
-						if (matched)
-							return {
-								...item,
-								outbound_qty: matched.outbound_qty,
-								max_outbound_qty: item.po_qty - matched.outbound_qty
-							}
-						return item
-					})
-				})
+				(oldData) => {
+					if (!oldData || !Array.isArray(oldData.metadata)) return oldData
+
+					return {
+						...oldData,
+						metadata: oldData.metadata.map((item) => {
+							const matched = variables.outbound_purchase_orders.find((order) => order.po === item.po)
+							if (matched)
+								return {
+									...item,
+									outbound_qty: matched.outbound_qty,
+									max_outbound_qty: item.po_qty - matched.outbound_qty
+								}
+							return item
+						})
+					}
+				}
 			)
 			// Return a context object with the snapshotted value
 			return { prevMasterData, prevDetailData }

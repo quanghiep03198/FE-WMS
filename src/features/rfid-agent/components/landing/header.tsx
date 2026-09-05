@@ -98,7 +98,7 @@ export const Header: React.FC = () => {
 						<NavigationMenuItem>
 							<NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
 							<NavigationMenuContent>
-								<ul className='grid gap-3 p-4 md:w-[400px] xl:w-[500px] xl:grid-cols-[.75fr_1fr]'>
+								<ul className='grid gap-3 p-4 md:w-100 xl:w-125 xl:grid-cols-[.75fr_1fr]'>
 									<li className='row-span-3'>
 										<NavigationMenuLink asChild>
 											<a
@@ -129,7 +129,7 @@ export const Header: React.FC = () => {
 						<NavigationMenuItem>
 							<NavigationMenuTrigger>Third-party</NavigationMenuTrigger>
 							<NavigationMenuContent>
-								<ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]'>
+								<ul className='grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150'>
 									{navigationGroup.thirdParty.map((externalLink) => (
 										<ListItem
 											key={externalLink.hash}
@@ -144,7 +144,7 @@ export const Header: React.FC = () => {
 							</NavigationMenuContent>
 						</NavigationMenuItem>
 						<NavigationMenuItem>
-							<Link to='/rfid-agent/docs'>
+							<Link to='/rfid-agent-documentation'>
 								<NavigationMenuLink className={navigationMenuTriggerStyle()}>Documentation</NavigationMenuLink>
 							</Link>
 						</NavigationMenuItem>

@@ -14,7 +14,7 @@ import {
 	Typography
 } from '@components/ui'
 import type { IPurchaseOrderResult } from '@features/order/services/order.service'
-import type { ITruckloadDelivery } from '@features/truckload-delivery/services/truckload-delivery.service'
+import type { ITruckloadDeliveryDetail } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { format } from 'date-fns'
 import { isNil, pick } from 'lodash-es'
@@ -30,7 +30,7 @@ type TruckloadDeliveryDetailRowProps = {
 	readOnly: boolean
 	deletable: boolean
 	isLargeScreen: boolean
-	defaultValues: ITruckloadDelivery['delivery_details'][number]
+	defaultValues: ITruckloadDeliveryDetail
 	onRemove: (index?: number | number[]) => void
 }
 
@@ -44,9 +44,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 }) => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-	const [snapshotData, setSnapshotData] = useState<ITruckloadDelivery['delivery_details'][number] | null>(
-		defaultValues
-	)
+	const [snapshotData, setSnapshotData] = useState<ITruckloadDeliveryDetail>(defaultValues)
 	const dateLocale = useDateLocale()
 
 	const handleSelectPurchaseOrder = useCallback((selectedItem: IPurchaseOrderResult) => {
@@ -71,23 +69,8 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 					readOnly={readOnly}
 					data-icon={false}
 					data-action={CommonActions.UPDATE}
-					onValueChange={(selectedItem: IPurchaseOrderResult) => handleSelectPurchaseOrder(selectedItem)}
+					onValueChange={(selectedItem) => handleSelectPurchaseOrder(selectedItem as IPurchaseOrderResult)}
 				/>
-				{/* {readOnly ? (
-					<span>{snapshotData?.po}</span>
-				) : (
-					<PurchaseOrderFieldControl
-						name={`outbound_purchase_orders.${index}.po`}
-						className='h-8 rounded-sm border-transparent py-1.5 shadow-none focus:border-primary'
-						tabIndex={index}
-						autoFocus={true}
-						data-index={index}
-						readOnly={readOnly}
-						data-icon={false}
-						data-action={CommonActions.UPDATE}
-						onValueChange={(selectedItem: IPurchaseOrderResult) => handleSelectPurchaseOrder(selectedItem)}
-					/>
-				)} */}
 			</TableCell>
 			{!isLargeScreen ? (
 				<TableCell className='w-[30%] xl:hidden' align='left'>

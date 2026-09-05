@@ -16,8 +16,8 @@ import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as featuresLayoutRouteImport } from './routes/(features)/_layout'
 import { Route as publicIndexRouteImport } from './routes/(public)/index'
 import { Route as publicRfidAgentRouteImport } from './routes/(public)/rfid-agent'
+import { Route as publicRfidAgentDocumentationRouteImport } from './routes/(public)/rfid-agent-documentation'
 import { Route as featuresPreferencesLayoutRouteImport } from './routes/(features)/preferences/_layout'
-import { Route as publicRfidAgentDocsRouteImport } from './routes/(public)/rfid-agent.docs'
 
 const featuresLayoutCargoWeightCheckLazyRouteImport = createFileRoute(
   '/(features)/_layout/cargo-weight-check',
@@ -121,6 +121,12 @@ const publicRfidAgentRoute = publicRfidAgentRouteImport.update({
   path: '/rfid-agent',
   getParentRoute: () => rootRouteImport,
 } as any)
+const publicRfidAgentDocumentationRoute =
+  publicRfidAgentDocumentationRouteImport.update({
+    id: '/(public)/rfid-agent-documentation',
+    path: '/rfid-agent-documentation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const featuresLayoutCargoWeightCheckLazyRoute =
   featuresLayoutCargoWeightCheckLazyRouteImport
     .update({
@@ -256,11 +262,6 @@ const featuresPreferencesLayoutRoute =
     path: '/preferences',
     getParentRoute: () => rootRouteImport,
   } as any)
-const publicRfidAgentDocsRoute = publicRfidAgentDocsRouteImport.update({
-  id: '/docs',
-  path: '/docs',
-  getParentRoute: () => publicRfidAgentRoute,
-} as any)
 const featuresLayoutadminAccessManagementLazyRoute =
   featuresLayoutadminAccessManagementLazyRouteImport
     .update({
@@ -421,10 +422,10 @@ const featuresLayoutwarehouseWarehouseWarehouseNumLazyRoute =
 export interface FileRoutesByFullPath {
   '/authorization': typeof authAuthorizationRoute
   '/login': typeof authLoginRoute
-  '/rfid-agent': typeof publicRfidAgentRouteWithChildren
+  '/rfid-agent': typeof publicRfidAgentRoute
+  '/rfid-agent-documentation': typeof publicRfidAgentDocumentationRoute
   '/': typeof publicIndexRoute
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
-  '/rfid-agent/docs': typeof publicRfidAgentDocsRoute
   '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckLazyRoute
   '/dashboard': typeof featuresLayoutDashboardLazyRoute
   '/inbound-report': typeof featuresLayoutInboundReportLazyRoute
@@ -453,10 +454,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/authorization': typeof authAuthorizationRoute
   '/login': typeof authLoginRoute
-  '/rfid-agent': typeof publicRfidAgentRouteWithChildren
+  '/rfid-agent': typeof publicRfidAgentRoute
+  '/rfid-agent-documentation': typeof publicRfidAgentDocumentationRoute
   '/': typeof publicIndexRoute
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
-  '/rfid-agent/docs': typeof publicRfidAgentDocsRoute
   '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckLazyRoute
   '/dashboard': typeof featuresLayoutDashboardLazyRoute
   '/inbound-report': typeof featuresLayoutInboundReportLazyRoute
@@ -487,10 +488,10 @@ export interface FileRoutesById {
   '/(auth)/authorization': typeof authAuthorizationRoute
   '/(auth)/login': typeof authLoginRoute
   '/(features)/_layout': typeof featuresLayoutRouteWithChildren
-  '/(public)/rfid-agent': typeof publicRfidAgentRouteWithChildren
+  '/(public)/rfid-agent': typeof publicRfidAgentRoute
+  '/(public)/rfid-agent-documentation': typeof publicRfidAgentDocumentationRoute
   '/(public)/': typeof publicIndexRoute
   '/(features)/preferences/_layout': typeof featuresPreferencesLayoutRouteWithChildren
-  '/(public)/rfid-agent/docs': typeof publicRfidAgentDocsRoute
   '/(features)/_layout/cargo-weight-check': typeof featuresLayoutCargoWeightCheckLazyRoute
   '/(features)/_layout/dashboard': typeof featuresLayoutDashboardLazyRoute
   '/(features)/_layout/inbound-report': typeof featuresLayoutInboundReportLazyRoute
@@ -522,9 +523,9 @@ export interface FileRouteTypes {
     | '/authorization'
     | '/login'
     | '/rfid-agent'
+    | '/rfid-agent-documentation'
     | '/'
     | '/preferences'
-    | '/rfid-agent/docs'
     | '/cargo-weight-check'
     | '/dashboard'
     | '/inbound-report'
@@ -554,9 +555,9 @@ export interface FileRouteTypes {
     | '/authorization'
     | '/login'
     | '/rfid-agent'
+    | '/rfid-agent-documentation'
     | '/'
     | '/preferences'
-    | '/rfid-agent/docs'
     | '/cargo-weight-check'
     | '/dashboard'
     | '/inbound-report'
@@ -587,9 +588,9 @@ export interface FileRouteTypes {
     | '/(auth)/login'
     | '/(features)/_layout'
     | '/(public)/rfid-agent'
+    | '/(public)/rfid-agent-documentation'
     | '/(public)/'
     | '/(features)/preferences/_layout'
-    | '/(public)/rfid-agent/docs'
     | '/(features)/_layout/cargo-weight-check'
     | '/(features)/_layout/dashboard'
     | '/(features)/_layout/inbound-report'
@@ -620,7 +621,8 @@ export interface RootRouteChildren {
   authAuthorizationRoute: typeof authAuthorizationRoute
   authLoginRoute: typeof authLoginRoute
   featuresLayoutRoute: typeof featuresLayoutRouteWithChildren
-  publicRfidAgentRoute: typeof publicRfidAgentRouteWithChildren
+  publicRfidAgentRoute: typeof publicRfidAgentRoute
+  publicRfidAgentDocumentationRoute: typeof publicRfidAgentDocumentationRoute
   publicIndexRoute: typeof publicIndexRoute
   featuresPreferencesLayoutRoute: typeof featuresPreferencesLayoutRouteWithChildren
 }
@@ -660,6 +662,13 @@ declare module '@tanstack/react-router' {
       path: '/rfid-agent'
       fullPath: '/rfid-agent'
       preLoaderRoute: typeof publicRfidAgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(public)/rfid-agent-documentation': {
+      id: '/(public)/rfid-agent-documentation'
+      path: '/rfid-agent-documentation'
+      fullPath: '/rfid-agent-documentation'
+      preLoaderRoute: typeof publicRfidAgentDocumentationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(features)/_layout/cargo-weight-check': {
@@ -745,13 +754,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/preferences'
       preLoaderRoute: typeof featuresPreferencesLayoutRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/(public)/rfid-agent/docs': {
-      id: '/(public)/rfid-agent/docs'
-      path: '/docs'
-      fullPath: '/rfid-agent/docs'
-      preLoaderRoute: typeof publicRfidAgentDocsRouteImport
-      parentRoute: typeof publicRfidAgentRoute
     }
     '/(features)/_layout/(admin)/access-management': {
       id: '/(features)/_layout/(admin)/access-management'
@@ -928,18 +930,6 @@ const featuresLayoutRouteWithChildren = featuresLayoutRoute._addFileChildren(
   featuresLayoutRouteChildren,
 )
 
-interface publicRfidAgentRouteChildren {
-  publicRfidAgentDocsRoute: typeof publicRfidAgentDocsRoute
-}
-
-const publicRfidAgentRouteChildren: publicRfidAgentRouteChildren = {
-  publicRfidAgentDocsRoute: publicRfidAgentDocsRoute,
-}
-
-const publicRfidAgentRouteWithChildren = publicRfidAgentRoute._addFileChildren(
-  publicRfidAgentRouteChildren,
-)
-
 interface featuresPreferencesLayoutRouteChildren {
   featuresPreferencesLayoutAccountLazyRoute: typeof featuresPreferencesLayoutAccountLazyRoute
   featuresPreferencesLayoutAppearanceSettingsLazyRoute: typeof featuresPreferencesLayoutAppearanceSettingsLazyRoute
@@ -965,7 +955,8 @@ const rootRouteChildren: RootRouteChildren = {
   authAuthorizationRoute: authAuthorizationRoute,
   authLoginRoute: authLoginRoute,
   featuresLayoutRoute: featuresLayoutRouteWithChildren,
-  publicRfidAgentRoute: publicRfidAgentRouteWithChildren,
+  publicRfidAgentRoute: publicRfidAgentRoute,
+  publicRfidAgentDocumentationRoute: publicRfidAgentDocumentationRoute,
   publicIndexRoute: publicIndexRoute,
   featuresPreferencesLayoutRoute: featuresPreferencesLayoutRouteWithChildren,
 }

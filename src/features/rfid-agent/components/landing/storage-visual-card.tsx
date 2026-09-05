@@ -63,7 +63,7 @@ const MarqueeList: React.FC = () => {
 					{cols.map((col: any, idx3: number) => (
 						<div
 							key={`icon-${idx3}`}
-							className='bg bg-card text-muted-foreground hover:border-primary hover:text-primary flex h-[60px] w-[60px] items-center justify-center rounded-lg border duration-100 md:h-[62px] md:w-[62px] md:min-w-[62px]'>
+							className='bg bg-card text-muted-foreground hover:border-success hover:text-success flex h-15 w-15 items-center justify-center rounded-lg border duration-100 md:h-15.5 md:w-15.5 md:min-w-15.5'>
 							{col}
 						</div>
 					))}

@@ -9,7 +9,7 @@ import type { useRegisterSW } from 'virtual:pwa-register/react'
 export const Route = createRootRouteWithContext<{
 	queryClient: QueryClient
 	isAuthenticated: boolean
-	serviceWorker: ReturnType<typeof useRegisterSW>
+	serviceWorker?: ReturnType<typeof useRegisterSW>
 }>()({
 	component: () => (
 		<Fragment>

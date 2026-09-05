@@ -19,7 +19,7 @@ import { Typewriter } from '@components/ui/@custom/type-writter'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { useSocketContext } from '@stores/socket.store'
 import { hasIn } from 'lodash-es'
-import type { IconNode} from 'lucide';
+import type { IconNode } from 'lucide'
 import { CircleCheckBig, CircleDot, CircleMinus, CircleX, LoaderCircle } from 'lucide'
 import { MorphIcon } from 'morphicons/react'
 import React, { useEffect, useState } from 'react'

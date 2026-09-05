@@ -1,4 +1,3 @@
-import { Theme } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import { Badge, Icon } from '@components/ui'
 import useTheme from '@hooks/use-theme'
@@ -69,7 +68,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 								r='3'
 								gradientUnits='userSpaceOnUse'
 								gradientTransform={gradientTransform}>
-								<stop stopColor={theme === Theme.DARK ? 'hsl(var(--success)' : 'hsl(var(--success)/50%)'} />
+								<stop stopColor='var(--success)' />
 								<stop offset='1' stopColor='var(--border)' />
 							</radialGradient>
 						</defs>

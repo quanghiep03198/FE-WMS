@@ -7,7 +7,7 @@ import type { DataTableProps, RenderSubComponentProps } from '@components/ui/@re
 import type { ITruckloadDelivery } from '@features/truckload-delivery/services/truckload-delivery.service'
 import useMediaQuery from '@hooks/use-media-query'
 import { useQueryClient } from '@tanstack/react-query'
-import type { PaginationState, SortingState } from '@tanstack/react-table'
+import type { CellContext, OnChangeFn, PaginationState, SortingState } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useDeepCompareEffect } from 'ahooks'
 import { unflatten } from 'flat'
@@ -191,7 +191,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				cell: (props) => (
+				cell: (props: CellContext<ITruckloadDelivery, Date>) => (
 					<DepartureTimeCell
 						{...props}
 						aria-invalid={props.row.original.possible_signing_late}
@@ -214,7 +214,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					<DateTimeCell
 						{...{
 							...props,
-							fallbackValue: props.row.original.actual_snap_time,
+							fallbackValue: props.row.original.actual_snap_time ?? undefined,
 							['aria-invalid']: props.row.original.possible_signing_late,
 							className: 'aria-invalid:text-destructive!'
 						}}
@@ -280,7 +280,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 
 	const handlePrefetch = useCallback(
 		async (params: Pick<Pagination<ITruckloadDelivery>, 'page' | 'limit'>) => {
-			return await queryClient.prefetchQuery(getTruckloadDeliveryQueryOptions({ ...searchParams, ...params }))
+			return await queryClient.query(getTruckloadDeliveryQueryOptions({ ...searchParams, ...params }))
 		},
 		[searchParams]
 	)
@@ -307,10 +307,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			paginationProps={{
 				...omit(data, 'data'),
 				enableInputPageSize: false,
-				prefetch: (params: Pick<Pagination<ITruckloadDelivery>, 'page' | 'limit'>) =>
-					startTransition(() => handlePrefetch(params))
+				prefetch: (params) => {
+					startTransition(() => {
+						handlePrefetch(params as Pick<Pagination<ITruckloadDelivery>, 'page' | 'limit'>)
+					})
+				}
 			}}
-			onPaginationChange={changePagination}
+			onPaginationChange={changePagination as OnChangeFn<PaginationState>}
 			onSortingChange={setSorting}
 			globalFilterFn='includesString'
 			initialState={{ columnVisibility: { dispatch_order: false }, sorting: [{ id: 'dispatch_order', desc: true }] }}

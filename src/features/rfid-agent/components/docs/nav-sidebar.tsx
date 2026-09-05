@@ -167,6 +167,7 @@ const SidebarMenuLink: React.FC<any> = ({ hash, href, title, viewTransition }) =
 					<Link
 						hash={hash}
 						preload='intent'
+						to='/rfid-agent-documentation'
 						viewTransition={viewTransition}
 						className={cn(
 							'transition-colors duration-200 ease-in-out',

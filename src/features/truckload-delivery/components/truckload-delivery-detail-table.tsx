@@ -29,6 +29,7 @@ import { useDeepCompareEffect, useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { isNil, pick, sortBy, uniqBy } from 'lodash-es'
 import React, { Fragment } from 'react'
+import type { Resolver} from 'react-hook-form';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -87,7 +88,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	const { t } = useTranslation()
 	const [action, setAction, resetAction] = useResetState<CommonActions.UPDATE | null>(null)
 	const form = useForm<UpsertPurchaseOrdersFormValues>({
-		resolver: zodResolver(upsertPurchaseOrdersSchema)
+		resolver: zodResolver(upsertPurchaseOrdersSchema) as Resolver<UpsertPurchaseOrdersFormValues>
 	})
 	const { table } = useTableContext('table')
 	const { fields, append, remove } = useFieldArray({ control: form.control, name: 'outbound_purchase_orders' })
@@ -500,7 +501,7 @@ const signatureRolesMap: Map<SignatureType, UserRole[]> = new Map([
 ])
 
 const Signature: React.FC<{
-	data: Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'approval_status'>
+	data: Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'approval_status' | SignatureType>
 	type: SignatureType
 	disabled?: boolean
 }> = ({ data, type, disabled }) => {
