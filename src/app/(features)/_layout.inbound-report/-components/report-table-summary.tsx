@@ -3,7 +3,7 @@
 import type { IInboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Separator, Typography } from '@/components/ui'
-import { Table } from '@tanstack/react-table'
+import type { Table } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
