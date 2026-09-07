@@ -150,8 +150,8 @@ const InboundHistoryTable: React.FC = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{data.daily_inbound_history?.length > 0 ? (
-						data.daily_inbound_history?.map((history) => {
+					{Array.isArray(data.daily_inbound_history) && data.daily_inbound_history.length > 0 ? (
+						sortBy(data.daily_inbound_history, (history) => history.date).map((history) => {
 							return <InboundHistoryRow key={history.date} data={history} />
 						})
 					) : (
