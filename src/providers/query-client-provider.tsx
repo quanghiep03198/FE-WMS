@@ -52,9 +52,7 @@ broadcastQueryClient({
 })
 
 export const QueryClientProvider: React.FC<React.PropsWithChildren> = ({ children }) => (
-	<PersistQueryClientProvider
-		client={queryClient}
-		persistOptions={{ persister: localStoragePersister, maxAge: 60 * 1000 * 15 }}>
+	<PersistQueryClientProvider client={queryClient} persistOptions={{ persister: localStoragePersister }}>
 		{children}
 	</PersistQueryClientProvider>
 )
