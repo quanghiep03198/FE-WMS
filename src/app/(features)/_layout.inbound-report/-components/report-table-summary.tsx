@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next'
 
 const ReportTableSummary: React.FC<{ table: Table<IInboundReport>; data: IInboundReport[] }> = ({ table, data }) => {
 	const { t } = useTranslation()
-	console.log(table.getFilteredRowModel().flatRows.map((row) => row.original.mo_no))
 
 	return (
 		<Div role='row' className='flex h-10 w-full items-center justify-center gap-x-4 px-4 py-2'>
