@@ -5,7 +5,7 @@ import { array, email, enum as enums, object, string } from 'zod'
 export const createUserSchema = object({
 	username: string({ error: 'ns_validation:required' })
 		.nonempty({ error: 'ns_validation:required' })
-		.min(4, { error: JSON.stringify({ key: 'ns_validation:min_length', bindings: { min: 3 } }) }),
+		.min(3, { error: JSON.stringify({ key: 'ns_validation:min_length', bindings: { min: 3 } }) }),
 	password: string().nullish(),
 	display_name: string().nonempty({ error: 'ns_validation:required' }),
 	email: email().nullish(),
