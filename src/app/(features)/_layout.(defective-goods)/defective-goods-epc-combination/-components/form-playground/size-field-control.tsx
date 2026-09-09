@@ -1,4 +1,5 @@
 import { GhostButton } from '@/app/(features)/-components/shared/ghost-button'
+import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-product-specification-asm'
 import { cn } from '@/common/utils/cn'
 import {
 	AutoCompleteFieldControl,
@@ -39,7 +40,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 	const scrollRef = useRef<HTMLDivElement>(null)
 	const { currentStrategy } = useSwitchCombinationStrategy()
 
-	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
+	const { data: productSpecification } = useGetProductSpecificationQuery()
 	const currentCategory = useWatch({ control: control, name: 'defective_category' })
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })

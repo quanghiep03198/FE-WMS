@@ -1,3 +1,4 @@
+import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-product-specification-asm'
 import { AutoCompleteFieldControl } from '@/components/ui'
 import { uniqBy } from 'lodash-es'
 import React, { useMemo } from 'react'
@@ -9,8 +10,8 @@ import type { DefAutoCompleteFieldControlProps } from './type'
 
 const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()
-	const { control, reset, getValues, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
-	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
+	const { control, reset, getValues } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { data: productSpecification } = useGetProductSpecificationQuery()
 	const currentCategory = useWatch({ control: control, name: 'defective_category' })
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })

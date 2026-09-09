@@ -29,6 +29,7 @@ import { createDefectiveGoodsSchema, updateDefectiveGoodsSchema } from '../../-s
 
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
 import type { IDefectiveGoods } from '@/services/defective-goods.service'
+import type z from 'zod'
 import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
 import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../../-constants'
 import { usePageContext } from '../../../-contexts/page-context'
@@ -74,7 +75,9 @@ const DefectiveGoodsForm: React.FC = () => {
 		formAction === CommonActions.UPDATE ? updateDefectiveGoodsSchema : createDefectiveGoodsSchema
 	)
 
-	const form = useForm<CreateDefectiveGoodsFormValues & Partial<IBaseEntity>>({
+	const form = useForm<
+		z.infer<typeof schemaRef.current> & Pick<IBaseEntity, 'created' | 'user_code_created' | 'updated'>
+	>({
 		resolver: zodResolver(schemaRef.current),
 		defaultValues: {
 			shoe_source: DefectiveGoodsSource.FINAL_INSPECTION,
@@ -86,7 +89,7 @@ const DefectiveGoodsForm: React.FC = () => {
 	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no' })
 	const currentCategory = useWatch({ control: form.control, name: 'defective_category' })
 
-	const { data: productSpecification, isLoading } = useGetProductSpecificationQuery()
+	const { isLoading } = useGetProductSpecificationQuery()
 	const { data: orderDetail } = useGetCommandNumberDetailQuery(currentManufacturingOrder)
 
 	const {
@@ -237,7 +240,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
 
 	return (
-		<FormProvider {...{ ...form, productSpecification }}>
+		<FormProvider {...form}>
 			<Form data-action={formAction === CommonActions.UPDATE} onSubmit={form.handleSubmit(handleSubmitForm)}>
 				{/* Form controls */}
 				<Div

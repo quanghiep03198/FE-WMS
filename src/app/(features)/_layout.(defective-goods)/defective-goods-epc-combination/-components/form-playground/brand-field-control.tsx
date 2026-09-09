@@ -1,3 +1,4 @@
+import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-product-specification-asm'
 import { SelectFieldControl } from '@/components/ui'
 import type { SelectFieldControlProps } from '@/components/ui/@field-control/select'
 import React, { useMemo } from 'react'
@@ -16,13 +17,15 @@ const BrandFieldControl: React.FC<BrandFieldControl> = ({ disabled, ...props }) 
 
 	// Memoized options for brand select
 	const { currentStrategy } = useSwitchCombinationStrategy()
+	const { data } = useGetProductSpecificationQuery()
+
 	const brandOptions = useMemo(() => {
-		if (!Array.isArray(ctx['productSpecification'])) return []
-		return ctx['productSpecification'].map(({ brand_name }) => ({
+		if (!Array.isArray(data)) return []
+		return data.map(({ brand_name }) => ({
 			label: brand_name,
 			value: brand_name
 		}))
-	}, [ctx['productSpecification']])
+	}, [data])
 
 	return (
 		<SelectFieldControl

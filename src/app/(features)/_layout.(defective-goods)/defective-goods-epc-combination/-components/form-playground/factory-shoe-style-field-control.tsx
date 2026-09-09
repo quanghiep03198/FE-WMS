@@ -1,3 +1,4 @@
+import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-product-specification-asm'
 import type { AutoCompleteFieldControlProps } from '@/components/ui'
 import { AutoCompleteFieldControl } from '@/components/ui'
 import React, { useMemo } from 'react'
@@ -15,8 +16,8 @@ const FactoryShoeStyleFieldControl: React.FC<
 > = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()
 	const { reset, setValue, getValues, control, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { data: productSpecification } = useGetProductSpecificationQuery()
 
-	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
 	const currentBrand = useWatch({ name: 'brand_name', control })
 
 	// Memoized options for shoe style select
