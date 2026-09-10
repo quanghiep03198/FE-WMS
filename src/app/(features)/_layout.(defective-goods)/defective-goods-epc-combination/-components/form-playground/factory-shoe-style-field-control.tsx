@@ -22,7 +22,7 @@ const FactoryShoeStyleFieldControl: React.FC<
 
 	// Memoized options for shoe style select
 	const factoryShoeStyleOptions = useMemo(() => {
-		if (!productSpecification.length) return []
+		if (!productSpecification?.length) return []
 		if (!currentBrand)
 			return productSpecification
 				.flatMap((item) =>

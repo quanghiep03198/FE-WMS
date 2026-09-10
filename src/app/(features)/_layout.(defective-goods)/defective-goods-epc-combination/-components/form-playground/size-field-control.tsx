@@ -58,7 +58,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 
 	// Memoized options for size select
 	const sizeOptions = useMemo(() => {
-		if (!productSpecification.length) return []
+		if (!productSpecification?.length) return []
 		if (shouldFilterAllSizes)
 			return uniqBy(
 				productSpecification

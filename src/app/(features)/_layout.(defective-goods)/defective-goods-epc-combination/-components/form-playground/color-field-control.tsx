@@ -19,7 +19,7 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 
 	// Memoized options for color select
 	const colorOptions = useMemo(() => {
-		if (!productSpecification.length) return []
+		if (!productSpecification?.length) return []
 		if (
 			currentCategory === DefectiveCategory.RESEARCH_DEVELOPMENT ||
 			!currentCategory ||

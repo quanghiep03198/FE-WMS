@@ -21,7 +21,7 @@ const CustShoeStyleFieldControl: React.FC<
 	const currentBrand = useWatch({ name: 'brand_name', control })
 
 	const custShoeStyleOptions = useMemo(() => {
-		if (!productSpecification.length) return []
+		if (!productSpecification?.length) return []
 		if (!currentBrand)
 			return productSpecification
 				.flatMap((item) =>
