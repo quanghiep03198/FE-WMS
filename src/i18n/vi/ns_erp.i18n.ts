@@ -35,6 +35,7 @@ export default {
 		employee_name: 'Nhân viên tạo đơn',
 		export_num: 'Số đã xuất kho',
 		factory_code_produce: 'Nhà máy sản xuất',
+		factory_entrance_time: 'TG vào xưởng',
 		factory_departure_time: 'TG xuất xưởng',
 		actual_departure_time: 'TG xuất xưởng thực tế',
 		container_sealing_time: 'TG niêm phong container',
@@ -79,6 +80,7 @@ export default {
 		moist_container: 'Container bị ẩm',
 		warehouse_officer_signature: 'Chữ ký KTP',
 		security_guard_signature: 'Chữ ký Bảo Vệ {{number}}',
+		seal_number: 'Số chì',
 		required_date: 'Ngày Yêu Cầu', // Required Date
 		returned_qty: 'Số Lượng Đã Trả Hàng', // Returned Quantity
 		decentralized_po: 'PO phân tách',

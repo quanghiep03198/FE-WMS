@@ -20,6 +20,8 @@ const RowActions: ColumnDefBase<ITruckloadDelivery, any>['cell'] = ({ row }) => 
 	const data = pick(row.original, [
 		'dispatch_order',
 		'license_plate',
+		'seal_number',
+		'factory_entrance_time',
 		'container_number',
 		'approval_status',
 		'punctured_container',
@@ -30,7 +32,14 @@ const RowActions: ColumnDefBase<ITruckloadDelivery, any>['cell'] = ({ row }) => 
 	const { event$ } = usePageContext()
 
 	return (
-		<RoleBaseAccessControl authorizedRoles={[UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}>
+		<RoleBaseAccessControl
+			authorizedRoles={[
+				UserRole.ADMIN,
+				UserRole.MANAGER,
+				UserRole.FG_WAREHOUSE_STAFF,
+				UserRole.IE_STAFF,
+				UserRole.SECURITY_GUARD
+			]}>
 			<DropdownMenu modal={false}>
 				<DropdownMenuTrigger
 					asChild={true}
@@ -46,14 +55,7 @@ const RowActions: ColumnDefBase<ITruckloadDelivery, any>['cell'] = ({ row }) => 
 							onClick={() => {
 								event$.emit({
 									action: CommonActions.UPDATE_MANY,
-									payload: pick(data, [
-										'dispatch_order',
-										'license_plate',
-										'container_number',
-										'punctured_container',
-										'smelling_container',
-										'moist_container'
-									])
+									payload: data
 								})
 							}}>
 							<Icon name='PencilLine' className='hidden lg:inline-block xl:inline-block' />

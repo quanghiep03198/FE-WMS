@@ -32,6 +32,8 @@ export default {
 		list_of_already_scanned_epcs: 'List of EPCs that have been previously scanned for inbound.',
 		license_plate_field:
 			'License plate that coresponding to container number. Also skip entering license plate if container number is unknown.',
+		seal_number_field:
+			'Seal number that coresponding to container number. Also skip entering seal number if container number is unknown.',
 		monthly_inventory_report: 'Manage and track the monthly inventory of finished goods in the warehouse.',
 		no_added_size: 'No size added',
 		no_dispatch_order_item_added: 'No dispatch order item added',

@@ -14,6 +14,7 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	dispatch_order: TruckloadDeliveryDispatchOrder
 	factory_code: string
 	license_plate: string
+	seal_number: string
 	outbound_qty: number
 	approval_status: TruckloadDeliveryStatus
 	ie_signature: string
@@ -24,6 +25,7 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	smelling_container: boolean
 	moist_container: boolean
 	container_sealing_time: Date | null
+	factory_entrance_time: Date | null
 	factory_departure_time: Date | null
 	actual_snap_time: Date | null
 	actual_departure_time: Date | null

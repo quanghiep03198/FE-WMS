@@ -50,6 +50,7 @@ export default {
 		list_of_already_scanned_epcs: 'Danh sách các EPC đã quét nhập kho trước đây.',
 		license_plate_field:
 			'Biển số xe tương ứng với số container. Cũng bỏ qua việc nhập biển số xe nếu không biết số container.',
+		seal_number_field: 'Số chì niêm phong. Bỏ qua trường này nếu không có số niêm phong hiện tại.',
 		monthly_inventory_report: 'Quản lý và theo dõi tồn kho hàng kho thành phẩm hàng tháng',
 		no_added_size: 'Chưa có size nào được thêm',
 		no_dispatch_order_item_added: 'Chưa có mục đơn hàng nào được thêm',

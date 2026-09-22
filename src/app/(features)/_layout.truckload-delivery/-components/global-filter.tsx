@@ -90,6 +90,12 @@ const GlobalFilter: React.FC = () => {
 				type: 'text'
 			},
 			{
+				icon: 'Lock',
+				name: 'seal_number',
+				label: t('ns_erp:fields.seal_number'),
+				type: 'text'
+			},
+			{
 				icon: 'NotepadText',
 				name: 'po',
 				label: t('ns_erp:fields.po'),
@@ -99,6 +105,12 @@ const GlobalFilter: React.FC = () => {
 				icon: 'CalendarPlus',
 				name: 'created_at',
 				label: t('ns_common:common_fields.created_at'),
+				type: 'date'
+			},
+			{
+				icon: 'CalendarCheck',
+				name: 'factory_entrance_time',
+				label: t('ns_erp:fields.factory_entrance_time'),
 				type: 'date'
 			},
 			{
@@ -249,6 +261,7 @@ const FormItem: React.FC<FieldItemProps> = ({ index, name, label, icon, type }) 
 				datalist={operators}
 				labelField='label'
 				valueField='value'
+				placeholder={operators.at(-1).label}
 				errorMessageVariant='tooltip'
 				onValueChange={() => {
 					if (type === 'date') resetField(`where.${index}.value`)

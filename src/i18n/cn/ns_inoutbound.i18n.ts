@@ -29,6 +29,7 @@ export default {
 		inoutbound_form_note: '更新库存移动之前断开连接',
 		list_of_already_scanned_epcs: '以前扫描入库的EPC列表.',
 		license_plate_field: '与集装箱编号对应的车牌号. 如果集装箱编号未知, 也可跳过输入车牌号.',
+		seal_number_field: '集装箱封条编号. 如果当前无法提供封条编号, 请跳过此字段.',
 		monthly_inventory_report: '管理和跟踪成品仓库的每月库存',
 		no_added_size: '没有添加尺码',
 		no_dispatch_order_item_added: '没有添加采购订单',

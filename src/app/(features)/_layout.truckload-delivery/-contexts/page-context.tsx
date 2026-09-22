@@ -27,7 +27,10 @@ type EventPayload =
 	  }
 	| {
 			action: CommonActions.UPDATE_MANY
-			payload: Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'container_number'>
+			payload: Pick<
+				ITruckloadDelivery,
+				'dispatch_order' | 'license_plate' | 'container_number' | 'seal_number' | 'factory_entrance_time'
+			>
 	  }
 	| { action: CommonActions.SET_STATUS; payload: string }
 	| { action: CommonActions.DELETE; payload: number }

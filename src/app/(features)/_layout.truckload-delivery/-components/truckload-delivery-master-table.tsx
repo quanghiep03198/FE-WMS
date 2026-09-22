@@ -7,9 +7,9 @@ import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/
 import type { DataTableProps, RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { useQueryClient } from '@tanstack/react-query'
-import type { PaginationState, SortingState } from '@tanstack/react-table'
+import type { PaginationState, SortingState, VisibilityState } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
-import { useDeepCompareEffect } from 'ahooks'
+import { useDeepCompareEffect, useLocalStorageState } from 'ahooks'
 import { unflatten } from 'flat'
 import { omit, omitBy } from 'lodash-es'
 import { useCallback, useMemo, useState, useTransition } from 'react'
@@ -36,6 +36,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1179px)')
 	const { data, isLoading, isRefetching } = useGetTruckloadDeliveryQuery()
+	const [storedHiddenState] = useLocalStorageState<VisibilityState>('truckloadDeliveryTableColumnVisibility', {
+		defaultValue: { dispatch_order: false }
+	})
 	const [isTransitioning, startTransition] = useTransition()
 	const queryClient = useQueryClient()
 	const { searchParams, setParams } = usePageQueryParams()
@@ -109,6 +112,22 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				maxSize: 250,
 				cell: TableCellText
 			}),
+			columnHelper.accessor('seal_number', {
+				id: 'seal_number',
+				header: t('ns_erp:fields.seal_number'),
+				meta: { hidden: isMobile },
+				enableResizing: true,
+				enableSorting: true,
+				enableMultiSort: false,
+				enableGlobalFilter: true,
+				enablePinning: true,
+				sortDescFirst: true,
+				filterFn: 'fuzzy',
+				minSize: 150,
+				size: 150,
+				maxSize: 250,
+				cell: TableCellText
+			}),
 			columnHelper.accessor('total_outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
 				enableSorting: true,
@@ -160,6 +179,25 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				size: 200,
 				maxSize: 250,
 				cell: DateTimeCell
+			}),
+			columnHelper.accessor('factory_entrance_time', {
+				header: t('ns_erp:fields.factory_entrance_time'),
+				enableResizing: true,
+				enableSorting: true,
+				enableMultiSort: false,
+				enablePinning: true,
+				enableColumnFilter: false,
+				enableGlobalFilter: false,
+				minSize: 150,
+				size: 200,
+				maxSize: 250,
+				cell: (props) => (
+					<DateTimeCell
+						{...props}
+						aria-invalid={props.row.original.possible_signing_late}
+						className='aria-[invalid=true]:!text-destructive'
+					/>
+				)
 			}),
 			columnHelper.accessor('container_sealing_time', {
 				header: t('ns_erp:fields.container_sealing_time'),
@@ -280,7 +318,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 
 	const handlePrefetch = useCallback(
 		async (params: Pick<Pagination<ITruckloadDelivery>, 'page' | 'limit'>) => {
-			return await queryClient.prefetchQuery(getTruckloadDeliveryQueryOptions({ ...searchParams, ...params }))
+			return await queryClient.query(getTruckloadDeliveryQueryOptions({ ...searchParams, ...params }))
 		},
 		[searchParams]
 	)
@@ -313,7 +351,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			onPaginationChange={changePagination}
 			onSortingChange={setSorting}
 			globalFilterFn='includesString'
-			initialState={{ columnVisibility: { dispatch_order: false }, sorting: [{ id: 'dispatch_order', desc: true }] }}
+			initialState={{ columnVisibility: storedHiddenState, sorting: [{ id: 'dispatch_order', desc: true }] }}
 			virtualizerOptions={virtualizerOptions}
 			toolbarProps={toolbarProps}
 			containerProps={{

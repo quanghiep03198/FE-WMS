@@ -41,6 +41,7 @@ export const TableViewOptions: React.FC = () => {
 								key={column.id}
 								className='whitespace-nowrap capitalize'
 								checked={column.getIsVisible()}
+								onSelect={(e) => e.preventDefault()}
 								onCheckedChange={(value) => {
 									column.toggleVisibility(!!value)
 									rerender()

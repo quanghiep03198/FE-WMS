@@ -36,6 +36,7 @@ export default {
 		employee_name: "Employee's name",
 		export_num: 'Qty. of goods shipped', //: Số đã xuất kho
 		factory_code_produce: 'Producing factory',
+		factory_entrance_time: 'Factory entrance time',
 		factory_departure_time: 'Factory departure time',
 		actual_departure_time: 'Actual departure time',
 		container_sealing_time: 'Container sealing time',
@@ -83,6 +84,7 @@ export default {
 		required_date: 'Required date',
 		returned_qty: 'Returned quantity',
 		decentralized_po: 'Decentralized PO',
+		seal_number: 'Seal number',
 		ship_order: 'Shipping order number',
 		shipping_id: 'Shipping ID',
 		shipping_destination: 'Shipping destination',

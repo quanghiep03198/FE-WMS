@@ -15,6 +15,7 @@ export const createDeliverySchema = object({
 		.trim()
 		.regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' }) // ? Should follow BIC format
 		.nullish(),
+	seal_number: string({ error: 'ns_validation:required' }).trim().nullish(),
 	outbound_purchase_orders: array(
 		object({
 			po: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
@@ -66,6 +67,14 @@ export const updateDispatchOrderSchema = object({
 	container_number: string({ error: 'ns_validation:required' })
 		.trim()
 		.regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' })
+		.nullish()
+		.transform((value) => (isNil(value) ? null : value.toUpperCase())),
+	factory_entrance_time: object({
+		date: coerce.date({ error: 'ns_validation:invalid_value' }).nullish(),
+		time: string({ error: 'ns_validation:invalid_value' }).nullish()
+	}),
+	seal_number: string({ error: 'ns_validation:required' })
+		.trim()
 		.nullish()
 		.transform((value) => (isNil(value) ? null : value.toUpperCase())),
 	punctured_container: boolean().optional(),
@@ -121,8 +130,10 @@ export const truckloadDeliveryFilterSchema = object({
 				'approval_status',
 				'license_plate',
 				'container_number',
+				'seal_number',
 				'po',
 				'created_at',
+				'factory_entrance_time',
 				'container_sealing_time',
 				'factory_departure_time',
 				'actual_departure_time'

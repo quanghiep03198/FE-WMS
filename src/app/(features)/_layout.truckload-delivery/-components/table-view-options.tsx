@@ -13,12 +13,18 @@ import {
 } from '@/components/ui'
 import { type ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
+import type { VisibilityState } from '@tanstack/react-table'
 import { type Table } from '@tanstack/react-table'
+import { useLocalStorageState } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 
 export function TableViewOptions({ table }: { table: Table<ITruckloadDelivery> }) {
 	const { t } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
+	const [, setStoredHiddenState] = useLocalStorageState<VisibilityState>('truckloadDeliveryTableColumnVisibility', {
+		defaultValue: { dispatch_order: false },
+		listenStorageChange: true
+	})
 
 	if (isMobile) return null
 
@@ -44,7 +50,11 @@ export function TableViewOptions({ table }: { table: Table<ITruckloadDelivery> }
 								key={column.id}
 								className='capitalize'
 								checked={column.getIsVisible()}
-								onCheckedChange={(value) => column.toggleVisibility(!!value)}>
+								onSelect={(e) => e.preventDefault()}
+								onCheckedChange={(value) => {
+									column.toggleVisibility(!!value)
+									setStoredHiddenState((prev) => ({ ...prev, [column.id]: value }))
+								}}>
 								{column.columnDef.header?.toString()}
 							</DropdownMenuCheckboxItem>
 						)
