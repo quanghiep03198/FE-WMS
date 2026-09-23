@@ -39,6 +39,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const [storedHiddenState] = useLocalStorageState<VisibilityState>('truckloadDeliveryTableColumnVisibility', {
 		defaultValue: { dispatch_order: false }
 	})
+
 	const [isTransitioning, startTransition] = useTransition()
 	const queryClient = useQueryClient()
 	const { searchParams, setParams } = usePageQueryParams()

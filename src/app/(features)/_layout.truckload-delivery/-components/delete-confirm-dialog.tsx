@@ -51,9 +51,11 @@ const DeleteConfirmDialog: React.FC = () => {
 			onOpenChange={setShouldConfirmDialogOpen}
 			onConfirm={() => {
 				if (typeof currentlyDeletingIdsRef.current === 'number') {
+					event$.emit({ action: 'CONFIRM_DELETE_DISPATCH_ORDER' })
 					return deleteOneById(currentlyDeletingIdsRef.current)
 				}
 				if (typeof currentlyDeletingDispatchOrdersRef.current === 'string') {
+					event$.emit({ action: 'CONFIRM_DELETE_DISPATCH_ORDER' })
 					return bulkDeleteByDispatchOrder(currentlyDeletingDispatchOrdersRef.current)
 				}
 			}}

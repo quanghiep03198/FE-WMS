@@ -44,7 +44,7 @@ const SignatureEditorDialog: React.FC = () => {
 	>(TruckloadDeliveryStatus.CONFIRMED)
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
+
 	const dialogData = useReactiveRef<
 		Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status' | 'license_plate'> & {
 			signature_type: SignatureType
@@ -57,6 +57,13 @@ const SignatureEditorDialog: React.FC = () => {
 		license_plate: null,
 		signature_type: null
 	})
+
+	const {
+		mutateAsync: setStatusAsync,
+		isPending,
+		isError
+	} = useUpdateDispatchOrderSignatureMutation(dialogData.current.dispatch_order)
+
 	const canvasRef = useRef<SignatureCanvasInstance>(null)
 
 	event$.useSubscription(({ action, payload }) => {

@@ -77,36 +77,35 @@ export const useCreateTruckloadDeliveryMutation = () => {
 }
 
 export const useUpdateDispatchOrderMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+	const { searchParams } = usePageQueryParams()
 
 	return useMutation({
+		meta: { invalidates: [[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams]] },
 		mutationFn: ({ dispatch_order, ...update }: UpdateDispatchOrderFormValues) => {
 			return TruckloadDeliveryService.bulkUpdate(dispatch_order, update)
-		},
-		onSuccess: () => invalidateQueries()
+		}
 	})
 }
 
 export const useDeleteTruckloadDeliveryMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+	const { searchParams } = usePageQueryParams()
 
 	return useMutation({
-		mutationKey: [TruckloadDeliveryMutationKeys.DELETE_PURCHASE_ORDER],
+		meta: { invalidates: [[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams]] },
 		mutationFn: (id: number) => {
 			return TruckloadDeliveryService.deleteOne(id)
-		},
-		onSuccess: () => invalidateQueries()
+		}
 	})
 }
 
 export const useDeleteDispatchOrdersMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+	const { searchParams } = usePageQueryParams()
 
 	return useMutation({
+		meta: { invalidates: [[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams]] },
 		mutationFn: (dispatchOrder: TruckloadDeliveryDispatchOrder) => {
 			return TruckloadDeliveryService.bulkDelete(dispatchOrder)
-		},
-		onSuccess: () => invalidateQueries()
+		}
 	})
 }
 
@@ -117,7 +116,10 @@ export const useUpsertPurchaseOrdersMutation = (dispatchOrder: string) => {
 
 	return useMutation({
 		meta: {
-			invalidates: [[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY_DETAIL, dispatchOrder]]
+			invalidates: [
+				[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams],
+				[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY_DETAIL, dispatchOrder]
+			]
 		},
 		mutationFn: (payload: UpsertPurchaseOrdersFormValues) => TruckloadDeliveryService.upsertPurchaseOrders(payload),
 		onMutate: async (variables) => {
@@ -197,17 +199,22 @@ export const useUpsertPurchaseOrdersMutation = (dispatchOrder: string) => {
 	})
 }
 
-export const useUpdateDispatchOrderSignatureMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+export const useUpdateDispatchOrderSignatureMutation = (dispatchOrder: string | null) => {
+	const { searchParams } = usePageQueryParams()
 
 	return useMutation({
+		meta: {
+			invalidates: [
+				[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams],
+				[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY_DETAIL, dispatchOrder]
+			]
+		},
 		mutationFn: (payload: {
 			dispatch_order: TruckloadDeliveryDispatchOrder
 			signature_type: SignatureType
 			approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 			signature: string
-		}) => TruckloadDeliveryService.updateDispatchOrderSignature(payload),
-		onSuccess: () => invalidateQueries()
+		}) => TruckloadDeliveryService.updateDispatchOrderSignature(payload)
 	})
 }
 
@@ -248,8 +255,6 @@ export const useUpdateContainerConditionMutation = () => {
 					}
 				}
 			)
-
-			// Return a context object with the snapshotted value
 			return { previousData }
 		},
 		onError: (_error, _variables, context) => {
@@ -260,18 +265,5 @@ export const useUpdateContainerConditionMutation = () => {
 				)
 			}
 		}
-		// onSettled: invalidateQueries
 	})
-}
-
-const useInvalidateQueries = (...queryKeys: any[]) => {
-	const queryClient = useQueryClient()
-
-	return () => {
-		queryClient.invalidateQueries({
-			predicate: (query) =>
-				query.queryKey.some((key) => [...Object.values(TruckloadDeliveryQueryKeys), ...queryKeys].includes(key)),
-			refetchType: 'active'
-		})
-	}
 }

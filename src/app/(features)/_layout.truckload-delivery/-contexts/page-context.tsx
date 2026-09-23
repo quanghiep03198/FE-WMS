@@ -41,6 +41,7 @@ type EventPayload =
 				signature_type: SignatureType
 			}
 	  }
+	| { action: 'CONFIRM_DELETE_DISPATCH_ORDER'; payload?: undefined }
 
 type SetStorageState<T> = (value?: T | ((prevState: T) => T)) => void
 

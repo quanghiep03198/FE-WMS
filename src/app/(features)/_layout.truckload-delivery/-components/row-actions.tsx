@@ -16,7 +16,7 @@ import { usePageContext } from '../-contexts/page-context'
 import { type ITruckloadDelivery } from '../-hooks/use-truckload-delivery-asm'
 import { GhostButton } from '../../-components/shared/ghost-button'
 
-const RowActions: ColumnDefBase<ITruckloadDelivery, any>['cell'] = ({ row }) => {
+const RowActions: ColumnDefBase<ITruckloadDelivery, any>['cell'] = ({ table, row }) => {
 	const data = pick(row.original, [
 		'dispatch_order',
 		'license_plate',
@@ -30,6 +30,13 @@ const RowActions: ColumnDefBase<ITruckloadDelivery, any>['cell'] = ({ row }) => 
 	])
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
+
+	event$.useSubscription(({ action }) => {
+		if (action === 'CONFIRM_DELETE_DISPATCH_ORDER') {
+			table.resetExpanded()
+			table.resetColumnFilters()
+		}
+	})
 
 	return (
 		<RoleBaseAccessControl
