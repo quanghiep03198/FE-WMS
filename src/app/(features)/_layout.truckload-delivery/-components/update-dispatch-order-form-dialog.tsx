@@ -36,7 +36,7 @@ import {
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { capitalize, padStart } from 'lodash-es'
+import { capitalize, isNil, padStart } from 'lodash-es'
 import { Fragment, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -54,6 +54,10 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 	const form = useForm<UpdateDispatchOrderFormValues>({
 		resolver: zodResolver(updateDispatchOrderSchema)
 	})
+
+	console.log(form.getErrors())
+	// console.log(form.getValues())
+
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 	const { mutateAsync, isPending, isError } = useUpdateDispatchOrderMutation()
 	const toastRef = useRef<string | number | null>(null)
@@ -63,18 +67,19 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 		setOpen(true)
 		form.reset({
 			...payload,
-			factory_entrance_time: payload.factory_entrance_time
-				? {
-						date: new Date(payload.factory_entrance_time),
-						time: format(new Date(payload.factory_entrance_time), 'HH:mm')
-					}
-				: null
+			...(payload.factory_entrance_time && {
+				factory_entrance_time: {
+					date: new Date(payload.factory_entrance_time),
+					time: format(new Date(payload.factory_entrance_time), 'HH:mm')
+				}
+			})
 		})
 	})
 
 	const handleSaveChanges = async (data: UpdateDispatchOrderFormValues) => {
 		toastRef.current = toast.loading(t('ns_common:notification.processing_request'))
 		try {
+			if (Object.values(data.factory_entrance_time).every(isNil)) delete data.factory_entrance_time
 			await mutateAsync(data)
 			toast.success(t('ns_common:notification.success'), { id: toastRef.current })
 			setOpen(false)
@@ -85,7 +90,13 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 	}
 
 	return (
-		<Dialog defaultOpen={false} open={open} onOpenChange={setOpen}>
+		<Dialog
+			defaultOpen={false}
+			open={open}
+			onOpenChange={(open) => {
+				setOpen(open)
+				if (!open) form.reset()
+			}}>
 			<DialogContent className='max-h-[85vh] max-w-lg overflow-auto scrollbar-none'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.update_truckload_delivery')}</DialogTitle>
@@ -97,10 +108,8 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 							<FieldSet>
 								<FieldGroup
 									aria-orientation='horizontal'
-									className='aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-2 aria-[orientation=horizontal]:gap-y-3'>
-									<Label htmlFor='factory_entrance_time.date' className='col-span-full'>
-										{t('ns_erp:fields.factory_entrance_time')}
-									</Label>
+									className='gap-x-3 aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[2fr_1fr] aria-[orientation=horizontal]:gap-y-3'>
+									<Label className='col-span-full'>{t('ns_erp:fields.factory_entrance_time')}</Label>
 									<DatePickerFieldControl name='factory_entrance_time.date' />
 									<FormField
 										name='factory_entrance_time.time'
@@ -117,7 +126,7 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 															<Icon name='Clock' />
 														</Button>
 													</PopoverTrigger>
-													<PopoverContent className='flex w-[var(--radix-popover-trigger-width)] flex-row items-stretch'>
+													<PopoverContent className='flex w-[var(--radix-popover-trigger-width)] flex-row items-stretch p-1'>
 														{/* <Div className=></Div> */}
 														<ScrollArea className='relative grid h-56 flex-1 items-stretch px-3'>
 															<Div className='sticky top-0 z-10 mb-2 flex w-full items-center justify-center border-b bg-table-head py-2 text-sm font-medium uppercase text-table-head-foreground'>
@@ -190,6 +199,7 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 									label={t('ns_erp:fields.container_number')}
 									name='container_number'
 									placeholder='e.g., ABCU1234567'
+									pattern='[A-Z]{4}[0-9]{7}'
 									description={t('ns_inoutbound:description.container_number_field')}
 									onChange={(e) => {
 										form.setValue('container_number', e.currentTarget.value.toUpperCase() || null)

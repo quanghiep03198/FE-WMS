@@ -1,5 +1,17 @@
 import { isNil } from 'lodash-es'
-import { any, array, boolean, coerce, enum as enumeration, number, object, string, type infer as Infer } from 'zod'
+import {
+	any,
+	array,
+	boolean,
+	coerce,
+	date,
+	enum as enumeration,
+	number,
+	object,
+	string,
+	type infer as Infer
+} from 'zod'
+import { ZodIssueCode } from 'zod/v3'
 
 // BIC container code pattern: 3 letters (owner code), 1 letter (equipment category), 6 digits (serial), 1 digit (check)
 const BIC_CONTAINER_PATTERN = /^[A-Z]{4}\d{7}$/
@@ -70,9 +82,9 @@ export const updateDispatchOrderSchema = object({
 		.nullish()
 		.transform((value) => (isNil(value) ? null : value.toUpperCase())),
 	factory_entrance_time: object({
-		date: coerce.date({ error: 'ns_validation:invalid_value' }).nullish(),
+		date: date({ error: 'ns_validation:invalid_value' }).nullish(),
 		time: string({ error: 'ns_validation:invalid_value' }).nullish()
-	}),
+	}).optional(),
 	seal_number: string({ error: 'ns_validation:required' })
 		.trim()
 		.nullish()
@@ -81,6 +93,17 @@ export const updateDispatchOrderSchema = object({
 	smelling_container: boolean().optional(),
 	moist_container: boolean().optional(),
 	remark: string().trim().max(255, { error: 'ns_validation:too_long' }).nullish()
+}).superRefine((values, ctx) => {
+	if (
+		(values.factory_entrance_time.date && !values.factory_entrance_time.time) ||
+		(!values.factory_entrance_time.date && values.factory_entrance_time.time)
+	) {
+		ctx.addIssue({
+			code: ZodIssueCode.custom,
+			path: ['factory_entrance_time', 'date'],
+			message: 'ns_validation:required'
+		})
+	}
 })
 
 export const upsertPurchaseOrdersSchema = object({
