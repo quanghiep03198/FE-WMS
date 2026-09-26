@@ -41,7 +41,10 @@ export default {
 	},
 	form: {
 		add_warehouse_title: '创建新仓库',
-		update_warehouse_title: '更新仓库'
+		update_warehouse_title: '更新仓库',
+		add_storage_location_title: '添加新库位',
+		update_storage_location_title: '更新库位',
+		storage_location_note: '库位名称必须唯一, 不能与其他库位重复.'
 	},
 	headings: {
 		warehouse_list_title: '仓库列表',

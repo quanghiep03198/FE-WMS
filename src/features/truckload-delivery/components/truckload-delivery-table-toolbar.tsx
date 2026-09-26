@@ -1,12 +1,12 @@
 'use no memo'
 
 import { Button, Div, Icon } from '@components/ui'
-import { type ITruckloadDelivery } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useQueryClient } from '@tanstack/react-query'
 import { type Table } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryQueryKeys } from '../hooks/use-truckload-delivery-asm'
+import { type ITruckloadDelivery } from '../types'
 import DownloadExcelButton from './download-excel-button'
 import GlobalFilter from './global-filter'
 import { TableViewOptions } from './table-view-options'

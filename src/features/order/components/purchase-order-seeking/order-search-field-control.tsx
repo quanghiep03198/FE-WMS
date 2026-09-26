@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { GhostButton } from '../../../../components/shared/ghost-button'
 import { useSearchPurchaseOrderQuery } from '../../hooks/use-order-request'
-import { usePurchaseOrderDetailQuery } from '../../hooks/use-po-detail-request'
+import { useGetPurchaseOrderQuery } from '../../hooks/use-po-detail-request'
 import SearchHistory from './search-history'
 
 export function OrderSearchFieldControl() {
@@ -39,7 +39,7 @@ export function OrderSearchFieldControl() {
 	const currentOrderValue = useWatch({ control, name: 'po' })
 
 	const { data: availablePurchaseOrders, isLoading } = useSearchPurchaseOrderQuery(currentOrderValue, true)
-	const { refetch } = usePurchaseOrderDetailQuery()
+	const { refetch } = useGetPurchaseOrderQuery()
 
 	const availableOrders = useMemo(() => {
 		return Array.isArray(availablePurchaseOrders)

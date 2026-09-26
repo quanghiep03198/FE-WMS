@@ -85,7 +85,7 @@ export default {
 		status: 'Status',
 		total: 'Total',
 		updated_at: 'Updated at',
-		user_name_updated: 'Last updated by',
+		updated_by: 'Last updated by',
 		unit: 'Unit'
 	},
 	common_form_titles: {
@@ -257,7 +257,7 @@ export default {
 		purchase_order_search: 'Purchase order search',
 		seeking: 'Seeking',
 		settings: 'Settings',
-		storage_detail: 'Storage details',
+		storage_locations: 'Storage locations',
 		transfer_managment: 'Transfer management',
 		truckload_delivery_management: 'Truckload delivery management',
 		warehouse_management: 'Warehouse management',
@@ -330,6 +330,7 @@ export default {
 		column_settings: 'Column settings'
 	},
 	titles: {
+		attention: 'Attention',
 		advanced_search: 'Advanced Search',
 		caution: 'Caution',
 		general_settings: 'General settings',

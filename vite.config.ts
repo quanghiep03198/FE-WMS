@@ -78,7 +78,7 @@ export default defineConfig(({ mode }) => {
 						},
 						{
 							// Static resources in root (favicon, icons, images) - not hashed, use StaleWhileRevalidate
-							urlPattern: /\.(?:ico|png|jpg|jpeg|svg|webp|woff2?)$/i,
+							urlPattern: /\.(?:ico|png|jpg|jpeg|svg|webp|woff2|mp4?)$/i,
 							handler: 'StaleWhileRevalidate',
 							options: {
 								cacheName: 'static-resources-cache',

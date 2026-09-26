@@ -1,10 +1,10 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Div, Separator, Typography } from '@components/ui'
-import type { IPurchaseOrderDetail } from '@features/order/types'
+import type { IPurchaseOrder } from '@features/order/types'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-const ReportTableSummary: React.FC<{ data: IPurchaseOrderDetail[] }> = ({ data }) => {
+const ReportTableSummary: React.FC<{ data: IPurchaseOrder[] }> = ({ data }) => {
 	const { t } = useTranslation()
 
 	return (

@@ -23,7 +23,7 @@ export const useAuthStore = create(
 				setAccessToken: (accessToken: string) => {
 					set((prev) => ({ ...prev, accessToken }))
 				},
-				setUserProfile: (profile: IUser) => {
+				setUserProfile: (profile: Partial<IUser>) => {
 					const state = get()
 					set({
 						...state,

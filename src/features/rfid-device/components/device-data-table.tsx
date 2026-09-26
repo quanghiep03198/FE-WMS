@@ -1,4 +1,4 @@
-import { Languages, RecordStatus, UserRole } from '@common/constants/enums'
+import { RecordStatus, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import { Badge, Button, DataTable, Icon, Tooltip, Typography } from '@components/ui'
 import ConfirmDialog from '@components/ui/@override/confirm-dialog'
@@ -34,7 +34,7 @@ const DeviceDataTable: React.FC = () => {
 	const dateLocale = useDateLocale()
 
 	const columnHelper = createColumnHelper<IRFIDReaderDevice>()
-	const tableRef = useReactiveRef<Table<IRFIDReaderDevice>>(null)
+	const tableRef = useReactiveRef<Table<IRFIDReaderDevice>>(null!)
 	const deleteItemsRef = useRef<string[]>(null)
 
 	const { mutateAsync: updateAsync } = useUpdateRFIDDeviceMutation()
@@ -49,7 +49,7 @@ const DeviceDataTable: React.FC = () => {
 	}, [])
 
 	const handleDeleteDevices = useCallback(() => {
-		return toast.promise(deleteAsync(deleteItemsRef.current), {
+		return toast.promise(deleteAsync(deleteItemsRef.current!), {
 			loading: t('ns_common:notification.processing_request'),
 			success: () => {
 				deleteItemsRef.current = []
@@ -68,8 +68,8 @@ const DeviceDataTable: React.FC = () => {
 		return [
 			columnHelper.display({
 				id: ROW_SELECTION_COLUMN_ID,
-				header: (props) => <IndeterminateCheckbox {...props} disabled={shouldDisableDelete} />,
-				cell: (props) => <RowSelectionCheckbox {...props} disabled={shouldDisableDelete} />,
+				header: (props) => <IndeterminateCheckbox {...props} disabled={shouldDisableDelete!} />,
+				cell: (props) => <RowSelectionCheckbox {...props} disabled={shouldDisableDelete!} />,
 				size: 60,
 				maxSize: 60,
 				enableResizing: false
@@ -80,19 +80,15 @@ const DeviceDataTable: React.FC = () => {
 				enableColumnFilter: true,
 				maxSize: 150
 			}),
-			columnHelper.display({
+			columnHelper.accessor('device_name', {
 				id: 'device_name',
 				header: t('ns_rfid:fields.device_name'),
 				enableColumnFilter: true,
 				maxSize: 250,
-				cell: ({ row }) => {
-					const deviceNameLocalization = {
-						[Languages.VIETNAMESE]: row.original.device_name_vi,
-						[Languages.ENGLISH]: row.original.device_name_en,
-						[Languages.CHINESE]: row.original.device_name_cn
-					}
+				cell: ({ getValue }) => {
+					const value = getValue()
 					return (
-						deviceNameLocalization[i18n.language] ?? (
+						value[i18n.language] ?? (
 							<Typography variant='small' color='muted'>
 								{t('ns_common:titles.unknown')}
 							</Typography>
@@ -129,15 +125,15 @@ const DeviceDataTable: React.FC = () => {
 						</Badge>
 					)
 			}),
-			columnHelper.accessor('ip_address', {
-				id: 'ip_address',
+			columnHelper.accessor('tcp_ip', {
+				id: 'tcp_ip',
 				header: 'TCP/IP',
 				maxSize: 100,
 				enableResizing: true,
 				cell: (info) => info.getValue()
 			}),
-			columnHelper.accessor('ip_port', {
-				id: 'ip_port',
+			columnHelper.accessor('tcp_port', {
+				id: 'tcp_port',
 				header: 'TCP/IP Port',
 				maxSize: 100,
 				enableResizing: true,
@@ -159,14 +155,14 @@ const DeviceDataTable: React.FC = () => {
 					),
 				sortDescFirst: true
 			}),
-			columnHelper.accessor('is_active', {
-				id: 'is_active',
+			columnHelper.accessor('deleted', {
+				id: 'deleted',
 				header: t('ns_common:common_fields.status'),
 				enableResizing: true,
 				enableColumnFilter: true,
 				cell: (info) => (
 					<Badge variant='outline' className={cn('justify-center gap-x-2 rounded whitespace-nowrap')}>
-						{info.getValue() === RecordStatus.ACTIVE ? (
+						{!info.getValue() ? (
 							<Fragment>
 								<Icon name='CircleCheck' className='fill-success stroke-success-foreground size-4' />
 								{t('ns_common:status.active')}
@@ -205,7 +201,7 @@ const DeviceDataTable: React.FC = () => {
 		<Fragment>
 			<DataTable
 				ref={tableRef}
-				data={data}
+				data={data!}
 				columns={columns}
 				loading={isLoading}
 				enableColumnFilters={true}

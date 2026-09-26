@@ -9,7 +9,6 @@ import { useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useGetTenantByFactory } from '../../../../tenancy/hooks/use-tenacy-request'
 import { useGetProductionInventoryQuery } from '../../../hooks/use-production-inventory-request'
 import DownloadExcelButton from './download-excel-button'
 
@@ -18,14 +17,12 @@ type ComboboxProps = { data: Record<'label' | 'value', string>[]; isLoading: boo
 const SearchBox: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery('(max-width:800px)')
-	const { data: tenant } = useGetTenantByFactory()
 	const { refetch } = useGetProductionInventoryQuery()
-	const { searchParams, setParams } = useQueryParams<Record<'shoes_style' | 'color', string>>(null)
+	const { searchParams, setParams } = useQueryParams<Record<'shoes_style' | 'color', string>>()
 
 	const { data, isLoading } = useQuery({
-		queryKey: ['PRODUCTION_INVENTORY_FEATURE', tenant?.id],
-		queryFn: async () => await InventoryService.getProductionInventoryFeatures(tenant?.id),
-		enabled: !!tenant?.id,
+		queryKey: ['PRODUCTION_INVENTORY_FEATURE'],
+		queryFn: async () => await InventoryService.getProductionInventoryFeatures(),
 		refetchOnMount: 'always',
 		select: (response) => {
 			return response.metadata
@@ -38,7 +35,12 @@ const SearchBox: React.FC = () => {
 	const selectedBrandName = useWatch({ control: form.control, name: 'brand_name' })
 	const selectedShoesStyle = useWatch({ control: form.control, name: 'shoes_style' })
 
-	const getOptions = (items: any[] | undefined, key: string, labelKey: string = key, valueKey: string = key) => {
+	const getOptions = (
+		items: any[] | null | undefined,
+		key: string,
+		labelKey: string = key,
+		valueKey: string = key
+	) => {
 		if (!Array.isArray(items)) return []
 		const options = items
 			.filter((item) => item[key] !== 'ALL')

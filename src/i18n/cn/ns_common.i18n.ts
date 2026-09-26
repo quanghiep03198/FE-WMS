@@ -86,7 +86,7 @@ export default {
 		status: '狀態',
 		total: '全部的',
 		updated_at: '编辑日期',
-		user_name_updated: '更新人員',
+		updated_by: '更新人員',
 		unit: '单位'
 	},
 	common_form_titles: {
@@ -259,7 +259,7 @@ export default {
 		packing_manifest: '包装信息',
 		seeking: '查询',
 		settings: '建立',
-		storage_detail: '仓库存储详情',
+		storage_locations: '仓库存储详情',
 		transfer_managment: '調撥管理',
 		warehouse_management: '倉庫管理',
 		daily_outbound_report: '出庫管理',
@@ -338,6 +338,7 @@ export default {
 		column_settings: '列配置'
 	},
 	titles: {
+		attention: '注意',
 		advanced_search: '高级搜索',
 		caution: '警告',
 		general_settings: '常规设置',

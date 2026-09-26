@@ -2,6 +2,7 @@
 
 import { cn } from '@common/utils/cn'
 import { Button, Div, Icon, Separator, Tooltip } from '@components/ui'
+import { useEditorState } from '@tiptap/react'
 import { useTranslation } from 'react-i18next'
 import { useEditorContext } from '../../context/editor-context'
 import { AlignmentDropdownMenu } from './toolbar-alignment-dropdown'
@@ -14,15 +15,29 @@ import { StyleDropdownMenu } from './toolbar-style-dropdown'
 import TableDropdownMenu from './toolbar-table-dropdown'
 
 const Toolbar: React.FC = () => {
-	const { editor } = useEditorContext()
 	const { t } = useTranslation()
+	const { editor } = useEditorContext()
+	const editorState = useEditorState({
+		editor,
+		selector: ({ editor }) => ({
+			isBold: editor.isActive('bold'),
+			isItalic: editor.isActive('italic'),
+			isBlockquote: editor.isActive('blockquote'),
+			isUnderline: editor.isActive('underline'),
+			isStrike: editor.isActive('strike'),
+			isCodeBlock: editor.isActive('codeBlock'),
+			isBulletList: editor.isActive('bulletList'),
+			isOrderedList: editor.isActive('orderedList'),
+			isTaskList: editor.isActive('taskList')
+		})
+	})
 
 	return (
 		<Div as='nav'>
 			<Div className='flex h-full items-center gap-x-1 overflow-y-hidden p-1.5'>
 				<SearchAndReplaceToolbar />
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
+				<Separator orientation='vertical' className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' />
 
 				{/* Undo */}
 				<Tooltip message={t('ns_common:actions.undo')}>
@@ -47,7 +62,7 @@ const Toolbar: React.FC = () => {
 					</Button>
 				</Tooltip>
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
+				<Separator orientation='vertical' className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' />
 
 				{/* Change style */}
 				<StyleDropdownMenu />
@@ -57,7 +72,7 @@ const Toolbar: React.FC = () => {
 					<FontSizeInput />
 				</Tooltip>
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
+				<Separator orientation='vertical' className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' />
 
 				<AlignmentDropdownMenu />
 
@@ -67,7 +82,8 @@ const Toolbar: React.FC = () => {
 						variant='ghost'
 						type='button'
 						size='icon'
-						className={cn('aspect-square size-8', editor.isActive('bold') && 'bg-accent text-accent-foreground')}
+						aria-pressed={editorState.isBold}
+						className={cn('aria-pressed:bg-accent aria-pressed:text-accent-foreground aspect-square size-8')}
 						onClick={() => editor.chain().focus().toggleBold().run()}>
 						<Icon name='Bold' />
 					</Button>
@@ -80,7 +96,7 @@ const Toolbar: React.FC = () => {
 						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
-							'bg-accent text-accent-foreground': editor.isActive('italic')
+							'bg-accent text-accent-foreground': editorState.isItalic
 						})}
 						onClick={() => editor.chain().focus().toggleItalic().run()}>
 						<Icon name='Italic' />
@@ -94,7 +110,7 @@ const Toolbar: React.FC = () => {
 						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
-							'bg-accent text-accent-foreground': editor.isActive('blockquote')
+							'bg-accent text-accent-foreground': editorState.isBlockquote
 						})}
 						onClick={() => editor.chain().focus().toggleBlockquote().run()}>
 						<Icon name='Quote' size={14} />
@@ -108,21 +124,21 @@ const Toolbar: React.FC = () => {
 						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
-							'bg-accent text-accent-foreground': editor.isActive('underline')
+							'bg-accent text-accent-foreground': editorState.isUnderline
 						})}
 						onClick={() => editor.commands.toggleUnderline()}>
 						<Icon name='Underline' />
 					</Button>
 				</Tooltip>
 
-				{/* Toggle underline */}
+				{/* Toggle code block */}
 				<Tooltip message={t('ns_common:editor.code_block')}>
 					<Button
 						variant='ghost'
 						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
-							'bg-accent text-accent-foreground': editor.isActive('underline')
+							'bg-accent text-accent-foreground': editorState.isCodeBlock
 						})}
 						onClick={() => editor.commands.toggleCodeBlock()}>
 						<Icon name='Code' />
@@ -136,20 +152,20 @@ const Toolbar: React.FC = () => {
 						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
-							'bg-accent text-accent-foreground': editor.isActive('strike')
+							'bg-accent text-accent-foreground': editorState.isStrike
 						})}
 						onClick={() => editor.chain().focus().toggleStrike().run()}>
 						<Icon name='Strikethrough' className='h-4 w-4' />
 					</Button>
 				</Tooltip>
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
+				<Separator orientation='vertical' className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' />
 
 				{/* Text color and highlight */}
 				<ToolbarColorPicker label={t('ns_common:editor.text_color')} icon='Baseline' type='textStyle' />
 				<ToolbarColorPicker label={t('ns_common:editor.highlight')} icon='Highlighter' type='highlight' />
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
+				<Separator orientation='vertical' className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' />
 
 				{/* Toggle ordered list */}
 				<Tooltip message={t('ns_common:editor.ordered_list')}>
@@ -158,7 +174,7 @@ const Toolbar: React.FC = () => {
 						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
-							'bg-accent text-accent-foreground': editor.isActive('orderedList')
+							'bg-accent text-accent-foreground': editorState.isOrderedList
 						})}
 						onClick={() => editor.chain().focus().toggleOrderedList().run()}>
 						<Icon name='ListOrdered' size={20} />
@@ -172,7 +188,7 @@ const Toolbar: React.FC = () => {
 						size='icon'
 						type='button'
 						className={cn('aspect-square size-8', {
-							'bg-accent text-accent-foreground': editor.isActive('bulletList')
+							'bg-accent text-accent-foreground': editorState.isBulletList
 						})}
 						onClick={() => editor.chain().focus().toggleBulletList().run()}>
 						<Icon name='List' size={18} />
@@ -185,7 +201,7 @@ const Toolbar: React.FC = () => {
 						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
-							'bg-accent text-accent-foreground': editor.isActive('taskList')
+							'bg-accent text-accent-foreground': editorState.isTaskList
 						})}
 						onClick={() => editor.chain().focus().toggleTaskList().run()}>
 						<Icon name='ListTodo' size={18} />

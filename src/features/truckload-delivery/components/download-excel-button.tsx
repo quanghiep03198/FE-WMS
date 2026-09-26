@@ -14,9 +14,9 @@ const DownloadExcelButton: React.FC = () => {
 
 	const handleDownloadExcel = async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
-		const factory = t(TRANSLATED_FACTORY[user?.current_factory_code], {
+		const factory = t(TRANSLATED_FACTORY[env<FactoryCode>('VITE_APP_TENANT')], {
 			ns: 'ns_common',
-			defaultValue: user?.current_factory_code
+			defaultValue: env<FactoryCode>('VITE_APP_TENANT')
 		}) as string
 
 		try {

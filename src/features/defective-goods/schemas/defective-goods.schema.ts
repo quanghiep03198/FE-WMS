@@ -38,9 +38,9 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 	.optional()
 	.superRefine((values, context) => {
 		if (
-			(values.defective_category === DefectiveCategory.B_GRADE ||
-				values.defective_category === DefectiveCategory.C_GRADE) &&
-			!values.mo_no
+			(values?.defective_category === DefectiveCategory.B_GRADE ||
+				values?.defective_category === DefectiveCategory.C_GRADE) &&
+			!values?.mo_no
 		)
 			context.addIssue({
 				path: ['mo_no'],
@@ -50,7 +50,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 			})
 	})
 	.superRefine((values, context) => {
-		switch (values.ri_type) {
+		switch (values?.ri_type) {
 			case 'uhf': {
 				if (!Array.isArray(values.epc) || values.epc.length === 0)
 					context.addIssue({
@@ -100,9 +100,12 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 		}
 	})
 	.superRefine((values, context) => {
-		if (Array.isArray(values.sizes) && values.ri_type === 'manually')
+		if (Array.isArray(values?.sizes) && values.ri_type === 'manually')
 			values.sizes.forEach((item, index) => {
-				if (values.sizes.findIndex((otherItem) => otherItem.size_code === item.size_code) !== index)
+				if (
+					Array.isArray(values?.sizes) &&
+					values.sizes.findIndex((otherItem) => otherItem.size_code === item.size_code) !== index
+				)
 					context.addIssue({
 						path: [`sizes.${index}.size_code`],
 						code: 'custom',

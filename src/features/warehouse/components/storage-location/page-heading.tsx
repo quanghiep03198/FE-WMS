@@ -1,10 +1,11 @@
-import { CommonActions, UserRole } from '@common/constants/enums'
+import { UserRole } from '@common/constants/enums'
+import { cn } from '@common/utils/cn'
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
 import { PageAction, PageDescription, PageHeader, PageTitle } from '@components/shared/page'
-import { Button, Icon } from '@components/ui'
+import { Button, buttonVariants, Icon } from '@components/ui'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { usePageContext } from '../../contexts/page-context'
+import { usePageContext } from '../../contexts/old-page-context'
 
 const PageHeading: React.FC = () => {
 	const { dispatch } = usePageContext()
@@ -28,15 +29,11 @@ const PageHeading: React.FC = () => {
 							{t('ns_common:actions.add')}
 						</Button>
 					}>
-					<Button
-						onClick={() =>
-							dispatch({
-								type: CommonActions.CREATE,
-								payload: { dialogTitle: t('ns_warehouse:form.add_warehouse_title') }
-							})
-						}>
+					<label
+						htmlFor='add-storage-location-dialog-trigger'
+						className={cn(buttonVariants({ variant: 'default' }))}>
 						<Icon name='CirclePlus' /> {t('ns_common:actions.add')}
-					</Button>
+					</label>
 				</RoleBaseAccessControl>
 			</PageAction>
 		</PageHeader>

@@ -517,7 +517,7 @@
 
 	html:active-view-transition-type(fade) {
 		&::view-transition-new(main-content) {
-			@apply blur-in-sm fade-in-50 animate-in duration-200 ease-out;
+			@apply blur-in-xs fade-in-50 animate-in duration-500 ease-in-out;
 		}
 	}
 }

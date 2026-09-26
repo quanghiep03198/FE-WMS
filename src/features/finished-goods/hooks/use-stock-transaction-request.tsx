@@ -12,6 +12,7 @@ export const useGetCurrentStockTransactionQuery = (stockFlow: StockFlow) => {
 	return useQuery({
 		queryKey: [StockTransactionQueryKey.STOCK_TRANSACTION, stockFlow],
 		queryFn: async () => await FinishedGoodsStockService.getCurrentStockTransaction(stockFlow),
+		staleTime: 10 * 1000,
 		select: (response) => response.metadata
 	})
 }

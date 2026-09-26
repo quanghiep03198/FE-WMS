@@ -1,26 +1,18 @@
-import { boolean, enum as enums, number, object, string, type infer as Infer } from 'zod'
-import { WarehouseTypes } from '../constants/warehouse.enum'
+import { int, number, object, string, type infer as Infer } from 'zod'
 
-export const warehouseFormSchema = object({
-	warehouse_name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
-	employee_code: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
-	type_warehouse: string({ message: 'ns_validation:required' })
-		.nonempty({ message: 'ns_validation:required' })
-		.and(
-			enums(WarehouseTypes, {
-				message: 'ns_validation:invalid_value'
-			})
-		),
-	company_code: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
-	dept_code: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
-	user_code_created: string().nullable().optional(),
-	user_name_created: string().nullable().optional(),
-	user_code_updated: string().nullable().optional(),
-	user_name_updated: string().nullable().optional(),
-	area: number({ message: 'ns_validation:required' }).nonnegative({ message: 'ns_validation:nonnegative' }),
-	is_disable: boolean().default(false),
-	is_default: boolean().default(false),
-	remark: string().nullable().optional()
+export const createWarehouseFormSchema = object({
+	name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+	capacity: int({ message: 'ns_validation:nonnegative' }).gt(0)
 })
-export type WarehouseFormValue = Infer<typeof warehouseFormSchema>
-export type PartialWarehouseFormValue = Partial<WarehouseFormValue>
+
+export const updateWarehouseFormSchema = object({
+	_id: string().trim().nonempty(),
+	name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+	capacity: number({ message: 'ns_validation:required' }).int({ message: 'ns_validation:nonnegative' }).gt(0)
+})
+
+export type CreateWarehouseFormValue = Infer<typeof createWarehouseFormSchema>
+export type UpdateWarehouseFormValue = Infer<typeof updateWarehouseFormSchema>
+
+export type CreateWarehouseFormSchema = typeof createWarehouseFormSchema
+export type UpdateWarehouseFormSchema = typeof updateWarehouseFormSchema

@@ -25,7 +25,8 @@ export default {
 		navigation_blocked_message: 'Dừng đọc EPC ngay bây giờ ?',
 		stock_out_submission_caution:
 			'Vui lòng kiểm tra kỹ thông tin trước khi xác nhận xuất kho. Sau khi xác nhận, bạn không thể thay đổi thông tin này.',
-		too_many_mono: 'Có nhiều hơn 3 chỉ lệnh được quét. Hãy kiểm tra lại.'
+		too_many_mono: 'Có nhiều hơn 3 chỉ lệnh được quét. Hãy kiểm tra lại.',
+		posible_incorrect_po: 'Có thể PO không chính xác. Bạn có muốn tiếp tục thực hiện lưu không ?'
 	},
 	counter_box: {
 		caption: 'Dữ liệu EPC được truyền liên tục từ máy chủ khi kết nối được thiết lập.',

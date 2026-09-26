@@ -32,7 +32,7 @@ const AlertTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({ classN
 AlertTitle.displayName = 'AlertTitle'
 
 const AlertDescription: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({ className, ...props }) => (
-	<div className={cn('text-sm [&_p]:leading-relaxed', className)} {...props} />
+	<div className={cn('text-muted-foreground text-sm [&_p]:leading-relaxed', className)} {...props} />
 )
 AlertDescription.displayName = 'AlertDescription'
 

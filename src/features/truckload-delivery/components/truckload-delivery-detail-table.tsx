@@ -17,10 +17,6 @@ import {
 } from '@components/ui'
 import { Typewriter } from '@components/ui/@custom/type-writter'
 import { useTableContext } from '@components/ui/@react-table/context/table.context'
-import type {
-	ITruckloadDelivery,
-	ITruckloadDeliveryDetail
-} from '@features/truckload-delivery/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'
@@ -44,6 +40,7 @@ import {
 	useUpsertPurchaseOrdersMutation
 } from '../hooks/use-truckload-delivery-asm'
 import { type UpsertPurchaseOrdersFormValues, upsertPurchaseOrdersSchema } from '../schemas'
+import type { ITruckloadDelivery, ITruckloadDeliveryDetail } from '../types'
 import TruckloadDeliveryDetailRow from './truckload-delivery-detail-row'
 
 type TruckloadDeliveryDetailTableProps = {

@@ -1,13 +1,13 @@
 import { CommonActions } from '@common/constants/enums'
 import type { AutoCompleteFieldControlProps } from '@components/forms/auto-complete'
 import { AutoCompleteFieldControl } from '@components/ui'
-import type { ITruckloadDeliveryDetail } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useDebounce, useUpdateEffect } from 'ahooks'
 import React, { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useSearchDispatchPurchaseOrder } from '../hooks/use-truckload-delivery-asm'
 import type { CreateDeliveryFormValues, UpsertPurchaseOrdersFormValues } from '../schemas'
+import type { ITruckloadDeliveryDetail } from '../types'
 
 type PurchaseOrderFieldControlProps = Partial<
 	Omit<

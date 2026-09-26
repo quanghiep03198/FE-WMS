@@ -1,4 +1,4 @@
-import type { ColumnDef } from '@tanstack/react-table'
+import type { IdentifiedColumnDef } from '@tanstack/react-table'
 import {
 	type ColumnFiltersState,
 	type ExpandedState,
@@ -107,11 +107,11 @@ export type DataTableProps = PartialTableOptions &
 		/**
 		 * Array of data objects to be displayed in the table.
 		 */
-		data: Array<any>
+		data: Array<any> | undefined
 		/**
 		 * Array of column definitions for the table. Each column can have various properties such as header, accessor, etc.
 		 */
-		columns: ColumnDef<any, any>[]
+		columns: Array<IdentifiedColumnDef<Table<any, any>> | AccessorKeyColumnDef<Table<any, any>>>
 		/**
 		 * Reference to the table instance. Useful for accessing table methods and properties.
 		 */

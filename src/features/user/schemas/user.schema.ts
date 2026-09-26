@@ -1,4 +1,4 @@
-import { FactoryCode, UserRole } from '@common/constants/enums'
+import { UserRole } from '@common/constants/enums'
 import type { infer as Infer } from 'zod'
 import { array, email, enum as enums, object, string } from 'zod'
 
@@ -10,10 +10,10 @@ export const createUserSchema = object({
 	display_name: string().nonempty({ error: 'ns_validation:required' }),
 	email: email().nullish(),
 	employee_code: string().nullish(),
-	roles: array(enums(UserRole), { error: 'ns_validation:required' }).nonempty({ error: 'ns_validation:required' }),
-	authorized_factory_codes: array(enums(FactoryCode), { error: 'ns_validation:required' }).nonempty({
-		error: 'ns_validation:required'
-	})
+	roles: array(enums(UserRole), { error: 'ns_validation:required' }).nonempty({ error: 'ns_validation:required' })
+	// authorized_factory_codes: array(enums(FactoryCode), { error: 'ns_validation:required' }).nonempty({
+	// 	error: 'ns_validation:required'
+	// })
 })
 
 export const updateUserSchema = createUserSchema.partial().required({ username: true }).omit({ password: true })

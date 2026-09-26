@@ -8,7 +8,7 @@ import type { RenderSubComponent } from '@components/ui/@react-table/types'
 import type { IInboundReport } from '@features/report/types'
 import useMediaQuery from '@hooks/use-media-query'
 import useQueryParams from '@hooks/use-query-params'
-import type { Table as TTable } from '@tanstack/react-table'
+import type { Table, Table as TTable } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { isNil } from 'lodash-es'
@@ -16,7 +16,6 @@ import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import AutoRefreshToggle from '../../../../components/shared/auto-refresh-toggle'
 import SizeTable from '../../../../components/shared/size-table'
-import { useGetTenantByFactory } from '../../../tenancy/hooks/use-tenacy-request'
 import { useGetInboundReport } from '../../hooks/finished-goods-inbound/use-inbound-report-request'
 import DownloadExcelDropdown from './download-excel-dropdown'
 import ReportTableSummary from './report-table-summary'
@@ -31,9 +30,8 @@ const InboundReportMasterTable: React.FC = () => {
 		'date:eq': format(new Date(), 'yyyy-MM-dd'),
 		'auto-refresh': false
 	})
-	const { data: currentTenant } = useGetTenantByFactory()
 	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
-	const { data, isLoading, refetch } = useGetInboundReport(currentTenant?.id, searchParams)
+	const { data, isLoading, refetch } = useGetInboundReport(searchParams)
 	const { t, i18n } = useTranslation()
 	const dataTableRef = useRef<TTable<IInboundReport>>(null)
 	const columnHelper = createColumnHelper<IInboundReport>()
@@ -203,11 +201,11 @@ const InboundReportMasterTable: React.FC = () => {
 	return (
 		<DataTable
 			columns={columns}
-			data={data}
+			data={data ?? []}
 			loading={isLoading}
 			enableExpanding={true}
 			enableColumnResizing={true}
-			ref={dataTableRef}
+			ref={dataTableRef as React.RefObject<Table<IInboundReport>>}
 			containerProps={{
 				style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' }
 			}}
@@ -231,7 +229,7 @@ const InboundReportMasterTable: React.FC = () => {
 				)
 			}}
 			footerProps={{
-				slot: () => <ReportTableSummary data={data} />
+				slot: () => <ReportTableSummary data={data ?? []} />
 			}}
 		/>
 	)

@@ -1,14 +1,15 @@
 import { CommonActions, UserRole } from '@common/constants/enums'
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
 import { Button, Icon } from '@components/ui'
+import { useWarehousePageContext } from '@features/warehouse/contexts/warehouse-page-context'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PageAction, PageDescription, PageHeader, PageTitle } from '../../../../components/shared/page'
-import { usePageContext } from '../../contexts/page-context'
 
 const PageHeading: React.FC = () => {
-	const { dispatch } = usePageContext()
 	const { t } = useTranslation()
+
+	const { event$ } = useWarehousePageContext()
 
 	return (
 		<PageHeader>
@@ -28,13 +29,7 @@ const PageHeading: React.FC = () => {
 							{t('ns_common:actions.add')}
 						</Button>
 					}>
-					<Button
-						onClick={() =>
-							dispatch({
-								type: CommonActions.CREATE,
-								payload: { dialogTitle: t('ns_warehouse:form.add_warehouse_title') }
-							})
-						}>
+					<Button onClick={() => event$.emit({ action: CommonActions.CREATE, payload: null })}>
 						<Icon name='CirclePlus' /> {t('ns_common:actions.add')}
 					</Button>
 				</RoleBaseAccessControl>

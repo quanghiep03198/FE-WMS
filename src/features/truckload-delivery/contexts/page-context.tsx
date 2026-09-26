@@ -1,13 +1,10 @@
 import type { CommonActions } from '@common/constants/enums'
-import type {
-	ITruckloadDelivery,
-	TruckloadDeliveryDispatchOrder
-} from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useEventEmitter, useSessionStorageState } from 'ahooks'
 import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use, useMemo } from 'react'
 import type { TruckloadDeliveryFilterFormValues } from '../schemas'
 import { truckloadDeliveryFilterSchema } from '../schemas'
+import type { ITruckloadDelivery, TruckloadDeliveryDispatchOrder } from '../types'
 // type-only import — safe for circular module resolution (erased at runtime)
 import type { PageQueryParams } from '../hooks/use-page-query-params'
 
@@ -49,7 +46,7 @@ type EventPayload =
 			}
 	  }
 
-type SetStorageState<T> = (value?: T | ((prevState: T) => T)) => void
+type SetStorageState<T> = ReturnType<typeof useSessionStorageState<T>>[1]
 
 type PageContextValue = {
 	event$: EventEmitter<EventPayload>
@@ -59,7 +56,7 @@ type PageContextValue = {
 	setStoredFilterParams: SetStorageState<TruckloadDeliveryFilterFormValues>
 }
 
-const PageContext = createContext<PageContextValue>(null)
+const PageContext = createContext<PageContextValue>({} as PageContextValue)
 
 export const PageContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const event$ = useEventEmitter<EventPayload>()
@@ -76,7 +73,7 @@ export const PageContextProvider: React.FC<React.PropsWithChildren> = ({ childre
 	})
 
 	const value = useMemo(
-		() => ({ event$, searchParams, setParams, storedFilterParams, setStoredFilterParams }),
+		() => ({ event$, searchParams, setParams, storedFilterParams, setStoredFilterParams }) satisfies PageContextValue,
 		[event$, searchParams, setParams, storedFilterParams, setStoredFilterParams]
 	)
 

@@ -2,8 +2,10 @@
 
 import { cn } from '@common/utils/cn'
 import { EditorContent, useEditor } from '@tiptap/react'
+import { useDeepCompareEffect } from 'ahooks'
 import { uniqueId } from 'lodash-es'
-import React, { memo, useState } from 'react'
+import React, { memo, useImperativeHandle, useState } from 'react'
+import isEqual from 'react-fast-compare'
 import type { RefCallBack } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger, Div, ScrollArea } from '..'
@@ -60,15 +62,24 @@ export const Editor: React.FC<EditorProps> = memo(
 				},
 				enableCoreExtensions: true,
 				editable: !disabled,
-				shouldRerenderOnTransaction: true,
-				immediatelyRender: true,
-				onUpdate: ({ editor }) => {
-					if (typeof handleUpdate === 'function') {
-						handleUpdate({ value: editor.getHTML(), isEmpty: editor.isEmpty })
-					}
-				}
+				immediatelyRender: true
 			},
 			[defaultValue, disabled, i18n.language]
+		)
+
+		useDeepCompareEffect(() => {
+			if (!editor || !defaultValue) return
+			if (isEqual(editor.getHTML(), defaultValue)) return // guard tránh loop
+			editor.commands.setContent(defaultValue)
+		}, [defaultValue]) // editor không cần trong dep vì stable ref
+
+		useImperativeHandle(
+			ref,
+			() => ({
+				getHTML: () => editor?.getHTML() ?? '',
+				isEmpty: () => editor?.isEmpty ?? true
+			}),
+			[editor]
 		)
 
 		const handleContextMenuOpen: React.MouseEventHandler<HTMLSpanElement> = (e) => {

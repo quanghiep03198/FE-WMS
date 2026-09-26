@@ -10,7 +10,7 @@ type EventPayload =
 
 const PageContext = createContext<{
 	event$: EventEmitter<EventPayload>
-}>(null)
+}>(null!)
 
 export const PageContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const event$ = useEventEmitter<EventPayload>()

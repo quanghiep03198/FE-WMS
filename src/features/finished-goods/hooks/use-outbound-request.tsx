@@ -3,11 +3,11 @@ import { DeletedFinishedGoodsQueryKey } from '@features/finished-goods/hooks/use
 import type { DeleteScannedEpcsFormValues } from '@features/finished-goods/schemas/delete-epc.schema'
 import { FinishedGoodsSharedService } from '@features/finished-goods/services/finished-goods-shared.service'
 import { type Register, useMutation, useQuery } from '@tanstack/react-query'
-import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageContext } from '../contexts/finished-goods-outbound/page-context'
 import { FinishedGoodsStockService } from '../services/finished-goods-stock.service'
+import { StockTransactionQueryKey } from './use-stock-transaction-request'
 
 export enum FinishedGoodsOutboundQueryKeys {
 	SCANNING_OUTBOUND_EPCS = 'OUTBOUND_EPC'
@@ -20,7 +20,7 @@ export const useGetScanningOutboundEpcQuery = () => {
 	return useQuery({
 		queryKey: [FinishedGoodsOutboundQueryKeys.SCANNING_OUTBOUND_EPCS, currentPage],
 		queryFn: async () =>
-			FinishedGoodsSharedService.getPaginatedScanningEpcs(StockFlow.OUTBOUND, { _page: currentPage }),
+			FinishedGoodsSharedService.getPaginatedScanningEpcs(StockFlow.OUTBOUND, { _page: currentPage! }),
 		enabled: false,
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
@@ -60,29 +60,21 @@ export const useDeleteScanningMoMutation = () => {
 	})
 }
 
-export const useStockOutMutation = (callback: () => unknown) => {
-	const toastId = useRef<string | number>(null)
+export const useStockOutMutation = () => {
 	const { t } = useTranslation()
 
 	const mutationMeta = useMutationMeta()
 
+	mutationMeta.invalidates.push([StockTransactionQueryKey.STOCK_TRANSACTION, StockFlow.OUTBOUND])
+
 	return useMutation({
 		meta: mutationMeta,
 		mutationFn: async (payload: any) => await FinishedGoodsStockService.stockOut(payload),
-		onMutate: () => {
-			toastId.current = toast.loading(t('ns_common:notification.processing_request'))
-		},
-		onSuccess: () => {
-			toast.success(t('ns_common:notification.success'), { id: toastId.current })
-			if (typeof callback === 'function') callback()
-		},
-		onError: () => {
-			toast.error(t('ns_common:notification.error'), { id: toastId.current })
-		}
+		onSuccess: () => toast.success(t('ns_common:notification.success'))
 	})
 }
 
-const useMutationMeta = (): Register['mutationMeta'] => {
+const useMutationMeta = (): Required<Register['mutationMeta']> => {
 	const { currentPage } = usePageContext('currentPage')
 
 	return {

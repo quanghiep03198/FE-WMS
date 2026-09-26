@@ -1,6 +1,5 @@
-import { RequestHeaders } from '@common/constants/enums'
 import axiosInstance from '@configs/axios.config'
-import type { IManufacturingOrder, IPurchaseOrderDetail } from '../types'
+import type { IManufacturingOrder, IPurchaseOrder } from '../types'
 
 export interface IPurchaseOrderResult {
 	po: string
@@ -13,26 +12,13 @@ export interface IPurchaseOrderResult {
 }
 
 export class OrderService {
-	static async searchCommandNumber(tenantId: string, params: { q: string }) {
-		return await axiosInstance.get<unknown, ResponseBody<Record<'mo_no', string>[]>>('/order/command-number/search', {
-			headers: {
-				[RequestHeaders.TENANT_ID]: tenantId
-			},
-			params
-		})
-	}
-
-	static async getPurchaseOrderInfo(purchaseOrder: string) {
-		return await axiosInstance.get<
-			void,
-			ResponseBody<{
-				po: string
-				brand_name: string
-				cust_shoes_style?: string
-				factory_shoes_style: string
-				color_sn: string
-			}>
-		>(`/order/purchase-order/${purchaseOrder}`)
+	static async searchManufacturingOrder(params: { q: string }) {
+		return await axiosInstance.get<unknown, ResponseBody<Record<'mo_no', string>[]>>(
+			'/order/manufacturing-order/search',
+			{
+				params
+			}
+		)
 	}
 
 	static async searchPurchaseOrder(params: { q: string; filter_all_brands: boolean }) {
@@ -44,16 +30,14 @@ export class OrderService {
 		)
 	}
 
-	static async getManufacturingOrderDetail(manufacturingOrder: string) {
+	static async getOneManufacturingOrder(manufacturingOrder: string) {
 		return await axiosInstance.get<
 			unknown,
 			ResponseBody<IManufacturingOrder & { sizes: Array<{ size_numcode: string; size_qty: number }> }>
 		>(`/order/manufacturing-order/${manufacturingOrder}`)
 	}
 
-	static async getPurchaseOrderSizeRun(purchaseOrder: string) {
-		return await axiosInstance.get<unknown, ResponseBody<IPurchaseOrderDetail[]>>(
-			`/order/purchase-order/size-run/${purchaseOrder}`
-		)
+	static async getOnePurchaseOrder(purchaseOrder: string) {
+		return await axiosInstance.get<unknown, ResponseBody<IPurchaseOrder>>(`/order/purchase-order/${purchaseOrder}`)
 	}
 }

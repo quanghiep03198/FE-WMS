@@ -8,6 +8,7 @@ export declare global {
 		readonly VITE_APP_DOMAIN: string
 		readonly VITE_APP_IP: string
 		readonly VITE_APP_VERSION: string
+		readonly VITE_APP_TENANT: 'VA1' | 'VB1' | 'VB2' | 'CA1'
 
 		readonly VITE_LIANYING_APP_DOMAIN: string
 		readonly VITE_LIANSHUN_APP_DOMAIN: string
@@ -48,7 +49,7 @@ export declare global {
 	type ResponseBody<T> = {
 		message: string
 		statusCode: HttpStatusCode
-		metadata: T | null
+		metadata: T
 		path: string
 		stack?: string
 		timestamp: Date
@@ -72,6 +73,9 @@ export declare global {
 		nextPage: number | null
 		prevPage: number | null
 	}
+
+	export type FactoryCode = 'VA1' | 'VB1' | 'VB2' | 'CA1'
+
 	type Locale = 'vi' | 'en' | 'cn'
 
 	type Bit = 0 | 1

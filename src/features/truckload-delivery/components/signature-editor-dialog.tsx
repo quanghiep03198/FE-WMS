@@ -22,7 +22,6 @@ import {
 	Typography
 } from '@components/ui'
 import { SignatureCanvas, type SignatureCanvasInstance } from '@components/ui/@custom/signature'
-import type { ITruckloadDelivery } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { useReactiveRef } from '@hooks/use-reactive-ref'
 import { useWorkerFn } from '@hooks/use-worker-fn'
@@ -34,6 +33,7 @@ import { TruckloadDeliveryStatus } from '../constants'
 import type { SignatureType } from '../contexts/page-context'
 import { usePageContext } from '../contexts/page-context'
 import { useUpdateDispatchOrderSignatureMutation } from '../hooks/use-truckload-delivery-asm'
+import type { ITruckloadDelivery } from '../types'
 
 const SignatureEditorDialog: React.FC = () => {
 	const [open, setOpen] = useState<boolean>(false)

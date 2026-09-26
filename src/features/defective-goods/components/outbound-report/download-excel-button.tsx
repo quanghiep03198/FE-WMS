@@ -1,8 +1,8 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import type { FactoryCode } from '@common/constants/enums'
+import env from '@common/utils/env'
 import { Button, Icon } from '@components/ui'
 import { useReportPageQueryParams } from '@features/report/hooks/use-report-page-query-params'
-import { useGetTenantByFactory } from '@features/tenancy/hooks/use-tenacy-request'
-import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'
 import { useMemoizedFn } from 'ahooks'
 import { saveAs } from 'file-saver'
@@ -15,19 +15,14 @@ const TOAST_ID = 'download_defective_goods_outbound_report'
 
 export const useDownloadReport = () => {
 	const { searchParams } = useReportPageQueryParams()
-	const { data: currentTenant } = useGetTenantByFactory()
 	const { t } = useTranslation()
-	const { user } = useAuth()
 
 	return useMemoizedFn(async () => {
 		toast.loading(t('ns_common:notification.downloading'), { id: TOAST_ID })
-		const translatedFactory = t(TRANSLATED_FACTORY[user?.current_factory_code], { ns: 'ns_common' })
+		const translatedFactory = t(TRANSLATED_FACTORY[env<FactoryCode>('VITE_APP_TENANT')], { ns: 'ns_common' })
 
 		try {
-			const blob = await DefectiveGoodsService.downloadOutboundReport(
-				currentTenant?.id,
-				pick(searchParams, ['date:eq'])
-			)
+			const blob = await DefectiveGoodsService.downloadOutboundReport(pick(searchParams, ['date:eq']))
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_daily_defective_goods_outbound_report', {

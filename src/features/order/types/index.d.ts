@@ -1,16 +1,15 @@
 import type { IBaseEntity } from '@common/types/entities'
 
-export interface IPurchaseOrderDetail {
+export interface IPurchaseOrder extends IBaseEntity {
 	po: string
-	mo_no: string
 	brand_name: string
-	shoes_style: string
+	factory_shoes_style: string
+	cust_shoes_style: string
 	color_sn: string
-	ship_id: string
-	ship_dest_country: string
-	ship_type: string
-	size_numcode: string
-	qty: number
+	shipping_method: string
+	shipping_destination: string
+	packing: Record<string, Record<string, number>>
+	shipping_progress: Record<string, { order_qty: number; shipped_out_qty: number }>
 }
 export interface IManufacturingOrder extends IBaseEntity {
 	mo_no: string

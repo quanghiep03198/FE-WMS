@@ -47,16 +47,22 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 
 	const filteredData = useMemo(() => {
 		return Array.isArray(data)
-			? data.filter((item) => item.mo_no.toLocaleLowerCase().includes(search.toLowerCase()))
+			? data.filter((item) =>
+					Object.hasOwn(item, 'mo_no')
+						? item.mo_no.toLocaleLowerCase().includes(search.toLowerCase())
+						: Object.hasOwn(item, 'po')
+							? item?.po?.toLocaleLowerCase()?.includes(search.toLowerCase())
+							: false
+				)
 			: []
 	}, [data, search])
 
-	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
+	const [scrollElement, setScrollElement] = useState<HTMLDivElement>()
 	const refCallback = useCallback((node: HTMLDivElement) => {
 		if (node) setScrollElement(node)
 	}, [])
 	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
-	const scrollToFn = useScrollToFn({ current: scrollElement })
+	const scrollToFn = useScrollToFn({ current: scrollElement! })
 	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
 
 	const virtualizer = useVirtualizer({
@@ -74,7 +80,7 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 	const orderField = ORDER_FIELD_MAP.get(stockFlow)
 
 	const autoCompleteDatalist = useMemo(() => {
-		return Array.isArray(data) ? uniqBy(data, orderField).map((item) => pick(item, orderField)) : []
+		return Array.isArray(data) ? uniqBy(data, orderField!).map((item) => pick(item, orderField!)) : []
 	}, [data, stockFlow])
 
 	return (
@@ -85,8 +91,8 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 					datalist={autoCompleteDatalist}
 					className='border-none! pl-10'
 					shouldFilter={true}
-					labelField={orderField}
-					valueField={orderField}
+					labelField={orderField!}
+					valueField={orderField!}
 					value={search}
 					onInput={(value) => setSearch(value)}
 					placeholder={t('ns_common:actions.search') + '...'}
@@ -108,7 +114,7 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 					}>
 					<TableHeader className='[&_th]:bg-table-head [&_th]:text-table-head-foreground sticky top-0 z-10 border-b [&_th]:h-(--header-height)'>
 						<TableRow>
-							<TableHead align='left' style={{ width: '20%' }}>
+							<TableHead align='left' style={{ width: '25%' }}>
 								ID
 							</TableHead>
 							<TableHead align='left' style={{ width: '20%' }} title={t(`ns_erp:fields.${orderField}`)}>
@@ -120,8 +126,8 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 							<TableHead align='left' style={{ width: '20%' }}>
 								{t('ns_common:common_fields.created_at')}
 							</TableHead>
-							<TableHead align='left' style={{ width: '10%' }}>
-								{t('ns_common:common_fields.actions')}
+							<TableHead align='left' style={{ width: '15%' }}>
+								<span className='line-clamp-1'>{t('ns_common:common_fields.actions')}</span>
 							</TableHead>
 							<TableHead align='right' style={{ width: '10%' }}>
 								<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
@@ -163,7 +169,7 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 							<Fragment>
 								{before > 0 && <VirtualPlaceholderRow colSpan={4} style={{ height: before }} />}
 								{virtualItems.map((virtualItem) => {
-									const item = data[virtualItem.index]
+									const item = data![virtualItem.index]
 									return virtualizer.isScrolling ? (
 										<MemoizedStockTransactionRow
 											key={item.id}

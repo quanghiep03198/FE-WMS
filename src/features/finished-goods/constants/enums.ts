@@ -13,12 +13,12 @@ export enum ScanCapability {
 	UNSCANNABLE = 'unscannable'
 }
 
-export enum FinishedGoodsAction {
+export enum FinishedGoodsStockAction {
 	IMPORT = 'A',
 	EXPORT = 'B'
 }
 
-export enum FinishedGoodsOutboundReason {
+export enum StockTransactionPurpose {
 	NORMAL_IMPORT = 'A',
 	RECYCLE_EXPORT = 'C'
 }

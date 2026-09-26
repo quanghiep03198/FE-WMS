@@ -1,7 +1,7 @@
 import { UserRole } from '@common/constants/enums'
 import RoleBaseAccessControl from '@components/guards/role-base-access-control'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@components/ui'
-import { EmployeeService } from '@features/employee/services/employee.service'
+import { getOneWarehouseQueryOptions } from '@features/warehouse/hooks/use-warehouse-request'
 import type { IWarehouse } from '@features/warehouse/types'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { useQueryClient } from '@tanstack/react-query'
@@ -9,7 +9,6 @@ import { Link } from '@tanstack/react-router'
 import type { Row } from '@tanstack/react-table'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getWarehouseStorageOptions } from '../../hooks/use-warehouse-storage-request'
 
 type WarehouseRowActionsProps = {
 	row: Row<IWarehouse>
@@ -22,16 +21,6 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 	const queryClient = useQueryClient()
 	const [open, setOpen] = useState(false)
 	// Prefetch warehouse storage detail before navigating
-	const prefetchWarehouseDetail = async (warehouseNum: string) => {
-		await queryClient.prefetchQuery(getWarehouseStorageOptions(warehouseNum))
-	}
-
-	// Prefetch employee before opening update form dialog
-	const prefetchEmployee = (departmentCode: string, employeeCode: string) =>
-		queryClient.prefetchQuery({
-			queryKey: ['EMPLOYEE', departmentCode, employeeCode],
-			queryFn: () => EmployeeService.searchEmployee({ dept_code: departmentCode, search: employeeCode })
-		})
 
 	return (
 		<DropdownMenu open={open} onOpenChange={setOpen}>
@@ -42,14 +31,9 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 			<DropdownMenuContent align='end' className='min-w-40'>
 				<DropdownMenuItem asChild={true} className='flex items-center gap-x-3'>
 					<Link
-						preload='render'
-						to='/warehouse/storage-details/$warehouseNum'
-						params={
-							{ warehouseNum: row.original.warehouse_num } as unknown as React.ComponentProps<
-								typeof Link
-							>['params']
-						}
-						onMouseEnter={() => prefetchWarehouseDetail(row.original.warehouse_num)}>
+						to='/storage-locations/$warehouseName'
+						params={{ warehouseName: row.original.name }}
+						onMouseEnter={() => queryClient.query(getOneWarehouseQueryOptions(row.original.name))}>
 						<Icon name='SquareDashedMousePointer' />
 						{t('ns_common:actions.detail')}
 					</Link>
@@ -65,7 +49,6 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 					}>
 					<DropdownMenuItem
 						className='flex items-center gap-x-3'
-						onMouseEnter={() => prefetchEmployee(row.original.dept_code, row.original?.manager_code)}
 						onClick={() => {
 							if (typeof onEdit === 'function') onEdit()
 						}}>

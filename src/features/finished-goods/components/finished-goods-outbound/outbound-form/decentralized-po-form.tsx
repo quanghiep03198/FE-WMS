@@ -3,6 +3,7 @@
 import { cn } from '@common/utils/cn'
 import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Tooltip, Typography } from '@components/ui'
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@components/ui/@custom/alert'
+import ConfirmDialog from '@components/ui/@override/confirm-dialog'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import {
 	closestCenter,
@@ -26,7 +27,6 @@ import { createPortal } from 'react-dom'
 import type { FieldArrayWithId, UseFieldArrayAppend } from 'react-hook-form'
 import { useFieldArray, useForm, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../../../contexts/finished-goods-outbound/page-context'
 import {
@@ -42,6 +42,7 @@ import PurchaseOrderAutoComplete from './purchase-order-autocomplete'
 
 const DecentralizedPoOutboundForm: React.FC = () => {
 	const { scannedOrders } = usePageContext('scannedOrders')
+	const [shouldAlert, setShouldAlert] = useState<boolean>(false)
 	const [activeState, setActiveState] = useState<{ id: string | null; index: number | null }>({
 		id: null,
 		index: null
@@ -68,7 +69,7 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 
 	const { fields, append, remove, move } = useFieldArray({ control: form.control, name: 'sizes' })
 
-	const { mutateAsync, isPending, isError, error, reset } = useStockOutMutation(form.reset)
+	const { mutateAsync, isPending, isError, error, reset } = useStockOutMutation()
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -94,9 +95,9 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 
 	const handleDragEnd = (event: DragEndEvent) => {
 		const { active, over } = event
-		if (active.id !== over.id) {
+		if (active.id !== over?.id) {
 			const oldIndex = fields.findIndex((item) => item.id === active.id)
-			const newIndex = fields.findIndex((item) => item.id === over.id)
+			const newIndex = fields.findIndex((item) => item.id === over?.id)
 			move(oldIndex, newIndex)
 			if (form.formState.isSubmitted) form.trigger('sizes')
 		}
@@ -115,17 +116,18 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 		return 0
 	}, [fieldsetRef.current])
 
+	const handleConfirm = async (data: DetailedOutBoundFormValues) => {
+		await mutateAsync(data)
+		form.reset()
+		setShouldAlert(false)
+	}
+
 	const handleSubmit = async (data: DetailedOutBoundFormValues) => {
-		try {
-			await mutateAsync({
-				...data,
-				sizes: data.sizes.map((item) => ({ size_numcode: item.size_numcode, qty: item.qty }))
-			}).then()
-			form.reset()
-			toast.success(t('ns_common:notification.success'))
-		} catch {
-			toast.error(t('ns_common:notification.error'))
-		}
+		await mutateAsync({
+			...data,
+			sizes: data.sizes.map((item) => ({ size_numcode: item.size_numcode, qty: item.qty }))
+		}).then()
+		form.reset()
 	}
 
 	return (
@@ -168,7 +170,10 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 							className='col-span-full'
 							style={
 								{
-									'--draggable-item-width': fieldsetSize?.width - fieldsetSizeVerticalPadding + 'px'
+									'--draggable-item-width':
+										(fieldsetSize
+											? fieldsetSize?.width - fieldsetSizeVerticalPadding
+											: fieldsetSizeVerticalPadding) + 'px'
 								} as React.CSSProperties
 							}>
 							<DndContext
@@ -197,8 +202,8 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 											duration: 300,
 											easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)'
 										}}>
-										{activeState.id && activeState.index ? (
-											<DroppableFieldItem {...activeState} onRemove={remove} />
+										{activeState.id && activeState.index !== null ? (
+											<DroppableFieldItem id={activeState.id} index={activeState.index} onRemove={remove} />
 										) : null}
 									</DragOverlay>
 								</SortableContext>
@@ -210,6 +215,18 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 					</Form>
 				</FormProvider>
 			</DecentralizedPoFormProvider>
+			<ConfirmDialog
+				open={shouldAlert}
+				title={t('ns_common:titles.caution')}
+				description={t('ns_inoutbound:notification.posible_incorrect_po')}
+				onConfirm={() => {
+					handleConfirm(form.getValues())
+					setShouldAlert(false)
+				}}
+				onCancel={() => setShouldAlert(false)}
+				isPending={isPending}
+				isError={isError}
+			/>
 		</Fragment>
 	)
 }

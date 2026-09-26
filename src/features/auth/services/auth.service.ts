@@ -1,11 +1,11 @@
-import type { LoginFormValues } from '@features/auth/schemas/login.schema'
-// import { destroySharedSocket } from '@common/hooks/use-socket-io'
-import { queryClient } from '@/integrations/tanstack-query'
 import axiosInstance from '@configs/axios.config'
+import type { LoginFormValues } from '@features/auth/schemas/login.schema'
+import { queryClient } from '@integrations/tanstack-query'
 
 import type { IAuthState } from '@stores/auth.store'
 import { useAuthStore } from '@stores/auth.store'
 import type { GenericAbortSignal } from 'axios'
+import { isNil } from 'lodash-es'
 
 export type RefreshTokenResponse = ResponseBody<{ newAccessToken: string; newRefreshToken: string }>
 
@@ -42,7 +42,7 @@ export class AuthService {
 	 */
 	static async refreshToken(signal?: GenericAbortSignal): Promise<RefreshTokenResponse> {
 		// If a refresh is already in-flight, piggyback on it
-		if (AuthService.__refreshTokenRequest) {
+		if (!isNil(AuthService.__refreshTokenRequest)) {
 			return AuthService.__refreshTokenRequest
 		}
 
@@ -55,11 +55,13 @@ export class AuthService {
 
 		try {
 			const response = await AuthService.__refreshTokenRequest
-			useAuthStore.getState().setAccessToken(response.metadata.newAccessToken)
-
+			if (response && 'metadata' in response && !!response.metadata) {
+				useAuthStore.getState().setAccessToken(response.metadata.newAccessToken)
+			}
 			return response
-		} catch {
+		} catch (error) {
 			AuthService.logout()
+			throw error
 		}
 	}
 }

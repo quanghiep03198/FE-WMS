@@ -84,7 +84,7 @@ export default {
 		status: 'Trạng thái',
 		total: 'Tổng cộng',
 		updated_at: 'Ngày cập nhật',
-		user_name_updated: 'Người cập nhật gần nhất',
+		updated_by: 'Người cập nhật gần nhất',
 		unit: 'Đơn vị'
 	},
 	common_form_titles: {
@@ -260,7 +260,7 @@ export default {
 		packing_manifest: 'Thông tin đóng hàng',
 		purchase_order_search: 'Tra cứu đơn hàng',
 		settings: 'Cài đặt',
-		storage_detail: 'Chi tiết vị trí lưu kho',
+		storage_locations: 'Chi tiết vị trí lưu kho',
 		transfer_managment: 'Quản lý chuyển giao',
 		truckload_delivery_management: 'Quản lý vận chuyển',
 		warehouse_management: 'Quản lý kho',
@@ -340,6 +340,7 @@ export default {
 		column_settings: 'Thiết lập cột'
 	},
 	titles: {
+		attention: 'Chú ý',
 		advanced_search: 'Tìm kiếm nâng cao',
 		caution: 'Cảnh báo',
 		general_settings: 'Cài đặt chung',

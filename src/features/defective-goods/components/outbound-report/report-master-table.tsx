@@ -11,7 +11,7 @@ import { useDefectiveCategoryList } from '@features/defective-goods/hooks/use-de
 import { useGetDefectiveGoodsOutboundReportQuery } from '@features/defective-goods/hooks/use-defective-goods-request'
 import { useGetCategoriesQty } from '@features/defective-goods/hooks/use-get-category-qty'
 import useMediaQuery from '@hooks/use-media-query'
-import type { Table as TTable } from '@tanstack/react-table'
+import type { Table, Table as TTable } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { lowerCase } from 'lodash-es'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
@@ -22,7 +22,7 @@ import DownloadExcelButton from './download-excel-button'
 const InboundReportMasterTable: React.FC = () => {
 	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
 	const { data, isLoading, refetch } = useGetDefectiveGoodsOutboundReportQuery()
-	const summaryData = useGetCategoriesQty(data)
+	const summaryData = useGetCategoriesQty(data ?? [])
 	const { t, i18n } = useTranslation()
 	const dataTableRef = useRef<TTable<IDefectiveGoodsOutboundReport>>(null)
 	const columnHelper = createColumnHelper<IDefectiveGoodsOutboundReport>()
@@ -141,10 +141,8 @@ const InboundReportMasterTable: React.FC = () => {
 				},
 				cell: ({ getValue }) => {
 					const value = getValue()
-					return t(TRANSLATED_DEFECTIVE_CATEGORY[value], {
-						ns: 'ns_inoutbound',
-						defaultValue: t('ns_common:titles.unknown')
-					})
+					if (!value) return t('titles.unknown', { ns: 'ns_common' })
+					return t(TRANSLATED_DEFECTIVE_CATEGORY[value], { ns: 'ns_inoutbound' })
 				}
 			}),
 			columnHelper.accessor('shoe_source', {
@@ -206,11 +204,11 @@ const InboundReportMasterTable: React.FC = () => {
 	return (
 		<DataTable
 			columns={columns}
-			data={data}
+			data={data!}
 			loading={isLoading}
 			enableExpanding={true}
 			enableColumnResizing={true}
-			ref={dataTableRef}
+			ref={dataTableRef as React.RefObject<Table<IDefectiveGoodsOutboundReport>>}
 			containerProps={{
 				style: { height: 'calc(var(--outlet-wrapper-height) - 12rem - 2 * var(--row-height))' }
 			}}

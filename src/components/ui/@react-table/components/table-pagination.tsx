@@ -12,7 +12,7 @@ export type DataTablePaginationProps = {
 	manualPagination?: boolean
 	enableInputPageSize?: boolean
 	controlledPaginationProps: Partial<Omit<Pagination<any>, 'data'>>
-	onPaginationChange: React.Dispatch<React.SetStateAction<PaginationState>>
+	onPaginationChange?: React.Dispatch<React.SetStateAction<PaginationState>>
 	[key: string]: any
 } & PaginationBaseProps
 
@@ -27,15 +27,27 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 }) => {
 	'use no memo'
 
-	const { t } = useTranslation('ns_common')
+	const { t } = useTranslation()
 	const { firstPage, lastPage, nextPage, previousPage, setPageSize } = table
 
 	const canNextPage = manualPagination ? controlledPaginationProps?.hasNextPage : table.getCanNextPage()
 	const canPreviousPage = manualPagination ? controlledPaginationProps?.hasPrevPage : table.getCanPreviousPage()
-	const pageCount = manualPagination ? controlledPaginationProps?.totalPages : table.getPageCount()
-	const pageSize = manualPagination ? controlledPaginationProps?.limit : table.getState().pagination.pageSize
-	const pageIndex = manualPagination ? controlledPaginationProps?.page : table.getState().pagination.pageIndex + 1
-	const rowCount = manualPagination ? controlledPaginationProps.totalDocs : table.getRowCount()
+	const pageCount =
+		manualPagination && typeof controlledPaginationProps?.totalPages === 'number'
+			? controlledPaginationProps?.totalPages
+			: table.getPageCount()
+	const pageSize =
+		manualPagination && typeof controlledPaginationProps?.limit === 'number'
+			? controlledPaginationProps?.limit
+			: table.getState().pagination.pageSize
+	const pageIndex =
+		manualPagination && typeof controlledPaginationProps?.page === 'number'
+			? controlledPaginationProps?.page
+			: table.getState().pagination.pageIndex + 1
+	const rowCount =
+		manualPagination && typeof controlledPaginationProps?.totalDocs === 'number'
+			? controlledPaginationProps.totalDocs
+			: table.getRowCount()
 
 	const pageIndexContext = String(pageIndex ?? 1) + '/' + String(pageCount ?? 1)
 
@@ -102,7 +114,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 				<Label className='font-medium whitespace-nowrap'>{t('ns_common:table.rows_per_page')}</Label>
 				<AutoComplete
 					type='number'
-					value={pageSize === 1 ? null : pageSize}
+					value={pageSize === 1 ? undefined : pageSize}
 					defaultValue={10}
 					min={10}
 					onInput={(value) => changePageSize(value)}

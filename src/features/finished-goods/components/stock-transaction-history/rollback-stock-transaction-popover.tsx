@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next'
 const RollbackStockTransactionPopover: React.FC<{
 	stockFlow: StockFlow
 	transactionId: string
-	canRollback: boolean
-}> = ({ stockFlow, transactionId, canRollback }) => {
+	reversible: boolean
+}> = ({ stockFlow, transactionId, reversible }) => {
 	const { t } = useTranslation()
 
 	const { mutateAsync, isPending, isError } = useRollbackStockTransactionMutation(stockFlow)
@@ -16,7 +16,7 @@ const RollbackStockTransactionPopover: React.FC<{
 	return (
 		<Popover modal>
 			<PopoverTrigger asChild>
-				<Button variant='destructive' size='xs' disabled={!canRollback || isPending}>
+				<Button variant='destructive' size='xs' disabled={!reversible || isPending}>
 					{t('ns_common:actions.rollback')}
 				</Button>
 			</PopoverTrigger>
@@ -34,7 +34,7 @@ const RollbackStockTransactionPopover: React.FC<{
 						variant='destructive'
 						size='sm'
 						className='mt-3'
-						disabled={!canRollback || isPending}
+						disabled={!reversible || isPending}
 						onClick={() => mutateAsync(transactionId)}>
 						{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
 						{t(isError ? 'ns_common:actions.retry' : 'ns_common:actions.confirm')}

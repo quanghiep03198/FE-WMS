@@ -1,4 +1,6 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import type { FactoryCode } from '@common/constants/enums'
+import env from '@common/utils/env'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Badge, Button, DataTable, Div, Icon, Tooltip, Typography } from '@components/ui'
 import EllipsisList from '@components/ui/@custom/ellipsis-list'
@@ -151,6 +153,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
 					const value = getValue()
+					console.log(value)
 					if (!value)
 						return (
 							<Typography variant='small' color='muted'>
@@ -238,7 +241,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 	return (
 		<Div className='relative space-y-10'>
 			<DataTable
-				ref={dataTableRef}
+				ref={dataTableRef as React.RefObject<Table<IMonthlyInventoryAudit>>}
 				columns={columns}
 				initialState={{
 					pagination: {
@@ -246,7 +249,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 						pageSize: 50
 					}
 				}}
-				data={data}
+				data={data ?? []}
 				loading={isLoading}
 				expanded={expanded}
 				getRowCanExpand={() => true}
@@ -262,7 +265,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 							'calc(var(--outlet-wrapper-height) -  2 * var(--row-height) - 2 * var(--outlet-padding) - 9.5rem)'
 					}
 				}}
-				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
+				footerProps={{ slot: () => <DataTableSummary data={data ?? []} isLoading={isLoading} /> }}
 				toolbarProps={{
 					slotLeft: () => (
 						<CheckoutInventoryAuditButton
@@ -271,7 +274,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 							}
 						/>
 					),
-					slotRight: () => <DataTableSlotRight downloadable={data?.length > 0} />
+					slotRight: () => <DataTableSlotRight downloadable={Array.isArray(data) && data?.length > 0} />
 				}}
 			/>
 		</Div>
@@ -297,7 +300,10 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_monthly_inventory_report', {
-					factory: t(TRANSLATED_FACTORY[user?.current_factory_code], { ns: 'ns_common' }),
+					factory: t(TRANSLATED_FACTORY[env<FactoryCode>('VITE_APP_TENANT')], {
+						ns: 'ns_common',
+						defaultValue: null
+					}),
 					month: searchParams['month:eq'],
 					defaultValue: `Monthly Inventory Report ~ ${searchParams['month:eq']}`
 				}) + '.xlsx'

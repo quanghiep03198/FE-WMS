@@ -1,28 +1,26 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import type { FactoryCode } from '@common/constants/enums'
+import env from '@common/utils/env'
 import { Button, Icon } from '@components/ui'
 import { useGetDefectiveGoodsInventoryQuery } from '@features/defective-goods/hooks/use-defective-goods-request'
 import { DefectiveGoodsService } from '@features/defective-goods/services/defective-goods.service'
-import { useGetTenantByFactory } from '@features/tenancy/hooks/use-tenacy-request'
-import useAuth from '@hooks/use-auth'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 const DownloadExcelButton: React.FC = () => {
-	const { user } = useAuth()
-	const { data: tenant } = useGetTenantByFactory()
 	const { t } = useTranslation()
 	const { data } = useGetDefectiveGoodsInventoryQuery()
 
 	const handleDownloadExcel = async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
-		const factory = t(TRANSLATED_FACTORY[user?.current_factory_code], {
+		const factory = t(TRANSLATED_FACTORY[env<FactoryCode>('VITE_APP_TENANT')], {
 			ns: 'ns_common',
-			defaultValue: user?.current_factory_code
+			defaultValue: env<FactoryCode>('VITE_APP_TENANT')
 		}) as string
 
 		try {
-			const blob = await DefectiveGoodsService.downloadDefectiveGoodsInventoryReport(tenant?.id)
+			const blob = await DefectiveGoodsService.downloadDefectiveGoodsInventoryReport()
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_defective_goods_inventory_report', {

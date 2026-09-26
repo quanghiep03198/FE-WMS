@@ -16,21 +16,18 @@ import {
 	RadioGroup,
 	RadioGroupItem,
 	SelectFieldControl,
-	Tooltip,
-	Typography
+	Tooltip
 } from '@components/ui'
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@components/ui/@custom/alert'
 import { useGetShapingProductLineQuery } from '@features/department/hooks/use-department-request'
-import { FinishedGoodsAction, FinishedGoodsOutboundReason } from '@features/finished-goods/constants/enums'
+import { FinishedGoodsStockAction, StockTransactionPurpose } from '@features/finished-goods/constants/enums'
 import { useGetWarehouseQuery } from '@features/warehouse/hooks/use-warehouse-request'
-import { useGetWarehouseStorageQuery } from '@features/warehouse/hooks/use-warehouse-storage-request'
-import type { IWarehouse, IWarehouseStorage } from '@features/warehouse/types'
+import { useGetStorageLocationByWarehouseQuery } from '@features/warehouse/hooks/use-warehouse-storage-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useMediaQuery from '@hooks/use-media-query'
 import { useMemoizedFn } from 'ahooks'
 import type { AxiosError } from 'axios'
 import { HttpStatusCode } from 'axios'
-import { omit } from 'lodash-es'
 import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
@@ -50,43 +47,36 @@ const InoutboundForm: React.FC = () => {
 		'setScannedEpc'
 	)
 	const { t, i18n } = useTranslation()
-	const [action, setAction] = useState<FinishedGoodsAction>(FinishedGoodsAction.IMPORT)
+	const [action, setAction] = useState<FinishedGoodsStockAction>(FinishedGoodsStockAction.IMPORT)
 	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 
 	const form = useForm<FormValues>({
-		resolver: zodResolver(action === FinishedGoodsAction.IMPORT ? stockBalancesSchema : outboundSchema),
+		resolver: zodResolver(action === FinishedGoodsStockAction.IMPORT ? stockBalancesSchema : outboundSchema),
 		defaultValues: {
-			rfid_status: FinishedGoodsAction.IMPORT,
-			rfid_use: FinishedGoodsOutboundReason.NORMAL_IMPORT,
-			warehouse_num: '',
-			storage_num: '',
-			storage_name: '',
-			dept_code: '',
-			dept_name: ''
+			action: FinishedGoodsStockAction.IMPORT,
+			purpose: StockTransactionPurpose.NORMAL_IMPORT,
+			warehouse: '',
+			storage_location: '',
+			assembly_line: { code: '', name: '' }
 		},
 		mode: 'onChange'
 	})
 
-	const warehouseNum = form.watch('warehouse_num')
+	const warehouseName = form.watch('warehouse')
 
-	const { data: warehouseOptions, isLoading } = useGetWarehouseQuery<IWarehouse[]>({
-		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
-	})
+	const { data: warehouseOptions, isLoading } = useGetWarehouseQuery()
 
 	const { data: assemblyLines } = useGetShapingProductLineQuery()
 	const { data: currentEpcData } = useGetScanningInboundEpcQuery()
-	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
-		enabled: Boolean(warehouseNum),
-		select: (response) => response.metadata
-	})
+	const { data: storageLocations } = useGetStorageLocationByWarehouseQuery(warehouseName)
 
 	const translatedAssemblyLines = useMemo(() => {
 		if (!Array.isArray(assemblyLines)) return []
 		return assemblyLines.map((item) => ({
-			dept_code: item.dept_code,
-			dept_name: t('ns_company:assembly_line', {
-				name: item.dept_name.replace(/[^A-Za-z0-9]/g, ''),
-				defaultValue: item.dept_name
+			code: item.code,
+			name: t('ns_company:assembly_line', {
+				name: item.name.replace(/[^A-Za-z0-9]/g, ''),
+				defaultValue: item.name
 			})
 		}))
 	}, [assemblyLines, i18n.language])
@@ -96,11 +86,9 @@ const InoutboundForm: React.FC = () => {
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({
 			...form.getValues(),
-			dept_code: '',
-			dept_name: '',
-			warehouse_num: '',
-			storage_num: '',
-			storage_name: ''
+			assembly_line: { code: '', name: '' },
+			warehouse: '',
+			storage_location: ''
 		})
 	})
 
@@ -113,22 +101,23 @@ const InoutboundForm: React.FC = () => {
 
 	useEffect(() => {
 		form.setValue(
-			'rfid_use',
-			action === FinishedGoodsAction.IMPORT
-				? FinishedGoodsOutboundReason.NORMAL_IMPORT
-				: FinishedGoodsOutboundReason.RECYCLE_EXPORT
+			'purpose',
+			action === FinishedGoodsStockAction.IMPORT
+				? StockTransactionPurpose.NORMAL_IMPORT
+				: StockTransactionPurpose.RECYCLE_EXPORT
 		)
 	}, [action])
 
 	const handleSubmit = async (data: FormValues) => {
+		console.log(data)
 		try {
 			await mutateAsync({
-				...omit(data, ['warehouse_num']),
+				...data,
 				mo_no: selectedOrder === FALLBACK_VALUE ? null : selectedOrder,
 				inbound_device_sn: selectedDevice
 			} as StockBalancesPayload)
 			// * Always select all scanned order after performing update stock
-			setScannedEpc(currentEpcData)
+			setScannedEpc(currentEpcData!)
 			toast.success(t('ns_common:notification.success'))
 		} catch {
 			toast.error(t('ns_common:notification.error'))
@@ -167,29 +156,29 @@ const InoutboundForm: React.FC = () => {
 					<Form onSubmit={form.handleSubmit(handleSubmit)}>
 						<Div className='col-span-full'>
 							<FormField
-								name='rfid_status'
+								name='action'
 								render={({ field }) => (
 									<FormItem>
 										<FormMessage />
 										<RadioGroup
 											className='grid grid-cols-2'
 											value={field.value}
-											defaultValue={FinishedGoodsAction.IMPORT}
+											defaultValue={FinishedGoodsStockAction.IMPORT}
 											onValueChange={(value) => {
 												field.onChange(value)
-												setAction(value as FinishedGoodsAction)
+												setAction(value as FinishedGoodsStockAction)
 												handleResetForm()
 											}}>
 											<FormItem>
 												<StyledFormLabel
 													role='checkbox'
 													tabIndex={0}
-													aria-checked={field.value === FinishedGoodsAction.IMPORT}
-													htmlFor={FinishedGoodsAction.IMPORT}>
+													aria-checked={field.value === FinishedGoodsStockAction.IMPORT}
+													htmlFor={FinishedGoodsStockAction.IMPORT}>
 													<FormControl>
 														<RadioGroupItem
-															id={FinishedGoodsAction.IMPORT}
-															value={FinishedGoodsAction.IMPORT}
+															id={FinishedGoodsStockAction.IMPORT}
+															value={FinishedGoodsStockAction.IMPORT}
 															className='hidden'
 														/>
 													</FormControl>
@@ -197,20 +186,20 @@ const InoutboundForm: React.FC = () => {
 													<CheckIcon
 														name='Check'
 														size={24}
-														aria-checked={field.value === FinishedGoodsAction.IMPORT}
+														aria-checked={field.value === FinishedGoodsStockAction.IMPORT}
 													/>
 												</StyledFormLabel>
 											</FormItem>
 											<FormItem>
 												<StyledFormLabel
-													htmlFor={FinishedGoodsAction.EXPORT}
+													htmlFor={FinishedGoodsStockAction.EXPORT}
 													role='radio'
 													tabIndex={0}
-													aria-checked={field.value == FinishedGoodsAction.EXPORT}>
+													aria-checked={field.value == FinishedGoodsStockAction.EXPORT}>
 													<FormControl>
 														<RadioGroupItem
-															id={FinishedGoodsAction.EXPORT}
-															value={FinishedGoodsAction.EXPORT}
+															id={FinishedGoodsStockAction.EXPORT}
+															value={FinishedGoodsStockAction.EXPORT}
 															className='sr-only'
 														/>
 													</FormControl>
@@ -218,7 +207,7 @@ const InoutboundForm: React.FC = () => {
 													<CheckIcon
 														name='Check'
 														size={24}
-														aria-checked={field.value === FinishedGoodsAction.EXPORT}
+														aria-checked={field.value === FinishedGoodsStockAction.EXPORT}
 													/>
 												</StyledFormLabel>
 											</FormItem>
@@ -230,15 +219,15 @@ const InoutboundForm: React.FC = () => {
 						<Div
 							className={cn(
 								'sm:col-span-full',
-								action === FinishedGoodsAction.IMPORT ? 'col-span-1' : 'col-span-full'
+								action === FinishedGoodsStockAction.IMPORT ? 'col-span-1' : 'col-span-full'
 							)}>
 							<FormField
-								name='rfid_use'
+								name='purpose'
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>{t('ns_common:common_fields.actions')}</FormLabel>
 										<Div className='border-input bg-background aria-disabled:text-muted-foreground flex h-9 w-full items-center rounded-md border px-3 py-1 text-sm shadow-sm'>
-											{form.watch('rfid_use') === FinishedGoodsOutboundReason.NORMAL_IMPORT
+											{form.watch('purpose') === StockTransactionPurpose.NORMAL_IMPORT
 												? t('ns_inoutbound:inoutbound_actions.normal_import')
 												: t('ns_inoutbound:inoutbound_actions.recycle')}
 											<Input
@@ -254,49 +243,43 @@ const InoutboundForm: React.FC = () => {
 								)}
 							/>
 						</Div>
-						{action === FinishedGoodsAction.IMPORT && (
+						{action === FinishedGoodsStockAction.IMPORT && (
 							<Fragment>
 								<Div className='col-span-1 sm:col-span-full'>
 									<SelectFieldControl
-										name='dept_code'
-										label={t('ns_erp:fields.shaping_dept_code')}
+										name='assembly_line.code'
+										label={t('ns_erp:fields.assembly_line_code')}
 										datalist={translatedAssemblyLines}
-										labelField='dept_name'
-										valueField='dept_code'
-										onValueChange={(value) =>
-											form.setValue(
-												'dept_name',
-												assemblyLines.find((item) => item.dept_code === value)?.dept_name
-											)
-										}
+										labelField='name'
+										valueField='code'
+										onValueChange={(value) => {
+											if (!Array.isArray(assemblyLines)) return
+											const matchedItem = assemblyLines.find((item) => item.code === value)
+											console.log(matchedItem)
+											if (matchedItem && 'name' in matchedItem)
+												form.setValue('assembly_line.name', matchedItem.name)
+										}}
 									/>
 								</Div>
 								<Div className='col-span-1 sm:col-span-full'>
 									<SelectFieldControl
 										disabled={isLoading}
-										name='warehouse_num'
+										name='warehouse'
 										label={t('ns_inoutbound:labels.io_archive_warehouse')}
-										datalist={warehouseOptions}
-										labelField='warehouse_name'
-										valueField='warehouse_num'
+										datalist={warehouseOptions ?? []}
+										labelField='name'
+										valueField='name'
 									/>
 								</Div>
 								<Div className='col-span-1 sm:col-span-full'>
 									<ComboboxFieldControl
-										name='storage_num'
-										datalist={storageAreaOptions}
-										labelField='storage_name'
-										valueField='storage_num'
-										shouldFilter={false}
-										disabled={warehouseOptions?.length === 0}
+										name='storage_location'
 										label={t('ns_inoutbound:labels.io_storage_location')}
-										template={WarehouseComboboxSelection}
-										onSelect={(value) => {
-											form.setValue(
-												'storage_name',
-												storageAreaOptions.find((item) => item.storage_num === value)?.storage_name
-											)
-										}}
+										datalist={storageLocations}
+										labelField='name'
+										valueField='name'
+										shouldFilter={true}
+										disabled={warehouseOptions?.length === 0}
 									/>
 								</Div>
 							</Fragment>
@@ -329,17 +312,6 @@ const InoutboundForm: React.FC = () => {
 		</Fragment>
 	)
 }
-
-const WarehouseComboboxSelection: React.FC<{ data: IWarehouseStorage }> = ({ data, ...props }) => (
-	<Div className='flex w-full flex-1 flex-col' {...props}>
-		<Typography variant='small' className='font-medium'>
-			{data.storage_name}
-		</Typography>
-		<Typography variant='small' color='muted'>
-			{data.storage_num}
-		</Typography>
-	</Div>
-)
 
 const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6 max-h-full`
 const StyledFormLabel = tw(FormLabel)<React.ComponentProps<typeof FormLabel>>`

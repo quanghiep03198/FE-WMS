@@ -4,8 +4,8 @@ import type { AxiosError } from 'axios'
 import type { IDepartment } from '../types'
 
 export enum DepartmentQueryKeys {
-	SHAPING_DEPT = 'SHAPING_DEPARTMENT',
-	SEWING_DEPT = 'SEWING_DEPARTMENT',
+	ASSEMBLY_DEPARTMENT = 'ASSEMBLY_DEPARTMENT',
+	SEWING_DEPARTMENT = 'SEWING_DEPARTMENT',
 	WAREHOUSE_DEPT = 'WAREHOUSE_DEPARTMENT'
 }
 
@@ -29,7 +29,7 @@ export function useGetDepartmentQuery(
 
 export const useGetShapingProductLineQuery = () => {
 	return useQuery({
-		queryKey: [DepartmentQueryKeys.SHAPING_DEPT],
+		queryKey: [DepartmentQueryKeys.ASSEMBLY_DEPARTMENT],
 		queryFn: DepartmentService.getShapingDepartments,
 		select: (response) => response.metadata
 	})
@@ -37,7 +37,7 @@ export const useGetShapingProductLineQuery = () => {
 
 export const useGetSewingProductLineQuery = () => {
 	return useQuery({
-		queryKey: [DepartmentQueryKeys.SEWING_DEPT],
+		queryKey: [DepartmentQueryKeys.SEWING_DEPARTMENT],
 		queryFn: DepartmentService.getSewingDepartments,
 		select: (response) => response.metadata
 	})

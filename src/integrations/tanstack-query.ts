@@ -1,6 +1,7 @@
-import { AppConfigs } from '@configs/app.config'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as Sentry from '@sentry/react'
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
-import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import type { QueryKey } from '@tanstack/react-query'
 import { matchQuery, MutationCache, QueryClient } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
@@ -15,9 +16,8 @@ declare module '@tanstack/react-query' {
 	}
 }
 
-export const localStoragePersister = createSyncStoragePersister({
-	storage: window.localStorage,
-	key: AppConfigs.QUERY_CLIENT_CACHE_STORAGE_KEY,
+export const asyncStoragePersister = createAsyncStoragePersister({
+	storage: AsyncStorage,
 	serialize: (data) => compress(JSON.stringify(data)),
 	deserialize: (data) => JSON.parse(decompress(data))
 })
@@ -25,8 +25,7 @@ export const localStoragePersister = createSyncStoragePersister({
 export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			staleTime: 1000 * 60 * 15,
-			experimental_prefetchInRender: true,
+			staleTime: 1000 * 60 * 5,
 			networkMode: 'always'
 		},
 		mutations: {
@@ -48,5 +47,11 @@ export const queryClient = new QueryClient({
 broadcastQueryClient({
 	queryClient: queryClient as unknown as Parameter<typeof broadcastQueryClient>['queryClient'],
 	broadcastChannel: 'wms-client', // Optional: defaults to 'react-query'
-	options: { webWorkerSupport: true, type: 'localstorage' }
+	options: { webWorkerSupport: true, type: 'localstorage' },
+	onBroadcastError: (error, event) => {
+		Sentry.captureException(error, {
+			tags: { broadcastEvent: event.type },
+			extra: { queryHash: event.queryHash, queryKey: event.queryKey }
+		})
+	}
 })

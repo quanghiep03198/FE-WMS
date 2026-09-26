@@ -35,7 +35,7 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 		description,
 		disabled,
 		label,
-		orientation,
+		orientation: orientation,
 		hidden,
 		triggerProps,
 		calendarProps = { mode: 'single' }
@@ -54,14 +54,13 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 			render={({ field }) => {
 				return (
 					<FormItem
-						className={cn(
-							orientation === 'horizontal'
-								? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'
-								: 'space-y-2',
-							hidden && 'hidden'
-						)}>
+						aria-hidden={hidden}
+						aria-orientation={orientation}
+						className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 						{label && (
-							<FormLabel className={orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'}>
+							<FormLabel
+								aria-orientation={orientation}
+								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
 								{label}
 							</FormLabel>
 						)}
@@ -98,12 +97,14 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 								</PopoverTrigger>
 								<PopoverContent className='w-auto p-0' align='start'>
 									<Calendar
-										mode={calendarProps.mode ?? 'single'}
-										selected={field.value ?? ''}
-										onSelect={field.onChange}
-										initialFocus={true}
-										disabled={disabled}
-										{...calendarProps}
+										{...({
+											...calendarProps,
+											mode: calendarProps.mode ?? 'single',
+											selected: field.value ?? '',
+											onSelect: field.onChange,
+											initialFocus: true,
+											disabled
+										} satisfies CalendarProps)}
 									/>
 								</PopoverContent>
 							</Popover>

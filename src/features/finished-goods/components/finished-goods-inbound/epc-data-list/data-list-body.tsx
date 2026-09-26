@@ -1,8 +1,10 @@
 'use no memo'
 
+import type { FactoryCode } from '@common/constants/enums'
 import { RequestHeaders, RequestMethod } from '@common/constants/enums'
 import { FatalError, RetriableError } from '@common/errors'
 import { cn } from '@common/utils/cn'
+import env from '@common/utils/env'
 import { Json } from '@common/utils/json'
 import { Button, Div, Icon, Tooltip, Typography } from '@components/ui'
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@components/ui/@custom/alert'
@@ -106,7 +108,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 				method: RequestMethod.GET,
 				credentials: 'include',
 				headers: {
-					[RequestHeaders.FACTORY_CODE]: user?.current_factory_code,
+					[RequestHeaders.FACTORY_CODE]: env<FactoryCode>('VITE_APP_TENANT'),
 					[RequestHeaders.RFID_READER_ID]: selectedDevice
 				},
 				signal: abortControllerRef.current.signal,
@@ -210,7 +212,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 
 	useUpdateEffect(() => {
 		setScanningStatus(DEFAULT_PROPS.scanningStatus)
-	}, [user?.current_factory_code])
+	}, [])
 
 	// * Triggered when incomming message comes
 	useDeepCompareEffect(() => {

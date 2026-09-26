@@ -1,28 +1,28 @@
-import type { FileRouteTypes } from '@/route-tree.gen'
 import type { Link } from '@tanstack/react-router'
 import { createContext, use, useMemo, useState } from 'react'
+import type { FileRouteTypes, FileRoutesByTo } from '../route-tree.gen'
 
-export type TBreadcrumb = {
-	to: FileRouteTypes['to']
+export type TBreadcrumb<T extends FileRouteTypes['fullPaths']> = {
+	to: T
 	text: string
-	params?: React.ComponentProps<typeof Link>['params']
+	params?: ReturnType<FileRoutesByTo[T]['useParams']>
 	search?: React.ComponentProps<typeof Link>['search']
 }
 
-type TBreadcrumbContext = {
-	breadcrumb: TBreadcrumb[]
-	setBreadcrumb: React.Dispatch<React.SetStateAction<TBreadcrumb[]>>
+type TBreadcrumbContext<T extends FileRouteTypes['fullPaths']> = {
+	breadcrumb: TBreadcrumb<T>[]
+	setBreadcrumb: React.Dispatch<React.SetStateAction<TBreadcrumb<T>[]>>
 }
 
-export const BreadcrumbContext = createContext<TBreadcrumbContext>({
+export const BreadcrumbContext = createContext<TBreadcrumbContext<FileRouteTypes['fullPaths']>>({
 	breadcrumb: [],
 	setBreadcrumb: () => undefined
 })
 
-export const BreadcrumbProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const [_breadcrumb, _setBreadcrumb] = useState<TBreadcrumb[]>([])
+export function BreadcrumbProvider({ children }: React.PropsWithChildren) {
+	const [_breadcrumb, _setBreadcrumb] = useState<TBreadcrumb<FileRouteTypes['fullPaths']>[]>([])
 
-	const contextValues = useMemo(
+	const contextValues: TBreadcrumbContext<FileRouteTypes['fullPaths']> = useMemo(
 		() => ({ breadcrumb: _breadcrumb, setBreadcrumb: _setBreadcrumb }),
 		[_breadcrumb, _setBreadcrumb]
 	)

@@ -27,7 +27,7 @@ export default {
 		name: { control: 'text', description: 'Tên trường trong form' },
 		label: { control: 'text', description: 'Nhãn hiển thị' },
 		placeholder: { control: 'text', description: 'Placeholder cho input' },
-		orientation: { control: 'radio', options: ['horizontal', 'vertical'], description: 'Kiểu bố cục' },
+		['orientation']: { control: 'radio', options: ['horizontal', 'vertical'], description: 'Kiểu bố cục' },
 		hidden: { control: 'boolean', description: 'Ẩn trường' },
 		className: { control: 'text', description: 'Class CSS bổ sung' }
 	}
@@ -82,6 +82,6 @@ export const Horizontal: StoryObj<typeof TagInputFieldControl> = {
 		label: 'Frameworks',
 		placeholder: 'Enter frameworks ...',
 		description: 'Enter your favorite frameworks',
-		orientation: 'horizontal'
+		['orientation']: 'horizontal'
 	}
 }

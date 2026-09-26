@@ -75,7 +75,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 		addAllItemsToSet(datalist.filter((item) => selectedItems.some((selected) => selected.epc === item.epc)))
 	}, [datalist])
 
-	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
+	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null!)
 	const refCallback = useCallback((node: HTMLDivElement) => {
 		if (node) setScrollElement(node)
 	}, [])
@@ -128,7 +128,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 				}>
 				<TableHeader className='[&_th]:bg-table-head [&_th]:text-table-head-foreground sticky top-0 z-10 border-b [&_th]:h-(--header-height)'>
 					<TableRow>
-						<TableHead className='w-[var(--row-selection-width)]'>
+						<TableHead style={{ width: 'var(--row-selection-width)' }}>
 							<Checkbox
 								role='checkbox'
 								checked={(isAllItemsSelected || (isSomeItemsSelected && 'indeterminate')) as CheckedState}
@@ -138,7 +138,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 								}}
 							/>
 						</TableHead>
-						<TableHead align='left' className='w-[var(--second-col-width)]'>
+						<TableHead align='left' style={{ width: 'var(--second-col-width)' }}>
 							EPC
 						</TableHead>
 						<TableHead align='center'>{t('ns_common:common_fields.status')}</TableHead>

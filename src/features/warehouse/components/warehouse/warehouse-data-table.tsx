@@ -1,6 +1,21 @@
 // #region Modules
 import { CommonActions } from '@common/constants/enums'
-import { Button, Checkbox, DataTable, Icon, Tooltip } from '@components/ui'
+import formatIntlNumber from '@common/utils/format-intl-number'
+import generateAvatar from '@common/utils/generate-avatar'
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+	Button,
+	DataTable,
+	Icon,
+	Item,
+	ItemContent,
+	ItemDescription,
+	ItemMedia,
+	ItemTitle,
+	Tooltip
+} from '@components/ui'
 import ConfirmDialog from '@components/ui/@override/confirm-dialog'
 import {
 	IndeterminateCheckbox,
@@ -8,19 +23,15 @@ import {
 } from '@components/ui/@react-table/components/row-selection-checkbox'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@components/ui/@react-table/constants'
 import { fuzzySort } from '@components/ui/@react-table/utils/fuzzy-sort.util'
+import { useWarehousePageContext } from '@features/warehouse/contexts/warehouse-page-context'
 import type { IWarehouse } from '@features/warehouse/types'
 import type { Row, Table } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
+import { format } from 'date-fns'
 import { Fragment, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { warehouseTypes } from '../../constants/warehouse.const'
-import { usePageContext } from '../../contexts/page-context'
-import {
-	useDeleteWarehouseMutation,
-	useGetWarehouseQuery,
-	useUpdateWarehouseStatusMutation
-} from '../../hooks/use-warehouse-request'
+import { useDeleteWarehouseMutation, useGetWarehouseQuery } from '../../hooks/use-warehouse-request'
 import WarehouseRowActions from './warehouse-row-actions'
 // #endregion
 
@@ -29,27 +40,28 @@ const WarehouseDataTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
-	const tableRef = useRef<Table<IWarehouse>>(null)
-	const { dispatch } = usePageContext()
+	const tableRef = useRef<Table<IWarehouse | null>>(null!)
+	const { event$ } = useWarehousePageContext()
 
 	// Handle reset row deletion
 	const handleResetAllRowSelection = () => {
-		tableRef.current.resetRowSelection()
-		resetRowSelectionType()
+		if (tableRef.current) {
+			tableRef.current.resetRowSelection()
+			resetRowSelectionType()
+		}
 	}
 
 	// Handle delete selected row(s)
 	const handleDeleteSelectedRows = () => {
-		deleteWarehouseAsync(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original.id))
+		if (tableRef.current) {
+			deleteWarehouseAsync(tableRef.current.getSelectedRowModel().flatRows.map((item) => String(item.original?._id)))
+		}
 	}
 
 	const handlePreUpdate = (row: Row<IWarehouse>) => {
-		dispatch({
-			type: CommonActions.UPDATE,
-			payload: {
-				dialogTitle: t('ns_warehouse:form.update_warehouse_title'),
-				defaultFormValues: row.original
-			}
+		event$.emit({
+			action: CommonActions.UPDATE,
+			payload: row.original
 		})
 	}
 
@@ -60,21 +72,16 @@ const WarehouseDataTable: React.FC = () => {
 	}
 
 	// Get warehouse data
-	const { data, isLoading, refetch } = useGetWarehouseQuery<IWarehouse[]>({
-		select: (response) => response.metadata
-	})
+	const { data, isLoading, refetch } = useGetWarehouseQuery()
 
 	// Delete warehouse
 	const { mutateAsync: deleteWarehouseAsync } = useDeleteWarehouseMutation(handleResetAllRowSelection)
-
-	// Update warehouse status
-	const { mutateAsync: updateWarehouseStatus } = useUpdateWarehouseStatusMutation()
 
 	const columnHelper = createColumnHelper<IWarehouse>()
 
 	const columns = useMemo(
 		() => [
-			columnHelper.accessor('id', {
+			columnHelper.accessor('_id', {
 				id: ROW_SELECTION_COLUMN_ID,
 				header: (props) => (
 					<IndeterminateCheckbox
@@ -101,9 +108,9 @@ const WarehouseDataTable: React.FC = () => {
 				enableGlobalFilter: false,
 				enableColumnFilter: false
 			}),
-			columnHelper.accessor('warehouse_num', {
-				id: 'warehouse_num',
-				header: t('ns_warehouse:fields.warehouse_num'),
+			columnHelper.accessor('name', {
+				id: 'name',
+				header: t('ns_warehouse:fields.warehouse_name'),
 				enableColumnFilter: true,
 				enableGlobalFilter: true,
 				enableResizing: true,
@@ -112,107 +119,95 @@ const WarehouseDataTable: React.FC = () => {
 				sortingFn: fuzzySort,
 				cell: ({ getValue }) => String(getValue()).toUpperCase()
 			}),
-			columnHelper.accessor('type_warehouse', {
-				id: 'type_warehouse',
-				header: t('ns_warehouse:fields.type_warehouse'),
+			columnHelper.accessor('capacity', {
+				id: 'capacity',
+				header: t('ns_warehouse:fields.storage_capacity'),
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true,
 				enableSorting: true,
-				enableGlobalFilter: false,
-				enableColumnFilter: true,
-				enableResizing: true,
-				filterFn: 'equals',
-				meta: {
-					filterVariant: 'select',
-					facetedUniqueValues: Object.entries(warehouseTypes).map(([key, val]) => ({
-						label: t(val, { ns: 'ns_warehouse', defaultValue: val }),
-						value: key
-					}))
-				},
-				cell: ({ getValue }) => {
-					const originalValue = getValue()
-					return t(warehouseTypes[originalValue], {
-						ns: 'ns_warehouse',
-						defaultValue: originalValue
-					})
-				}
+				filterFn: 'inNumberRange',
+				sortingFn: fuzzySort,
+				meta: { filterVariant: 'range' },
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
-			columnHelper.accessor('warehouse_name', {
-				id: 'warehouse_name',
-				header: t('ns_warehouse:fields.warehouse_name'),
-				minSize: 250,
-				enableMultiSort: true,
-				enableResizing: true,
+			columnHelper.accessor('created_by', {
+				header: t('ns_common:common_fields.created_by'),
 				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true,
+				enableSorting: true,
 				filterFn: 'fuzzy',
 				sortingFn: fuzzySort,
-				enableSorting: true,
-				cell: ({ getValue }) => String(getValue()).toUpperCase()
+				cell: ({ getValue }) => {
+					const user = getValue()
+					return (
+						<Item size='sm' className='p-0'>
+							<ItemMedia>
+								<Avatar className='size-8'>
+									<AvatarImage src={generateAvatar({ name: user.display_name })} />
+									<AvatarFallback>{user.display_name.charAt(0).toUpperCase()}</AvatarFallback>
+								</Avatar>
+							</ItemMedia>
+							<ItemContent className='gap-0'>
+								<ItemTitle>{user.display_name}</ItemTitle>
+								<ItemDescription className='before:content-["@"]'>{user.username}</ItemDescription>
+							</ItemContent>
+						</Item>
+					)
+				}
 			}),
-			columnHelper.accessor('area', {
-				id: 'area',
-				header: t('ns_warehouse:fields.area'),
-				minSize: 150,
-				meta: { filterVariant: 'range', align: 'right' },
-				filterFn: 'inNumberRange',
+			columnHelper.accessor('created_at', {
+				header: t('ns_common:common_fields.created_at'),
 				enableColumnFilter: true,
-				enableGlobalFilter: false,
+				enableGlobalFilter: true,
 				enableResizing: true,
 				enableSorting: true,
+				filterFn: 'inDateRange',
 				sortingFn: fuzzySort,
-				cell: ({ getValue }) => new Intl.NumberFormat('en-US', { minimumSignificantDigits: 3 }).format(getValue())
+				meta: { filterVariant: 'date' },
+				cell: ({ getValue }) => format(getValue(), 'yyyy-MM-dd HH:mm')
 			}),
-			columnHelper.accessor('is_disable', {
-				id: 'is_disable',
-				header: t('ns_warehouse:fields.is_disable'),
-				size: 100,
-				meta: { align: 'center' },
-				cell: ({ getValue, row: { original } }) => {
-					const value = getValue()
-					return (
-						<Checkbox
-							role='checkbox'
-							checked={value}
-							onCheckedChange={(checked) =>
-								updateWarehouseStatus({
-									id: original.id,
-									payload: {
-										is_disable: Boolean(checked),
-										is_default: checked ? false : original.is_default
-									}
-								})
-							}
-						/>
-					)
-				}
-			}),
-			columnHelper.accessor('is_default', {
-				id: 'is_default',
-				header: t('ns_warehouse:fields.is_default'),
-				minSize: 100,
-				meta: { align: 'center' },
-				cell: ({ getValue, row: { original } }) => {
-					const value = Boolean(getValue())
-					return (
-						<Checkbox
-							role='checkbox'
-							disabled={original.is_disable}
-							checked={value}
-							onCheckedChange={(checked) =>
-								updateWarehouseStatus({
-									id: original.id,
-									payload: { is_default: Boolean(checked) }
-								})
-							}
-						/>
-					)
-				}
-			}),
-			columnHelper.accessor('remark', {
-				id: 'remark',
-				header: t('ns_common:common_fields.remark'),
+			columnHelper.accessor('updated_by', {
+				header: t('ns_common:common_fields.updated_by'),
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
 				enableResizing: true,
-				cell: ({ getValue }) => getValue() ?? '-'
+				enableSorting: true,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
+				cell: ({ getValue }) => {
+					const user = getValue()
+					if (!user) return
+					return (
+						<Item size='sm' className='p-0'>
+							<ItemMedia>
+								<Avatar className='size-8'>
+									<AvatarImage src={generateAvatar({ name: user.display_name })} />
+									<AvatarFallback>{user.display_name.charAt(0).toUpperCase()}</AvatarFallback>
+								</Avatar>
+							</ItemMedia>
+							<ItemContent className='gap-0'>
+								<ItemTitle>{user.display_name}</ItemTitle>
+								<ItemDescription className='before:content-["@"]'>{user.username}</ItemDescription>
+							</ItemContent>
+						</Item>
+					)
+				}
 			}),
-			columnHelper.accessor('id', {
+			columnHelper.accessor('updated_at', {
+				header: t('ns_common:common_fields.updated_at'),
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true,
+				enableSorting: true,
+				filterFn: 'inDateRange',
+				sortingFn: fuzzySort,
+				meta: { filterVariant: 'date' },
+				cell: ({ getValue }) =>
+					getValue() ? format(getValue(), 'yyyy-MM-dd HH:mm') : <span className='text-muted-foreground'>-</span>
+			}),
+			columnHelper.accessor('_id', {
 				id: ROW_ACTIONS_COLUMN_ID,
 				header: t('ns_common:common_fields.actions'),
 				size: 100,
@@ -236,7 +231,7 @@ const WarehouseDataTable: React.FC = () => {
 	return (
 		<Fragment>
 			<DataTable
-				data={data}
+				data={data!}
 				columns={columns}
 				loading={isLoading}
 				enableColumnResizing={true}

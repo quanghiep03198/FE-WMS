@@ -1,3 +1,5 @@
+import type { StockFlow } from '../constants/enums'
+
 export interface IElectronicProductCode {
 	epc: string
 	mo_no: string
@@ -66,22 +68,19 @@ export interface IArchivedFilterFeature {
 
 export type StockTransactionType = 'stock_in' | 'recall' | 'stock_out'
 
+export type StockTxType = 'stock_in' | 'recall'
+export type ShippingTxType = 'stock_out'
+
 export interface IStockTransaction<T extends StockFlow> {
 	id: string
 	mo_no: string
-	po: T extends 'outbound' ? string : never
+	po: T extends Extract<StockFlow, 'outbound'> ? string : never
 	qty: number
+	reversible: boolean
+	voided: boolean
 	tx_at: string
-	tx_type: StockTransactionType
-	can_rollback: boolean
-	reversed: boolean
-	changes: Record<
-		string,
-		{
-			stocked_in_qty: number
-			total_recall_tx: number
-			total_return_tx: number
-			shipped_out_qty: number
-		}
-	>
+	tx_type: T extends Extract<StockFlow, 'outbound'> ? ShippingTxType : T extends 'inbound' ? StockTxType : never
+	changes: T extends Extract<StockFlow, 'outbound'>
+		? Array<{ mo_no: string; size_ledger: Record<string, ISizeLedgerFluctuation> }>
+		: Record<string, ISizeLedgerFluctuation>
 }

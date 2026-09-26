@@ -9,7 +9,7 @@ import {
 } from '@components/ui'
 import type { IRFIDReaderDevice } from '@features/rfid-device/types'
 import type { CellContext } from '@tanstack/react-table'
-import { isNil, pick } from 'lodash-es'
+import { pick } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -48,15 +48,14 @@ const ActionDropdown: React.FC<
 								action: CommonActions.UPDATE,
 								defaultValues: {
 									...pick(row.original, [
-										'station_no',
 										'device_sn',
-										'ip_address',
-										'ip_port',
-										'device_name_vi',
-										'device_name_en',
-										'device_name_cn'
-									]),
-									device_ant: row.original.device_ant === '0' || isNil(row.original.device_ant) ? '0' : '1'
+										'device_name',
+										'device_type',
+										'station_no',
+										'tcp_ip',
+										'tcp_port'
+									])
+									// device_ant: row.original.device_ant === '0' || isNil(row.original.device_ant) ? '0' : '1'
 								}
 							})
 						}>

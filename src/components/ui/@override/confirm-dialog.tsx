@@ -52,7 +52,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 				<AlertDialogFooter>
 					<AlertDialogCancel
 						onClick={() => {
-							onOpenChange(!open)
+							if (typeof onOpenChange === 'function') onOpenChange(!open)
 							if (onCancel && typeof onCancel === 'function') onCancel()
 						}}>
 						{t('ns_common:actions.cancel')}

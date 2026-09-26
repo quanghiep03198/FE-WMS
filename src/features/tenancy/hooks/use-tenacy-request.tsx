@@ -1,4 +1,4 @@
-import useAuth from '@hooks/use-auth'
+import env from '@common/utils/env'
 import { useQuery } from '@tanstack/react-query'
 import { TenancyService } from '../services/tenancy.service'
 
@@ -7,11 +7,13 @@ export enum TenancyQueryKeys {
 	ALL_TENANTS = 'ALL_TENANTS'
 }
 
+/**
+ * @deprecated
+ * @returns
+ */
 export const useGetTenantByFactory = () => {
-	const { user } = useAuth()
-
 	return useQuery({
-		queryKey: [TenancyQueryKeys.TENANT_BY_FACTORY, user?.current_factory_code],
+		queryKey: [TenancyQueryKeys.TENANT_BY_FACTORY, env<FactoryCode>('VITE_APP_TENANT')],
 		queryFn: TenancyService.getTenantsByFactory,
 		refetchOnMount: true,
 		refetchOnWindowFocus: true,

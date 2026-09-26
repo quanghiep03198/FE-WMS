@@ -3,7 +3,6 @@ import { QueryErrorResetBoundary } from '@tanstack/react-query'
 
 import React from 'react'
 import { I18nextProvider } from 'react-i18next'
-import { useRegisterSW } from 'virtual:pwa-register/react'
 import { ErrorBoundaryFallback } from './components/errors/error-boundary-fallback'
 import { Toaster } from './components/ui/@core/sonner'
 import { AppConfigs } from './configs/app.config'
@@ -13,8 +12,6 @@ import { RouterProvider } from './providers/router-provider'
 import { ThemeProvider } from './providers/theme-provider'
 
 const App: React.FC = () => {
-	const serviceWorker = useRegisterSW({ immediate: true })
-
 	return (
 		<QueryErrorResetBoundary>
 			{({ reset: resetQueryError }) => (
@@ -33,7 +30,7 @@ const App: React.FC = () => {
 					<QueryClientProvider>
 						<I18nextProvider i18n={i18n}>
 							<ThemeProvider>
-								<RouterProvider context={{ serviceWorker }} />
+								<RouterProvider />
 								<Toaster
 									className='pointer-events-auto'
 									position='bottom-right'

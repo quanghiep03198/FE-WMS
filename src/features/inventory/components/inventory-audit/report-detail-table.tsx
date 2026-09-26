@@ -12,7 +12,6 @@ import React, { Fragment, useMemo, useRef } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useGetTenantByFactory } from '../../../tenancy/hooks/use-tenacy-request'
 import { InventoryAuditQueryKeys, useInventoryAuditMutation } from '../../hooks/use-inventory-audit-request'
 import type { InventoryAuditFormValues } from '../../schemas/inventory-audit.schema'
 import { reportDataSchema } from '../../schemas/inventory-audit.schema'
@@ -46,15 +45,13 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		}
 	})
 	const { fields } = useFieldArray({ name: 'data', control: form.control })
-	const abortControllerRef = useRef<AbortController | null>(null)
-
-	const { data: currentTenant } = useGetTenantByFactory()
+	const abortControllerRef = useRef<AbortController>(new AbortController())
 
 	// * Implement optimistic update on save manual changes
-	const { mutateAsync, isPending, isError } = useInventoryAuditMutation(queries, abortControllerRef?.current?.signal)
+	const { mutateAsync, isPending, isError } = useInventoryAuditMutation(queries, abortControllerRef.current.signal)
 
 	const handleCancelUpdate = () => {
-		abortControllerRef.current.abort()
+		if (abortControllerRef.current) abortControllerRef.current.abort()
 		disableEditing()
 		form.reset({
 			data: data.map((item) => ({
@@ -66,12 +63,14 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 	}
 
 	const handleStartUpdate = () => {
-		abortControllerRef.current = new AbortController()
+		if (abortControllerRef.current && abortControllerRef.current.signal.aborted) {
+			abortControllerRef.current = new AbortController()
+		}
 		enableEditing()
 	}
 
 	const fetchingQueries = useIsFetching({
-		queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, currentTenant?.id, searchParams],
+		queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, searchParams],
 		exact: true,
 		type: 'active',
 		fetchStatus: 'fetching',
@@ -246,7 +245,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 												<Button type='submit' size='sm' disabled={isLoading}>
 													<Icon
 														name={isPending ? 'LoaderCircle' : 'Check'}
-														className={isPending && 'animate-spin'}
+														className={cn(isPending && 'animate-spin')}
 													/>{' '}
 													{isPending
 														? t('ns_common:status.processing')

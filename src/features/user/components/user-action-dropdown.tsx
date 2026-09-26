@@ -30,8 +30,8 @@ const UserActionDropdown: React.FC<CellContext<IUser, unknown>> = ({ row }) => {
 								'display_name',
 								'email',
 								'employee_code',
-								'roles',
-								'authorized_factory_codes'
+								'roles'
+								// 'authorized_factory_codes'
 							])
 						})
 					}>

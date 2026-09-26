@@ -35,7 +35,7 @@ function Layout() {
 		<AuthGuard>
 			<LayoutComposition.Container>
 				<LayoutComposition.Heading />
-				<LayoutComposition.MainSection as='section'>
+				<LayoutComposition.MainSection>
 					<LayoutComposition.Navbar />
 					<LayoutComposition.OutletWrapper>
 						<Outlet />

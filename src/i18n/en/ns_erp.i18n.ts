@@ -86,7 +86,7 @@ export default {
 		ship_order: 'Shipping order number',
 		shipping_id: 'Shipping ID',
 		shipping_destination: 'Shipping destination',
-		shipping_type: 'Shipping type',
+		shipping_method: 'Shipping type',
 		shipment_confirm_date: 'Shipment confirm date', //: Ngày xác nhận xuất hàng
 		shoes_type_b: 'Shoes type B', //: Giày cấp B
 		sewing_line: 'Sewing line',
@@ -95,7 +95,7 @@ export default {
 		recalled_qty: 'Recalled Quantity', // Recalled Quantity
 		ri_type: 'Combination type',
 		shaping_dept_productivity: 'Shaping department productivity', // Shaping Department Productivity
-		shaping_dept_code: 'Shaping department code',
+		assembly_line_code: 'Shaping department code',
 		shaping_dept_name: 'Shaping department name',
 		shoe_source: 'Shoes source',
 		sno_car_number: 'Container number',

@@ -14,10 +14,11 @@ import {
 	type GlobalFilterTableState,
 	type PaginationState,
 	type RowSelectionState,
-	type SortingState
+	type SortingState,
+	type Table
 } from '@tanstack/react-table'
 import { useDeepCompareEffect, useEventEmitter, useResetState } from 'ahooks'
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import tw from 'tailwind-styled-components'
 import type { StoreApi } from 'zustand'
@@ -29,7 +30,7 @@ import TableToolbar from './components/table-toolbar'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from './constants'
 import type { TableContextStore } from './context/table.context'
 import { TableContext } from './context/table.context'
-import { type DataTableProps } from './types'
+import { type DataTableProps, type TableFooterProps } from './types'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
 import { fuzzySort } from './utils/fuzzy-sort.util'
 import { dateRangeFilter } from './utils/in-date-range-filter.util'
@@ -52,7 +53,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 	expanded = {},
 	paginationProps = { enableInputPageSize: true },
 	toolbarProps,
-	footerProps = { hidden: true, slot: null },
+	footerProps = { hidden: true } satisfies TableFooterProps,
 	manualExpanding = false,
 	manualPagination = false,
 	manualSorting = false,
@@ -108,7 +109,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 	const visibleColumns = columns.filter((col) => !col.meta?.hidden)
 
 	// * Table declaration
-	const table = useReactTable<any>({
+	const table = useReactTable<Table<any>>({
 		data: _data,
 		columns: visibleColumns,
 		initialState: {
@@ -136,8 +137,8 @@ const DataGrid: React.FC<DataTableProps> = ({
 			columnOrder,
 			pagination: manualPagination
 				? {
-						pageIndex: paginationProps.page - 1,
-						pageSize: paginationProps.limit
+						pageIndex: (paginationProps?.page ?? 1) - 1,
+						pageSize: paginationProps?.limit ?? 20
 					}
 				: pagination
 		},
@@ -272,7 +273,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 	return (
 		<TableContext.Provider value={store.current}>
 			<DataTableWrapper data-border={border}>
-				<TableToolbar {...{ ...toolbarProps, table }} />
+				<TableToolbar {...{ ...toolbarProps }} />
 				<DataTable
 					columns={visibleColumns}
 					loading={loading}
@@ -321,4 +322,4 @@ const DataTableWrapper = tw.div`
 `
 const FooterGroup = tw.div`flex items-center justify-between`
 
-export default memo(DataGrid)
+export default DataGrid

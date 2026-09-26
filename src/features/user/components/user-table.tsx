@@ -140,7 +140,7 @@ const UserTable: React.FC = () => {
 	return (
 		<DataTable
 			columns={columns}
-			data={data}
+			data={data!}
 			loading={isLoading}
 			border='bottom-only'
 			containerProps={{

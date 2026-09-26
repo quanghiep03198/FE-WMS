@@ -1,14 +1,14 @@
 import { UserRole } from '@common/constants/enums'
 import RoleBaseAccessControl from '@components/guards/role-base-access-control'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@components/ui'
-import type { IWarehouseStorage } from '@features/warehouse/types'
+import type { IStorageLocation } from '@features/warehouse/types'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import type { Row } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 type WarehouseRowActionsProps = {
-	row: Row<IWarehouseStorage>
+	row: Row<IStorageLocation>
 	onEdit: () => void
 	onDelete: () => void
 }

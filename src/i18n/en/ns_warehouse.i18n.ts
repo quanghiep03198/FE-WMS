@@ -21,8 +21,11 @@ export default {
 		warehouse_num: 'Warehouse code'
 	},
 	form: {
-		add_warehouse_title: 'Create New Warehouse',
-		update_warehouse_title: 'Update Warehouse'
+		add_warehouse_title: 'Add new warehouse',
+		update_warehouse_title: 'Update warehouse',
+		add_storage_location_title: 'Add new storage locations',
+		update_storage_location_title: 'Update storage location',
+		storage_location_note: 'The storage location name must be unique and cannot duplicate other locations.'
 	},
 	headings: {
 		storage_list_description: 'Manage storage location information',

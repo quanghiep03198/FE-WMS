@@ -6,7 +6,7 @@ import { isDateRange } from 'react-day-picker'
 import type { TruckloadDeliveryStatus } from '../constants'
 import { usePageContext } from '../contexts/page-context'
 import type { FilterOperator, TruckloadDeliveryFilterFormValues } from '../schemas'
-import type { ITruckloadDelivery } from '../services/truckload-delivery.service'
+import type { ITruckloadDelivery } from '../types'
 
 export type PageQueryParams = {
 	q?: string

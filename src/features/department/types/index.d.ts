@@ -1,8 +1,8 @@
 import type { IBaseEntity } from '../../../common/types/entities'
 
 export interface IDepartment extends IBaseEntity, Pick<ICompany, 'company_code'> {
-	dept_code: string
-	dept_name: string
+	code: string
+	name: string
 }
 export interface ICompany extends IBaseEntity {
 	company_code: string

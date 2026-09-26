@@ -1,127 +1,88 @@
-import {
-	keepPreviousData,
-	useMutation,
-	useQuery,
-	useQueryClient,
-	type UseMutationOptions,
-	type UseQueryOptions
-} from '@tanstack/react-query'
-import type { AxiosError, AxiosResponse } from 'axios'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { HttpStatusCode } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import type { PartialStorageFormValue } from '../schemas/storage-location.schema'
-import { WarehouseStorageService } from '../services/warehouse-storage.service'
-import type { IWarehouseStorage } from '../types'
+import type { UpdateStorageLocationFormValue } from '../schemas/storage-location.schema'
+import { StorageLocationService } from '../services/storage-location.service'
+import { getOneWarehouseQueryOptions, WarehouseQueryKeys } from './use-warehouse-request'
 
 export enum WarehouseStorageQueryKeys {
 	WAREHOUSE_STORAGE = 'WAREHOUSE_STORAGE',
 	WAREHOUSE_STORAGE_SUMMARY = 'WAREHOUSE_STORAGE_SUMMARY'
 }
 
-type TQueryKey = [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, string]
-
-type TransformResponseFn<T> = UseQueryOptions<
-	ResponseBody<IWarehouseStorage[]>,
-	AxiosError<unknown, any>,
-	T,
-	TQueryKey
->['select']
-
-type TQueryFnData = Awaited<Promise<ResponseBody<IWarehouseStorage[]>>>
-
-type UseGetWarehouseStorageQueryOptions<T> = UseQueryOptions<
-	TQueryFnData,
-	AxiosError<unknown, any>,
-	ReturnType<TransformResponseFn<T>>,
-	TQueryKey
->
-
-export function getWarehouseStorageOptions<T>(
-	warehouseNum: string,
-	options?: Partial<UseGetWarehouseStorageQueryOptions<T>>
-) {
-	return {
-		queryKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum],
-		queryFn: () => WarehouseStorageService.getWarehouseStorages(warehouseNum),
-		placeholderData: keepPreviousData,
-		...options
-	} as Required<UseGetWarehouseStorageQueryOptions<T>>
-}
-
 export function useGetWarehouseStorageSummaryQuery() {
 	return useQuery({
 		queryKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE_SUMMARY],
-		queryFn: WarehouseStorageService.getWarehouseStorageSummary,
+		queryFn: StorageLocationService.getWarehouseStorageSummary,
 		select: (response) => response.metadata
 	})
 }
 
-export function useGetWarehouseStorageQuery<T>(
-	warehouseNum: string,
-	options?: Partial<UseGetWarehouseStorageQueryOptions<T>>
-) {
-	const defaultOptions = getWarehouseStorageOptions<T>(warehouseNum)
-
-	const queryOptions = {
-		...defaultOptions,
-		...options
-	}
-
-	return useQuery(queryOptions)
+export function useGetStorageLocationByWarehouseQuery(warehouseName: string) {
+	return useQuery(
+		getOneWarehouseQueryOptions(warehouseName, (response) =>
+			Array.isArray(response.metadata?.storage_locations)
+				? response.metadata.storage_locations.sort((a, b) =>
+						a.name.localeCompare(b.name, undefined, { numeric: true })
+					)
+				: []
+		)
+	)
 }
 
-export function useUpdateStorageMutation({ warehouseNum }: { warehouseNum: string }) {
-	const queryClient = useQueryClient()
+export function useCreateStorageMutation(warehouseName: string) {
 	const { t } = useTranslation()
 
 	return useMutation({
 		meta: {
-			invalidates: [
-				[WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum],
-				[WarehouseStorageQueryKeys.WAREHOUSE_STORAGE_SUMMARY]
-			]
+			invalidates: [[WarehouseQueryKeys.WAREHOUSE, warehouseName]]
 		},
-		mutationFn: (data: { id: number; payload: PartialStorageFormValue }) =>
-			WarehouseStorageService.updateWarehouseStorage(data.id, data.payload),
+		mutationFn: StorageLocationService.createWarehouseStorage,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
-		onSuccess: (_data, _variables, context) => {
-			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum] })
-		},
-		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
+		onSuccess: (_data, _variables, context) => toast.success(t('ns_common:notification.success'), { id: context }),
+		onError: (error, _variables, context) => {
+			if (error.response?.status !== HttpStatusCode.Conflict)
+				toast.error(t('ns_common:notification.error'), { id: context })
+			else toast.error((error.response?.data as ResponseBody<null>).message, { id: context })
+		}
 	})
 }
 
-export function useDeleteStorageMutation(
-	{ warehouseNum }: { warehouseNum: string },
-	{
-		onSettled
-	}: UseMutationOptions<
-		AxiosResponse<ResponseBody<null>, unknown>,
-		AxiosError<unknown, unknown>,
-		unknown,
-		string | number
-	>
-) {
-	const queryClient = useQueryClient()
+export function useUpdateStorageMutation(warehouseName: string) {
 	const { t } = useTranslation()
 
 	return useMutation({
 		meta: {
-			invalidates: [
-				[WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum],
-				[WarehouseStorageQueryKeys.WAREHOUSE_STORAGE_SUMMARY]
-			]
+			invalidates: [[WarehouseQueryKeys.WAREHOUSE, warehouseName]]
 		},
-		mutationFn: WarehouseStorageService.deleteWarehouseStorage,
+		throwOnError: true,
+		mutationFn: async ({ _id, ...payload }: UpdateStorageLocationFormValue) =>
+			await StorageLocationService.updateWarehouseStorage(_id, payload),
+		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
+		onSuccess: (_data, _variables, context) => toast.success(t('ns_common:notification.success'), { id: context }),
+		onError: (error, _variables, context) => {
+			if (error.response?.status !== HttpStatusCode.Conflict)
+				toast.error(t('ns_common:notification.error'), { id: context })
+			else toast.error((error.response?.data as ResponseBody<null>).message, { id: context })
+		}
+	})
+}
+
+export function useDeleteStorageMutation(warehouseName: string) {
+	const { t } = useTranslation()
+
+	return useMutation({
+		meta: {
+			invalidates: [[WarehouseQueryKeys.WAREHOUSE, warehouseName]]
+		},
+		mutationFn: StorageLocationService.deleteWarehouseStorage,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum] })
 		},
 		onError: (_data, _variables, context) => {
 			toast.error(t('ns_common:notification.error'), { id: context })
-		},
-		onSettled: onSettled
+		}
 	})
 }

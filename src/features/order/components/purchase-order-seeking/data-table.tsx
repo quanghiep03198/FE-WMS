@@ -1,7 +1,7 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '@components/ui'
-import type { IPurchaseOrderDetail } from '@features/order/types'
-import { groupBy, orderBy, sortBy } from 'lodash-es'
+import type { IPurchaseOrder } from '@features/order/types'
+import { sortBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -10,24 +10,19 @@ import {
 	NestedColumn,
 	NestedTable
 } from '../../../../components/shared/horizontal-nested-table'
-import { usePurchaseOrderDetailQuery } from '../../hooks/use-po-detail-request'
+import { useGetPurchaseOrderQuery } from '../../hooks/use-po-detail-request'
 import EmptySearchResult from './empty-history'
 
 const DataSection: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const { data, isLoading } = usePurchaseOrderDetailQuery()
-
-	const orderQty = useMemo(() => {
-		if (!Array.isArray(data)) return 0
-		return formatIntlNumber(data.reduce((acc, curr) => acc + curr.qty, 0))
-	}, [data])
+	const { data, isLoading } = useGetPurchaseOrderQuery()
 
 	const columns = useMemo<
 		Array<{
 			header: string
-			accessorKey: keyof IPurchaseOrderDetail
+			accessorKey: keyof IPurchaseOrder
 			meta: React.ThHTMLAttributes<HTMLTableCellElement>
-			cell?: (value: IPurchaseOrderDetail[keyof IPurchaseOrderDetail]) => string | number | React.ReactNode
+			cell?: (value: IPurchaseOrder[keyof IPurchaseOrder]) => string | number | React.ReactNode
 		}>
 	>(
 		() => [
@@ -43,7 +38,7 @@ const DataSection: React.FC = () => {
 			},
 			{
 				header: t('ns_erp:fields.factory_shoes_style'),
-				accessorKey: 'shoes_style',
+				accessorKey: 'factory_shoes_style',
 				meta: { align: 'left' }
 			},
 			{
@@ -54,28 +49,22 @@ const DataSection: React.FC = () => {
 
 			{
 				header: t('ns_erp:fields.shipping_destination'),
-				accessorKey: 'ship_dest_country',
+				accessorKey: 'shipping_destination',
 				meta: { align: 'left', style: { minWidth: 150, maxWidth: 150 } }
 			},
 			{
-				header: t('ns_erp:fields.shipping_type'),
-				accessorKey: 'ship_type',
+				header: t('ns_erp:fields.shipping_method'),
+				accessorKey: 'shipping_method',
 				meta: { align: 'left', style: { minWidth: 150, maxWidth: 150 } }
 			},
 			{
 				header: t('ns_erp:fields.order_qty'),
-				accessorKey: 'qty',
-				meta: { align: 'left', style: { minWidth: 150, maxWidth: 150 } },
-				cell: () => <span className='font-medium'>{orderQty}</span>
+				accessorKey: 'order_qty',
+				meta: { align: 'left', style: { minWidth: 150, maxWidth: 150 } }
 			}
 		],
-		[orderQty, i18n.language]
+		[i18n.language]
 	)
-
-	const sizeQtyByOrder = useMemo(() => {
-		if (!data) return []
-		return Object.entries(groupBy(orderBy(data, 'mo_no', 'asc'), (item) => item.mo_no))
-	}, [data])
 
 	if (isLoading)
 		return (
@@ -85,7 +74,7 @@ const DataSection: React.FC = () => {
 			</Div>
 		)
 
-	if (!Array.isArray(data) || !data.length) return <EmptySearchResult />
+	if (!data) return <EmptySearchResult />
 
 	return (
 		<Div className='scrollbar-track-accent/50 @container relative max-h-96 overflow-auto rounded-lg border'>
@@ -150,15 +139,14 @@ const DataSection: React.FC = () => {
 					</TableRow>
 					<TableRow>
 						{columns.map((column) => {
-							const [rowData] = data
 							const cellValue =
 								typeof column.cell === 'function'
-									? column.cell(rowData[column.accessorKey])
-									: rowData?.[column.accessorKey]
+									? column.cell(data[column.accessorKey])
+									: data?.[column.accessorKey]
 							return (
 								<TableHead
 									key={column.accessorKey}
-									className='text-foreground font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+									className='text-foreground font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10 last:font-medium'
 									{...column.meta}>
 									<span data-empty={!cellValue} className='data-[empty=true]:text-muted-foreground'>
 										{cellValue ?? t('ns_common:titles.unknown')}
@@ -185,23 +173,23 @@ const DataSection: React.FC = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{sizeQtyByOrder.map(([date, history]) => {
-						const totalQty = history.reduce((acc, curr) => acc + curr.qty, 0)
+					{Object.entries(data.packing).map(([manufacturingOrder, sizeRun]) => {
+						const totalQty = Object.values(sizeRun).reduce((acc, curr) => acc + curr, 0)
 						return (
-							<TableRow key={date}>
+							<TableRow key={manufacturingOrder}>
 								<TableCell
 									align='left'
 									colSpan={1}
 									className='sticky left-0 z-10'
 									style={{ boxShadow: '1px 0px var(--border)' }}>
-									<span>{date}</span>
+									<span>{manufacturingOrder}</span>
 								</TableCell>
 								<TableCell colSpan={5} className='p-0'>
 									<NestedTable>
-										{sortBy(history, 'size_numcode').map((item) => (
-											<NestedColumn key={item.size_numcode} className='*:h-9'>
-												<NestedCellHead>{item.size_numcode}</NestedCellHead>
-												<NestedCell>{formatIntlNumber(item.qty)}</NestedCell>
+										{sortBy(Object.entries(sizeRun), (item) => item[0]).map(([size, qty]) => (
+											<NestedColumn key={size} className='*:h-9'>
+												<NestedCellHead>{size}</NestedCellHead>
+												<NestedCell>{formatIntlNumber(qty)}</NestedCell>
 											</NestedColumn>
 										))}
 									</NestedTable>

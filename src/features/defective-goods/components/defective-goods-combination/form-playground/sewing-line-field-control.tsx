@@ -11,7 +11,7 @@ const SewingLineFieldControl: React.FC<DefAutoCompleteFieldControlProps> = (prop
 
 	const datalist = useMemo(() => {
 		if (!Array.isArray(data)) return []
-		return data.map(({ dept_name }) => ({ label: dept_name, value: dept_name }))
+		return data.map(({ name }) => ({ label: name, value: name }))
 	}, [data])
 
 	return (

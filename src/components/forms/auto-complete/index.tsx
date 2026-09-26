@@ -6,7 +6,6 @@ import useScrollToFn from '@hooks/use-scroll-fn'
 import useVirtualScrollPadding from '@hooks/use-virtual-scroll-padding'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import type { ResourceKey } from 'i18next'
 import { useCallback, useId, useMemo, useRef, useState } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { useFormContext, useWatch } from 'react-hook-form'
@@ -51,7 +50,7 @@ export type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<stri
 	onItemClick?: (value: D) => unknown
 } & React.ComponentProps<'input'>
 
-export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlProps<T, D>) {
+export function AutoCompleteFieldControl<T extends FieldValues, D>(props: AutoCompleteFieldControlProps<T, D>) {
 	const { t } = useTranslation()
 	const { control, getFieldState, setValue } = useFormContext()
 	const {
@@ -70,6 +69,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 		errorMessageVariant = 'inline',
 		estimateItemHeight = 32,
 		className,
+		hidden,
 		onInput,
 		onSelect,
 		onItemClick,
@@ -105,14 +105,14 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 	}
 
 	const { error } = getFieldState(name)
-	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
+	const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>(null)
 	const refCallback = useCallback((node: HTMLDivElement) => {
 		if (node) {
 			setScrollElement(node)
 		}
 	}, [])
 
-	const scrollToFn = useScrollToFn({ current: scrollElement })
+	const scrollToFn = useScrollToFn({ current: scrollElement! })
 	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
 	const estimateSize = useCallback(() => estimateItemHeight, [])
 
@@ -135,9 +135,9 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 			render={({ field }) => {
 				return (
 					<FormItem
-						className={cn(
-							orientation === 'horizontal' ? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0' : 'space-y-2'
-						)}
+						aria-hidden={hidden}
+						aria-orientation={orientation}
+						className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'
 						style={
 							{
 								'--item-height': '32px'
@@ -146,7 +146,8 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 						{label && (
 							<FormLabel
 								htmlFor={id}
-								className={orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'}>
+								aria-orientation={orientation}
+								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
 								{label}
 							</FormLabel>
 						)}
@@ -154,7 +155,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 							<Popover open={open && props['aria-haspopup'] !== 'false'} onOpenChange={setOpen} modal={false}>
 								<FormControl>
 									<Tooltip
-										message={t(error?.message as ResourceKey) || ''}
+										message={t(error?.message, { defaultValue: error?.message })}
 										triggerProps={{ asChild: true, type: 'button', className: 'w-full' }}
 										contentProps={{
 											hidden: !error || errorMessageVariant === 'inline',

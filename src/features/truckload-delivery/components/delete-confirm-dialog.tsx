@@ -1,6 +1,5 @@
 import { CommonActions } from '@common/constants/enums'
 import ConfirmDialog from '@components/ui/@override/confirm-dialog'
-import type { TruckloadDeliveryDispatchOrder } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
@@ -9,6 +8,7 @@ import {
 	useDeleteDispatchOrdersMutation,
 	useDeleteTruckloadDeliveryMutation
 } from '../hooks/use-truckload-delivery-asm'
+import type { TruckloadDeliveryDispatchOrder } from '../types'
 
 const DeleteConfirmDialog: React.FC = () => {
 	const { t } = useTranslation()

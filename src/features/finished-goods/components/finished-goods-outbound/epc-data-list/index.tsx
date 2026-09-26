@@ -1,8 +1,10 @@
 'use no memo'
 
+import type { FactoryCode } from '@common/constants/enums'
 import { RequestHeaders, RequestMethod } from '@common/constants/enums'
 import { FatalError, RetriableError } from '@common/errors'
 import { cn } from '@common/utils/cn'
+import env from '@common/utils/env'
 import { Json } from '@common/utils/json'
 import { Button, buttonVariants, Div, Icon, Label, Typography } from '@components/ui'
 import { AppConfigs } from '@configs/app.config'
@@ -46,7 +48,7 @@ const SSE_TOAST_ID = 'FETCH_SSE'
 
 const ScannedEpcList: React.FC = () => {
 	const { t } = useTranslation()
-	const abortControllerRef = useRef<AbortController | null>(null)
+	const abortControllerRef = useRef<AbortController>(new AbortController())
 	const [isPending, startTransition] = useTransition()
 	const { user } = useAuth()
 	const outletWrapper = useQuerySelector('#outlet-wrapper')
@@ -59,7 +61,12 @@ const ScannedEpcList: React.FC = () => {
 
 	const hasMounted = useRef(false)
 	useLayoutEffect(() => {
-		if (outletWrapperSize?.width > 920 && outletWrapperSize?.width < 1280) setIsExpanded(true)
+		if (
+			typeof outletWrapperSize?.width === 'number' &&
+			outletWrapperSize?.width > 920 &&
+			outletWrapperSize?.width < 1280
+		)
+			setIsExpanded(true)
 	}, [outletWrapperSize])
 
 	useLayoutEffect(() => {
@@ -107,6 +114,7 @@ const ScannedEpcList: React.FC = () => {
 			const previousPageData = scannedEpc?.data ?? []
 			const nextPageData = metadata?.data ?? []
 			setScannedEpc({
+				...scannedEpc,
 				...metadata,
 				data: uniqBy([...previousPageData, ...nextPageData], 'epc')
 			})
@@ -128,15 +136,15 @@ const ScannedEpcList: React.FC = () => {
 		if (abortControllerRef.current && !abortControllerRef.current.signal.aborted) {
 			abortControllerRef.current.abort()
 		}
-		abortControllerRef.current = new AbortController()
+		if (abortControllerRef.current.signal.aborted) abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
 			await fetchEventSource(AppConfigs.BASE_API_URL + '/rfid/outbound/sse', {
 				method: RequestMethod.GET,
 				credentials: 'include',
 				headers: {
-					[RequestHeaders.USER_REQUEST]: user?.username,
-					[RequestHeaders.FACTORY_CODE]: user?.current_factory_code
+					[RequestHeaders.USER_REQUEST]: user?.username!,
+					[RequestHeaders.FACTORY_CODE]: env<FactoryCode>('VITE_APP_TENANT')
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
@@ -166,7 +174,8 @@ const ScannedEpcList: React.FC = () => {
 						startTransition(() => setScannedOrders(data?.orders))
 						setScanningState(isPending ? 'pending' : 'success')
 					} catch (error) {
-						throw new FatalError(error)
+						const errorMessage = (error as Error).message
+						throw new FatalError(errorMessage)
 					}
 				},
 				onclose() {
@@ -185,7 +194,7 @@ const ScannedEpcList: React.FC = () => {
 				}
 			})
 		} catch (e) {
-			toast('Failed to connect', { id: SSE_TOAST_ID, description: e.message })
+			toast('Failed to connect', { id: SSE_TOAST_ID, description: (e as Error).message })
 		} finally {
 			toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
 		}
@@ -207,7 +216,14 @@ const ScannedEpcList: React.FC = () => {
 	const scrollToFn = useScrollToFn(containerRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ITEM_SIZE)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
-	const overscan = containerRef.current?.getBoundingClientRect().height > 400 ? 5 : 0
+	const overscan =
+		containerRef?.current &&
+		'getBoundingClientRect' in containerRef.current &&
+		typeof containerRef.current.getBoundingClientRect === 'function'
+			? containerRef.current.getBoundingClientRect().height > 400
+				? 5
+				: 0
+			: 0
 
 	// * Intitialize virtual list to render scanned EPC data
 	const virtualizer = useVirtualizer({

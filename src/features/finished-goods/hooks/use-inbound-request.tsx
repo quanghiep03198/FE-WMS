@@ -2,7 +2,7 @@ import type { DeleteScannedEpcsFormValues } from '@features/finished-goods/schem
 import { FinishedGoodsStockService } from '@features/finished-goods/services/finished-goods-stock.service'
 import { keepPreviousData, type Register, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { FinishedGoodsAction, StockFlow } from '../constants/enums'
+import { FinishedGoodsStockAction, StockFlow } from '../constants/enums'
 import { DEFAULT_PROPS, usePageContext } from '../contexts/finished-goods-inbound/page-context'
 import type { StockBalancesPayload } from '../schemas/inoutbound.schema'
 import { FinishedGoodsSharedService } from '../services/finished-goods-shared.service'
@@ -33,9 +33,9 @@ export const useGetScanningInboundEpcQuery = () => {
 	return useQuery({
 		queryKey: [FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice, params],
 		queryFn: async () => {
-			return await FinishedGoodsSharedService.getPaginatedScanningEpcs(StockFlow.INBOUND, params, selectedDevice)
+			return await FinishedGoodsSharedService.getPaginatedScanningEpcs(StockFlow.INBOUND, params, selectedDevice!)
 		},
-		enabled: scanningStatus === 'disconnected' && !!selectedDevice,
+		enabled: scanningStatus === 'disconnected',
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		placeholderData: keepPreviousData,
@@ -55,8 +55,8 @@ export const useGetScanningInboundMoQuery = () => {
 
 	return useQuery({
 		queryKey: [FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice],
-		queryFn: async () => await FinishedGoodsSharedService.getScanningMos(StockFlow.INBOUND, selectedDevice),
-		enabled: scanningStatus === 'disconnected',
+		queryFn: async () => await FinishedGoodsSharedService.getScanningMos(StockFlow.INBOUND, selectedDevice!),
+		enabled: scanningStatus === 'disconnected' && !!selectedDevice,
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		select: (response) => response.metadata
@@ -120,16 +120,16 @@ export const useUpdateStockVariationMutation = () => {
 	const mutationMeta = useMutationMeta()
 
 	const handler = {
-		[FinishedGoodsAction.IMPORT]: FinishedGoodsStockService.stockIn,
-		[FinishedGoodsAction.EXPORT]: FinishedGoodsStockService.recallFromStock
+		[FinishedGoodsStockAction.IMPORT]: FinishedGoodsStockService.stockIn,
+		[FinishedGoodsStockAction.EXPORT]: FinishedGoodsStockService.recallFromStock
 	}
 
 	mutationMeta.invalidates.push([StockTransactionQueryKey.STOCK_TRANSACTION, StockFlow.INBOUND])
 
 	return useMutation({
 		meta: mutationMeta,
-		mutationFn: (payload: StockBalancesPayload) => {
-			const mutationFn = handler[payload.rfid_status]
+		mutationFn: async (payload: StockBalancesPayload) => {
+			const mutationFn = handler[payload.action]
 			if (typeof mutationFn === 'function') return mutationFn(payload)
 		},
 		onSuccess: () => {
@@ -139,7 +139,7 @@ export const useUpdateStockVariationMutation = () => {
 	})
 }
 
-const useMutationMeta = (): Register['mutationMeta'] => {
+const useMutationMeta = (): Required<Register['mutationMeta']> => {
 	const { selectedDevice, currentPage, selectedOrder } = usePageContext(
 		'selectedDevice',
 		'currentPage',

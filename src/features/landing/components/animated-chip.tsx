@@ -11,9 +11,8 @@ const ACTIVE_STANDALONE_CUBE_CLASS =
 const ACTIVE_CLUSTERED_CUBE_CLASS =
 	'translate-y-0 [&_path:nth-child(odd)]:fill-(--yellow) [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
 const INACTIVE_CUBE_CLASS = '-translate-y-10 [&_path:nth-child(odd)]:fill-muted'
-const ACTIVE_WMS_CARD_CLASS =
-	'-translate-6 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] running'
-const INACTIVE_WMS_CARD_CLASS = '-translate-1 border-neutral-600! bg-neutral-500 text-neutral-700 shadow-none paused'
+const ACTIVE_WMS_CARD_CLASS = '-translate-6 border-2 opacity-100 shadow-[24px_24px_16px_#0a0a0a98] running'
+const INACTIVE_WMS_CARD_CLASS = '-translate-1 opacity-50 shadow-none paused'
 const VISIBLE_GLOW_CLASS = 'opacity-100'
 const HIDDEN_GLOW_CLASS = 'opacity-0'
 
@@ -282,7 +281,7 @@ const BeamAnimated: React.FC = () => {
 				<div className='relative grid h-full w-full flex-1 place-content-center'>
 					<div
 						className={cn(
-							'flex aspect-square size-24 flex-col items-center justify-center gap-y-6 rounded-lg p-4 delay-1000 select-none sm:size-12 sm:gap-y-2 sm:rounded-sm sm:p-2 sm:text-lg md:p-4',
+							'bg-primary text-primary-foreground flex aspect-square size-24 flex-col items-center justify-center gap-y-6 rounded-lg p-4 delay-1000 select-none sm:size-12 sm:gap-y-2 sm:rounded-sm sm:p-2 sm:text-lg md:p-4',
 							'animate-in slide-in-from-bottom-0 delay-[1350ms] duration-300 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)] will-change-transform',
 							isAnimated ? ACTIVE_WMS_CARD_CLASS : INACTIVE_WMS_CARD_CLASS
 						)}>

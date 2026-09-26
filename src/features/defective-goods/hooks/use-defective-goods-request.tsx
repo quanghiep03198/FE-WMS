@@ -6,14 +6,17 @@ import { useSessionStorageState } from 'ahooks'
 import { omitBy, pick, pickBy } from 'lodash-es'
 import { useCallback } from 'react'
 import { useReportPageQueryParams } from '../../report/hooks/use-report-page-query-params'
-import { useGetTenantByFactory } from '../../tenancy/hooks/use-tenacy-request'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../constants/storage-keys'
 import {
 	type DefectiveGoodsInboundFormValues,
 	type DefectiveGoodsOutboundFormValues,
 	type InboundOutboundFormValues
 } from '../schemas/defective-goods-inoutbound.schema'
-import { type CreateDefectiveGoodsFormValues, type DefectiveGoodQueryParams } from '../schemas/defective-goods.schema'
+import {
+	type CreateDefectiveGoodsFormValues,
+	type DefectiveGoodQueryParams,
+	type UpdateDefectiveGoodsFormValues
+} from '../schemas/defective-goods.schema'
 import type { IDefectiveGoods, IDefectiveGoodsInventory } from '../types'
 import { useFilterQuery } from './use-filter-query'
 
@@ -44,12 +47,9 @@ const useInvalidateQuery = () => {
 }
 
 export const useGetDefectiveGoodsInventoryQuery = () => {
-	const { data: tenant } = useGetTenantByFactory()
-
 	return useQuery({
-		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INVENTORY, tenant?.id],
-		queryFn: async () => await DefectiveGoodsService.getDefectiveGoodsInventory(tenant?.id),
-		enabled: !!tenant?.id,
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INVENTORY],
+		queryFn: async () => await DefectiveGoodsService.getDefectiveGoodsInventory(),
 		select: (response) => {
 			return Array.isArray(response.metadata)
 				? response.metadata.map((item: IDefectiveGoodsInventory) => ({
@@ -91,7 +91,7 @@ export const useCreateDefectiveGoodsMutation = () => {
 export const useUpdateDefectiveGoodsMutation = () => {
 	return useMutation({
 		meta: { invalidates: [Object.values(DefectiveGoodsQueryKey)] },
-		mutationFn: async (payload: { id: number; data: CreateDefectiveGoodsFormValues }) =>
+		mutationFn: async (payload: { id: number; data: UpdateDefectiveGoodsFormValues }) =>
 			await DefectiveGoodsService.updateDefectiveGoods(payload.id, payload.data)
 	})
 }
@@ -124,26 +124,22 @@ export const useGetCanInoutboundEpcQuery = () => {
 }
 
 export const useGetDefectiveGoodsInboundReportQuery = () => {
-	const { data: tenant } = useGetTenantByFactory()
 	const { searchParams } = useReportPageQueryParams()
 
 	return useQuery({
-		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT, tenant?.id, pick(searchParams, 'date:eq')],
-		queryFn: async () => await DefectiveGoodsService.getInboundReport(tenant?.id, pick(searchParams, 'date:eq')),
-		enabled: !!tenant?.id,
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT, pick(searchParams, 'date:eq')],
+		queryFn: async () => await DefectiveGoodsService.getInboundReport(pick(searchParams, 'date:eq')),
 		refetchInterval: searchParams['auto-refresh'],
 		select: (response) => response.metadata
 	})
 }
 
 export const useGetDefectiveGoodsOutboundReportQuery = () => {
-	const { data: tenant } = useGetTenantByFactory()
 	const { searchParams } = useReportPageQueryParams()
 
 	return useQuery({
-		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_OUTBOUND_REPORT, tenant?.id, pick(searchParams, 'date:eq')],
-		queryFn: async () => await DefectiveGoodsService.getOutboundReport(tenant?.id, pick(searchParams, 'date:eq')),
-		enabled: !!tenant?.id,
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_OUTBOUND_REPORT, pick(searchParams, 'date:eq')],
+		queryFn: async () => await DefectiveGoodsService.getOutboundReport(pick(searchParams, 'date:eq')),
 		refetchInterval: searchParams['auto-refresh'],
 		select: (response) => response.metadata
 	})
@@ -180,7 +176,7 @@ export const usePrefetchDefectiveGoodsQuery = () => {
 	return useCallback(
 		(page: number) => {
 			const params = pickBy({ ...searchTerms, page }, (item) => !!item)
-			queryClient.prefetchQuery({
+			queryClient.query({
 				queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, params],
 				queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(params)
 			})

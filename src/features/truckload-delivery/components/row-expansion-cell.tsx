@@ -1,10 +1,10 @@
 import { Icon } from '@components/ui'
-import type { ITruckloadDelivery } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useQueryClient } from '@tanstack/react-query'
 import type { CellContext } from '@tanstack/react-table'
 import { useRef, useTransition } from 'react'
 import { GhostButton } from '../../../components/shared/ghost-button'
 import { getTruckloadDeliveryDetailQueryOptions } from '../hooks/use-truckload-delivery-asm'
+import type { ITruckloadDelivery } from '../types'
 
 type RowExpansionCellProps = CellContext<ITruckloadDelivery, any>
 

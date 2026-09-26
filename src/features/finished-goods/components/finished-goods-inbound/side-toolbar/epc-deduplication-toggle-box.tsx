@@ -32,7 +32,7 @@ const EpcDeduplicationToggleBox: React.FC = () => {
 			credentials: 'include',
 			headers: {
 				[RequestHeaders.USER_REQUEST]: user?.username,
-				[RequestHeaders.FACTORY_CODE]: user?.current_factory_code
+				[RequestHeaders.FACTORY_CODE]: env<FactoryCode>('VITE_APP_TENANT')
 			},
 			async onopen(response) {
 				if (

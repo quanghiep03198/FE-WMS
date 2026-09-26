@@ -1,8 +1,8 @@
+import type { FactoryCode } from '@common/constants/enums'
 import env from '@common/utils/env'
 import { isIPv4 } from '@common/utils/ip'
 import { Div, Typography } from '@components/ui'
 import { __hostRegistry } from '@configs/host-registry.config'
-import useAuth from '@hooks/use-auth'
 import { HttpStatusCode } from 'axios'
 
 import React from 'react'
@@ -10,8 +10,7 @@ import { useTranslation } from 'react-i18next'
 
 const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { t } = useTranslation()
-	const { user } = useAuth()
-	const currentHostRegistry = __hostRegistry.get(user?.current_factory_code)
+	const currentHostRegistry = __hostRegistry.get(env<FactoryCode>('VITE_APP_TENANT'))!
 
 	const shouldCheck = env('VITE_NODE_ENV') === 'production'
 
@@ -38,8 +37,8 @@ const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) =>
 					dangerouslySetInnerHTML={{
 						__html: t('ns_common:errors.303_message', {
 							url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color: var(--active);'>URL</a>`,
-							factoryCode: t(`ns_common:factory.${user?.current_factory_code}`, {
-								defaultValue: user?.current_factory_code
+							factoryCode: t(`ns_common:factory.${env<FactoryCode>('VITE_APP_TENANT')}`, {
+								defaultValue: env<FactoryCode>('VITE_APP_TENANT')
 							}),
 							defaultValue: null
 						})

@@ -1,7 +1,8 @@
 // #region In use Entities
 
 export interface IBaseEntity {
-	id: number
+	id: number | string
+	_id: string
 	updated?: Date | string
 	created?: Date | string
 	remark?: string | null

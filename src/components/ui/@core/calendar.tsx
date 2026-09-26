@@ -3,10 +3,10 @@ import { useDateLocale } from '@hooks/use-date-locale'
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import * as React from 'react'
-import { DayPicker } from 'react-day-picker'
+import { DayPicker, DayPickerDefaultProps } from 'react-day-picker'
 import { buttonVariants } from './button'
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = Exclude<React.ComponentProps<typeof DayPicker>, DayPickerDefaultProps>
 
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
 	const locale = useDateLocale()

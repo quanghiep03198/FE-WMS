@@ -1,4 +1,3 @@
-import { RequestHeaders } from '@common/constants/enums'
 import axiosInstance from '@configs/axios.config'
 import type { AxiosRequestConfig } from 'axios'
 import type {
@@ -34,10 +33,7 @@ export class InventoryService {
 		return await axiosInstance.put(`/inventory/audit/checkout/${month}`)
 	}
 
-	static async getProductionInventoryReport(
-		tenantId: string,
-		params: Record<'brand_name' | 'shoes_style' | 'color', string>
-	) {
+	static async getProductionInventoryReport(params: Record<'brand_name' | 'shoes_style' | 'color', string>) {
 		return await axiosInstance.get<
 			void,
 			ResponseBody<{
@@ -46,7 +42,6 @@ export class InventoryService {
 				outbound: IOutboundEstimation[]
 			}>
 		>('/inventory/summary', {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: {
 				'brand_name:eq': params.brand_name,
 				'shoes_style:eq': params.shoes_style,
@@ -55,21 +50,15 @@ export class InventoryService {
 		})
 	}
 
-	static async downloadProductionInventoryReport(tenantId: string) {
+	static async downloadProductionInventoryReport() {
 		return await axiosInstance.get('/inventory/summary/export', {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			responseType: 'blob'
 		})
 	}
 
-	static async getProductionInventoryFeatures(tenantId: string) {
+	static async getProductionInventoryFeatures() {
 		return await axiosInstance.get<void, ResponseBody<IProductionInventoryFeature[]>>(
-			'/inventory/production-features',
-			{
-				headers: {
-					[RequestHeaders.TENANT_ID]: tenantId
-				}
-			}
+			'/inventory/production-features'
 		)
 	}
 }

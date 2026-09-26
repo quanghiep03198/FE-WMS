@@ -80,7 +80,7 @@ const ScanningCounter: React.FC = () => {
 const ScanningTimer: React.FC = () => {
 	const { scanningStatus } = usePageContext('scanningStatus')
 	const duration = useRef<number>(0)
-	const [intervalValue, setIntervalValue, resetInterval] = useResetState(undefined)
+	const [intervalValue, setIntervalValue, resetInterval] = useResetState<number | undefined>(undefined)
 	const [scannedTime, setScannedTime, resetScannedTime] = useResetState({
 		hours: '00',
 		minutes: '00',

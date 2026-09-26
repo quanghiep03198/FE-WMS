@@ -1,4 +1,5 @@
-import useAuth from '@hooks/use-auth'
+import type { FactoryCode } from '@common/constants/enums'
+import env from '@common/utils/env'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { DEFAULT_PROPS, usePageContext } from '../contexts/finished-goods-inbound/page-context'
 import type { ExchangeEpcPayload, ExchangeOrderFormValue } from '../schemas/exchange-epc.schema'
@@ -7,10 +8,8 @@ import type { SearchCustOrderParams } from '../types'
 import { FinishedGoodsInboundQueryKeys } from './use-inbound-request'
 
 export const useSearchExchangableOrderQuery = (params: SearchCustOrderParams) => {
-	const { user } = useAuth()
-
 	return useQuery({
-		queryKey: ['EXCHANGABLE_ORDER', user?.current_factory_code, params],
+		queryKey: ['EXCHANGABLE_ORDER', env<FactoryCode>('VITE_APP_TENANT'), params],
 		queryFn: () => FinishedGoodsMoService.searchExchangableMo(params),
 		enabled: false,
 		select: (response) => response.metadata
@@ -31,7 +30,7 @@ export const useExchangeEpcMutation = () => {
 			]
 		},
 		mutationFn: async (payload: ExchangeOrderFormValue) =>
-			await FinishedGoodsMoService.exchangeManufacturingOrder(selectedDevice, payload),
+			await FinishedGoodsMoService.exchangeManufacturingOrder(selectedDevice!, payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
@@ -53,7 +52,7 @@ export const useUpsertEpcsMatchMutation = () => {
 			]
 		},
 		mutationFn: async (payload: ExchangeEpcPayload) =>
-			await FinishedGoodsMoService.upsertEpcsMatch(selectedDevice, payload),
+			await FinishedGoodsMoService.upsertEpcsMatch(selectedDevice!, payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)

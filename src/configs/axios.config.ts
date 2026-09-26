@@ -1,8 +1,10 @@
-import { i18n } from '@/i18n'
+import type { FactoryCode } from '@common/constants/enums'
 import { Languages, RequestHeaders } from '@common/constants/enums'
 import { UnauthorizedError } from '@common/errors'
+import env from '@common/utils/env'
 import { Json } from '@common/utils/json'
 import { AuthService } from '@features/auth/services/auth.service'
+import { i18n } from '@i18n/index'
 import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
 import qs from 'qs'
 import { toast } from 'sonner'
@@ -54,7 +56,7 @@ export class AxiosClient {
 				const locale = storedLocale ? Json.parse<Languages>(storedLocale) : Languages.ENGLISH
 				const user = AuthService.getCredentials()
 				config.headers[RequestHeaders.USER_REQUEST] = user?.username
-				config.headers[RequestHeaders.FACTORY_CODE] = user?.current_factory_code
+				config.headers[RequestHeaders.FACTORY_CODE] = env<FactoryCode>('VITE_APP_TENANT')
 				config.headers[RequestHeaders.ACCEPT_LANGUAGE] = locale
 				return config
 			},
@@ -68,9 +70,9 @@ export class AxiosClient {
 					toast.error('Request timeout')
 					return Promise.reject(new Error('Request timeout'))
 				}
-				if (this.NOTIFIABLE_ERROR_CODES.includes(error.response?.status)) {
-					toast.error(error.response?.data?.message, { id: error.response?.data?.path, duration: 5000 })
-				}
+				// if (this.NOTIFIABLE_ERROR_CODES.includes(error.response?.status!)) {
+				// 	toast.error(error.response?.data?.message, { id: error.response?.data?.path, duration: 5000 })
+				// }
 
 				const originalRequest = error.config
 				const errorStatus = error.response?.status
@@ -104,7 +106,7 @@ export class AxiosClient {
 						if (!credentials?.username)
 							throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
 						const { metadata } = await AuthService.refreshToken(abortController.signal)
-						this.processQueue(null, metadata.newAccessToken)
+						if (metadata && 'newAccessToken' in metadata) this.processQueue(null, metadata.newAccessToken)
 						const response = await this.instance(originalRequest)
 						originalRequest.retry = true
 						return response
@@ -121,7 +123,7 @@ export class AxiosClient {
 		)
 	}
 
-	private processQueue(error, token = null) {
+	private processQueue(error, token) {
 		this.unauthorizedRequestHandlers.forEach((promise) => {
 			if (error) {
 				promise.reject(error)

@@ -14,7 +14,7 @@ import type {
 export class FinishedGoodsSharedService {
 	static async getPaginatedScanningEpcs(
 		stockFlow: StockFlow,
-		params: { _page: number; 'mo_no:eq'?: string },
+		params: { _page: number | null; 'mo_no:eq'?: string },
 		deviceSerialNumber?: string
 	) {
 		const headers: AxiosRequestConfig['headers'] = {}

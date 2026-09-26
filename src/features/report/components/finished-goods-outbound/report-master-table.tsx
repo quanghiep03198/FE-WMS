@@ -1,5 +1,6 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import { PresetBreakPoints } from '@common/constants/enums'
+import env from '@common/utils/env'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import AutoRefreshToggle from '@components/shared/auto-refresh-toggle'
 import DatePickerFilter from '@components/shared/date-picker-filter'
@@ -8,8 +9,6 @@ import TableCellText from '@components/ui/@react-table/components/table-cell-tex
 import { ROW_EXPANSION_COLUMN_ID } from '@components/ui/@react-table/constants'
 import { ReportService } from '@features/report/services/report.service'
 import type { IOutboundReport } from '@features/report/types'
-import { useGetTenantByFactory } from '@features/tenancy/hooks/use-tenacy-request'
-import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'
 import useQueryParams from '@hooks/use-query-params'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -25,9 +24,7 @@ import ReportTableSummary from './report-table-footer'
 
 const ReportDatalist: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'date:eq': string; 'auto-refresh': number | false }>()
-	const { user } = useAuth()
-	const { data: currentTenant } = useGetTenantByFactory()
-	const { data, isLoading, refetch } = useGetOutboundReport(currentTenant?.id, searchParams)
+	const { data, isLoading, refetch } = useGetOutboundReport(searchParams)
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 
@@ -141,13 +138,14 @@ const ReportDatalist: React.FC = () => {
 	)
 
 	const handleDownloadExcel = async () => {
+		const factory = env<FactoryCode>('VITE_APP_TENANT')
 		const id = toast.loading(t('ns_common:notification.downloading'))
 		try {
-			const blob = await ReportService.downloadOutboundReport(currentTenant?.id, searchParams)
+			const blob = await ReportService.downloadOutboundReport(searchParams)
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_daily_outbound_report', {
-					factory: t(TRANSLATED_FACTORY[user?.current_factory_code], { ns: 'ns_common' }),
+					factory: t(TRANSLATED_FACTORY[factory], { ns: 'ns_common', defaultValue: factory }),
 					date: searchParams['date:eq'],
 					defaultValue: `Outbound Report ~ ${format(new Date(), 'yyyy-MM-dd')}`
 				}) + '.xlsx'
@@ -158,7 +156,7 @@ const ReportDatalist: React.FC = () => {
 		}
 	}
 
-	const renderTableFooter = useCallback(() => <ReportTableSummary data={data} />, [data])
+	const renderTableFooter = useCallback(() => <ReportTableSummary data={data ?? []} />, [data])
 
 	return (
 		<Div as='section' className='relative'>
@@ -167,7 +165,7 @@ const ReportDatalist: React.FC = () => {
 			</Div>
 			<DataTable
 				columns={columns}
-				data={data}
+				data={data ?? []}
 				loading={isLoading}
 				enableExpanding={true}
 				getRowId={(originalRow: IOutboundReport) => originalRow.po}

@@ -1,10 +1,8 @@
 'use no memo'
 
 import { cn } from '@common/utils/cn'
-import type { Table } from '@tanstack/react-table'
 import { useMemoizedFn } from 'ahooks'
 import { pick } from 'lodash-es'
-import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
@@ -15,20 +13,20 @@ import { GlobalFilterPopover } from './global-filter'
 import { TableViewOptions } from './table-view-options'
 
 const TableToolbar: React.FC<ToolbarProps> = (props) => {
-	const table = props['table'] as Table<any>
-	const { event$ } = useTableContext('event$')
+	const { table, event$ } = useTableContext('table', 'event$')
 	const {
 		columnPinning: { left, right },
 		globalFilter,
 		columnFilters
 	} = table.getState()
 
-	const { t } = useTranslation('ns_common')
+	const { t } = useTranslation()
 	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
 
 	const isSomeColumnsPinned =
-		left.some((columnId) => columnId !== ROW_SELECTION_COLUMN_ID && columnId !== ROW_EXPANSION_COLUMN_ID) ||
-		right.some((columnId) => columnId !== ROW_ACTIONS_COLUMN_ID)
+		(Array.isArray(left) &&
+			left.some((columnId) => columnId !== ROW_SELECTION_COLUMN_ID && columnId !== ROW_EXPANSION_COLUMN_ID)) ||
+		(Array.isArray(right) && right.some((columnId) => columnId !== ROW_ACTIONS_COLUMN_ID))
 
 	const resetAllFilters = useMemoizedFn(() => {
 		table.resetGlobalFilter(table.initialState.globalFilter)
@@ -92,7 +90,4 @@ const TableToolbar: React.FC<ToolbarProps> = (props) => {
 
 TableToolbar.displayName = 'TableToolbar'
 
-export default memo(
-	TableToolbar,
-	(_, nextProps) => nextProps['table'].getState().columnSizingInfo.isResizingColumn !== false
-) as typeof TableToolbar
+export default TableToolbar

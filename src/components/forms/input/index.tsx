@@ -32,9 +32,9 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 		disabled,
 		placeholder,
 		description,
-		type,
+		type = 'text',
 		hidden,
-		orientation,
+		orientation: orientation,
 		errorMessageVariant = 'inline',
 		defaultValue = getValues(name),
 		ref,
@@ -45,7 +45,7 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 	const id = useId()
 	const [value, setValue] = useState<string>(defaultValue)
 	const localRef = useRef<typeof Input.prototype>(null)
-	const resolvedRef = (ref ?? localRef) as typeof localRef
+	const resolvedRef = ref ?? localRef
 	const [currentType, setCurrentType] = useState<React.HTMLInputTypeAttribute>(type)
 	const currentValue = watch(name)
 	const { error } = getFieldState(name)
@@ -77,16 +77,14 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 			render={({ field }) => {
 				return (
 					<FormItem
-						className={cn(
-							orientation === 'horizontal'
-								? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'
-								: 'space-y-2',
-							(currentType === 'hidden' || hidden) && 'hidden'
-						)}>
+						aria-hidden={hidden}
+						aria-orientation={orientation}
+						className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 						{label && (
 							<FormLabel
 								htmlFor={id}
-								className={orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'}>
+								aria-orientation={orientation}
+								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
 								{label}
 							</FormLabel>
 						)}
@@ -108,7 +106,10 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 											type={currentType}
 											ref={(e) => {
 												field.ref(e)
-												if (resolvedRef.current) {
+												if (typeof resolvedRef === 'function') {
+													resolvedRef(e)
+												}
+												if ('current' in resolvedRef && resolvedRef.current) {
 													resolvedRef.current = e
 												}
 											}}

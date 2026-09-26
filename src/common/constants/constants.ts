@@ -11,7 +11,7 @@ export const LOCALES: LocaleOptions = [
 	{ value: Languages.CHINESE, label: 'Chinese' }
 ]
 
-export const TRANSLATED_FACTORY: Readonly<Record<'VA1' | 'VB1' | 'VB2' | 'CA1', ResourceKeys['ns_common']>> = {
+export const TRANSLATED_FACTORY: Readonly<Record<FactoryCode, ResourceKeys['ns_common']>> = {
 	VA1: 'factory.VA1',
 	VB1: 'factory.VB1',
 	VB2: 'factory.VB2',

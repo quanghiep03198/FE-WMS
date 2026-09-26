@@ -1,7 +1,6 @@
 'use no memo'
 
 import type { BaseFieldControl } from '@common/types/hook-form'
-import { cn } from '@common/utils/cn'
 import type { TagsInputProps } from '@components/ui'
 import {
 	Div,
@@ -20,7 +19,7 @@ import { useFormContext } from 'react-hook-form'
 export type TagInputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & Partial<TagsInputProps>
 
 export function TagInputFieldControl<T extends FieldValues>(props: TagInputFieldControlProps<T>) {
-	const { name, hidden = false, label, description, orientation, placeholder, ...restProps } = props
+	const { name, hidden = false, label, description, orientation: orientation, placeholder, ...restProps } = props
 	const id = useId()
 	const { control, getValues, getFieldState } = useFormContext()
 	const isInvalid = getFieldState(name).invalid
@@ -32,17 +31,15 @@ export function TagInputFieldControl<T extends FieldValues>(props: TagInputField
 			defaultValue={getValues(name) ?? []}
 			render={({ field }) => (
 				<FormItem
-					className={cn(
-						orientation === 'horizontal' ? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0' : 'space-y-2',
-						hidden && 'hidden'
-					)}>
+					aria-hidden={hidden}
+					aria-orientation={orientation}
+					className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 					{label && (
 						<FormLabel
 							htmlFor={id}
-							className={cn(
-								'text-pretty',
-								orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'
-							)}>
+
+							aria-orientation={orientation}
+							className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
 							{label}
 						</FormLabel>
 					)}

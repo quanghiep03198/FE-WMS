@@ -122,7 +122,7 @@ const FormMessage: React.FC<React.ComponentProps<'p'>> = ({ className, children,
 	const message =
 		typeof i18nErrorMessage === 'string'
 			? t(i18nErrorMessage)
-			: t(i18nErrorMessage.key, { ...i18nErrorMessage.bindings })
+			: String(t(i18nErrorMessage.key, { ...i18nErrorMessage.bindings }))
 
 	return (
 		<p

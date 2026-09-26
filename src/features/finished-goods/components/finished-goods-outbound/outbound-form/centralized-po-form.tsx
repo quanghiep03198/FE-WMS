@@ -2,16 +2,17 @@
 
 import { Form as FormProvider, Icon, MultiSelectFieldControl, Tooltip } from '@components/ui'
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@components/ui/@custom/alert'
+import ConfirmDialog from '@components/ui/@override/confirm-dialog'
+import { useSearchPurchaseOrderQuery } from '@features/order/hooks/use-order-request'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useResetState } from 'ahooks'
+import { useDebounce, useResetState } from 'ahooks'
 import type { AxiosError } from 'axios'
 import { HttpStatusCode } from 'axios'
 import { sortedUniqBy } from 'lodash-es'
-import { Fragment, useMemo } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../../../contexts/finished-goods-outbound/page-context'
 import { useStockOutMutation } from '../../../hooks/use-outbound-request'
@@ -33,7 +34,13 @@ const CentralizedPoOutboundForm: React.FC = () => {
 		mode: 'onChange'
 	})
 
-	const { mutateAsync, isPending, isError, error, reset } = useStockOutMutation(form.reset)
+	const [shouldAlert, setShouldAlert] = useState<boolean>(false)
+	const value = useWatch({ control: form.control, name: 'po' })
+	const debouncedSearchTerm = useDebounce(value, { wait: 500 })
+
+	const { data: purchaseOrders } = useSearchPurchaseOrderQuery(debouncedSearchTerm)
+
+	const { mutateAsync, isPending, isError, error, reset } = useStockOutMutation()
 
 	const filteredOrders = useMemo(() => {
 		if (!Array.isArray(scannedOrders)) return []
@@ -44,12 +51,18 @@ const CentralizedPoOutboundForm: React.FC = () => {
 		return sortedUniqBy([...result, ...selectedOrders], (item) => item.mo_no)
 	}, [searchTerm, scannedOrders])
 
-	const handleSubmit = (data: StandardOutboundFormValues) => {
-		mutateAsync(data).then(() => {
-			form.reset()
-			resetSearchTerm()
-			toast.success(t('ns_common:notification.success'))
-		})
+	const handleSubmit = async (data: StandardOutboundFormValues) => {
+		const shouldAlert = !!value && !purchaseOrders?.some((po) => po?.po === value)
+		setShouldAlert(shouldAlert)
+		if (shouldAlert) return
+		await handleConfirm(data)
+	}
+
+	const handleConfirm = async (data: StandardOutboundFormValues) => {
+		await mutateAsync(data)
+		form.reset()
+		resetSearchTerm()
+		setShouldAlert(false)
 	}
 
 	return (
@@ -92,10 +105,18 @@ const CentralizedPoOutboundForm: React.FC = () => {
 						labelField='mo_no'
 						valueField='mo_no'
 					/>
-
 					<FormSubmission isPending={isPending} isError={isError} />
 				</Form>
 			</FormProvider>
+			<ConfirmDialog
+				open={shouldAlert}
+				title={t('ns_common:titles.caution')}
+				description={t('ns_inoutbound:notification.posible_incorrect_po')}
+				onConfirm={() => handleConfirm(form.getValues())}
+				onCancel={() => setShouldAlert(false)}
+				isPending={isPending}
+				isError={isError}
+			/>
 		</Fragment>
 	)
 }

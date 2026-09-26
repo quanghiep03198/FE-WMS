@@ -2,15 +2,13 @@ import { cn } from '@common/utils/cn'
 import { LanguageSelect } from '@components/shared/language-selector'
 import ThemeToggle from '@components/shared/theme-toggle'
 import { Div, Icon, Label, Tooltip, Typography, buttonVariants } from '@components/ui'
-import { Stepper, type TStep } from '@components/ui/@custom/stepper'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import LoginForm from './login-form'
-import WorkplaceSelectionForm from './workplace-selection-form'
 
-const Container = tw.div`relative flex justify-center items-center min-h-screen overflow-y-auto bg-background text-foreground scrollbar-none scrollbar`
-const FormSection = tw.section`mx-auto flex max-w-xl w-full flex-col items-stretch justify-center gap-y-6 px-4 z-10`
+const Container = tw.div`relative flex justify-center items-center min-h-screen overflow-y-auto text-foreground scrollbar-none scrollbar`
+// const FormSection = tw.section`bg-background flex w-full flex-col items-stretch justify-center max-w-lg mx-auto gap-y-6 p-6 sm:px-2 z-10`
 
 const ThemeSelector: React.FC = () => {
 	return (
@@ -33,27 +31,7 @@ const HomeNavigator: React.FC = () => {
 }
 
 const FormFieldset: React.FC = () => {
-	const steps: TStep[] = [
-		{
-			title: 'ns_auth:steps.verify_account',
-			status: 'current'
-		},
-		{
-			title: 'ns_auth:steps.select_department',
-			status: 'upcoming'
-		}
-	]
-
-	return (
-		<Stepper.Provider data={steps} enableChangeStep={false}>
-			<Stepper.Panel value={1}>
-				<LoginForm />
-			</Stepper.Panel>
-			<Stepper.Panel value={2} className='animate-in fade-in-0 slide-in-from-left-4 duration-500'>
-				<WorkplaceSelectionForm />
-			</Stepper.Panel>
-		</Stepper.Provider>
-	)
+	return <LoginForm />
 }
 
 const FormHeading: React.FC = () => {
@@ -83,12 +61,4 @@ const LanguageSelector: React.FC = () => {
 	)
 }
 
-export default {
-	Container,
-	FormSection,
-	FormHeading,
-	FormFieldset,
-	HomeNavigator,
-	LanguageSelector,
-	ThemeSelector
-}
+export { Container, FormFieldset, FormHeading, HomeNavigator, LanguageSelector, ThemeSelector }

@@ -1,5 +1,17 @@
-import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@components/ui'
-import { useStepContext } from '@components/ui/@custom/stepper'
+import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import env from '@common/utils/env'
+import {
+	Button,
+	Checkbox,
+	Div,
+	FormItem,
+	FormLabel,
+	Form as FormProvider,
+	Icon,
+	Input,
+	InputFieldControl,
+	Label
+} from '@components/ui'
 import { AuthQueryKeys } from '@features/auth/hooks/use-profile-request'
 import { AuthService } from '@features/auth/services/auth.service'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,7 +29,7 @@ import { loginSchema } from '../../schemas/login.schema'
 
 const LoginForm: React.FC = () => {
 	const { t } = useTranslation()
-	const { dispatch } = useStepContext()
+	// const { dispatch } = useStepContext()
 	const { setUserProfile, setAccessToken } = useAuth()
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
 		defaultValue: undefined,
@@ -44,7 +56,6 @@ const LoginForm: React.FC = () => {
 			setUserProfile(data?.metadata?.user)
 			setAccessToken(data?.metadata?.accessToken)
 			toast.success(t('ns_common:notification.success'), { id: context })
-			dispatch({ type: 'NEXT_STEP' })
 		},
 		onError(_error, _variables, context) {
 			toast.error(t('ns_auth:notification.login_failed'), { id: context })
@@ -79,6 +90,15 @@ const LoginForm: React.FC = () => {
 					type='password'
 					name='password'
 				/>
+
+				<FormItem>
+					<FormLabel>{t('ns_common:common_fields.factory_code')}</FormLabel>
+					<Input
+						readOnly
+						className='cursor-auto'
+						value={t(TRANSLATED_FACTORY[env('VITE_APP_TENANT')], { ns: 'ns_common' })}
+					/>
+				</FormItem>
 				<Div className='flex items-center justify-between'>
 					<Div className='flex items-center space-x-2'>
 						<Checkbox

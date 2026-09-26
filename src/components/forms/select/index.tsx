@@ -1,7 +1,6 @@
 'use no memo'
 
 import { cn } from '@common/utils/cn'
-import type { ResourceKey } from 'i18next'
 import React, { useId } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
@@ -41,7 +40,7 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 		description,
 		hidden,
 		label,
-		orientation,
+		orientation: orientation,
 		className,
 		placeholder = 'Select',
 		datalist,
@@ -63,19 +62,13 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 			render={({ field }) => {
 				return (
 					<FormItem
-						className={cn(
-							orientation === 'horizontal'
-								? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'
-								: 'space-y-2',
-							hidden && 'hidden'
-						)}>
+						aria-orientation={orientation}
+						className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 						{label && (
 							<FormLabel
 								htmlFor={id}
-								className={cn(
-									'text-pretty',
-									orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'
-								)}>
+								aria-orientation={orientation}
+								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
 								{label}
 							</FormLabel>
 						)}
@@ -91,7 +84,7 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 									}
 								}}>
 								<Tooltip
-									message={t(error?.message as ResourceKey) || ''}
+									message={t(error?.message)}
 									triggerProps={{ type: 'button', className: 'w-full' }}
 									contentProps={{
 										hidden: !error || errorMessageVariant === 'inline',
@@ -123,7 +116,7 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 										))
 									) : (
 										<SelectItem
-											value={null}
+											value={null!}
 											disabled
 											className='flex items-center justify-center text-center text-xs font-medium'>
 											No option

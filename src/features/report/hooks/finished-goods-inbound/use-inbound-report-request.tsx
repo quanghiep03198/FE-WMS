@@ -7,17 +7,13 @@ export enum InboundReportQueryKeys {
 	DAILY_INBOUND = 'DAILY_INBOUND'
 }
 
-export const useGetInboundReport = (
-	tenantId: string,
-	params?: { 'auto-refresh': false | number; 'date:eq': string }
-) => {
+export const useGetInboundReport = (params?: { 'auto-refresh': false | number; 'date:eq': string }) => {
 	const queryParams = params?.['date:eq'] ? pick(params, 'date:eq') : { ['date:eq']: format(new Date(), 'yyyy-MM-dd') }
 
 	return useQuery({
-		queryKey: [InboundReportQueryKeys.DAILY_INBOUND, tenantId, queryParams],
-		queryFn: async () => await ReportService.getInboundReport(tenantId, queryParams),
-		enabled: !!tenantId,
-		refetchInterval: params['auto-refresh'],
-		select: (response) => response.metadata
+		queryKey: [InboundReportQueryKeys.DAILY_INBOUND, queryParams],
+		queryFn: async () => await ReportService.getInboundReport(queryParams),
+		refetchInterval: params && 'auto-refresh' in params ? params['auto-refresh'] : false,
+		select: (response) => response.metadata ?? []
 	})
 }

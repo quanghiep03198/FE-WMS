@@ -2,19 +2,11 @@ import { UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import AppLogo from '@components/shared/app-logo'
 import {
-	Button,
 	Collapsible,
 	CollapsibleContent,
-	DropdownMenu,
-	DropdownMenuCheckboxItem,
-	DropdownMenuContent,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
 	Icon,
 	Sidebar,
 	SidebarContent,
-	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupLabel,
 	SidebarHeader,
@@ -32,13 +24,12 @@ import { navigationConfig, type NavigationConfig } from '@configs/navigation.con
 import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'
 import { CollapsibleTrigger } from '@radix-ui/react-collapsible'
-import { useQueryClient } from '@tanstack/react-query'
 import { Link, useRouterState } from '@tanstack/react-router'
-import { useUpdateEffect } from 'ahooks'
 import React, { Fragment, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
+import { FileRouteTypes } from '../../../route-tree.gen'
 
 type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon' | 'authorizedRoles'> & {
 	indice: `${number}` | `${number}.${number}` | 'none'
@@ -65,7 +56,14 @@ const NavSidebar: React.FC = () => {
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{navigationConfig.main.map((item, index) => {
 								if (!Array.isArray(item.items))
-									return <SidebarMenuLink indice={`${index + 1}`} key={index.toString()} {...item} />
+									return (
+										<SidebarMenuLink
+											indice={`${index + 1}`}
+											key={index.toString()}
+											// viewTransition={{ types: ['fade'] }}
+											{...item}
+										/>
+									)
 								return (
 									<Collapsible key={uuid()} defaultOpen={true} className='group/collapsible w-full'>
 										<CollapsibleTrigger asChild={true}>
@@ -102,7 +100,7 @@ const NavSidebar: React.FC = () => {
 											<SidebarMenuSub>
 												{item.items?.map((subItem, subIndex) => (
 													<SidebarMenuSubLink
-														viewTransition={{ types: ['fade'] }}
+														// viewTransition={{ types: ['fade'] }}
 														indice={`${index + 1}.${subIndex + 1}`}
 														key={`${index + 1}.${subIndex + 1}`}
 														{...subItem}
@@ -134,7 +132,14 @@ const NavSidebar: React.FC = () => {
 							<SidebarGroupLabel>{t('navigation.administration_menu_label')}</SidebarGroupLabel>
 							<SidebarMenu role='menu' aria-label='Administration'>
 								{navigationConfig.administration.map((item) => {
-									return <SidebarMenuLink indice='none' key={uuid()} {...item} />
+									return (
+										<SidebarMenuLink
+											indice='none'
+											viewTransition={{ types: ['fade'] }}
+											key={uuid()}
+											{...item}
+										/>
+									)
 								})}
 							</SidebarMenu>
 						</SidebarGroup>
@@ -147,14 +152,14 @@ const NavSidebar: React.FC = () => {
 						{navigationConfig.preferences
 							.filter((item) => item.url !== '/preferences/account')
 							.map((item, index) => (
-								<SidebarMenuLink indice='none' key={index.toString()} {...item} />
+								<SidebarMenuLink indice='none' key={index.toString()} viewTransition {...item} />
 							))}
 					</SidebarMenu>
 				</SidebarGroup>
 			</SidebarContent>
-			<SidebarFooter>
+			{/* <SidebarFooter>
 				<SwitchUserCompany />
-			</SidebarFooter>
+			</SidebarFooter> */}
 			<SidebarRail />
 		</Sidebar>
 	)
@@ -197,8 +202,8 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 				className='group-aria-disabled/menuitem:cursor-not-allowed'
 				tooltip={t(title, { defaultValue: title })}>
 				<Link
-					to={url}
-					search={isActive && location.search}
+					to={url as FileRouteTypes['to']}
+					search={isActive ? location.search : {}}
 					viewTransition={viewTransition}
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10 '
@@ -251,8 +256,8 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 			}}>
 			<SidebarMenuSubButton asChild size='md' className='group-aria-disabled/menuitem:cursor-not-allowed'>
 				<Link
-					to={url}
-					search={isActive && location.search}
+					to={url as FileRouteTypes['to']}
+					search={isActive ? location.search : {}}
 					preload='intent'
 					viewTransition={viewTransition}
 					activeProps={{
@@ -271,49 +276,6 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 				/>
 			)}
 		</SidebarMenuSubItem>
-	)
-}
-
-const SwitchUserCompany: React.FC = () => {
-	const { user, setCurrentFactory } = useAuth()
-	const { t } = useTranslation()
-	const { open } = useSidebar()
-	const queryClient = useQueryClient()
-
-	useUpdateEffect(() => {
-		queryClient.invalidateQueries({ type: 'all', refetchType: 'all' })
-	}, [user?.current_factory_code])
-
-	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button variant='ghost' size={open ? 'default' : 'icon'} className={cn(open ? 'justify-start' : 'size-8')}>
-					<Icon name='Factory' />
-					{open && (
-						<Fragment>
-							{t(`ns_common:factory.${user?.current_factory_code}`, {
-								defaultValue: user?.current_factory_code
-							})}
-
-							<Icon name='ChevronsUpDown' className='ml-auto' />
-						</Fragment>
-					)}
-				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent className='w-radix-dropdown-menu min-w-60' side={open ? 'top' : 'right'} align='end'>
-				<DropdownMenuLabel>{t('ns_company:factory')}</DropdownMenuLabel>
-				<DropdownMenuSeparator />
-				{Array.isArray(user?.authorized_factory_codes) &&
-					user.authorized_factory_codes.map((item) => (
-						<DropdownMenuCheckboxItem
-							key={item}
-							checked={user?.current_factory_code === item}
-							onCheckedChange={() => setCurrentFactory(item)}>
-							{t(`ns_common:factory.${item}`, { defaultValue: item })}
-						</DropdownMenuCheckboxItem>
-					))}
-			</DropdownMenuContent>
-		</DropdownMenu>
 	)
 }
 

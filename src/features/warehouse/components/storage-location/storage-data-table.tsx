@@ -1,6 +1,20 @@
 // #region Modules
 import { CommonActions } from '@common/constants/enums'
-import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@components/ui'
+import generateAvatar from '@common/utils/generate-avatar'
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+	Button,
+	DataTable,
+	Icon,
+	Item,
+	ItemContent,
+	ItemDescription,
+	ItemMedia,
+	ItemTitle,
+	Tooltip
+} from '@components/ui'
 import ConfirmDialog from '@components/ui/@override/confirm-dialog'
 import {
 	IndeterminateCheckbox,
@@ -8,50 +22,50 @@ import {
 } from '@components/ui/@react-table/components/row-selection-checkbox'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@components/ui/@react-table/constants'
 import { fuzzySort } from '@components/ui/@react-table/utils/fuzzy-sort.util'
-import type { IWarehouseStorage } from '@features/warehouse/types'
-import type { UseQueryResult } from '@tanstack/react-query'
+import { useStorageLocationPageContext } from '@features/warehouse/contexts/storage-location-page-context'
+import { useGetOneWarehouseQuery } from '@features/warehouse/hooks/use-warehouse-request'
+import type { IStorageLocation } from '@features/warehouse/types'
 import { useParams } from '@tanstack/react-router'
 import type { Table } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { Fragment, memo, useMemo, useRef, useState } from 'react'
-import isEqual from 'react-fast-compare'
+import { Fragment, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { warehouseStorageTypes } from '../../constants/warehouse.const'
-import { usePageContext } from '../../contexts/page-context'
-import { useDeleteStorageMutation, useUpdateStorageMutation } from '../../hooks/use-warehouse-storage-request'
+import { useDeleteStorageMutation } from '../../hooks/use-warehouse-storage-request'
 import StorageRowActions from './storage-row-actions'
 // #endregion
 
-const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLoading, refetch }) => {
-	const { t, i18n } = useTranslation(['ns_common'])
-	const tableRef = useRef<Table<any>>(null)
+const StorageList: React.FC = () => {
+	const { t, i18n } = useTranslation()
+	const tableRef = useRef<Table<any>>({} as Table<any>)
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
-	const { warehouseNum } = useParams({ strict: false })
+	const warehouseName = useParams({
+		strict: true,
+		from: '/(features)/_layout/(warehouse)/storage-locations/$warehouseName',
+		select: (params) => params.warehouseName
+	})
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
+	const { data, isLoading, refetch } = useGetOneWarehouseQuery(warehouseName)
 
-	const { dispatch } = usePageContext()
-
-	// Update warehouse storage location
-	const { mutateAsync: updateWarehouseStorage } = useUpdateStorageMutation({ warehouseNum })
+	const { event$ } = useStorageLocationPageContext()
 
 	const handleResetAllRowSelection = () => {
-		tableRef.current.resetRowSelection()
+		if (tableRef.current) tableRef.current.resetRowSelection()
 		resetRowSelectionType()
 	}
 
-	const handleDeleteSelectedRows = () => {
-		deleteWarehouseStorage(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original?.id))
+	const handleDeleteSelectedRows = async () => {
+		if (tableRef.current) {
+			await deleteWarehouseStorage(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original?.id))
+			handleResetAllRowSelection()
+		}
 	}
 
 	// Delete selected warehouse storage locations
-	const { mutateAsync: deleteWarehouseStorage } = useDeleteStorageMutation(
-		{ warehouseNum },
-		{ onSettled: handleResetAllRowSelection }
-	)
+	const { mutateAsync: deleteWarehouseStorage } = useDeleteStorageMutation(warehouseName)
 
-	const columnHelper = createColumnHelper<IWarehouseStorage>()
+	const columnHelper = createColumnHelper<IStorageLocation>()
 
 	const columns = useMemo(
 		() => [
@@ -79,15 +93,8 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 				enableHiding: false,
 				enableResizing: false
 			}),
-			columnHelper.accessor('storage_num', {
-				header: t('ns_warehouse:fields.storage_num'),
-				enableSorting: true,
-				enableColumnFilter: true,
-				enableHiding: false,
-				filterFn: 'fuzzy',
-				sortingFn: fuzzySort
-			}),
-			columnHelper.accessor('storage_name', {
+
+			columnHelper.accessor('name', {
 				header: t('ns_warehouse:fields.storage_name'),
 				enableSorting: true,
 				enableColumnFilter: true,
@@ -95,106 +102,81 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 				filterFn: 'fuzzy',
 				sortingFn: fuzzySort
 			}),
-			columnHelper.accessor('type_storage', {
-				header: t('ns_warehouse:fields.type_storage'),
-				enableSorting: true,
+			columnHelper.accessor('created_by', {
+				header: t('ns_common:common_fields.created_by'),
 				enableColumnFilter: true,
-				enableHiding: false,
-				meta: {
-					filterVariant: 'select',
-					facetedUniqueValues: Object.entries(warehouseStorageTypes).map(([key, val]) => ({
-						label: t(val, { ns: 'ns_warehouse', defaultValue: val }),
-						value: key
-					}))
-				},
-				cell: ({ getValue }) => {
-					const originalValue = getValue()
-					return t(warehouseStorageTypes[originalValue], { ns: 'ns_warehouse' })
-				}
-			}),
-			columnHelper.accessor('storage_capacity', {
-				header: t('ns_warehouse:fields.storage_capacity'),
+				enableGlobalFilter: true,
+				enableResizing: true,
 				enableSorting: true,
-				enableColumnFilter: true,
-				enableHiding: false,
-				filterFn: 'inNumberRange',
-				meta: {
-					filterVariant: 'range'
-				}
-			}),
-			columnHelper.accessor('warehouse_name', {
-				header: t('ns_warehouse:fields.warehouse_name'),
-				enableSorting: true,
-				enableColumnFilter: true,
-				enableHiding: false,
 				filterFn: 'fuzzy',
-				sortingFn: fuzzySort
-			}),
-			columnHelper.accessor('is_disable', {
-				header: t('ns_warehouse:fields.is_disable'),
-				size: 100,
-				meta: { align: 'center' },
-				cell: ({ getValue, row }) => {
-					const value = getValue()
-					const { original } = row
-					return (
-						<Checkbox
-							role='checkbox'
-							aria-disabled={value}
-							checked={value}
-							onCheckedChange={async (checked) =>
-								await updateWarehouseStorage({
-									id: original.id,
-									payload: {
-										is_disable: Boolean(checked),
-										is_default: checked ? false : Boolean(original.is_default)
-									}
-								})
-							}
-						/>
-					)
-				}
-			}),
-			columnHelper.accessor('is_default', {
-				header: t('ns_warehouse:fields.is_default'),
-				minSize: 100,
-				meta: { align: 'center' },
-				cell: ({ getValue, row: { original } }) => {
-					const value = Boolean(getValue())
-					return (
-						<Checkbox
-							role='checkbox'
-							disabled={original.is_disable}
-							checked={value}
-							onCheckedChange={async (checked) =>
-								await updateWarehouseStorage({
-									id: original.id,
-									payload: {
-										is_default: Boolean(checked)
-									}
-								})
-							}
-						/>
-					)
-				}
-			}),
-			columnHelper.accessor('created', {
-				header: t('ns_common:common_fields.created_at'),
-				enableSorting: true,
 				sortingFn: fuzzySort,
 				cell: ({ getValue }) => {
-					const createdAt = getValue()
-					return format(createdAt, 'yyyy-MM-dd')
+					const user = getValue()
+					return (
+						<Item size='sm' className='p-0'>
+							<ItemMedia>
+								<Avatar className='size-8'>
+									<AvatarImage src={generateAvatar({ name: user.display_name })} />
+									<AvatarFallback>{user.display_name.charAt(0).toUpperCase()}</AvatarFallback>
+								</Avatar>
+							</ItemMedia>
+							<ItemContent className='gap-0'>
+								<ItemTitle>{user.display_name}</ItemTitle>
+								<ItemDescription className='before:content-["@"]'>{user.username}</ItemDescription>
+							</ItemContent>
+						</Item>
+					)
 				}
 			}),
-			columnHelper.accessor('remark', {
-				header: t('ns_common:common_fields.remark'),
-				cell: ({ getValue }) =>
-					getValue() || (
-						<Typography variant='small' color='muted'>
-							-
-						</Typography>
+			columnHelper.accessor('created_at', {
+				header: t('ns_common:common_fields.created_at'),
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true,
+				enableSorting: true,
+				filterFn: 'inDateRange',
+				sortingFn: fuzzySort,
+				meta: { filterVariant: 'date' },
+				cell: ({ getValue }) => format(getValue(), 'yyyy-MM-dd HH:mm')
+			}),
+			columnHelper.accessor('updated_by', {
+				header: t('ns_common:common_fields.updated_by'),
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true,
+				enableSorting: true,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
+				cell: ({ getValue }) => {
+					const user = getValue()
+					if (!user) return
+					return (
+						<Item size='sm' className='p-0'>
+							<ItemMedia>
+								<Avatar className='size-8'>
+									<AvatarImage src={generateAvatar({ name: user.display_name })} />
+									<AvatarFallback>{user.display_name.charAt(0).toUpperCase()}</AvatarFallback>
+								</Avatar>
+							</ItemMedia>
+							<ItemContent className='gap-0'>
+								<ItemTitle>{user.display_name}</ItemTitle>
+								<ItemDescription className='before:content-["@"]'>{user.username}</ItemDescription>
+							</ItemContent>
+						</Item>
 					)
+				}
+			}),
+			columnHelper.accessor('updated_at', {
+				header: t('ns_common:common_fields.updated_at'),
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true,
+				enableSorting: true,
+				filterFn: 'inDateRange',
+				sortingFn: fuzzySort,
+				meta: { filterVariant: 'date' },
+				cell: ({ getValue }) =>
+					getValue() ? format(getValue(), 'yyyy-MM-dd HH:mm') : <span className='text-muted-foreground'>-</span>
 			}),
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
@@ -211,14 +193,9 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 								setRowSelectionType('single')
 							}}
 							onEdit={() => {
-								dispatch({
-									type: CommonActions.UPDATE,
-									payload: {
-										dialogTitle: t('ns_common:common_form_titles.update', {
-											object: t('ns_warehouse:specialized_vocabs.storage_area')
-										}),
-										defaultFormValues: row.original
-									}
+								event$.emit({
+									action: CommonActions.UPDATE,
+									payload: row.original
 								})
 							}}
 						/>
@@ -233,7 +210,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 		<Fragment>
 			<DataTable
 				ref={tableRef}
-				data={data}
+				data={data?.storage_locations!}
 				loading={isLoading}
 				columns={columns}
 				enableColumnResizing={true}
@@ -245,11 +222,6 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 				toolbarProps={{
 					slotRight: ({ table }) => (
 						<Fragment>
-							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.upload')}>
-								<Button variant='outline' size='icon' onClick={() => refetch()}>
-									<Icon name='Upload' />
-								</Button>
-							</Tooltip>
 							{table.getSelectedRowModel().flatRows.length > 0 && rowSelectionType === 'multiple' && (
 								<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
 									<Button
@@ -281,7 +253,4 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 	)
 }
 
-export default memo(
-	StorageList,
-	(prev, next) => isEqual(prev.data, next.data) && isEqual(prev.isLoading, next.isLoading)
-)
+export default StorageList

@@ -7,7 +7,7 @@ export interface IUser extends IBaseEntity {
 	password: string
 	employee_code: string
 	picture: string
-	authorized_factory_codes: Array<FactoryCode>
+	// authorized_factory_codes: Array<FactoryCode>
 	roles: Array<UserRole>
 	current_factory_code: FactoryCode
 	is_system_user: boolean

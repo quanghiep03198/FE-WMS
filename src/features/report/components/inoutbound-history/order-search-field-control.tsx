@@ -66,7 +66,7 @@ export function OrderSearchFieldControl() {
 	}, [availableOrders, currentOrderValue])
 
 	useEffect(() => {
-		ref.current.focus()
+		if (ref.current) ref.current.focus()
 	}, [currentDataType])
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -114,7 +114,7 @@ export function OrderSearchFieldControl() {
 														})
 											)}
 											aria-invalid={!!getFieldState('order').error}
-											className='focus-border-0 rounded-none border-0'
+											className='focus-border-0 rounded-none border-0 shadow-none'
 											onKeyDown={handleKeyDown}
 											onClick={() => setOpen(true)}
 											onChange={(e) => field.onChange(e)}

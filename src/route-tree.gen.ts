@@ -83,8 +83,8 @@ const featuresLayoutfinishedGoodsFinishedGoodsOutboundLazyRouteImport =
   createFileRoute(
     '/(features)/_layout/(finished-goods)/finished-goods-outbound',
   )()
-const featuresLayoutwarehouseWarehouseLazyRouteImport = createFileRoute(
-  '/(features)/_layout/(warehouse)/warehouse',
+const featuresLayoutwarehouseWarehousesLazyRouteImport = createFileRoute(
+  '/(features)/_layout/(warehouse)/warehouses',
 )()
 const featuresPreferencesLayoutAccountLazyRouteImport = createFileRoute(
   '/(features)/preferences/_layout/account',
@@ -94,8 +94,10 @@ const featuresPreferencesLayoutAppearanceSettingsLazyRouteImport =
 const featuresPreferencesLayoutKeybindingsLazyRouteImport = createFileRoute(
   '/(features)/preferences/_layout/keybindings',
 )()
-const featuresLayoutwarehouseWarehouseWarehouseNumLazyRouteImport =
-  createFileRoute('/(features)/_layout/(warehouse)/warehouse/$warehouseNum')()
+const featuresLayoutwarehouseStorageLocationsWarehouseNameLazyRouteImport =
+  createFileRoute(
+    '/(features)/_layout/(warehouse)/storage-locations/$warehouseName',
+  )()
 
 const authAuthorizationRoute = authAuthorizationRouteImport.update({
   id: '/(auth)/authorization',
@@ -358,15 +360,15 @@ const featuresLayoutfinishedGoodsFinishedGoodsOutboundLazyRoute =
         (d) => d.Route,
       ),
     )
-const featuresLayoutwarehouseWarehouseLazyRoute =
-  featuresLayoutwarehouseWarehouseLazyRouteImport
+const featuresLayoutwarehouseWarehousesLazyRoute =
+  featuresLayoutwarehouseWarehousesLazyRouteImport
     .update({
-      id: '/(warehouse)/warehouse',
-      path: '/warehouse',
+      id: '/(warehouse)/warehouses',
+      path: '/warehouses',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./routes/(features)/_layout/(warehouse)/warehouse.lazy').then(
+      import('./routes/(features)/_layout/(warehouse)/warehouses.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -406,15 +408,15 @@ const featuresPreferencesLayoutKeybindingsLazyRoute =
         (d) => d.Route,
       ),
     )
-const featuresLayoutwarehouseWarehouseWarehouseNumLazyRoute =
-  featuresLayoutwarehouseWarehouseWarehouseNumLazyRouteImport
+const featuresLayoutwarehouseStorageLocationsWarehouseNameLazyRoute =
+  featuresLayoutwarehouseStorageLocationsWarehouseNameLazyRouteImport
     .update({
-      id: '/$warehouseNum',
-      path: '/$warehouseNum',
-      getParentRoute: () => featuresLayoutwarehouseWarehouseLazyRoute,
+      id: '/(warehouse)/storage-locations/$warehouseName',
+      path: '/storage-locations/$warehouseName',
+      getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./routes/(features)/_layout/(warehouse)/warehouse.$warehouseNum.lazy').then(
+      import('./routes/(features)/_layout/(warehouse)/storage-locations.$warehouseName.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -445,11 +447,11 @@ export interface FileRoutesByFullPath {
   '/defective-goods-outbound-report': typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportLazyRoute
   '/finished-goods-inbound': typeof featuresLayoutfinishedGoodsFinishedGoodsInboundLazyRoute
   '/finished-goods-outbound': typeof featuresLayoutfinishedGoodsFinishedGoodsOutboundLazyRoute
-  '/warehouse': typeof featuresLayoutwarehouseWarehouseLazyRouteWithChildren
+  '/warehouses': typeof featuresLayoutwarehouseWarehousesLazyRoute
   '/preferences/account': typeof featuresPreferencesLayoutAccountLazyRoute
   '/preferences/appearance-settings': typeof featuresPreferencesLayoutAppearanceSettingsLazyRoute
   '/preferences/keybindings': typeof featuresPreferencesLayoutKeybindingsLazyRoute
-  '/warehouse/$warehouseNum': typeof featuresLayoutwarehouseWarehouseWarehouseNumLazyRoute
+  '/storage-locations/$warehouseName': typeof featuresLayoutwarehouseStorageLocationsWarehouseNameLazyRoute
 }
 export interface FileRoutesByTo {
   '/authorization': typeof authAuthorizationRoute
@@ -477,11 +479,11 @@ export interface FileRoutesByTo {
   '/defective-goods-outbound-report': typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportLazyRoute
   '/finished-goods-inbound': typeof featuresLayoutfinishedGoodsFinishedGoodsInboundLazyRoute
   '/finished-goods-outbound': typeof featuresLayoutfinishedGoodsFinishedGoodsOutboundLazyRoute
-  '/warehouse': typeof featuresLayoutwarehouseWarehouseLazyRouteWithChildren
+  '/warehouses': typeof featuresLayoutwarehouseWarehousesLazyRoute
   '/preferences/account': typeof featuresPreferencesLayoutAccountLazyRoute
   '/preferences/appearance-settings': typeof featuresPreferencesLayoutAppearanceSettingsLazyRoute
   '/preferences/keybindings': typeof featuresPreferencesLayoutKeybindingsLazyRoute
-  '/warehouse/$warehouseNum': typeof featuresLayoutwarehouseWarehouseWarehouseNumLazyRoute
+  '/storage-locations/$warehouseName': typeof featuresLayoutwarehouseStorageLocationsWarehouseNameLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -511,11 +513,11 @@ export interface FileRoutesById {
   '/(features)/_layout/(defective-goods)/defective-goods-outbound-report': typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportLazyRoute
   '/(features)/_layout/(finished-goods)/finished-goods-inbound': typeof featuresLayoutfinishedGoodsFinishedGoodsInboundLazyRoute
   '/(features)/_layout/(finished-goods)/finished-goods-outbound': typeof featuresLayoutfinishedGoodsFinishedGoodsOutboundLazyRoute
-  '/(features)/_layout/(warehouse)/warehouse': typeof featuresLayoutwarehouseWarehouseLazyRouteWithChildren
+  '/(features)/_layout/(warehouse)/warehouses': typeof featuresLayoutwarehouseWarehousesLazyRoute
   '/(features)/preferences/_layout/account': typeof featuresPreferencesLayoutAccountLazyRoute
   '/(features)/preferences/_layout/appearance-settings': typeof featuresPreferencesLayoutAppearanceSettingsLazyRoute
   '/(features)/preferences/_layout/keybindings': typeof featuresPreferencesLayoutKeybindingsLazyRoute
-  '/(features)/_layout/(warehouse)/warehouse/$warehouseNum': typeof featuresLayoutwarehouseWarehouseWarehouseNumLazyRoute
+  '/(features)/_layout/(warehouse)/storage-locations/$warehouseName': typeof featuresLayoutwarehouseStorageLocationsWarehouseNameLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -545,11 +547,11 @@ export interface FileRouteTypes {
     | '/defective-goods-outbound-report'
     | '/finished-goods-inbound'
     | '/finished-goods-outbound'
-    | '/warehouse'
+    | '/warehouses'
     | '/preferences/account'
     | '/preferences/appearance-settings'
     | '/preferences/keybindings'
-    | '/warehouse/$warehouseNum'
+    | '/storage-locations/$warehouseName'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/authorization'
@@ -577,11 +579,11 @@ export interface FileRouteTypes {
     | '/defective-goods-outbound-report'
     | '/finished-goods-inbound'
     | '/finished-goods-outbound'
-    | '/warehouse'
+    | '/warehouses'
     | '/preferences/account'
     | '/preferences/appearance-settings'
     | '/preferences/keybindings'
-    | '/warehouse/$warehouseNum'
+    | '/storage-locations/$warehouseName'
   id:
     | '__root__'
     | '/(auth)/authorization'
@@ -610,11 +612,11 @@ export interface FileRouteTypes {
     | '/(features)/_layout/(defective-goods)/defective-goods-outbound-report'
     | '/(features)/_layout/(finished-goods)/finished-goods-inbound'
     | '/(features)/_layout/(finished-goods)/finished-goods-outbound'
-    | '/(features)/_layout/(warehouse)/warehouse'
+    | '/(features)/_layout/(warehouse)/warehouses'
     | '/(features)/preferences/_layout/account'
     | '/(features)/preferences/_layout/appearance-settings'
     | '/(features)/preferences/_layout/keybindings'
-    | '/(features)/_layout/(warehouse)/warehouse/$warehouseNum'
+    | '/(features)/_layout/(warehouse)/storage-locations/$warehouseName'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -811,11 +813,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresLayoutfinishedGoodsFinishedGoodsOutboundLazyRouteImport
       parentRoute: typeof featuresLayoutRoute
     }
-    '/(features)/_layout/(warehouse)/warehouse': {
-      id: '/(features)/_layout/(warehouse)/warehouse'
-      path: '/warehouse'
-      fullPath: '/warehouse'
-      preLoaderRoute: typeof featuresLayoutwarehouseWarehouseLazyRouteImport
+    '/(features)/_layout/(warehouse)/warehouses': {
+      id: '/(features)/_layout/(warehouse)/warehouses'
+      path: '/warehouses'
+      fullPath: '/warehouses'
+      preLoaderRoute: typeof featuresLayoutwarehouseWarehousesLazyRouteImport
       parentRoute: typeof featuresLayoutRoute
     }
     '/(features)/preferences/_layout/account': {
@@ -839,30 +841,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresPreferencesLayoutKeybindingsLazyRouteImport
       parentRoute: typeof featuresPreferencesLayoutRoute
     }
-    '/(features)/_layout/(warehouse)/warehouse/$warehouseNum': {
-      id: '/(features)/_layout/(warehouse)/warehouse/$warehouseNum'
-      path: '/$warehouseNum'
-      fullPath: '/warehouse/$warehouseNum'
-      preLoaderRoute: typeof featuresLayoutwarehouseWarehouseWarehouseNumLazyRouteImport
-      parentRoute: typeof featuresLayoutwarehouseWarehouseLazyRoute
+    '/(features)/_layout/(warehouse)/storage-locations/$warehouseName': {
+      id: '/(features)/_layout/(warehouse)/storage-locations/$warehouseName'
+      path: '/storage-locations/$warehouseName'
+      fullPath: '/storage-locations/$warehouseName'
+      preLoaderRoute: typeof featuresLayoutwarehouseStorageLocationsWarehouseNameLazyRouteImport
+      parentRoute: typeof featuresLayoutRoute
     }
   }
 }
-
-interface featuresLayoutwarehouseWarehouseLazyRouteChildren {
-  featuresLayoutwarehouseWarehouseWarehouseNumLazyRoute: typeof featuresLayoutwarehouseWarehouseWarehouseNumLazyRoute
-}
-
-const featuresLayoutwarehouseWarehouseLazyRouteChildren: featuresLayoutwarehouseWarehouseLazyRouteChildren =
-  {
-    featuresLayoutwarehouseWarehouseWarehouseNumLazyRoute:
-      featuresLayoutwarehouseWarehouseWarehouseNumLazyRoute,
-  }
-
-const featuresLayoutwarehouseWarehouseLazyRouteWithChildren =
-  featuresLayoutwarehouseWarehouseLazyRoute._addFileChildren(
-    featuresLayoutwarehouseWarehouseLazyRouteChildren,
-  )
 
 interface featuresLayoutRouteChildren {
   featuresLayoutCargoWeightCheckLazyRoute: typeof featuresLayoutCargoWeightCheckLazyRoute
@@ -884,7 +871,8 @@ interface featuresLayoutRouteChildren {
   featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportLazyRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsOutboundReportLazyRoute
   featuresLayoutfinishedGoodsFinishedGoodsInboundLazyRoute: typeof featuresLayoutfinishedGoodsFinishedGoodsInboundLazyRoute
   featuresLayoutfinishedGoodsFinishedGoodsOutboundLazyRoute: typeof featuresLayoutfinishedGoodsFinishedGoodsOutboundLazyRoute
-  featuresLayoutwarehouseWarehouseLazyRoute: typeof featuresLayoutwarehouseWarehouseLazyRouteWithChildren
+  featuresLayoutwarehouseWarehousesLazyRoute: typeof featuresLayoutwarehouseWarehousesLazyRoute
+  featuresLayoutwarehouseStorageLocationsWarehouseNameLazyRoute: typeof featuresLayoutwarehouseStorageLocationsWarehouseNameLazyRoute
 }
 
 const featuresLayoutRouteChildren: featuresLayoutRouteChildren = {
@@ -922,8 +910,10 @@ const featuresLayoutRouteChildren: featuresLayoutRouteChildren = {
     featuresLayoutfinishedGoodsFinishedGoodsInboundLazyRoute,
   featuresLayoutfinishedGoodsFinishedGoodsOutboundLazyRoute:
     featuresLayoutfinishedGoodsFinishedGoodsOutboundLazyRoute,
-  featuresLayoutwarehouseWarehouseLazyRoute:
-    featuresLayoutwarehouseWarehouseLazyRouteWithChildren,
+  featuresLayoutwarehouseWarehousesLazyRoute:
+    featuresLayoutwarehouseWarehousesLazyRoute,
+  featuresLayoutwarehouseStorageLocationsWarehouseNameLazyRoute:
+    featuresLayoutwarehouseStorageLocationsWarehouseNameLazyRoute,
 }
 
 const featuresLayoutRouteWithChildren = featuresLayoutRoute._addFileChildren(

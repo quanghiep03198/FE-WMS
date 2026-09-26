@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { GhostButton } from '../../../components/shared/ghost-button'
 import { TruckloadDeliveryStatus } from '../constants'
 import { usePageContext } from '../contexts/page-context'
-import { type ITruckloadDelivery } from '../hooks/use-truckload-delivery-asm'
+import { ITruckloadDelivery } from '../types'
 
 const RowActions: ColumnDefBase<ITruckloadDelivery, any>['cell'] = ({ row }) => {
 	const data = pick(row.original, [

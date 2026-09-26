@@ -1,8 +1,8 @@
-import type { FileRouteTypes } from '@/route-tree.gen'
 import { UserRole } from '@common/constants/enums'
 import env from '@common/utils/env'
 import type { IconProps } from '@components/ui'
 import type { ResourceKeys } from 'i18next'
+import type { FileRouteTypes } from '../route-tree.gen'
 
 export type NavigationConfig = {
 	icon?: IconProps['name']
@@ -34,7 +34,7 @@ export const navigationConfig: Record<'main' | 'preferences' | 'integrations' | 
 				items: [
 					{
 						title: 'navigation.warehouse_management',
-						url: '/warehouse',
+						url: '/warehouses',
 						authorizedRoles: [
 							UserRole.ADMIN,
 							UserRole.MANAGER,

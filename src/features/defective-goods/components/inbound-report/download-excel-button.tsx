@@ -1,5 +1,6 @@
+import type { FactoryCode } from '@common/constants/enums'
+import env from '@common/utils/env'
 import { Button, Icon } from '@components/ui'
-import { useGetTenantByFactory } from '@features/tenancy/hooks/use-tenacy-request'
 import useMediaQuery from '@hooks/use-media-query'
 import useQueryParams from '@hooks/use-query-params'
 import { useQueryClient } from '@tanstack/react-query'
@@ -9,7 +10,6 @@ import { DefectiveGoodsQueryKey } from '../../hooks/use-defective-goods-request'
 
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import { DefectiveGoodsService } from '@features/defective-goods/services/defective-goods.service'
-import useAuth from '@hooks/use-auth'
 import { useMemoizedFn } from 'ahooks'
 import { saveAs } from 'file-saver'
 import { toast } from 'sonner'
@@ -21,16 +21,15 @@ const TOAST_ID = 'download_defective_goods_inbound_report'
 
 const useDownloadReport = () => {
 	const { searchParams } = useQueryParams<PageQueryParams>()
-	const { data: currentTenant } = useGetTenantByFactory()
 	const { t } = useTranslation()
-	const { user } = useAuth()
 
 	return useMemoizedFn(async () => {
+		const factory = env<FactoryCode>('VITE_APP_TENANT')
 		toast.loading(t('ns_common:notification.downloading'), { id: TOAST_ID })
-		const translatedFactory = t(TRANSLATED_FACTORY[user?.current_factory_code], { ns: 'ns_common' })
+		const translatedFactory = t(TRANSLATED_FACTORY[factory], { ns: 'ns_common', defaultValue: factory })
 
 		try {
-			const blob = await DefectiveGoodsService.downloadInboundReport(currentTenant?.id, searchParams)
+			const blob = await DefectiveGoodsService.downloadInboundReport(searchParams)
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_daily_defective_goods_inbound_report', {
@@ -50,13 +49,11 @@ const DownloadExcelButton: React.FC = () => {
 	const { t } = useTranslation()
 	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
 	const handleDownloadReport = useDownloadReport()
-	const { data: currentTenant } = useGetTenantByFactory()
 	const { searchParams } = useQueryParams()
 	const queryClient = useQueryClient()
 
 	const queryData = queryClient.getQueryData<ResponseBody<IDefectiveGoodsInboundReport>>([
 		DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT,
-		currentTenant?.id,
 		pick(searchParams, ['date:eq'])
 	])
 

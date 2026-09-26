@@ -1,5 +1,6 @@
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import env from '@common/utils/env'
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
 import {
 	Button,
@@ -35,6 +36,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { RFIDDeviceType } from '../constants'
 import { usePageContext } from '../contexts/page-context'
 import { useCreateRFIDDeviceMutation, useUpdateRFIDDeviceMutation } from '../hooks/use-rfid-device-request'
 import {
@@ -46,7 +48,7 @@ import {
 
 const RFIDDeviceFormDialog: React.FC = () => {
 	const [open, setOpen] = useState<boolean>(false)
-	const [action, setAction, resetAction] = useResetState<CommonActions.CREATE | CommonActions.UPDATE>(null)
+	const [action, setAction, resetAction] = useResetState<CommonActions.CREATE | CommonActions.UPDATE | null>(null)
 	const { event$ } = usePageContext()
 	const { t } = useTranslation()
 	const { user } = useAuth()
@@ -120,25 +122,25 @@ const RFIDDeviceFormDialog: React.FC = () => {
 							<Fieldset>
 								<Div className='col-span-2'>
 									<InputFieldControl
-										name='device_name_vi'
+										name='device_name.vi'
 										label={t('ns_common:languages.vi')}
-										disabled={!user.roles.includes(UserRole.ADMIN)}
+										disabled={!user?.roles?.includes(UserRole.ADMIN)}
 										placeholder='Tên hiển thị'
 									/>
 								</Div>
 								<Div className='col-span-2'>
 									<InputFieldControl
-										name='device_name_en'
+										name='device_name.en'
 										label={t('ns_common:languages.en')}
-										disabled={!user.roles.includes(UserRole.ADMIN)}
+										disabled={!user?.roles.includes(UserRole.ADMIN)}
 										placeholder='Display name'
 									/>
 								</Div>
 								<Div className='col-span-2'>
 									<InputFieldControl
-										name='device_name_cn'
+										name='device_name.cn'
 										label={t('ns_common:languages.cn')}
-										disabled={!user.roles.includes(UserRole.ADMIN)}
+										disabled={!user?.roles?.includes(UserRole.ADMIN)}
 										placeholder='显示名称'
 									/>
 								</Div>
@@ -146,16 +148,16 @@ const RFIDDeviceFormDialog: React.FC = () => {
 									<InputFieldControl
 										name='device_sn'
 										label={t('ns_rfid:fields.device_sn')}
-										disabled={!user.roles.includes(UserRole.ADMIN)}
+										disabled={!user?.roles?.includes(UserRole.ADMIN)}
 										placeholder='xxx xxx xxx'
 										description={t('ns_rfid:descriptions.device_sn')}
 									/>
 								</Div>
 								<Div className='col-span-3'>
-									<InputFieldControl name='ip_address' label='TCP/IP' placeholder='192.xxx.xxx.xxx' />
+									<InputFieldControl name='tcp_ip' label='TCP/IP' placeholder='192.xxx.xxx.xxx' />
 								</Div>
 								<Div className='col-span-3'>
-									<InputFieldControl name='ip_port' label='TCP/IP port' placeholder='8160' />
+									<InputFieldControl name='tcp_port' label='TCP/IP port' placeholder='8160' />
 								</Div>
 								<Div className='col-span-full'>
 									<SelectFieldControl
@@ -168,9 +170,9 @@ const RFIDDeviceFormDialog: React.FC = () => {
 											})
 										)}
 										datalist={[
-											{ label: 'WH101', value: `CUS_${user?.current_factory_code}_WH101` },
-											{ label: 'WH102', value: `CUS_${user?.current_factory_code}_WH102` },
-											{ label: 'WH103', value: `CUS_${user?.current_factory_code}_WH103` }
+											{ label: 'WH101', value: `CUS_${env<FactoryCode>('VITE_APP_TENANT')}_WH101` },
+											{ label: 'WH102', value: `CUS_${env<FactoryCode>('VITE_APP_TENANT')}_WH102` },
+											{ label: 'WH103', value: `CUS_${env<FactoryCode>('VITE_APP_TENANT')}_WH103` }
 										]}
 										labelField='label'
 										valueField='value'
@@ -180,9 +182,9 @@ const RFIDDeviceFormDialog: React.FC = () => {
 								<Div className='col-span-full space-y-4'>
 									<FormField
 										control={form.control}
-										name='device_ant'
+										name='device_type'
 										render={({ field }) => (
-											<FormItem className='space-y-3'>
+											<FormItem className='flex flex-col gap-y-1.5'>
 												<FormLabel>{t('ns_rfid:fields.device_type')}</FormLabel>
 												<FormControl>
 													<RadioGroup
@@ -191,13 +193,13 @@ const RFIDDeviceFormDialog: React.FC = () => {
 														className='flex items-center gap-x-6'>
 														<FormItem className='flex items-center gap-3 space-y-0'>
 															<FormControl>
-																<RadioGroupItem value='1' />
+																<RadioGroupItem value={RFIDDeviceType.ANTENNA} />
 															</FormControl>
 															<FormLabel>Atenna</FormLabel>
 														</FormItem>
 														<FormItem className='flex items-center gap-3 space-y-0'>
 															<FormControl>
-																<RadioGroupItem value='0' />
+																<RadioGroupItem value={RFIDDeviceType.HANDHOLD} />
 															</FormControl>
 															<FormLabel>Handhold</FormLabel>
 														</FormItem>

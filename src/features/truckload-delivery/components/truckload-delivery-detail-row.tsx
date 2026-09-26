@@ -14,7 +14,6 @@ import {
 	Typography
 } from '@components/ui'
 import type { IPurchaseOrderResult } from '@features/order/services/order.service'
-import type { ITruckloadDeliveryDetail } from '@features/truckload-delivery/services/truckload-delivery.service'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { format } from 'date-fns'
 import { isNil, pick } from 'lodash-es'
@@ -22,6 +21,7 @@ import React, { Fragment, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GhostButton } from '../../../components/shared/ghost-button'
 import { usePageContext } from '../contexts/page-context'
+import type { ITruckloadDeliveryDetail } from '../types'
 import OutboundQtyInputFieldControl from './outbound-qty-field-control'
 import PurchaseOrderFieldControl from './purchase-order-field-control'
 

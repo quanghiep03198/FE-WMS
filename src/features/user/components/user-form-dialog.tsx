@@ -216,7 +216,7 @@ const UserFormDialog: React.FC = () => {
 								valueField='value'
 							/>
 						</Div>
-						<Div className='col-span-full'>
+						{/* <Div className='col-span-full'>
 							<MultiSelectFieldControl
 								name='authorized_factory_codes'
 								label={t('ns_company:factory')}
@@ -232,7 +232,7 @@ const UserFormDialog: React.FC = () => {
 								maxCount={3}
 								valueField='value'
 							/>
-						</Div>
+						</Div> */}
 						<DialogFooter className='col-span-full'>
 							<Button type='submit' disabled={isPending}>
 								{isPending && <Icon name='LoaderCircle' className='animate-spin' />}

@@ -41,7 +41,10 @@ export default {
 	},
 	form: {
 		add_warehouse_title: 'Tạo mới kho',
-		update_warehouse_title: 'Cập nhật mới kho'
+		update_warehouse_title: 'Cập nhật mới kho',
+		add_storage_location_title: 'Thêm vị trí lưu kho mới',
+		update_storage_location_title: 'Cập nhật vị trí lưu kho',
+		storage_location_note: 'Tên vị trí lưu kho phải duy nhất, không được trùng với các vị trí khác.'
 	},
 	headings: {
 		warehouse_list_title: 'Danh sách lý kho',

@@ -1,7 +1,6 @@
 import NotFoundPage from '@components/errors/not-found'
 import useAuth from '@hooks/use-auth'
 import { queryClient } from '@integrations/tanstack-query'
-import type { RouterProps } from '@tanstack/react-router'
 import { RouterProvider as BrowserRouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from '../route-tree.gen'
 
@@ -31,7 +30,6 @@ function isChunkLoadError(error: unknown): boolean {
 // Set up a Router instance
 export const router = createRouter({
 	routeTree,
-	// InnerWrap: ({ children }) => <>{children}</>,
 	context: { queryClient, isAuthenticated: false },
 	defaultPreload: 'intent',
 	defaultNotFoundComponent: NotFoundPage,
@@ -64,8 +62,8 @@ declare module '@tanstack/react-router' {
 	}
 }
 
-export const RouterProvider: React.FC<Pick<RouterProps, 'context'>> = ({ context: extendedContext }) => {
+export const RouterProvider: React.FC = () => {
 	const { isAuthenticated } = useAuth()
 
-	return <BrowserRouterProvider router={router} context={{ queryClient, isAuthenticated, ...extendedContext }} />
+	return <BrowserRouterProvider router={router} context={{ queryClient, isAuthenticated }} />
 }

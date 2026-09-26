@@ -119,7 +119,8 @@ export default {
 		navigation_blocked_caption: '操做没保存. 你确认想离开页面吗 ?',
 		navigation_blocked_message: '现在停读 ?',
 		stock_out_submission_caution: '请在确认出库前仔细检查信息. 确认后, 您将无法更改此信息.',
-		too_many_mono: '已扫描到超过3个命令. 请重新检查'
+		too_many_mono: '已扫描到超过3个命令. 请重新检查',
+		posible_incorrect_po: 'PO 可能不正确. 您是否仍然要继续保存?'
 	},
 	order_status: {
 		[OrderStatus.APPROVED]: '已審核',

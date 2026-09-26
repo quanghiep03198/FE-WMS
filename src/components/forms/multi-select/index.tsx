@@ -1,7 +1,6 @@
 'use no memo'
 
 import type { BaseFieldControl } from '@common/types/hook-form'
-import { cn } from '@common/utils/cn'
 import { Div, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@components/ui'
 import { useId } from 'react'
 import type { FieldValues } from 'react-hook-form'
@@ -9,13 +8,15 @@ import { useFormContext } from 'react-hook-form'
 import type { MultiSelectProps } from '../../ui/@custom/multi-select'
 import { MultiSelect } from '../../ui/@custom/multi-select'
 
-export type MultipleSelectFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
+export type MultipleSelectFieldControlProps<T extends FieldValues, D extends Record<string, any>> = Omit<
 	BaseFieldControl<T>,
 	'control'
 > &
 	Partial<MultiSelectProps<D>>
 
-export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlProps<T, D>) {
+export function MultiSelectFieldControl<T extends FieldValues, D extends Record<string, any>>(
+	props: MultipleSelectFieldControlProps<T, D>
+) {
 	const id = useId()
 	const { control, formState, trigger } = useFormContext()
 	const {
@@ -43,17 +44,14 @@ export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlP
 			control={control}
 			render={({ field }) => (
 				<FormItem
-					className={cn(
-						orientation === 'horizontal' ? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0' : 'space-y-2',
-						hidden && 'hidden'
-					)}>
+					aria-orientation={orientation}
+					className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 					{label && (
 						<FormLabel
 							htmlFor={id}
-							className={cn(
-								'text-pretty',
-								orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'
-							)}>
+							aria-hidden={hidden}
+							aria-orientation={orientation}
+							className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
 							{label}
 						</FormLabel>
 					)}
@@ -65,9 +63,9 @@ export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlP
 								shouldFilter={shouldFilter}
 								placeholder={placeholder}
 								aria-invalid={isInvalid}
-								datalist={datalist}
-								labelField={labelField}
-								valueField={valueField}
+								datalist={datalist!}
+								labelField={labelField!}
+								valueField={valueField!}
 								defaultValue={defaultValue}
 								classNames={classNames}
 								value={field.value}

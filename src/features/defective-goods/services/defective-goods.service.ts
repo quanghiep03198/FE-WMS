@@ -1,5 +1,4 @@
 // import { CreateDefectiveGoodsFormValues } from '@/app/(features)/_layout.b-grade-goods-inbound/-schemas/defective-goods.schema'
-import { RequestHeaders } from '@common/constants/enums'
 import axiosInstance from '@configs/axios.config'
 import type {
 	DefectiveGoodsInboundFormValues,
@@ -38,12 +37,8 @@ export class DefectiveGoodsService {
 		)
 	}
 
-	static async getDefectiveGoodsInventory(tenantId: string) {
-		return await axiosInstance.get<void, ResponseBody<IDefectiveGoodsInventory[]>>('/defective-goods/inventory', {
-			headers: {
-				[RequestHeaders.TENANT_ID]: tenantId
-			}
-		})
+	static async getDefectiveGoodsInventory() {
+		return await axiosInstance.get<void, ResponseBody<IDefectiveGoodsInventory[]>>('/defective-goods/inventory')
 	}
 
 	static async createDefectiveGoods(payload: CreateDefectiveGoodsFormValues) {
@@ -78,41 +73,29 @@ export class DefectiveGoodsService {
 		)
 	}
 
-	static async getInboundReport(tenantId: string, params: { 'date:eq': string }) {
+	static async getInboundReport(params: { 'date:eq': string }) {
 		return await axiosInstance.get<void, ResponseBody<IDefectiveGoodsInboundReport[]>>(
 			'/defective-goods/daily-inbound',
-			{
-				headers: {
-					[RequestHeaders.TENANT_ID]: tenantId
-				},
-				params
-			}
+			{ params }
 		)
 	}
 
-	static async getOutboundReport(tenantId: string, params: { 'date:eq': string }) {
+	static async getOutboundReport(params: { 'date:eq': string }) {
 		return await axiosInstance.get<void, ResponseBody<IDefectiveGoodsOutboundReport[]>>(
 			'/defective-goods/daily-outbound',
-			{
-				headers: {
-					[RequestHeaders.TENANT_ID]: tenantId
-				},
-				params
-			}
+			{ params }
 		)
 	}
 
-	static async downloadInboundReport(tenantId: string, filter: { 'date:eq': string }) {
+	static async downloadInboundReport(filter: { 'date:eq': string }) {
 		return await axiosInstance.get<void, Blob>(`/defective-goods/export-daily-inbound`, {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filter,
 			responseType: 'blob'
 		})
 	}
 
-	static async downloadOutboundReport(tenantId: string, filter: { 'date:eq': string }) {
+	static async downloadOutboundReport(filter: { 'date:eq': string }) {
 		return await axiosInstance.get<void, Blob>(`/defective-goods/export-daily-outbound`, {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filter,
 			responseType: 'blob'
 		})
@@ -125,12 +108,9 @@ export class DefectiveGoodsService {
 		)
 	}
 
-	static async downloadDefectiveGoodsInventoryReport(tenantId: string) {
+	static async downloadDefectiveGoodsInventoryReport() {
 		return await axiosInstance.get<void, Blob>('/defective-goods/export-inventory-report', {
-			responseType: 'blob',
-			headers: {
-				[RequestHeaders.TENANT_ID]: tenantId
-			}
+			responseType: 'blob'
 		})
 	}
 }

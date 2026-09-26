@@ -9,11 +9,11 @@ type ThemeProviderProps = {
 
 type ThemeProviderState = {
 	theme: Theme
-	setTheme: (value?: SetState<Theme>) => void
+	setTheme: (this: unknown, value: SetState<Theme>) => void
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>({
-	theme: Theme?.SYSTEM,
+	theme: Theme.SYSTEM,
 	setTheme: () => undefined
 })
 
@@ -39,7 +39,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, ...props }: The
 		<ThemeProviderContext.Provider
 			{...props}
 			value={{
-				theme: theme as Theme,
+				theme,
 				setTheme
 			}}>
 			{children}

@@ -1,4 +1,5 @@
 export default {
+	duplicate: '值重复',
 	required: '必填项',
 	min_length: '最小 {{ min }} 长度',
 	invalid_value: '无效的值',

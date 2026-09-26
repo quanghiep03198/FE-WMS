@@ -1,3 +1,4 @@
+import env from '@common/utils/env'
 import { AppConfigs } from '@configs/app.config'
 import { AuthService } from '@features/auth/services/auth.service'
 import useAuth from '@hooks/use-auth'
@@ -13,14 +14,14 @@ type TSocketContextStore = {
 	io: Socket
 }
 
-export const SocketContext = createContext<StoreApi<TSocketContextStore>>(null)
+export const SocketContext = createContext<StoreApi<TSocketContextStore>>({} as StoreApi<TSocketContextStore>)
 
 export const SocketProvider: React.FC<React.PropsWithChildren & { namespace?: string }> = ({
 	children,
 	namespace = ''
 }) => {
 	const storeRef = useRef<StoreApi<TSocketContextStore>>(null)
-	const { user, accessToken } = useAuth()
+	const { accessToken } = useAuth()
 
 	if (!storeRef.current)
 		storeRef.current = create<TSocketContextStore>((set) => {
@@ -32,7 +33,7 @@ export const SocketProvider: React.FC<React.PropsWithChildren & { namespace?: st
 					transports: ['websocket', 'polling', 'webtransport'],
 					auth: {
 						accessToken,
-						factoryCode: user?.current_factory_code
+						factoryCode: env<FactoryCode>('VITE_APP_TENANT')
 					}
 				}),
 				setIsConnected: (isConnected) => {
@@ -41,10 +42,10 @@ export const SocketProvider: React.FC<React.PropsWithChildren & { namespace?: st
 			}
 		})
 
-	const socket = storeRef.current.getState().io
+	const socket = storeRef.current!.getState().io
 
-	const handleConnect = () => storeRef.current.getState().setIsConnected(true)
-	const handleDisconnect = () => storeRef.current.getState().setIsConnected(false)
+	const handleConnect = () => storeRef.current!.getState().setIsConnected(true)
+	const handleDisconnect = () => storeRef.current!.getState().setIsConnected(false)
 
 	useUpdateEffect(() => {
 		if (!accessToken) return

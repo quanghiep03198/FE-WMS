@@ -137,7 +137,8 @@ export default {
 		navigation_blocked_message: 'Cancel scanning EPCs anyway?',
 		stock_out_submission_caution:
 			'Please check the information carefully before confirming the stock out. After confirmation, you cannot change this information.',
-		too_many_mono: 'There are more than 3 commands scanned. Please check again.'
+		too_many_mono: 'There are more than 3 commands scanned. Please check again.',
+		posible_incorrect_po: 'The PO might be incorrect. Do you want to continue saving anyway?'
 	},
 	order_status: {
 		[OrderStatus.APPROVED]: 'Approved',

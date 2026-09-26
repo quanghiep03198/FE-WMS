@@ -12,11 +12,10 @@ export enum InventoryAuditQueryKeys {
 	INVENTORY_AUDIT = 'INVENTORY_AUDIT'
 }
 
-export const useGetInventoryAuditReport = (params?: { 'month:eq': string }) => {
+export const useGetInventoryAuditReport = (params: { 'month:eq': string }) => {
 	return useQuery({
 		queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, params],
 		queryFn: async () => await InventoryService.getInventoryAuditReport(params),
-		refetchOnWindowFocus: false,
 		select: (response) => response.metadata
 	})
 }
@@ -83,7 +82,7 @@ export const useInventoryAuditMutation = (
 		},
 		onError: (_error, _variable, context) => {
 			toast.error(t('ns_common:notification.error'))
-			queryClient.setQueryData([InventoryAuditQueryKeys.INVENTORY_AUDIT, searchParams], context.previousData)
+			queryClient.setQueryData([InventoryAuditQueryKeys.INVENTORY_AUDIT, searchParams], context!.previousData)
 		}
 	})
 }

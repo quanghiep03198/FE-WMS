@@ -1,8 +1,7 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import env from '@common/utils/env'
 import type { UrlQueryParams } from '@features/report/components/finished-goods-inbound/report-master-table'
 import { ReportService } from '@features/report/services/report.service'
-import { useGetTenantByFactory } from '@features/tenancy/hooks/use-tenacy-request'
-import useAuth from '@hooks/use-auth'
 import useQueryParams from '@hooks/use-query-params'
 import { useMemoizedFn } from 'ahooks'
 import { saveAs } from 'file-saver'
@@ -11,20 +10,19 @@ import { toast } from 'sonner'
 
 export const useDownloadReport = () => {
 	const { searchParams } = useQueryParams<UrlQueryParams>()
-	const { data: currentTenant } = useGetTenantByFactory()
 	const { t } = useTranslation()
-	const { user } = useAuth()
 
 	return useMemoizedFn(async (reportType: 'daily-productivity' | 'assembly-productivity') => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
-		const translatedFactory = t(TRANSLATED_FACTORY[user?.current_factory_code], { ns: 'ns_common' })
+		const factory = env<FactoryCode>('VITE_APP_TENANT')
+		const translatedFactory = t(TRANSLATED_FACTORY[factory], { ns: 'ns_common', defaultValue: factory })
 		const fallbackFileTitle =
 			reportType === 'daily-productivity'
 				? `Daily Inbound Report ${translatedFactory} - ${searchParams['date:eq']}`
 				: `Shaping Department Productivity Report ${translatedFactory} - ${searchParams['date:eq']}`
 
 		try {
-			const blob = await ReportService.downloadInboundReport(reportType, currentTenant?.id, searchParams)
+			const blob = await ReportService.downloadInboundReport(reportType, searchParams)
 			saveAs(
 				blob,
 				t(

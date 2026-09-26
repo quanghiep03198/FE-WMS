@@ -9,10 +9,12 @@ const easeInOutQuint = (t: number) => {
 	return t <= 0.5 ? 16 * t ** 5 : 1 + 16 * (--t) ** 5
 }
 
-export default function useScrollToFn(containerRef: RefObject<HTMLElement>) {
+export default function useScrollToFn(containerRef: RefObject<HTMLElement | null>) {
 	const scrollingRef = useRef<number>(0)
 
 	return useCallback<VirtualizerOptions<any, any>['scrollToFn']>((...args: ScrollToFnArgs) => {
+		if (!containerRef.current) return
+
 		const [offset, canSmooth, instance] = args
 		const duration = 1000
 		const start = containerRef.current?.scrollTop ?? 0

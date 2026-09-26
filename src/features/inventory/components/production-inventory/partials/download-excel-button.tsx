@@ -1,27 +1,24 @@
 import { FactoryAgencyCode } from '@common/constants/enums'
+import env from '@common/utils/env'
 import { Button, Icon } from '@components/ui'
 import { InventoryService } from '@features/inventory/services/inventory.service'
-import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useGetTenantByFactory } from '../../../../tenancy/hooks/use-tenacy-request'
 
 const DownloadExcelButton: React.FC<React.ComponentProps<typeof Button>> = (props) => {
 	const { t } = useTranslation()
-	const { user } = useAuth()
-	const { data: tenant } = useGetTenantByFactory()
 	const isSmallScreen = useMediaQuery('(max-width:800px)')
 
 	const handleDownloadExcel = async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
 		try {
-			const blob = await InventoryService.downloadProductionInventoryReport(tenant?.id)
+			const blob = await InventoryService.downloadProductionInventoryReport()
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_production_inventory_summary', {
-					factory: FactoryAgencyCode[user?.current_factory_code],
+					factory: FactoryAgencyCode[env<FactoryCode>('VITE_APP_TENANT')],
 					defaultValue: null
 				}) + '.xlsx'
 			)

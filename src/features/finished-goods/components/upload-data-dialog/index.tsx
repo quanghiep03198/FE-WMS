@@ -1,5 +1,7 @@
+import type { FactoryCode } from '@common/constants/enums'
 import { PresetBreakPoints, RequestHeaders } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import env from '@common/utils/env'
 import {
 	Button,
 	buttonVariants,
@@ -48,7 +50,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 			 * 'CUS' prefix represents the customer's EPC data.
 			 */
 			const STATION_PREFIX = 'CUS'
-			formData.append('station', `${STATION_PREFIX}_${user?.current_factory_code}_${station}`)
+			formData.append('station', `${STATION_PREFIX}_${env<FactoryCode>('VITE_APP_TENANT')}_${station}`)
 			files.forEach((file) => formData.append('files', file, uuid()))
 			return await axiosInstance.post(`/rfid/upload-data`, formData, {
 				headers: {
