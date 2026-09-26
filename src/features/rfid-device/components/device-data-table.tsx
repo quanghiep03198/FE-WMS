@@ -1,4 +1,4 @@
-import type { RecordStatus} from '@common/constants/enums';
+import type { RecordStatus } from '@common/constants/enums'
 import { UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import { Badge, Button, DataTable, Icon, Tooltip, Typography } from '@components/ui'

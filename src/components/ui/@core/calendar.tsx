@@ -3,7 +3,7 @@ import { useDateLocale } from '@hooks/use-date-locale'
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import * as React from 'react'
-import type { DayPickerDefaultProps } from 'react-day-picker';
+import type { DayPickerDefaultProps } from 'react-day-picker'
 import { DayPicker } from 'react-day-picker'
 import { buttonVariants } from './button'
 
