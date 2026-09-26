@@ -14,7 +14,7 @@ import {
 	LanguageSelector,
 	ThemeSelector
 } from '../../features/auth/components/login/page-composition'
-import { FileRouteTypes } from '../../route-tree.gen'
+import type { FileRouteTypes } from '../../route-tree.gen'
 
 export const Route = createFileRoute('/(auth)/login')({
 	component: LoginPage,

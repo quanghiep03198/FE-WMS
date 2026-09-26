@@ -6,7 +6,7 @@ import type {
 	UpdateDispatchOrderFormValues,
 	UpsertPurchaseOrdersFormValues
 } from '@features/truckload-delivery/schemas'
-import { ITruckloadDelivery, ITruckloadDeliveryDetail, TruckloadDeliveryDispatchOrder } from '../types'
+import type { ITruckloadDelivery, ITruckloadDeliveryDetail, TruckloadDeliveryDispatchOrder } from '../types'
 
 export class TruckloadDeliveryService {
 	static async getDispatchOrders(

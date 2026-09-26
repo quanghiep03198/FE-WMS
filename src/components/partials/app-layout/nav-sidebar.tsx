@@ -29,7 +29,7 @@ import React, { Fragment, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
-import { FileRouteTypes } from '../../../route-tree.gen'
+import type { FileRouteTypes } from '../../../route-tree.gen'
 
 type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon' | 'authorizedRoles'> & {
 	indice: `${number}` | `${number}.${number}` | 'none'
