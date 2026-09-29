@@ -109,7 +109,6 @@ const InoutboundForm: React.FC = () => {
 	}, [action])
 
 	const handleSubmit = async (data: FormValues) => {
-		console.log(data)
 		try {
 			await mutateAsync({
 				...data,
@@ -255,7 +254,6 @@ const InoutboundForm: React.FC = () => {
 										onValueChange={(value) => {
 											if (!Array.isArray(assemblyLines)) return
 											const matchedItem = assemblyLines.find((item) => item.code === value)
-											console.log(matchedItem)
 											if (matchedItem && 'name' in matchedItem)
 												form.setValue('assembly_line.name', matchedItem.name)
 										}}
