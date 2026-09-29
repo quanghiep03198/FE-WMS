@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 
 const EpcDeduplicationToggleBox: React.FC = () => {
 	const { t } = useTranslation()
-	const abortControllerRef = useRef<AbortController | null>(null)
+	const abortControllerRef = useRef<AbortController>(new AbortController())
 	const [isEnabled, setIsEnabled] = useLocalStorageState<boolean>('rfid:deduplicate_inbound_epc', {
 		defaultValue: true,
 		listenStorageChange: true
@@ -31,7 +31,7 @@ const EpcDeduplicationToggleBox: React.FC = () => {
 			method: RequestMethod.GET,
 			credentials: 'include',
 			headers: {
-				[RequestHeaders.USER_REQUEST]: user?.username,
+				...(user && { [RequestHeaders.USER_REQUEST]: user.username }),
 				[RequestHeaders.FACTORY_CODE]: env<FactoryCode>('VITE_APP_TENANT')
 			},
 			async onopen(response) {
@@ -61,7 +61,7 @@ const EpcDeduplicationToggleBox: React.FC = () => {
 					const data = Json.parse<{ enabled: boolean }>(event.data)
 					setIsEnabled(data.enabled)
 				} catch (error) {
-					throw new FatalError(error)
+					throw new FatalError((error as Error).message)
 				}
 			},
 			onclose() {
