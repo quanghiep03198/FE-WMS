@@ -2,6 +2,8 @@
 
 import { cn } from '@common/utils/cn'
 import type { ResourceKey } from 'i18next'
+import { Eye, EyeOff } from 'lucide'
+import { MorphIcon } from 'morphicons/react'
 import React, { useEffect, useId, useRef, useState } from 'react'
 import type { ControllerRenderProps, FieldValues, Path } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
@@ -15,7 +17,6 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-	Icon,
 	Toggle,
 	Tooltip
 } from '../../ui'
@@ -132,7 +133,11 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 											type='button'
 											className='absolute top-1/2 right-1 z-20 size-8 -translate-y-1/2 bg-transparent p-0 focus-within:ring-0 focus-within:outline-none hover:bg-transparent data-[state=on]:bg-transparent'
 											onPressedChange={(pressed) => setCurrentType(pressed ? 'text' : 'password')}>
-											<Icon name={currentType === 'password' ? 'Eye' : 'EyeOff'} />
+											<MorphIcon
+												spring='snappy'
+												size={16}
+												icon={currentType === 'password' ? Eye : EyeOff}
+											/>
 										</Toggle>
 									)}
 								</Div>
