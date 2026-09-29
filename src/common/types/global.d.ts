@@ -88,6 +88,8 @@ export declare global {
 
 	type Parameter<T> = T extends (param: infer Argument) => any ? Argument : never
 
+	type ArrayElement<T> = T extends (infer U)[] ? U : never
+
 	interface Set<T> {
 		at(index: number): T | undefined
 	}
