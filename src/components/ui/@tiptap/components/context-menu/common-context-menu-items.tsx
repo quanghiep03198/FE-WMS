@@ -7,8 +7,7 @@ const getCopiedData = async () => {
 		const clipboardItems = await navigator.clipboard.read()
 		const type = clipboardItems[0].types.includes('text/html') ? 'text/html' : 'text/plain'
 		return await (await clipboardItems[0].getType(type)).text()
-	} catch (err) {
-		console.log(err.name, err.message)
+	} catch {
 		return null
 	}
 }
@@ -43,12 +42,8 @@ const CommonContextMenuItems: React.FC<{ editor: Editor }> = ({ editor }) => {
 				className='gap-x-2'
 				disabled={!canPaste}
 				onClick={async () => {
-					try {
-						const coppiedData = await getCopiedData()
-						editor.commands.insertContentAt(editor.state.selection.anchor, coppiedData)
-					} catch (err) {
-						console.log(err.name, err.message)
-					}
+					const coppiedData = await getCopiedData()
+					if (coppiedData) editor.commands.insertContentAt(editor.state.selection.anchor, coppiedData)
 				}}>
 				<Icon name='ClipboardPaste' />
 				Dán
