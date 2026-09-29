@@ -43,7 +43,7 @@ const AlertDialogContent: React.FC<React.ComponentProps<typeof AlertDialogPrimit
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName
 
 const AlertDialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-	<div className={cn('flex flex-col space-y-2 text-center sm:text-left', className)} {...props} />
+	<div className={cn('flex flex-col space-y-2 text-left', className)} {...props} />
 )
 AlertDialogHeader.displayName = 'AlertDialogHeader'
 
@@ -63,6 +63,19 @@ const AlertDialogDescription: React.FC<React.ComponentProps<typeof AlertDialogPr
 	...props
 }) => <AlertDialogPrimitive.Description className={cn('text-muted-foreground text-sm', className)} {...props} />
 AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayName
+
+const AlertDialogMedia: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {
+	return (
+		<div
+			data-slot='alert-dialog-media'
+			className={cn(
+				"bg-muted mb-2 inline-flex size-10 items-center justify-center rounded-md sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-6",
+				className
+			)}
+			{...props}
+		/>
+	)
+}
 
 const AlertDialogAction: React.FC<
 	React.ComponentProps<typeof AlertDialogPrimitive.Action> & Pick<ButtonProps, 'variant' | 'size'>
@@ -85,6 +98,7 @@ export {
 	AlertDialogDescription,
 	AlertDialogFooter,
 	AlertDialogHeader,
+	AlertDialogMedia,
 	AlertDialogOverlay,
 	AlertDialogPortal,
 	AlertDialogTitle,
