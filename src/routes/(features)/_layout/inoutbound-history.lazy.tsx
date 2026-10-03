@@ -27,7 +27,7 @@ function RouteComponent() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.inoutbound_history')}</title>
-			<meta name='description' content='Search in/outbound progress by order' />
+			<meta content='Search in/outbound progress by order' name='description' />
 
 			<RoleGuard
 				authorizedRoles={[

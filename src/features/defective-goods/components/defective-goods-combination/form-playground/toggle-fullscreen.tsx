@@ -22,21 +22,21 @@ const ToggleFullscreen: React.FC = () => {
 	if (isMobile)
 		return (
 			<Button
+				className='aria-pressed:text-foreground h-8 rounded-md px-3 text-xs'
 				size='sm'
-				variant='ghost'
 				type='button'
-				onClick={() => toggleFullscreen()}
-				className='aria-pressed:text-foreground h-8 rounded-md px-3 text-xs'>
+				variant='ghost'
+				onClick={() => toggleFullscreen()}>
 				<Icon name={isFullscreen ? 'Minimize2' : 'Maximize2'} size={14} />
 				{t('ns_inoutbound:scanner_setting.toggle_fullscreen')}
 			</Button>
 		)
 
 	return (
-		<Label htmlFor='toggle-fullscreen' className='inline-flex items-center gap-x-2'>
+		<Label className='inline-flex items-center gap-x-2' htmlFor='toggle-fullscreen'>
 			<Icon name='Fullscreen' size={18} />
 			{t('ns_inoutbound:scanner_setting.toggle_fullscreen')}
-			<Switch id='toggle-fullscreen' checked={isFullscreen} onCheckedChange={() => toggleFullscreen()} />
+			<Switch checked={isFullscreen} id='toggle-fullscreen' onCheckedChange={() => toggleFullscreen()} />
 		</Label>
 	)
 }

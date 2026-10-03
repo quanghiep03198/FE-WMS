@@ -275,14 +275,14 @@ const DataGrid: React.FC<DataTableProps> = ({
 			<DataTableWrapper data-border={border}>
 				<TableToolbar {...{ ...toolbarProps }} />
 				<DataTable
-					columns={visibleColumns}
-					loading={loading}
 					caption={caption}
-					virtualizerOptions={virtualizerOptions}
+					columns={visibleColumns}
 					containerProps={containerProps}
 					footerProps={footerProps}
-					renderSubComponent={renderSubComponent}
 					getRowCanExpand={getRowCanExpand}
+					loading={loading}
+					renderSubComponent={renderSubComponent}
+					virtualizerOptions={virtualizerOptions}
 				/>
 				<FooterGroup>
 					{isResizingColumn ? (
@@ -299,12 +299,12 @@ const DataGrid: React.FC<DataTableProps> = ({
 						/>
 					)}
 					<DataTablePagination
-						table={table}
+						controlledPaginationProps={paginationProps}
+						enableInputPageSize={paginationProps.enableInputPageSize}
 						loading={loading}
 						manualPagination={manualPagination}
-						controlledPaginationProps={paginationProps}
 						prefetch={paginationProps.prefetch}
-						enableInputPageSize={paginationProps.enableInputPageSize}
+						table={table}
 						onPaginationChange={onPaginationChange}
 					/>
 				</FooterGroup>

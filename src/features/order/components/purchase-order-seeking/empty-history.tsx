@@ -19,7 +19,7 @@ const EmptySearchResult: React.FC = () => {
 				</EmptyDescription>
 			</EmptyHeader>
 			<EmptyContent>
-				<Button variant='outline' size='sm' onClick={() => removeParam('po')}>
+				<Button size='sm' variant='outline' onClick={() => removeParam('po')}>
 					<Icon name='Undo2' />
 					{t('ns_common:actions.retry')}
 				</Button>

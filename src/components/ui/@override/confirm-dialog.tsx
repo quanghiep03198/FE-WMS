@@ -64,7 +64,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 							if (typeof onConfirm === 'function') onConfirm()
 						}}
 						{...dialogActionProps}>
-						{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
+						{isPending && <Icon className='animate-spin' name='LoaderCircle' />}
 						{isError
 							? t('ns_common:actions.retry')
 							: dialogActionProps?.children

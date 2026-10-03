@@ -133,9 +133,9 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 		<NodeViewWrapper className='w-full'>
 			{previewUrl && (
 				<Div className='relative'>
-					<img src={previewUrl} alt='Preview' className='mx-auto object-contain' />
+					<img alt='Preview' className='mx-auto object-contain' src={previewUrl} />
 					<Div className='absolute inset-0 place-content-center place-items-center bg-neutral-950/50'>
-						<Icon name='LoaderCircle' className='animate-spin' />
+						<Icon className='animate-spin' name='LoaderCircle' />
 					</Div>
 					<Input
 						className='h-8 border-none text-center focus:border-none'
@@ -144,12 +144,12 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 				</Div>
 			)}
 			<Input
-				ref={fileInputRef}
-				type='file'
 				accept='image/*'
-				onChange={handleFileChange}
 				className='hidden'
 				id='image-upload'
+				ref={fileInputRef}
+				type='file'
+				onChange={handleFileChange}
 			/>
 		</NodeViewWrapper>
 	)

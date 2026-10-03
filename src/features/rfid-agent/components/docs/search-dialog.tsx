@@ -48,15 +48,15 @@ const SearchDialog: React.FC = () => {
 	return (
 		<Fragment>
 			<Button
-				variant={isSmallScreen ? 'ghost' : 'outline'}
-				size={isSmallScreen ? 'icon' : 'default'}
 				className='bg-background min-w-56 basis-56 gap-x-2 px-2 sm:min-w-fit sm:basis-auto'
+				size={isSmallScreen ? 'icon' : 'default'}
+				variant={isSmallScreen ? 'ghost' : 'outline'}
 				onClick={() => setOpen(!open)}>
 				<Icon name='Search' />
-				<Typography variant='small' className='sm:hidden'>
+				<Typography className='sm:hidden' variant='small'>
 					Search ...
 				</Typography>
-				<Badge variant='secondary' className='ml-auto font-mono font-normal tracking-widest sm:hidden'>
+				<Badge className='ml-auto font-mono font-normal tracking-widest sm:hidden' variant='secondary'>
 					ctrl+k
 				</Badge>
 			</Button>
@@ -65,8 +65,8 @@ const SearchDialog: React.FC = () => {
 				<CommandDialog open={open} onOpenChange={setOpen}>
 					<Command shouldFilter={false}>
 						<CommandInput
-							placeholder='Type a command or search...'
 							className='h-9 items-center'
+							placeholder='Type a command or search...'
 							onValueChange={debounce((value) => setSearchTerm(value), 200)}
 						/>
 						<CommandEmpty>No results found.</CommandEmpty>
@@ -75,7 +75,7 @@ const SearchDialog: React.FC = () => {
 								<Fragment>
 									<CommandGroup heading='RFID Agent'>
 										{menuGroups.rfidAgent.map((item) => (
-											<CommandItem key={item.hash} asChild className='h-8 text-sm' value={item.hash}>
+											<CommandItem asChild className='h-8 text-sm' key={item.hash} value={item.hash}>
 												<Link hash={item.hash} onClick={() => setOpen(false)}>
 													{t(item.title, { defaultValue: item.title })}
 												</Link>
@@ -85,7 +85,7 @@ const SearchDialog: React.FC = () => {
 									<CommandSeparator />
 									<CommandGroup heading='Eclipse Mosquitto'>
 										{menuGroups.mosquitto.map((item) => (
-											<CommandItem key={item.hash} asChild className='h-8 text-sm' value={item.hash}>
+											<CommandItem asChild className='h-8 text-sm' key={item.hash} value={item.hash}>
 												<Link hash={item.hash} onClick={() => setOpen(false)}>
 													{t(item.title, { defaultValue: item.title })}
 												</Link>
@@ -97,7 +97,7 @@ const SearchDialog: React.FC = () => {
 								filteredItems.length > 0 && (
 									<CommandGroup heading={`${filteredItems.length} results`}>
 										{filteredItems.map((item) => (
-											<CommandItem key={item.hash} className='h-8 text-sm' value={item.hash} asChild>
+											<CommandItem asChild className='h-8 text-sm' key={item.hash} value={item.hash}>
 												<Link hash={item.hash} onClick={() => setOpen(false)}>
 													{t(item.title, { defaultValue: item.title })}
 												</Link>

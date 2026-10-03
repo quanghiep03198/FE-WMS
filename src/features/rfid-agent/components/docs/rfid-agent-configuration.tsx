@@ -16,9 +16,9 @@ const RFIDAgentConfiguration: React.FC = () => {
 				<DialogTrigger>
 					<figure className='space-y-1 [&_img]:rounded'>
 						<img
-							src={RFIDAgentConfigImage}
 							alt='RFID Agent Configuration'
 							className='object-contain object-center'
+							src={RFIDAgentConfigImage}
 						/>
 						<figcaption className='text-muted-foreground text-center text-sm'>
 							RFID Agent Configuration
@@ -28,9 +28,9 @@ const RFIDAgentConfiguration: React.FC = () => {
 				<DialogContent className='bg-background/50! relative h-screen max-w-screen rounded-none backdrop-blur-sm'>
 					<figure className='space-y-1'>
 						<img
-							src={RFIDAgentConfigImage}
 							alt='RFID Agent Configuration'
 							className='mx-auto w-full max-w-[90vw] rounded object-contain object-center'
+							src={RFIDAgentConfigImage}
 						/>
 						<figcaption className='text-muted-foreground text-center text-sm'>
 							RFID Agent Configuration

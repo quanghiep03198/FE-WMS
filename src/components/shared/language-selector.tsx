@@ -24,8 +24,8 @@ export const LanguageSelect: React.FC = () => {
 	const { i18n } = useTranslation()
 
 	return (
-		<Select onValueChange={(value) => i18n.changeLanguage(value)} value={i18n.language}>
-			<SelectTrigger aria-label='Languages' id='language' className='bg-background'>
+		<Select value={i18n.language} onValueChange={(value) => i18n.changeLanguage(value)}>
+			<SelectTrigger aria-label='Languages' className='bg-background' id='language'>
 				<SelectValue placeholder='Choose language' />
 			</SelectTrigger>
 			<SelectContent>
@@ -46,17 +46,17 @@ export const LanguageDropdown: React.FC<{ triggerProps?: ButtonProps }> = ({ tri
 		<DropdownMenu>
 			<Tooltip message={t('ns_common:settings.language')} triggerProps={{ asChild: true }}>
 				<DropdownMenuTrigger asChild>
-					<Button {...triggerProps} size='icon' type='button' aria-label='Languages'>
+					<Button {...triggerProps} aria-label='Languages' size='icon' type='button'>
 						<Icon name='Languages' />
 					</Button>
 				</DropdownMenuTrigger>
 			</Tooltip>
-			<DropdownMenuContent className='w-48' align='end'>
+			<DropdownMenuContent align='end' className='w-48'>
 				<DropdownMenuLabel>Languages</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuRadioGroup value={i18n.language} onValueChange={(value) => i18n.changeLanguage(value)}>
 					{LOCALES.map((item) => (
-						<DropdownMenuRadioItem value={item.value} key={item.value}>
+						<DropdownMenuRadioItem key={item.value} value={item.value}>
 							{item.label}
 						</DropdownMenuRadioItem>
 					))}

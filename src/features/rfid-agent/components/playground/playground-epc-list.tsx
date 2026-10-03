@@ -51,7 +51,7 @@ export const PlaygroundEpcList: React.FC = () => {
 			<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
 				{virtualizer.getVirtualItems().map((virtualItem) => {
 					const item = scannedEpcs[virtualItem.index]
-					return <ReaderVirtualRow key={virtualItem.key} data={item} {...omit(virtualItem, ['key'])} />
+					return <ReaderVirtualRow data={item} key={virtualItem.key} {...omit(virtualItem, ['key'])} />
 				})}
 			</Div>
 		</Div>
@@ -61,9 +61,9 @@ export const PlaygroundEpcList: React.FC = () => {
 const ReaderVirtualRow: React.FC<{ data: string } & VirtualItem> = memo(({ data, index, size, start }) => {
 	return (
 		<Div
-			key={index}
-			data-index={index}
 			className='hover:bg-accent absolute top-0 right-auto left-auto w-full border-b px-4 py-2 font-medium whitespace-nowrap uppercase last:border-none'
+			data-index={index}
+			key={index}
 			style={{
 				height: size,
 				transform: `translateY(${start}px)`

@@ -16,27 +16,27 @@ const RollbackStockTransactionPopover: React.FC<{
 	return (
 		<Popover modal>
 			<PopoverTrigger asChild>
-				<Button variant='destructive' size='xs' disabled={!reversible || isPending}>
+				<Button disabled={!reversible || isPending} size='xs' variant='destructive'>
 					{t('ns_common:actions.rollback')}
 				</Button>
 			</PopoverTrigger>
 
-			<PopoverContent className='flex w-full max-w-sm items-start gap-6' align='end'>
+			<PopoverContent align='end' className='flex w-full max-w-sm items-start gap-6'>
 				<Div className='bg-destructive/10 text-destructive flex aspect-square size-12 items-center justify-center rounded-full'>
 					<Icon name='TriangleAlert' size={20} />
 				</Div>
 				<Div className='flex flex-1 flex-col gap-y-1.5'>
 					<Typography className='font-medium'>{t('ns_inoutbound:titles.rollback_stock_transaction')}</Typography>
-					<Typography variant='small' color='muted'>
+					<Typography color='muted' variant='small'>
 						{t('ns_inoutbound:description.rollback_stock_transaction')}
 					</Typography>
 					<Button
-						variant='destructive'
-						size='sm'
 						className='mt-3'
 						disabled={!reversible || isPending}
+						size='sm'
+						variant='destructive'
 						onClick={() => mutateAsync(transactionId)}>
-						{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
+						{isPending && <Icon className='animate-spin' name='LoaderCircle' />}
 						{t(isError ? 'ns_common:actions.retry' : 'ns_common:actions.confirm')}
 					</Button>
 				</Div>

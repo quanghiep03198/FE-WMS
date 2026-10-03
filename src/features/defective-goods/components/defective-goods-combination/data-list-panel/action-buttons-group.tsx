@@ -19,17 +19,17 @@ const ActionButtonsGroup: React.FC = () => {
 				message={isAllCardsExpanded ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}
 				triggerProps={{ asChild: true }}>
 				<Toggle
+					pressed={!isAllCardsExpanded}
 					variant='default'
 					className={cn(
 						'aspect-square size-8 p-0',
 						isTogglingExpand && 'animate-out fade-out-50 duration-200 ease-in-out'
 					)}
-					pressed={!isAllCardsExpanded}
 					onPressedChange={toggleAllCardExpaned}>
 					<Icon name={isAllCardsExpanded ? 'Minimize2' : 'Maximize2'} strokeWidth={2} />
 				</Toggle>
 			</Tooltip>
-			<Separator orientation='vertical' className='h-4 w-0.5' />
+			<Separator className='h-4 w-0.5' orientation='vertical' />
 			<Tooltip
 				message={t('ns_common:actions.reload')}
 				triggerProps={{
@@ -39,8 +39,8 @@ const ActionButtonsGroup: React.FC = () => {
 					<Icon name='RefreshCcw' />
 				</Button>
 			</Tooltip>
-			<Separator orientation='vertical' className='h-4 w-0.5' />
-			<RoleBaseAccessControl mode='mask' authorizedRoles={[UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}>
+			<Separator className='h-4 w-0.5' orientation='vertical' />
+			<RoleBaseAccessControl authorizedRoles={[UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]} mode='mask'>
 				<DeleteButton />
 			</RoleBaseAccessControl>
 		</Div>

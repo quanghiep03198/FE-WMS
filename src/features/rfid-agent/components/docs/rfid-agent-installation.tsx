@@ -24,13 +24,13 @@ const RFIDAgentInstallation: React.FC = () => {
 									data?.assets.find((asset) => asset.content_type === 'application/x-msdos-program')
 										?.browser_download_url
 								}>
-								{isLoading ? <Icon name='LoaderCircle' className='animate-spin' /> : <MicrosoftIcon />}
+								{isLoading ? <Icon className='animate-spin' name='LoaderCircle' /> : <MicrosoftIcon />}
 								Windows Installer (.exe)
 								{isError && (
 									<Icon
+										className='fill-destructive stroke-destructive-foreground absolute top-0 right-0 translate-x-1/2 -translate-y-1/2'
 										name='CircleAlert'
 										size={18}
-										className='fill-destructive stroke-destructive-foreground absolute top-0 right-0 translate-x-1/2 -translate-y-1/2'
 									/>
 								)}
 							</DownloadButton>
@@ -39,15 +39,15 @@ const RFIDAgentInstallation: React.FC = () => {
 									data?.assets.find((asset) => asset.content_type === 'application/zip')?.browser_download_url
 								}>
 								<Icon
-									name={isLoading ? 'LoaderCircle' : 'FolderArchive'}
 									className={isLoading && 'animate-spin'}
+									name={isLoading ? 'LoaderCircle' : 'FolderArchive'}
 								/>{' '}
 								Portable Version (.rar)
 								{isError && (
 									<Icon
+										className='fill-destructive stroke-destructive-foreground absolute top-0 right-0 translate-x-1/2 -translate-y-1/2'
 										name='CircleAlert'
 										size={18}
-										className='fill-destructive stroke-destructive-foreground absolute top-0 right-0 translate-x-1/2 -translate-y-1/2'
 									/>
 								)}
 							</DownloadButton>
@@ -59,14 +59,14 @@ const RFIDAgentInstallation: React.FC = () => {
 					<UnorderedList className='my-6 list-inside list-disc space-y-2 pl-8'>
 						<ListItem>
 							Run{' '}
-							<Badge variant='secondary' className='translate-y-0.5 gap-x-1'>
+							<Badge className='translate-y-0.5 gap-x-1' variant='secondary'>
 								<Icon name='AppWindow' /> rfid-agent.exe
 							</Badge>{' '}
 							in case you use download Window installer
 						</ListItem>
 						<ListItem>
 							Extract{' '}
-							<Badge variant='secondary' className='translate-y-0.5 gap-x-1'>
+							<Badge className='translate-y-0.5 gap-x-1' variant='secondary'>
 								<Icon name='FolderArchive' /> rfid-agent.rar
 							</Badge>{' '}
 							{`if you download "Portable Version"`}
@@ -78,7 +78,7 @@ const RFIDAgentInstallation: React.FC = () => {
 					<Typography as='span'>
 						Ping RFID Reader TCP/IP to check if communication between your computer and RFID Reader is available
 					</Typography>
-					<Terminal command='ping <your_reader_ip_address>' className='my-4'>
+					<Terminal className='my-4' command='ping <your_reader_ip_address>'>
 						ping &lt;your_reader_ip_address&gt;
 					</Terminal>
 				</ListItem>

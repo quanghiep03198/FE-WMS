@@ -53,18 +53,18 @@ const FactoryShoeStyleFieldControl: React.FC<
 	return (
 		<AutoCompleteFieldControl
 			{...props}
-			name='factory_shoes_style'
+			datalist={factoryShoeStyleOptions}
+			disabled={disabled}
 			label={t('ns_erp:fields.factory_shoes_style')}
+			labelField='factory_shoes_style'
+			loading={loading}
+			name='factory_shoes_style'
+			readOnly={readOnly}
+			valueField='factory_shoes_style'
 			placeholder={t('ns_common:form_placeholder.fill', {
 				object: String(t('ns_erp:fields.factory_shoes_style')).toLowerCase(),
 				defaultValue: null
 			})}
-			loading={loading}
-			datalist={factoryShoeStyleOptions}
-			labelField='factory_shoes_style'
-			valueField='factory_shoes_style'
-			readOnly={readOnly}
-			disabled={disabled}
 			onInput={(value) => setValue('factory_shoes_style', value.toUpperCase())}
 			onItemClick={handleValueChange}
 		/>

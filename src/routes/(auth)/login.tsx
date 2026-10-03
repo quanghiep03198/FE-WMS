@@ -44,7 +44,7 @@ function LoginPage() {
 	return (
 		<Fragment>
 			<title>Login</title>
-			<meta name='description' content='Warehouse management system authentication' />
+			<meta content='Warehouse management system authentication' name='description' />
 
 			<Container>
 				<ThemeSelector />
@@ -52,15 +52,15 @@ function LoginPage() {
 				<Card className='relative z-10 mx-auto grid w-full max-w-7xl auto-rows-max gap-y-0 overflow-clip rounded-lg border p-0 shadow-2xl md:max-w-xl lg:max-w-lg xl:grid-cols-[1.5fr_1fr]'>
 					<Div className='row-span-3 hidden overflow-clip p-0 xl:block' onContextMenu={(e) => e.preventDefault()}>
 						<video
-							src='/wms-trailer.mp4'
 							autoPlay
 							loop
 							muted
 							className='h-full w-full border-none object-cover object-center outline-none!'
+							src='/wms-trailer.mp4'
 						/>
 					</Div>
 					<CardHeader className='py-6 xl:col-start-2'>
-						<Link to='/' className='group mx-auto mb-6 sm:zoom-[0.8]' data-state='expanded'>
+						<Link className='group mx-auto mb-6 sm:zoom-[0.8]' data-state='expanded' to='/'>
 							<AppLogo />
 						</Link>
 						<CardTitle className='text-center text-2xl whitespace-nowrap'>{t('ns_auth:texts.title')}</CardTitle>

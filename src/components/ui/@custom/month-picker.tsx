@@ -107,25 +107,25 @@ const MonthCalendar: React.FC<MonthCalendarProps> = ({
 				</div>
 				<div className='flex items-center space-x-1'>
 					<button
-						onClick={() => {
-							setMenuYear(menuYear - 1)
-							if (onYearBackward) onYearBackward()
-						}}
 						className={cn(
 							buttonVariants({ variant: variant?.chevrons ?? 'outline' }),
 							'absolute left-1 inline-flex h-7 w-7 items-center justify-center p-0'
-						)}>
+						)}
+						onClick={() => {
+							setMenuYear(menuYear - 1)
+							if (onYearBackward) onYearBackward()
+						}}>
 						<ChevronLeft className='h-4 w-4 opacity-50' />
 					</button>
 					<button
-						onClick={() => {
-							setMenuYear(menuYear + 1)
-							if (onYearForward) onYearForward()
-						}}
 						className={cn(
 							buttonVariants({ variant: variant?.chevrons ?? 'outline' }),
 							'absolute right-1 inline-flex h-7 w-7 items-center justify-center p-0'
-						)}>
+						)}
+						onClick={() => {
+							setMenuYear(menuYear + 1)
+							if (onYearForward) onYearForward()
+						}}>
 						<ChevronRight className='h-4 w-4 opacity-50' />
 					</button>
 				</div>
@@ -134,18 +134,22 @@ const MonthCalendar: React.FC<MonthCalendarProps> = ({
 				<tbody>
 					{months.map((monthRow, a) => {
 						return (
-							<tr key={'row-' + a} className='mt-2 flex w-full'>
+							<tr className='mt-2 flex w-full' key={'row-' + a}>
 								{monthRow.map((m) => {
 									return (
 										<td
-											key={m.number}
-											className='has-aria-[selected]:bg-accent [&:has([aria-selected].day-outside)]:bg-accent/50 relative h-8 w-1/4 p-0 text-center text-sm focus-within:relative focus-within:z-20 first:has-aria-[selected]:rounded-l-md last:has-aria-[selected]:rounded-r-md [&:has([aria-selected].day-range-end)]:rounded-r-md'>
+											className='has-aria-[selected]:bg-accent [&:has([aria-selected].day-outside)]:bg-accent/50 relative h-8 w-1/4 p-0 text-center text-sm focus-within:relative focus-within:z-20 first:has-aria-[selected]:rounded-l-md last:has-aria-[selected]:rounded-r-md [&:has([aria-selected].day-range-end)]:rounded-r-md'
+											key={m.number}>
 											<button
-												onClick={() => {
-													setMonth(m.number)
-													setYear(menuYear)
-													if (onMonthSelect) onMonthSelect(new Date(menuYear, m.number))
-												}}
+												className={cn(
+													buttonVariants({
+														variant:
+															month == m.number && menuYear == year
+																? (variant?.calendar?.selected ?? 'default')
+																: (variant?.calendar?.main ?? 'ghost')
+													}),
+													'h-full w-full p-0 font-normal aria-selected:opacity-100'
+												)}
 												disabled={
 													(maxDate
 														? menuYear > maxDate?.getFullYear() ||
@@ -159,15 +163,11 @@ const MonthCalendar: React.FC<MonthCalendarProps> = ({
 														? disabledDatesMapped?.some((d) => d.year == menuYear && d.month == m.number)
 														: false)
 												}
-												className={cn(
-													buttonVariants({
-														variant:
-															month == m.number && menuYear == year
-																? (variant?.calendar?.selected ?? 'default')
-																: (variant?.calendar?.main ?? 'ghost')
-													}),
-													'h-full w-full p-0 font-normal aria-selected:opacity-100'
-												)}>
+												onClick={() => {
+													setMonth(m.number)
+													setYear(menuYear)
+													if (onMonthSelect) onMonthSelect(new Date(menuYear, m.number))
+												}}>
 												{callbacks?.monthLabel ? callbacks.monthLabel(m) : m.name}
 											</button>
 										</td>

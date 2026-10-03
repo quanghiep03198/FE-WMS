@@ -79,10 +79,10 @@ function Field({
 }: React.ComponentProps<'div'> & VariantProps<typeof fieldVariants>) {
 	return (
 		<div
-			role='group'
-			data-slot='field'
-			data-orientation={orientation}
 			className={cn(fieldVariants({ orientation }), className)}
+			data-orientation={orientation}
+			data-slot='field'
+			role='group'
 			{...props}
 		/>
 	)
@@ -91,8 +91,8 @@ function Field({
 function FieldContent({ className, ...props }: React.ComponentProps<'div'>) {
 	return (
 		<div
-			data-slot='field-content'
 			className={cn('group/field-content flex flex-1 flex-col gap-1.5 leading-snug', className)}
+			data-slot='field-content'
 			{...props}
 		/>
 	)
@@ -150,9 +150,9 @@ function FieldSeparator({
 }) {
 	return (
 		<div
-			data-slot='field-separator'
-			data-content={!!children}
 			className={cn('relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2', className)}
+			data-content={!!children}
+			data-slot='field-separator'
 			{...props}>
 			<Separator className='absolute inset-0 top-1/2' />
 			{children && (
@@ -202,9 +202,9 @@ function FieldError({
 
 	return (
 		<div
-			role='alert'
-			data-slot='field-error'
 			className={cn('text-destructive text-sm font-normal', className)}
+			data-slot='field-error'
+			role='alert'
 			{...props}>
 			{content}
 		</div>

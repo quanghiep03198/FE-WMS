@@ -216,37 +216,37 @@ const Pagination: React.FC<PaginationProps> = ({
 		<Div className='mx-auto flex w-full max-w-full items-center justify-center gap-x-0.5'>
 			<Button
 				disabled={!hasPrevPage}
-				variant='ghost'
 				size='sm'
-				onClick={() => setParams({ page: currentPage - 1 })}
-				onMouseEnter={() => hasPrevPage && handleNavButtonHover(currentPage - 1, 'prev')}
-				onMouseLeave={stopContinuousPrefetch}
+				variant='ghost'
 				className={
 					continuousPrefetchState.isActive &&
 					continuousPrefetchState.direction === 'prev' &&
 					'animate-pulse delay-100'
-				}>
+				}
+				onClick={() => setParams({ page: currentPage - 1 })}
+				onMouseEnter={() => hasPrevPage && handleNavButtonHover(currentPage - 1, 'prev')}
+				onMouseLeave={stopContinuousPrefetch}>
 				<Icon name='ChevronLeft' />
 				{t('ns_common:pagination.previous_page')}
 			</Button>
 			<Button
-				onClick={() => setParams({ page: 1 })}
-				onMouseEnter={() => debouncedPrefetch(1)}
-				variant={currentPage === 1 ? 'outline' : 'ghost'}
 				className='size-8 text-sm'
-				size='icon'>
+				size='icon'
+				variant={currentPage === 1 ? 'outline' : 'ghost'}
+				onClick={() => setParams({ page: 1 })}
+				onMouseEnter={() => debouncedPrefetch(1)}>
 				1
 			</Button>
 			{paginationRange[0] - 1 > 1 && <PaginationElipsis />}
 			{paginationRange.map((pageIndex) => {
 				return (
 					<Button
-						key={pageIndex}
-						onClick={() => setParams({ page: pageIndex })}
-						onMouseEnter={() => debouncedPrefetch(pageIndex)}
-						variant={pageIndex === currentPage ? 'outline' : 'ghost'}
 						className='size-8 text-sm'
-						size='icon'>
+						key={pageIndex}
+						size='icon'
+						variant={pageIndex === currentPage ? 'outline' : 'ghost'}
+						onClick={() => setParams({ page: pageIndex })}
+						onMouseEnter={() => debouncedPrefetch(pageIndex)}>
 						{pageIndex}
 					</Button>
 				)
@@ -254,26 +254,26 @@ const Pagination: React.FC<PaginationProps> = ({
 			{paginationRange.at(-1) + 1 < totalPages && <PaginationElipsis />}
 			{totalPages > 1 && (
 				<Button
-					onClick={() => setParams({ page: totalPages })}
-					onMouseEnter={() => debouncedPrefetch(totalPages)}
-					variant={currentPage === totalPages ? 'outline' : 'ghost'}
 					className='size-8 text-sm'
-					size='icon'>
+					size='icon'
+					variant={currentPage === totalPages ? 'outline' : 'ghost'}
+					onClick={() => setParams({ page: totalPages })}
+					onMouseEnter={() => debouncedPrefetch(totalPages)}>
 					{totalPages}
 				</Button>
 			)}
 			<Button
-				variant='ghost'
 				disabled={!hasNextPage}
 				size='sm'
-				onClick={() => setParams({ page: currentPage + 1 })}
-				onMouseEnter={() => hasNextPage && handleNavButtonHover(nextPage, 'next')}
-				onMouseLeave={stopContinuousPrefetch}
+				variant='ghost'
 				className={
 					continuousPrefetchState.isActive &&
 					continuousPrefetchState.direction === 'next' &&
 					'animate-pulse delay-100'
-				}>
+				}
+				onClick={() => setParams({ page: currentPage + 1 })}
+				onMouseEnter={() => hasNextPage && handleNavButtonHover(nextPage, 'next')}
+				onMouseLeave={stopContinuousPrefetch}>
 				{t('ns_common:pagination.next_page')}
 				<Icon name='ChevronRight' />
 			</Button>

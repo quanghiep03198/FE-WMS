@@ -70,36 +70,36 @@ const SyncDataTrigger: React.FC = () => {
 			<Div className='flex h-full flex-1 grow flex-col items-stretch gap-6'>
 				<Div className='grid grid-cols-[3fr_1fr] gap-x-6 gap-y-4'>
 					<Div className='space-y-1'>
-						<Typography variant='small' className='inline-flex items-center gap-x-3 font-semibold'>
+						<Typography className='inline-flex items-center gap-x-3 font-semibold' variant='small'>
 							{t('ns_inoutbound:scanner_setting.decker_data_synchronization')}
 						</Typography>
-						<Typography variant='small' color='muted' className='block text-pretty'>
+						<Typography className='block text-pretty' color='muted' variant='small'>
 							{t('ns_inoutbound:scanner_setting.decker_data_synchronization_description')}
 						</Typography>
 					</Div>
 					<Div className='group/trigger relative inline-flex h-8 w-full max-w-44 items-center divide-x justify-self-end rounded-md border'>
 						<StatusIndicator
 							aria-disabled={!factory}
-							state={isConnected ? 'active' : 'down'}
+							className='absolute top-0 right-0 translate-x-1/2 -translate-y-1/2'
 							label={undefined}
 							size='sm'
-							className='absolute top-0 right-0 translate-x-1/2 -translate-y-1/2'
+							state={isConnected ? 'active' : 'down'}
 						/>
 						<Button
-							variant='ghost'
-							size='sm'
-							disabled={!factory}
 							className='flex-1 rounded-none'
+							disabled={!factory}
+							size='sm'
+							variant='ghost'
 							onClick={() => io.emit('sync_decker_data', { id: uuid(), factory } satisfies SyncMessagePayload)}>
 							{t('ns_common:actions.trigger')}
 						</Button>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
-								<Button variant='ghost' size='icon' className='size-8 rounded-none'>
+								<Button className='size-8 rounded-none' size='icon' variant='ghost'>
 									<Icon name='ChevronDown' />
 								</Button>
 							</DropdownMenuTrigger>
-							<DropdownMenuContent className='w-56' align='end'>
+							<DropdownMenuContent align='end' className='w-56'>
 								<DropdownMenuLabel>{t('ns_common:common_fields.factory_code')}</DropdownMenuLabel>
 								<DropdownMenuSeparator />
 								<DropdownMenuRadioGroup value={factory} onValueChange={(value) => setFactory(value as Factory)}>
@@ -140,16 +140,16 @@ const SyncDataTrigger: React.FC = () => {
 										<MorphIcon
 											icon={icon[item.status].icon}
 											size={18}
+											spring='bouncy'
 											stroke={icon[item.status].color}
 											className={cn({
 												'animate-spin': item.status === 'processing'
 											})}
-											spring='bouncy'
 										/>
 									</Div>
 									<Typewriter
-										delay={(index + 1) * 300}
 										className='animate-typing line-clamp-1 w-full whitespace-pre-wrap'
+										delay={(index + 1) * 300}
 										text={t(item.name, { ns: 'ns_rfid', defaultValue: item.name })}
 									/>
 								</StepItem>

@@ -27,7 +27,7 @@ function Page() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.dashboard')}</title>
-			<meta name='description' content={t('ns_dashboard:dashboard_description')} />
+			<meta content={t('ns_dashboard:dashboard_description')} name='description' />
 
 			<RoleGuard
 				authorizedRoles={[

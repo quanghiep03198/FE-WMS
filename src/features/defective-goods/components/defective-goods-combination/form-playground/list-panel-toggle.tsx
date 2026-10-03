@@ -8,10 +8,10 @@ const ListPanelToggle: React.FC = () => {
 	const { t } = useTranslation()
 	return (
 		<Button
-			variant='ghost'
+			className='hidden @7xl/playground-wrapper:inline-flex'
 			size='sm'
 			type='button'
-			className='hidden @7xl/playground-wrapper:inline-flex'
+			variant='ghost'
 			onClick={() => toggleListPanelOpen()}>
 			<Icon name={listPanelOpen ? 'PanelLeftClose' : 'PanelLeftOpen'} size={18} />
 			{listPanelOpen ? t('ns_common:actions.collapse_list_panel') : t('ns_common:actions.open_list_panel')}

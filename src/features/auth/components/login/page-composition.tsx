@@ -21,8 +21,8 @@ const ThemeSelector: React.FC = () => {
 const HomeNavigator: React.FC = () => {
 	return (
 		<Div className='fixed! top-2 left-2 z-10'>
-			<Tooltip message='Home' contentProps={{ side: 'right' }}>
-				<Link to='/' className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}>
+			<Tooltip contentProps={{ side: 'right' }} message='Home'>
+				<Link className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))} to='/'>
 					<Icon name='ArrowLeft' />
 				</Link>
 			</Tooltip>
@@ -39,7 +39,7 @@ const FormHeading: React.FC = () => {
 
 	return (
 		<Div className='w-full space-y-2 text-center *:text-pretty'>
-			<Typography variant='h3' className='text-center whitespace-nowrap'>
+			<Typography className='text-center whitespace-nowrap' variant='h3'>
 				{t('ns_auth:texts.title')}
 			</Typography>
 			<Typography color='muted'>{t('ns_auth:texts.description')}</Typography>

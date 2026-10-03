@@ -16,8 +16,8 @@ export const DatePicker: React.FC<CalendarProps> = ({ selected, ...props }) => {
 		<Popover>
 			<PopoverTrigger asChild>
 				<Button
-					variant={'outline'}
-					className={cn('min-w-60 justify-start text-left font-normal', !selected && 'text-muted-foreground')}>
+					className={cn('min-w-60 justify-start text-left font-normal', !selected && 'text-muted-foreground')}
+					variant={'outline'}>
 					<CalendarIcon className='mr-2 size-4' />
 					<span className='first-letter:uppercase'>
 						{selected ? format(selected as Date, 'PPP', { locale }) : t('ns_common:actions.pick_a_date')}

@@ -30,7 +30,7 @@ export class InventoryService {
 	}
 
 	public static async checkoutMonthlyInventory(month: string) {
-		return await axiosInstance.put(`/inventory/audit/checkout/${month}`)
+		return await axiosInstance.put<void, ResponseBody<void>>(`/inventory/audit/checkout/${month}`)
 	}
 
 	static async getProductionInventoryReport(params: Record<'brand_name' | 'shoes_style' | 'color', string>) {

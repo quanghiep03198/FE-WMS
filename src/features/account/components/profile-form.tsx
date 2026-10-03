@@ -30,7 +30,7 @@ const ProfileForm: React.FC = () => {
 				{/* Public profile */}
 				<Fieldset>
 					<Legend>{t('ns_auth:profile.public_profile')}</Legend>
-					<Typography variant='small' color='muted'>
+					<Typography color='muted' variant='small'>
 						{t('ns_auth:profile.this_will_be')}{' '}
 					</Typography>
 					<Div className='space-y-6'>
@@ -38,7 +38,7 @@ const ProfileForm: React.FC = () => {
 						<InputFieldControl label={t('ns_auth:profile.email')} name='email' />
 						<InputFieldControl disabled label={t('ns_auth:fields.employee_code')} name='employee_code' />
 						<Button disabled={isPending}>
-							{isPending && <Icon name='LoaderCircle' className='animate-spin' />}{' '}
+							{isPending && <Icon className='animate-spin' name='LoaderCircle' />}{' '}
 							{isError ? t('ns_common:actions.retry') : t('ns_auth:profile.save_changes')}
 						</Button>
 					</Div>

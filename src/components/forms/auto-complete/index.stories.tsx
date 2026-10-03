@@ -82,7 +82,7 @@ const Template: StoryFn<StoryArgs> = (args) => {
 	return (
 		<div className='mx-auto max-w-lg space-y-10'>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(setFormValues)} className='flex flex-col gap-y-6'>
+				<form className='flex flex-col gap-y-6' onSubmit={form.handleSubmit(setFormValues)}>
 					<AutoCompleteFieldControl {...args} />
 					<Button type='submit'>Submit</Button>
 				</form>

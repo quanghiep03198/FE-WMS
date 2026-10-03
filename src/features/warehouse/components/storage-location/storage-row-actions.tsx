@@ -24,10 +24,10 @@ const StorageRowActions: React.FC<WarehouseRowActionsProps> = (props) => {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end' className='min-w-40'>
 				<RoleBaseAccessControl
-					mode='fallback'
 					authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER]}
+					mode='fallback'
 					fallbackComponent={
-						<DropdownMenuItem className='flex items-center gap-x-3' disabled>
+						<DropdownMenuItem disabled className='flex items-center gap-x-3'>
 							<Icon name='Lock' />
 							{t('ns_common:actions.update')}
 						</DropdownMenuItem>
@@ -42,10 +42,10 @@ const StorageRowActions: React.FC<WarehouseRowActionsProps> = (props) => {
 					</DropdownMenuItem>
 				</RoleBaseAccessControl>
 				<RoleBaseAccessControl
-					mode='fallback'
 					authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER]}
+					mode='fallback'
 					fallbackComponent={
-						<DropdownMenuItem className='flex items-center gap-x-3' disabled>
+						<DropdownMenuItem disabled className='flex items-center gap-x-3'>
 							<Icon name='Lock' />
 							{t('ns_common:actions.delete')}
 						</DropdownMenuItem>

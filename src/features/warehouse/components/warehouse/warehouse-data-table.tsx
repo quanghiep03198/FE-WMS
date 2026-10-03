@@ -142,7 +142,7 @@ const WarehouseDataTable: React.FC = () => {
 				cell: ({ getValue }) => {
 					const user = getValue()
 					return (
-						<Item size='sm' className='p-0'>
+						<Item className='p-0' size='sm'>
 							<ItemMedia>
 								<Avatar className='size-8'>
 									<AvatarImage src={generateAvatar({ name: user.display_name })} />
@@ -180,7 +180,7 @@ const WarehouseDataTable: React.FC = () => {
 					const user = getValue()
 					if (!user) return
 					return (
-						<Item size='sm' className='p-0'>
+						<Item className='p-0' size='sm'>
 							<ItemMedia>
 								<Avatar className='size-8'>
 									<AvatarImage src={generateAvatar({ name: user.display_name })} />
@@ -231,11 +231,11 @@ const WarehouseDataTable: React.FC = () => {
 	return (
 		<Fragment>
 			<DataTable
-				data={data!}
 				columns={columns}
-				loading={isLoading}
+				data={data!}
 				enableColumnResizing={true}
 				enableRowSelection={true}
+				loading={isLoading}
 				ref={tableRef}
 				containerProps={{
 					style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
@@ -244,17 +244,17 @@ const WarehouseDataTable: React.FC = () => {
 					slotRight: ({ table }) => (
 						<Fragment>
 							{table.getSelectedRowModel().flatRows.length > 0 && rowSelectionType == 'multiple' && (
-								<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
+								<Tooltip message={t('ns_common:actions.add')} triggerProps={{ asChild: true }}>
 									<Button
-										variant='destructive'
 										size='icon'
+										variant='destructive'
 										onClick={() => setConfirmDialogOpen(!confirmDialogOpen)}>
 										<Icon name='Trash2' />
 									</Button>
 								</Tooltip>
 							)}
-							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.reload')}>
-								<Button variant='outline' size='icon' onClick={() => refetch()}>
+							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+								<Button size='icon' variant='outline' onClick={() => refetch()}>
 									<Icon name='RefreshCcw' />
 								</Button>
 							</Tooltip>
@@ -263,12 +263,12 @@ const WarehouseDataTable: React.FC = () => {
 				}}
 			/>
 			<ConfirmDialog
-				open={confirmDialogOpen}
-				onOpenChange={setConfirmDialogOpen}
-				title={t('ns_common:confirmation.delete_title')}
 				description={t('ns_common:confirmation.delete_description')}
-				onConfirm={handleDeleteSelectedRows}
+				open={confirmDialogOpen}
+				title={t('ns_common:confirmation.delete_title')}
 				onCancel={handleResetAllRowSelection}
+				onConfirm={handleDeleteSelectedRows}
+				onOpenChange={setConfirmDialogOpen}
 			/>
 		</Fragment>
 	)

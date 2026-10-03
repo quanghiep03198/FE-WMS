@@ -7,16 +7,7 @@ import { StorageLocationService } from '../services/storage-location.service'
 import { getOneWarehouseQueryOptions, WarehouseQueryKeys } from './use-warehouse-request'
 
 export enum WarehouseStorageQueryKeys {
-	WAREHOUSE_STORAGE = 'WAREHOUSE_STORAGE',
-	WAREHOUSE_STORAGE_SUMMARY = 'WAREHOUSE_STORAGE_SUMMARY'
-}
-
-export function useGetWarehouseStorageSummaryQuery() {
-	return useQuery({
-		queryKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE_SUMMARY],
-		queryFn: StorageLocationService.getWarehouseStorageSummary,
-		select: (response) => response.metadata
-	})
+	WAREHOUSE_STORAGE = 'WAREHOUSE_STORAGE'
 }
 
 export function useGetStorageLocationByWarehouseQuery(warehouseName: string) {

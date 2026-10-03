@@ -65,5 +65,5 @@ declare module '@tanstack/react-router' {
 export const RouterProvider: React.FC = () => {
 	const { isAuthenticated } = useAuth()
 
-	return <BrowserRouterProvider router={router} context={{ queryClient, isAuthenticated }} />
+	return <BrowserRouterProvider context={{ queryClient, isAuthenticated }} router={router} />
 }

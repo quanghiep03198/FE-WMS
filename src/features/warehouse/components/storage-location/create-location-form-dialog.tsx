@@ -67,7 +67,6 @@ const CreateLocationFormDialog: React.FC<{ data: IWarehouse }> = ({ data: wareho
 		e.preventDefault()
 		remove(activeIndex)
 		const currentActiveIndex = activeIndex > 0 ? activeIndex - 1 : fields.length - 1
-		console.log(currentActiveIndex)
 		setActiveIndex(currentActiveIndex)
 		inputRefs.current[fields[currentActiveIndex].id]?.focus()
 	})
@@ -85,7 +84,7 @@ const CreateLocationFormDialog: React.FC<{ data: IWarehouse }> = ({ data: wareho
 				setOpen(open)
 				if (!open) form.reset()
 			}}>
-			<DialogTrigger id='add-storage-location-dialog-trigger' className='hidden' />
+			<DialogTrigger className='hidden' id='add-storage-location-dialog-trigger' />
 			<DialogContent className='bg-popover w-full max-w-xl'>
 				<DialogHeader>
 					<DialogTitle className='lowercase first-letter:uppercase'>
@@ -112,20 +111,23 @@ const CreateLocationFormDialog: React.FC<{ data: IWarehouse }> = ({ data: wareho
 								<TableBody>
 									{fields.length === 0 ? (
 										<TableRow>
-											<TableCell colSpan={3} className='text-muted-foreground h-24 text-center'>
+											<TableCell className='text-muted-foreground h-24 text-center' colSpan={3}>
 												{t('ns_common:table.no_data')}
 											</TableCell>
 										</TableRow>
 									) : (
 										fields.map((field, index) => (
 											<TableRow
-												key={field.id}
 												className='[&:has(input[aria-invalid=true])>td]:bg-destructive/5 [&:focus-within>td_input[aria-invalid=true]]:bg-destructive/5! [&:focus-within>td_input]:bg-table-row-active! [&:focus-within>td]:bg-table-row-active [&_input]:bg-inherit'
+												key={field.id}
 												onFocus={() => setActiveIndex(index)}>
 												<TableCell>{index + 1}</TableCell>
 												<TableCell className='p-0!'>
 													<InputFieldControl
+														className='aria-invalid:bg-destructive/5! aria-invalid:placeholder:text-destructive! h-full rounded-none border-none bg-inherit! shadow-none transition-none'
+														errorMessageVariant='tooltip'
 														key={field.id}
+														name={`locations.${index}.name`}
 														placeholder={capitalize(
 															t('ns_common:form_placeholder.fill', {
 																object: t('ns_warehouse:fields.storage_name')
@@ -134,9 +136,6 @@ const CreateLocationFormDialog: React.FC<{ data: IWarehouse }> = ({ data: wareho
 														ref={(e) => {
 															inputRefs.current[field.id] = e
 														}}
-														name={`locations.${index}.name`}
-														className='aria-invalid:bg-destructive/5! aria-invalid:placeholder:text-destructive! h-full rounded-none border-none bg-inherit! shadow-none transition-none'
-														errorMessageVariant='tooltip'
 														onFocus={() => setActiveIndex(index)}
 														onChange={(e) =>
 															form.setValue(`locations.${index}.name`, e.target.value.toUpperCase())
@@ -145,7 +144,7 @@ const CreateLocationFormDialog: React.FC<{ data: IWarehouse }> = ({ data: wareho
 												</TableCell>
 												<TableCell>
 													<Tooltip message={'Ctrl+L'} triggerProps={{ asChild: true }}>
-														<Button variant='ghost' size='xs' onClick={() => remove(index)}>
+														<Button size='xs' variant='ghost' onClick={() => remove(index)}>
 															<Icon name='X' size={14} /> {t('ns_common:actions.delete')}
 														</Button>
 													</Tooltip>
@@ -156,7 +155,7 @@ const CreateLocationFormDialog: React.FC<{ data: IWarehouse }> = ({ data: wareho
 								</TableBody>
 								<TableFooter className='[&_th]:bg-table-head sticky bottom-0 z-10 [&_th]:border-none'>
 									<TableRow>
-										<TableHead colSpan={2} align='left' className='border-none'>
+										<TableHead align='left' className='border-none' colSpan={2}>
 											<Tooltip message={'Ctrl+D'} triggerProps={{ asChild: true }}>
 												<Button type='button' variant='ghost' onClick={() => append({ name: '' })}>
 													<Icon name='ListPlus' />
@@ -183,8 +182,8 @@ const CreateLocationFormDialog: React.FC<{ data: IWarehouse }> = ({ data: wareho
 									{t('ns_common:actions.cancel')}
 								</Button>
 							</DialogClose>
-							<Button type='submit' disabled={isPending}>
-								{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
+							<Button disabled={isPending} type='submit'>
+								{isPending && <Icon className='animate-spin' name='LoaderCircle' />}
 								{t('ns_common:actions.submit')}
 							</Button>
 						</DialogFooter>

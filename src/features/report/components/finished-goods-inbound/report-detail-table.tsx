@@ -27,7 +27,7 @@ const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_data'] }> 
 						))
 					) : (
 						<TableRow>
-							<TableCell align='center' colSpan={2} className='font-medium'>
+							<TableCell align='center' className='font-medium' colSpan={2}>
 								{t('ns_common:table.no_data')}
 							</TableCell>
 						</TableRow>

@@ -57,16 +57,16 @@ const SearchDialog: React.FC = () => {
 	return (
 		<Fragment>
 			<Tooltip
+				contentProps={{ hidden: !isSmallScreen }}
 				message={t('ns_common:actions.search')}
-				triggerProps={{ asChild: true }}
-				contentProps={{ hidden: !isSmallScreen }}>
+				triggerProps={{ asChild: true }}>
 				<Button
-					variant={isSmallScreen ? 'ghost' : 'outline'}
-					size={isSmallScreen ? 'icon' : 'default'}
 					className='ml-auto basis-56 gap-x-2 px-2 sm:basis-auto'
+					size={isSmallScreen ? 'icon' : 'default'}
+					variant={isSmallScreen ? 'ghost' : 'outline'}
 					onClick={() => setOpen(!open)}>
 					<Icon name='Search' />
-					<Typography variant='small' className='flex-1 text-left sm:hidden'>
+					<Typography className='flex-1 text-left sm:hidden' variant='small'>
 						{t('ns_common:actions.search') + ' ...'}
 					</Typography>
 					<Kbd className='text-xs sm:hidden'>
@@ -80,8 +80,8 @@ const SearchDialog: React.FC = () => {
 				<CommandDialog open={open} onOpenChange={setOpen}>
 					<Command shouldFilter={false}>
 						<CommandInput
-							placeholder={t('ns_common:actions.search') + ' ...'}
 							className='h-9 items-center'
+							placeholder={t('ns_common:actions.search') + ' ...'}
 							onValueChange={debounce((value) => setSearchTerm(value), 200)}
 						/>
 						<CommandEmpty>No results found.</CommandEmpty>
@@ -125,7 +125,7 @@ const SearchDialog: React.FC = () => {
 								filteredItems.length > 0 && (
 									<CommandGroup heading={`${filteredItems.length} results`}>
 										{filteredItems.map((item, index) => (
-											<CommandItem key={index.toString()} asChild={true} className='h-9 text-sm'>
+											<CommandItem asChild={true} className='h-9 text-sm' key={index.toString()}>
 												<Link
 													className='flex items-center gap-x-2'
 													to={item.url}

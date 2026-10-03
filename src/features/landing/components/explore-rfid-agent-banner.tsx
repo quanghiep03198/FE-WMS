@@ -14,9 +14,9 @@ export function ExploreRfidAgentBanner() {
 				<Typography className='inline-flex flex-wrap items-center gap-x-2 sm:flex-col'>
 					<Typography as='span'>🚀 RFID Agent {!!data && data?.tag_name} has been released !!!</Typography>
 					<Link
-						to='/rfid-agent'
-						className='text-success relative inline-flex items-center gap-x-1 text-base underline-offset-4 hover:underline'>
-						Explore now <Icon name='ArrowRight' size={14} strokeWidth={2} className='translate-y-0.5' />
+						className='text-success relative inline-flex items-center gap-x-1 text-base underline-offset-4 hover:underline'
+						to='/rfid-agent'>
+						Explore now <Icon className='translate-y-0.5' name='ArrowRight' size={14} strokeWidth={2} />
 					</Link>
 				</Typography>
 			</Div>

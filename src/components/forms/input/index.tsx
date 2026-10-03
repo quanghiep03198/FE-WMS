@@ -73,8 +73,8 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 	return (
 		<FormField
 			control={control}
-			name={name}
 			defaultValue={defaultValue}
+			name={name}
 			render={({ field }) => {
 				return (
 					<FormItem
@@ -83,9 +83,9 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 						className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 						{label && (
 							<FormLabel
-								htmlFor={id}
 								aria-orientation={orientation}
-								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
+								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'
+								htmlFor={id}>
 								{label}
 							</FormLabel>
 						)}
@@ -102,9 +102,19 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 											['aria-invalid']: !!error
 										}}>
 										<Input
-											id={id}
 											aria-invalid={!!getFieldState(name).error}
+											disabled={disabled}
+											id={id}
+											placeholder={placeholder}
+											style={{ ...props.style }}
 											type={currentType}
+											value={value}
+											className={cn(
+												className,
+												'aria-invalid:border-destructive aria-invalid:focus-within:border-destructive disabled:opacity-50',
+												type === 'password' && 'placeholder:font-pass placeholder:tracking-wider',
+												orientation === 'horizontal' && 'mb-2 block'
+											)}
 											ref={(e) => {
 												field.ref(e)
 												if (typeof resolvedRef === 'function') {
@@ -114,29 +124,19 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 													resolvedRef.current = e
 												}
 											}}
-											value={value}
-											placeholder={placeholder}
-											disabled={disabled}
-											className={cn(
-												className,
-												'aria-invalid:border-destructive aria-invalid:focus-within:border-destructive disabled:opacity-50',
-												type === 'password' && 'placeholder:font-pass placeholder:tracking-wider',
-												orientation === 'horizontal' && 'mb-2 block'
-											)}
-											style={{ ...props.style }}
 											onChange={(e) => handleChange(e, field)}
 											{...restProps}
 										/>
 									</Tooltip>
 									{type === 'password' && (
 										<Toggle
-											type='button'
 											className='absolute top-1/2 right-1 z-20 size-8 -translate-y-1/2 bg-transparent p-0 focus-within:ring-0 focus-within:outline-none hover:bg-transparent data-[state=on]:bg-transparent'
+											type='button'
 											onPressedChange={(pressed) => setCurrentType(pressed ? 'text' : 'password')}>
 											<MorphIcon
-												spring='snappy'
-												size={16}
 												icon={currentType === 'password' ? Eye : EyeOff}
+												size={16}
+												spring='snappy'
 											/>
 										</Toggle>
 									)}

@@ -28,17 +28,17 @@ export const GlobalFilterPopover: React.FC<GlobalFilterPopoverProps> = ({
 					<Icon name='Search' />
 				</PopoverTrigger>
 			</Tooltip>
-			<PopoverContent align='end' side='left' sideOffset={4} className='relative w-64 p-0'>
-				<Icon name='Search' className='absolute top-1/2 left-2 -translate-y-1/2' />
+			<PopoverContent align='end' className='relative w-64 p-0' side='left' sideOffset={4}>
+				<Icon className='absolute top-1/2 left-2 -translate-y-1/2' name='Search' />
 				<DebouncedInput
+					className='font-lg border p-2 pl-8 placeholder:text-sm'
+					placeholder={`${t('ns_common:actions.search')} ...`}
+					type='search'
 					value={globalFilter}
 					onChange={(value) => {
 						event$.emit(pick(table.getState(), ['rowSelection']))
 						onGlobalFilterChange(String(value))
 					}}
-					className='font-lg border p-2 pl-8 placeholder:text-sm'
-					placeholder={`${t('ns_common:actions.search')} ...`}
-					type='search'
 				/>
 			</PopoverContent>
 		</Popover>

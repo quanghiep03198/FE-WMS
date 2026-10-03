@@ -74,15 +74,15 @@ export function Combobox<T extends Record<string, any>>({
 			<PopoverTrigger asChild>
 				<Button
 					{...triggerProps}
-					variant='outline'
 					aria-expanded={open}
 					aria-placeholder={placeholder}
 					data-empty={!currentValue}
-					onClick={() => setOpen(true)}
+					variant='outline'
 					className={cn(
 						'data-[empty=true]:text-muted-foreground hover:bg-background data-[empty=true]:hover:text-muted-foreground w-full max-w-full justify-between font-normal',
 						triggerProps?.className
-					)}>
+					)}
+					onClick={() => setOpen(true)}>
 					{currentValueText || placeholder}
 					<CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
 				</Button>
@@ -90,8 +90,8 @@ export function Combobox<T extends Record<string, any>>({
 			<PopoverContent className='w-radix-popover p-0' {...contentProps}>
 				<Command shouldFilter={false} value={currentValue}>
 					<CommandInput
-						placeholder={placeholder ?? `${t('ns_common:actions.search')} ...`}
 						className='h-9'
+						placeholder={placeholder ?? `${t('ns_common:actions.search')} ...`}
 						onInput={(e) => {
 							if (typeof onInput === 'function') onInput(e.currentTarget.value)
 							setSearchTerm(String(e.currentTarget.value).toLocaleLowerCase())

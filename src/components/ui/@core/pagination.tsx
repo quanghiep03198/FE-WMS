@@ -7,9 +7,9 @@ import { buttonVariants } from '@components/ui/@core/button'
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
 	<nav
-		role='navigation'
 		aria-label='pagination'
 		className={cn('mx-auto flex w-full justify-center', className)}
+		role='navigation'
 		{...props}
 	/>
 )
@@ -46,7 +46,7 @@ const PaginationLink: React.FC<PaginationLinkProps> = ({ className, isActive, si
 PaginationLink.displayName = 'PaginationLink'
 
 const PaginationPrevious: React.FC<React.ComponentProps<typeof PaginationLink>> = ({ className, ...props }) => (
-	<PaginationLink aria-label='Go to previous page' size='default' className={cn('gap-1 pl-2.5', className)} {...props}>
+	<PaginationLink aria-label='Go to previous page' className={cn('gap-1 pl-2.5', className)} size='default' {...props}>
 		<ChevronLeftIcon className='h-4 w-4' />
 		<span>Previous</span>
 	</PaginationLink>
@@ -54,7 +54,7 @@ const PaginationPrevious: React.FC<React.ComponentProps<typeof PaginationLink>> 
 PaginationPrevious.displayName = 'PaginationPrevious'
 
 const PaginationNext: React.FC<React.ComponentProps<typeof PaginationLink>> = ({ className, ...props }) => (
-	<PaginationLink aria-label='Go to next page' size='default' className={cn('gap-1 pr-2.5', className)} {...props}>
+	<PaginationLink aria-label='Go to next page' className={cn('gap-1 pr-2.5', className)} size='default' {...props}>
 		<span>Next</span>
 		<ChevronRightIcon className='h-4 w-4' />
 	</PaginationLink>

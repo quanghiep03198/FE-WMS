@@ -27,14 +27,16 @@ const BrandFieldControl: React.FC<BrandFieldControl> = ({ disabled, ...props }) 
 	return (
 		<SelectFieldControl
 			{...props}
-			name='brand_name'
+			datalist={brandOptions}
+			disabled={disabled}
 			label={t('ns_erp:fields.brand_name')}
+			labelField='label'
+			name='brand_name'
+			valueField='value'
 			placeholder={t('ns_common:form_placeholder.fill', {
 				object: String(t('ns_erp:fields.brand_name')).toLowerCase(),
 				defaultValue: null
 			})}
-			disabled={disabled}
-			datalist={brandOptions}
 			onValueChange={() => {
 				reset({
 					...getValues(),
@@ -44,8 +46,6 @@ const BrandFieldControl: React.FC<BrandFieldControl> = ({ disabled, ...props }) 
 					...(currentStrategy !== 'manually' ? { size_code: '' } : { sizes: [] })
 				})
 			}}
-			labelField='label'
-			valueField='value'
 		/>
 	)
 }

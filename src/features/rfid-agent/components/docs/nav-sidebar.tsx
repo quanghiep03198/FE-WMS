@@ -93,9 +93,9 @@ const NavSidebar: React.FC = () => {
 	const { data } = useGetLatestRelease()
 
 	return (
-		<Sidebar variant='sidebar' side='left' collapsible='offcanvas'>
+		<Sidebar collapsible='offcanvas' side='left' variant='sidebar'>
 			<SidebarHeader className='p-4'>
-				<Link to='/rfid-agent' className='flex items-center gap-x-2'>
+				<Link className='flex items-center gap-x-2' to='/rfid-agent'>
 					<Icon name='Radio' size={40} strokeWidth={1.5} />
 					<span className='flex flex-col font-bold'>
 						RFID Agent
@@ -106,7 +106,7 @@ const NavSidebar: React.FC = () => {
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel className='text-foreground text-base'>Eclipse Mosquitto</SidebarGroupLabel>
-					<SidebarMenu role='menu' aria-label='Eclipse Mosquitto'>
+					<SidebarMenu aria-label='Eclipse Mosquitto' role='menu'>
 						{menuGroups.mosquitto.map((item) => (
 							<SidebarMenuLink key={item.hash} {...item} />
 						))}
@@ -115,7 +115,7 @@ const NavSidebar: React.FC = () => {
 				<SidebarSeparator />
 				<SidebarGroup>
 					<SidebarGroupLabel className='text-foreground text-base'>RFID Agent</SidebarGroupLabel>
-					<SidebarMenu role='menu' aria-label='Main menu'>
+					<SidebarMenu aria-label='Main menu' role='menu'>
 						{menuGroups.rfidAgent.map((item) => (
 							<SidebarMenuLink key={item.hash} {...item} />
 						))}
@@ -124,7 +124,7 @@ const NavSidebar: React.FC = () => {
 				<SidebarSeparator />
 				<SidebarGroup>
 					<SidebarGroupLabel className='text-foreground text-base'>FAQ</SidebarGroupLabel>
-					<SidebarMenu role='menu' aria-label='Eclipse Mosquitto'>
+					<SidebarMenu aria-label='Eclipse Mosquitto' role='menu'>
 						{menuGroups.faqs.map((item) => (
 							<SidebarMenuLink key={item.hash} {...item} />
 						))}
@@ -157,10 +157,10 @@ const SidebarMenuLink: React.FC<any> = ({ hash, href, title, viewTransition }) =
 			<SidebarMenuButton asChild size='default'>
 				{href ? (
 					<a
+						className='text-muted-foreground hover:text-primary-foreground'
 						href={href}
-						target='_blank'
 						rel='noreferrer'
-						className='text-muted-foreground hover:text-primary-foreground'>
+						target='_blank'>
 						{title} <Icon name='ArrowUpRight' />
 					</a>
 				) : (

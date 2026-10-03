@@ -27,13 +27,13 @@ const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) =>
 	if (isNotCompatible)
 		return (
 			<Div className='flex min-h-(--outlet-wrapper-height) w-full flex-1 flex-col items-center justify-center gap-y-3'>
-				<Typography variant='code' color='destructive' className='font-semibold'>
+				<Typography className='font-semibold' color='destructive' variant='code'>
 					{HttpStatusCode.SeeOther}
 				</Typography>
 				<Typography variant='h1'>{t('ns_common:errors.303')}</Typography>
 				<Typography
-					variant='p'
 					color='muted'
+					variant='p'
 					dangerouslySetInnerHTML={{
 						__html: t('ns_common:errors.303_message', {
 							url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color: var(--active);'>URL</a>`,

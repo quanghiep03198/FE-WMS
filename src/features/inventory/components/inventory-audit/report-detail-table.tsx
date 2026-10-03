@@ -135,14 +135,14 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 											const error = form.getFieldState(`data.${index}.supplemental_stocked_in_qty`).error
 											return (
 												<TableCell
-													key={field.id}
 													aria-invalid={!!error}
-													className='aria-invalid:bg-destructive p-0'>
+													className='aria-invalid:bg-destructive p-0'
+													key={field.id}>
 													<InputFieldControl
+														disabled={!isEditing || isLoading}
+														errorMessageVariant='tooltip'
 														name={`data.${index}.supplemental_stocked_in_qty`}
 														type='number'
-														errorMessageVariant='tooltip'
-														disabled={!isEditing || isLoading}
 														className={cn(
 															'aria-invalid:bg-destructive/20 h-auto w-full rounded-none border-none bg-transparent p-0 whitespace-nowrap shadow-none focus:outline-none',
 															form.watch(`data.${index}.supplemental_stocked_in_qty`) !== 0
@@ -165,14 +165,14 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 											const error = form.getFieldState(`data.${index}.supplemental_shipped_out_qty`).error
 											return (
 												<TableCell
-													key={field.id}
 													aria-invalid={!!error}
-													className='aria-invalid:bg-destructive/20 p-0'>
+													className='aria-invalid:bg-destructive/20 p-0'
+													key={field.id}>
 													<InputFieldControl
+														disabled={!isEditing || isLoading}
+														errorMessageVariant='tooltip'
 														name={`data.${index}.supplemental_shipped_out_qty`}
 														type='number'
-														errorMessageVariant='tooltip'
-														disabled={!isEditing || isLoading}
 														className={cn(
 															'aria-invalid:bg-destructive/20 h-auto w-full rounded-none border-none p-0 whitespace-nowrap shadow-none focus:outline-none',
 															form.watch(`data.${index}.supplemental_shipped_out_qty`) !== 0
@@ -191,8 +191,8 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 										const supplementalShippedOutQty = form.watch(`data.${index}.supplemental_shipped_out_qty`)
 										return (
 											<TableCell
-												key={item.size_numcode}
-												className={cn('hover:ring-primary!', { 'opacity-50': isError })}>
+												className={cn('hover:ring-primary!', { 'opacity-50': isError })}
+												key={item.size_numcode}>
 												{item.beginning_inventory_qty +
 													item.stocked_in_qty +
 													supplementalStockedInQty -
@@ -210,13 +210,13 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 							<TableRow className='*:border-none'>
 								<TableVerticalHeader className='sticky left-0 w-full! flex-1'>
 									<RoleBaseAccessControl
-										mode='fallback'
 										authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}
+										mode='fallback'
 										fallbackComponent={
 											<Typography
-												variant='small'
+												className='inline-flex items-center gap-x-2 font-normal normal-case'
 												color='destructive'
-												className='inline-flex items-center gap-x-2 font-normal normal-case'>
+												variant='small'>
 												<Icon name='TriangleAlert' />
 												{t('ns_auth:notification.viewonly')}
 											</Typography>
@@ -224,8 +224,8 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 										<Div className='inline-grid grid-cols-2 gap-x-2'>
 											{isEditing ? (
 												<Button
-													type='button'
 													size='sm'
+													type='button'
 													variant='secondary'
 													onClick={() => handleCancelUpdate()}>
 													<Icon name='X' />
@@ -233,8 +233,8 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 												</Button>
 											) : (
 												<Button
-													type='button'
 													size='sm'
+													type='button'
 													variant='outline'
 													onClick={() => handleStartUpdate()}>
 													<Icon name='Pencil' />
@@ -242,10 +242,10 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 												</Button>
 											)}
 											{isEditing && (
-												<Button type='submit' size='sm' disabled={isLoading}>
+												<Button disabled={isLoading} size='sm' type='submit'>
 													<Icon
-														name={isPending ? 'LoaderCircle' : 'Check'}
 														className={cn(isPending && 'animate-spin')}
+														name={isPending ? 'LoaderCircle' : 'Check'}
 													/>{' '}
 													{isPending
 														? t('ns_common:status.processing')

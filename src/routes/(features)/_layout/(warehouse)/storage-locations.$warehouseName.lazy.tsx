@@ -53,7 +53,7 @@ function Page() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.warehouse_management')}</title>
-			<meta name='description' content={t('ns_warehouse:headings.storage_list_description')} />
+			<meta content={t('ns_warehouse:headings.storage_list_description')} name='description' />
 
 			<RoleGuard
 				authorizedRoles={[

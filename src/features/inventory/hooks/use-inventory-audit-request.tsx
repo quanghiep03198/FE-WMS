@@ -1,6 +1,7 @@
 import { InventoryService } from '@features/inventory/services/inventory.service'
 import useQueryParams from '@hooks/use-query-params'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { HttpStatusCode } from 'axios'
 import { format } from 'date-fns'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -39,8 +40,11 @@ export const useCheckoutInventoryAuditMutation = () => {
 		onSuccess: () => {
 			toast.success(t('ns_common:notification.success'), { id: toastId.current })
 		},
-		onError: () => {
-			toast.error(t('ns_common:notification.error'), { id: toastId.current })
+		onError: (error) => {
+			const errorResponse = error.response?.data as ResponseBody<void>
+			if (errorResponse?.statusCode === HttpStatusCode.InternalServerError)
+				toast.error(t('ns_common:notification.error'), { id: toastId.current })
+			else toast.error(errorResponse?.message, { id: toastId.current })
 		}
 	})
 }

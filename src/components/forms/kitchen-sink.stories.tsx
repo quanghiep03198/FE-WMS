@@ -99,33 +99,33 @@ export const Template = () => {
 	return (
 		<div className='space-y-10'>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+				<form className='space-y-8' onSubmit={form.handleSubmit(onSubmit)}>
 					<Div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
 						{/* Personal Information Section */}
 						<Div className='space-y-4'>
-							<Typography variant='h4' className='text-lg font-semibold'>
+							<Typography className='text-lg font-semibold' variant='h4'>
 								Thông tin cá nhân
 							</Typography>
 							<InputFieldControl
-								label='Họ'
-								name='lastName'
-								placeholder='Nhập họ'
 								description='Họ của nhân viên, ví dụ: Nguyễn'
 								hidden={false}
+								label='Họ'
+								name='lastName'
 								orientation='vertical'
+								placeholder='Nhập họ'
 							/>
 							<InputFieldControl
-								label='Tên'
-								name='firstName'
-								placeholder='Nhập tên'
 								description='Tên của nhân viên, ví dụ: Nguyễn Văn'
 								hidden={false}
+								label='Tên'
+								name='firstName'
 								orientation='vertical'
+								placeholder='Nhập tên'
 							/>
 							<DatePickerFieldControl
+								calendarProps={{ mode: 'single', disabled: (value) => isAfter(value, new Date()) }}
 								label='Ngày sinh'
 								name='dateOfBirth'
-								calendarProps={{ mode: 'single', disabled: (value) => isAfter(value, new Date()) }}
 							/>
 							<FormField
 								control={form.control}
@@ -135,19 +135,19 @@ export const Template = () => {
 										<FormLabel>Giới tính *</FormLabel>
 										<FormControl>
 											<RadioGroup
-												onValueChange={field.onChange}
+												className='flex flex-col space-y-1'
 												defaultValue={field.value}
-												className='flex flex-col space-y-1'>
+												onValueChange={field.onChange}>
 												<div className='flex items-center space-x-2'>
-													<RadioGroupItem value='male' id='male' />
+													<RadioGroupItem id='male' value='male' />
 													<label htmlFor='male'>Nam</label>
 												</div>
 												<div className='flex items-center space-x-2'>
-													<RadioGroupItem value='female' id='female' />
+													<RadioGroupItem id='female' value='female' />
 													<label htmlFor='female'>Nữ</label>
 												</div>
 												<div className='flex items-center space-x-2'>
-													<RadioGroupItem value='other' id='other' />
+													<RadioGroupItem id='other' value='other' />
 													<label htmlFor='other'>Khác</label>
 												</div>
 											</RadioGroup>
@@ -157,17 +157,17 @@ export const Template = () => {
 								)}
 							/>
 							<InputFieldControl
+								description='Địa chỉ email liên hệ công việc.'
 								label='Email'
 								name='email'
-								type='email'
 								placeholder='example@gmail.com'
-								description='Địa chỉ email liên hệ công việc.'
+								type='email'
 							/>
 							<InputFieldControl
+								description='Số điện thoại liên lạc cá nhân'
 								label='Số điện thoại'
 								name='phone'
 								placeholder='xxxx xxx xxx'
-								description='Số điện thoại liên lạc cá nhân'
 							/>
 						</Div>
 
@@ -175,19 +175,23 @@ export const Template = () => {
 
 						{/* Work Information Section */}
 						<Div className='space-y-4'>
-							<Typography variant='h4' className='text-lg font-semibold'>
+							<Typography className='text-lg font-semibold' variant='h4'>
 								Thông tin công việc
 							</Typography>
 							<InputFieldControl
+								description='Mã định danh duy nhất cho nhân viên'
 								label='Mã nhân viên'
 								name='employeeId'
 								placeholder='Nhập mã nhân viên'
-								description='Mã định danh duy nhất cho nhân viên'
 							/>
 
 							<SelectFieldControl
+								description='Chọn phòng ban mà nhân viên làm việc'
 								label='Phòng ban'
+								labelField='label'
 								name='department'
+								placeholder='Chọn phòng ban'
+								valueField='value'
 								datalist={[
 									{ value: 'it', label: 'Công nghệ thông tin' },
 									{ value: 'hr', label: 'Nhân sự' },
@@ -195,40 +199,36 @@ export const Template = () => {
 									{ value: 'sales', label: 'Kinh doanh' },
 									{ value: 'marketing', label: 'Marketing' }
 								]}
-								labelField='label'
-								valueField='value'
-								placeholder='Chọn phòng ban'
-								description='Chọn phòng ban mà nhân viên làm việc'
 							/>
 							<InputFieldControl
+								description='Chức vụ cán bộ, công nhân viên đang đảm nhiệm'
 								label='Chức vụ'
 								name='position'
 								placeholder='Nhập chức vụ'
-								description='Chức vụ cán bộ, công nhân viên đang đảm nhiệm'
 							/>
 							<InputFieldControl
+								description='Nhập mức lương cơ bản (VND)'
 								label='Mức lương'
 								name='salary'
 								placeholder='VND'
-								description='Nhập mức lương cơ bản (VND)'
 							/>
 
 							<DatePickerFieldControl
+								calendarProps={{ mode: 'single', disabled: (value) => isAfter(value, new Date()) }}
 								label='Ngày vào làm'
 								name='startDate'
-								calendarProps={{ mode: 'single', disabled: (value) => isAfter(value, new Date()) }}
 							/>
 
 							<SelectFieldControl
 								label='Loại hình làm việc'
+								labelField='label'
 								name='workType'
+								valueField='value'
 								datalist={[
 									{ value: 'full-time', label: 'Toàn thời gian' },
 									{ value: 'part-time', label: 'Bán thời gian' },
 									{ value: 'contract', label: 'Hợp đồng' }
 								]}
-								labelField='label'
-								valueField='value'
 							/>
 						</Div>
 					</Div>
@@ -237,11 +237,11 @@ export const Template = () => {
 					<Div className='space-y-6'>
 						<Typography className='text-lg font-semibold'>Thông tin bổ sung</Typography>
 						<TextareaFieldControl
+							description='Địa chỉ nơi ở của nhân viên, bao gồm số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố'
 							label='Địa chỉ'
 							name='address'
-							placeholder='Nhập địa chỉ đầy đủ'
-							description='Địa chỉ nơi ở của nhân viên, bao gồm số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố'
 							orientation='vertical'
+							placeholder='Nhập địa chỉ đầy đủ'
 						/>
 						<FormField
 							control={form.control}
@@ -254,12 +254,12 @@ export const Template = () => {
 									</div>
 									{['JavaScript', 'React', 'Node.js', 'Python', 'Java', 'SQL'].map((skill) => (
 										<FormField
-											key={skill}
 											control={form.control}
+											key={skill}
 											name='skills'
 											render={({ field }) => {
 												return (
-													<FormItem key={skill} className='flex flex-row items-start space-y-0 space-x-3'>
+													<FormItem className='flex flex-row items-start space-y-0 space-x-3' key={skill}>
 														<FormControl>
 															<Checkbox
 																checked={field.value?.includes(skill)}
@@ -296,15 +296,15 @@ export const Template = () => {
 							)}
 						/>
 						<TextareaFieldControl
+							description='Thông tin bổ sung hoặc ghi chú đặc biệt về nhân viên'
 							label='Ghi chú'
 							name='notes'
-							placeholder='Thêm ghi chú về nhân viên...'
-							description='Thông tin bổ sung hoặc ghi chú đặc biệt về nhân viên'
 							orientation='vertical'
+							placeholder='Thêm ghi chú về nhân viên...'
 						/>
 					</Div>
 
-					<Button type='submit' className='w-full'>
+					<Button className='w-full' type='submit'>
 						Lưu thông tin nhân viên
 					</Button>
 				</form>

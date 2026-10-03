@@ -65,21 +65,21 @@ const UserStatusFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 				<Icon name='CirclePlus' /> {t('ns_common:common_fields.status')}
 				{typeof currentFilterValue === 'boolean' && (
 					<Div className='inline-flex items-center md:hidden'>
-						<Separator orientation='vertical' className='mx-2 h-4' />{' '}
-						<Badge variant='secondary' className='mx-1 rounded-sm px-1.5 font-normal'>
+						<Separator className='mx-2 h-4' orientation='vertical' />{' '}
+						<Badge className='mx-1 rounded-sm px-1.5 font-normal' variant='secondary'>
 							{currentFilterValue ? t('ns_common:status.active') : t('ns_common:status.deactivated')}
 						</Badge>
 					</Div>
 				)}
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className='w-64' align='end'>
+			<DropdownMenuContent align='end' className='w-64'>
 				<DropdownMenuRadioGroup
 					value={
 						isNil(currentFilterValue) ? null : currentFilterValue ? RecordStatus.ACTIVE : RecordStatus.INACTIVE
 					}
 					onValueChange={handleValueChange}>
 					{dropdownOptions.map((option) => (
-						<DropdownMenuRadioItem key={option.value} value={option.value} className='gap-x-2'>
+						<DropdownMenuRadioItem className='gap-x-2' key={option.value} value={option.value}>
 							<Icon
 								name={option.icon}
 								className={cn({
@@ -88,7 +88,7 @@ const UserStatusFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 								})}
 							/>
 							{option.label}
-							<Badge variant='outline' className='ml-auto font-normal'>
+							<Badge className='ml-auto font-normal' variant='outline'>
 								{option.count}
 							</Badge>
 						</DropdownMenuRadioItem>
@@ -96,8 +96,8 @@ const UserStatusFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 				</DropdownMenuRadioGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
-					disabled={!table.getColumn('is_active').getFilterValue()}
 					className='justify-center gap-x-2'
+					disabled={!table.getColumn('is_active').getFilterValue()}
 					onClick={() => table.getColumn('is_active').setFilterValue(null)}>
 					<Icon name='X' />
 					{t('ns_common:actions.clear_filter')}

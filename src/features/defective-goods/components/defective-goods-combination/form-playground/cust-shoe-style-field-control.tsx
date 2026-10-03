@@ -52,18 +52,18 @@ const CustShoeStyleFieldControl: React.FC<
 	return (
 		<AutoCompleteFieldControl
 			{...props}
-			name='cust_shoes_style'
+			datalist={custShoeStyleOptions}
+			disabled={disabled}
 			label={t('ns_erp:fields.cust_shoes_style')}
+			labelField='cust_shoes_style'
+			loading={loading}
+			name='cust_shoes_style'
+			readOnly={readOnly}
+			valueField='cust_shoes_style'
 			placeholder={t('ns_common:form_placeholder.fill', {
 				object: String(t('ns_erp:fields.cust_shoes_style')).toLowerCase(),
 				defaultValue: null
 			})}
-			loading={loading}
-			datalist={custShoeStyleOptions}
-			labelField='cust_shoes_style'
-			valueField='cust_shoes_style'
-			readOnly={readOnly}
-			disabled={disabled}
 			onItemClick={handleValueChange}
 		/>
 	)

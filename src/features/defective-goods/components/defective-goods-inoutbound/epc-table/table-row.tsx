@@ -12,14 +12,14 @@ export const DataTableRow: React.FC<{
 	'use no memo'
 
 	return (
-		<TableRow style={{ width: '100%', height: virtualRow.size }} className='group'>
+		<TableRow className='group' style={{ width: '100%', height: virtualRow.size }}>
 			{row.getVisibleCells().map((cell) => {
 				const { columnDef } = cell.column
 				return (
 					<TableCell
+						align={columnDef.meta?.align ?? 'left'}
 						key={cell.id}
-						style={{ width: `var(--column-${cell.column.id}-size)` }}
-						align={columnDef.meta?.align ?? 'left'}>
+						style={{ width: `var(--column-${cell.column.id}-size)` }}>
 						<span className='line-clamp-1 text-ellipsis'>{flexRender(columnDef.cell, cell.getContext())}</span>
 					</TableCell>
 				)

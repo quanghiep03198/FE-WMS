@@ -17,25 +17,25 @@ export const NumberRangeFilter: React.FC<NumberRangeFilterProps> = ({ column }) 
 	return (
 		<Div className='flex items-center'>
 			<DebouncedInput
-				type='number'
-				tabIndex={0}
 				className='placeholder:text-muted-foreground/80 hover:text-foreground rounded-none border-none px-3 text-xs shadow-none placeholder:text-xs'
-				min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 				max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
+				min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
+				placeholder={`Min ${column.getFacetedMinMaxValues()?.[0] ? `(${column.getFacetedMinMaxValues()?.[0]})` : ''}`}
+				tabIndex={0}
+				type='number'
 				value={(isAllFiltersCleared ? '' : (column.getFilterValue() as [number, number]))?.[0] ?? ''}
 				onChange={(value) => column.setFilterValue((old: [number, number]) => [value, old?.[1]])}
-				placeholder={`Min ${column.getFacetedMinMaxValues()?.[0] ? `(${column.getFacetedMinMaxValues()?.[0]})` : ''}`}
 			/>
-			<Separator orientation='vertical' className='h-6 w-1' />
+			<Separator className='h-6 w-1' orientation='vertical' />
 			<DebouncedInput
-				type='number'
-				tabIndex={0}
 				className='placeholder:text-muted-foreground/80 hover:text-foreground rounded-none border-none px-3 text-xs shadow-none placeholder:text-xs'
-				min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 				max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
+				min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
+				placeholder={`Max ${column.getFacetedMinMaxValues()?.[1] ? `(${column.getFacetedMinMaxValues()?.[1]})` : ''}`}
+				tabIndex={0}
+				type='number'
 				value={(isAllFiltersCleared ? '' : (column.getFilterValue() as [number, number]))?.[1] ?? ''}
 				onChange={(value) => column.setFilterValue((old: [number, number]) => [old?.[0], value])}
-				placeholder={`Max ${column.getFacetedMinMaxValues()?.[1] ? `(${column.getFacetedMinMaxValues()?.[1]})` : ''}`}
 			/>
 		</Div>
 	)

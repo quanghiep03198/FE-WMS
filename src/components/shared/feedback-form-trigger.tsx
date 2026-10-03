@@ -24,7 +24,7 @@ export default function FeedbackFormTrigger({ children, ...props }: ButtonProps)
 	}, [feedback])
 
 	return (
-		<Button type='button' ref={buttonRef} {...props}>
+		<Button ref={buttonRef} type='button' {...props}>
 			{children ? (
 				children
 			) : (

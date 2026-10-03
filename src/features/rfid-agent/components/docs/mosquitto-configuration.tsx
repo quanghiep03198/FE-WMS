@@ -19,7 +19,7 @@ const MosquittoConfiguration: React.FC = () => {
 				<li className='mb-4 space-y-4'>
 					<Typography as='span'>
 						Open{' '}
-						<Badge variant='secondary' className='gap-x-1'>
+						<Badge className='gap-x-1' variant='secondary'>
 							<Icon name='FileCog' /> mosquitto.conf
 						</Badge>{' '}
 						file and set the following parameters:
@@ -56,7 +56,7 @@ const MosquittoConfiguration: React.FC = () => {
 						<br />
 						protocol websockets
 					</Terminal>
-					<Typography variant='blockquote' className='mb-4!'>
+					<Typography className='mb-4!' variant='blockquote'>
 						Replace &lt;your_ip_address&gt; with the actual IP address of your machine. Save the file after making
 						the changes.
 					</Typography>
@@ -75,13 +75,13 @@ const MosquittoConfiguration: React.FC = () => {
 						to open <b>Command Prompt</b>. After that, run the following command to get your IP address.
 					</Typography>
 					<Terminal
+						className='my-4'
 						command={
 							/* template */ `
 								ipconfig
 								
 							`
-						}
-						className='my-4'>
+						}>
 						Ethernet adapter:
 						<br />
 						Connection-specific DNS Suffix . :
@@ -98,7 +98,7 @@ const MosquittoConfiguration: React.FC = () => {
 						<br />
 						Default Gateway . . . . . . . . . : 10.xxx.xxx.xxx
 					</Terminal>
-					<Typography variant='blockquote' className='mb-4!'>
+					<Typography className='mb-4!' variant='blockquote'>
 						Look for the <code>IPv4 Address</code> under your active network connection. This is the IP address
 						you need to use in the <code>mosquitto.conf</code> file.
 					</Typography>
@@ -118,13 +118,13 @@ const MosquittoConfiguration: React.FC = () => {
 						and apply the new configuration.
 					</Typography>
 					<Terminal
+						className='my-4'
 						command={
 							/* template */ `
 								net stop mosquitto
 								net start mosquitto
 							`
-						}
-						className='my-4'>
+						}>
 						net stop mosquitto
 						<br />
 						net start mosquitto

@@ -41,27 +41,27 @@ const TableToolbar: React.FC<ToolbarProps> = (props) => {
 	const { slotLeft: SlotLeft, slotRight: SlotRight, rtl } = props
 
 	return (
-		<Div role='toolbar' className={cn('flex items-center justify-between py-0.5', rtl && 'flex-row-reverse')}>
+		<Div className={cn('flex items-center justify-between py-0.5', rtl && 'flex-row-reverse')} role='toolbar'>
 			{SlotLeft && <SlotLeft table={table} />}
 			<Div className='ml-auto grid auto-cols-fr grid-flow-col items-center gap-x-1'>
 				<Tooltip message={t('ns_common:actions.unpin_all_columns')} triggerProps={{ asChild: true }}>
 					<Button
-						variant='destructive'
+						className={cn(!isSomeColumnsPinned && 'hidden')}
 						size='icon'
+						variant='destructive'
 						onClick={() => {
 							table.resetColumnPinning()
 							event$.emit(pick(table.getState(), ['columnPinning']))
-						}}
-						className={cn(!isSomeColumnsPinned && 'hidden')}>
+						}}>
 						<Icon name='PinOff' />
 					</Button>
 				</Tooltip>
 				<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
 					<Button
-						variant='destructive'
+						className={cn(!isFilterDirty && 'hidden')}
 						size='icon'
-						onClick={() => resetAllFilters()}
-						className={cn(!isFilterDirty && 'hidden')}>
+						variant='destructive'
+						onClick={() => resetAllFilters()}>
 						<Icon name='FunnelX' />
 					</Button>
 				</Tooltip>
@@ -77,7 +77,7 @@ const TableToolbar: React.FC<ToolbarProps> = (props) => {
 				{(table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableResizing) ||
 					table.options.enableColumnResizing) && (
 					<Tooltip message={t('ns_common:table.reset_size')} triggerProps={{ asChild: true }}>
-						<Button variant='outline' size='icon' onClick={() => table.resetColumnSizing()}>
+						<Button size='icon' variant='outline' onClick={() => table.resetColumnSizing()}>
 							<Icon name='FoldHorizontal' size={18} />
 						</Button>
 					</Tooltip>

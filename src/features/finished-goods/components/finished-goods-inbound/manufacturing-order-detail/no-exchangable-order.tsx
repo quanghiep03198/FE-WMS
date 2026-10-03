@@ -9,7 +9,7 @@ const NoExchangeOrder: React.FC = () => {
 		<Div className='grid place-content-center gap-x-2 rounded-lg border px-4 py-10'>
 			<Div className='inline-flex flex-col items-center gap-0.5'>
 				<Typography className='font-medium'>No available item</Typography>
-				<Typography variant='small' color='muted'>
+				<Typography color='muted' variant='small'>
 					{t('ns_inoutbound:description.no_exchangable_order')}
 				</Typography>
 			</Div>

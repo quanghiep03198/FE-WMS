@@ -28,7 +28,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 	return (
 		<TableFooter>
 			<TableRow>
-				<TableCell colSpan={3} align='center' className='bg-muted text-muted-foreground'>
+				<TableCell align='center' className='bg-muted text-muted-foreground' colSpan={3}>
 					{t('ns_common:titles.overall')}
 				</TableCell>
 			</TableRow>
@@ -49,7 +49,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 						onContextMenu={(e) => e.preventDefault()}>
 						{Array.isArray(data) &&
 							sortBy(data, 'size_numcode').map((size) => (
-								<NestedColumn key={size?.size_numcode} className='grid-rows-3!'>
+								<NestedColumn className='grid-rows-3!' key={size?.size_numcode}>
 									<NestedCell className='text-table-head-foreground group-hover:bg-table-row-active aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted px-4 py-2 font-medium first:border-l-0 last:border-r-0 has-[[role=button]]:text-center has-[[role=checkbox]]:text-center has-[[role=combobox]]:p-0 has-[[role=listbox]]:p-0 has-[[role=textbox]]:p-0 data-[type=number]:text-right'>
 										{size?.size_numcode}
 									</NestedCell>
@@ -60,7 +60,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 							))}
 					</Div>
 				</TableCell>
-				<TableCell className='sticky right-0 w-24 min-w-24 p-0! font-medium' align='right'>
+				<TableCell align='right' className='sticky right-0 w-24 min-w-24 p-0! font-medium'>
 					<NestedColumn className='w-full grid-rows-4!'>
 						<NestedCell className='text-table-head-foreground row-span-2 flex h-full items-center justify-end'>
 							{capitalize(t('ns_common:common_fields.total'))}

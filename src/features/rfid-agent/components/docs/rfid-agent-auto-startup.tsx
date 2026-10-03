@@ -17,7 +17,7 @@ const RFIDAgentAutoStartup: React.FC = () => {
 			<OrderedList>
 				<ListItem>
 					Install <Badge variant='secondary'>nssm</Badge> via <Badge variant='secondary'>Chocolately</Badge>
-					<Terminal tabTitle='Powershell' command='choco install nssm'>
+					<Terminal command='choco install nssm' tabTitle='Powershell'>
 						choco install nssm
 					</Terminal>
 				</ListItem>
@@ -26,8 +26,8 @@ const RFIDAgentAutoStartup: React.FC = () => {
 					<Badge variant='secondary'>C:\Program Files\RFID Agent</Badge>. Run the following command to set up RFID
 					Agent as a service that starts automatically:
 					<Terminal
-						tabTitle='Powershell'
-						command='nssm install "RFID Agent" "C:\Program Files\RFID Agent\rfid-agent.exe"'>
+						command='nssm install "RFID Agent" "C:\Program Files\RFID Agent\rfid-agent.exe"'
+						tabTitle='Powershell'>
 						nssm install &quot;RFID Agent&quot; &quot;C:\Program Files\RFID Agent\rfid-agent.exe&quot;
 					</Terminal>
 				</ListItem>

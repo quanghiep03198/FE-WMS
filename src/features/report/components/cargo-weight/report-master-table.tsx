@@ -150,8 +150,8 @@ const ReportMasterTable: React.FC = () => {
 
 	return (
 		<DataTable
-			data={data}
 			columns={columns}
+			data={data}
 			loading={isLoading}
 			containerProps={{
 				style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
@@ -161,10 +161,10 @@ const ReportMasterTable: React.FC = () => {
 				slotRight: () => {
 					return (
 						<Fragment>
-							<Button variant='outline' size='icon' onClick={() => handleDownloadExcel()}>
+							<Button size='icon' variant='outline' onClick={() => handleDownloadExcel()}>
 								<Icon name='Download' />
 							</Button>
-							<Button variant='outline' size='icon' onClick={() => refetch()}>
+							<Button size='icon' variant='outline' onClick={() => refetch()}>
 								<Icon name='RefreshCcw' />
 							</Button>
 						</Fragment>

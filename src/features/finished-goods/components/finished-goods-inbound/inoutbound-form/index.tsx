@@ -128,10 +128,10 @@ const InoutboundForm: React.FC = () => {
 			{createPortal(
 				<Alert data-state={isError && error?.status === HttpStatusCode.BadRequest ? 'open' : 'closed'}>
 					<Icon
+						className='fill-destructive-foreground stroke-destructive'
 						name='TriangleAlert'
 						size={40}
 						strokeWidth={2}
-						className='fill-destructive-foreground stroke-destructive'
 					/>
 					<AlertContent>
 						<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
@@ -140,9 +140,9 @@ const InoutboundForm: React.FC = () => {
 						</AlertDescription>
 					</AlertContent>
 					<Tooltip
+						contentProps={{ side: 'left' }}
 						message={t('ns_common:actions.dismiss')}
-						triggerProps={{ asChild: true }}
-						contentProps={{ side: 'left' }}>
+						triggerProps={{ asChild: true }}>
 						<AlertClose onClick={() => reset()}>
 							<Icon name='X' />
 						</AlertClose>
@@ -161,8 +161,8 @@ const InoutboundForm: React.FC = () => {
 										<FormMessage />
 										<RadioGroup
 											className='grid grid-cols-2'
-											value={field.value}
 											defaultValue={FinishedGoodsStockAction.IMPORT}
+											value={field.value}
 											onValueChange={(value) => {
 												field.onChange(value)
 												setAction(value as FinishedGoodsStockAction)
@@ -170,43 +170,43 @@ const InoutboundForm: React.FC = () => {
 											}}>
 											<FormItem>
 												<StyledFormLabel
-													role='checkbox'
-													tabIndex={0}
 													aria-checked={field.value === FinishedGoodsStockAction.IMPORT}
-													htmlFor={FinishedGoodsStockAction.IMPORT}>
+													htmlFor={FinishedGoodsStockAction.IMPORT}
+													role='checkbox'
+													tabIndex={0}>
 													<FormControl>
 														<RadioGroupItem
+															className='hidden'
 															id={FinishedGoodsStockAction.IMPORT}
 															value={FinishedGoodsStockAction.IMPORT}
-															className='hidden'
 														/>
 													</FormControl>
 													{t('ns_inoutbound:action_types.stock_in')}
 													<CheckIcon
+														aria-checked={field.value === FinishedGoodsStockAction.IMPORT}
 														name='Check'
 														size={24}
-														aria-checked={field.value === FinishedGoodsStockAction.IMPORT}
 													/>
 												</StyledFormLabel>
 											</FormItem>
 											<FormItem>
 												<StyledFormLabel
+													aria-checked={field.value == FinishedGoodsStockAction.EXPORT}
 													htmlFor={FinishedGoodsStockAction.EXPORT}
 													role='radio'
-													tabIndex={0}
-													aria-checked={field.value == FinishedGoodsStockAction.EXPORT}>
+													tabIndex={0}>
 													<FormControl>
 														<RadioGroupItem
+															className='sr-only'
 															id={FinishedGoodsStockAction.EXPORT}
 															value={FinishedGoodsStockAction.EXPORT}
-															className='sr-only'
 														/>
 													</FormControl>
 													{t('ns_inoutbound:action_types.stock_out')}
 													<CheckIcon
+														aria-checked={field.value === FinishedGoodsStockAction.EXPORT}
 														name='Check'
 														size={24}
-														aria-checked={field.value === FinishedGoodsStockAction.EXPORT}
 													/>
 												</StyledFormLabel>
 											</FormItem>
@@ -230,12 +230,12 @@ const InoutboundForm: React.FC = () => {
 												? t('ns_inoutbound:inoutbound_actions.normal_import')
 												: t('ns_inoutbound:inoutbound_actions.recycle')}
 											<Input
+												className='text-foreground h-max w-full border-none px-0 shadow-none focus-within:outline-none focus:border-none'
+												placeholder={t('ns_common:actions.select_database')}
 												readOnly={true}
 												type='hidden'
-												placeholder={t('ns_common:actions.select_database')}
-												className='text-foreground h-max w-full border-none px-0 shadow-none focus-within:outline-none focus:border-none'
-												onChange={field.onChange}
 												value={field.value}
+												onChange={field.onChange}
 											/>
 										</Div>
 									</FormItem>
@@ -246,10 +246,10 @@ const InoutboundForm: React.FC = () => {
 							<Fragment>
 								<Div className='col-span-1 sm:col-span-full'>
 									<SelectFieldControl
-										name='assembly_line.code'
-										label={t('ns_erp:fields.assembly_line_code')}
 										datalist={translatedAssemblyLines}
+										label={t('ns_erp:fields.assembly_line_code')}
 										labelField='name'
+										name='assembly_line.code'
 										valueField='code'
 										onValueChange={(value) => {
 											if (!Array.isArray(assemblyLines)) return
@@ -261,46 +261,46 @@ const InoutboundForm: React.FC = () => {
 								</Div>
 								<Div className='col-span-1 sm:col-span-full'>
 									<SelectFieldControl
-										disabled={isLoading}
-										name='warehouse'
-										label={t('ns_inoutbound:labels.io_archive_warehouse')}
 										datalist={warehouseOptions ?? []}
+										disabled={isLoading}
+										label={t('ns_inoutbound:labels.io_archive_warehouse')}
 										labelField='name'
+										name='warehouse'
 										valueField='name'
 									/>
 								</Div>
 								<Div className='col-span-1 sm:col-span-full'>
 									<ComboboxFieldControl
-										name='storage_location'
-										label={t('ns_inoutbound:labels.io_storage_location')}
 										datalist={storageLocations}
-										labelField='name'
-										valueField='name'
-										shouldFilter={true}
 										disabled={warehouseOptions?.length === 0}
+										label={t('ns_inoutbound:labels.io_storage_location')}
+										labelField='name'
+										name='storage_location'
+										shouldFilter={true}
+										valueField='name'
 									/>
 								</Div>
 							</Fragment>
 						)}
 						<Div className='col-span-full grid grid-cols-2 gap-x-2'>
 							<Button
-								type='submit'
-								size={isMobileScreen ? 'lg' : 'default'}
 								className='w-full'
-								disabled={selectedOrder === 'all' || isPending}>
+								disabled={selectedOrder === 'all' || isPending}
+								size={isMobileScreen ? 'lg' : 'default'}
+								type='submit'>
 								<Icon
-									name={isPending ? 'LoaderCircle' : 'Check'}
 									aria-busy={isPending}
 									className='aria-busy:animate-spin'
+									name={isPending ? 'LoaderCircle' : 'Check'}
 								/>
 								{t('ns_common:actions.save')}
 							</Button>
 							<Button
+								className='gap-x-2 sm:w-full md:w-full'
+								size={isMobileScreen ? 'lg' : 'default'}
 								type='reset'
 								variant='outline'
-								size={isMobileScreen ? 'lg' : 'default'}
-								onClick={handleResetForm}
-								className='gap-x-2 sm:w-full md:w-full'>
+								onClick={handleResetForm}>
 								<Icon name='Undo' /> {t('ns_common:actions.reset')}
 							</Button>
 						</Div>

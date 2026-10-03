@@ -14,12 +14,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
 
 	return (
 		<DayPicker
-			formatters={{
-				formatWeekdayName: (day) => format(day, 'EEEEE', { locale }),
-				formatCaption: (date) => format(date, 'LLL, y', { locale })
-			}}
-			showOutsideDays={showOutsideDays}
 			className={cn('p-3', className)}
+			showOutsideDays={showOutsideDays}
 			classNames={{
 				months: 'flex flex-row gap-4 sm:flex-col',
 				month: 'space-y-4',
@@ -58,6 +54,10 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
 			components={{
 				IconLeft: () => <ChevronLeftIcon className='h-4 w-4' />,
 				IconRight: () => <ChevronRightIcon className='h-4 w-4' />
+			}}
+			formatters={{
+				formatWeekdayName: (day) => format(day, 'EEEEE', { locale }),
+				formatCaption: (date) => format(date, 'LLL, y', { locale })
 			}}
 			{...props}
 		/>

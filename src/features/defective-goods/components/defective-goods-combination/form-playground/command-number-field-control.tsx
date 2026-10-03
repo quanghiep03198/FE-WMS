@@ -18,19 +18,19 @@ const CommandNumberFieldControl: React.FC<CommandNumberFieldControlProps> = (pro
 
 	return (
 		<AutoCompleteFieldControl
-			name='mo_no'
+			datalist={data}
 			label={t('ns_erp:fields.mo_no')}
+			labelField='mo_no'
+			loading={isLoading}
+			name='mo_no'
+			shouldFilter={false}
+			valueField='mo_no'
 			placeholder={capitalize(
 				t('ns_common:form_placeholder.fill', {
 					object: t('ns_erp:fields.mo_no'),
 					defaultValue: 'Search purchase command number ...'
 				})
 			)}
-			datalist={data}
-			labelField='mo_no'
-			valueField='mo_no'
-			shouldFilter={false}
-			loading={isLoading}
 			{...props}
 		/>
 	)

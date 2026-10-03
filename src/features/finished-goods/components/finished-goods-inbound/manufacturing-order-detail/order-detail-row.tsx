@@ -72,8 +72,8 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			)}>
 			<TableCell>
 				<Checkbox
-					disabled={!hasSomeRowMatch && selectedRows.length > 0}
 					checked={selectedRows.some((row) => row.mo_no === data?.mo_no)}
+					disabled={!hasSomeRowMatch && selectedRows.length > 0}
 					onCheckedChange={(checked) =>
 						handleToggleSelectRow(checked, {
 							mo_no: data?.mo_no,
@@ -88,8 +88,8 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				<Div className='flex items-center gap-x-2'>
 					{data?.mo_no ?? FALLBACK_VALUE}
 					<RoleBaseAccessControl
-						mode='invisible'
-						authorizedRoles={[UserRole.ADMIN, UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+						authorizedRoles={[UserRole.ADMIN, UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}
+						mode='invisible'>
 						{data?.mo_no === FALLBACK_VALUE ? (
 							<button
 								className='opacity-0 duration-100 group-hover/cell:opacity-100'
@@ -108,7 +108,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 										scanned_size_qty: aggregateSizeCount
 									})
 								}}>
-								<Icon name='ArrowLeftRight' className='stroke-active' />
+								<Icon className='stroke-active' name='ArrowLeftRight' />
 							</button>
 						)}
 					</RoleBaseAccessControl>
@@ -120,7 +120,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				<NestedTable onContextMenu={(e) => e.preventDefault()}>
 					{Array.isArray(data?.sizes) &&
 						sortBy(data.sizes, 'size_numcode').map((size) => (
-							<NestedColumn key={size?.size_numcode} className='min-w-24 basis-24'>
+							<NestedColumn className='min-w-24 basis-24' key={size?.size_numcode}>
 								<NestedCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
@@ -137,8 +137,8 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 													})
 												}}>
 												<Icon
-													name='ArrowLeftRight'
 													className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100 group-has-[button[data-state=open]]/cell:opacity-100'
+													name='ArrowLeftRight'
 												/>
 											</button>
 											<DeleteSizePopover

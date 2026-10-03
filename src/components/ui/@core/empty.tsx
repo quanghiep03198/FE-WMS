@@ -17,8 +17,8 @@ function Empty({ className, ...props }: React.ComponentProps<'div'>) {
 function EmptyHeader({ className, ...props }: React.ComponentProps<'div'>) {
 	return (
 		<div
-			data-slot='empty-header'
 			className={cn('flex max-w-sm flex-col items-center gap-2 text-center', className)}
+			data-slot='empty-header'
 			{...props}
 		/>
 	)
@@ -46,16 +46,16 @@ function EmptyMedia({
 }: React.ComponentProps<'div'> & VariantProps<typeof emptyMediaVariants>) {
 	return (
 		<div
+			className={cn(emptyMediaVariants({ variant, className }))}
 			data-slot='empty-icon'
 			data-variant={variant}
-			className={cn(emptyMediaVariants({ variant, className }))}
 			{...props}
 		/>
 	)
 }
 
 function EmptyTitle({ className, ...props }: React.ComponentProps<'div'>) {
-	return <div data-slot='empty-title' className={cn('text-lg font-medium tracking-tight', className)} {...props} />
+	return <div className={cn('text-lg font-medium tracking-tight', className)} data-slot='empty-title' {...props} />
 }
 
 function EmptyDescription({ className, ...props }: React.ComponentProps<'p'>) {
@@ -74,8 +74,8 @@ function EmptyDescription({ className, ...props }: React.ComponentProps<'p'>) {
 function EmptyContent({ className, ...props }: React.ComponentProps<'div'>) {
 	return (
 		<div
-			data-slot='empty-content'
 			className={cn('flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance', className)}
+			data-slot='empty-content'
 			{...props}
 		/>
 	)

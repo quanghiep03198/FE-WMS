@@ -73,15 +73,15 @@ const UserTableToolbar: React.FC<{
 				{table.getColumn('roles') && (
 					<DataTableFacetedFilter
 						column={table.getColumn('roles')}
-						title={t('ns_auth:fields.role')}
 						options={roles}
+						title={t('ns_auth:fields.role')}
 					/>
 				)}
 				{isFiltered && (
-					<Tooltip message={t('ns_common:actions.clear_filter')} contentProps={{ hidden: !isMobile }}>
+					<Tooltip contentProps={{ hidden: !isMobile }} message={t('ns_common:actions.clear_filter')}>
 						<Button
-							variant='secondary'
 							size={isMobile ? 'icon' : 'default'}
+							variant='secondary'
 							onClick={() => {
 								table.resetGlobalFilter()
 								table.resetColumnFilters()

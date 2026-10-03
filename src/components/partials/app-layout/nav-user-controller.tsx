@@ -24,19 +24,19 @@ const NavUserControl: React.FC = () => {
 		<DropdownMenu>
 			<DropdownMenuTrigger className='inline-flex h-full items-center justify-center ring-0 outline-none focus:border-none'>
 				<Avatar className='size-8'>
-					<AvatarImage src={user?.picture} alt={user?.display_name} />
+					<AvatarImage alt={user?.display_name} src={user?.picture} />
 					<AvatarFallback>G</AvatarFallback>
 				</Avatar>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent align='end' sideOffset={8} className='w-64'>
+			<DropdownMenuContent align='end' className='w-64' sideOffset={8}>
 				<DropdownMenuLabel className='capitalize'>{user?.display_name ?? 'Unknown'}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{navigationConfig.preferences
 					.filter((item) => item.url !== '/preferences/keybindings')
 					.map((item) => (
 						<DropdownMenuItem asChild key={item.title}>
-							<Link to={item.url} className='whitespace-nowrap'>
-								<Icon name={item.icon} className='mr-2' /> {t(item.title as any)}
+							<Link className='whitespace-nowrap' to={item.url}>
+								<Icon className='mr-2' name={item.icon} /> {t(item.title as any)}
 								<DropdownMenuShortcut>{item.keybinding.split('.').join('+')}</DropdownMenuShortcut>
 							</Link>
 						</DropdownMenuItem>
@@ -44,7 +44,7 @@ const NavUserControl: React.FC = () => {
 
 				<DropdownMenuSeparator />
 				<DropdownMenuItem onClick={() => logout()}>
-					<Icon name='LogOut' className='mr-2' /> {t('ns_common:actions.logout')}
+					<Icon className='mr-2' name='LogOut' /> {t('ns_common:actions.logout')}
 					<DropdownMenuShortcut>{'ctrl+q'}</DropdownMenuShortcut>
 				</DropdownMenuItem>
 			</DropdownMenuContent>

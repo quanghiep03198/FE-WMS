@@ -62,10 +62,10 @@ const InoutboundOverview: React.FC = () => {
 					</CardDescription>
 					<CardAction className='inline-flex items-center gap-x-3'>
 						<Select
-							value={year.toString()}
 							defaultValue={new Date().getFullYear().toString()}
+							value={year.toString()}
 							onValueChange={(value) => setYear(Number.parseInt(value))}>
-							<SelectTrigger className='inline-flex w-[180px] items-center gap-x-2' defaultChecked>
+							<SelectTrigger defaultChecked className='inline-flex w-[180px] items-center gap-x-2'>
 								<Icon name='CalendarDays' size={18} />
 								<SelectValue placeholder='Select' />
 							</SelectTrigger>
@@ -102,10 +102,10 @@ const InoutboundOverview: React.FC = () => {
 									)
 								}))}>
 								<CartesianGrid vertical={false} />
-								<XAxis dataKey='month' tickLine={false} tickMargin={10} axisLine={false} />
+								<XAxis axisLine={false} dataKey='month' tickLine={false} tickMargin={10} />
 								<ChartTooltip
+									content={<ChartTooltipContent className='min-w-48' indicator='dot' />}
 									cursor={false}
-									content={<ChartTooltipContent indicator='dot' className='min-w-48' />}
 								/>
 								<YAxis stroke='var(--muted-foreground)' tickFormatter={formatIntlNumber} />
 								<Bar dataKey='inbound_qty' fill='var(--color-inbound_qty)' radius={3} />

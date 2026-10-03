@@ -119,12 +119,12 @@ const ReportMasterTable: React.FC = () => {
 					return typeof value === 'string' ? (
 						<EllipsisList
 							data={value.split(';')}
+							threshhold={2}
 							template={({ data }) => (
-								<Badge variant='outline' className='whitespace-nowrap'>
+								<Badge className='whitespace-nowrap' variant='outline'>
 									{data.trim().replace(/\((\d+)\)/, ' ($1 prs)')}
 								</Badge>
 							)}
-							threshhold={2}
 						/>
 					) : (
 						t('ns_common:titles.unknown')
@@ -173,8 +173,8 @@ const ReportMasterTable: React.FC = () => {
 							aria-busy={isPending}
 							aria-invalid={isError}
 							className='aria-invalid:border-destructive block rounded-none border-none bg-inherit text-right shadow-none aria-busy:opacity-50'
-							placeholder={t('ns_common:titles.unknown')}
 							defaultValue={value}
+							placeholder={t('ns_common:titles.unknown')}
 							type='number'
 							onBlur={(e) => {
 								if (e.currentTarget.value && Number.parseFloat(e.target.value) !== value)
@@ -239,10 +239,10 @@ const ReportMasterTable: React.FC = () => {
 
 	return (
 		<DataTable
-			data={data}
 			columns={columns}
-			loading={isLoading}
+			data={data}
 			enableMultiSort={true}
+			loading={isLoading}
 			containerProps={{
 				style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
 			}}
@@ -256,7 +256,7 @@ const ReportMasterTable: React.FC = () => {
 				slotRight: () => {
 					return (
 						<Fragment>
-							<Button variant='outline' size='icon' onClick={() => refetch()}>
+							<Button size='icon' variant='outline' onClick={() => refetch()}>
 								<Icon name='RefreshCcw' />
 							</Button>
 						</Fragment>

@@ -32,11 +32,11 @@ export const DebouncedInput: React.FC<DebouncedInputProps> = ({
 		<Input
 			{...props}
 			value={_value}
-			onChange={(e) => setValue(e.target.value)}
 			className={cn(
 				'border-none shadow-none ring-0 ring-offset-transparent duration-0 outline-none placeholder:text-xs',
 				className
 			)}
+			onChange={(e) => setValue(e.target.value)}
 		/>
 	)
 }

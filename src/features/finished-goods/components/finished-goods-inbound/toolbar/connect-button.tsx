@@ -45,23 +45,23 @@ const ConnectButton: React.FC = () => {
 				toast.custom(
 					() => (
 						<Div className='bg-background rounded-lg border p-4 shadow-lg'>
-							<Typography variant='small' className='font-medium'>
+							<Typography className='font-medium' variant='small'>
 								{t('ns_inoutbound:notification.browser_tab_resumed')} 🖐
 							</Typography>
-							<Typography variant='small' color='muted' className='block text-pretty'>
+							<Typography className='block text-pretty' color='muted' variant='small'>
 								{t('ns_inoutbound:notification.browser_tab_resumed_message')}
 							</Typography>
 							<Div className='mt-3 flex items-center justify-end gap-x-1 [&>button]:h-6 [&>button]:rounded-sm'>
 								<Button
-									variant='default'
 									size='sm'
+									variant='default'
 									onClick={() => {
 										setScanningStatus('connecting')
 										toast.dismiss('welcome-back')
 									}}>
 									{t('ns_common:actions.connect')}
 								</Button>
-								<Button variant='outline' size='sm' onClick={() => toast.dismiss('welcome-back')}>
+								<Button size='sm' variant='outline' onClick={() => toast.dismiss('welcome-back')}>
 									{t('ns_common:actions.dismiss')}
 								</Button>
 							</Div>
@@ -73,7 +73,7 @@ const ConnectButton: React.FC = () => {
 	})
 
 	return (
-		<Button disabled={!selectedDevice} onClick={handleToggleScanning} variant={scanningButtonProps.variant}>
+		<Button disabled={!selectedDevice} variant={scanningButtonProps.variant} onClick={handleToggleScanning}>
 			<Icon name={scanningButtonProps.icon} />
 			{scanningButtonProps.children}
 		</Button>

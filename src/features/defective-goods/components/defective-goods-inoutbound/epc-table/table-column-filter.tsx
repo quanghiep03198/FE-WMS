@@ -63,19 +63,9 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 		case 'select': {
 			return (
 				<DropdownSelect
-					selectTriggerProps={{
-						className:
-							'w-full px-4 h-(--row-height) bg-transparent rounded-none border-none text-sm font-normal text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none',
-						tabIndex: 0
-					}}
-					selectProps={{
-						defaultValue: '',
-						value: currentFilterValue ?? ('' as string),
-						onValueChange: (value) => {
-							setCurrentFilterValue(value)
-						}
-					}}
+					labelField='label'
 					placeholder={t('ns_common:table.search_in_column')}
+					valueField='value'
 					datalist={
 						Array.isArray(metaUniqueValues)
 							? metaUniqueValues
@@ -86,8 +76,18 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 										value: value
 									}))
 					}
-					labelField='label'
-					valueField='value'
+					selectProps={{
+						defaultValue: '',
+						value: currentFilterValue ?? ('' as string),
+						onValueChange: (value) => {
+							setCurrentFilterValue(value)
+						}
+					}}
+					selectTriggerProps={{
+						className:
+							'w-full px-4 h-(--row-height) bg-transparent rounded-none border-none text-sm font-normal text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none',
+						tabIndex: 0
+					}}
 				/>
 			)
 		}
@@ -96,10 +96,10 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 			return (
 				<AutoComplete
 					className='text-muted-foreground hover:text-foreground h-(--row-height) w-full rounded-none border-none! bg-transparent px-4 text-sm font-normal shadow-none ring-0 outline-none placeholder:text-sm focus:border-none focus:ring-0'
-					value={currentFilterValue ?? ''}
-					onInput={setCurrentFilterValue}
-					onSelect={setCurrentFilterValue}
+					labelField='label'
 					placeholder={t('ns_common:table.search_in_column')}
+					value={currentFilterValue ?? ''}
+					valueField='value'
 					datalist={
 						Array.isArray(metaUniqueValues)
 							? metaUniqueValues
@@ -110,8 +110,8 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 										value: value
 									}))
 					}
-					labelField='label'
-					valueField='value'
+					onInput={setCurrentFilterValue}
+					onSelect={setCurrentFilterValue}
 				/>
 			)
 		}
@@ -119,12 +119,12 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 		default: {
 			return (
 				<Input
-					id={column.id}
-					value={currentFilterValue ?? ('' as React.ComponentProps<'input'>['value'])}
-					placeholder={t('ns_common:table.search_in_column')}
-					onChange={(e) => setCurrentFilterValue(e.currentTarget.value)}
 					autoComplete='off'
 					className='h-(--row-height) border-none bg-transparent text-sm font-normal shadow-none focus:border-none'
+					id={column.id}
+					placeholder={t('ns_common:table.search_in_column')}
+					value={currentFilterValue ?? ('' as React.ComponentProps<'input'>['value'])}
+					onChange={(e) => setCurrentFilterValue(e.currentTarget.value)}
 				/>
 			)
 		}

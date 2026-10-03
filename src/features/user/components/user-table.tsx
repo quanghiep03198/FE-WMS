@@ -32,10 +32,10 @@ const UserTable: React.FC = () => {
 				cell: ({ row, getValue }) => (
 					<Div className='inline-flex items-center gap-x-2'>
 						<Avatar className='size-7'>
-							<AvatarImage src={row.original?.picture} alt={getValue()} />
+							<AvatarImage alt={getValue()} src={row.original?.picture} />
 							<AvatarFallback>G</AvatarFallback>
 						</Avatar>
-						<Typography variant='small' className='line-clamp-1 font-medium'>
+						<Typography className='line-clamp-1 font-medium' variant='small'>
 							{getValue()}
 						</Typography>
 					</Div>
@@ -72,7 +72,7 @@ const UserTable: React.FC = () => {
 				cell: ({ getValue }) => {
 					const roles = getValue()
 					return roles.length === 0 ? (
-						<Typography variant='small' color='muted'>
+						<Typography color='muted' variant='small'>
 							{t('ns_common:titles.unknown')}
 						</Typography>
 					) : (
@@ -95,7 +95,7 @@ const UserTable: React.FC = () => {
 					const value = getValue()
 					if (!value)
 						return (
-							<Typography variant='small' color='muted'>
+							<Typography color='muted' variant='small'>
 								{t('ns_common:titles.unknown')}
 							</Typography>
 						)
@@ -110,12 +110,12 @@ const UserTable: React.FC = () => {
 					const isActive = getValue()
 					return (
 						<Badge
-							variant='outline'
-							className='justify-center gap-x-2 rounded-l-full rounded-r-full whitespace-nowrap'>
+							className='justify-center gap-x-2 rounded-l-full rounded-r-full whitespace-nowrap'
+							variant='outline'>
 							<Icon
-								name={isActive ? 'CircleCheck' : 'CircleMinus'}
 								aria-current={isActive}
 								className='stroke-muted-foreground aria-current:stroke-success'
+								name={isActive ? 'CircleCheck' : 'CircleMinus'}
 							/>
 							{t(isActive ? 'ns_common:status.active' : 'ns_common:status.deactivated')}
 						</Badge>
@@ -139,14 +139,14 @@ const UserTable: React.FC = () => {
 
 	return (
 		<DataTable
+			border='bottom-only'
 			columns={columns}
 			data={data!}
 			loading={isLoading}
-			border='bottom-only'
+			virtualizerOptions={{ estimateSize: 50 }}
 			containerProps={{
 				style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
 			}}
-			virtualizerOptions={{ estimateSize: 50 }}
 			toolbarProps={{
 				override: true,
 				render: UserTableToolbar

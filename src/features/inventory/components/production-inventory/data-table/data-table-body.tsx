@@ -34,7 +34,7 @@ const DataTableBody: React.FC<DataTableBodyProps> = ({ virtualizer, rows, column
 								size={virtualItem.size}
 							/>
 						) : (
-							<DataTableRow key={virtualItem.key} size={virtualItem.size} row={rows[virtualItem.index]} />
+							<DataTableRow key={virtualItem.key} row={rows[virtualItem.index]} size={virtualItem.size} />
 						)
 					})}
 					{after > 0 && <VirtualPlaceholderRow colSpan={columnCount} style={{ height: after }} />}

@@ -77,17 +77,17 @@ const SearchBox: React.FC = () => {
 					<ShoesStyleCombobox data={shoesStyleOptions} isLoading={isLoading} />
 					<ColorCombobox data={colorOptions} isLoading={isLoading} />
 					<Button
-						type='submit'
+						disabled={!form.watch('shoes_style') || !form.watch('color')}
 						size={isSmallScreen ? 'icon' : 'default'}
-						disabled={!form.watch('shoes_style') || !form.watch('color')}>
+						type='submit'>
 						<Icon name='Search' size={isSmallScreen ? 18 : 16} />{' '}
 						{!isSmallScreen && t('ns_common:actions.search')}
 					</Button>
 					<Button
+						disabled={!form.watch('shoes_style') || !form.watch('color')}
+						size={isSmallScreen ? 'icon' : 'default'}
 						type='button'
 						variant='outline'
-						size={isSmallScreen ? 'icon' : 'default'}
-						disabled={!form.watch('shoes_style') || !form.watch('color')}
 						onClick={() => refetch()}>
 						<Icon name='RefreshCcw' size={isSmallScreen ? 18 : 16} />{' '}
 						{!isSmallScreen && t('ns_common:actions.reload')}
@@ -116,19 +116,19 @@ const BrandNameComboboxFieldControl: React.FC<ComboboxProps> = ({ data, isLoadin
 	return (
 		<Div className='flex-1'>
 			<ComboboxFieldControl
-				name='brand_name'
+				datalist={filteredData}
+				labelField='label'
 				loading={isLoading}
+				name='brand_name'
+				shouldFilter={false}
+				valueField='value'
 				placeholder={capitalize(
 					t('ns_common:form_placeholder.select', {
 						object: t('ns_erp:fields.brand_name'),
 						defaultValue: 'Select customer brand'
 					})
 				)}
-				shouldFilter={false}
 				onInput={setSearchTerm}
-				datalist={filteredData}
-				labelField='label'
-				valueField='value'
 			/>
 		</Div>
 	)
@@ -147,19 +147,19 @@ const ShoesStyleCombobox: React.FC<ComboboxProps> = ({ data, isLoading }) => {
 	return (
 		<Div className='flex-1'>
 			<ComboboxFieldControl
+				datalist={filteredData}
+				labelField='label'
+				loading={isLoading}
 				name='shoes_style'
+				shouldFilter={false}
+				valueField='value'
 				placeholder={capitalize(
 					t('ns_common:form_placeholder.select', {
 						object: t('ns_erp:fields.factory_shoes_style'),
 						defaultValue: 'Select shoes style'
 					})
 				)}
-				shouldFilter={false}
-				loading={isLoading}
-				datalist={filteredData}
 				onInput={setSearchTerm}
-				labelField='label'
-				valueField='value'
 			/>
 		</Div>
 	)
@@ -178,19 +178,19 @@ const ColorCombobox: React.FC<ComboboxProps> = ({ data, isLoading }) => {
 	return (
 		<Div className='flex-1'>
 			<ComboboxFieldControl
+				datalist={filteredData}
+				labelField='label'
+				loading={isLoading}
 				name='color'
+				shouldFilter={false}
+				valueField='value'
 				placeholder={capitalize(
 					t('ns_common:form_placeholder.select', {
 						object: t('ns_erp:fields.color_sn'),
 						defaultValue: 'Select color'
 					})
 				)}
-				loading={isLoading}
 				onInput={setSearchTerm}
-				shouldFilter={false}
-				datalist={filteredData}
-				labelField='label'
-				valueField='value'
 			/>
 		</Div>
 	)

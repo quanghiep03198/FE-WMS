@@ -53,17 +53,17 @@ const BubbleMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 
 	return (
 		<TiptapBubbleMenu
-			editor={editor}
 			className='bg-background flex w-[256px] flex-col gap-2 rounded-md border py-2 shadow-2xl'
-			style={{ zIndex: 10, transitionDuration: '200ms' }}
-			shouldShow={(props) => props.editor.isActive('link')}>
+			editor={editor}
+			shouldShow={(props) => props.editor.isActive('link')}
+			style={{ zIndex: 10, transitionDuration: '200ms' }}>
 			<Div className='flex items-center gap-x-2 px-2'>
-				<Icon name='Globe' className='text-muted-foreground basis-[32px]' />
+				<Icon className='text-muted-foreground basis-[32px]' name='Globe' />
 				<a
-					href={editor.getAttributes('link').href}
-					target='_blank'
 					className='line-clamp-1 flex-1 text-xs'
-					rel='noreferrer'>
+					href={editor.getAttributes('link').href}
+					rel='noreferrer'
+					target='_blank'>
 					{editor.getAttributes('link').href}
 				</a>
 			</Div>
@@ -72,26 +72,26 @@ const BubbleMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 				<Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
 					<Tooltip message='Cập nhật'>
 						<PopoverTrigger asChild>
-							<Button variant='ghost' size='icon' className='h-8 w-8'>
+							<Button className='h-8 w-8' size='icon' variant='ghost'>
 								<Icon name='Pencil' />
 							</Button>
 						</PopoverTrigger>
 					</Tooltip>
 					<PopoverContent
 						align='start'
-						side='bottom'
-						sideOffset={18}
 						alignOffset={0}
-						className='z-20 w-full max-w-sm'>
+						className='z-20 w-full max-w-sm'
+						side='bottom'
+						sideOffset={18}>
 						<Form {...form}>
 							<form
+								className='flex items-center gap-x-2'
 								onSubmit={(e) => {
 									e.stopPropagation()
 									form.handleSubmit(handleEditLink)(e)
-								}}
-								className='flex items-center gap-x-2'>
-								<InputFieldControl name='href' type='url' className='h-8' />
-								<Button type='submit' size='sm'>
+								}}>
+								<InputFieldControl className='h-8' name='href' type='url' />
+								<Button size='sm' type='submit'>
 									Áp dụng
 								</Button>
 							</form>
@@ -101,20 +101,20 @@ const BubbleMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 
 				<Tooltip message='Copy'>
 					<Button
-						type='button'
 						className='aspect-square h-8 w-8'
-						variant='ghost'
 						size='icon'
+						type='button'
+						variant='ghost'
 						onClick={handleCopyLinkToClipboard}>
 						<Icon name='Copy' />
 					</Button>
 				</Tooltip>
 				<Tooltip message='Unlink'>
 					<Button
-						type='button'
 						className='aspect-square h-8 w-8'
-						variant='ghost'
 						size='icon'
+						type='button'
+						variant='ghost'
 						onClick={() => editor.commands.unsetLink()}>
 						<Icon name='Unlink' />
 					</Button>

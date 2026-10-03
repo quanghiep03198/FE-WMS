@@ -136,7 +136,7 @@ const OrderDetailTable: React.FC = () => {
 
 	return (
 		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-			<HoverCard openDelay={50} closeDelay={50}>
+			<HoverCard closeDelay={50} openDelay={50}>
 				<HoverCardTrigger asChild>
 					<DialogTrigger
 						className={cn(
@@ -150,7 +150,7 @@ const OrderDetailTable: React.FC = () => {
 						<Icon name='ArrowUpRight' />
 					</DialogTrigger>
 				</HoverCardTrigger>
-				<HoverCardContent side='top' align='start' sideOffset={8} className='w-radix-hover-card text-pretty'>
+				<HoverCardContent align='start' className='w-radix-hover-card text-pretty' side='top' sideOffset={8}>
 					<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 				</HoverCardContent>
 			</HoverCard>
@@ -230,12 +230,12 @@ const OrderDetailTable: React.FC = () => {
 								<TableRow className='*:bg-table-head'>
 									<TableHead>
 										<Checkbox
+											disabled={!selectedRows || selectedRows?.length === 0}
 											role='checkbox'
 											checked={
 												(isAllMatchingRowsSelected ||
 													(isSomeMatchingRowsSelected && 'indeterminate')) as CheckedState
 											}
-											disabled={!selectedRows || selectedRows?.length === 0}
 											onCheckedChange={toggleAllMatchedRowsSelected}
 										/>
 									</TableHead>
@@ -267,17 +267,17 @@ const OrderDetailTable: React.FC = () => {
 									<TableHead align='center'></TableHead>
 									<TableHead align='center'>
 										<Input
-											role='textbox'
-											placeholder='Search ...'
 											className='w-full border-none font-normal shadow-none transition-none'
+											placeholder='Search ...'
+											role='textbox'
 											onChange={(e) => setColumnFilters((prev) => ({ ...prev, mo_no: e.target.value }))}
 										/>
 									</TableHead>
 									<TableHead align='center'>
 										<Input
-											role='textbox'
-											placeholder='Search ...'
 											className='w-full border-none font-normal shadow-none transition-none'
+											placeholder='Search ...'
+											role='textbox'
 											onChange={(e) =>
 												setColumnFilters((prev) => ({
 													...prev,
@@ -288,9 +288,9 @@ const OrderDetailTable: React.FC = () => {
 									</TableHead>
 									<TableHead align='center'>
 										<Input
-											role='textbox'
-											placeholder='Search ...'
 											className='w-full border-none font-normal shadow-none transition-none'
+											placeholder='Search ...'
+											role='textbox'
 											onChange={(e) => setColumnFilters((prev) => ({ ...prev, color_sn: e.target.value }))}
 										/>
 									</TableHead>
@@ -309,7 +309,7 @@ const OrderDetailTable: React.FC = () => {
 							{Array.isArray(filteredScannedOrders) && filteredScannedOrders.length > 0 && (
 								<TableBody>
 									{filteredScannedOrders.map((order) => {
-										return <TableDataRow key={order.mo_no} data={order} />
+										return <TableDataRow data={order} key={order.mo_no} />
 									})}
 								</TableBody>
 							)}
@@ -326,10 +326,10 @@ const OrderDetailTable: React.FC = () => {
 					<Div className='bg-background flex basis-16 items-center justify-between px-2 pr-4'>
 						<ExchangeOrderDialogTrigger />
 						<Div className='bg-background mr-2 flex flex-1 items-center justify-end gap-x-2'>
-							<Typography color='muted' className='font-medium'>
+							<Typography className='font-medium' color='muted'>
 								{t('ns_common:common_fields.total')}
 							</Typography>
-							<Separator orientation='horizontal' className='h-0.5 basis-4' />
+							<Separator className='h-0.5 basis-4' orientation='horizontal' />
 							<Typography className='inline-flex items-baseline gap-x-1 font-medium'>
 								{totalFilteredQty}
 								<Typography variant='small'>pcs</Typography>
@@ -338,9 +338,9 @@ const OrderDetailTable: React.FC = () => {
 					</Div>
 				</Div>
 				<Typography
-					variant='small'
+					className='flex h-fit items-center justify-center gap-x-2 text-center'
 					color='muted'
-					className='flex h-fit items-center justify-center gap-x-2 text-center'>
+					variant='small'>
 					<Icon name='Info' size={18} />
 					{t('ns_inoutbound:mo_no_box.caption')}
 				</Typography>
@@ -367,7 +367,7 @@ const ExchangeOrderDialogTrigger: React.FC = () => {
 	}
 
 	return (
-		<Button onClick={handlePreExchangeSelectedRows} disabled={!selectedRows || selectedRows?.length === 0}>
+		<Button disabled={!selectedRows || selectedRows?.length === 0} onClick={handlePreExchangeSelectedRows}>
 			<Icon name='ArrowLeftRight' /> Exchange
 		</Button>
 	)

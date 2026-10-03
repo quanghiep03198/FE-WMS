@@ -70,8 +70,8 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 									<FormControl>
 										<Button
 											{...triggerProps}
-											variant='outline'
 											aria-disabled={disabled}
+											variant='outline'
 											className={cn(
 												'bg-background hover:bg-background focus:border-primary w-full justify-start text-left font-normal aria-disabled:opacity-50',
 												!field.value && 'text-muted-foreground',
@@ -95,7 +95,7 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 										</Button>
 									</FormControl>
 								</PopoverTrigger>
-								<PopoverContent className='w-auto p-0' align='start'>
+								<PopoverContent align='start' className='w-auto p-0'>
 									<Calendar
 										{...({
 											...calendarProps,

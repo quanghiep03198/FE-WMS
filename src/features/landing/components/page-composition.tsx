@@ -11,8 +11,8 @@ const PageComposition: React.FC = () => {
 
 	return (
 		<Container
-			ref={pageContext?.parentScrollRef}
 			data-state='expanded'
+			ref={pageContext?.parentScrollRef}
 			style={
 				{
 					'--primary-alt': 'var(--success)'

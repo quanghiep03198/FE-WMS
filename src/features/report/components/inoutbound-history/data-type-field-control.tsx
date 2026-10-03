@@ -25,12 +25,12 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 		<Div className='place-content-center place-items-center space-y-4'>
 			<Div className='flex items-center justify-center'>
 				<Icon
+					className='animate-in zoom-in-0 slide-in-from-bottom-2 mr-2 duration-500'
 					name='BotMessageSquare'
 					size={24}
-					className='animate-in zoom-in-0 slide-in-from-bottom-2 mr-2 duration-500'
 				/>
 				&quot;
-				<Typewriter text={t('ns_common:others.lookup_question')} delay={200} className='italic' />
+				<Typewriter className='italic' delay={200} text={t('ns_common:others.lookup_question')} />
 				&quot;
 			</Div>
 			<FormField
@@ -39,8 +39,8 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 					<FormItem>
 						<RadioGroup
 							className='mx-auto grid max-w-3xl grid-cols-2 items-stretch gap-x-4'
-							value={field.value}
 							defaultValue={StockFlow.INBOUND}
+							value={field.value}
 							onValueChange={(value) => {
 								field.onChange(value)
 								setValue('order', '')
@@ -48,44 +48,44 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 							<FormItem>
 								<StyledFormLabel aria-checked={field.value === StockFlow.INBOUND} htmlFor={StockFlow.INBOUND}>
 									<FormControl>
-										<RadioGroupItem id={StockFlow.INBOUND} value={StockFlow.INBOUND} className='hidden' />
+										<RadioGroupItem className='hidden' id={StockFlow.INBOUND} value={StockFlow.INBOUND} />
 									</FormControl>
-									<Icon name='Forklift' size={32} strokeWidth={1} className='mr-2' />
+									<Icon className='mr-2' name='Forklift' size={32} strokeWidth={1} />
 									<Div className='space-y-1.5'>
 										<Typography> {t('ns_inoutbound:action_types.stock_in')}</Typography>
 										<Typography
-											variant='small'
-											className='text-muted-foreground block w-full max-w-3/4 font-normal'>
+											className='text-muted-foreground block w-full max-w-3/4 font-normal'
+											variant='small'>
 											{t('ns_inoutbound:description.inbound_history_lookup')}
 										</Typography>
 									</Div>
 									<CheckIcon
+										aria-checked={field.value === StockFlow.INBOUND}
+										className='absolute top-4 right-4'
 										name='Check'
 										size={28}
-										className='absolute top-4 right-4'
-										aria-checked={field.value === StockFlow.INBOUND}
 									/>
 								</StyledFormLabel>
 							</FormItem>
 							<FormItem>
-								<StyledFormLabel htmlFor={StockFlow.OUTBOUND} aria-checked={field.value == StockFlow.OUTBOUND}>
+								<StyledFormLabel aria-checked={field.value == StockFlow.OUTBOUND} htmlFor={StockFlow.OUTBOUND}>
 									<FormControl>
-										<RadioGroupItem id={StockFlow.OUTBOUND} value={StockFlow.OUTBOUND} className='sr-only' />
+										<RadioGroupItem className='sr-only' id={StockFlow.OUTBOUND} value={StockFlow.OUTBOUND} />
 									</FormControl>
-									<Icon name='Truck' size={32} strokeWidth={1} className='mr-2 scale-x-[-1]' />
+									<Icon className='mr-2 scale-x-[-1]' name='Truck' size={32} strokeWidth={1} />
 									<Div className='space-y-1.5'>
 										<Typography>{t('ns_inoutbound:action_types.stock_out')}</Typography>
 										<Typography
-											variant='small'
-											className='text-muted-foreground block w-full max-w-3/4 font-normal'>
+											className='text-muted-foreground block w-full max-w-3/4 font-normal'
+											variant='small'>
 											{t('ns_inoutbound:description.outbound_history_lookup')}
 										</Typography>
 									</Div>
 									<CheckIcon
-										name='Check'
-										size={28}
 										aria-checked={field.value === StockFlow.OUTBOUND}
 										className='absolute top-4 right-4'
+										name='Check'
+										size={28}
 									/>
 								</StyledFormLabel>
 							</FormItem>

@@ -93,8 +93,8 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 
 	return (
 		<FormField
-			name={name}
 			control={control}
+			name={name}
 			render={({ field }) => {
 				return (
 					<FormItem
@@ -103,9 +103,9 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 						className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 						{label && (
 							<FormLabel
-								htmlFor={id}
 								aria-orientation={orientation}
-								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
+								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'
+								htmlFor={id}>
 								{label}
 							</FormLabel>
 						)}
@@ -115,15 +115,15 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 									<FormControl>
 										<Button
 											{...triggerProps}
-											id={id}
-											disabled={disabled}
 											aria-invalid={isError}
+											disabled={disabled}
+											id={id}
 											variant='outline'
 											className={cn(
 												triggerProps?.className,
 												'bg-background aria-invalid:border-destructive aria-invalid:focus-within:border-destructive hover:bg-background focus:border-primary w-full justify-between px-3 font-normal'
 											)}>
-											<Typography variant='small' className='line-clamp-1'>
+											<Typography className='line-clamp-1' variant='small'>
 												{field.value || placeholder}
 											</Typography>
 											<CaretSortIcon className='ml-auto h-4 w-4 opacity-50' />
@@ -131,7 +131,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 									</FormControl>
 								</PopoverTrigger>
 								<PopoverContent className='w-radix-popover p-0' {...popoverContentProps}>
-									<Command value={field.value} shouldFilter={shouldFilter}>
+									<Command shouldFilter={shouldFilter} value={field.value}>
 										<CommandInput
 											value={searchTerm ?? ''}
 											placeholder={t('ns_common:form_placeholder.search', {
@@ -146,7 +146,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 										<CommandList>
 											{loading ? (
 												<CommandLoading className='h-12 cursor-wait place-content-center place-items-center'>
-													<Icon name='LoaderCircle' className='animate-spin' />
+													<Icon className='animate-spin' name='LoaderCircle' />
 												</CommandLoading>
 											) : (
 												<Fragment>
@@ -155,14 +155,14 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 														{options.map((option) => {
 															return (
 																<CommandItem
+																	className='line-clamp-1 flex items-center gap-x-4'
+																	disabled={option?.['disabled'] ?? false}
 																	key={option[valueField].toString()}
+																	value={option[valueField] ?? ''}
 																	keywords={[
 																		option[labelField].toString(),
 																		option[valueField].toString()
 																	]}
-																	disabled={option?.['disabled'] ?? false}
-																	value={option[valueField] ?? ''}
-																	className='line-clamp-1 flex items-center gap-x-4'
 																	onSelect={(value) => {
 																		setValue(name, value as PathValue<T, Path<T>>)
 																		setValue(name, option[valueField])
@@ -180,7 +180,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 																			}}
 																		/>
 																	) : (
-																		<Typography variant='small' className='line-clamp-1 flex-1'>
+																		<Typography className='line-clamp-1 flex-1' variant='small'>
 																			{option[labelField]}
 																		</Typography>
 																	)}

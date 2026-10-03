@@ -49,13 +49,13 @@ const SheetContent: React.FC<SheetContentProps> = ({ side = 'right', className, 
 	<SheetPortal>
 		<SheetOverlay />
 		<SheetPrimitive.Content
+			className={cn(sheetVariants({ side }), className)}
 			onInteractOutside={(e) => {
 				const { originalEvent } = e.detail
 				if (originalEvent.target instanceof Element && originalEvent.target.closest('.group.toast')) {
 					e.preventDefault()
 				}
 			}}
-			className={cn(sheetVariants({ side }), className)}
 			{...props}>
 			{children}
 			<SheetPrimitive.Close className='ring-offset-background data-[state=open]:bg-secondary focus:ring-ring absolute top-4 right-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:pointer-events-none'>

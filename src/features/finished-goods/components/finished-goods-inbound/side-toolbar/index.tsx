@@ -13,10 +13,10 @@ const SideToolbar: React.FC = () => {
 	return (
 		<>
 			<Sheet>
-				<SheetTrigger id='side-toolbar-sheet-trigger' className='hidden' />
+				<SheetTrigger className='hidden' id='side-toolbar-sheet-trigger' />
 				<SheetContent
-					side='left'
 					className='scroll-fade-y max-w-lg overflow-y-scroll!'
+					side='left'
 					onOpenAutoFocus={(e) => e.preventDefault()}>
 					<Div className='max-h-full flex-1 space-y-6'>
 						<Div className='space-y-3'>

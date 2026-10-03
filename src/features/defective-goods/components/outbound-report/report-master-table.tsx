@@ -205,12 +205,15 @@ const InboundReportMasterTable: React.FC = () => {
 		<DataTable
 			columns={columns}
 			data={data!}
-			loading={isLoading}
-			enableExpanding={true}
 			enableColumnResizing={true}
+			enableExpanding={true}
+			loading={isLoading}
 			ref={dataTableRef as React.RefObject<Table<IDefectiveGoodsOutboundReport>>}
 			containerProps={{
 				style: { height: 'calc(var(--outlet-wrapper-height) - 12rem - 2 * var(--row-height))' }
+			}}
+			footerProps={{
+				slot: () => <ReportTableSummary summaryData={summaryData} />
 			}}
 			initialState={{
 				columnPinning: {
@@ -235,9 +238,6 @@ const InboundReportMasterTable: React.FC = () => {
 						</Tooltip>
 					</Fragment>
 				)
-			}}
-			footerProps={{
-				slot: () => <ReportTableSummary summaryData={summaryData} />
 			}}
 		/>
 	)

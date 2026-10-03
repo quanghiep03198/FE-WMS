@@ -135,10 +135,10 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 			{createPortal(
 				<Alert data-state={isError && error?.status === HttpStatusCode.BadRequest ? 'open' : 'closed'}>
 					<Icon
+						className='fill-destructive-foreground stroke-destructive'
 						name='TriangleAlert'
 						size={40}
 						strokeWidth={2}
-						className='fill-destructive-foreground stroke-destructive'
 					/>
 					<AlertContent>
 						<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
@@ -147,9 +147,9 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 						</AlertDescription>
 					</AlertContent>
 					<Tooltip
+						contentProps={{ side: 'left' }}
 						message={t('ns_common:actions.dismiss')}
-						triggerProps={{ asChild: true }}
-						contentProps={{ side: 'left' }}>
+						triggerProps={{ asChild: true }}>
 						<AlertClose onClick={() => reset()}>
 							<Icon name='X' />
 						</AlertClose>
@@ -180,16 +180,16 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 								collisionDetection={closestCenter}
 								modifiers={[restrictToVerticalAxis]}
 								sensors={sensors}
-								onDragStart={handleDragStart}
-								onDragEnd={handleDragEnd}>
+								onDragEnd={handleDragEnd}
+								onDragStart={handleDragStart}>
 								<SortableContext items={fields}>
 									<Div
-										ref={fieldsetRef}
 										as='fieldset'
-										className='relative col-span-full flex h-fit flex-col gap-y-6 rounded-md border border-dashed p-4 duration-100'>
+										className='relative col-span-full flex h-fit flex-col gap-y-6 rounded-md border border-dashed p-4 duration-100'
+										ref={fieldsetRef}>
 										{fields.length > 0 ? (
 											fields.map((field, index) => (
-												<DroppableFieldItem key={field.id} id={field.id} index={index} onRemove={remove} />
+												<DroppableFieldItem id={field.id} index={index} key={field.id} onRemove={remove} />
 											))
 										) : (
 											<EmptyState />
@@ -210,22 +210,22 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 							</DndContext>
 						</Div>
 						<Div className='col-span-full'>
-							<FormSubmission isPending={isPending} isError={isError} />
+							<FormSubmission isError={isError} isPending={isPending} />
 						</Div>
 					</Form>
 				</FormProvider>
 			</DecentralizedPoFormProvider>
 			<ConfirmDialog
+				description={t('ns_inoutbound:notification.posible_incorrect_po')}
+				isError={isError}
+				isPending={isPending}
 				open={shouldAlert}
 				title={t('ns_common:titles.caution')}
-				description={t('ns_inoutbound:notification.posible_incorrect_po')}
+				onCancel={() => setShouldAlert(false)}
 				onConfirm={() => {
 					handleConfirm(form.getValues())
 					setShouldAlert(false)
 				}}
-				onCancel={() => setShouldAlert(false)}
-				isPending={isPending}
-				isError={isError}
 			/>
 		</Fragment>
 	)
@@ -253,16 +253,16 @@ const ArrayFieldControl: React.FC<{
 	return (
 		<Div className={cn('col-span-full flex items-center justify-between', fields.length > 0 && 'gap-x-2')}>
 			{fields.length > 0 && (
-				<Typography variant='small' color={availableFieldLeft === 0 ? 'muted' : 'default'} className='font-medium'>
+				<Typography className='font-medium' color={availableFieldLeft === 0 ? 'muted' : 'default'} variant='small'>
 					{availableFieldLeft} left
 				</Typography>
 			)}
 			<Div className={cn('flex flex-1 items-center justify-center gap-x-2', fields.length > 0 && 'justify-end')}>
 				<Button
-					size='sm'
-					type='button'
 					aria-disabled={shouldAllowAdditionalSizes}
 					className='aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:hover:opacity-50! aria-disalbed:pointer-events-none'
+					size='sm'
+					type='button'
 					onClick={handleAppendField}>
 					<Icon name='Plus' /> {t('ns_common:actions.add')}
 				</Button>
@@ -287,9 +287,9 @@ const EmptyState: React.FC = () => {
 
 	return (
 		<Div className='animate-in fade-in-0 zoom-in-90 col-span-full flex flex-col items-center justify-center'>
-			<Icon name='CircleFadingPlus' size={40} strokeWidth={1} stroke='var(--muted-foreground)' className='mb-4' />
+			<Icon className='mb-4' name='CircleFadingPlus' size={40} stroke='var(--muted-foreground)' strokeWidth={1} />
 			<Typography className='mb-1 font-medium'>{t('ns_inoutbound:description.no_added_size')}</Typography>
-			<Typography variant='small' color='muted' className='col-span-full text-center'>
+			<Typography className='col-span-full text-center' color='muted' variant='small'>
 				{t('ns_inoutbound:description.add_outbound_size')}
 			</Typography>
 		</Div>
@@ -309,13 +309,13 @@ const CommandNumberFieldControl: React.FC = () => {
 
 	return (
 		<ComboboxFieldControl
-			label={t('ns_erp:fields.mo_no')}
-			name='mo_no'
-			onInput={(search) => setSearchTerm(search)}
-			shouldFilter={false}
 			datalist={filteredOrders}
+			label={t('ns_erp:fields.mo_no')}
 			labelField='mo_no'
+			name='mo_no'
+			shouldFilter={false}
 			valueField='mo_no'
+			onInput={(search) => setSearchTerm(search)}
 		/>
 	)
 }

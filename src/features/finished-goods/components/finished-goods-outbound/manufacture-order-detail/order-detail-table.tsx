@@ -80,8 +80,8 @@ const OrderSizeDetailTable: React.FC = () => {
 				} as React.CSSProperties
 			}>
 			<Div
-				ref={containerRef}
 				className='scrollbar-track-accent/20 @container h-[calc(var(--outlet-wrapper-height,100vh)-var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg'
+				ref={containerRef}
 				style={
 					{
 						'--sticky-left-col-width': '130px',
@@ -140,7 +140,7 @@ const OrderSizeDetailTable: React.FC = () => {
 					{!Array.isArray(filteredScannedOrders) || filteredScannedOrders.length === 0 ? (
 						<TableEmptyState />
 					) : (
-						<TableBody virtualizer={virtualizer} data={filteredScannedOrders} />
+						<TableBody data={filteredScannedOrders} virtualizer={virtualizer} />
 					)}
 				</Table>
 			</Div>

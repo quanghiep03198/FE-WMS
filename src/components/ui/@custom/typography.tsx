@@ -49,7 +49,7 @@ export const Typography: React.FC<TypographyProps> = ({ ref, ...props }) => {
 	const Element: React.ElementType = as || (variant === 'default' ? 'p' : variant)
 
 	return (
-		<Element ref={resolvedRef} className={cn(typographyVariants({ variant, color, className }))} {...restProps}>
+		<Element className={cn(typographyVariants({ variant, color, className }))} ref={resolvedRef} {...restProps}>
 			{children}
 		</Element>
 	)

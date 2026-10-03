@@ -42,21 +42,21 @@ const FeaturesSection: React.FunctionComponent = () => {
 
 	return (
 		<Div
-			ref={ref}
+			as='section'
 			className='animate-in fade-in-0 slide-in-from-bottom-4 xxl:max-w-8xl @container relative mx-auto flex w-full max-w-7xl flex-col justify-center space-y-16 px-3 py-10 transition-opacity duration-700 xl:px-0'
 			id='outstanding-features'
-			as='section'
+			ref={ref}
 			style={{
 				animationFillMode: 'forwards',
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}>
 			<Div className='space-y-1.5 text-center sm:mb-4 sm:text-xl xl:text-left'>
 				<Typography
-					variant='small'
-					className='w-full text-base! font-medium text-(--primary-alt) sm:text-sm sm:font-normal'>
+					className='w-full text-base! font-medium text-(--primary-alt) sm:text-sm sm:font-normal'
+					variant='small'>
 					No more paperwork
 				</Typography>
-				<Typography variant='h1' className='text-pretty'>
+				<Typography className='text-pretty' variant='h1'>
 					Comprehensive solutions for <br className='hidden lg:block' /> Warehouse Management
 				</Typography>
 			</Div>
@@ -67,31 +67,31 @@ const FeaturesSection: React.FunctionComponent = () => {
 					</Div>
 					<Div className='flex flex-col space-y-3 text-center xl:text-left'>
 						<Typography variant='h4'>Outstanding Features</Typography>
-						<Typography color='muted' className='text-pretty'>
+						<Typography className='text-pretty' color='muted'>
 							i-WMS streamlines warehouse operations with advanced inventory management, order processing, and
 							real-time analytics, boosting efficiency and accuracy.
 						</Typography>
 					</Div>
 					<Div className='flex flex-wrap items-center justify-center gap-2 sm:mx-auto sm:max-w-lg xl:justify-start'>
-						<Badge variant='secondary' className='bg-red-500/10 text-red-500 hover:bg-red-500/20'>
+						<Badge className='bg-red-500/10 text-red-500 hover:bg-red-500/20' variant='secondary'>
 							IoT
 						</Badge>
-						<Badge variant='secondary' className='bg-orange-500/10 text-orange-500 hover:bg-orange-500/20'>
+						<Badge className='bg-orange-500/10 text-orange-500 hover:bg-orange-500/20' variant='secondary'>
 							RFID
 						</Badge>
-						<Badge variant='secondary' className='bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20'>
+						<Badge className='bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20' variant='secondary'>
 							Multi-tenant
 						</Badge>
-						<Badge variant='secondary' className='bg-green-500/10 text-green-500 hover:bg-green-500/20'>
+						<Badge className='bg-green-500/10 text-green-500 hover:bg-green-500/20' variant='secondary'>
 							Data-streaming
 						</Badge>
-						<Badge variant='secondary' className='bg-blue-500/10 text-blue-500 hover:bg-blue-500/20'>
+						<Badge className='bg-blue-500/10 text-blue-500 hover:bg-blue-500/20' variant='secondary'>
 							Real-time
 						</Badge>
-						<Badge variant='secondary' className='bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20'>
+						<Badge className='bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20' variant='secondary'>
 							Internationalization
 						</Badge>
-						<Badge variant='secondary' className='bg-purple-500/10 text-purple-500 hover:bg-purple-500/20'>
+						<Badge className='bg-purple-500/10 text-purple-500 hover:bg-purple-500/20' variant='secondary'>
 							Reporting
 						</Badge>
 					</Div>
@@ -106,17 +106,17 @@ const FeaturesSection: React.FunctionComponent = () => {
 						<EffectCard key={index.toString()}>
 							<EffectCardIconWrapper className='z-20'>
 								<EffectCardIcon
-									name={feature.icon}
 									className='group-hover/card:stroke-success'
-									strokeWidth={1.5}
+									name={feature.icon}
 									size={24}
+									strokeWidth={1.5}
 								/>
 							</EffectCardIconWrapper>
 							<EffectCardContent className='z-20'>
 								<Typography className='font-medium'>{feature.name}</Typography>
 								<Typography
-									color='muted'
 									className='text-pretty'
+									color='muted'
 									dangerouslySetInnerHTML={{
 										__html: feature.description
 									}}

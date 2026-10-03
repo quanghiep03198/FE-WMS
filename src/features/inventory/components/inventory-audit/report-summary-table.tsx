@@ -2,13 +2,13 @@ import formatIntlNumber from '@common/utils/format-intl-number'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui'
 import Skeleton from '@components/ui/@custom/skeleton'
 import type { IMonthlyInventoryAudit } from '@features/inventory/types'
-import { useGetWarehouseStorageSummaryQuery } from '@features/warehouse/hooks/use-warehouse-storage-request'
+import { useGetWarehouseStorageSummaryQuery } from '@features/warehouse/hooks/use-warehouse-request'
 import { useTranslation } from 'react-i18next'
 
 const DataTableSummary: React.FC<{ data: IMonthlyInventoryAudit[]; isLoading: boolean }> = ({ data, isLoading }) => {
 	const { t } = useTranslation()
 
-	const { data: storageSummary, isLoading: isLoadingStorageSummary } = useGetWarehouseStorageSummaryQuery()
+	const { data: storageSummary } = useGetWarehouseStorageSummaryQuery()
 
 	const totalInitialQuantity = Array.isArray(data)
 		? data.reduce((acc, curr) => acc + curr.beginning_inventory_qty, 0)

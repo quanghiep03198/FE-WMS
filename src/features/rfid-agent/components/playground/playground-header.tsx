@@ -13,7 +13,7 @@ const PlaygroundHeader: React.FC = () => {
 				<PlaygroundStatusIndicator />
 				<Typography className='inline-flex gap-x-1 text-lg font-semibold'>
 					{formatIntlNumber(scannedEpcs.length)}
-					<Typography as='small' variant='small' className='text-xs font-medium'>
+					<Typography as='small' className='text-xs font-medium' variant='small'>
 						prs
 					</Typography>
 				</Typography>

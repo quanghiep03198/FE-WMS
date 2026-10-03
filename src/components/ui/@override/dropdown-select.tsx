@@ -38,9 +38,9 @@ export const DropdownSelect = <T extends Record<string, any>>({
 						))
 					) : (
 						<SelectItem
-							value={null}
 							disabled
-							className='flex items-center justify-center text-center text-xs font-medium'>
+							className='flex items-center justify-center text-center text-xs font-medium'
+							value={null}>
 							No option
 						</SelectItem>
 					)}

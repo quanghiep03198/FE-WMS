@@ -294,15 +294,15 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 		<Fragment>
 			{createPortal(
 				<Alert data-state={hasInvalidEpcAlert ? 'open' : 'closed'}>
-					<Icon name='TriangleAlert' size={36} className='stroke-destructive-foreground' />
+					<Icon className='stroke-destructive-foreground' name='TriangleAlert' size={36} />
 					<AlertContent>
 						<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
 						<AlertDescription>{t('ns_inoutbound:notification.invalid_epc_deteted')}</AlertDescription>
 					</AlertContent>
 					<Tooltip
+						contentProps={{ side: 'left' }}
 						message={t('ns_common:actions.dismiss')}
-						triggerProps={{ asChild: true }}
-						contentProps={{ side: 'left' }}>
+						triggerProps={{ asChild: true }}>
 						<AlertClose
 							onClick={() => {
 								isInvalidEpcDismissedRef.current = true
@@ -316,8 +316,8 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 			)}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<Div
-					ref={containerRef}
 					aria-expanded={isExpanded}
+					ref={containerRef}
 					className={cn(
 						'scroll-fade-y group/scrollable divide-border bg-background z-10 flex h-0 w-full flex-col items-stretch justify-start divide-y overflow-y-auto contain-size',
 						'transition-height aria-expanded:h-72 aria-expanded:p-2 @[920px]/page-container:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]',
@@ -330,14 +330,14 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 							const item = scannedEpc.data[virtualItem.index]
 							return (
 								<Div
-									key={virtualItem.index}
 									className='hover:bg-secondary absolute top-0 right-auto left-auto flex h-10 w-full justify-between border-b px-4 py-2 whitespace-nowrap uppercase transition-all duration-75 last:border-none'
+									key={virtualItem.index}
 									style={{
 										height: virtualItem.size,
 										transform: `translateY(${virtualItem.start}px)`
 									}}>
 									<Typography className='font-medium'>{item.epc}</Typography>
-									<Typography variant='small' className='text-foreground capitalize'>
+									<Typography className='text-foreground capitalize' variant='small'>
 										{item.mo_no}
 									</Typography>
 								</Div>
@@ -345,8 +345,9 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 						})}
 						{scannedEpc.hasNextPage && (
 							<Button
-								variant='link'
 								className='w-full'
+								disabled={isFetching}
+								variant='link'
 								style={{
 									position: 'absolute',
 									top: 0,
@@ -356,10 +357,9 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 								onClick={() => {
 									if (!currentPage) setCurrentPage(DEFAULT_NEXT_CURSOR)
 									else setCurrentPage(currentPage + 1)
-								}}
-								disabled={isFetching}>
+								}}>
 								{isFetching ? (
-									<Icon name='LoaderCircle' className='animate-spin' />
+									<Icon className='animate-spin' name='LoaderCircle' />
 								) : (
 									<Fragment>
 										<Icon name='Plus' />
@@ -375,7 +375,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 					aria-expanded={isExpanded}
 					className='transition-height grid h-0 place-items-center overflow-clip duration-200 group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)] aria-expanded:h-64 @[920px]/page-container:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]'>
 					<Div className='inline-flex items-center gap-x-4'>
-						<Icon name='Inbox' stroke='var(--muted-foreground)' size={32} strokeWidth={1} />
+						<Icon name='Inbox' size={32} stroke='var(--muted-foreground)' strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
@@ -383,10 +383,10 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 			{listBoxFooterRef?.current &&
 				createPortal(
 					<Button
-						variant='ghost'
-						size='lg'
 						aria-expanded={isExpanded}
 						className='order-2 @[920px]/page-container:hidden'
+						size='lg'
+						variant='ghost'
 						onClick={() => setIsExpanded(!isExpanded)}>
 						<Icon name={isExpanded ? 'ChevronsUp' : 'ChevronsDown'} />{' '}
 						{isExpanded ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}

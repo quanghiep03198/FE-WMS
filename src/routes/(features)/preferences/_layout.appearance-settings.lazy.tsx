@@ -18,7 +18,7 @@ function Page() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.settings')}</title>
-			<meta name='description' content={t('ns_preference:captions.appearance')} />
+			<meta content={t('ns_preference:captions.appearance')} name='description' />
 
 			<PageWrapper className='space-y-6'>
 				<PageHeader>

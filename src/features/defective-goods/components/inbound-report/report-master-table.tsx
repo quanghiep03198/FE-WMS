@@ -167,10 +167,10 @@ const InboundReportMasterTable: React.FC = () => {
 					}
 					return (
 						<EllipsisList
-							threshhold={3}
 							data={split(value, ',').sort((a, b) => a.localeCompare(b)) as string[]}
+							threshhold={3}
 							template={({ data }) => (
-								<Badge variant='secondary' className='whitespace-nowrap'>
+								<Badge className='whitespace-nowrap' variant='secondary'>
 									{data.trim()}
 								</Badge>
 							)}
@@ -218,12 +218,15 @@ const InboundReportMasterTable: React.FC = () => {
 		<DataTable
 			columns={columns}
 			data={data}
-			loading={isLoading}
-			enableExpanding={true}
 			enableColumnResizing={true}
+			enableExpanding={true}
+			loading={isLoading}
 			ref={dataTableRef}
 			containerProps={{
 				style: { height: 'calc(var(--outlet-wrapper-height) - 12rem - 2 * var(--row-height))' }
+			}}
+			footerProps={{
+				slot: () => <ReportTableSummary summaryData={summaryData} />
 			}}
 			initialState={{
 				columnPinning: {
@@ -248,9 +251,6 @@ const InboundReportMasterTable: React.FC = () => {
 						</Tooltip>
 					</Fragment>
 				)
-			}}
-			footerProps={{
-				slot: () => <ReportTableSummary summaryData={summaryData} />
 			}}
 		/>
 	)

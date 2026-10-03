@@ -14,14 +14,14 @@ const RFIDAgentTroubleShooting: React.FC = () => {
 			<OrderedList>
 				<ListItem>
 					Ensure that you already installed{' '}
-					<Link to='/rfid-agent' hash={DocumentHashNavigation.MOSQUITTO_INTRODUCTION} className='text-active'>
+					<Link className='text-active' hash={DocumentHashNavigation.MOSQUITTO_INTRODUCTION} to='/rfid-agent'>
 						Eclipse Mosquitto
 					</Link>
 					, followed{' '}
 					<Link
-						to='/rfid-agent/docs'
+						className='underline underline-offset-2'
 						hash={DocumentHashNavigation.MOSQUITTO_CONFIGURATION}
-						className='underline underline-offset-2'>
+						to='/rfid-agent/docs'>
 						configuration steps
 					</Link>{' '}
 					mentioned in the documentation, and it is running properly.

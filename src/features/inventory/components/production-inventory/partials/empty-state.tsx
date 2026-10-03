@@ -54,17 +54,17 @@ const EmptyState: React.FC = () => {
 
 	return (
 		<Div className='transition-allow-discret xxl:space-y-10 mx-auto w-full max-w-5xl xl:space-y-6'>
-			<Div ref={ref} className='flex flex-col items-stretch divide-y'>
+			<Div className='flex flex-col items-stretch divide-y' ref={ref}>
 				{inventoryHints.map((item, index) => (
 					<Div
-						key={index.toString()}
-						className='grid grid-cols-[3rem_auto] items-center gap-x-2 py-6 [&>svg]:place-self-center'>
+						className='grid grid-cols-[3rem_auto] items-center gap-x-2 py-6 [&>svg]:place-self-center'
+						key={index.toString()}>
 						<Icon name={item.icon} size={32} strokeWidth={1} />
 						<Div className='space-y-2'>
 							<Typography as='h6' className='text-base font-medium'>
 								{item.title}
 							</Typography>
-							<Typography variant='small' color='muted'>
+							<Typography color='muted' variant='small'>
 								{item.description}
 							</Typography>
 						</Div>

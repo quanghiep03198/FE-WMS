@@ -15,9 +15,9 @@ const ScannedEpcCounter: React.FC = () => {
 			<ScanningSkeleton />
 			<ScanningCounter />
 			<Typography
-				variant='small'
 				className='relative z-10 mb-6 line-clamp-1 text-center text-xs text-pretty @md:text-sm'
-				color='muted'>
+				color='muted'
+				variant='small'>
 				{t('ns_inoutbound:counter_box.caption')}
 			</Typography>
 			<ScanningTimer />
@@ -29,8 +29,8 @@ const ScanningSkeleton: React.FC = () => {
 	const { scanningState } = usePageContext('scanningState')
 	return (
 		<Div
-			data-status={scanningState}
-			className='absolute inset-0 z-0 h-full opacity-0 transition-opacity duration-500 ease-in-out data-[status=success]:opacity-100'>
+			className='absolute inset-0 z-0 h-full opacity-0 transition-opacity duration-500 ease-in-out data-[status=success]:opacity-100'
+			data-status={scanningState}>
 			<Skeleton className='inset-0 h-full w-full animate-[pulse_1.25s_cubic-bezier(0.4,0,0.6,1)_infinite] rounded-[inherit]' />
 		</Div>
 	)
@@ -67,9 +67,9 @@ const ScanningCounter: React.FC = () => {
 				{t('ns_inoutbound:counter_box.label')}
 			</Typography>
 			<Separator className='bg-foreground h-0.5 w-1.5' />
-			<Typography variant='h4' className='inline-flex gap-x-1 self-baseline text-xl tracking-wide @3xl:text-2xl'>
+			<Typography className='inline-flex gap-x-1 self-baseline text-xl tracking-wide @3xl:text-2xl' variant='h4'>
 				{formatIntlNumber(count)}
-				<Typography as='small' variant='small' className='text-xs @3xl:text-sm'>
+				<Typography as='small' className='text-xs @3xl:text-sm' variant='small'>
 					prs
 				</Typography>
 			</Typography>

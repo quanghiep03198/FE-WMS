@@ -11,7 +11,7 @@ const BrowserMockup: React.FC = () => {
 			</BrowserToolbar>
 			<Layout>
 				<LayoutSidebar className='sm:hidden'>
-					<Icon name='Boxes' stroke='var(--border)' strokeWidth={0.75} size={36} className='mb-4' />
+					<Icon className='mb-4' name='Boxes' size={36} stroke='var(--border)' strokeWidth={0.75} />
 					<Skeleton className='h-3 w-full' />
 					<Skeleton className='h-3 w-3/4' />
 					<Skeleton className='h-3 w-full' />
@@ -34,18 +34,18 @@ const BrowserMockup: React.FC = () => {
 					<ContentGrid>
 						<ContentGridItem className='col-span-4 flex items-center justify-center sm:col-span-5'>
 							<Icon
-								name='ScanBarcode'
-								strokeWidth={0.75}
-								stroke='var(--border)'
 								className='size-16 sm:size-12'
+								name='ScanBarcode'
+								stroke='var(--border)'
+								strokeWidth={0.75}
 							/>
 						</ContentGridItem>
 						<ContentGridItem className='col-span-6 flex items-center justify-center sm:col-span-5'>
 							<Icon
-								name='ChartNoAxesCombined'
-								strokeWidth={0.75}
-								stroke='var(--border)'
 								className='size-16 sm:size-14'
+								name='ChartNoAxesCombined'
+								stroke='var(--border)'
+								strokeWidth={0.75}
 							/>
 						</ContentGridItem>
 						<ContentGridItem className='col-span-6 grid grid-cols-4 items-center gap-x-2 gap-y-3 p-6 sm:gap-x-4 sm:p-4'>
@@ -54,7 +54,7 @@ const BrowserMockup: React.FC = () => {
 							))}
 						</ContentGridItem>
 						<ContentGridItem className='col-span-4 flex items-center justify-center'>
-							<Icon name='ChartPie' strokeWidth={0.75} stroke='var(--border)' className='size-16 sm:size-14' />
+							<Icon className='size-16 sm:size-14' name='ChartPie' stroke='var(--border)' strokeWidth={0.75} />
 						</ContentGridItem>
 					</ContentGrid>
 				</LayoutContent>

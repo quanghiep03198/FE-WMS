@@ -94,22 +94,22 @@ export function AssemblyProductivityOverview() {
 					<CardAction>
 						<RadioGroup
 							value={activePeriod}
-							onValueChange={setActivePeriod}
 							className={cn(
 								'isolate hidden grid-cols-3 gap-0 divide-x overflow-clip rounded-lg border **:cursor-pointer! @4xl/card:inline-grid',
 								'[&>div:has([data-state=checked])]:bg-accent [&>div:has([data-state=checked])]:text-accent-foreground [&_button[role=radio]]:hidden [&>div]:h-9 [&>div]:px-3 [&>div]:py-1.5 [&>div]:text-center'
-							)}>
+							)}
+							onValueChange={setActivePeriod}>
 							<Div role='radio'>
 								<Label htmlFor='last-3m-option'>{t('ns_dashboard:period_options.last_3_months')}</Label>
-								<RadioGroupItem value={format(subMonths(new Date(), 3), 'yyyy-MM-dd')} id='last-3m-option' />
+								<RadioGroupItem id='last-3m-option' value={format(subMonths(new Date(), 3), 'yyyy-MM-dd')} />
 							</Div>
 							<Div role='radio'>
 								<Label htmlFor='last-30d-option'>{t('ns_dashboard:period_options.last_30_days')}</Label>
-								<RadioGroupItem value={format(subDays(new Date(), 30), 'yyyy-MM-dd')} id='last-30d-option' />
+								<RadioGroupItem id='last-30d-option' value={format(subDays(new Date(), 30), 'yyyy-MM-dd')} />
 							</Div>
 							<Div role='radio'>
 								<Label htmlFor='last-7d-option'>{t('ns_dashboard:period_options.last_7_days')}</Label>
-								<RadioGroupItem value={format(subDays(new Date(), 7), 'yyyy-MM-dd')} id='last-7d-option' />
+								<RadioGroupItem id='last-7d-option' value={format(subDays(new Date(), 7), 'yyyy-MM-dd')} />
 							</Div>
 						</RadioGroup>
 						<Select defaultValue={format(subMonths(new Date(), 3), 'yyyy-MM-dd')}>
@@ -142,13 +142,13 @@ export function AssemblyProductivityOverview() {
 								const chart = brand as keyof typeof chartConfig
 								return (
 									<TabsTrigger
-										key={chart}
 										data-active={activeChart === chart}
+										key={chart}
 										onClick={() => setActiveChart(chart)}>
-										<Typography variant='small' className='text-muted-foreground text-xs uppercase'>
+										<Typography className='text-muted-foreground text-xs uppercase' variant='small'>
 											{chartConfig[chart].label}
 										</Typography>
-										<Typography variant='h3' as='span'>
+										<Typography as='span' variant='h3'>
 											{volumn.toLocaleString()}
 										</Typography>
 									</TabsTrigger>
@@ -165,7 +165,7 @@ export function AssemblyProductivityOverview() {
 						{t('ns_common:table.no_data')}
 					</Div>
 				) : (
-					<ChartContainer config={chartConfig} className='xxl:h-80 aspect-auto h-72 w-full'>
+					<ChartContainer className='xxl:h-80 aspect-auto h-72 w-full' config={chartConfig}>
 						<AreaChart
 							accessibilityLayer
 							data={chartData}
@@ -175,11 +175,11 @@ export function AssemblyProductivityOverview() {
 							}}>
 							<CartesianGrid vertical={false} />
 							<XAxis
-								dataKey='work_date'
-								tickLine={false}
 								axisLine={false}
-								tickMargin={8}
+								dataKey='work_date'
 								minTickGap={32}
+								tickLine={false}
+								tickMargin={8}
 								tickFormatter={(value) => {
 									const date = new Date(value)
 									return capitalize(
@@ -208,18 +208,18 @@ export function AssemblyProductivityOverview() {
 								}
 							/>
 							<defs>
-								<linearGradient id={`fill-${activeChart}`} x1='0' y1='0' x2='0' y2='1'>
+								<linearGradient id={`fill-${activeChart}`} x1='0' x2='0' y1='0' y2='1'>
 									<stop offset='5%' stopColor={`var(--color-${activeChart})`} stopOpacity={0.8} />
 									<stop offset='95%' stopColor={`var(--color-${activeChart})`} stopOpacity={0.2} />
 								</linearGradient>
 							</defs>
 							<Area
 								dataKey='volumn'
-								type='natural'
 								fill={`url(#fill-${activeChart})`}
 								fillOpacity={0.6}
-								stroke={`var(--color-${activeChart})`}
 								stackId='a'
+								stroke={`var(--color-${activeChart})`}
+								type='natural'
 							/>
 						</AreaChart>
 					</ChartContainer>

@@ -25,8 +25,8 @@ import {
 import { useGetStatisticsQuery } from '../hooks/use-statistic-request'
 
 const PercentageBadge: React.FC<{ percentage: number | null }> = ({ percentage }) => (
-	<Badge variant='outline' className='gap-x-2'>
-		<Icon size={12} name={getTrendingIcon(percentage)} style={{ color: getIconColor(percentage) }} />
+	<Badge className='gap-x-2' variant='outline'>
+		<Icon name={getTrendingIcon(percentage)} size={12} style={{ color: getIconColor(percentage) }} />
 		{formatPercentageChange(percentage)}
 	</Badge>
 )
@@ -39,7 +39,7 @@ const Statistics: React.FC = () => {
 		return (
 			<Div className='grid h-full w-full grid-cols-2 gap-4 @6xl/statistics:grid-cols-4'>
 				{Array.from({ length: 4 }).map((_, idx) => (
-					<Card key={idx} className='min-h-52'>
+					<Card className='min-h-52' key={idx}>
 						<CardHeader>
 							<CardDescription>
 								<Skeleton className='h-3' />
@@ -74,11 +74,11 @@ const Statistics: React.FC = () => {
 					</CardAction>
 				</CardHeader>
 				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
-					<Typography variant='small' className='line-clamp-1 flex gap-2 font-medium'>
+					<Typography className='line-clamp-1 flex gap-2 font-medium' variant='small'>
 						{t(getAnalysisSentence(data?.inbound_percentage_change), { ns: 'ns_dashboard', defaultValue: null })}{' '}
 						<Icon name={getTrendingIcon(data?.inbound_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='text-muted-foreground lowercase first-letter:uppercase'>
+					<Typography className='text-muted-foreground lowercase first-letter:uppercase' variant='small'>
 						{t(
 							...getDetailDescription(
 								data?.inbound_percentage_change,
@@ -100,11 +100,11 @@ const Statistics: React.FC = () => {
 					</CardAction>
 				</CardHeader>
 				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
-					<Typography variant='small' className='line-clamp-1 flex gap-2 font-medium'>
+					<Typography className='line-clamp-1 flex gap-2 font-medium' variant='small'>
 						{t(getAnalysisSentence(data?.outbound_percentage_change), { ns: 'ns_dashboard', defaultValue: null })}{' '}
 						<Icon name={getTrendingIcon(data?.outbound_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='text-muted-foreground lowercase first-letter:uppercase'>
+					<Typography className='text-muted-foreground lowercase first-letter:uppercase' variant='small'>
 						{t(
 							...getDetailDescription(
 								data?.outbound_percentage_change,
@@ -126,14 +126,14 @@ const Statistics: React.FC = () => {
 					</CardAction>
 				</CardHeader>
 				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
-					<Typography variant='small' className='line-clamp-1 flex gap-2 font-medium'>
+					<Typography className='line-clamp-1 flex gap-2 font-medium' variant='small'>
 						{t(getAnalysisSentence(data?.inventory_percentage_change), {
 							ns: 'ns_dashboard',
 							defaultValue: null
 						})}
 						<Icon name={getTrendingIcon(data?.inventory_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='text-muted-foreground lowercase first-letter:uppercase'>
+					<Typography className='text-muted-foreground lowercase first-letter:uppercase' variant='small'>
 						{t(
 							...getDetailDescription(
 								data?.inventory_percentage_change,
@@ -155,14 +155,14 @@ const Statistics: React.FC = () => {
 					</CardAction>
 				</CardHeader>
 				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
-					<Typography variant='small' className='line-clamp-1 flex gap-2 font-medium'>
+					<Typography className='line-clamp-1 flex gap-2 font-medium' variant='small'>
 						{t(getAnalysisSentence(data?.turnover_percentage_change), {
 							ns: 'ns_dashboard',
 							defaultValue: null
 						})}
 						<Icon name={getTrendingIcon(data?.turnover_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='text-muted-foreground lowercase first-letter:uppercase'>
+					<Typography className='text-muted-foreground lowercase first-letter:uppercase' variant='small'>
 						{t(
 							...getDetailDescription(
 								data?.turnover_percentage_change,

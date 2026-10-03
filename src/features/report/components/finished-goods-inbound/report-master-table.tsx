@@ -122,10 +122,10 @@ const InboundReportMasterTable: React.FC = () => {
 				cell: ({ getValue }) => {
 					return (
 						<EllipsisList
-							threshhold={3}
 							data={getValue().map((name) => t('ns_company:assembly_line', { name, defaultValue: name }))}
+							threshhold={3}
 							template={({ data }) => (
-								<Badge variant='outline' className='max-h-fit font-normal whitespace-nowrap'>
+								<Badge className='max-h-fit font-normal whitespace-nowrap' variant='outline'>
 									{data}
 								</Badge>
 							)}
@@ -141,11 +141,11 @@ const InboundReportMasterTable: React.FC = () => {
 				cell: ({ getValue }) => {
 					return (
 						<EllipsisList
-							threshhold={3}
 							data={getValue()}
+							threshhold={3}
 							template={({ data }) =>
 								data && (
-									<Badge variant='secondary' className='whitespace-nowrap'>
+									<Badge className='whitespace-nowrap' variant='secondary'>
 										{data}
 									</Badge>
 								)
@@ -202,14 +202,17 @@ const InboundReportMasterTable: React.FC = () => {
 		<DataTable
 			columns={columns}
 			data={data ?? []}
-			loading={isLoading}
-			enableExpanding={true}
 			enableColumnResizing={true}
+			enableExpanding={true}
+			getRowId={(originalRow: IInboundReport) => originalRow.mo_no}
+			loading={isLoading}
 			ref={dataTableRef as React.RefObject<Table<IInboundReport>>}
 			containerProps={{
 				style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' }
 			}}
-			getRowId={(originalRow: IInboundReport) => originalRow.mo_no}
+			footerProps={{
+				slot: () => <ReportTableSummary data={data ?? []} />
+			}}
 			renderSubComponent={
 				(({ row }) => {
 					return <SizeTable data={row.original?.size_ledger} />
@@ -227,9 +230,6 @@ const InboundReportMasterTable: React.FC = () => {
 						</Tooltip>
 					</Fragment>
 				)
-			}}
-			footerProps={{
-				slot: () => <ReportTableSummary data={data ?? []} />
 			}}
 		/>
 	)

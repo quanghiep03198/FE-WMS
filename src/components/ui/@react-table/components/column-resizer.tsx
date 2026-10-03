@@ -9,10 +9,6 @@ type ColumnResizerProps = {
 const ColumnResizer: React.FC<ColumnResizerProps> = ({ header }) => {
 	return (
 		<Separator
-			onDoubleClick={() => header.column.resetSize()}
-			onMouseDown={header.getResizeHandler()}
-			onTouchStart={header.getResizeHandler()}
-			onTouchMove={header.getResizeHandler()}
 			className={cn(
 				'bg-border absolute inset-y-0 right-0 z-0 w-1 cursor-col-resize! touch-none opacity-0 transition-opacity duration-500 select-none group-hover:opacity-100',
 				'group-data-[border=all]/data-grid-wrapper:h-full',
@@ -20,6 +16,10 @@ const ColumnResizer: React.FC<ColumnResizerProps> = ({ header }) => {
 				header.column.getCanResize() && 'hover:bg-primary',
 				header.column.getIsResizing() && 'bg-primary opacity-10'
 			)}
+			onDoubleClick={() => header.column.resetSize()}
+			onMouseDown={header.getResizeHandler()}
+			onTouchMove={header.getResizeHandler()}
+			onTouchStart={header.getResizeHandler()}
 		/>
 	)
 }

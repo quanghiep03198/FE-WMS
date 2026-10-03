@@ -63,18 +63,18 @@ const RoleBaseAccessControl: React.FC<RoleBaseAccessControlProps> = ({
 	const Component: Record<VisibilityMode, React.ReactNode> = {
 		mask: (
 			<div
-				role='none'
 				aria-disabled={!isAccessible}
 				className={cn('group/rbac relative', classNames?.wrapper)}
-				onPointerDown={preventActionIfUnauthorized}
-				onContextMenu={preventActionIfUnauthorized}>
+				role='none'
+				onContextMenu={preventActionIfUnauthorized}
+				onPointerDown={preventActionIfUnauthorized}>
 				{!isAccessible && (
 					<div
-						data-slot='rbac-mask'
-						className='ease absolute inset-0 z-20 flex items-center justify-center gap-x-2 opacity-0 transition-opacity duration-200 group-hover/rbac:opacity-100 group-aria-disabled/rbac:cursor-not-allowed group-aria-disabled/rbac:select-none'>
+						className='ease absolute inset-0 z-20 flex items-center justify-center gap-x-2 opacity-0 transition-opacity duration-200 group-hover/rbac:opacity-100 group-aria-disabled/rbac:cursor-not-allowed group-aria-disabled/rbac:select-none'
+						data-slot='rbac-mask'>
 						<Icon
-							name='Lock'
 							className='group-hover/rbac:animate-in group-hover/rbac:zoom-in-0 ease-in-out group-hover/rbac:duration-200'
+							name='Lock'
 						/>
 					</div>
 				)}

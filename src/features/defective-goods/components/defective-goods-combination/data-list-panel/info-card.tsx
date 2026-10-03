@@ -102,8 +102,8 @@ const InfoCard: React.FC<{
 				<CardAction className='absolute top-3 right-3'>
 					<DropdownMenu modal>
 						<DropdownMenuTrigger
-							onClick={(e) => e.stopPropagation()}
-							className='hover:bg-accent m-0! aspect-square size-6 place-content-center place-items-center rounded'>
+							className='hover:bg-accent m-0! aspect-square size-6 place-content-center place-items-center rounded'
+							onClick={(e) => e.stopPropagation()}>
 							<Icon name='Ellipsis' />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='start' side='left'>
@@ -116,7 +116,7 @@ const InfoCard: React.FC<{
 									}}>
 									<Icon name='MousePointerClick' size={18} /> {t('ns_common:actions.detail')}
 								</DropdownMenuItem>
-								<RoleBaseAccessControl mode='invisible' authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}>
+								<RoleBaseAccessControl authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]} mode='invisible'>
 									<DropdownMenuItem
 										className='gap-x-2'
 										onClick={(e) => {
@@ -139,16 +139,16 @@ const InfoCard: React.FC<{
 					</DropdownMenu>
 				</CardAction>
 				<Div className='mb-3! flex items-center gap-x-1'>
-					<RoleBaseAccessControl mode='invisible' authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}>
+					<RoleBaseAccessControl authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]} mode='invisible'>
 						<Checkbox
 							checked={isItemSelected(data.id)}
 							onCheckedChange={() => handleSelect(false, data.id)}
 							onClick={(e) => e.stopPropagation()}
 						/>
-						<Separator orientation='vertical' className='mx-2 h-5 w-0.5' />
+						<Separator className='mx-2 h-5 w-0.5' orientation='vertical' />
 					</RoleBaseAccessControl>
 					<Badge>{data.brand_name}</Badge>
-					<Badge variant='outline' className='w-fit'>
+					<Badge className='w-fit' variant='outline'>
 						{t(TRANSLATED_DEFECTIVE_CATEGORY[data.defective_category], {
 							ns: 'ns_inoutbound',
 							defaultValue: null
@@ -160,11 +160,11 @@ const InfoCard: React.FC<{
 					ID: {data.epc}{' '}
 					<Tooltip message='Copy' triggerProps={{ asChild: true }}>
 						<button
+							className={cn('ml-2')}
 							onClick={(e) => {
 								e.stopPropagation()
 								copyToClipboard(data.epc)
-							}}
-							className={cn('ml-2')}>
+							}}>
 							<Icon name={isCoppied ? 'CopyCheck' : 'Copy'} />
 						</button>
 					</Tooltip>
@@ -195,14 +195,14 @@ const InfoCard: React.FC<{
 							</DescriptionItem>
 							<DescriptionItem title={data.po}>
 								<Typography variant='small'>Size: </Typography>
-								<Typography variant='small' title={data.size_code}>
+								<Typography title={data.size_code} variant='small'>
 									#{data.size_code}
 								</Typography>
 							</DescriptionItem>
 							{data.po && (
 								<DescriptionItem title={data.po}>
 									<Typography variant='small'>{t('ns_erp:fields.po')}:</Typography>
-									<Typography variant='small' title={data.po}>
+									<Typography title={data.po} variant='small'>
 										{data.po}
 									</Typography>
 								</DescriptionItem>
@@ -215,13 +215,13 @@ const InfoCard: React.FC<{
 							)}
 							<DescriptionItem title={data.sewing_line ?? '?'}>
 								<Typography variant='small'>{t('ns_erp:fields.sewing_line')} : </Typography>
-								<Typography variant='small' className='uppercase'>
+								<Typography className='uppercase' variant='small'>
 									{data.sewing_line ?? '?'}
 								</Typography>
 							</DescriptionItem>
 							<DescriptionItem title={data.assembly_line ?? '?'}>
 								<Typography variant='small'>{t('ns_erp:fields.assembly_line')} : </Typography>
-								<Typography variant='small' className='uppercase'>
+								<Typography className='uppercase' variant='small'>
 									{data.assembly_line ?? '?'}
 								</Typography>
 							</DescriptionItem>
@@ -250,7 +250,7 @@ const InfoCard: React.FC<{
 							</DescriptionItem>
 							<DescriptionItem title={data.unit ?? '?'}>
 								<Typography variant='small'>{t('ns_common:common_fields.unit')} : </Typography>
-								<Typography variant='small' className='capitalize'>
+								<Typography className='capitalize' variant='small'>
 									{t(`ns_common:unit.${data.unit}`, { defaultValue: data.unit })}
 								</Typography>
 							</DescriptionItem>

@@ -58,10 +58,10 @@ export const DataTableBody: React.FC<TableBodyProps> = ({
 			<TableBody>
 				{rows.map((row) => (
 					<MemoizedVirtualTableRow
-						key={row.id}
-						row={row}
 						index={row.index}
+						key={row.id}
 						renderSubComponent={renderSubComponent}
+						row={row}
 					/>
 				))}
 			</TableBody>
@@ -77,11 +77,11 @@ export const DataTableBody: React.FC<TableBodyProps> = ({
 					const row = rows[virtualItem.index] as TRow<any>
 					return (
 						<MemoizedVirtualTableRow
-							key={row.id}
-							row={row}
 							index={virtualItem.index}
 							isScrolling={virtualizer.isScrolling}
+							key={row.id}
 							renderSubComponent={renderSubComponent}
+							row={row}
 						/>
 					)
 				})}

@@ -69,7 +69,7 @@ const DataSection: React.FC = () => {
 	if (isLoading)
 		return (
 			<Div className='mx-auto flex h-80 max-w-4xl items-center justify-center gap-x-2'>
-				<Icon name='LoaderCircle' className='animate-spin' />
+				<Icon className='animate-spin' name='LoaderCircle' />
 				<Typography variant='small'>{t('ns_common:status.loading')}</Typography>
 			</Div>
 		)
@@ -129,9 +129,9 @@ const DataSection: React.FC = () => {
 					<TableRow>
 						{columns.map((column) => (
 							<TableHead
+								className='bg-table-row-active! text-table-head-foreground capitalize first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								key={column.accessorKey}
 								title={column.header}
-								className='bg-table-row-active! text-table-head-foreground capitalize first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>{column.header}</span>
 							</TableHead>
@@ -145,10 +145,10 @@ const DataSection: React.FC = () => {
 									: data?.[column.accessorKey]
 							return (
 								<TableHead
-									key={column.accessorKey}
 									className='text-foreground font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10 last:font-medium'
+									key={column.accessorKey}
 									{...column.meta}>
-									<span data-empty={!cellValue} className='data-[empty=true]:text-muted-foreground'>
+									<span className='data-[empty=true]:text-muted-foreground' data-empty={!cellValue}>
 										{cellValue ?? t('ns_common:titles.unknown')}
 									</span>
 								</TableHead>
@@ -162,7 +162,7 @@ const DataSection: React.FC = () => {
 							style={{ boxShadow: '1px 0px var(--border)', maxWidth: 200, minWidth: 200 }}>
 							<span>{t('ns_erp:fields.mo_no')}</span>
 						</TableHead>
-						<TableHead colSpan={5} align='left' className='p-0'>
+						<TableHead align='left' className='p-0' colSpan={5}>
 							<span className='sticky left-(--column-width) block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
 								Size
 							</span>
@@ -179,15 +179,15 @@ const DataSection: React.FC = () => {
 							<TableRow key={manufacturingOrder}>
 								<TableCell
 									align='left'
-									colSpan={1}
 									className='sticky left-0 z-10'
+									colSpan={1}
 									style={{ boxShadow: '1px 0px var(--border)' }}>
 									<span>{manufacturingOrder}</span>
 								</TableCell>
-								<TableCell colSpan={5} className='p-0'>
+								<TableCell className='p-0' colSpan={5}>
 									<NestedTable>
 										{sortBy(Object.entries(sizeRun), (item) => item[0]).map(([size, qty]) => (
-											<NestedColumn key={size} className='*:h-9'>
+											<NestedColumn className='*:h-9' key={size}>
 												<NestedCellHead>{size}</NestedCellHead>
 												<NestedCell>{formatIntlNumber(qty)}</NestedCell>
 											</NestedColumn>

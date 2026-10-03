@@ -19,7 +19,7 @@ const EmptyHistory: React.FC = () => {
 				</EmptyDescription>
 			</EmptyHeader>
 			<EmptyContent>
-				<Button variant='outline' size='sm' onClick={() => removeParam('order')}>
+				<Button size='sm' variant='outline' onClick={() => removeParam('order')}>
 					<Icon name='Undo2' />
 					{t('ns_common:actions.retry')}
 				</Button>

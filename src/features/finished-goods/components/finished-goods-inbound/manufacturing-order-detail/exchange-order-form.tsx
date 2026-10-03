@@ -116,18 +116,18 @@ const ExchangeOrderFormDialog: React.FC = () => {
 				<FormProvider {...form}>
 					<Form className='group' onSubmit={form.handleSubmit(handleExchangeEpc)}>
 						<Div className='col-span-full'>
-							<InputFieldControl name='mo_no' label={t('ns_erp:fields.mo_no')} readOnly />
+							<InputFieldControl readOnly label={t('ns_erp:fields.mo_no')} name='mo_no' />
 						</Div>
 						<Div className={defaultValues?.mo_no === FALLBACK_VALUE ? 'col-span-1' : 'col-span-full'}>
 							<ComboboxFieldControl
-								name='mo_no_actual'
-								label={t('ns_erp:fields.mo_no_actual')}
 								datalist={orderDetail ?? []}
-								labelField='mo_no'
-								valueField='mo_no'
-								shouldFilter={false}
-								onInput={debounce((value) => setSearchTerm(value), 200)}
 								description={t('ns_inoutbound:description.transferred_order')}
+								label={t('ns_erp:fields.mo_no_actual')}
+								labelField='mo_no'
+								name='mo_no_actual'
+								shouldFilter={false}
+								valueField='mo_no'
+								onInput={debounce((value) => setSearchTerm(value), 200)}
 							/>
 						</Div>
 
@@ -143,8 +143,8 @@ const ExchangeOrderFormDialog: React.FC = () => {
 							<Separator />
 							<Div className='inline-flex items-center gap-x-2'>
 								<Checkbox
-									id={checkboxId}
 									checked={isConfirmed}
+									id={checkboxId}
 									onCheckedChange={(value) => setIsConfirmed(value)}
 								/>
 								<Label htmlFor={checkboxId}>{t('ns_common:confirmation.understand_and_proceed')}</Label>
@@ -152,12 +152,12 @@ const ExchangeOrderFormDialog: React.FC = () => {
 						</Div>
 						<DialogFooter className='col-span-full'>
 							<DialogClose asChild>
-								<Button variant='secondary' disabled={isPending}>
+								<Button disabled={isPending} variant='secondary'>
 									{t('ns_common:actions.cancel')}
 								</Button>
 							</DialogClose>
-							<Button type='submit' disabled={!isConfirmed || isPending}>
-								{isPending && <Icon name='LoaderCircle' className='animate-[spin_1.5s_linear_infinite]' />}
+							<Button disabled={!isConfirmed || isPending} type='submit'>
+								{isPending && <Icon className='animate-[spin_1.5s_linear_infinite]' name='LoaderCircle' />}
 								{isPending ? t('ns_common:status.processing') : t('ns_common:actions.confirm')}
 							</Button>
 						</DialogFooter>

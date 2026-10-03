@@ -38,8 +38,8 @@ const AutoRefreshToggle: React.FC = () => {
 			<HoverCardTrigger className='bg-accent/60 inline-flex items-center justify-center gap-x-3 rounded-md px-4 py-2 shadow'>
 				<Label htmlFor={id}>{t('ns_common:table.auto_refresh')}</Label>
 				<Switch
-					id={id}
 					checked={Boolean(refetchInterval)}
+					id={id}
 					onCheckedChange={(checked) => {
 						if (checked) setRefetchInterval(previousRefetchInterval ?? 5000)
 						else setRefetchInterval(false)
@@ -47,15 +47,15 @@ const AutoRefreshToggle: React.FC = () => {
 				/>
 			</HoverCardTrigger>
 			<HoverCardPortal>
-				<HoverCardContent hidden={!refetchInterval} side='right' sideOffset={8} className='w-80'>
+				<HoverCardContent className='w-80' hidden={!refetchInterval} side='right' sideOffset={8}>
 					<Div className='space-y-4'>
 						<Typography variant='small'>{t('ns_common:table.refetch_interval')}</Typography>
 						<Div className='flex items-start justify-between gap-2'>
-							<Icon name='Zap' size={20} className='-translate-y-2' />
+							<Icon className='-translate-y-2' name='Zap' size={20} />
 							<Div className='flex-1 basis-full space-y-3'>
 								<Slider
-									min={5000}
 									max={30000}
+									min={5000}
 									step={5000}
 									value={
 										typeof refetchInterval === 'number'
@@ -66,13 +66,13 @@ const AutoRefreshToggle: React.FC = () => {
 								/>
 								<Div className='flex items-baseline justify-between'>
 									{Array.from({ length: 6 }, (_, i) => (
-										<Typography key={i} variant='small' className='text-center text-[10px]!'>
+										<Typography className='text-center text-[10px]!' key={i} variant='small'>
 											{(i + 1) * 5}
 										</Typography>
 									))}
 								</Div>
 							</Div>
-							<Icon name='Leaf' size={20} className='-translate-y-2' />
+							<Icon className='-translate-y-2' name='Leaf' size={20} />
 						</Div>
 					</Div>
 				</HoverCardContent>

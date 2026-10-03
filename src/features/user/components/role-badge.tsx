@@ -21,7 +21,7 @@ const RoleBadge: React.FC<{ data: UserRole }> = ({ data }) => {
 	})()
 
 	return (
-		<Badge variant='secondary' className='flex-nowrap whitespace-nowrap' title={t(`ns_auth:roles.${data}`)}>
+		<Badge className='flex-nowrap whitespace-nowrap' title={t(`ns_auth:roles.${data}`)} variant='secondary'>
 			<Icon name={roleIcon} size={18} />
 			{t(`ns_auth:roles.${data}`)}
 		</Badge>

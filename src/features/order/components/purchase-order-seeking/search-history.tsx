@@ -35,7 +35,7 @@ const SearchHistory: React.FC = () => {
 
 	return (
 		<Div className='flex items-center gap-6 md:gap-3'>
-			<Typography variant='small' color='muted' className='inline-flex items-center gap-x-2'>
+			<Typography className='inline-flex items-center gap-x-2' color='muted' variant='small'>
 				<Icon name='History' size={20} strokeWidth={1.5} />
 				<span className='sm:hidden md:hidden'>
 					{recentlySearch.length > 0
@@ -49,14 +49,14 @@ const SearchHistory: React.FC = () => {
 						<Icon name='ChevronLeft' />
 					</GhostButton>
 					<div
-						ref={scrollRef}
+						className='scroll-fade-x xxl:max-w-lg flex max-w-sm snap-mandatory scrollbar-none items-center gap-x-2 scroll-smooth px-1 md:max-w-xs'
 
-						className='scroll-fade-x xxl:max-w-lg flex max-w-sm snap-mandatory scrollbar-none items-center gap-x-2 scroll-smooth px-1 md:max-w-xs'>
+						ref={scrollRef}>
 						{recentlySearch.map((term) => (
 							<Badge
+								className='min-w-28 cursor-pointer justify-between overflow-hidden'
 								key={term}
 								variant='outline'
-								className='min-w-28 cursor-pointer justify-between overflow-hidden'
 								onClick={() => setValue('po', term)}>
 								<span className='line-clamp-1 text-left text-ellipsis' title={term}>
 									{term}

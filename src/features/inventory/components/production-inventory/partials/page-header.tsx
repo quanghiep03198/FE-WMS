@@ -9,7 +9,7 @@ const PageHeader: React.FC = () => {
 			<Div className='mb-2'>
 				<Icon name='PackageSearch' size={52} strokeWidth={1} />
 			</Div>
-			<Typography variant='h4' className='text-center capitalize'>
+			<Typography className='text-center capitalize' variant='h4'>
 				{t('ns_inoutbound:titles.production_inventory_summary')}
 			</Typography>
 			<Typography color='muted'>{t('ns_inoutbound:description.inventory_estimation')}</Typography>

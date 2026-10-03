@@ -115,11 +115,11 @@ export const Header: React.FC = () => {
 									</li>
 									{navigationGroup.rfidAgent.map((externalLink) => (
 										<ListItem
-											key={externalLink.hash}
-											to='/rfid-agent/docs'
 											hash={externalLink.hash}
+											href={externalLink.href}
+											key={externalLink.hash}
 											title={externalLink.title}
-											href={externalLink.href}>
+											to='/rfid-agent/docs'>
 											{externalLink.description}
 										</ListItem>
 									))}
@@ -132,11 +132,11 @@ export const Header: React.FC = () => {
 								<ul className='grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150'>
 									{navigationGroup.thirdParty.map((externalLink) => (
 										<ListItem
-											key={externalLink.hash}
-											to='/rfid-agent/docs'
 											hash={externalLink.hash}
+											href={externalLink.href}
+											key={externalLink.hash}
 											title={externalLink.title}
-											href={externalLink.href}>
+											to='/rfid-agent/docs'>
 											{externalLink.description}
 										</ListItem>
 									))}
@@ -157,7 +157,7 @@ export const Header: React.FC = () => {
 						</SheetTrigger>
 						<SheetContent>
 							<SheetHeader>
-								<Link to='/rfid-agent' className='flex items-center gap-x-2'>
+								<Link className='flex items-center gap-x-2' to='/rfid-agent'>
 									<Icon name='Radio' size={40} strokeWidth={1.5} />
 									<span className='flex flex-col text-left font-bold'>
 										RFID Agent
@@ -171,11 +171,11 @@ export const Header: React.FC = () => {
 								<ul>
 									{navigationGroup.rfidAgent.map((externalLink) => (
 										<ListItem
-											key={externalLink.hash}
-											to='/rfid-agent/docs'
 											hash={externalLink.hash}
+											href={externalLink.href}
+											key={externalLink.hash}
 											title={externalLink.title}
-											href={externalLink.href}>
+											to='/rfid-agent/docs'>
 											{externalLink.description}
 										</ListItem>
 									))}
@@ -185,11 +185,11 @@ export const Header: React.FC = () => {
 								<ul>
 									{navigationGroup.thirdParty.map((externalLink) => (
 										<ListItem
-											key={externalLink.hash}
-											to='/rfid-agent/docs'
 											hash={externalLink.hash}
+											href={externalLink.href}
+											key={externalLink.hash}
 											title={externalLink.title}
-											href={externalLink.href}>
+											to='/rfid-agent/docs'>
 											{externalLink.description}
 										</ListItem>
 									))}
@@ -214,8 +214,8 @@ const ListItem: React.FC<React.PropsWithChildren & React.ComponentProps<typeof L
 		<li>
 			<NavigationMenuLink asChild>
 				<Link
-					ref={ref}
 					preload='intent'
+					ref={ref}
 					className={cn(
 						'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none',
 						className

@@ -70,10 +70,10 @@ const CentralizedPoOutboundForm: React.FC = () => {
 			{createPortal(
 				<Alert data-state={isError && error?.status === HttpStatusCode.BadRequest ? 'open' : 'closed'}>
 					<Icon
+						className='fill-destructive-foreground stroke-destructive'
 						name='TriangleAlert'
 						size={40}
 						strokeWidth={2}
-						className='fill-destructive-foreground stroke-destructive'
 					/>
 					<AlertContent>
 						<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
@@ -82,9 +82,9 @@ const CentralizedPoOutboundForm: React.FC = () => {
 						</AlertDescription>
 					</AlertContent>
 					<Tooltip
+						contentProps={{ side: 'left' }}
 						message={t('ns_common:actions.dismiss')}
-						triggerProps={{ asChild: true }}
-						contentProps={{ side: 'left' }}>
+						triggerProps={{ asChild: true }}>
 						<AlertClose onClick={() => reset()}>
 							<Icon name='X' />
 						</AlertClose>
@@ -96,26 +96,26 @@ const CentralizedPoOutboundForm: React.FC = () => {
 				<Form onSubmit={form.handleSubmit(handleSubmit)}>
 					<PurchaseOrderAutoComplete />
 					<MultiSelectFieldControl
-						name='mo_no'
-						label={t('ns_erp:fields.mo_no')}
-						shouldFilter={false}
-						search={searchTerm}
-						onInput={(value) => setSearchTerm(value)}
 						datalist={filteredOrders}
+						label={t('ns_erp:fields.mo_no')}
 						labelField='mo_no'
+						name='mo_no'
+						search={searchTerm}
+						shouldFilter={false}
 						valueField='mo_no'
+						onInput={(value) => setSearchTerm(value)}
 					/>
-					<FormSubmission isPending={isPending} isError={isError} />
+					<FormSubmission isError={isError} isPending={isPending} />
 				</Form>
 			</FormProvider>
 			<ConfirmDialog
+				description={t('ns_inoutbound:notification.posible_incorrect_po')}
+				isError={isError}
+				isPending={isPending}
 				open={shouldAlert}
 				title={t('ns_common:titles.caution')}
-				description={t('ns_inoutbound:notification.posible_incorrect_po')}
-				onConfirm={() => handleConfirm(form.getValues())}
 				onCancel={() => setShouldAlert(false)}
-				isPending={isPending}
-				isError={isError}
+				onConfirm={() => handleConfirm(form.getValues())}
 			/>
 		</Fragment>
 	)

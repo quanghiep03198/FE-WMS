@@ -220,15 +220,15 @@ const SimpleTemplate: React.FC<{ totalPages: number }> = ({ totalPages }) => {
 			</div>
 			<div className='flex justify-center'>
 				<Pagination
-					page={currentPage}
-					totalPages={totalPages}
 					hasNextPage={currentPage < totalPages}
 					hasPrevPage={currentPage > 1}
-					nextPage={currentPage + 1}
-					prevPage={currentPage - 1}
 					limit={20}
-					totalDocs={totalPages * 20}
+					nextPage={currentPage + 1}
+					page={currentPage}
+					prevPage={currentPage - 1}
 					range={2}
+					totalDocs={totalPages * 20}
+					totalPages={totalPages}
 					onPageChange={handlePageChange}
 					onPrefetch={() => {}}
 				/>
@@ -302,8 +302,8 @@ const MockApiTemplate: React.FC<{ totalPages: number }> = ({ totalPages }) => {
 					) : (
 						logs.map((log, index) => (
 							<div
-								key={index}
-								className={`flex gap-2 ${log.type === 'prefetch' ? 'text-blue-600' : 'text-green-600'}`}>
+								className={`flex gap-2 ${log.type === 'prefetch' ? 'text-blue-600' : 'text-green-600'}`}
+								key={index}>
 								<span className='font-mono text-gray-400'>{log.timestamp}</span>
 								<span className={log.type === 'prefetch' ? 'text-blue-700' : 'text-green-700'}>
 									{log.message}
@@ -335,15 +335,15 @@ const MockApiTemplate: React.FC<{ totalPages: number }> = ({ totalPages }) => {
 
 			<div className='flex justify-center'>
 				<Pagination
-					page={currentPage}
-					totalPages={totalPages}
 					hasNextPage={currentPage < totalPages}
 					hasPrevPage={currentPage > 1}
-					nextPage={currentPage + 1}
-					prevPage={currentPage - 1}
 					limit={20}
-					totalDocs={totalPages * 20}
+					nextPage={currentPage + 1}
+					page={currentPage}
+					prevPage={currentPage - 1}
 					range={2}
+					totalDocs={totalPages * 20}
+					totalPages={totalPages}
 					onPageChange={handlePageChange}
 					onPrefetch={handlePrefetch}
 				/>

@@ -10,13 +10,13 @@ const UnavailableService: React.FC = () => {
 		<Div className='grid min-h-(--outlet-wrapper-height) w-full place-items-center gap-y-3'>
 			<Div>
 				<Div className='flex items-center gap-x-4'>
-					<Typography color='destructive' className='font-semibold'>
+					<Typography className='font-semibold' color='destructive'>
 						{HttpStatusCode.ServiceUnavailable}
 					</Typography>
-					<Separator orientation='vertical' className='h-5 w-0.5' />
+					<Separator className='h-5 w-0.5' orientation='vertical' />
 					<Typography variant='h4'>{t('ns_common:errors.503')}</Typography>
 				</Div>
-				<Typography variant='p' className='mt-2 mb-6 text-base leading-7' color='muted'>
+				<Typography className='mt-2 mb-6 text-base leading-7' color='muted' variant='p'>
 					{t('ns_common:errors.503_message')}
 				</Typography>
 			</Div>

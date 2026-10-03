@@ -49,28 +49,28 @@ export default function Spotlight({ className, fill }: SpotlightProps) {
 				document.head
 			)}
 			<svg
+				fill='none'
+				viewBox='0 0 3787 2842'
+				xmlns='http://www.w3.org/2000/svg'
 				className={cn(
 					'animate-spotlight transition-width pointer-events-none absolute z-1 h-[200%] opacity-0 sm:w-[200%] md:w-[150%] lg:w-[150%] xl:w-[120%]',
 					{
 						'animate-spotlight-off': scroll?.top > 10
 					},
 					className
-				)}
-				xmlns='http://www.w3.org/2000/svg'
-				viewBox='0 0 3787 2842'
-				fill='none'>
+				)}>
 				<g filter='url(#filter)'>
 					<ellipse
 						cx='1924.71'
 						cy='273.501'
+						fill={fill || 'url(#gradient)'}
+						fillOpacity='0.21'
 						rx='1924.71'
 						ry='273.501'
-						transform='matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)'
-						fill={fill || 'url(#gradient)'}
-						fillOpacity='0.21'></ellipse>
+						transform='matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)'></ellipse>
 				</g>
 				<defs>
-					<linearGradient id='gradient' x1='100%' y1='0%' x2='0%' y2='0%'>
+					<linearGradient id='gradient' x1='100%' x2='0%' y1='0%' y2='0%'>
 						<stop offset='14%' stopColor='#ef4444' />
 						<stop offset='28%' stopColor='#f97316' />
 						<stop offset='42%' stopColor='#eab308' />
@@ -82,16 +82,16 @@ export default function Spotlight({ className, fill }: SpotlightProps) {
 				</defs>
 				<defs>
 					<filter
-						id='filter'
-						x='0.860352'
-						y='0.838989'
-						width='3785.16'
-						height='2840.26'
+						colorInterpolationFilters='sRGB'
 						filterUnits='userSpaceOnUse'
-						colorInterpolationFilters='sRGB'>
+						height='2840.26'
+						id='filter'
+						width='3785.16'
+						x='0.860352'
+						y='0.838989'>
 						<feFlood floodOpacity='0' result='BackgroundImageFix'></feFlood>
-						<feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape'></feBlend>
-						<feGaussianBlur stdDeviation='151' result='effect1_foregroundBlur_1065_8'></feGaussianBlur>
+						<feBlend in='SourceGraphic' in2='BackgroundImageFix' mode='normal' result='shape'></feBlend>
+						<feGaussianBlur result='effect1_foregroundBlur_1065_8' stdDeviation='151'></feGaussianBlur>
 					</filter>
 				</defs>
 			</svg>

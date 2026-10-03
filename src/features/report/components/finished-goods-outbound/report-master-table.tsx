@@ -166,15 +166,18 @@ const ReportDatalist: React.FC = () => {
 			<DataTable
 				columns={columns}
 				data={data ?? []}
-				loading={isLoading}
 				enableExpanding={true}
 				getRowId={(originalRow: IOutboundReport) => originalRow.po}
+				loading={isLoading}
+				containerProps={{
+					style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' }
+				}}
+				footerProps={{
+					slot: renderTableFooter
+				}}
 				renderSubComponent={({ row }) => {
 					const data = pick(row.original as IOutboundReport, ['detail', 'overall'])
 					return <OutboundReportDetailTable {...data} />
-				}}
-				containerProps={{
-					style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' }
 				}}
 				toolbarProps={{
 					slotLeft: () => isSmallScreen && <DatePickerFilter />,
@@ -182,10 +185,10 @@ const ReportDatalist: React.FC = () => {
 						<Fragment>
 							<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
 								<Button
+									disabled={!data || data.length === 0}
 									size='icon'
 									variant='outline'
-									onClick={handleDownloadExcel}
-									disabled={!data || data.length === 0}>
+									onClick={handleDownloadExcel}>
 									<Icon name='Download' />
 								</Button>
 							</Tooltip>
@@ -196,9 +199,6 @@ const ReportDatalist: React.FC = () => {
 							</Tooltip>
 						</Fragment>
 					)
-				}}
-				footerProps={{
-					slot: renderTableFooter
 				}}
 			/>
 		</Div>

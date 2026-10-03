@@ -42,9 +42,9 @@ function Layout() {
 			<UnsupportedScreen />
 			<AuthGuard>
 				<SidebarProvider
+					className='h-screen [&:has(#toggle-fullscreen[data-state=checked])_header]:z-0'
 					data-state-persistent-key='appSidebarOpen'
-					suppressHydrationWarning={true}
-					className='h-screen [&:has(#toggle-fullscreen[data-state=checked])_header]:z-0'>
+					suppressHydrationWarning={true}>
 					<NavSidebar />
 					<LayoutWrapper>
 						<BreadcrumbProvider>

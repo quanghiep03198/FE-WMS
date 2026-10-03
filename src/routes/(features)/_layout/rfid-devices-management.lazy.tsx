@@ -26,7 +26,7 @@ function Page() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.rfid_device_management')}</title>
-			<meta name='description' content={t('ns_rfid:descriptions.rfid_device_management')} />
+			<meta content={t('ns_rfid:descriptions.rfid_device_management')} name='description' />
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 				<HostCompatibleGuard>

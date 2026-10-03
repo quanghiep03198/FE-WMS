@@ -106,6 +106,10 @@ const SidebarProvider: React.FC<
 		<SidebarContext.Provider value={contextValue}>
 			<TooltipProvider delayDuration={0}>
 				<div
+					className={cn(
+						'group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar z-50 flex min-h-svh w-full',
+						className
+					)}
 					style={
 						{
 							'--sidebar-width': SIDEBAR_WIDTH,
@@ -113,10 +117,6 @@ const SidebarProvider: React.FC<
 							...style
 						} as React.CSSProperties
 					}
-					className={cn(
-						'group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar z-50 flex min-h-svh w-full',
-						className
-					)}
 					{...props}>
 					{children}
 				</div>
@@ -151,15 +151,15 @@ const Sidebar: React.FC<
 		return (
 			<Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
 				<SheetContent
-					data-sidebar='sidebar'
-					data-mobile='true'
 					className='bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden'
+					data-mobile='true'
+					data-sidebar='sidebar'
+					side={side}
 					style={
 						{
 							'--sidebar-width': SIDEBAR_WIDTH_MOBILE
 						} as React.CSSProperties
-					}
-					side={side}>
+					}>
 					<div className='flex h-full w-full flex-col'>{children}</div>
 				</SheetContent>
 			</Sheet>
@@ -169,10 +169,10 @@ const Sidebar: React.FC<
 	return (
 		<div
 			className='group peer text-sidebar-foreground block sm:hidden md:hidden'
-			data-state={state}
 			data-collapsible={state === 'collapsed' ? collapsible : ''}
-			data-variant={variant}
-			data-side={side}>
+			data-side={side}
+			data-state={state}
+			data-variant={variant}>
 			{/* This is what handles the sidebar gap on desktop */}
 			<div
 				className={cn(
@@ -198,8 +198,8 @@ const Sidebar: React.FC<
 				)}
 				{...props}>
 				<div
-					data-sidebar='sidebar'
-					className='bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow'>
+					className='bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow'
+					data-sidebar='sidebar'>
 					{children}
 				</div>
 			</div>
@@ -213,10 +213,10 @@ const SidebarTrigger: React.FC<React.ComponentProps<'button'>> = ({ className, o
 
 	return (
 		<Button
-			data-sidebar='trigger'
-			variant='ghost'
-			size='icon'
 			className={cn('h-7 w-7', className)}
+			data-sidebar='trigger'
+			size='icon'
+			variant='ghost'
 			onClick={(event) => {
 				onClick?.(event)
 				toggleSidebar()
@@ -234,10 +234,9 @@ const SidebarRail: React.FC<React.ComponentProps<'button'>> = ({ className, ...p
 
 	return (
 		<button
-			data-sidebar='rail'
 			aria-label='Toggle Sidebar'
+			data-sidebar='rail'
 			tabIndex={-1}
-			onClick={toggleSidebar}
 			title='Toggle Sidebar'
 			className={cn(
 				'bg-sidebar after:bg-sidebar-border hover:after:bg-sidebar-border/50 absolute inset-y-0 z-30 flex w-4 -translate-x-1/2 transition-opacity ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:h-full after:w-px after:transition-all after:duration-200 sm:hidden md:hidden',
@@ -248,6 +247,7 @@ const SidebarRail: React.FC<React.ComponentProps<'button'>> = ({ className, ...p
 				'[[data-side=right][data-collapsible=offcanvas]_&]:-left-2',
 				className
 			)}
+			onClick={toggleSidebar}
 			{...props}
 		/>
 	)
@@ -283,17 +283,17 @@ const SidebarInput: React.FC<React.ComponentProps<typeof Input>> = ({ className,
 SidebarInput.displayName = 'SidebarInput'
 
 const SidebarHeader: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {
-	return <div data-sidebar='header' className={cn('flex flex-col gap-2 p-2', className)} {...props} />
+	return <div className={cn('flex flex-col gap-2 p-2', className)} data-sidebar='header' {...props} />
 }
 SidebarHeader.displayName = 'SidebarHeader'
 
 const SidebarFooter: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {
-	return <div data-sidebar='footer' className={cn('flex flex-col gap-2 p-2', className)} {...props} />
+	return <div className={cn('flex flex-col gap-2 p-2', className)} data-sidebar='footer' {...props} />
 }
 SidebarFooter.displayName = 'SidebarFooter'
 
 const SidebarSeparator: React.FC<React.ComponentProps<typeof Separator>> = ({ className, ...props }) => {
-	return <Separator data-sidebar='separator' className={cn('bg-sidebar-border mx-2 w-auto', className)} {...props} />
+	return <Separator className={cn('bg-sidebar-border mx-2 w-auto', className)} data-sidebar='separator' {...props} />
 }
 SidebarSeparator.displayName = 'SidebarSeparator'
 
@@ -312,7 +312,7 @@ const SidebarContent: React.FC<React.ComponentProps<'div'>> = ({ className, ...p
 SidebarContent.displayName = 'SidebarContent'
 
 const SidebarGroup: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {
-	return <div data-sidebar='group' className={cn('relative flex w-full min-w-0 flex-col p-2', className)} {...props} />
+	return <div className={cn('relative flex w-full min-w-0 flex-col p-2', className)} data-sidebar='group' {...props} />
 }
 SidebarGroup.displayName = 'SidebarGroup'
 
@@ -361,17 +361,17 @@ const SidebarGroupAction: React.FC<React.ComponentProps<'button'> & { asChild?: 
 SidebarGroupAction.displayName = 'SidebarGroupAction'
 
 const SidebarGroupContent: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => (
-	<div data-sidebar='group-content' className={cn('w-full text-sm', className)} {...props} />
+	<div className={cn('w-full text-sm', className)} data-sidebar='group-content' {...props} />
 )
 SidebarGroupContent.displayName = 'SidebarGroupContent'
 
 const SidebarMenu: React.FC<React.ComponentProps<'ul'>> = ({ className, ...props }) => (
-	<ul data-sidebar='menu' className={cn('flex w-full min-w-0 flex-col items-stretch gap-1', className)} {...props} />
+	<ul className={cn('flex w-full min-w-0 flex-col items-stretch gap-1', className)} data-sidebar='menu' {...props} />
 )
 SidebarMenu.displayName = 'SidebarMenu'
 
 const SidebarMenuItem: React.FC<React.ComponentProps<'li'>> = ({ className, ...props }) => (
-	<li data-sidebar='menu-item' className={cn('group/menu-item relative', className)} {...props} />
+	<li className={cn('group/menu-item relative', className)} data-sidebar='menu-item' {...props} />
 )
 SidebarMenuItem.displayName = 'SidebarMenuItem'
 
@@ -409,10 +409,10 @@ const SidebarMenuButton: React.FC<
 
 	const button = (
 		<Comp
+			className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+			data-active={isActive}
 			data-sidebar='menu-button'
 			data-size={size}
-			data-active={isActive}
-			className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
 			{...props}
 		/>
 	)
@@ -431,10 +431,10 @@ const SidebarMenuButton: React.FC<
 		<Tooltip>
 			<TooltipTrigger asChild>{button}</TooltipTrigger>
 			<TooltipContent
-				side='right'
 				align='center'
-				sideOffset={8}
 				hidden={state !== 'collapsed' || isMobile}
+				side='right'
+				sideOffset={8}
 				{...tooltip}
 			/>
 		</Tooltip>
@@ -500,8 +500,8 @@ const SidebarMenuSkeleton: React.FC<
 
 	return (
 		<div
-			data-sidebar='menu-skeleton'
 			className={cn('flex h-8 items-center gap-2 rounded-md px-2', className)}
+			data-sidebar='menu-skeleton'
 			{...props}>
 			{showIcon && <Skeleton className='size-4 rounded-md' data-sidebar='menu-skeleton-icon' />}
 			<Skeleton
@@ -545,9 +545,9 @@ const SidebarMenuSubButton: React.FC<
 
 	return (
 		<Comp
+			data-active={isActive}
 			data-sidebar='menu-sub-button'
 			data-size={size}
-			data-active={isActive}
 			className={cn(
 				'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&>svg]:text-sidebar-accent-foreground flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
 				'data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground',

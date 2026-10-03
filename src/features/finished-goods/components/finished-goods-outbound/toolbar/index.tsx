@@ -7,7 +7,7 @@ const ActionsToolbar: React.FC = () => {
 
 	return (
 		<Div className='flex items-center justify-end gap-x-2'>
-			<UploadDataFileDialog station='WH103' maxFiles={200} />
+			<UploadDataFileDialog maxFiles={200} station='WH103' />
 			<Button variant='secondary' onClick={() => window.dispatchEvent(new CustomEvent('refetch-outbound-sse'))}>
 				<Icon name='RefreshCcw' />
 				{t('ns_common:actions.reload')}

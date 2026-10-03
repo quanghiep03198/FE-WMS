@@ -160,12 +160,12 @@ const ExchangeEpcFormDialog: React.FC = () => {
 									{t('ns_common:titles.target_data')}
 								</Legend>
 								<ComboboxFieldControl
-									name='mo_no_actual'
-									label={t('ns_erp:fields.mo_no_actual')}
 									datalist={uniqBy([...exchangableOrders, ...(availableCommandNumbers ?? [])], 'mo_no')}
+									label={t('ns_erp:fields.mo_no_actual')}
 									labelField='mo_no'
-									valueField='mo_no'
+									name='mo_no_actual'
 									shouldFilter={false}
+									valueField='mo_no'
 									onInput={debounce((value) => setSearchTerm(value), 200)}
 									onSelect={(value) => {
 										form.reset({
@@ -175,10 +175,10 @@ const ExchangeEpcFormDialog: React.FC = () => {
 									}}
 								/>
 								<InputFieldControl
-									name='mo_noseq'
 									label={t('ns_erp:fields.mo_noseq')}
-									readOnly={true}
+									name='mo_noseq'
 									placeholder='001'
+									readOnly={true}
 								/>
 								<InputFieldControl
 									label={t('ns_erp:fields.factory_shoes_style')}
@@ -195,16 +195,16 @@ const ExchangeEpcFormDialog: React.FC = () => {
 								<InputFieldControl label='Size' name='size_numcode_actual' placeholder='10' readOnly={true} />
 								<InputFieldControl
 									autoComplete='off'
+									disabled={!actualOrder}
+									min={1}
 									name='quantity'
+									placeholder='1'
+									readOnly={Boolean(isExchangeAll)}
+									type='number'
 									label={t('ns_common:common_fields.quantity_with_limit', {
 										limit: scannedSizeQuantity,
 										defaultValue: `Quantity (max ${scannedSizeQuantity})`
 									})}
-									placeholder='1'
-									type='number'
-									disabled={!actualOrder}
-									readOnly={Boolean(isExchangeAll)}
-									min={1}
 								/>
 								<Div className='col-span-full flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4 shadow-sm'>
 									<Checkbox checked={isExchangeAll} onCheckedChange={handleToggleSelectAll} />
@@ -217,12 +217,12 @@ const ExchangeEpcFormDialog: React.FC = () => {
 						</Div>
 						<DialogFooter className='col-span-full'>
 							<DialogClose asChild>
-								<Button variant='secondary' onClick={() => form.reset()} disabled={isPending}>
+								<Button disabled={isPending} variant='secondary' onClick={() => form.reset()}>
 									{t('ns_common:actions.cancel')}
 								</Button>
 							</DialogClose>
 							<Button disabled={isPending}>
-								{isPending && <Icon name='LoaderCircle' className='animate-[spin_1.5s_linear_infinite]' />}
+								{isPending && <Icon className='animate-[spin_1.5s_linear_infinite]' name='LoaderCircle' />}
 								{isPending
 									? t('ns_common:status.processing')
 									: isError

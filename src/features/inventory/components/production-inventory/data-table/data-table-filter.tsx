@@ -22,16 +22,16 @@ const DataTableGlobalFilter: React.FC<DataTableGlobalFilterProps> = ({
 		<Div className='focus-within:border-primary flex h-9 w-full max-w-[280px] items-center space-x-2 rounded-md border px-2 py-1 transition-colors duration-200'>
 			<Icon name='Search' size={18} />
 			<DebouncedInput
+				className='font-lg border bg-transparent px-0 text-sm placeholder:text-sm'
 				type='search'
 				value={globalFilter}
-				onChange={(value) => onGlobalFilterChange(String(value))}
-				className='font-lg border bg-transparent px-0 text-sm placeholder:text-sm'
 				placeholder={capitalize(
 					t('ns_common:form_placeholder.search', {
 						object: dataType === 'inbound' ? t('ns_erp:fields.mo_no') : t('ns_erp:fields.po'),
 						defaultValue: 'Search ...'
 					})
 				)}
+				onChange={(value) => onGlobalFilterChange(String(value))}
 			/>
 		</Div>
 	)

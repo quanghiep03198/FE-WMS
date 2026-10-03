@@ -14,7 +14,7 @@ function Page() {
 	return (
 		<Fragment>
 			<title>Warehouse Management System</title>
-			<meta name='description' content='Greenland Warehouse Management System' />
+			<meta content='Greenland Warehouse Management System' name='description' />
 			<script type='application/ld+json'>
 				{JSON.stringify({
 					'@context': 'https://schema.org',

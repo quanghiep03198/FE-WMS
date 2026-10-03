@@ -27,7 +27,7 @@ function Page() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.purchase_order_search')}</title>
-			<meta name='description' content='Search processing purchase order' />
+			<meta content='Search processing purchase order' name='description' />
 
 			<RoleGuard
 				authorizedRoles={[
@@ -40,7 +40,7 @@ function Page() {
 				<Div
 					as='section'
 					className='xxl:max-w-7xl mx-auto flex min-h-(--outlet-wrapper-height) flex-col place-content-center items-stretch gap-y-6'>
-					<Typography variant='h2' className='bg-background z-10 text-center font-medium capitalize'>
+					<Typography className='bg-background z-10 text-center font-medium capitalize' variant='h2'>
 						{t('ns_erp:titles.purchase_order_seeking')}
 					</Typography>
 					<SearchForm />

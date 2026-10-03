@@ -9,15 +9,15 @@ const RemindMessage: React.FC = () => {
 	return (
 		<Div className='inline-flex items-center self-center'>
 			<Icon
+				className='animate-in zoom-in-0 slide-in-from-bottom-2 xxl:block mr-2 hidden duration-500'
 				name='BotMessageSquare'
 				size={24}
-				className='animate-in zoom-in-0 slide-in-from-bottom-2 xxl:block mr-2 hidden duration-500'
 			/>
 			&quot;
 			<Typewriter
 				className='text-sm italic'
-				text={t('ns_inoutbound:description.inoutbound_form_note')}
 				delay={200}
+				text={t('ns_inoutbound:description.inoutbound_form_note')}
 			/>
 			&quot;
 		</Div>

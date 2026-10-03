@@ -31,18 +31,18 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 			<DropdownMenuContent align='end' className='min-w-40'>
 				<DropdownMenuItem asChild={true} className='flex items-center gap-x-3'>
 					<Link
-						to='/storage-locations/$warehouseName'
 						params={{ warehouseName: row.original.name }}
+						to='/storage-locations/$warehouseName'
 						onMouseEnter={() => queryClient.query(getOneWarehouseQueryOptions(row.original.name))}>
 						<Icon name='SquareDashedMousePointer' />
 						{t('ns_common:actions.detail')}
 					</Link>
 				</DropdownMenuItem>
 				<RoleBaseAccessControl
-					mode='fallback'
 					authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER]}
+					mode='fallback'
 					fallbackComponent={
-						<DropdownMenuItem className='flex items-center gap-x-3' disabled>
+						<DropdownMenuItem disabled className='flex items-center gap-x-3'>
 							<Icon name='Lock' />
 							{t('ns_common:actions.update')}
 						</DropdownMenuItem>
@@ -57,10 +57,10 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 					</DropdownMenuItem>
 				</RoleBaseAccessControl>
 				<RoleBaseAccessControl
-					mode='fallback'
 					authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER]}
+					mode='fallback'
 					fallbackComponent={
-						<DropdownMenuItem className='flex items-center gap-x-3' disabled>
+						<DropdownMenuItem disabled className='flex items-center gap-x-3'>
 							<Icon name='Lock' />
 							{t('ns_common:actions.delete')}
 						</DropdownMenuItem>

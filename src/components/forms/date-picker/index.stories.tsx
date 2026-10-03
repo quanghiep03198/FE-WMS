@@ -77,9 +77,9 @@ const Template = (args: any) => {
 	return (
 		<div className='mx-auto w-full max-w-lg space-y-10'>
 			<FormProvider {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className='flex w-full flex-col gap-y-6'>
+				<form className='flex w-full flex-col gap-y-6' onSubmit={form.handleSubmit(onSubmit)}>
 					<DatePickerFieldControl {...args} />
-					<Button type='submit' style={{ marginTop: 16 }}>
+					<Button style={{ marginTop: 16 }} type='submit'>
 						Submit
 					</Button>
 				</form>
@@ -101,6 +101,6 @@ export const Range: Story = {
 }
 export const Horizontal: Story = {
 	render: (args: StoryArgs) => (
-		<Template {...args} orientation='horizontal' calendarProps={{ ...args.calendarProps, mode: 'range' }} />
+		<Template {...args} calendarProps={{ ...args.calendarProps, mode: 'range' }} orientation='horizontal' />
 	)
 }

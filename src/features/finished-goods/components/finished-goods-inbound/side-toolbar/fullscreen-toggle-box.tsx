@@ -19,15 +19,15 @@ const FullscreenToggleBox: React.FC<{ shouldExitOnUnmount?: boolean }> = ({ shou
 		<Div className='grid w-full grid-cols-[3fr_1fr] items-center rounded-md border p-4'>
 			<Div className='space-y-1'>
 				<Label htmlFor='toggle-fullscreen'>{t('ns_inoutbound:scanner_setting.toggle_fullscreen')}</Label>
-				<Typography variant='small' color='muted' className='block text-pretty'>
+				<Typography className='block text-pretty' color='muted' variant='small'>
 					{t('ns_inoutbound:scanner_setting.toggle_fullscreen_note')}
 				</Typography>
 			</Div>
 			<Div className='place-self-center justify-self-end'>
 				<Switch
-					id='toggle-fullscreen'
-					className='max-w-full'
 					checked={isFullscreen}
+					className='max-w-full'
+					id='toggle-fullscreen'
 					onCheckedChange={() => toggleFullscreen()}
 				/>
 			</Div>

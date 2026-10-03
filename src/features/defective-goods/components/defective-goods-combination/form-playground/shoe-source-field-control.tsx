@@ -11,14 +11,14 @@ export const ShoeSourceFieldControl: React.FC<
 
 	return (
 		<SelectFieldControl
-			name='shoe_source'
 			label={t('ns_erp:fields.shoe_source')}
+			labelField='label'
+			name='shoe_source'
+			valueField='value'
 			datalist={Object.values(DefectiveGoodsSource).map((source) => ({
 				label: t(`ns_inoutbound:shoes_source.${source}`),
 				value: source
 			}))}
-			labelField='label'
-			valueField='value'
 			{...props}
 		/>
 	)

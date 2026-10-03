@@ -25,8 +25,8 @@ const DataSection: React.FC = () => {
 	if (isLoading)
 		return (
 			<Div className='flex h-48 items-center justify-center gap-x-2'>
-				<Icon name='LoaderCircle' size={20} className='inline-block animate-spin' />
-				<Typography variant='small' color='muted'>
+				<Icon className='inline-block animate-spin' name='LoaderCircle' size={20} />
+				<Typography color='muted' variant='small'>
 					{t('ns_common:status.loading')}
 				</Typography>
 			</Div>
@@ -43,7 +43,7 @@ const DataSection: React.FC = () => {
 				</Div>
 				<Div className='relative col-span-full space-y-4 rounded-md border p-4 shadow-sm'>
 					<SizeTable data={sizeData.data} total={sizeData.total} />
-					<Typography variant='small' color='muted' className='block text-center'>
+					<Typography className='block text-center' color='muted' variant='small'>
 						{t('ns_inoutbound:description.size_qty_caption')}
 					</Typography>
 				</Div>

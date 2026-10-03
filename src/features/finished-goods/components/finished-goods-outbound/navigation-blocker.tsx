@@ -19,12 +19,12 @@ const PageNavigationBlocker: React.FC = () => {
 
 	return (
 		<ConfirmDialog
-			open={blocker.status === 'blocked'}
-			onOpenChange={handleReset}
-			title={t('ns_inoutbound:notification.navigation_blocked_message')}
 			description={t('ns_inoutbound:notification.navigation_blocked_caption')}
-			onConfirm={handleProceed}
+			open={blocker.status === 'blocked'}
+			title={t('ns_inoutbound:notification.navigation_blocked_message')}
 			onCancel={handleReset}
+			onConfirm={handleProceed}
+			onOpenChange={handleReset}
 		/>
 	)
 }

@@ -69,18 +69,18 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 	return (
 		<AutoCompleteFieldControl
 			{...props}
-			name='color_sn'
+			datalist={colorOptions}
+			disabled={disabled}
 			label={t('ns_erp:fields.color_sn')}
+			labelField='label'
+			loading={loading}
+			name='color_sn'
+			readOnly={readOnly}
+			valueField='value'
 			placeholder={t('ns_common:form_placeholder.fill', {
 				object: String(t('ns_erp:fields.color_sn')).toLowerCase(),
 				defaultValue: null
 			})}
-			disabled={disabled}
-			loading={loading}
-			readOnly={readOnly}
-			datalist={colorOptions}
-			labelField='label'
-			valueField='value'
 			onInput={(value) =>
 				reset({
 					...getValues(),

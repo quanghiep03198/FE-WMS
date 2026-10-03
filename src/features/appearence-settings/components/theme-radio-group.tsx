@@ -8,13 +8,13 @@ const ThemeRadioGroup: React.FC = () => {
 
 	return (
 		<RadioGroup
+			className='grid max-w-md grid-cols-2 gap-8 pt-2'
+			defaultValue={theme}
 			onValueChange={(value) => {
 				setTheme(value as Theme)
-			}}
-			defaultValue={theme}
-			className='grid max-w-md grid-cols-2 gap-8 pt-2'>
+			}}>
 			<Label className='[&:has([data-state=checked])>Div]:border-primary'>
-				<RadioGroupItem value='light' className='sr-only' />
+				<RadioGroupItem className='sr-only' value='light' />
 				<Div className='border-muted hover:border-accent items-center rounded-md border-2 p-1'>
 					<Div className='space-y-2 rounded-sm bg-neutral-200 p-2'>
 						<Div className='space-y-2 rounded-md bg-white p-2 shadow-sm'>
@@ -35,7 +35,7 @@ const ThemeRadioGroup: React.FC = () => {
 			</Label>
 
 			<Label className='[&:has([data-state=checked])>Div]:border-primary'>
-				<RadioGroupItem value='dark' className='sr-only' />
+				<RadioGroupItem className='sr-only' value='dark' />
 				<Div className='border-muted bg-popover hover:bg-accent hover:text-accent-foreground items-center rounded-md border-2 p-1'>
 					<Div className='space-y-2 rounded-sm bg-neutral-950 p-2'>
 						<Div className='space-y-2 rounded-md bg-neutral-800 p-2 shadow-sm'>

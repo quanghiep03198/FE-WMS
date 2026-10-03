@@ -18,7 +18,7 @@ const EpcListBox: React.FC = () => {
 			</ListBoxBody>
 			<ListBoxFooter ref={listBoxWrapperRef}>
 				<OrderDetails />
-				<UploadDataFileDialog station='WH101' maxFiles={200} />
+				<UploadDataFileDialog maxFiles={200} station='WH101' />
 			</ListBoxFooter>
 		</ListBoxWrapper>
 	)

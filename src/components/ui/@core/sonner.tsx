@@ -8,8 +8,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
 
 	return (
 		<Sonner
-			theme={theme}
 			className='toaster group'
+			theme={theme}
 			toastOptions={{
 				classNames: {
 					toast: 'group toast group-[.toaster]:bg-background group-[.toaster]:pointer-events-auto group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',

@@ -42,7 +42,7 @@ const OrderListSelect: React.FC = () => {
 			toast.warning('Oops !!!', {
 				id: TOO_MANY_ORDER_TOAST,
 				description: t('ns_inoutbound:notification.too_many_mono'),
-				icon: <Icon name='TriangleAlert' className='stroke-destructive' />,
+				icon: <Icon className='stroke-destructive' name='TriangleAlert' />,
 				action: {
 					label: t('ns_common:actions.dismiss'),
 					type: 'button',
@@ -63,11 +63,11 @@ const OrderListSelect: React.FC = () => {
 	return (
 		<Div className='w-full sm:basis-full'>
 			<Select value={selectedOrder} onValueChange={handleChangeOrder}>
-				<HoverCard openDelay={50} closeDelay={50}>
+				<HoverCard closeDelay={50} openDelay={50}>
 					<HoverCardTrigger asChild>
 						<SelectTrigger className='flex w-full justify-start gap-x-2 border-0 bg-inherit shadow-none'>
 							{selectedOrder !== previousSelectedOrder && isLoading ? (
-								<Icon name='LoaderCircle' className='animate-[spin_1.75s_linear_infinite]' />
+								<Icon className='animate-[spin_1.75s_linear_infinite]' name='LoaderCircle' />
 							) : (
 								<Icon name='ListFilter' />
 							)}
@@ -75,10 +75,10 @@ const OrderListSelect: React.FC = () => {
 						</SelectTrigger>
 					</HoverCardTrigger>
 					<HoverCardContent
+						className='w-radix-hover-card inline-grid auto-cols-auto grid-flow-col gap-x-2 *:text-pretty'
 						side='bottom'
-						sideOffset={10}
-						className='w-radix-hover-card inline-grid auto-cols-auto grid-flow-col gap-x-2 *:text-pretty'>
-						<Icon name='Info' className='stroke-active my-0.5' size={18} />
+						sideOffset={10}>
+						<Icon className='stroke-active my-0.5' name='Info' size={18} />
 						<Typography variant='small'>{t('ns_inoutbound:description.select_order')}</Typography>
 					</HoverCardContent>
 				</HoverCard>
@@ -90,7 +90,7 @@ const OrderListSelect: React.FC = () => {
 								return acc + curr.count
 							}, 0)
 							return (
-								<SelectItem key={item.mo_no} value={item.mo_no} className='flex! items-center gap-x-2'>
+								<SelectItem className='flex! items-center gap-x-2' key={item.mo_no} value={item.mo_no}>
 									{item.mo_no} {`(${cmdQuantity} pairs)`}
 								</SelectItem>
 							)

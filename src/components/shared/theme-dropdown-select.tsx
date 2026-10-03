@@ -6,7 +6,7 @@ const ThemeDropdownSelect: React.FC = () => {
 	const { theme, setTheme } = useTheme()
 
 	return (
-		<Select value={theme} defaultValue={theme} onValueChange={(value) => setTheme(value as Theme)}>
+		<Select defaultValue={theme} value={theme} onValueChange={(value) => setTheme(value as Theme)}>
 			<SelectTrigger>
 				<SelectValue placeholder='Select theme' />
 			</SelectTrigger>

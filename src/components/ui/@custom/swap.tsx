@@ -17,10 +17,10 @@ export const Swap: React.FC<TSwapButtonProps> = ({ checked, swapOn, swapOff, onC
 	return (
 		<Label htmlFor={id} {...rest}>
 			<Toggler
-				id={id}
-				type='checkbox'
 				checked={checked}
+				id={id}
 				ref={resolvedRef}
+				type='checkbox'
 				onChange={(e) => {
 					if (onChange) onChange(e)
 				}}

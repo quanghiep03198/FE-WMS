@@ -27,7 +27,7 @@ const Terminal: React.FC<TerminalProps> = ({
 			className={cn('divide-border bg-accent/50 text-accent-foreground divide-y rounded-md', className)}
 			{...props}>
 			<div className='flex items-center justify-between p-3'>
-				<Typography variant='small' className='inline-flex items-center gap-x-2 font-medium'>
+				<Typography className='inline-flex items-center gap-x-2 font-medium' variant='small'>
 					<Icon name={tabIcon} /> {tabTitle}
 				</Typography>
 				<Tooltip message={t('ns_common:editor.copy')} triggerProps={{ asChild: true }}>

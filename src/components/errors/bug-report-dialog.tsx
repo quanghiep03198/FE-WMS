@@ -47,11 +47,11 @@ const BugReportDialog: React.FC<{ eventId: string }> = ({ eventId }) => {
 			<DialogContent className='max-w-4xl'>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleSubmit)}>
-						<InputFieldControl name='email' label='Email' type='email' placeholder='example@email.com' />
-						<InputFieldControl name='name' label='Name' placeholder='Your name' />
+						<InputFieldControl label='Email' name='email' placeholder='example@email.com' type='email' />
+						<InputFieldControl label='Name' name='name' placeholder='Your name' />
 						<TextareaFieldControl
-							name='description'
 							label='What happened?'
+							name='description'
 							placeholder='I clicked to the submit button then this error come up with'
 							rows={5}
 						/>

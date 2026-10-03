@@ -59,7 +59,7 @@ export const RowSelectionCheckbox: React.FC<RowSelectionCheckboxProps> = ({ row,
 		if (typeof onCheckedChange === 'function') onCheckedChange(checked)
 	}
 
-	return <Checkbox disabled={disabled} checked={row.getIsSelected()} onCheckedChange={handleCheckedChange} />
+	return <Checkbox checked={row.getIsSelected()} disabled={disabled} onCheckedChange={handleCheckedChange} />
 }
 
 RowSelectionCheckbox.displayName = 'RowSelectionCheckbox'

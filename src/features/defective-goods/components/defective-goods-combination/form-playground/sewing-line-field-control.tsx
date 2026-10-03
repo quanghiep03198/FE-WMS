@@ -16,17 +16,17 @@ const SewingLineFieldControl: React.FC<DefAutoCompleteFieldControlProps> = (prop
 
 	return (
 		<AutoCompleteFieldControl
-			name='sewing_line'
+			datalist={datalist}
 			label={t('ns_erp:fields.sewing_line')}
+			labelField='label'
+			name='sewing_line'
+			valueField='value'
 			placeholder={capitalize(
 				t('ns_common:form_placeholder.fill', {
 					object: t('ns_erp:fields.sewing_line'),
 					defaultValue: null
 				})
 			)}
-			datalist={datalist}
-			labelField='label'
-			valueField='value'
 			{...props}
 		/>
 	)

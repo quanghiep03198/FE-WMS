@@ -22,16 +22,16 @@ const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 			<Div className='grid min-h-(--outlet-wrapper-height) w-full place-items-center gap-y-3'>
 				<Div>
 					<Div className='flex items-center gap-x-4'>
-						<Typography color='destructive' className='font-semibold'>
+						<Typography className='font-semibold' color='destructive'>
 							{HttpStatusCode.BadGateway}
 						</Typography>
-						<Separator orientation='vertical' className='h-5 w-0.5' />
+						<Separator className='h-5 w-0.5' orientation='vertical' />
 						<Typography variant='h4'>{t('ns_common:errors.502')}</Typography>
 					</Div>
 					<Typography
-						variant='p'
 						className='mt-2 mb-6 max-w-3xl text-base leading-7 text-pretty'
 						color='muted'
+						variant='p'
 						dangerouslySetInnerHTML={{
 							__html: t('ns_common:errors.502_message', {
 								url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color:var(--active);'>URL</a>`,

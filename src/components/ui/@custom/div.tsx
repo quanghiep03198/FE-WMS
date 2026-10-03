@@ -12,7 +12,7 @@ export const Div: React.FC<DivProps> = (props) => {
 	const resolvedRef = ref || localRef
 
 	return (
-		<Component className={cn(className)} style={style} ref={resolvedRef} {...restProps}>
+		<Component className={cn(className)} ref={resolvedRef} style={style} {...restProps}>
 			{children}
 		</Component>
 	)

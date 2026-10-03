@@ -27,7 +27,7 @@ import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { InventoryAuditQueryKeys, useGetInventoryAuditReport } from '../../hooks/use-inventory-audit-request'
-import CheckoutInventoryAuditButton from './checkout-button'
+import CheckoutInventoryAuditConfirmDialog from './checkout-confirm-dialog'
 import { InventoryReportDetailTable } from './report-detail-table'
 import DataTableSummary from './report-summary-table'
 
@@ -51,9 +51,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 	const renderSubComponents = useCallback(
 		({ row }: RenderSubComponentProps<IMonthlyInventoryAudit>): React.ReactElement => (
 			<InventoryReportDetailTable
-				queries={pick(row.original, ['mo_no', 'year_month'])}
-				data={row.original?.size_ledger}
 				canUpdate={row.original.inventory_closure_status === 'pending'}
+				data={row.original?.size_ledger}
+				queries={pick(row.original, ['mo_no', 'year_month'])}
 			/>
 		),
 		[]
@@ -153,19 +153,18 @@ export const InventoryReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
 					const value = getValue()
-					console.log(value)
 					if (!value)
 						return (
-							<Typography variant='small' color='muted'>
+							<Typography color='muted' variant='small'>
 								{t('ns_common:titles.unknown')}
 							</Typography>
 						)
 					return (
 						<EllipsisList
-							threshhold={2}
 							data={value.filter((item) => !!item).sort((a, b) => a.localeCompare(b))}
+							threshhold={2}
 							template={({ data }) => (
-								<Badge variant='secondary' className='whitespace-nowrap'>
+								<Badge className='whitespace-nowrap' variant='secondary'>
 									{data.trim()}
 								</Badge>
 							)}
@@ -241,34 +240,34 @@ export const InventoryReportMasterTable: React.FC = () => {
 	return (
 		<Div className='relative space-y-10'>
 			<DataTable
-				ref={dataTableRef as React.RefObject<Table<IMonthlyInventoryAudit>>}
 				columns={columns}
-				initialState={{
-					pagination: {
-						pageIndex: 0,
-						pageSize: 50
-					}
-				}}
 				data={data ?? []}
-				loading={isLoading}
-				expanded={expanded}
-				getRowCanExpand={() => true}
-				enableRowSelection={true}
-				enableExpanding={true}
 				enableColumnResizing={true}
-				manualExpanding={true}
-				renderSubComponent={renderSubComponents}
+				enableExpanding={true}
+				enableRowSelection={true}
+				expanded={expanded}
+				footerProps={{ slot: () => <DataTableSummary data={data ?? []} isLoading={isLoading} /> }}
+				getRowCanExpand={() => true}
 				getRowId={(originalRow: IMonthlyInventoryAudit) => originalRow.mo_no}
+				loading={isLoading}
+				manualExpanding={true}
+				ref={dataTableRef as React.RefObject<Table<IMonthlyInventoryAudit>>}
+				renderSubComponent={renderSubComponents}
 				containerProps={{
 					style: {
 						height:
 							'calc(var(--outlet-wrapper-height) -  2 * var(--row-height) - 2 * var(--outlet-padding) - 9.5rem)'
 					}
 				}}
-				footerProps={{ slot: () => <DataTableSummary data={data ?? []} isLoading={isLoading} /> }}
+				initialState={{
+					pagination: {
+						pageIndex: 0,
+						pageSize: 50
+					}
+				}}
 				toolbarProps={{
 					slotLeft: () => (
-						<CheckoutInventoryAuditButton
+						<CheckoutInventoryAuditConfirmDialog
 							isClosed={
 								Array.isArray(data) && data.every((item) => item.inventory_closure_status === 'completed')
 							}
@@ -317,7 +316,7 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 	return (
 		<Fragment>
 			<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-				<Button size='icon' variant='outline' disabled={!downloadable} onClick={() => handleDownloadExcel()}>
+				<Button disabled={!downloadable} size='icon' variant='outline' onClick={() => handleDownloadExcel()}>
 					<Icon name='Download' />
 				</Button>
 			</Tooltip>

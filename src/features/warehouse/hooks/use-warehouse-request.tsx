@@ -7,7 +7,8 @@ import { WarehouseService } from '../services/warehouse.service'
 import type { IWarehouse } from '../types'
 
 export enum WarehouseQueryKeys {
-	WAREHOUSE = 'WAREHOUSE'
+	WAREHOUSE = 'WAREHOUSE',
+	WAREHOUSE_STORAGE_SUMMARY = 'WAREHOUSE_STORAGE_SUMMARY'
 }
 
 export function getOneWarehouseQueryOptions(
@@ -78,5 +79,13 @@ export function useDeleteWarehouseMutation(settledHandler: () => void) {
 		},
 		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context }),
 		onSettled: settledHandler
+	})
+}
+
+export function useGetWarehouseStorageSummaryQuery() {
+	return useQuery({
+		queryKey: [WarehouseQueryKeys.WAREHOUSE_STORAGE_SUMMARY],
+		queryFn: WarehouseService.getSummary,
+		select: (response) => response.metadata
 	})
 }

@@ -20,7 +20,7 @@ const SectionHeading: React.FC<TypographyProps & { id: DocumentHashNavigation }>
 	}, [inViewport])
 
 	return (
-		<Typography variant='h2' id={id} ref={ref} {...props}>
+		<Typography id={id} ref={ref} variant='h2' {...props}>
 			{children}
 		</Typography>
 	)

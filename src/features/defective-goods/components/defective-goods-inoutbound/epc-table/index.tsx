@@ -192,7 +192,7 @@ const EpcTable: React.FC = () => {
 								return isValid(new Date(value)) ? (
 									format(new Date(value), 'yyyy-MM-dd HH:mm:ss')
 								) : (
-									<Typography variant='small' color='muted'>
+									<Typography color='muted' variant='small'>
 										{t('ns_common:titles.unknown')}
 									</Typography>
 								)

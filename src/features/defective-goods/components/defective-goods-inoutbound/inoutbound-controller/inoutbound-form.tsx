@@ -97,13 +97,13 @@ const InoutboundForm: React.FC = () => {
 	return (
 		<Div className='flex w-full flex-row items-center justify-between gap-x-3 @4xl:gap-x-6 @6xl:flex-1 @6xl:justify-end'>
 			<DropdownSelect
+				labelField='label'
+				placeholder={t('ns_common:common_fields.actions')}
+				valueField='value'
 				datalist={[
 					{ label: t('ns_inoutbound:action_types.stock_in'), value: StockFlow.INBOUND },
 					{ label: t('ns_inoutbound:action_types.stock_out'), value: StockFlow.OUTBOUND }
 				]}
-				labelField='label'
-				valueField='value'
-				placeholder={t('ns_common:common_fields.actions')}
 				selectProps={{
 					value: searchParams.action,
 					onValueChange: (value) => {
@@ -115,25 +115,25 @@ const InoutboundForm: React.FC = () => {
 				}}
 			/>
 			<RadioGroup
-				disabled={isPending}
-				onValueChange={(value) => setParams({ ...searchParams, action: value as StockFlow })}
+				className='hidden items-center gap-x-6 @4xl:flex'
 				defaultValue={searchParams.action}
+				disabled={isPending}
 				value={searchParams.action}
-				className='hidden items-center gap-x-6 @4xl:flex'>
+				onValueChange={(value) => setParams({ ...searchParams, action: value as StockFlow })}>
 				<Div className='flex items-center space-y-0 space-x-3'>
-					<RadioGroupItem value={StockFlow.INBOUND} id='action-inbound' />
+					<RadioGroupItem id='action-inbound' value={StockFlow.INBOUND} />
 					<Label className='font-normal' htmlFor='action-inbound'>
 						{t('ns_inoutbound:action_types.stock_in')}
 					</Label>
 				</Div>
 				<Div className='flex items-center space-y-0 space-x-3'>
-					<RadioGroupItem value={StockFlow.OUTBOUND} id='action-outbound' />
+					<RadioGroupItem id='action-outbound' value={StockFlow.OUTBOUND} />
 					<Label className='font-normal' htmlFor='action-outbound'>
 						{t('ns_inoutbound:action_types.stock_out')}
 					</Label>
 				</Div>
 			</RadioGroup>
-			<Separator orientation='vertical' className='h-6 w-0.5' />
+			<Separator className='h-6 w-0.5' orientation='vertical' />
 			<FormProvider {...form}>
 				<Form onSubmit={form.handleSubmit(handleFormSubmission)}>
 					<Div
@@ -147,9 +147,11 @@ const InoutboundForm: React.FC = () => {
 						{searchParams.action === StockFlow.OUTBOUND ? (
 							<Fragment>
 								<SelectFieldControl
-									name='outbound_purpose'
 									errorMessageVariant='tooltip'
+									labelField='label'
+									name='outbound_purpose'
 									placeholder={t('ns_inoutbound:placeholders.outbound_purpose')}
+									valueField='value'
 									datalist={[
 										{
 											label: t('ns_inoutbound:inoutbound_actions.shipping'),
@@ -168,42 +170,40 @@ const InoutboundForm: React.FC = () => {
 											value: DefectiveGoodsOutboundPurpose.RUIN
 										}
 									]}
-									labelField='label'
-									valueField='value'
 								/>
 								{currentOutboundPurpose === DefectiveGoodsOutboundPurpose.SHIPPING && (
 									<PurchaseOrderFieldControl
-										label={null}
 										errorMessageVariant='tooltip'
+										label={null}
 										placeholder={t('ns_erp:fields.po')}
 									/>
 								)}
 							</Fragment>
 						) : (
 							<InputFieldControl
-								name='storage_location'
+								autoComplete='off'
 								errorMessageVariant='tooltip'
+								name='storage_location'
 								placeholder={t('ns_inoutbound:placeholders.enter_storage_location')}
 								onChange={(e) => form.setValue('storage_location', e.currentTarget.value.toUpperCase())}
-								autoComplete='off'
 							/>
 						)}
 					</Div>
-					<Separator orientation='vertical' className='h-6 w-0.5' />
+					<Separator className='h-6 w-0.5' orientation='vertical' />
 					<RoleBaseAccessControl
-						mode='fallback'
 						authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}
+						mode='fallback'
 						fallbackComponent={
 							<Button
-								type='button'
 								className='cursor-not-allowed'
+								type='button'
 								onClick={() =>
 									toast.warning(t('ns_common:errors.403_notification'), { id: ACTION_RESTRICTED_TOAST_ID })
 								}>
 								<Icon name='Lock' /> {t('ns_common:actions.save')}
 							</Button>
 						}>
-						<Button type='submit' disabled={disabled}>
+						<Button disabled={disabled} type='submit'>
 							<Icon name='Check' />
 							{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 						</Button>

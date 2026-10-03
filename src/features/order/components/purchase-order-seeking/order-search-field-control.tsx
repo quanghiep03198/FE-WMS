@@ -78,52 +78,52 @@ export function OrderSearchFieldControl() {
 							} as React.CSSProperties
 						}>
 						<Div className='space-y-2'>
-							<Popover open={open} onOpenChange={setOpen} modal={false}>
+							<Popover modal={false} open={open} onOpenChange={setOpen}>
 								<FormControl>
-									<PopoverTrigger onClick={(e) => e.preventDefault()} asChild={true}>
+									<PopoverTrigger asChild={true} onClick={(e) => e.preventDefault()}>
 										<Div className='focus-within:border-primary aria-invalid:border-destructive aria-invalid:focus-within:border-destructive relative flex w-full flex-1 flex-col items-stretch gap-6 rounded-lg border px-6 py-3 transition-colors duration-200'>
 											<Div className='flex items-center gap-x-2'>
 												<Input
+													aria-invalid={!!getFieldState('po').error}
+													autoComplete='off'
 													id={id}
 													ref={ref}
 													value={field.value}
-													autoComplete='off'
+													className={cn(
+														'focus-border-0 rounded-none border-0 px-0 text-base shadow-none',
+														isLoading && 'animate-pulse'
+													)}
 													placeholder={capitalize(
 														t('ns_common:form_placeholder.fill', {
 															object: t('ns_erp:fields.po'),
 															defaultValue: null
 														})
 													)}
-													aria-invalid={!!getFieldState('po').error}
-													className={cn(
-														'focus-border-0 rounded-none border-0 px-0 text-base shadow-none',
-														isLoading && 'animate-pulse'
-													)}
-													onKeyDown={handleKeyDown}
-													onClick={() => setOpen(true)}
 													onChange={(e) => field.onChange(e)}
+													onClick={() => setOpen(true)}
+													onKeyDown={handleKeyDown}
 												/>
 
 												<Tooltip message={t('ns_common:actions.reset')} triggerProps={{ asChild: true }}>
 													<GhostButton
+														disabled={!field.value}
 														type='button'
-														onClick={() => setValue('po', '')}
-														disabled={!field.value}>
+														onClick={() => setValue('po', '')}>
 														<Icon name='X' />
 													</GhostButton>
 												</Tooltip>
-												<Separator orientation='vertical' className='h-4 w-0.5' />
+												<Separator className='h-4 w-0.5' orientation='vertical' />
 												<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-													<GhostButton onClick={() => refetch()} disabled={isLoading}>
-														<Icon name='RefreshCcw' className={isLoading && 'animate-spin'} />
+													<GhostButton disabled={isLoading} onClick={() => refetch()}>
+														<Icon className={isLoading && 'animate-spin'} name='RefreshCcw' />
 													</GhostButton>
 												</Tooltip>
 											</Div>
 											<Div className='flex items-center justify-between'>
 												<SearchHistory />
 												<Label
-													htmlFor='search-po-button'
 													className={cn(buttonVariants({ size: isMobile ? 'default' : 'lg' }))}
+													htmlFor='search-po-button'
 													onClick={(e) => {
 														e.stopPropagation()
 														setOpen(false)
@@ -136,26 +136,26 @@ export function OrderSearchFieldControl() {
 									</PopoverTrigger>
 								</FormControl>
 								<PopoverContent
-									sideOffset={8}
 									className='max-h-52 w-[var(--radix-popover-trigger-width)] overflow-auto p-1'
+									sideOffset={8}
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{Array.isArray(filteredDatalist) && filteredDatalist?.length > 0 ? (
 										filteredDatalist?.map((item) => {
 											return (
 												<AutoCompleteItem
-													key={item.value.po}
 													aria-disabled={item.value.isCompleted}
+													key={item.value.po}
 													onClick={() => setValue('po', item.value.po)}>
 													{item.value.po}
 													{item.value.isCompleted && <Icon name='BadgeCheck' size={18} />}
 													{item.value.po === currentOrderValue && (
-														<Icon name='Check' className='ml-auto' />
+														<Icon className='ml-auto' name='Check' />
 													)}
 												</AutoCompleteItem>
 											)
 										})
 									) : (
-										<Typography variant='small' color='muted' className='block h-full p-10 text-center'>
+										<Typography className='block h-full p-10 text-center' color='muted' variant='small'>
 											{t('ns_common:table.no_data')}
 										</Typography>
 									)}

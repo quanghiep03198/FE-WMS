@@ -32,7 +32,7 @@ function Page() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.access_management')}</title>
-			<meta name='description' content='Manage users' />
+			<meta content='Manage users' name='description' />
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN]}>
 				<RoleBaseAccessControl

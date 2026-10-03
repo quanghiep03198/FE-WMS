@@ -65,7 +65,7 @@ const DataTable: React.FC<TableProps> = (props) => {
 
 	return (
 		<Wrapper style={{ ...computedColumnSizes, ...tableStyles }}>
-			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
+			{caption && <TableHeadCaption aria-description={caption} id={captionId} />}
 			<ScrollArea
 				ref={containerRef}
 				style={{
@@ -75,7 +75,7 @@ const DataTable: React.FC<TableProps> = (props) => {
 					WebkitOverflowScrolling: 'touch'
 				}}
 				{...containerProps}>
-				<Table data-role='data-grid' className='table-auto border-separate border-spacing-0 border-none'>
+				<Table className='table-auto border-separate border-spacing-0 border-none' data-role='data-grid'>
 					{caption && (
 						<TableCaption aria-labelledby={captionId} className='hidden'>
 							{caption}
@@ -88,11 +88,11 @@ const DataTable: React.FC<TableProps> = (props) => {
 						<DataTableEmpty />
 					) : (
 						<DataTableBody
-							table={table}
 							containerRef={containerRef}
-							shouldEnableVirtualizer={virtualizerOptions.enabled}
 							estimatedRowHeight={virtualizerOptions.estimateSize}
 							renderSubComponent={renderSubComponent}
+							shouldEnableVirtualizer={virtualizerOptions.enabled}
+							table={table}
 						/>
 					)}
 				</Table>

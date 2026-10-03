@@ -122,10 +122,10 @@ const Carousel: React.FC<React.ComponentProps<'div'> & CarouselProps> = ({
 				canScrollNext
 			}}>
 			<div
-				onKeyDownCapture={handleKeyDown}
+				aria-roledescription='carousel'
 				className={cn('relative', className)}
 				role='region'
-				aria-roledescription='carousel'
+				onKeyDownCapture={handleKeyDown}
 				{...props}>
 				{children}
 			</div>
@@ -138,7 +138,7 @@ const CarouselContent: React.FC<React.ComponentProps<'div'>> = ({ className, ...
 	const { carouselRef, orientation } = useCarousel()
 
 	return (
-		<div ref={carouselRef} className='overflow-hidden'>
+		<div className='overflow-hidden' ref={carouselRef}>
 			<div className={cn('flex', orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col', className)} {...props} />
 		</div>
 	)
@@ -150,9 +150,9 @@ const CarouselItem: React.FC<React.ComponentProps<'div'>> = ({ className, ...pro
 
 	return (
 		<div
-			role='group'
 			aria-roledescription='slide'
 			className={cn('min-w-0 shrink-0 grow-0 basis-full', orientation === 'horizontal' ? 'pl-4' : 'pt-4', className)}
+			role='group'
 			{...props}
 		/>
 	)
@@ -164,8 +164,9 @@ const CarouselPrevious: React.FC<ButtonProps> = ({ className, variant = 'outline
 
 	return (
 		<Button
-			variant={variant}
+			disabled={!canScrollPrev}
 			size={size}
+			variant={variant}
 			className={cn(
 				'absolute h-8 w-8 rounded-full',
 				orientation === 'horizontal'
@@ -173,7 +174,6 @@ const CarouselPrevious: React.FC<ButtonProps> = ({ className, variant = 'outline
 					: '-top-12 left-1/2 -translate-x-1/2 rotate-90',
 				className
 			)}
-			disabled={!canScrollPrev}
 			onClick={scrollPrev}
 			{...props}>
 			<ArrowLeftIcon className='h-4 w-4' />
@@ -188,8 +188,9 @@ const CarouselNext: React.FC<ButtonProps> = ({ className, variant = 'outline', s
 
 	return (
 		<Button
-			variant={variant}
+			disabled={!canScrollNext}
 			size={size}
+			variant={variant}
 			className={cn(
 				'absolute h-8 w-8 rounded-full',
 				orientation === 'horizontal'
@@ -197,7 +198,6 @@ const CarouselNext: React.FC<ButtonProps> = ({ className, variant = 'outline', s
 					: '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
 				className
 			)}
-			disabled={!canScrollNext}
 			onClick={scrollNext}
 			{...props}>
 			<ArrowRightIcon className='h-4 w-4' />

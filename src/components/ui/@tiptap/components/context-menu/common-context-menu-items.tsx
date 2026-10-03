@@ -24,15 +24,15 @@ const CommonContextMenuItems: React.FC<{ editor: Editor }> = ({ editor }) => {
 	return (
 		<Fragment>
 			<ContextMenuItem
-				disabled={editor.view.state.selection.empty}
 				className='gap-x-2'
+				disabled={editor.view.state.selection.empty}
 				onClick={() => document.execCommand('copy')}>
 				<Icon name='Copy' /> Copy
 				<ContextMenuShortcut>⌘+c</ContextMenuShortcut>
 			</ContextMenuItem>
 			<ContextMenuItem
-				disabled={editor.view.state.selection.empty}
 				className='gap-x-2'
+				disabled={editor.view.state.selection.empty}
 				onClick={() => document.execCommand('cut')}>
 				<Icon name='Scissors' /> Cut
 				<ContextMenuShortcut>⌘+x</ContextMenuShortcut>
@@ -50,8 +50,8 @@ const CommonContextMenuItems: React.FC<{ editor: Editor }> = ({ editor }) => {
 				<ContextMenuShortcut>⌘+v</ContextMenuShortcut>
 			</ContextMenuItem>
 			<ContextMenuItem
-				disabled={!canPaste}
 				className='flex gap-x-2 whitespace-nowrap'
+				disabled={!canPaste}
 				onClick={async () => {
 					const copiedData = await navigator.clipboard.readText()
 					editor.commands.insertContentAt(editor.state.selection.anchor, copiedData)

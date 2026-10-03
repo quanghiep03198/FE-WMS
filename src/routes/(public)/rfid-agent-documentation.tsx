@@ -44,7 +44,7 @@ function RouteComponent() {
 					logo: new URL('logo.svg', url)
 				})}
 			</script>
-			<SidebarProvider data-state-persistent-key='rfidAgentDocSidebarOpen' className='h-screen overflow-hidden'>
+			<SidebarProvider className='h-screen overflow-hidden' data-state-persistent-key='rfidAgentDocSidebarOpen'>
 				<PageProvider>
 					<NavSidebar />
 					<Div className='@container relative flex h-screen flex-1 flex-col'>
@@ -64,7 +64,7 @@ function RouteComponent() {
 									)
 								}}>
 								<Div as='article' className='space-y-20'>
-									<Typography variant='h1' className='inline-flex items-center gap-x-3'>
+									<Typography className='inline-flex items-center gap-x-3' variant='h1'>
 										<Icon name='Link' size={26} /> Eclipse Mosquitto
 									</Typography>
 									<MosquittoIntroduction />
@@ -75,7 +75,7 @@ function RouteComponent() {
 								</Div>
 								<Separator />
 								<Div as='article' className='space-y-20'>
-									<Typography variant='h1' className='inline-flex items-center gap-x-3'>
+									<Typography className='inline-flex items-center gap-x-3' variant='h1'>
 										<Icon name='Link' size={26} /> RFID Agent
 									</Typography>
 									<RFIDAgentIntroduction />
@@ -87,7 +87,7 @@ function RouteComponent() {
 								</Div>
 								<Separator />
 								<Div as='article' className='space-y-20'>
-									<Typography variant='h1' className='inline-flex items-center gap-x-3'>
+									<Typography className='inline-flex items-center gap-x-3' variant='h1'>
 										<Icon name='Link' size={26} /> FAQ
 									</Typography>
 									<FAQCommonQuestions />

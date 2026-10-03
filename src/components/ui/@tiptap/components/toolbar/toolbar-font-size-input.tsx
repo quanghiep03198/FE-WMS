@@ -56,23 +56,23 @@ const FontSizeInput: React.FC = () => {
 	return (
 		<Div className='flex h-8 items-stretch overflow-hidden rounded-md border *:rounded-none *:p-0 [&_button]:aspect-square [&_button]:size-8! [&_button]:place-content-center'>
 			<Button
+				disabled={fontSize <= FONT_SIZE_MIN}
 				type='button'
 				variant='ghost'
-				onClick={() => handleChangeFontSize(-1)}
-				disabled={fontSize <= FONT_SIZE_MIN}>
+				onClick={() => handleChangeFontSize(-1)}>
 				<Icon name='Minus' size={14} />
 			</Button>
-			<Separator orientation='vertical' className='h-8 w-px' />
+			<Separator className='h-8 w-px' orientation='vertical' />
 			<Input
-				type='number'
 				className='focus:boder-none h-full w-12 rounded-none border-0 text-center outline-none focus-within:ring-0 focus-within:ring-offset-0'
-				min={FONT_SIZE_MIN}
 				max={FONT_SIZE_MAX}
+				min={FONT_SIZE_MIN}
+				type='number'
 				value={fontSize}
 				onChange={(e) => setFontSize(+e.target.value)}
 			/>
-			<Separator orientation='vertical' className='h-8 w-px' />
-			<Button type='button' size='icon' variant='ghost' onClick={() => handleChangeFontSize(1)}>
+			<Separator className='h-8 w-px' orientation='vertical' />
+			<Button size='icon' type='button' variant='ghost' onClick={() => handleChangeFontSize(1)}>
 				<Icon name='Plus' size={14} />
 			</Button>
 		</Div>

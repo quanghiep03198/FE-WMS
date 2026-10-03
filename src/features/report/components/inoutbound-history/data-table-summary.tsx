@@ -18,7 +18,7 @@ export default function DataTableSummary({
 		<Table className='w-full table-fixed'>
 			<TableHeader className='[&_th]:bg-table-head [&_th]:text-table-head-foreground'>
 				<TableRow>
-					<TableHead colSpan={2} className='text-foreground!'>
+					<TableHead className='text-foreground!' colSpan={2}>
 						{t('ns_common:titles.overall')}
 					</TableHead>
 				</TableRow>

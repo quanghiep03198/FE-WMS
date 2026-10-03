@@ -60,8 +60,8 @@ const DownloadExcelButton: React.FC = () => {
 	return (
 		<Button
 			disabled={!Array.isArray(queryData?.metadata) || queryData?.metadata?.length === 0}
-			variant={isLargeScreen ? 'default' : 'outline'}
 			size={isLargeScreen ? 'default' : 'icon'}
+			variant={isLargeScreen ? 'default' : 'outline'}
 			onClick={() => handleDownloadReport()}>
 			<Icon name='Download' />
 			{isLargeScreen && t('ns_common:actions.download_excel')}

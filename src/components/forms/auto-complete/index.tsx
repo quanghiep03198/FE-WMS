@@ -145,14 +145,14 @@ export function AutoCompleteFieldControl<T extends FieldValues, D>(props: AutoCo
 						}>
 						{label && (
 							<FormLabel
-								htmlFor={id}
 								aria-orientation={orientation}
-								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
+								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'
+								htmlFor={id}>
 								{label}
 							</FormLabel>
 						)}
 						<Div className='space-y-2'>
-							<Popover open={open && props['aria-haspopup'] !== 'false'} onOpenChange={setOpen} modal={false}>
+							<Popover modal={false} open={open && props['aria-haspopup'] !== 'false'} onOpenChange={setOpen}>
 								<FormControl>
 									<Tooltip
 										message={t(error?.message, { defaultValue: error?.message })}
@@ -165,42 +165,42 @@ export function AutoCompleteFieldControl<T extends FieldValues, D>(props: AutoCo
 											['aria-invalid']: !!error
 										}}>
 										<PopoverTrigger
-											type='button'
 											aria-disabled={disabled}
 											className='relative w-full aria-disabled:opacity-50'
+											type='button'
 											onClick={(e) => e.preventDefault()}>
 											<Input
+												aria-invalid={!!getFieldState(name).error}
+												autoComplete='off'
+												data-icon={props['data-icon']}
+												disabled={disabled}
 												id={id}
+												placeholder={placeholder}
+												readOnly={readOnly}
 												ref={resolvedRef}
 												value={field.value}
-												autoComplete='off'
-												placeholder={placeholder}
-												aria-invalid={!!getFieldState(name).error}
 												className={cn(
 													'peer aria-invalid:border-destructive aria-invalid:focus-within:border-destructive pr-9 transition-colors',
 													className
 												)}
-												data-icon={props['data-icon']}
-												onKeyDown={handleKeyDown}
 												onClick={() => setOpen(true)}
+												onKeyDown={handleKeyDown}
 												onChange={(e) => {
 													field.onChange(e)
 													if (typeof onInput === 'function') onInput(e.target.value)
 												}}
-												disabled={disabled}
-												readOnly={readOnly}
 											/>
 											<CaretSortIcon className='absolute top-1/2 right-3 ml-auto h-4 w-4 -translate-y-1/2 opacity-50 peer-data-[icon=false]:hidden' />
 										</PopoverTrigger>
 									</Tooltip>
 								</FormControl>
 								<PopoverContent
-									ref={refCallback}
 									className='w-radix-popover max-h-52 overflow-auto scroll-auto p-1'
+									ref={refCallback}
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{loading ? (
 										<Div className='flex items-center justify-center p-10 text-center'>
-											<Icon name='LoaderCircle' size={18} className='animate-spin' />
+											<Icon className='animate-spin' name='LoaderCircle' size={18} />
 										</Div>
 									) : virtualItems?.length > 0 ? (
 										<Div style={{ height: virtualizer.getTotalSize() }}>
@@ -212,15 +212,15 @@ export function AutoCompleteFieldControl<T extends FieldValues, D>(props: AutoCo
 													return (
 														<CustomAutoCompleteItem
 															key={item.key}
-															value={option}
 															style={{ height: item.size }}
+															value={option}
 														/>
 													)
 
 												return (
 													<AutoCompleteItem
-														key={item.key}
 														aria-selected={field.value === option[valueField]}
+														key={item.key}
 														style={{ height: item.size }}
 														onClick={(e) => {
 															e.stopPropagation()
@@ -229,7 +229,7 @@ export function AutoCompleteFieldControl<T extends FieldValues, D>(props: AutoCo
 															if (typeof onSelect === 'function') onSelect(String(option[valueField]))
 															if (typeof onItemClick === 'function') onItemClick(option)
 														}}>
-														<Typography variant='small' className='line-clamp-1 flex-1'>
+														<Typography className='line-clamp-1 flex-1' variant='small'>
 															{String(option[labelField])}
 														</Typography>
 														<CheckIcon className='group-aria-selected:-item:opacity-100 ml-auto opacity-0 transition-opacity duration-200' />
@@ -239,7 +239,7 @@ export function AutoCompleteFieldControl<T extends FieldValues, D>(props: AutoCo
 											{after > 0 && <AutoCompleteItem style={{ height: after }} />}
 										</Div>
 									) : (
-										<Typography variant='small' color='muted' className='block h-full p-10 text-center'>
+										<Typography className='block h-full p-10 text-center' color='muted' variant='small'>
 											{t('ns_common:table.no_data')}
 										</Typography>
 									)}

@@ -38,9 +38,9 @@ const StorageVisual: React.FC<Props> = ({ className }) => {
 			</VisualCard.Header>
 			<VisualCard.Content className='mt-6 flex-1 mask-[linear-gradient(to_right,transparent,var(--background)_10%,var(--background)_90%,transparent)] @xl:m-0'>
 				<figure
+					aria-label='Supabase Storage supports images, documents and videos'
 					className={cn('nowrap inset-0 flex overflow-hidden', className)}
-					role='img'
-					aria-label='Supabase Storage supports images, documents and videos'>
+					role='img'>
 					<MarqueeList />
 					{cloneElement(<MarqueeList />, { 'aria-hidden': true })}
 				</figure>
@@ -51,19 +51,19 @@ const StorageVisual: React.FC<Props> = ({ className }) => {
 
 const MarqueeList: React.FC = () => {
 	const cols = [
-		<Icon key={0} name='FileArchive' className='h-6 w-6 md:h-6 md:w-6' />,
-		<Icon key={1} name='FileCode' className='h-6 w-6 md:h-6 md:w-6' />
+		<Icon className='h-6 w-6 md:h-6 md:w-6' key={0} name='FileArchive' />,
+		<Icon className='h-6 w-6 md:h-6 md:w-6' key={1} name='FileCode' />
 	]
 	return range(0, 2).map((_, idx1: number) => (
 		<div
-			key={`row-${idx1}`}
-			className='group-hover:paused relative left-0 z-10 flex h-full w-auto animate-[marquee_10s_forwards_linear_infinite] items-end pb-4 transition-transform will-change-transform'>
+			className='group-hover:paused relative left-0 z-10 flex h-full w-auto animate-[marquee_10s_forwards_linear_infinite] items-end pb-4 transition-transform will-change-transform'
+			key={`row-${idx1}`}>
 			{range(0, 8).map((_, idx2: number) => (
-				<div key={`col-${idx2}`} className='ml-2 flex flex-col gap-2 md:gap-2'>
+				<div className='ml-2 flex flex-col gap-2 md:gap-2' key={`col-${idx2}`}>
 					{cols.map((col: any, idx3: number) => (
 						<div
-							key={`icon-${idx3}`}
-							className='bg bg-card text-muted-foreground hover:border-success hover:text-success flex h-15 w-15 items-center justify-center rounded-lg border duration-100 md:h-15.5 md:w-15.5 md:min-w-15.5'>
+							className='bg bg-card text-muted-foreground hover:border-success hover:text-success flex h-15 w-15 items-center justify-center rounded-lg border duration-100 md:h-15.5 md:w-15.5 md:min-w-15.5'
+							key={`icon-${idx3}`}>
 							{col}
 						</div>
 					))}

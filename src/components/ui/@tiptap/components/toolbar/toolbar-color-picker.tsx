@@ -100,17 +100,17 @@ const ToolbarColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) =
 				<Tooltip message={label}>
 					<PopoverTrigger asChild>
 						<Button
-							variant='ghost'
 							className='aspect-square h-8 w-8 flex-col gap-x-1.5'
 							size='icon'
-							type='button'>
+							type='button'
+							variant='ghost'>
 							<Icon name={icon} />
 							<Div
+								style={{ backgroundColor: currentColor }}
 								className={cn('mt-0.5 h-1.5 w-4/5 self-center rounded-l-full rounded-r-full border-[0.5px]', {
 									'bg-foreground!': !currentColor && type === 'textStyle',
 									'bg-transparent': !currentColor && type === 'highlight'
 								})}
-								style={{ backgroundColor: currentColor }}
 							/>
 						</Button>
 					</PopoverTrigger>
@@ -170,10 +170,10 @@ const ToolbarColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) =
 							</Button>
 						)}
 						<Button
-							variant='secondary'
+							className='gap-x-2'
 							size='sm'
 							type='button'
-							className='gap-x-2'
+							variant='secondary'
 							onClick={() => {
 								if (type === 'highlight') editor.commands.unsetHighlight()
 								if (type === 'textStyle') editor.commands.unsetColor()

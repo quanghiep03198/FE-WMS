@@ -30,8 +30,8 @@ const RestorationDataActions: React.FC<RestorationDataActionsProps> = ({ stockFl
 
 	return (
 		<Fragment>
-			<Button size='lg' disabled={!selectedItems.length || isPending} onClick={() => handleRestoreArchivedEpcs()}>
-				{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
+			<Button disabled={!selectedItems.length || isPending} size='lg' onClick={() => handleRestoreArchivedEpcs()}>
+				{isPending && <Icon className='animate-spin' name='LoaderCircle' />}
 				{isError ? t('ns_common:actions.retry') : t('ns_common:actions.restore')}
 			</Button>
 			<SheetClose asChild>

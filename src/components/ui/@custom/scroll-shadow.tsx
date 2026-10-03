@@ -80,19 +80,11 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({
 	return (
 		<div
 			{...props}
-			ref={(e) => {
-				localRef.current = e
-				if (typeof ref === 'function') {
-					ref(e)
-				} else if (ref && 'current' in ref) {
-					ref.current = e
-				}
-			}}
-			data-top-scroll={isScrollable && scrollStates.isScrolledToTop}
-			data-bottom-scroll={isScrollable && scrollStates.isScrolledToBottom}
 			data-away-edge={isScrollable && scrollStates.isAwayFromEdge}
+			data-bottom-scroll={isScrollable && scrollStates.isScrolledToBottom}
 			data-left-scroll={isScrollable && scrollStates.isScrollToStart}
 			data-right-scroll={isScrollable && scrollStates.isScrollToEnd}
+			data-top-scroll={isScrollable && scrollStates.isScrolledToTop}
 			className={cn(
 				className,
 				// prettier-ignore
@@ -110,6 +102,14 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({
 					data-[right-scroll=true]:mask-[linear-gradient(to_right,transparent,var(--background)_10%,var(--background)_100%)]
 				`
 			)}
+			ref={(e) => {
+				localRef.current = e
+				if (typeof ref === 'function') {
+					ref(e)
+				} else if (ref && 'current' in ref) {
+					ref.current = e
+				}
+			}}
 			style={{
 				scrollbarGutter: 'stable',
 				maskRepeat: 'no-repeat',

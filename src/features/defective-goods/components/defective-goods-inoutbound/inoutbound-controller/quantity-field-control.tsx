@@ -25,11 +25,11 @@ const QuantityFiledControl = () => {
 
 	return (
 		<Input
-			name='qty'
-			type='number'
 			min={1}
-			value={currentValue || null}
+			name='qty'
 			placeholder={t('ns_common:common_fields.quantity')}
+			type='number'
+			value={currentValue || null}
 			onChange={(e) => setCurrentValue(+e.currentTarget.value)}
 		/>
 	)

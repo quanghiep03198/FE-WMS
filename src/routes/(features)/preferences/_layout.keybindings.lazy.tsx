@@ -83,7 +83,7 @@ function KeybindingsPage() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.keyboard_shortcut')}</title>
-			<meta name='description' content={t('ns_preference:captions.keybindings')} />
+			<meta content={t('ns_preference:captions.keybindings')} name='description' />
 
 			<PageWrapper className='space-y-6'>
 				<PageHeader>
@@ -92,27 +92,27 @@ function KeybindingsPage() {
 				</PageHeader>
 				<PageSeparator className='block!' />
 				<DataTable
-					data={navigationCommands.concat(extendedCommands)}
-					columns={columns}
+					enableColumnResizing
 					border='bottom-only'
+					columns={columns}
+					containerProps={{ className: 'h-[50vh]' }}
+					data={navigationCommands.concat(extendedCommands)}
 					initialState={{
 						pagination: {
 							pageSize: 50,
 							pageIndex: 0
 						}
 					}}
-					enableColumnResizing
-					containerProps={{ className: 'h-[50vh]' }}
 					toolbarProps={{
 						override: true,
 						render: ({ table }: { table: Table<Pick<NavigationConfig, 'title' | 'keybinding'>> }) => (
 							<Div className='flex h-10 w-1/3 items-center gap-x-2 self-end overflow-hidden rounded-md border px-4 py-2'>
 								<Icon name='Search' />
 								<DebouncedInput
+									className='p-0'
+									placeholder={t('ns_common:actions.search') + '...'}
 									value={table.getState().globalFilter}
 									onChange={(value) => table.setGlobalFilter(value)}
-									placeholder={t('ns_common:actions.search') + '...'}
-									className='p-0'
 								/>
 							</Div>
 						)

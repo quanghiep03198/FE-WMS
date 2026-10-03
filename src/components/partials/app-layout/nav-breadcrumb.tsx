@@ -26,7 +26,7 @@ const NavBreadcrumb: React.FC = () => {
 			<BreadcrumbList>
 				<BreadcrumbItem className=''>
 					<BreadcrumbLink asChild>
-						<Link to='/dashboard' preload={false}>
+						<Link preload={false} to='/dashboard'>
 							<HomeIcon className='size-[1.135rem]' />
 						</Link>
 					</BreadcrumbLink>
@@ -40,13 +40,13 @@ const NavBreadcrumb: React.FC = () => {
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align='start'>
 								{breadcrumb.slice(0, THREADS_HOLD).map((item) => (
-									<DropdownMenuItem key={uuidv4()} asChild={true}>
+									<DropdownMenuItem asChild={true} key={uuidv4()}>
 										<Link
-											to={item.to}
+											className='font-semibold'
 											params={item.params}
-											search={item.search}
 											preload={false}
-											className='font-semibold'>
+											search={item.search}
+											to={item.to}>
 											{item.text}
 										</Link>
 									</DropdownMenuItem>
@@ -56,11 +56,11 @@ const NavBreadcrumb: React.FC = () => {
 						<BreadcrumbSeparator />
 						<BreadcrumbLink asChild>
 							<Link
-								to={breadcrumb[breadcrumb.length - 1].to}
+								activeProps={{ className: 'text-foreground' }}
 								params={breadcrumb[breadcrumb.length - 1].params}
-								search={breadcrumb[breadcrumb.length - 1].search}
 								preload={false}
-								activeProps={{ className: 'text-foreground' }}>
+								search={breadcrumb[breadcrumb.length - 1].search}
+								to={breadcrumb[breadcrumb.length - 1].to}>
 								{breadcrumb.at(-1)?.text}
 							</Link>
 						</BreadcrumbLink>
@@ -69,14 +69,14 @@ const NavBreadcrumb: React.FC = () => {
 					breadcrumb.map((item, index) => (
 						<Fragment key={uuidv4()}>
 							<BreadcrumbItem>
-								<BreadcrumbLink key={uuidv4()} asChild={true}>
+								<BreadcrumbLink asChild={true} key={uuidv4()}>
 									<Link
-										to={item.to}
-										params={item.params}
-										search={item.search}
-										preload={false}
+										activeProps={{ className: 'text-foreground' }}
 										className='font-medium'
-										activeProps={{ className: 'text-foreground' }}>
+										params={item.params}
+										preload={false}
+										search={item.search}
+										to={item.to}>
 										{item.text}
 									</Link>
 								</BreadcrumbLink>

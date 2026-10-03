@@ -56,7 +56,7 @@ const TableDropdownMenu: React.FC = () => {
 		<DropdownMenu>
 			<Tooltip message={t('ns_common:editor.table')}>
 				<DropdownMenuTrigger asChild>
-					<Button size='icon' className='h-8 w-8' variant='ghost' type='button'>
+					<Button className='h-8 w-8' size='icon' type='button' variant='ghost'>
 						<Icon name='Table' />
 					</Button>
 				</DropdownMenuTrigger>
@@ -83,13 +83,13 @@ const TableDropdownMenu: React.FC = () => {
 											e.stopPropagation()
 											form.handleSubmit(handleInsertTable)(e)
 										}}>
-										<InputFieldControl type='number' name='rows' label={t('ns_common:editor.num_of_rows')} />
+										<InputFieldControl label={t('ns_common:editor.num_of_rows')} name='rows' type='number' />
 										<InputFieldControl
-											type='number'
-											name='cols'
 											label={t('ns_common:editor.num_of_columns')}
+											name='cols'
+											type='number'
 										/>
-										<Button type='submit' size='sm' className='gap-x-2'>
+										<Button className='gap-x-2' size='sm' type='submit'>
 											<Icon name='CirclePlus' /> {t('ns_common:editor.insert_table')}
 										</Button>
 									</form>

@@ -87,19 +87,19 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 						]
 					})
 				}>
-				<Icon name='Trash2' className='stroke-destructive' />
+				<Icon className='stroke-destructive' name='Trash2' />
 			</PopoverTrigger>
-			<PopoverContent className='w-96' side='bottom' align='start'>
+			<PopoverContent align='start' className='w-96' side='bottom'>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleDeleteEpcs)}>
 						<MultiSelectFieldControl
-							name='epcs'
-							label={t('ns_common:common_fields.quantity')}
 							datalist={availableEpcs}
+							label={t('ns_common:common_fields.quantity')}
 							labelField='epc'
-							valueField='epc'
 							loading={isLoading}
 							maxCount={2}
+							name='epcs'
+							valueField='epc'
 						/>
 						<FormField
 							control={form.control}
@@ -117,7 +117,7 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 						/>
 						<Separator />
 						<Div className='flex items-center justify-end gap-x-1'>
-							<Button variant='destructive' type='submit' disabled={isPending}>
+							<Button disabled={isPending} type='submit' variant='destructive'>
 								{t('ns_common:actions.delete')}
 							</Button>
 							<PopoverClose

@@ -18,10 +18,10 @@ const UserActivityInfo: React.FC<UserActivityInfoProps> = ({ createdBy, createdA
 					<AvatarImage src={generateAvatar({ name: createdBy })} />
 				</Avatar>
 				<Div className='flex flex-col space-y-0.5'>
-					<Typography variant='small' className='font-medium'>
+					<Typography className='font-medium' variant='small'>
 						@{createdBy}
 					</Typography>
-					<Typography variant='small' color='muted' className='text-xs first-letter:uppercase'>
+					<Typography className='text-xs first-letter:uppercase' color='muted' variant='small'>
 						{format(new Date(createdAt), 'MMM dd, YYY - hh:mm:ss ', {
 							locale: dateLocale
 						})}
@@ -30,9 +30,9 @@ const UserActivityInfo: React.FC<UserActivityInfoProps> = ({ createdBy, createdA
 
 				{isValid(lastUpdatedAt) && (
 					<Typography
-						variant='small'
+						className='ml-auto inline-flex items-center gap-x-2 self-start'
 						color='muted'
-						className='ml-auto inline-flex items-center gap-x-2 self-start'>
+						variant='small'>
 						<Icon name='FileCog' size={18} />
 
 						{t('ns_common:timestamps.last_updated', {

@@ -36,12 +36,12 @@ const ActionDropdown: React.FC<
 	const { event$ } = usePageContext()
 
 	return (
-		<RoleBaseAccessControl mode='mask' authorizedRoles={[UserRole.ADMIN]}>
+		<RoleBaseAccessControl authorizedRoles={[UserRole.ADMIN]} mode='mask'>
 			<DropdownMenu>
 				<DropdownMenuTrigger className='text-muted-foreground hover:text-foreground transition-colors duration-200 ease-in-out'>
 					<Icon name='Ellipsis' />
 				</DropdownMenuTrigger>
-				<DropdownMenuContent side='left' align='start'>
+				<DropdownMenuContent align='start' side='left'>
 					<DropdownMenuItem
 						onClick={() =>
 							event$.emit({

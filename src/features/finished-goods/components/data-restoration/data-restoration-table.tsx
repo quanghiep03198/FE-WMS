@@ -112,10 +112,10 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 	return (
 		<Div
 			className='scrollbar-track-accent/10 flex-1 space-y-1 overflow-y-auto'
+			ref={refCallback}
 			style={{
 				container: 'table / size'
-			}}
-			ref={refCallback}>
+			}}>
 			<Table
 				className='table-auto border-separate border-spacing-0 [&_td]:border-x-0 [&_th]:border-x-0'
 				style={
@@ -130,8 +130,8 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 					<TableRow>
 						<TableHead style={{ width: 'var(--row-selection-width)' }}>
 							<Checkbox
-								role='checkbox'
 								checked={(isAllItemsSelected || (isSomeItemsSelected && 'indeterminate')) as CheckedState}
+								role='checkbox'
 								onCheckedChange={(checked) => {
 									if (checked) addAllItemsToSet(datalist)
 									else removeAllItemsFromSet()
@@ -146,20 +146,20 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 								<GhostButton onClick={() => handleRefetch()}>
 									<Icon
-										name={isFetching ? 'Loader' : 'RefreshCcw'}
 										className={cn('h-full', isFetching && 'animate-spin')}
+										name={isFetching ? 'Loader' : 'RefreshCcw'}
 									/>
 								</GhostButton>
 							</Tooltip>
 						</TableHead>
 					</TableRow>
 				</TableHeader>
-				<TableBody className='group/body' aria-busy={isFetching}>
+				<TableBody aria-busy={isFetching} className='group/body'>
 					{isLoading ? (
 						Array.from({ length: 10 }, (_, i) => (
 							<TableRow key={i.toString()}>
 								{Array.from({ length: 4 }, (_, j) => (
-									<TableCell key={`${i}.${j}`} className='h-9'>
+									<TableCell className='h-9' key={`${i}.${j}`}>
 										<Skeleton />
 									</TableCell>
 								))}
@@ -168,11 +168,11 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 					) : !Array.isArray(datalist) || datalist?.length === 0 ? (
 						<TableRow>
 							<TableCell
-								colSpan={4}
-								className='h-[calc(100cqh-var(--header-height)-var(--footer-height)-2*var(--border-width,1px))]'>
+								className='h-[calc(100cqh-var(--header-height)-var(--footer-height)-2*var(--border-width,1px))]'
+								colSpan={4}>
 								<Div className='flex h-full items-center justify-center gap-x-3'>
-									<Icon name='PackageOpen' size={36} strokeWidth={1} stroke='var(--muted-foreground)' />
-									<Typography variant='small' color='muted' className='font-medium'>
+									<Icon name='PackageOpen' size={36} stroke='var(--muted-foreground)' strokeWidth={1} />
+									<Typography className='font-medium' color='muted' variant='small'>
 										{t('ns_common:table.no_data')}
 									</Typography>
 								</Div>
@@ -185,25 +185,25 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 								const item = datalist[virtualItem.index]
 								return virtualizer.isScrolling ? (
 									<MemoizedDataRestorationRow
-										key={item.epc}
 										data={item}
 										dataType={dataType}
+										key={item.epc}
 										size={virtualItem.size}
 									/>
 								) : (
-									<DataRestorationRow key={item.epc} data={item} dataType={dataType} size={virtualItem.size} />
+									<DataRestorationRow data={item} dataType={dataType} key={item.epc} size={virtualItem.size} />
 								)
 							})}
 							{hasNextPage && (
 								<TableRow>
-									<TableCell colSpan={4} align='center' className='text-muted-foreground h-10'>
+									<TableCell align='center' className='text-muted-foreground h-10' colSpan={4}>
 										{isFetchingNextPage ? (
-											<Icon name='LoaderCircle' className='animate-spin' />
+											<Icon className='animate-spin' name='LoaderCircle' />
 										) : (
 											<Button
-												variant='link'
-												size='lg'
 												disabled={isFetching}
+												size='lg'
+												variant='link'
 												onClick={() => handleFetchNextPage()}>
 												<Icon name='Plus' />
 												{t('ns_common:actions.load_more')}

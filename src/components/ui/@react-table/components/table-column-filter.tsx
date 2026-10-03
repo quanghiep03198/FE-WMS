@@ -69,9 +69,6 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 
 			return (
 				<DateRangePicker
-					triggerProps={{
-						className: 'border-none shadow-none hover:bg-background flex text-xs! font-medium'
-					}}
 					calendarProps={{
 						defaultMonth: date?.from ?? new Date(),
 						numberOfMonths: 1,
@@ -81,26 +78,18 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 							rerender()
 						}
 					}}
+					triggerProps={{
+						className: 'border-none shadow-none hover:bg-background flex text-xs! font-medium'
+					}}
 				/>
 			)
 		}
 		case 'select': {
 			return (
 				<DropdownSelect
-					selectTriggerProps={{
-						className:
-							'min-w-32 px-4 rounded-none border-none text-xs font-medium text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
-						tabIndex: 0,
-						style: { height: DEFAULT_ESTIMATE_SIZE }
-					}}
-					selectProps={{
-						defaultValue: '',
-						value: isAllFiltersCleared ? '' : (column.getFilterValue() as string),
-						onValueChange: (value) => {
-							column.setFilterValue(value)
-						}
-					}}
+					labelField='label'
 					placeholder={t('ns_common:table.search_in_column')}
+					valueField='value'
 					datalist={
 						Array.isArray(metaUniqueValues)
 							? metaUniqueValues
@@ -111,8 +100,19 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 										value: value
 									}))
 					}
-					labelField='label'
-					valueField='value'
+					selectProps={{
+						defaultValue: '',
+						value: isAllFiltersCleared ? '' : (column.getFilterValue() as string),
+						onValueChange: (value) => {
+							column.setFilterValue(value)
+						}
+					}}
+					selectTriggerProps={{
+						className:
+							'min-w-32 px-4 rounded-none border-none text-xs font-medium text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
+						tabIndex: 0,
+						style: { height: DEFAULT_ESTIMATE_SIZE }
+					}}
 				/>
 			)
 		}
@@ -121,9 +121,6 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 			return (
 				<MultiSelectColumnFilter
 					value={(columnFilterValue ?? []) as string[]}
-					onValueChange={(value) => {
-						column.setFilterValue(value)
-					}}
 					datalist={
 						Array.isArray(metaUniqueValues)
 							? metaUniqueValues
@@ -134,6 +131,9 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 										value: value
 									}))
 					}
+					onValueChange={(value) => {
+						column.setFilterValue(value)
+					}}
 				/>
 			)
 		}
@@ -142,8 +142,8 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 			return (
 				<DebouncedInput
 					id={column.id}
-					value={(isAllFiltersCleared ? '' : (columnFilterValue as DebouncedInputProps['value'])) ?? ''}
 					placeholder={t('ns_common:table.search_in_column')}
+					value={(isAllFiltersCleared ? '' : (columnFilterValue as DebouncedInputProps['value'])) ?? ''}
 					onChange={(value) => column.setFilterValue(value)}
 				/>
 			)

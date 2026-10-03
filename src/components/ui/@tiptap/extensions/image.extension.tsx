@@ -239,22 +239,22 @@ function TiptapImage(props: NodeViewProps) {
 	return (
 		<NodeViewWrapper
 			ref={nodeRef}
+			style={{ width: node.attrs.width }}
 			className={cn(
 				'relative flex flex-col rounded border-2 border-transparent transition-all duration-200',
 				selected ? 'border-active' : '',
 				node.attrs.align === 'left' && 'left-0 translate-x-0',
 				node.attrs.align === 'center' && 'left-1/2 -translate-x-1/2',
 				node.attrs.align === 'right' && 'left-full -translate-x-full'
-			)}
-			style={{ width: node.attrs.width }}>
+			)}>
 			<Div className={cn('group relative rounded-md')}>
 				<figure className={cn('relative m-0')}>
 					<img
+						alt={node.attrs.alt}
+						className='rounded-[inherit] object-center'
 						ref={imageRef}
 						src={node.attrs.src}
-						alt={node.attrs.alt}
 						title={node.attrs.title}
-						className='rounded-[inherit] object-center'
 						onLoad={(e) => {
 							const img = e.currentTarget
 							const aspectRatio = img.naturalWidth / img.naturalHeight
@@ -268,10 +268,10 @@ function TiptapImage(props: NodeViewProps) {
 									'absolute top-0 left-0 z-20 cursor-nw-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
 									resizing && 'opacity-100'
 								)}
+								onTouchStart={(event) => handleTouchStart(event, 'left')}
 								onMouseDown={(event) => {
 									handleResizingPosition({ e: event, position: 'left' })
-								}}
-								onTouchStart={(event) => handleTouchStart(event, 'left')}>
+								}}>
 								<Div className='bg-active ring-active/50 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-[3px]' />
 							</Div>
 							<Div
@@ -279,10 +279,10 @@ function TiptapImage(props: NodeViewProps) {
 									'absolute top-0 right-0 z-20 cursor-ne-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
 									resizing && 'opacity-100'
 								)}
+								onTouchStart={(event) => handleTouchStart(event, 'right')}
 								onMouseDown={(event) => {
 									handleResizingPosition({ e: event, position: 'right' })
-								}}
-								onTouchStart={(event) => handleTouchStart(event, 'right')}>
+								}}>
 								<Div className='bg-active ring-active/50 size-2 translate-x-1/2 -translate-y-1/2 rounded-full ring-[3px]' />
 							</Div>
 							<Div
@@ -290,10 +290,10 @@ function TiptapImage(props: NodeViewProps) {
 									'absolute bottom-0 left-0 z-20 cursor-sw-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
 									resizing && 'opacity-100'
 								)}
+								onTouchStart={(event) => handleTouchStart(event, 'left')}
 								onMouseDown={(event) => {
 									handleResizingPosition({ e: event, position: 'left' })
-								}}
-								onTouchStart={(event) => handleTouchStart(event, 'left')}>
+								}}>
 								<Div className='bg-active ring-active/50 size-2 -translate-x-1/2 translate-y-1/2 rounded-full ring-[3px]' />
 							</Div>
 							<Div
@@ -301,10 +301,10 @@ function TiptapImage(props: NodeViewProps) {
 									'absolute right-0 bottom-0 z-20 cursor-se-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
 									resizing && 'opacity-100'
 								)}
+								onTouchStart={(event) => handleTouchStart(event, 'right')}
 								onMouseDown={(event) => {
 									handleResizingPosition({ e: event, position: 'right' })
-								}}
-								onTouchStart={(event) => handleTouchStart(event, 'right')}>
+								}}>
 								<Div className='bg-active ring-active/50 size-2 translate-x-1/2 translate-y-1/2 rounded-full ring-[3px]' />
 							</Div>
 						</Fragment>
@@ -313,13 +313,13 @@ function TiptapImage(props: NodeViewProps) {
 
 				{editingCaption ? (
 					<Input
-						value={caption}
-						onChange={handleCaptionChange}
-						onBlur={handleCaptionBlur}
-						onKeyDown={handleCaptionKeyDown}
+						autoFocus
 						className='text-muted-foreground h-9 rounded-none border-0 py-0 text-center text-sm shadow-none focus:border-0 focus:ring-offset-0'
 						placeholder={t('ns_common:editor.add_caption')}
-						autoFocus
+						value={caption}
+						onBlur={handleCaptionBlur}
+						onChange={handleCaptionChange}
+						onKeyDown={handleCaptionKeyDown}
 					/>
 				) : (
 					<Div
@@ -337,33 +337,33 @@ function TiptapImage(props: NodeViewProps) {
 							openedMore && 'opacity-100'
 						)}>
 						<Button
-							size='icon'
 							className={cn('size-7', node.attrs.align === 'left' && 'bg-accent')}
-							variant='ghost'
+							size='icon'
 							type='button'
+							variant='ghost'
 							onClick={() => updateAttributes({ align: 'left' })}>
 							<AlignLeft className='size-4' />
 						</Button>
 						<Button
-							size='icon'
 							className={cn('size-7', node.attrs.align === 'center' && 'bg-accent')}
-							variant='ghost'
+							size='icon'
 							type='button'
+							variant='ghost'
 							onClick={() => updateAttributes({ align: 'center' })}>
 							<AlignCenter className='size-4' />
 						</Button>
 						<Button
+							className={cn('size-7', node.attrs.align === 'right' && 'bg-accent')}
 							size='icon'
 							type='button'
-							className={cn('size-7', node.attrs.align === 'right' && 'bg-accent')}
 							variant='ghost'
 							onClick={() => updateAttributes({ align: 'right' })}>
 							<AlignRight className='size-4' />
 						</Button>
-						<Separator orientation='vertical' className='h-[20px]' />
+						<Separator className='h-[20px]' orientation='vertical' />
 						<DropdownMenu open={openedMore} onOpenChange={setOpenedMore}>
 							<DropdownMenuTrigger asChild>
-								<Button size='icon' className='size-7' variant='ghost' type='button'>
+								<Button className='size-7' size='icon' type='button' variant='ghost'>
 									<MoreVertical className='size-4' />
 								</Button>
 							</DropdownMenuTrigger>
@@ -379,18 +379,18 @@ function TiptapImage(props: NodeViewProps) {
 										<Div className='space-y-4'>
 											<Div>
 												<Input
-													ref={fileInputRef}
-													type='file'
 													accept='image/*'
-													onChange={handleFileChange}
 													className='hidden'
 													id='replace-image-upload'
+													ref={fileInputRef}
+													type='file'
+													onChange={handleFileChange}
 												/>
 												<label
-													htmlFor='replace-image-upload'
-													className='hover:bg-accent flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-4'>
+													className='hover:bg-accent flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-4'
+													htmlFor='replace-image-upload'>
 													{isPending ? (
-														<Icon name='LoaderCircle' className='h-4 w-4 animate-spin' />
+														<Icon className='h-4 w-4 animate-spin' name='LoaderCircle' />
 													) : (
 														<Fragment>
 															<Icon name='Image' size={24} />
@@ -404,28 +404,28 @@ function TiptapImage(props: NodeViewProps) {
 											</Div>
 											<Separator className='relative'>
 												<Typography
-													variant='small'
-													className='bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs uppercase'>
+													className='bg-background absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs uppercase'
+													variant='small'>
 													{t('ns_common:others.or')}
 												</Typography>
 											</Separator>
 											<Div>
 												<Div className='space-y-2'>
 													<Input
+														className='text-xs'
 														value={imageUrl}
-														onChange={(e) => setImageUrl(e.target.value)}
 														placeholder={t('ns_common:form_placeholder.fill', {
 															object: 'URL',
 															defaultValue: null
 														})}
-														className='text-xs'
+														onChange={(e) => setImageUrl(e.target.value)}
 													/>
 													<Button
-														onClick={handleImageUrlSubmit}
 														className='w-full'
-														type='button'
 														disabled={!imageUrl}
-														size='sm'>
+														size='sm'
+														type='button'
+														onClick={handleImageUrlSubmit}>
 														{t('ns_common:editor.replace_with_url')}
 													</Button>
 												</Div>
@@ -434,10 +434,10 @@ function TiptapImage(props: NodeViewProps) {
 											<Div className='space-y-2'>
 												<Label className='text-xs'>{t('ns_common:editor.alt_text')}</Label>
 												<Input
+													className='text-xs'
+													placeholder='Alt text (optional)'
 													value={altText}
 													onChange={(e) => setAltText(e.target.value)}
-													placeholder='Alt text (optional)'
-													className='text-xs'
 												/>
 											</Div>
 										</Div>

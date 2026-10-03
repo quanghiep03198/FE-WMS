@@ -97,16 +97,16 @@ const EpcDeduplicationToggleBox: React.FC = () => {
 		<Div className='grid w-full grid-cols-[3fr_1fr] items-center rounded-md border p-4'>
 			<Div className='space-y-1'>
 				<Label htmlFor='toggle-deduplication-epc'>{t('ns_rfid:titles.deduplicate_epc')}</Label>
-				<Typography variant='small' color='muted' className='block text-pretty'>
+				<Typography className='block text-pretty' color='muted' variant='small'>
 					{t('ns_rfid:descriptions.deduplicate_epc')}
 				</Typography>
 			</Div>
 			<Div className='place-self-center justify-self-end'>
 				<Switch
-					id='toggle-deduplication-epc'
+					checked={isEnabled}
 					className='max-w-full'
 					defaultChecked={isEnabled}
-					checked={isEnabled}
+					id='toggle-deduplication-epc'
 					onCheckedChange={setIsEnabled}
 				/>
 			</Div>

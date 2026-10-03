@@ -30,7 +30,7 @@ const SizeTable: React.FC<SizeTableProps> = ({ data, total, ...props }) => {
 			<TableRow className='*:border-b'>
 				<TableVerticalHeader>Size</TableVerticalHeader>
 				{sortedData.map((item) => (
-					<TableCellHead variant='small' key={item.size_numcode} className='bg-table-head'>
+					<TableCellHead className='bg-table-head' key={item.size_numcode} variant='small'>
 						{item.size_numcode}
 					</TableCellHead>
 				))}

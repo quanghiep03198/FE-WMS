@@ -20,7 +20,7 @@ const UserActionDropdown: React.FC<CellContext<IUser, unknown>> = ({ row }) => {
 			<DropdownMenuTrigger className='text-muted-foreground hover:text-foreground transition-colors duration-200 ease-in-out'>
 				<Icon name='Ellipsis' />
 			</DropdownMenuTrigger>
-			<DropdownMenuContent side='left' align='start'>
+			<DropdownMenuContent align='start' side='left'>
 				<DropdownMenuItem
 					onClick={() =>
 						event$.emit({
@@ -42,7 +42,7 @@ const UserActionDropdown: React.FC<CellContext<IUser, unknown>> = ({ row }) => {
 					onClick={async () => {
 						await mutateAsync({ username: row.original.username, is_active: !row.original.is_active })
 					}}>
-					{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
+					{isPending && <Icon className='animate-spin' name='LoaderCircle' />}
 					{row.original.is_active ? t('ns_common:actions.deactivate') : t('ns_common:actions.activate')}
 				</DropdownMenuItem>
 			</DropdownMenuContent>

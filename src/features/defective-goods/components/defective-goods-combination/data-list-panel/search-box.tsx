@@ -95,11 +95,11 @@ const SearchBox: React.FC = () => {
 	const isFilterDirty = Object.values(searchTerms).some((value) => !isEmpty(value))
 
 	return (
-		<Div ref={ref} className='flex h-full w-full items-center space-x-2'>
-			<Icon name='Search' className='basis-6' />
+		<Div className='flex h-full w-full items-center space-x-2' ref={ref}>
+			<Icon className='basis-6' name='Search' />
 			<Input
-				placeholder={t('ns_rfid:placeholders.search_epc')}
 				className='border-none px-0 shadow-none'
+				placeholder={t('ns_rfid:placeholders.search_epc')}
 				type='text'
 				value={epcSearchTerm}
 				onChange={handleEpcChange}
@@ -108,11 +108,11 @@ const SearchBox: React.FC = () => {
 				}}
 			/>
 			<GhostButton
-				onClick={handleResetAllSearchTerms}
 				className={cn(
 					'transition-allow-discrete duration-300',
 					isFilterDirty ? 'animate-in fade-in-0' : 'animate-out fade-out-0 hidden'
-				)}>
+				)}
+				onClick={handleResetAllSearchTerms}>
 				<Icon name='X' />
 			</GhostButton>
 			<Separator
@@ -129,10 +129,10 @@ const SearchBox: React.FC = () => {
 					</PopoverTrigger>
 					<PopoverContent
 						align='end'
-						sideOffset={20}
-						style={{ width: size?.width + 16 }}
 						alignOffset={-8}
-						className='relative'>
+						className='relative'
+						sideOffset={20}
+						style={{ width: size?.width + 16 }}>
 						<PopoverClose className='text-muted-foreground hover:text-foreground absolute top-4 right-4 transition-colors duration-200'>
 							<Icon name='X' />
 						</PopoverClose>
@@ -147,9 +147,9 @@ const SearchBox: React.FC = () => {
 										formFieldOrientation === 'horizontal' ? 'gap-y-3' : 'gap-y-6'
 									)}>
 									<DatePickerFieldControl
-										name='created'
-										label={t('ns_common:common_fields.created_at')}
 										calendarProps={{ disabled: (value) => isAfter(value, new Date()) }}
+										label={t('ns_common:common_fields.created_at')}
+										name='created'
 										orientation={formFieldOrientation}
 									/>
 									<CategoryFieldControl orientation={formFieldOrientation} />
@@ -165,14 +165,14 @@ const SearchBox: React.FC = () => {
 								</Div>
 							</fieldset>
 							<fieldset className='flex items-center justify-end gap-x-2'>
-								<Button type='submit' size='sm'>
+								<Button size='sm' type='submit'>
 									<Icon name='Search' />
 									{t('ns_common:actions.search')}
 								</Button>
 								<Button
+									size='sm'
 									type='reset'
 									variant='secondary'
-									size='sm'
 									onClick={() => {
 										form.reset(DEFAULT_SEARCH_TERMS)
 										resetEpcSearchTerm()

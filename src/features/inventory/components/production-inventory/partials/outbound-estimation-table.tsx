@@ -69,7 +69,7 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 						format(value, 'yyyy-MM-dd')
 					) : (
 						<Div className='place-items-center'>
-							<Icon name='CalendarOff' className='stroke-muted-foreground' />
+							<Icon className='stroke-muted-foreground' name='CalendarOff' />
 						</Div>
 					)
 				},
@@ -99,10 +99,10 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 
 	return (
 		<DataTable
+			caption={t('ns_inoutbound:description.outbound_estimation')}
+			columns={columns}
 			data={data ?? []}
 			dataType={StockFlow.OUTBOUND}
-			columns={columns}
-			caption={t('ns_inoutbound:description.outbound_estimation')}
 			footer={DataTableFooter}
 		/>
 	)
@@ -114,7 +114,7 @@ const DataTableFooter: React.FC<{ rows: Row<IOutboundEstimation>[] }> = memo(({ 
 	return (
 		<TableFooter className='sticky bottom-0 z-20'>
 			<TableRow className='bg-table-head [&_td:not(first-child)]:bg-table-head [&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t'>
-				<TableCell colSpan={4} align='left' className='sticky left-0 z-10 bg-transparent! font-semibold'>
+				<TableCell align='left' className='sticky left-0 z-10 bg-transparent! font-semibold' colSpan={4}>
 					{t('ns_common:common_fields.total')}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>

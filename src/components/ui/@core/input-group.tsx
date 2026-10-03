@@ -44,10 +44,10 @@ function InputGroupAddon({
 }: React.ComponentProps<'div'> & VariantProps<typeof inputGroupAddonVariants>) {
 	return (
 		<div
-			role='group'
-			data-slot='input-group-addon'
-			data-align={align}
 			className={cn(inputGroupAddonVariants({ align }), className)}
+			data-align={align}
+			data-slot='input-group-addon'
+			role='group'
 			onClick={(e) => {
 				if ((e.target as HTMLElement).closest('button')) {
 					return
@@ -82,10 +82,10 @@ function InputGroupButton({
 }: Omit<React.ComponentProps<typeof Button>, 'size'> & VariantProps<typeof inputGroupButtonVariants>) {
 	return (
 		<Button
-			type={type}
-			data-size={size}
-			variant={variant}
 			className={cn(inputGroupButtonVariants({ size }), className)}
+			data-size={size}
+			type={type}
+			variant={variant}
 			{...props}
 		/>
 	)

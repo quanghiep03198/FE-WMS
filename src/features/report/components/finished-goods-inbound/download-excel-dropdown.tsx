@@ -22,7 +22,7 @@ const DownloadExcelDropdown: React.FC = () => {
 
 	return (
 		<DropdownMenu>
-			<Tooltip message={t('ns_common:actions.download_excel')} contentProps={{ hidden: isLargeScreen }}>
+			<Tooltip contentProps={{ hidden: isLargeScreen }} message={t('ns_common:actions.download_excel')}>
 				<DropdownMenuTrigger
 					className={cn(
 						buttonVariants({

@@ -10,7 +10,7 @@ const DataTableBodyLoading: React.FC = () => {
 	const preRenderColumns = table.getAllLeafColumns()
 
 	return preRenderRows.map((rowIndex) => (
-		<TableRow key={rowIndex} data-role='data-grid-row'>
+		<TableRow data-role='data-grid-row' key={rowIndex}>
 			{preRenderColumns.map((column, columnIndex) => {
 				return (
 					<TableCell

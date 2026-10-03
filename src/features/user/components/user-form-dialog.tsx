@@ -159,8 +159,8 @@ const UserFormDialog: React.FC = () => {
 				<FormProvider {...form}>
 					<DialogForm onSubmit={form.handleSubmit(handleCreateUser)}>
 						<InputFieldControl
-							name='username'
 							label={t('ns_auth:fields.username')}
+							name='username'
 							placeholder={capitalize(
 								t('ns_common:form_placeholder.fill', {
 									object: t('ns_auth:fields.username'),
@@ -169,51 +169,51 @@ const UserFormDialog: React.FC = () => {
 							)}
 						/>
 						<InputFieldControl
-							name='password'
 							label={t('ns_auth:fields.password')}
-							type='password'
+							name='password'
 							placeholder={'******'}
+							type='password'
 						/>
 						<Div className='col-span-full'>
 							<InputFieldControl
-								name='display_name'
 								label={t('ns_auth:fields.display_name')}
-								onChange={(e) => form.setValue('display_name', e.target.value.toUpperCase())}
+								name='display_name'
 								placeholder={capitalize(
 									t('ns_common:form_placeholder.fill', {
 										object: t('ns_auth:fields.display_name'),
 										defaultValue: null
 									})
 								)}
+								onChange={(e) => form.setValue('display_name', e.target.value.toUpperCase())}
 							/>
 						</Div>
 						<InputFieldControl
-							name='email'
-							type='email'
 							label={t('ns_auth:fields.email')}
+							name='email'
 							placeholder={'example@vn.well-union.com'}
+							type='email'
 						/>
 						<InputFieldControl
-							name='employee_code'
 							label={t('ns_auth:fields.employee_code')}
+							name='employee_code'
 							placeholder='e.g., S000001'
 							onChange={(e) => form.setValue('employee_code', e.target.value.toUpperCase())}
 						/>
 						<Div className='col-span-full *:aria-[roledescription=selected-item]:max-w-32!'>
 							<MultiSelectFieldControl
-								name='roles'
+								canSelectAll={false}
+								classNames={{ selectedItem: '*:first:max-w-40' }}
+								datalist={rolesDatalist}
 								label={t('ns_auth:fields.role')}
+								labelField='label'
+								name='roles'
+								valueField='value'
 								placeholder={capitalize(
 									t('ns_common:form_placeholder.select', {
 										object: t('ns_auth:fields.role'),
 										defaultValue: null
 									})
 								)}
-								classNames={{ selectedItem: '*:first:max-w-40' }}
-								canSelectAll={false}
-								datalist={rolesDatalist}
-								labelField='label'
-								valueField='value'
 							/>
 						</Div>
 						{/* <Div className='col-span-full'>
@@ -234,8 +234,8 @@ const UserFormDialog: React.FC = () => {
 							/>
 						</Div> */}
 						<DialogFooter className='col-span-full'>
-							<Button type='submit' disabled={isPending}>
-								{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
+							<Button disabled={isPending} type='submit'>
+								{isPending && <Icon className='animate-spin' name='LoaderCircle' />}
 								{isError ? t('ns_common:actions.retry') : t('ns_common:actions.submit')}
 							</Button>
 							<DialogClose className={buttonVariants({ variant: 'secondary' })} onClick={() => form.reset({})}>

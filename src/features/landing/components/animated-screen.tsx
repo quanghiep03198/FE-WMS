@@ -68,10 +68,6 @@ const AnimatedScreen: React.FC = () => {
 				document.head
 			)}
 			<div
-				style={{
-					overflow: 'visible',
-					transformStyle: 'preserve-3d'
-				}}
 				className={cn(
 					'bg-background pointer-events-none relative grid aspect-square h-auto max-h-240 rotate-45 grid-cols-[18rem_auto] grid-rows-[80px_auto] gap-y-4 overflow-visible rounded-xl border antialiased select-none *:pointer-events-none *:select-none',
 					'xxl:zoom-[1] w-full -translate-1/12',
@@ -80,14 +76,18 @@ const AnimatedScreen: React.FC = () => {
 					'md:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)] md:zoom-[0.8]',
 					'sm:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)] sm:zoom-[0.5]',
 					'after:from-background after:via-background/80 md:after:to-background/50 lg:after:via-background via-25% to-50% after:absolute after:inset-0 after:z-10 after:h-[calc(100%+4px)] after:w-[200%] after:-translate-y-px after:bg-linear-to-l after:to-transparent md:via-65% lg:after:via-60% lg:after:to-80%'
-				)}>
+				)}
+				style={{
+					overflow: 'visible',
+					transformStyle: 'preserve-3d'
+				}}>
 				<aside className='paused group-aria-current/cta:running z-0 col-start-1 row-span-full animate-[fly-down_0.7s_ease_forwards] space-y-10 border-r p-4 text-sm'>
 					<div data-slot='sidebar-header'>
 						<AppLogo />
 					</div>
 					<div
-						data-slot='sidebar-menu'
-						className='[&_*[data-slot=menu-label]]:text-muted-foreground space-y-8 [&_*[data-slot=menu-item]]:flex [&_*[data-slot=menu-item]]:items-center [&_*[data-slot=menu-item]]:gap-x-2 [&_*[data-slot=menu-item]>svg]:size-4.5 [&_*[data-slot=menu-label]]:text-xs [&_*[data-slot=menu-label]]:font-medium [&_*[data-slot=menu]]:space-y-3 [&>*[data-slot=sidebar-menu-group]]:space-y-4'>
+						className='[&_*[data-slot=menu-label]]:text-muted-foreground space-y-8 [&_*[data-slot=menu-item]]:flex [&_*[data-slot=menu-item]]:items-center [&_*[data-slot=menu-item]]:gap-x-2 [&_*[data-slot=menu-item]>svg]:size-4.5 [&_*[data-slot=menu-label]]:text-xs [&_*[data-slot=menu-label]]:font-medium [&_*[data-slot=menu]]:space-y-3 [&>*[data-slot=sidebar-menu-group]]:space-y-4'
+						data-slot='sidebar-menu'>
 						<div data-slot='sidebar-menu-group'>
 							<h4 data-slot='menu-label'>Main</h4>
 							<ul data-slot='menu'>
@@ -151,7 +151,7 @@ const AnimatedScreen: React.FC = () => {
 						<button>
 							<Icon name='Menu' />
 						</button>
-						<Separator orientation='vertical' className='h-4 w-1' />
+						<Separator className='h-4 w-1' orientation='vertical' />
 						<Breadcrumb>
 							<BreadcrumbList>
 								<BreadcrumbLink href='#'>
@@ -181,16 +181,16 @@ const AnimatedScreen: React.FC = () => {
 								</CardTitle>
 								<CardAction>
 									<Badge variant='outline'>
-										<Icon name='TrendingUp' className='stroke-success' /> +12%
+										<Icon className='stroke-success' name='TrendingUp' /> +12%
 									</Badge>
 								</CardAction>
 							</CardHeader>
 							<CardFooter className='flex-col items-start gap-1.5 text-sm'>
-								<Typography variant='small' className='line-clamp-1 flex gap-2 font-medium'>
+								<Typography className='line-clamp-1 flex gap-2 font-medium' variant='small'>
 									Higher than last month
 									<Icon name='TrendingUp' />
 								</Typography>
-								<Typography variant='small' className='text-muted-foreground lowercase first-letter:uppercase'>
+								<Typography className='text-muted-foreground lowercase first-letter:uppercase' variant='small'>
 									Significantly increased by 612 (prs) compared to previous period
 								</Typography>
 							</CardFooter>
@@ -203,16 +203,16 @@ const AnimatedScreen: React.FC = () => {
 								</CardTitle>
 								<CardAction>
 									<Badge variant='outline'>
-										<Icon name='TrendingDown' className='stroke-success' /> +19%
+										<Icon className='stroke-success' name='TrendingDown' /> +19%
 									</Badge>
 								</CardAction>
 							</CardHeader>
 							<CardFooter className='flex-col items-start gap-1.5 text-sm'>
-								<Typography variant='small' className='line-clamp-1 flex gap-2 font-medium'>
+								<Typography className='line-clamp-1 flex gap-2 font-medium' variant='small'>
 									Higher than last month
 									<Icon name='TrendingUp' />
 								</Typography>
-								<Typography variant='small' className='text-muted-foreground lowercase first-letter:uppercase'>
+								<Typography className='text-muted-foreground lowercase first-letter:uppercase' variant='small'>
 									Slightly decreased by 608 (prs) compared to previous period
 								</Typography>
 							</CardFooter>
@@ -220,8 +220,8 @@ const AnimatedScreen: React.FC = () => {
 					</section>
 					<section>
 						<Card
-							data-role='card'
-							className='paused group-aria-current/cta:running min-w-128 animate-[fly-down_1s_ease-in-out_forwards]'>
+							className='paused group-aria-current/cta:running min-w-128 animate-[fly-down_1s_ease-in-out_forwards]'
+							data-role='card'>
 							<CardHeader>
 								<CardTitle>Inbound overview</CardTitle>
 								<CardDescription className='capitalize'>
@@ -250,19 +250,19 @@ const AnimatedScreen: React.FC = () => {
 											month: capitalize(format(new Date(new Date().getFullYear(), item.month - 1), 'MMM'))
 										}))}>
 										<CartesianGrid vertical={false} />
-										<XAxis dataKey='month' tickLine={false} tickMargin={10} axisLine={false} />
+										<XAxis axisLine={false} dataKey='month' tickLine={false} tickMargin={10} />
 										<YAxis stroke='var(--muted-foreground)' tickFormatter={formatIntlNumber} />
 										<Bar
 											dataKey='inbound_qty'
 											fill='var(--color-inbound_qty)'
-											radius={3}
 											isAnimationActive={false}
+											radius={3}
 										/>
 										<Bar
 											dataKey='outbound_qty'
 											fill='var(--color-outbound_qty)'
-											radius={3}
 											isAnimationActive={false}
+											radius={3}
 										/>
 										<ChartLegend content={<ChartLegendContent />} formatter={capitalize} />
 									</BarChart>

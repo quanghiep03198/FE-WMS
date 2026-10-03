@@ -149,7 +149,7 @@ const Steps: React.FC<TStepsProps> = ({ enableChangeStep }) => {
 	}
 
 	return (
-		<Div as='nav' aria-label='Progress' className='bg-background sticky top-0 z-20 w-full'>
+		<Div aria-label='Progress' as='nav' className='bg-background sticky top-0 z-20 w-full'>
 			<StepList role='list'>
 				{data.map((step: TStep) => {
 					const stepTitle = t(step.title, { defaultValue: step.title, ns: undefined })
@@ -159,14 +159,14 @@ const Steps: React.FC<TStepsProps> = ({ enableChangeStep }) => {
 							{step.status === 'completed' ? (
 								<StepTrigger>
 									<StepIndicator className='border-success bg-success group-hover:bg-success/80 duration-200'>
-										<Icon name='Check' size={20} className='text-success-foreground' aria-hidden='true' />
+										<Icon aria-hidden='true' className='text-success-foreground' name='Check' size={20} />
 									</StepIndicator>
 									<Div>
-										<Typography color='success' className='font-medium'>
+										<Typography className='font-medium' color='success'>
 											{stepTitle}
 										</Typography>
 										{step.description && (
-											<Typography variant='small' color='muted' className='font-normal'>
+											<Typography className='font-normal' color='muted' variant='small'>
 												{t(step.description, { defaultValue: step.description, ns: undefined })}
 											</Typography>
 										)}
@@ -178,7 +178,7 @@ const Steps: React.FC<TStepsProps> = ({ enableChangeStep }) => {
 									<Div>
 										<Typography color='success'>{stepTitle}</Typography>
 										{step.description && (
-											<Typography variant='small' color='muted' className='font-normal'>
+											<Typography className='font-normal' color='muted' variant='small'>
 												{t(step.description, { defaultValue: step.description, ns: undefined })}
 											</Typography>
 										)}
@@ -190,7 +190,7 @@ const Steps: React.FC<TStepsProps> = ({ enableChangeStep }) => {
 									<Div>
 										<Typography color='muted'>{stepTitle}</Typography>
 										{step.description && (
-											<Typography variant='small' color='muted' className='basis-1/4 font-normal'>
+											<Typography className='basis-1/4 font-normal' color='muted' variant='small'>
 												{t(step.description, { defaultValue: step.description, ns: undefined })}
 											</Typography>
 										)}
@@ -207,9 +207,9 @@ const Steps: React.FC<TStepsProps> = ({ enableChangeStep }) => {
 }
 
 const StepSeparator: React.FC = () => (
-	<div className='absolute top-0 right-0 h-full w-5 translate-x-1/2 sm:hidden md:hidden' aria-hidden='true'>
-		<svg className='text-border h-full w-full' viewBox='0 0 22 80' fill='none' preserveAspectRatio='none'>
-			<path d='M0 -2L20 40L0 82' vectorEffect='non-scaling-stroke' stroke='currentcolor' strokeLinejoin='round' />
+	<div aria-hidden='true' className='absolute top-0 right-0 h-full w-5 translate-x-1/2 sm:hidden md:hidden'>
+		<svg className='text-border h-full w-full' fill='none' preserveAspectRatio='none' viewBox='0 0 22 80'>
+			<path d='M0 -2L20 40L0 82' stroke='currentcolor' strokeLinejoin='round' vectorEffect='non-scaling-stroke' />
 		</svg>
 	</div>
 )

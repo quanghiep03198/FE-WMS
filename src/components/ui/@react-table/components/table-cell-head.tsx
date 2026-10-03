@@ -59,6 +59,7 @@ const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger
+				title={headerTitle}
 				className={cn(
 					'flex h-max w-full cursor-auto grid-cols-[14px_auto] items-center px-4 py-2 text-left text-sm capitalize select-none has-[[role=button]]:w-full has-[[role=button]]:justify-center has-[[role=checkbox]]:w-full has-[[role=checkbox]]:justify-center!',
 					{
@@ -78,30 +79,29 @@ const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 				onClick={(e) => {
 					if (typeof toggleSorting === 'function') toggleSorting(e)
 					rerender()
-				}}
-				title={headerTitle}>
+				}}>
 				{columnDef.enableSorting && (
 					<Icon
+						className='h-(--icon-size) max-w-(--icon-size) min-w-(--icon-size)'
 						name={currentSortingState}
 						size={14}
-						className='h-(--icon-size) max-w-(--icon-size) min-w-(--icon-size)'
 					/>
 				)}
-				<Typography as='small' variant='small' className='line-clamp-1 text-left text-inherit'>
+				<Typography as='small' className='line-clamp-1 text-left text-inherit' variant='small'>
 					{flexRender(columnDef.header, header.getContext())}
 				</Typography>
 			</ContextMenuTrigger>
 			<ContextMenuContent className='w-64' hidden={FIXED_COLUMN_IDS.includes(header.column.id)}>
 				<ContextMenuItem
-					disabled={!columnDef.enableSorting}
 					className='gap-x-2'
+					disabled={!columnDef.enableSorting}
 					onClick={() => header.column.toggleSorting(false)}>
 					<ArrowUpIcon />
 					{t('ns_common:table.sort_asc')}
 				</ContextMenuItem>
 				<ContextMenuItem
-					disabled={!columnDef.enableSorting}
 					className='gap-x-2'
+					disabled={!columnDef.enableSorting}
 					onClick={() => header.column.toggleSorting(true)}>
 					<ArrowDownIcon />
 					{t('ns_common:table.sort_desc')}
@@ -110,8 +110,8 @@ const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 				<ContextMenuSub>
 					<ContextMenuSubTrigger
 						aria-disabled={!header.isPlaceholder && !header.column.columnDef.enablePinning}
-						disabled={!header.isPlaceholder && !header.column.columnDef.enablePinning}
-						className='aria-disabled:text-muted-foreground gap-x-2'>
+						className='aria-disabled:text-muted-foreground gap-x-2'
+						disabled={!header.isPlaceholder && !header.column.columnDef.enablePinning}>
 						<Icon name='Pin' size={14} />
 						{t('ns_common:actions.pin')}
 					</ContextMenuSubTrigger>

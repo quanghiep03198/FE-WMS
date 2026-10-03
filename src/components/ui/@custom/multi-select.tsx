@@ -248,13 +248,13 @@ export function MultiSelect<D extends SelectItem>({
 			<PopoverTrigger
 				{...props}
 				ref={popoverTriggerRef}
-				onWheel={(e) => e.stopPropagation()}
-				onClick={() => setIsPopoverOpen(!isPopoverOpen)}
 				className={cn(
 					buttonVariants({ variant: 'outline' }),
 					'bg-background aria-invalid:border-destructive! grid w-full scrollbar-none! grid-cols-[1fr_auto] items-center overflow-hidden px-3 py-0 hover:bg-inherit [&_svg]:pointer-events-auto',
 					classNames?.popoverTrigger
-				)}>
+				)}
+				onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+				onWheel={(e) => e.stopPropagation()}>
 				{Array.isArray(datalist) && Array.isArray(selectedValues) && selectedValues?.length > 0 ? (
 					<>
 						<Div className='scroll-fade-x overflow-x flex scrollbar-none! items-center gap-x-1 overflow-x-auto overflow-y-hidden'>
@@ -262,11 +262,11 @@ export function MultiSelect<D extends SelectItem>({
 								selectedValues.slice(0, maxCount).map((value) => {
 									const option = datalist.find((item) => item?.[valueField] === value)
 									return (
-										<Badge key={String(value)} variant='secondary' className={classNames?.selectedItem}>
+										<Badge className={classNames?.selectedItem} key={String(value)} variant='secondary'>
 											<Typography
-												variant='small'
 												className='max-w-16 truncate text-xs'
-												title={String(option?.[labelField])}>
+												title={String(option?.[labelField])}
+												variant='small'>
 												{String(option?.[labelField])}
 											</Typography>
 											<CrossCircledIcon
@@ -282,7 +282,7 @@ export function MultiSelect<D extends SelectItem>({
 							{Array.isArray(selectedValues) && selectedValues?.length > maxCount && (
 								<HoverCard>
 									<HoverCardTrigger>
-										<Badge variant='secondary' className={'whitespace-nowrap'}>
+										<Badge className={'whitespace-nowrap'} variant='secondary'>
 											{`+ ${selectedValues?.length - maxCount} more`}
 											<XCircle
 												className='ml-2 h-4 w-4 cursor-pointer'
@@ -319,13 +319,13 @@ export function MultiSelect<D extends SelectItem>({
 									handleClear()
 								}}
 							/>
-							<Separator orientation='vertical' className='flex h-full min-h-4' />
+							<Separator className='flex h-full min-h-4' orientation='vertical' />
 							<CaretSortIcon className='text-muted-foreground size-4 cursor-pointer' />
 						</Div>
 					</>
 				) : (
 					<>
-						<Typography variant='small' className='text-muted-foreground block text-left text-sm font-normal'>
+						<Typography className='text-muted-foreground block text-left text-sm font-normal' variant='small'>
 							{placeholder}
 						</Typography>
 						<CaretSortIcon className='text-muted-foreground ml-auto size-4 cursor-pointer' />
@@ -333,9 +333,9 @@ export function MultiSelect<D extends SelectItem>({
 				)}
 			</PopoverTrigger>
 			<PopoverContent
-				ref={popoverContentRef}
-				className={cn('w-radix-popover p-0', classNames?.popoverContent)}
 				align='start'
+				className={cn('w-radix-popover p-0', classNames?.popoverContent)}
+				ref={popoverContentRef}
 				onEscapeKeyDown={() => setIsPopoverOpen(false)}
 				onOpenAutoFocus={(e) => e.preventDefault()}>
 				<Command
@@ -350,8 +350,8 @@ export function MultiSelect<D extends SelectItem>({
 							: 0
 					}}>
 					<CommandInput
-						value={search ?? searchTerm}
 						placeholder={`${t('ns_common:actions.search')}...`}
+						value={search ?? searchTerm}
 						onKeyDown={handleInputKeyDown}
 						onInput={(e) => {
 							e.stopPropagation()
@@ -359,10 +359,10 @@ export function MultiSelect<D extends SelectItem>({
 							if (typeof onInput === 'function') onInput(String(e.currentTarget.value))
 						}}
 					/>
-					<CommandList ref={refCallback} className='scroll-fade-y'>
+					<CommandList className='scroll-fade-y' ref={refCallback}>
 						{loading ? (
 							<CommandLoading className='flex items-center justify-center p-6'>
-								<Icon name='LoaderCircle' className='animate-spin' />
+								<Icon className='animate-spin' name='LoaderCircle' />
 							</CommandLoading>
 						) : (
 							<Fragment>
@@ -370,12 +370,12 @@ export function MultiSelect<D extends SelectItem>({
 								<CommandGroup>
 									{canSelectAll && (
 										<CommandItem
-											key='all'
+											className='cursor-pointer'
 											disabled={datalist?.length === 0}
+											key='all'
 											keywords={['all']}
-											onSelect={toggleAll}
 											onClick={(e) => e.stopPropagation()}
-											className='cursor-pointer'>
+											onSelect={toggleAll}>
 											<Div
 												className={cn(
 													'border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border',
@@ -394,11 +394,11 @@ export function MultiSelect<D extends SelectItem>({
 										const isSelected = selectedValues.includes(option?.[valueField])
 										return (
 											<CommandItem
-												key={item.key}
 												data-index={item.index}
-												value={String(option[valueField])}
-												keywords={[String(option[labelField])]}
 												disabled={option.disabled}
+												key={item.key}
+												keywords={[String(option[labelField])]}
+												value={String(option[valueField])}
 												onSelect={() => toggleOption(option[valueField])}>
 												<Checkbox checked={isSelected} />
 												<Typography variant='small'>{String(option?.[labelField])}</Typography>
@@ -416,17 +416,17 @@ export function MultiSelect<D extends SelectItem>({
 							{Array.isArray(selectedValues) && selectedValues?.length > 0 && (
 								<Fragment>
 									<CommandItem
+										className='flex-1 cursor-pointer justify-center'
 										onClick={(e) => e.stopPropagation()}
-										onSelect={handleClear}
-										className='flex-1 cursor-pointer justify-center'>
+										onSelect={handleClear}>
 										{t('ns_common:actions.reset')}
 									</CommandItem>
-									<Separator orientation='vertical' className='flex h-full min-h-6' />
+									<Separator className='flex h-full min-h-6' orientation='vertical' />
 								</Fragment>
 							)}
 							<CommandItem
-								onSelect={() => setIsPopoverOpen(false)}
-								className='max-w-full flex-1 cursor-pointer justify-center'>
+								className='max-w-full flex-1 cursor-pointer justify-center'
+								onSelect={() => setIsPopoverOpen(false)}>
 								{t('ns_common:actions.close')}
 							</CommandItem>
 						</Div>

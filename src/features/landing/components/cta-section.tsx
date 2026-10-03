@@ -26,31 +26,31 @@ const CTASection: React.FC = () => {
 
 	return (
 		<Div
-			id='cta'
-			as='section'
-			ref={ref}
 			aria-current={isSectionInViewPort}
-			className='group/cta animate-in fade-in-0 slide-in-from-bottom-4 paused aria-current:running xxl:mt-32 xxl:max-w-8xl xxl:p-0 @container/cta relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 duration-700 sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0'>
+			as='section'
+			className='group/cta animate-in fade-in-0 slide-in-from-bottom-4 paused aria-current:running xxl:mt-32 xxl:max-w-8xl xxl:p-0 @container/cta relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 duration-700 sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0'
+			id='cta'
+			ref={ref}>
 			<Div className='col-span-2 col-start-1 row-span-1 row-start-1 mb-4 flex justify-center @7xl/cta:col-span-1 @7xl/cta:justify-start'>
 				<Button
+					className='hover:border-success hover:bg-success hover:text-success-foreground rounded-l-full rounded-r-full px-5 tracking-wide transition-colors duration-200'
+					variant='outline'
 					onClick={() => {
 						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
-					}}
-					variant='outline'
-					className='hover:border-success hover:bg-success hover:text-success-foreground rounded-l-full rounded-r-full px-5 tracking-wide transition-colors duration-200'>
+					}}>
 					<Icon name='Tags' size={20} />
 					Introducing version {env('VITE_APP_VERSION')}
-					<Icon name='ArrowRight' className='ml-auto' />
+					<Icon className='ml-auto' name='ArrowRight' />
 				</Button>
 			</Div>
 			<Typography
-				variant='h1'
-				className='col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-center text-pretty duration-700 lg:col-span-2 lg:max-w-full @7xl/cta:max-w-xl @7xl/cta:text-left'>
+				className='col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-center text-pretty duration-700 lg:col-span-2 lg:max-w-full @7xl/cta:max-w-xl @7xl/cta:text-left'
+				variant='h1'>
 				Simplify Warehouse Management with <span className='text-(--primary-alt)'>i-WMS</span>
 			</Typography>
 			<Typography
-				variant='p'
-				className='col-start-1 row-span-1 row-start-3 mx-auto mb-6 max-w-4xl text-center leading-relaxed tracking-wide text-pretty lg:col-span-2 lg:max-w-full lg:self-start xl:max-w-6xl xl:text-lg @7xl/cta:text-left'>
+				className='col-start-1 row-span-1 row-start-3 mx-auto mb-6 max-w-4xl text-center leading-relaxed tracking-wide text-pretty lg:col-span-2 lg:max-w-full lg:self-start xl:max-w-6xl xl:text-lg @7xl/cta:text-left'
+				variant='p'>
 				Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS. Our
 				comprehensive system provides the tools you need to manage your warehouse effortlessly.
 			</Typography>
@@ -65,7 +65,7 @@ const CTASection: React.FC = () => {
 				))}
 			</List>
 			<Div className='animate-in fade-in-0 slide-in-from-bottom-4 z-10 col-start-1 row-span-1 row-start-5 flex items-center justify-center gap-x-1 duration-700 lg:col-start-1 lg:row-start-5 lg:justify-start xl:justify-start'>
-				<Link to='/login' className={cn(buttonVariants())}>
+				<Link className={cn(buttonVariants())} to='/login'>
 					Get started
 				</Link>
 				<Button

@@ -79,37 +79,37 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 						{t('ns_common:table.no_data')}
 					</Div>
 				) : (
-					<ChartContainer config={chartConfig} className='mx-auto aspect-square max-h-64 @xl/card:max-h-80'>
+					<ChartContainer className='mx-auto aspect-square max-h-64 @xl/card:max-h-80' config={chartConfig}>
 						<PieChart>
-							<ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+							<ChartTooltip content={<ChartTooltipContent hideLabel />} cursor={false} />
 							<Pie
+								activeIndex={activeIndex}
 								data={chartData}
 								dataKey='qty'
-								nameKey='defective_category'
 								innerRadius={64}
+								nameKey='defective_category'
 								strokeWidth={8}
-								activeIndex={activeIndex}
 								activeShape={({ outerRadius = 0, ...props }: PieSectorDataItem) => (
 									<g>
 										<Sector {...props} outerRadius={outerRadius + 6} />
-										<Sector {...props} outerRadius={outerRadius + 16} innerRadius={outerRadius + 8} />
+										<Sector {...props} innerRadius={outerRadius + 8} outerRadius={outerRadius + 16} />
 									</g>
 								)}>
 								<Label
 									content={({ viewBox }) => {
 										if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
 											return (
-												<text x={viewBox.cx} y={viewBox.cy} textAnchor='middle' dominantBaseline='middle'>
+												<text dominantBaseline='middle' textAnchor='middle' x={viewBox.cx} y={viewBox.cy}>
 													<tspan
+														className='fill-foreground text-3xl font-bold tabular-nums'
 														x={viewBox.cx}
-														y={viewBox.cy}
-														className='fill-foreground text-3xl font-bold tabular-nums'>
+														y={viewBox.cy}>
 														{chartData[activeIndex]?.qty?.toLocaleString()}
 													</tspan>
 													<tspan
+														className='fill-muted-foreground'
 														x={viewBox.cx}
-														y={(viewBox.cy || 0) + 24}
-														className='fill-muted-foreground'>
+														y={(viewBox.cy || 0) + 24}>
 														{capitalize(
 															activeCategory === DefectiveCategory.C_GRADE
 																? t('ns_common:unit.pcs')

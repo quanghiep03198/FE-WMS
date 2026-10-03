@@ -31,7 +31,7 @@ const Hero: React.FC = () => {
 				<GradientBadge>
 					<span className='relative z-20'>Just released version {data?.tag_name}</span>
 				</GradientBadge>
-				<Typography variant='h1' className='xxl:text-6xl xl:text-5xl'>
+				<Typography className='xxl:text-6xl xl:text-5xl' variant='h1'>
 					Empower your Inventory by <br className='hidden xl:inline-block' /> Real-time RFID Reader connectivity
 					with{' '}
 					<span className='animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,var(--foreground),45%,var(--muted-foreground),50%,var(--foreground))] bg-size-[200%_100%] bg-clip-text text-transparent dark:bg-[linear-gradient(75deg,var(--muted-foreground),45%,var(--foreground),50%,var(--muted-foreground))]'>
@@ -44,9 +44,9 @@ const Hero: React.FC = () => {
 					support.
 				</Typography>
 				<Link
-					hash='features'
-					className={cn(buttonVariants({ variant: 'default', size: 'lg', className: 'mt-6 self-center' }))}>
-					Explore features <Icon name='ArrowDown' className='animate-bounce' />
+					className={cn(buttonVariants({ variant: 'default', size: 'lg', className: 'mt-6 self-center' }))}
+					hash='features'>
+					Explore features <Icon className='animate-bounce' name='ArrowDown' />
 				</Link>
 			</Div>
 		</Div>

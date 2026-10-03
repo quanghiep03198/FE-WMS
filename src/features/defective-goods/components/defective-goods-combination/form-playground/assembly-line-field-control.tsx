@@ -16,17 +16,17 @@ const AssemblyLineFieldControl: React.FC<DefAutoCompleteFieldControlProps> = (pr
 
 	return (
 		<AutoCompleteFieldControl
-			name='assembly_line'
+			datalist={datalist}
 			label={t('ns_erp:fields.assembly_line')}
+			labelField='label'
+			name='assembly_line'
+			valueField='value'
 			placeholder={capitalize(
 				t('ns_common:form_placeholder.fill', {
 					object: t('ns_erp:fields.assembly_line'),
 					defaultValue: null
 				})
 			)}
-			datalist={datalist}
-			labelField='label'
-			valueField='value'
 			{...props}
 		/>
 	)

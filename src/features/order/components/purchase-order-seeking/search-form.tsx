@@ -33,7 +33,7 @@ const SearchForm: React.FC = () => {
 				})}>
 				<Div className='flex items-center gap-x-2'>
 					<OrderSearchFieldControl />
-					<Button id='search-po-button' type='submit' className='hidden'>
+					<Button className='hidden' id='search-po-button' type='submit'>
 						<Icon name='Search' />
 						{t('ns_common:actions.search')}
 					</Button>

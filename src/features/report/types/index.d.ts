@@ -37,7 +37,7 @@ export interface IInboundHistory {
 	mo_no: string
 	brand_name: string
 	factory_shoes_style: string
-	// cust_shoes_style: string
+	cust_shoes_style: string
 	color_sn: string
 	order_qty: number
 	accumulated_inbound_qty: number
@@ -64,6 +64,20 @@ export interface IInboundHistory {
 				shipped_out_qty: number
 			}
 		>
+		transaction_history: Array<{
+			time: string
+			assembly_line: string
+			storage_location: string
+			size_ledger: Record<
+				string,
+				{
+					stocked_in_qty: number
+					total_recall_tx: number
+					total_return_tx: number
+				}
+			>
+			voided: boolean
+		}>
 	}>
 	size_ledger: Record<
 		string,

@@ -42,10 +42,10 @@ const ItemSelectionCheckbox: React.FC<ItemSelectionCheckboxProps> = ({ data, tot
 
 	return (
 		<RoleBaseAccessControl
-			mode='fallback'
 			authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}
+			mode='fallback'
 			fallbackComponent={
-				<Typography variant='small' color='muted'>
+				<Typography color='muted' variant='small'>
 					{t('ns_common:table.total_rows', {
 						count: totalDocs,
 						defaultValue: `${selectedCount}/${totalDocs} selected`
@@ -54,7 +54,7 @@ const ItemSelectionCheckbox: React.FC<ItemSelectionCheckboxProps> = ({ data, tot
 			}>
 			<Div className='inline-flex items-center gap-x-3'>
 				<Checkbox checked={checkboxState} onCheckedChange={handleCheckboxChange} />
-				<Typography variant='small' color='muted'>
+				<Typography color='muted' variant='small'>
 					{t('ns_common:pagination.selected_records', {
 						selectedRecords: `${selectedCount}/${totalDocs ?? 0}`,
 						defaultValue: `${selectedCount}/${totalDocs} selected`

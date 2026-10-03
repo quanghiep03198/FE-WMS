@@ -28,11 +28,11 @@ function DataTableHeader<T extends TableRowData>({ headerGroups }: DataTableHead
 
 						return (
 							<TableHead
-								key={header.id}
-								colSpan={header.colSpan}
 								align={columnDef.meta?.align ?? 'left'}
-								title={columnDef.meta?.title}
 								className='relative'
+								colSpan={header.colSpan}
+								key={header.id}
+								title={columnDef.meta?.title}
 								style={{
 									width: column.getSize(),
 									...getCanSticky(column.id)
@@ -93,9 +93,9 @@ function TableCellHead<T extends TableRowData>({ header }: TableCellHeadProps<T>
 			}
 			onClick={handleToggleSorting}>
 			{columnDef.enableSorting && (
-				<Icon name={currentSortingState} size={14} className='max-w-(--icon-size) min-w-(--icon-size)' />
+				<Icon className='max-w-(--icon-size) min-w-(--icon-size)' name={currentSortingState} size={14} />
 			)}
-			<Typography as='small' variant='small' className='line-clamp-1 text-left text-inherit'>
+			<Typography as='small' className='line-clamp-1 text-left text-inherit' variant='small'>
 				{flexRender(columnDef.header, header.getContext())}
 			</Typography>
 		</Div>

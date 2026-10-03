@@ -32,7 +32,7 @@ function Page() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.cargo_weight_check')}</title>
-			<meta name='description' content={t('ns_packing:descriptions.daily_weighing_report')} />
+			<meta content={t('ns_packing:descriptions.daily_weighing_report')} name='description' />
 
 			<RoleGuard
 				authorizedRoles={[

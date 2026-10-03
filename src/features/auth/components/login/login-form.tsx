@@ -29,10 +29,9 @@ import { loginSchema } from '../../schemas/login.schema'
 
 const LoginForm: React.FC = () => {
 	const { t } = useTranslation()
-	// const { dispatch } = useStepContext()
-	const { setUserProfile, setAccessToken } = useAuth()
+	const { setAccessToken } = useAuth()
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
-		defaultValue: undefined,
+		defaultValue: '',
 		listenStorageChange: true
 	})
 	const [shouldPersistAccount, setShouldPersistAccount] = useState<boolean>(!!persistedAccount)
@@ -41,20 +40,20 @@ const LoginForm: React.FC = () => {
 		resolver: zodResolver(loginSchema),
 		mode: 'onChange',
 		defaultValues: {
-			username: persistedAccount,
+			username: persistedAccount ?? '',
 			password: ''
 		}
 	})
 
 	const { mutateAsync: login, isPending } = useMutation({
-		mutationKey: [AuthQueryKeys.PROFILE],
+		meta: { invalidates: [[AuthQueryKeys.PROFILE]] },
 		mutationFn: AuthService.login,
 		onMutate: () => {
 			return toast.loading(t('ns_common:notification.processing_request'))
 		},
 		onSuccess: async (data, _variables, context) => {
-			setUserProfile(data?.metadata?.user)
-			setAccessToken(data?.metadata?.accessToken)
+			if (typeof data.metadata?.accessToken !== 'string') return
+			setAccessToken(data.metadata.accessToken)
 			toast.success(t('ns_common:notification.success'), { id: context })
 		},
 		onError(_error, _variables, context) {
@@ -68,7 +67,7 @@ const LoginForm: React.FC = () => {
 		if (shouldPersistAccount) {
 			setPersistedAccount(username)
 		} else {
-			setPersistedAccount(undefined)
+			setPersistedAccount('')
 			localStorage.removeItem('persistedAccount')
 		}
 	}, [username, shouldPersistAccount])
@@ -77,18 +76,18 @@ const LoginForm: React.FC = () => {
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit((data) => login(data))}>
 				<InputFieldControl
-					label={t('ns_auth:fields.username')}
-					placeholder={t('ns_auth:fields.username')}
-					name='username'
 					autoComplete='username'
 					defaultValue={persistedAccount}
+					label={t('ns_auth:fields.username')}
+					name='username'
+					placeholder={t('ns_auth:fields.username')}
 				/>
 				<InputFieldControl
-					label={t('ns_auth:fields.password')}
-					placeholder='********'
 					autoComplete='current-password'
-					type='password'
+					label={t('ns_auth:fields.password')}
 					name='password'
+					placeholder='********'
+					type='password'
 				/>
 
 				<FormItem>
@@ -102,19 +101,19 @@ const LoginForm: React.FC = () => {
 				<Div className='flex items-center justify-between'>
 					<Div className='flex items-center space-x-2'>
 						<Checkbox
-							type='button'
-							id='persist-account-checkbox'
 							checked={shouldPersistAccount}
-							onCheckedChange={(value) => setShouldPersistAccount(Boolean(value))}
 							defaultChecked={Boolean(persistedAccount)}
+							id='persist-account-checkbox'
+							type='button'
+							onCheckedChange={(value) => setShouldPersistAccount(Boolean(value))}
 						/>
 						<Label htmlFor='persist-account-checkbox'>{t('ns_auth:labels.remember_account')}</Label>
 					</Div>
-					<Button variant='link' asChild className='px-0'>
+					<Button asChild className='px-0' variant='link'>
 						<Link to='/'>{t('ns_auth:labels.forgot_password')}</Link>
 					</Button>
 				</Div>
-				<Button type='submit' className='w-full gap-x-2' size='lg' disabled={isPending}>
+				<Button className='w-full gap-x-2' disabled={isPending} size='lg' type='submit'>
 					<Icon name='LogIn' />
 					{t('ns_common:actions.login')}
 				</Button>

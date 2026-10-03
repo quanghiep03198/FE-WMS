@@ -47,7 +47,7 @@ const ChartContainer: React.FC<
 					className
 				)}
 				{...props}>
-				<ChartStyle id={chartId} config={config} />
+				<ChartStyle config={config} id={chartId} />
 				<RechartsPrimitive.ResponsiveContainer>{children}</RechartsPrimitive.ResponsiveContainer>
 			</div>
 		</ChartContext.Provider>
@@ -230,16 +230,16 @@ const ChartLegendContent: React.FC<
 
 	return (
 		<div
-			ref={ref}
-			className={cn('flex items-center justify-center gap-4', verticalAlign === 'top' ? 'pb-3' : 'pt-3', className)}>
+			className={cn('flex items-center justify-center gap-4', verticalAlign === 'top' ? 'pb-3' : 'pt-3', className)}
+			ref={ref}>
 			{payload.map((item) => {
 				const key = `${nameKey || item.dataKey || 'value'}`
 				const itemConfig = getPayloadConfigFromPayload(config, item, key)
 
 				return (
 					<div
-						key={item.value}
-						className={cn('[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3')}>
+						className={cn('[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3')}
+						key={item.value}>
 						{itemConfig?.icon && !hideIcon ? (
 							<itemConfig.icon />
 						) : (

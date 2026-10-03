@@ -12,16 +12,16 @@ const ProfileWallpaper: React.FC = () => {
 					<AvatarFallback>Unknown</AvatarFallback>
 				</Avatar>
 				<Icon
+					className='stroke-primary-foreground absolute right-0 bottom-1 -translate-x-1/2 fill-blue-500'
 					name='BadgeCheck'
 					size={24}
-					className='stroke-primary-foreground absolute right-0 bottom-1 -translate-x-1/2 fill-blue-500'
 				/>
 			</Div>
 			<Div className='flex flex-col gap-y-1'>
-				<Typography variant='h4' className='row-span-1'>
+				<Typography className='row-span-1' variant='h4'>
 					{user?.display_name}
 				</Typography>
-				<Typography color='muted' className='row-span-1 block'>
+				<Typography className='row-span-1 block' color='muted'>
 					{user?.email ?? 'example@email.com'}
 				</Typography>
 			</Div>

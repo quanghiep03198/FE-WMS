@@ -75,19 +75,19 @@ const WarehouseFormDialog: React.FC = () => {
 					<Form onSubmit={form.handleSubmit(handleSubmit)}>
 						<FormItem>
 							<InputFieldControl
-								placeholder='A1'
-								name='name'
-								label={t('ns_warehouse:fields.warehouse_name')}
 								className='uppercase'
+								label={t('ns_warehouse:fields.warehouse_name')}
+								name='name'
+								placeholder='A1'
 							/>
 						</FormItem>
 						<FormItem>
 							<InputFieldControl
-								placeholder='30,000'
-								name='capacity'
-								type='number'
-								step={1}
 								label={t('ns_warehouse:fields.storage_capacity')}
+								name='capacity'
+								placeholder='30,000'
+								step={1}
+								type='number'
 							/>
 						</FormItem>
 						{/* Form actions */}
@@ -101,7 +101,7 @@ const WarehouseFormDialog: React.FC = () => {
 								}}>
 								{t('ns_common:actions.cancel')}
 							</Button>
-							<Button type='submit' disabled={isPending}>
+							<Button disabled={isPending} type='submit'>
 								{t('ns_common:actions.submit')}
 							</Button>
 						</DialogFooter>

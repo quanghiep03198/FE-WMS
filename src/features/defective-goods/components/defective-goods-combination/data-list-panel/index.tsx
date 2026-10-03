@@ -43,7 +43,7 @@ const DatalistPanel: React.FC = () => {
 						/>
 						<ActionButtonsGroup />
 					</Div>
-					<DataList isLoading={isLoading} data={data} />
+					<DataList data={data} isLoading={isLoading} />
 				</ListPanelProvider>
 				<Div className='place-content-center place-items-center'>
 					<Pagination {...omit(data, ['data'])} range={1} onPrefetch={handlePrefetch} />
@@ -67,7 +67,7 @@ const DatalistPanel: React.FC = () => {
 							/>
 							<ActionButtonsGroup />
 						</Div>
-						<DataList isLoading={isLoading} data={data} />
+						<DataList data={data} isLoading={isLoading} />
 					</ListPanelProvider>
 					<SheetFooter>
 						<Pagination {...omit(data, ['data'])} range={1} onPrefetch={handlePrefetch} />
@@ -85,6 +85,7 @@ export const DataListPanelSheetTrigger: React.FC<React.ComponentProps<typeof Lab
 
 	return (
 		<label
+			htmlFor='list-sheet-trigger'
 			className={cn(
 				buttonVariants({
 					variant: 'secondary',
@@ -92,7 +93,6 @@ export const DataListPanelSheetTrigger: React.FC<React.ComponentProps<typeof Lab
 					className: 'inline-flex @7xl/playground-wrapper:hidden'
 				})
 			)}
-			htmlFor='list-sheet-trigger'
 			{...props}>
 			<Icon name='Clock' /> {t('ns_inoutbound:titles.combination_history')}
 		</label>

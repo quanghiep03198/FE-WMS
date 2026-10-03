@@ -91,17 +91,19 @@ export function OrderSearchFieldControl() {
 							} as React.CSSProperties
 						}>
 						<Div className='space-y-2'>
-							<Popover open={open} onOpenChange={setOpen} modal={false}>
+							<Popover modal={false} open={open} onOpenChange={setOpen}>
 								<FormControl>
 									<PopoverTrigger
 										className='focus-within:border-primary aria-invalid:border-destructive aria-invalid:focus-within:border-destructive relative flex h-10 w-full flex-1 items-center rounded-lg border px-3 py-1 transition-colors duration-200'
 										onClick={(e) => e.preventDefault()}>
-										<Icon name='Search' size={20} className={cn('stroke-muted-foreground')} />
+										<Icon className={cn('stroke-muted-foreground')} name='Search' size={20} />
 										<Input
+											aria-invalid={!!getFieldState('order').error}
+											autoComplete='off'
+											className='focus-border-0 rounded-none border-0 shadow-none'
 											id={id}
 											ref={ref}
 											value={field.value}
-											autoComplete='off'
 											placeholder={capitalize(
 												currentDataType === StockFlow.INBOUND
 													? t('ns_common:form_placeholder.search', {
@@ -113,24 +115,22 @@ export function OrderSearchFieldControl() {
 															defaultValue: null
 														})
 											)}
-											aria-invalid={!!getFieldState('order').error}
-											className='focus-border-0 rounded-none border-0 shadow-none'
-											onKeyDown={handleKeyDown}
-											onClick={() => setOpen(true)}
 											onChange={(e) => field.onChange(e)}
+											onClick={() => setOpen(true)}
+											onKeyDown={handleKeyDown}
 										/>
 										{isLoading && (
 											<Icon
+												className={cn('stroke-muted-foreground animate-spin')}
 												name='LoaderCircle'
 												size={18}
-												className={cn('stroke-muted-foreground animate-spin')}
 											/>
 										)}
 									</PopoverTrigger>
 								</FormControl>
 								<PopoverContent
-									sideOffset={8}
 									className='w-radix-popover max-h-52 overflow-auto p-1'
+									sideOffset={8}
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{Array.isArray(filteredDatalist) && filteredDatalist?.length > 0 ? (
 										filteredDatalist?.map((item) => {
@@ -141,7 +141,7 @@ export function OrderSearchFieldControl() {
 														e.stopPropagation()
 														setValue('order', item.value)
 													}}>
-													<Typography variant='small' className='line-clamp-1 flex-1'>
+													<Typography className='line-clamp-1 flex-1' variant='small'>
 														{String(item.label)}
 													</Typography>
 													<CheckIcon
@@ -154,7 +154,7 @@ export function OrderSearchFieldControl() {
 											)
 										})
 									) : (
-										<Typography variant='small' color='muted' className='block h-full p-10 text-center'>
+										<Typography className='block h-full p-10 text-center' color='muted' variant='small'>
 											{t('ns_common:table.no_data')}
 										</Typography>
 									)}

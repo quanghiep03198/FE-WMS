@@ -112,12 +112,12 @@ export const Editor: React.FC<EditorProps> = memo(
 						<ContextMenuTrigger onContextMenu={handleContextMenuOpen}>
 							<ScrollArea className='relative w-full max-w-full resize-y overflow-auto' style={{ height }}>
 								<EditorContent
-									id={id}
-									editor={editor}
-									name={name}
-									controls={true}
 									content={defaultValue}
+									controls={true}
 									disabled={disabled}
+									editor={editor}
+									id={id}
+									name={name}
 									ref={(e) => {
 										if (!ref) return
 										if (typeof ref === 'function') ref(e)

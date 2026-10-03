@@ -26,18 +26,18 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, isScrolling, ind
 	return (
 		<Fragment>
 			<TableRow
-				data-index={index}
-				data-role='data-grid-row'
-				aria-selected={isSelected}
 				aria-expanded={isExpanded}
-				className={cn('group h-(--row-height,40px)', isScrolling && 'will-change-scroll')}>
+				aria-selected={isSelected}
+				className={cn('group h-(--row-height,40px)', isScrolling && 'will-change-scroll')}
+				data-index={index}
+				data-role='data-grid-row'>
 				{row.getVisibleCells().map((cell) => {
 					return (
 						<TableCell
-							key={cell.id}
-							data-role='data-grid-cell'
-							className='has-[input]:p-0'
 							align={cell.column.columnDef.meta?.align}
+							className='has-[input]:p-0'
+							data-role='data-grid-cell'
+							key={cell.id}
 							style={{
 								width: `var(--column-${cell.column.id}-size)`,
 								...computeStickyOffsetPosition(cell.column)
@@ -52,11 +52,11 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, isScrolling, ind
 			</TableRow>
 			{/* Sub-component */}
 			{typeof renderSubComponent === 'function' && (
-				<TableRow data-role='expandable-row' className='w-full'>
+				<TableRow className='w-full' data-role='expandable-row'>
 					<TableCell
-						colSpan={row.getVisibleCells().length}
 						aria-expanded={isExpanded}
-						className='border-none p-0 aria-expanded:border-b aria-expanded:shadow-[inset_0_0px_4px_#17171725]'>
+						className='border-none p-0 aria-expanded:border-b aria-expanded:shadow-[inset_0_0px_4px_#17171725]'
+						colSpan={row.getVisibleCells().length}>
 						<Collapsible open={isExpanded}>
 							<CollapsibleContent className='group/detail bg-secondary/50 sticky left-0 w-[100cqw] scrollbar-gutter-stable overflow-auto'>
 								<Div className='p-3'>{renderSubComponent({ table, row })}</Div>

@@ -241,62 +241,62 @@ const ScannedEpcList: React.FC = () => {
 			{/* Datalist header */}
 			<Div className='@container/toolbar grid w-full auto-cols-auto grid-flow-col items-center border-b [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
 				<Label
+					htmlFor='stock-transaction-sheet-trigger'
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
 						className: 'flex h-full w-full flex-col py-1 font-normal @xl/toolbar:flex-row'
-					})}
-					htmlFor='stock-transaction-sheet-trigger'>
+					})}>
 					<Icon name='ClockFading' size={18} />
-					<Typography variant='small' className='text-muted-foreground text-xs @xl/toolbar:text-sm'>
+					<Typography className='text-muted-foreground text-xs @xl/toolbar:text-sm' variant='small'>
 						{t('ns_inoutbound:titles.current_stock_transaction')}
 					</Typography>
 				</Label>
 				<Button
-					variant='ghost'
 					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @xl/toolbar:flex-row'
+					variant='ghost'
 					onClick={() => fetchServerEvent()}>
 					<Icon name='RefreshCcw' />
-					<Typography variant='small' className='text-muted-foreground text-xs @xl/toolbar:text-sm'>
+					<Typography className='text-muted-foreground text-xs @xl/toolbar:text-sm' variant='small'>
 						{t('ns_common:actions.reload')}
 					</Typography>
 				</Button>
 				<Label
+					htmlFor='data-restoration-sheet-trigger'
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
 						className: 'flex h-full w-full flex-col py-1 font-normal @xl/toolbar:flex-row'
-					})}
-					htmlFor='data-restoration-sheet-trigger'>
+					})}>
 					<Icon name='Archive' size={18} />
-					<Typography variant='small' className='text-muted-foreground text-xs @xl/toolbar:text-sm'>
+					<Typography className='text-muted-foreground text-xs @xl/toolbar:text-sm' variant='small'>
 						{t('ns_common:actions.archived')}
 					</Typography>
 				</Label>
 				<DataRestorationSheet dataType={StockFlow.OUTBOUND} />
 				<StockTransactionHistorySheet stockFlow={StockFlow.OUTBOUND} />
 				<Label
+					htmlFor='epc-data-upload-dialog-trigger'
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
 						className: 'flex h-full w-full flex-col py-1 font-normal @xl/toolbar:flex-row'
-					})}
-					htmlFor='epc-data-upload-dialog-trigger'>
+					})}>
 					<Icon name='Upload' size={18} />
-					<Typography variant='small' className='text-muted-foreground text-xs @xl/toolbar:text-sm'>
+					<Typography className='text-muted-foreground text-xs @xl/toolbar:text-sm' variant='small'>
 						{t('ns_common:actions.upload')}
 					</Typography>
 				</Label>
 				<Label
+					htmlFor='order-detail-dialog-trigger'
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
 						className:
 							'flex h-full w-full flex-col flex-wrap font-normal @xl/toolbar:flex-row @4xl/playground:hidden @7xl/layout-wrapper:hidden'
-					})}
-					htmlFor='order-detail-dialog-trigger'>
+					})}>
 					<Icon name='ArrowUpRight' size={18} />
-					<Typography variant='small' className='text-muted-foreground text-xs @xl/toolbar:text-sm'>
+					<Typography className='text-muted-foreground text-xs @xl/toolbar:text-sm' variant='small'>
 						{t('ns_common:actions.detail')}
 					</Typography>
 				</Label>
@@ -304,9 +304,9 @@ const ScannedEpcList: React.FC = () => {
 			{/* Datalist body */}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<Div
-					ref={containerRef}
 					aria-expanded={isExpanded}
 					data-mounted={hasMounted.current}
+					ref={containerRef}
 					className={cn(
 						'linear bg-background scroll-fade-y transition-height relative z-10 h-0 divide-y overflow-y-auto p-0 will-change-transform contain-size',
 						'data-[mounted=true]:duration-100',
@@ -316,16 +316,16 @@ const ScannedEpcList: React.FC = () => {
 						const item = scannedEpc.data[virtualItem.index]
 						return (
 							<Div
-								key={virtualItem.index}
 								className='hover:bg-secondary absolute inset-x-0 top-0 flex h-10 w-full justify-between px-4 py-2 whitespace-nowrap uppercase transition-all duration-75 last:border-none'
+								key={virtualItem.index}
 								style={{
 									height: virtualItem.size,
 									transform: `translateY(${virtualItem.start}px)`
 								}}>
-								<Typography variant='small' className='font-medium sm:text-sm'>
+								<Typography className='font-medium sm:text-sm' variant='small'>
 									{item.epc}
 								</Typography>
-								<Typography variant='small' className='text-foreground capitalize'>
+								<Typography className='text-foreground capitalize' variant='small'>
 									{item.mo_no}
 								</Typography>
 							</Div>
@@ -333,8 +333,9 @@ const ScannedEpcList: React.FC = () => {
 					})}
 					{scannedEpc.hasNextPage && (
 						<Button
-							variant='link'
 							className='absolute inset-x-0'
+							disabled={isFetching}
+							variant='link'
 							style={{
 								height: VIRTUAL_ITEM_SIZE,
 								transform: `translateY(${virtualizer.getTotalSize()}px)`
@@ -342,10 +343,9 @@ const ScannedEpcList: React.FC = () => {
 							onClick={() => {
 								if (!currentPage) setCurrentPage(DEFAULT_NEXT_CURSOR)
 								else setCurrentPage(currentPage + 1)
-							}}
-							disabled={isFetching}>
+							}}>
 							{isFetching ? (
-								<Icon name='LoaderCircle' className='animate-spin' />
+								<Icon className='animate-spin' name='LoaderCircle' />
 							) : (
 								<Fragment>
 									<Icon name='Plus' />
@@ -365,7 +365,7 @@ const ScannedEpcList: React.FC = () => {
 						'aria-expanded:h-64 @4xl/playground:aria-expanded:h-(--outlet-wrapper-height)'
 					)}>
 					<Div className='inline-flex items-center gap-x-4'>
-						<Icon name='Inbox' stroke='var(--muted-foreground)' size={32} strokeWidth={1} />
+						<Icon name='Inbox' size={32} stroke='var(--muted-foreground)' strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
@@ -376,14 +376,14 @@ const ScannedEpcList: React.FC = () => {
 					<OrderDetailTableDialog />
 				</Div>
 				<Button
-					variant='secondary'
 					className='flex w-full @[1440px]/playground:flex @4xl/playground:hidden'
+					variant='secondary'
 					onClick={() => setIsExpanded(!isExpanded)}>
 					<Icon name={isExpanded ? 'ChevronUp' : 'ChevronDown'} />{' '}
 					{isExpanded ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}
 				</Button>
 				<Div className='[&>button[aria-haspopup=dialog]]:hidden'>
-					<UploadDataFileDialog station='WH103' maxFiles={500} />
+					<UploadDataFileDialog maxFiles={500} station='WH103' />
 				</Div>
 			</Div>
 		</Div>

@@ -5,17 +5,17 @@ export function ActiveShapePieChart<T>({ data, children }: { data: T[]; children
 	const [activeIndex, setActiveIndex] = useState(0)
 
 	return (
-		<ResponsiveContainer width='100%' height='100%'>
-			<PieChart width={320} height={320}>
+		<ResponsiveContainer height='100%' width='100%'>
+			<PieChart height={320} width={320}>
 				<Pie
 					activeIndex={activeIndex}
 					activeShape={renderActiveShape}
 					data={data}
+					dataKey='value'
+					fill='var(--primary)'
 					innerRadius={64}
 					outerRadius={96}
-					fill='var(--primary)'
 					stroke='var(--border)'
-					dataKey='value'
 					onMouseEnter={(_, index) => setActiveIndex(index)}
 				/>
 				{children}
@@ -39,33 +39,33 @@ export const renderActiveShape = (props) => {
 
 	return (
 		<g>
-			<text x={cx} y={cy} dy={8} textAnchor='middle' fill={fill}>
+			<text dy={8} fill={fill} textAnchor='middle' x={cx} y={cy}>
 				{payload.name}
 			</text>
 			<Sector
 				cx={cx}
 				cy={cy}
+				endAngle={endAngle}
+				fill={fill}
 				innerRadius={innerRadius}
 				outerRadius={outerRadius}
 				startAngle={startAngle}
-				endAngle={endAngle}
-				fill={fill}
 			/>
 			<Sector
 				cx={cx}
 				cy={cy}
-				startAngle={startAngle}
 				endAngle={endAngle}
+				fill={fill}
 				innerRadius={outerRadius + 6}
 				outerRadius={outerRadius + 10}
-				fill={fill}
+				startAngle={startAngle}
 			/>
-			<path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill='none' />
-			<circle cx={ex} cy={ey} r={2} fill={fill} stroke='none' />
-			<text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor}>
+			<path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} fill='none' stroke={fill} />
+			<circle cx={ex} cy={ey} fill={fill} r={2} stroke='none' />
+			<text textAnchor={textAnchor} x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey}>
 				{`PV ${value}`}
 			</text>
-			<text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill='var(--foreground)'>
+			<text dy={18} fill='var(--foreground)' textAnchor={textAnchor} x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey}>
 				{`(Rate ${(percent * 100).toFixed(2)}%)`}
 			</text>
 		</g>

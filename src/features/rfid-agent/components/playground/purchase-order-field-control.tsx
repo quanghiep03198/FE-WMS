@@ -30,12 +30,12 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = (pro
 
 	return (
 		<AutoCompleteFieldControl
-			name='po'
-			label={t('ns_erp:fields.po')}
-			loading={isLoading}
-			shouldFilter={false}
 			datalist={datalist}
+			label={t('ns_erp:fields.po')}
 			labelField='po'
+			loading={isLoading}
+			name='po'
+			shouldFilter={false}
 			valueField='po'
 			placeholder={t('ns_common:form_placeholder.fill', {
 				object: t('ns_erp:fields.po'),

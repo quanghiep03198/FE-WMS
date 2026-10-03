@@ -51,7 +51,10 @@ const SearchForm: React.FC = () => {
 					<OrderSearchFieldControl />
 					{hasSearch && (
 						<SelectFieldControl
+							className='h-10 flex-1'
+							labelField='label'
 							name='type'
+							valueField='value'
 							datalist={[
 								{ label: t('ns_inoutbound:action_types.stock_in'), value: StockFlow.INBOUND },
 								{ label: t('ns_inoutbound:action_types.stock_out'), value: StockFlow.OUTBOUND }
@@ -59,9 +62,6 @@ const SearchForm: React.FC = () => {
 							onValueChange={() => {
 								form.setValue('order', '')
 							}}
-							className='h-10 flex-1'
-							labelField='label'
-							valueField='value'
 						/>
 					)}
 					<Button size='lg'>
@@ -69,7 +69,7 @@ const SearchForm: React.FC = () => {
 						{t('ns_common:actions.search')}
 					</Button>
 					{hasSearch && (
-						<Button size='lg' variant='secondary' type='button' onClick={() => refetch()}>
+						<Button size='lg' type='button' variant='secondary' onClick={() => refetch()}>
 							<Icon name='RefreshCcw' />
 							{t('ns_common:actions.reload')}
 						</Button>

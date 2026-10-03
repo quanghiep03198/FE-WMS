@@ -31,10 +31,10 @@ const ThemeToggle: React.FC<
 	return (
 		<Tooltip message={t('ns_common:actions.toggle_theme')} triggerProps={{ asChild: true }} {...tooltipProps}>
 			<Button
-				variant={variant}
-				size='icon'
-				className='relative'
 				aria-pressed={darkTheme}
+				className='relative'
+				size='icon'
+				variant={variant}
 				onClick={() => toggleTheme()}>
 				<Icon aria-label={darkTheme ? 'Dark Mode' : 'Light Mode'} name={darkTheme ? 'Moon' : 'Sun'} ref={iconRef} />
 			</Button>

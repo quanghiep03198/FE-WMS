@@ -12,17 +12,17 @@ const ImagePlaceholderToolbar: React.FC<ButtonProps> = ({ className, onClick, ch
 	return (
 		<Tooltip message={t('ns_common:editor.image')} triggerProps={{ asChild: true }}>
 			<Button
-				variant='ghost'
+				className={cn('aspect-square size-8 p-0', editor?.isActive('image-placeholder') && 'bg-accent', className)}
 				size='icon'
 				type='button'
-				className={cn('aspect-square size-8 p-0', editor?.isActive('image-placeholder') && 'bg-accent', className)}
+				variant='ghost'
 				onClick={(e) => {
 					e.preventDefault()
 					editor?.chain().focus().insertImagePlaceholder().run()
 					onClick?.(e)
 				}}
 				{...props}>
-				{children ?? <Icon name='Image' className='h-4 w-4' />}
+				{children ?? <Icon className='h-4 w-4' name='Image' />}
 			</Button>
 		</Tooltip>
 	)

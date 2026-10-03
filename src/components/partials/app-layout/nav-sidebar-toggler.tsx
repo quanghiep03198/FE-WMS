@@ -8,10 +8,10 @@ const NavSidebarToggler: React.FC = () => {
 
 	return (
 		<Tooltip
+			contentProps={{ side: 'bottom', align: 'start' }}
 			message={`${t('ns_common:actions.toggle_sidebar')} (ctrl+b)`}
-			triggerProps={{ asChild: true }}
-			contentProps={{ side: 'bottom', align: 'start' }}>
-			<Button variant='ghost' size='icon' onClick={toggleSidebar} aria-label='Menu'>
+			triggerProps={{ asChild: true }}>
+			<Button aria-label='Menu' size='icon' variant='ghost' onClick={toggleSidebar}>
 				<Icon name='Menu' />
 			</Button>
 		</Tooltip>

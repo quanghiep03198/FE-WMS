@@ -108,46 +108,46 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 
 	return (
 		<Div
-			role='navigation'
-			className='ml-auto flex items-center space-x-2 py-0.5 sm:space-x-2 lg:space-x-4 xl:space-x-4'>
+			className='ml-auto flex items-center space-x-2 py-0.5 sm:space-x-2 lg:space-x-4 xl:space-x-4'
+			role='navigation'>
 			<Div className='flex items-center space-x-2'>
 				<Label className='font-medium whitespace-nowrap'>{t('ns_common:table.rows_per_page')}</Label>
 				<AutoComplete
-					type='number'
-					value={pageSize === 1 ? undefined : pageSize}
+					className='w-24'
+					datalist={[10, 20, 30, 40, 50].map((size) => ({ label: String(size), value: size }))}
 					defaultValue={10}
+					labelField='label'
 					min={10}
-					onInput={(value) => changePageSize(value)}
-					onSelect={(value) => changePageSize(value)}
 					placeholder={'0'}
 					readOnly={!enableInputPageSize}
 					shouldFilter={false}
-					className='w-24'
-					datalist={[10, 20, 30, 40, 50].map((size) => ({ label: String(size), value: size }))}
-					labelField='label'
+					type='number'
+					value={pageSize === 1 ? undefined : pageSize}
 					valueField='value'
+					onInput={(value) => changePageSize(value)}
+					onSelect={(value) => changePageSize(value)}
 				/>
 			</Div>
-			<Separator orientation='vertical' className='bg-border h-6 w-1 sm:hidden md:hidden' />
-			<Typography variant='small' className='text-center font-medium whitespace-nowrap'>
+			<Separator className='bg-border h-6 w-1 sm:hidden md:hidden' orientation='vertical' />
+			<Typography className='text-center font-medium whitespace-nowrap' variant='small'>
 				{t('table.page', {
 					ns: 'ns_common',
 					defaultValue: pageIndexContext,
 					page: pageIndexContext
 				})}
 			</Typography>
-			<Separator orientation='vertical' className='bg-border h-6 w-1 sm:hidden md:hidden' />
+			<Separator className='bg-border h-6 w-1 sm:hidden md:hidden' orientation='vertical' />
 			<ButtonGroup>
 				<Tooltip
 					message={t('pagination.first_page', { defaultValue: 'First page' })}
 					triggerProps={{ asChild: true }}>
 					<Button
-						role='button'
 						aria-disabled={!canPreviousPage || loading}
 						aria-label={t('ns_common:pagination.first_page')}
 						disabled={!canPreviousPage || loading}
-						variant='outline'
+						role='button'
 						size='icon'
+						variant='outline'
 						onClick={goToFirstPage}
 						onPointerEnter={() => handlePrefetch({ limit: pageSize, page: 1 })}>
 						<Icon name='ChevronsLeft' />
@@ -157,12 +157,12 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 					message={t('pagination.previous_page', { defaultValue: 'Previous page' })}
 					triggerProps={{ asChild: true }}>
 					<Button
-						role='button'
 						aria-disabled={!canPreviousPage || loading}
 						aria-label={t('ns_common:pagination.previous_page')}
 						disabled={!canPreviousPage || loading}
-						variant='outline'
+						role='button'
 						size='icon'
+						variant='outline'
 						onClick={goToPrevPage}
 						onPointerEnter={() => {
 							if (canPreviousPage) handlePrefetch({ limit: pageSize, page: pageIndex - 1 })
@@ -174,12 +174,12 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 					message={t('pagination.next_page', { defaultValue: 'Next page' })}
 					triggerProps={{ asChild: true }}>
 					<Button
-						role='button'
 						aria-disabled={!canNextPage || loading}
 						aria-label={t('ns_common:pagination.next_page')}
 						disabled={!canNextPage || loading}
-						variant='outline'
+						role='button'
 						size='icon'
+						variant='outline'
 						onClick={goToNextPage}
 						onPointerEnter={() => {
 							if (canNextPage) handlePrefetch({ limit: pageSize, page: pageIndex + 1 })
@@ -188,16 +188,16 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 					</Button>
 				</Tooltip>
 				<Tooltip
+					contentProps={{ align: 'end' }}
 					message={t('pagination.last_page', { defaultValue: 'Last page' })}
-					triggerProps={{ asChild: true }}
-					contentProps={{ align: 'end' }}>
+					triggerProps={{ asChild: true }}>
 					<Button
-						role='button'
 						aria-disabled={!canNextPage || loading}
 						aria-label={t('ns_common:pagination.last_page')}
 						disabled={!canNextPage || loading}
-						variant='outline'
+						role='button'
 						size='icon'
+						variant='outline'
 						onClick={goToLastPage}
 						onPointerEnter={() => handlePrefetch({ limit: pageSize, page: pageCount })}>
 						<Icon name='ChevronsRight' />

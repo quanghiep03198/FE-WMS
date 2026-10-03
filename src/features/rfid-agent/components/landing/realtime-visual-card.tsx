@@ -56,30 +56,29 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 			</VisualCard.Header>
 			<VisualCard.Content>
 				<figure
+					aria-label='Supabase Realtime multiplayer app demo'
 					ref={cardRef}
+					role='img'
 					className={cn(
 						'group xxl:h-80 pointer-events-auto relative z-0 h-full min-h-64 w-full overflow-hidden mask-[linear-gradient(to_bottom,transparent,var(--background)_10%,var(--background)_100%)] xl:-bottom-2 2xl:bottom-0 @2xl/visual-card:min-h-80',
 						"hover:cursor-[url('/realtime-cursor-light.svg'),auto]!",
 						"dark:hover:cursor-[url('/realtime-cursor-dark.svg'),auto]!",
 						className
 					)}
-					role='img'
-					aria-label='Supabase Realtime multiplayer app demo'
-					onMouseMove={reduceMotion ? undefined : handleMouseMove}
 					onMouseLeave={handleMouseLeave} // Reset on mouse leave
-				>
+					onMouseMove={reduceMotion ? undefined : handleMouseMove}>
 					<img
-						src='/realtime-dark.svg'
 						alt='Realtime'
-						sizes='100%'
 						className='absolute inset-0 hidden w-full object-cover xl:object-center dark:block'
+						sizes='100%'
+						src='/realtime-dark.svg'
 						width='100%'
 					/>
 					<img
-						src='/realtime-light.svg'
 						alt='Realtime'
-						sizes='100%'
 						className='absolute inset-0 w-full object-cover xl:object-center dark:hidden'
+						sizes='100%'
+						src='/realtime-light.svg'
 						width='100%'
 					/>
 					{/* User 1 */}
@@ -92,7 +91,7 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 							transform: `${svgTransform} translate(-50%, -50%)`, // Center the SVG
 							transition: 'transform 0.75s ease-out' // Smooth transition
 						}}>
-						<svg width='30' height='38' viewBox='0 0 30 38' fill='none' xmlns='http://www.w3.org/2000/svg'>
+						<svg fill='none' height='38' viewBox='0 0 30 38' width='30' xmlns='http://www.w3.org/2000/svg'>
 							<path
 								d='M3.58385 1.69742C2.57836 0.865603 1.05859 1.58076 1.05859 2.88572V35.6296C1.05859 37.1049 2.93111 37.7381 3.8265 36.5656L12.5863 25.0943C12.6889 24.96 12.8483 24.8812 13.0173 24.8812H27.3245C28.7697 24.8812 29.4211 23.0719 28.3076 22.1507L3.58385 1.69742Z'
 								fill='var(--muted)'
@@ -117,7 +116,7 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 							transform: `${svgTransform2} translate(-50%, -50%)`, // Center the SVG
 							transition: 'transform 1s ease-out' // Smooth transition
 						}}>
-						<svg width='20' height='28' viewBox='0 0 30 38' fill='none' xmlns='http://www.w3.org/2000/svg'>
+						<svg fill='none' height='28' viewBox='0 0 30 38' width='20' xmlns='http://www.w3.org/2000/svg'>
 							<path
 								d='M3.58385 1.69742C2.57836 0.865603 1.05859 1.58076 1.05859 2.88572V35.6296C1.05859 37.1049 2.93111 37.7381 3.8265 36.5656L12.5863 25.0943C12.6889 24.96 12.8483 24.8812 13.0173 24.8812H27.3245C28.7697 24.8812 29.4211 23.0719 28.3076 22.1507L3.58385 1.69742Z'
 								fill='var(--muted)'

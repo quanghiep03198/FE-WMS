@@ -8,6 +8,9 @@ const PlaygroundStatusIndicator: React.FC = () => {
 
 	return (
 		<StatusIndicator
+			className='ml-2'
+			label={t('ns_inoutbound:counter_box.label')}
+			labelClassName='text-base after:content-[":"] ml-1 inline-flex items-center gap-x-1 font-medium'
 			state={
 				Object.values(connectionStatus).every((value) => value)
 					? 'active'
@@ -15,9 +18,6 @@ const PlaygroundStatusIndicator: React.FC = () => {
 						? 'fixing'
 						: 'down'
 			}
-			label={t('ns_inoutbound:counter_box.label')}
-			className='ml-2'
-			labelClassName='text-base after:content-[":"] ml-1 inline-flex items-center gap-x-1 font-medium'
 		/>
 	)
 }

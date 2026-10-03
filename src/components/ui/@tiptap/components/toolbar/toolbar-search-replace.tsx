@@ -55,80 +55,80 @@ export function SearchAndReplaceToolbar() {
 	}, [open])
 
 	return (
-		<Popover open={open} onOpenChange={setOpen} modal={false}>
-			<PopoverTrigger disabled={!editor} asChild>
+		<Popover modal={false} open={open} onOpenChange={setOpen}>
+			<PopoverTrigger asChild disabled={!editor}>
 				<Button
-					variant='ghost'
+					className={cn('font-normal')}
 					size='sm'
+					variant='ghost'
 					onClick={() => {
 						setOpen(!open)
-					}}
-					className={cn('font-normal')}>
+					}}>
 					<Icon name='Search' />
 					{t('ns_common:editor.search_and_replace')}
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent
 				align='start'
+				className='relative flex w-[400px] px-3 py-2.5'
 				sideOffset={12}
 				onCloseAutoFocus={(e) => {
 					e.preventDefault()
 				}}
 				onEscapeKeyDown={() => {
 					setOpen(false)
-				}}
-				className='relative flex w-[400px] px-3 py-2.5'>
+				}}>
 				{!replacing ? (
 					<Div className={cn('relative flex items-center gap-2')}>
 						<Input
-							value={searchText}
 							className='w-48'
+							placeholder={t('ns_common:actions.search') + '...'}
+							value={searchText}
 							onChange={(e) => {
 								setSearchText(e.target.value)
 							}}
-							placeholder={t('ns_common:actions.search') + '...'}
 						/>
 						<small>
 							{results?.length === 0 ? selectedResult : selectedResult + 1}/{results?.length}
 						</small>
-						<Button onClick={selectPrevious} size='icon' variant='ghost' className='size-7'>
+						<Button className='size-7' size='icon' variant='ghost' onClick={selectPrevious}>
 							<ArrowLeftIcon className='size-4' />
 						</Button>
-						<Button onClick={selectNext} size='icon' className='size-7' variant='ghost'>
+						<Button className='size-7' size='icon' variant='ghost' onClick={selectNext}>
 							<ArrowRightIcon className='h-4 w-4' />
 						</Button>
-						<Separator orientation='vertical' className='mx-0.5 h-7' />
+						<Separator className='mx-0.5 h-7' orientation='vertical' />
 						<Button
+							className='size-7'
+							size='icon'
+							variant='ghost'
 							onClick={() => {
 								setReplacing(true)
-							}}
-							size='icon'
-							className='size-7'
-							variant='ghost'>
+							}}>
 							<Repeat className='h-4 w-4' />
 						</Button>
 						<Button
+							className='size-7'
+							size='icon'
+							variant='ghost'
 							onClick={() => {
 								setOpen(false)
-							}}
-							size='icon'
-							className='size-7'
-							variant='ghost'>
+							}}>
 							<X className='h-4 w-4' />
 						</Button>
 					</Div>
 				) : (
 					<Div className={cn('relative w-full')}>
 						<X
+							className='absolute top-3 right-3 h-4 w-4 cursor-pointer'
 							onClick={() => {
 								setOpen(false)
 							}}
-							className='absolute top-3 right-3 h-4 w-4 cursor-pointer'
 						/>
 						<Div className='flex w-full items-center gap-3'>
 							<Button
-								size='icon'
 								className='size-7 rounded-full'
+								size='icon'
 								variant='ghost'
 								onClick={() => {
 									setReplacing(false)
@@ -144,13 +144,13 @@ export function SearchAndReplaceToolbar() {
 							<Div className='mb-3'>
 								<Label className='text-gray-11 mb-1 text-xs'>{t('ns_common:actions.search')}</Label>
 								<Input
+									placeholder={t('ns_common:actions.search') + '...'}
 									value={searchText}
 									onChange={(e) => {
 										setSearchText(e.target.value)
 									}}
-									placeholder={t('ns_common:actions.search') + '...'}
 								/>
-								<Typography variant='small' className='text-xs'>
+								<Typography className='text-xs' variant='small'>
 									{results?.length === 0 ? selectedResult : selectedResult + 1}/{results?.length}
 								</Typography>
 							</Div>
@@ -158,24 +158,24 @@ export function SearchAndReplaceToolbar() {
 								<Label className='text-gray-11 mb-1 text-xs'>{t('ns_common:editor.replace_with')}</Label>
 								<Input
 									className='w-full'
+									placeholder={t('ns_common:editor.replace') + '...'}
 									value={replaceText}
 									onChange={(e) => {
 										setReplaceText(e.target.value)
 									}}
-									placeholder={t('ns_common:editor.replace') + '...'}
 								/>
 							</Div>
 							<Div className='mt-3 flex items-center space-x-2'>
 								<Checkbox
 									checked={checked}
+									id='match_case'
 									onCheckedChange={(checked: boolean) => {
 										setChecked(checked)
 									}}
-									id='match_case'
 								/>
 								<Label
-									htmlFor='match_case'
-									className='text-xs leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+									className='text-xs leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+									htmlFor='match_case'>
 									{t('ns_common:editor.match_case')}
 								</Label>
 							</Div>
@@ -183,19 +183,19 @@ export function SearchAndReplaceToolbar() {
 
 						<Div className='actions mt-6 flex items-center justify-between'>
 							<Div className='flex items-center gap-2'>
-								<Button onClick={selectPrevious} size='icon' className='h-7 w-7' variant='secondary'>
+								<Button className='h-7 w-7' size='icon' variant='secondary' onClick={selectPrevious}>
 									<ArrowLeftIcon className='h-4 w-4' />
 								</Button>
-								<Button onClick={selectNext} size='icon' className='h-7 w-7' variant='secondary'>
+								<Button className='h-7 w-7' size='icon' variant='secondary' onClick={selectNext}>
 									<ArrowRightIcon className='h-4 w-4' />
 								</Button>
 							</Div>
 
 							<Div className='main-actions flex items-center gap-2'>
-								<Button size='sm' className='h-7 px-3 text-xs' variant='secondary' onClick={replaceAll}>
+								<Button className='h-7 px-3 text-xs' size='sm' variant='secondary' onClick={replaceAll}>
 									{t('ns_common:editor.replace_all')}
 								</Button>
-								<Button onClick={replace} size='sm' className='h-7 px-3 text-xs'>
+								<Button className='h-7 px-3 text-xs' size='sm' onClick={replace}>
 									{t('ns_common:editor.replace')}
 								</Button>
 							</Div>

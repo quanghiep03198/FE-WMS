@@ -23,22 +23,22 @@ export default function EllipsisList<T>({ threshhold, data, template: ListItemTe
 			{isTruncated ? (
 				<Fragment>
 					{visibleData.map((item) => (
-						<ListItemTemplate key={uuid()} data={item} />
+						<ListItemTemplate data={item} key={uuid()} />
 					))}
 					{
 						<HoverCard>
 							<HoverCardTrigger className='text-muted-foreground hover:text-foreground inline-flex cursor-pointer items-center gap-x-2 underline-offset-4 hover:underline'>
-								<Typography variant='small' className='whitespace-nowrap'>
+								<Typography className='whitespace-nowrap' variant='small'>
 									{t('ns_common:pagination.ellipsis_count', {
 										count: truncatedData.length,
 										defaultValue: `... and ${truncatedData.length}`
 									})}
 								</Typography>{' '}
 							</HoverCardTrigger>
-							<HoverCardContent side='bottom' align='end' className='p-0'>
+							<HoverCardContent align='end' className='p-0' side='bottom'>
 								<Div className='scrollfade-y flex max-h-40 flex-wrap items-start gap-2 p-4'>
 									{truncatedData.map((item) => (
-										<ListItemTemplate key={uuid()} data={item} />
+										<ListItemTemplate data={item} key={uuid()} />
 									))}
 								</Div>
 							</HoverCardContent>
@@ -46,7 +46,7 @@ export default function EllipsisList<T>({ threshhold, data, template: ListItemTe
 					}
 				</Fragment>
 			) : (
-				data.map((item) => <ListItemTemplate key={uuid()} data={item} />)
+				data.map((item) => <ListItemTemplate data={item} key={uuid()} />)
 			)}
 		</Div>
 	)

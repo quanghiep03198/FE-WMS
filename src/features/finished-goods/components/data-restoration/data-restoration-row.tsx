@@ -41,8 +41,8 @@ const DataRestorationRow: React.FC<DataRestorationRowProps> = ({ data, dataType,
 			style={{ height: size }}>
 			<TableCell className='group-aria-selected/row:bg-table-row-selected'>
 				<Checkbox
-					id={data.epc}
 					checked={isSelected}
+					id={data.epc}
 					onCheckedChange={(checked) => {
 						if (checked) {
 							addItemToSet(data)
@@ -53,33 +53,33 @@ const DataRestorationRow: React.FC<DataRestorationRowProps> = ({ data, dataType,
 				/>
 			</TableCell>
 			<TableCell align='left' className='group-aria-selected/row:bg-table-row-selected'>
-				<Label htmlFor={data.epc} className='cursor-pointer'>
+				<Label className='cursor-pointer' htmlFor={data.epc}>
 					{data?.epc}
 				</Label>
 			</TableCell>
 			<TableCell align='center' className='group-aria-selected/row:bg-table-row-selected'>
 				{dataType === StockFlow.OUTBOUND ? (
-					<Badge variant='outline' className='justify-center gap-x-2'>
+					<Badge className='justify-center gap-x-2' variant='outline'>
 						<Icon
+							className={data.scanned ? 'stroke-success' : 'stroke-muted-foreground'}
 							name={data.scanned ? 'Check' : 'CircleDashed'}
 							size={14}
-							className={data.scanned ? 'stroke-success' : 'stroke-muted-foreground'}
 						/>
 						{data.scanned ? t('ns_rfid:status.scanned') : t('ns_rfid:status.unscanned')}
 					</Badge>
 				) : (
-					<Badge variant='outline' className='justify-center gap-x-2'>
+					<Badge className='justify-center gap-x-2' variant='outline'>
 						<Icon
+							className={data.scannable ? 'stroke-success' : 'stroke-destructive'}
 							name={data.scannable ? 'Check' : 'X'}
 							size={14}
-							className={data.scannable ? 'stroke-success' : 'stroke-destructive'}
 						/>
 						{data.scannable ? t('ns_rfid:status.scannable') : t('ns_rfid:status.unscannable')}
 					</Badge>
 				)}
 			</TableCell>
 			<TableCell className='group-aria-selected/row:bg-table-row-selected'>
-				<HoverCard openDelay={100} closeDelay={100}>
+				<HoverCard closeDelay={100} openDelay={100}>
 					<HoverCardTrigger asChild>
 						<GhostButton>
 							<Icon name='Ellipsis' />
@@ -87,9 +87,9 @@ const DataRestorationRow: React.FC<DataRestorationRowProps> = ({ data, dataType,
 					</HoverCardTrigger>
 					<HoverCardContent
 						align='start'
+						className='bg-popover text-popover-foreground w-full max-w-md rounded-md'
 						side='left'
-						sideOffset={8}
-						className='bg-popover text-popover-foreground w-full max-w-md rounded-md'>
+						sideOffset={8}>
 						<ListDetail>
 							<ListDetailItem>
 								{t('ns_erp:fields.mo_no')}: <Typography variant='small'>{data?.mo_no}</Typography>

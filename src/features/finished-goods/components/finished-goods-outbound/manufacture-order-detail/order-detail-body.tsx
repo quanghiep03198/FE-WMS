@@ -34,7 +34,7 @@ const OrderDetailTableBody: React.FC<OrderDetailTableBodyProps> = ({ virtualizer
 			{Array.isArray(virtualItems) &&
 				virtualItems.map((virtualRow) => {
 					const row = data[virtualRow.index]
-					return <TableDataRow key={row.mo_no} data={row} virtualRow={virtualRow} />
+					return <TableDataRow data={row} key={row.mo_no} virtualRow={virtualRow} />
 				})}
 			{after > 0 && (
 				<TableRow ref={(node) => virtualizer.measureElement(node)}>

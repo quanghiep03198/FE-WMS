@@ -81,7 +81,7 @@ const OutboundHistoryTable: React.FC = () => {
 	if (isLoading)
 		return (
 			<Div className='text-muted-foreground grid h-20 w-full place-items-center text-center'>
-				<Icon name='LoaderCircle' className='animate-spin' />
+				<Icon className='animate-spin' name='LoaderCircle' />
 			</Div>
 		)
 
@@ -96,10 +96,10 @@ const OutboundHistoryTable: React.FC = () => {
 					<TableRow>
 						{columns.map((column) => (
 							<TableHead
-								key={column.accessorKey}
-								title={column.header}
-								style={{ width: 'var(--column-width)' }}
 								className='bg-table-row-active! text-table-head-foreground capitalize first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
+								key={column.accessorKey}
+								style={{ width: 'var(--column-width)' }}
+								title={column.header}
 								{...column.meta}>
 								<span>{column.header}</span>
 							</TableHead>
@@ -108,9 +108,9 @@ const OutboundHistoryTable: React.FC = () => {
 					<TableRow>
 						{columns.map((column) => (
 							<TableHead
+								className='text-foreground font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								key={column.accessorKey}
 								style={{ width: 'var(--column-width)' }}
-								className='text-foreground font-normal first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>
 									{typeof column.cell === 'function'
@@ -127,10 +127,10 @@ const OutboundHistoryTable: React.FC = () => {
 							style={{ boxShadow: '1px 0px var(--border)', maxWidth: 200, minWidth: 200 }}>
 							<span>{t('ns_erp:fields.outbound_date')}</span>
 						</TableHead>
-						<TableHead colSpan={7} align='left' className='p-0'>
+						<TableHead align='left' className='p-0' colSpan={7}>
 							<span
-								style={{ left: 'var(--column-width)' }}
-								className='sticky block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
+								className='sticky block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'
+								style={{ left: 'var(--column-width)' }}>
 								{t('ns_erp:fields.daily_outbound_qty')}
 							</span>
 						</TableHead>
@@ -142,20 +142,29 @@ const OutboundHistoryTable: React.FC = () => {
 				<TableBody>
 					{data.outbound_history.length > 0 ? (
 						data.outbound_history.map((item) => {
-							const totalShippedOutQty = 0
-
-							console.log(item)
+							const totalShippedOutQty = item.data.reduce((total, current) => {
+								if (Array.isArray(current.shipping_details)) {
+									return (
+										total +
+										current.shipping_details.reduce(
+											(subTotal, detail) => subTotal + detail.shipped_out_qty,
+											0
+										)
+									)
+								}
+								return total
+							}, 0)
 
 							return (
 								<TableRow key={item.date}>
 									<TableCell
 										align='left'
-										colSpan={1}
 										className='sticky left-0 z-10'
+										colSpan={1}
 										style={{ boxShadow: '1px 0px var(--border)' }}>
 										<span>{item.date}</span>
 									</TableCell>
-									<TableCell colSpan={7} className='divide-border divide-y p-0'>
+									<TableCell className='divide-border divide-y p-0' colSpan={7}>
 										{item.data.map((item) => (
 											<NestedTable key={item.mo_no}>
 												<NestedColumn className='basis-32'>
@@ -173,7 +182,7 @@ const OutboundHistoryTable: React.FC = () => {
 											</NestedTable>
 										))}
 									</TableCell>
-									<TableCell colSpan={1} align='left' className='sticky! right-0 z-10 font-medium'>
+									<TableCell align='left' className='sticky! right-0 z-10 font-medium' colSpan={1}>
 										<span>{formatIntlNumber(totalShippedOutQty)}</span>
 									</TableCell>
 								</TableRow>
@@ -181,7 +190,7 @@ const OutboundHistoryTable: React.FC = () => {
 						})
 					) : (
 						<TableRow>
-							<TableCell colSpan={9} className='border-b-0! p-0'>
+							<TableCell className='border-b-0! p-0' colSpan={9}>
 								<Div className='sticky left-0 flex max-w-[calc(100cqw-10px)] items-center justify-center gap-x-2'>
 									<EmptyHistory />
 								</Div>
@@ -192,20 +201,20 @@ const OutboundHistoryTable: React.FC = () => {
 				<TableFooter className='sticky bottom-0 z-20 [&>tr:first-child>td]:border-t'>
 					<TableRow>
 						<TableCell
-							colSpan={9}
 							align='left'
-							className='bg-table-row-active text-table-head-foreground border-b-0! p-0'>
+							className='bg-table-row-active text-table-head-foreground border-b-0! p-0'
+							colSpan={9}>
 							<Div className='sticky left-0 max-w-[calc(100cqw-10px)] px-4 py-2 text-center'>
 								{t('ns_common:titles.overall')}
 							</Div>
 						</TableCell>
 					</TableRow>
 					<TableRow>
-						<TableCell colSpan={9} align='left' className='border-t p-0 font-normal'>
+						<TableCell align='left' className='border-t p-0 font-normal' colSpan={9}>
 							<NestedTable className='w-full'>
 								<NestedColumn
-									style={{ minWidth: 'var(--column-width)' }}
-									className='sticky left-0 z-20 shadow-[1px_0px_var(--border)] *:h-9 *:capitalize'>
+									className='sticky left-0 z-20 shadow-[1px_0px_var(--border)] *:h-9 *:capitalize'
+									style={{ minWidth: 'var(--column-width)' }}>
 									<NestedCellHead>Size</NestedCellHead>
 									<NestedCellHead>
 										<span>{t('ns_erp:fields.mo_size_qty')}</span>
@@ -220,7 +229,7 @@ const OutboundHistoryTable: React.FC = () => {
 								{Array.isArray(data?.overall) &&
 									sortBy(data.overall, 'size_numcode').map((item) => {
 										return (
-											<NestedColumn key={item.size_numcode} className='w-full *:h-9'>
+											<NestedColumn className='w-full *:h-9' key={item.size_numcode}>
 												<NestedCellHead>{item.size_numcode}</NestedCellHead>
 												<NestedCell>{formatIntlNumber(item?.order_qty)}</NestedCell>
 												<NestedCell>{formatIntlNumber(item?.shipped_out_qty)}</NestedCell>

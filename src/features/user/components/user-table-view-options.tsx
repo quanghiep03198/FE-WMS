@@ -21,9 +21,9 @@ export function UserTableViewOptions<TData>({ table }: { table: Table<TData> }) 
 
 	return (
 		<DropdownMenu>
-			<Tooltip message={t('ns_common:table.column_settings')} contentProps={{ hidden: !isMobile }}>
+			<Tooltip contentProps={{ hidden: !isMobile }} message={t('ns_common:table.column_settings')}>
 				<DropdownMenuTrigger asChild>
-					<Button variant={isMobile ? 'ghost' : 'outline'} size={isMobile ? 'icon' : 'default'}>
+					<Button size={isMobile ? 'icon' : 'default'} variant={isMobile ? 'ghost' : 'outline'}>
 						<Icon name='Settings2' />
 						{!isMobile && t('ns_common:table.column_settings')}
 					</Button>
@@ -38,9 +38,9 @@ export function UserTableViewOptions<TData>({ table }: { table: Table<TData> }) 
 					.map((column) => {
 						return (
 							<DropdownMenuCheckboxItem
-								key={column.id}
-								className='capitalize'
 								checked={column.getIsVisible()}
+								className='capitalize'
+								key={column.id}
 								onCheckedChange={(value) => column.toggleVisibility(!!value)}>
 								{column.columnDef.header?.toString()}
 							</DropdownMenuCheckboxItem>

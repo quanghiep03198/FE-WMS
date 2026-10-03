@@ -17,8 +17,8 @@ export const PlaygroundActions: React.FC = () => {
 	return (
 		<Div className='@container/playground-actions grid grid-cols-3 items-center gap-x-2 p-2'>
 			<Button
-				size='sm'
 				disabled={!connectionStatus.isMQTTConnectionReady}
+				size='sm'
 				variant={connectionStatus.isReaderConnectionReady ? 'destructive' : 'default'}
 				onClick={async () => {
 					publishMessage(PublishedTopics.REQUEST_SIGNAL, {
@@ -26,31 +26,31 @@ export const PlaygroundActions: React.FC = () => {
 					})
 				}}>
 				<Icon
-					name={connectionStatus.isReaderConnectionReady ? 'Unplug' : 'PlugZap'}
 					className='hidden @sm/playground-actions:block'
+					name={connectionStatus.isReaderConnectionReady ? 'Unplug' : 'PlugZap'}
 				/>
 				{connectionStatus.isReaderConnectionReady
 					? t('ns_common:actions.disconnect')
 					: t('ns_common:actions.connect')}
 			</Button>
 			<Button
+				disabled={!connectionStatus.isReaderConnectionReady || !connectionStatus.isMQTTConnectionReady}
 				size='sm'
 				variant='secondary'
-				disabled={!connectionStatus.isReaderConnectionReady || !connectionStatus.isMQTTConnectionReady}
 				onClick={async () => {
 					publishMessage(PublishedTopics.REQUEST_SIGNAL, {
 						action: connectionStatus.isReaderPlaying ? 'stop' : 'start'
 					})
 				}}>
 				<Icon
-					name={connectionStatus.isReaderPlaying ? 'Pause' : 'Play'}
 					className='hidden @sm/playground-actions:block'
+					name={connectionStatus.isReaderPlaying ? 'Pause' : 'Play'}
 				/>
 				{connectionStatus.isReaderPlaying ? t('ns_common:actions.stop') : t('ns_common:actions.start')}
 			</Button>
 			<Button
-				variant='outline'
 				size='sm'
+				variant='outline'
 				onClick={async () => {
 					resetScannedEpcs()
 					publishMessage(PublishedTopics.REQUEST_DATA, {
@@ -58,7 +58,7 @@ export const PlaygroundActions: React.FC = () => {
 					})
 					event$.emit({ action: CommonActions.IMPORT, payload: [] })
 				}}>
-				<Icon name='RefreshCcw' className='hidden @sm/playground-actions:block' /> {t('ns_common:actions.reset')}
+				<Icon className='hidden @sm/playground-actions:block' name='RefreshCcw' /> {t('ns_common:actions.reset')}
 			</Button>
 		</Div>
 	)

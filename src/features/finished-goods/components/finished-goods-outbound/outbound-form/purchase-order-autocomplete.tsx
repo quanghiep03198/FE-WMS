@@ -17,14 +17,14 @@ const PurchaseOrderAutoComplete: React.FC = () => {
 
 	return (
 		<AutoCompleteFieldControl
-			label={t('ns_erp:fields.po')}
-			name='po'
 			datalist={purchaseOrders ?? []}
-			shouldFilter={false}
-			placeholder={t('ns_common:form_placeholder.fill', { object: 'PO', defaultValue: 'PO' })}
+			label={t('ns_erp:fields.po')}
 			labelField='po'
-			valueField='po'
 			loading={isLoading}
+			name='po'
+			placeholder={t('ns_common:form_placeholder.fill', { object: 'PO', defaultValue: 'PO' })}
+			shouldFilter={false}
+			valueField='po'
 			template={({ value }) => (
 				<Div
 					className={cn(

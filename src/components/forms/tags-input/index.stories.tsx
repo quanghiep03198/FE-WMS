@@ -52,7 +52,7 @@ const Template = (args: TagInputFieldControlProps<any>) => {
 	return (
 		<div className='mx-auto max-w-md space-y-10'>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(setFormValues)} className='grid gap-y-6'>
+				<form className='grid gap-y-6' onSubmit={form.handleSubmit(setFormValues)}>
 					<TagInputFieldControl {...args} />
 					<Button type='submit'>Submit</Button>
 				</form>

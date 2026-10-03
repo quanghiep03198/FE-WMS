@@ -11,7 +11,7 @@ const Heading: React.FC = () => {
 	return (
 		<Div className='border-border bg-background/85 xxl:max-w-8xl sticky top-0 z-20 mx-auto flex w-full max-w-7xl basis-40 items-start justify-between border-b py-10 backdrop-blur'>
 			<Div className='space-y-2'>
-				<Typography variant='h1' className='font-bold tracking-tight'>
+				<Typography className='font-bold tracking-tight' variant='h1'>
 					{t('ns_common:navigation.settings')}
 				</Typography>
 				<Typography color='muted'>{t('ns_preference:captions.header')}</Typography>
@@ -19,20 +19,20 @@ const Heading: React.FC = () => {
 			<Div className='inline-flex items-center'>
 				<Tooltip message={t('ns_common:actions.back')} triggerProps={{ asChild: true }}>
 					<Button
-						variant='ghost'
-						size='icon'
 						disabled={!router.history.canGoBack()}
+						size='icon'
+						variant='ghost'
 						onClick={() => router.history.back()}>
 						<ArrowLeftIcon />
 					</Button>
 				</Tooltip>
 				<Tooltip message='Forward' triggerProps={{ asChild: true }}>
-					<Button variant='ghost' size='icon' onClick={() => router.history.forward()}>
+					<Button size='icon' variant='ghost' onClick={() => router.history.forward()}>
 						<ArrowRightIcon />
 					</Button>
 				</Tooltip>
 				<Tooltip message='Home' triggerProps={{ asChild: true }}>
-					<Button asChild variant='ghost' size='icon' onClick={() => router.history.forward()}>
+					<Button asChild size='icon' variant='ghost' onClick={() => router.history.forward()}>
 						<Link to='/dashboard'>
 							<HomeIcon />
 						</Link>

@@ -38,9 +38,9 @@ export const TableViewOptions: React.FC = () => {
 					.map((column) => {
 						return (
 							<DropdownMenuCheckboxItem
-								key={column.id}
-								className='whitespace-nowrap capitalize'
 								checked={column.getIsVisible()}
+								className='whitespace-nowrap capitalize'
+								key={column.id}
 								onCheckedChange={(value) => {
 									column.toggleVisibility(!!value)
 									rerender()

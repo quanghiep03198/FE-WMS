@@ -26,9 +26,9 @@ export function TagInputFieldControl<T extends FieldValues>(props: TagInputField
 
 	return (
 		<FormField
-			name={name}
 			control={control}
 			defaultValue={getValues(name) ?? []}
+			name={name}
 			render={({ field }) => (
 				<FormItem
 					aria-hidden={hidden}
@@ -36,20 +36,20 @@ export function TagInputFieldControl<T extends FieldValues>(props: TagInputField
 					className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 					{label && (
 						<FormLabel
-							htmlFor={id}
-
 							aria-orientation={orientation}
-							className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
+
+							className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'
+							htmlFor={id}>
 							{label}
 						</FormLabel>
 					)}
 					<FormControl>
 						<Div className='space-y-2'>
 							<TagsInput
+								aria-invalid={isInvalid}
 								placeholder={placeholder}
 								value={field.value}
 								onValueChange={field.onChange}
-								aria-invalid={isInvalid}
 								{...restProps}
 							/>
 							<FormDescription>{description}</FormDescription>

@@ -31,7 +31,7 @@ function Page() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.defective_goods_outbound_report')}</title>
-			<meta name='description' content={t('ns_inoutbound:description.defective_goods_outbound_report')} />
+			<meta content={t('ns_inoutbound:description.defective_goods_outbound_report')} name='description' />
 
 			<RoleGuard
 				authorizedRoles={[

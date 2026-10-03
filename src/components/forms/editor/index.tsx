@@ -49,14 +49,14 @@ export function EditorFieldControl<T extends FieldValues>({
 	}, [getValues(name)])
 	return (
 		<FormField
-			name={name}
 			control={control}
 			defaultValue={defaultValue}
+			name={name}
 			render={() => (
 				<FormItem>
 					<FormLabel>{label}</FormLabel>
 					<FormControl>
-						<Editor name={name} defaultValue={defaultValue} onUpdate={setState} disabled={disabled} />
+						<Editor defaultValue={defaultValue} disabled={disabled} name={name} onUpdate={setState} />
 					</FormControl>
 					<FormMessage />
 				</FormItem>

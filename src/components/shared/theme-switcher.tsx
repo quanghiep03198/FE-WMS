@@ -65,8 +65,8 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
 			)}>
 			<div className='absolute inset-x-1 top-1/2 z-[-1] w-full -translate-y-1/2'>
 				<div
-					ref={activeRef}
 					className='bg-accent aspect-square size-6 rounded-full transition-all duration-200 ease-in-out'
+					ref={activeRef}
 				/>
 			</div>
 			{themes.map(({ key, icon: Icon, label }) => {
@@ -74,13 +74,13 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
 				return (
 					<button
 						aria-label={label}
+						className='first relative h-6 w-6 rounded-full'
+						key={key}
+						type='button'
 						ref={(e) => {
 							if (key === Theme.SYSTEM) firstButtonRef.current = e
 						}}
-						className='first relative h-6 w-6 rounded-full'
-						key={key}
-						onClick={() => handleSelectTheme(key as Theme)}
-						type='button'>
+						onClick={() => handleSelectTheme(key as Theme)}>
 						<Icon
 							className={cn(
 								'relative z-10 m-auto size-4',

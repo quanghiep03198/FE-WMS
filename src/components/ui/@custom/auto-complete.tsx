@@ -73,15 +73,16 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 	}
 
 	return (
-		<Popover open={open} onOpenChange={setOpen} modal={false}>
-			<PopoverTrigger type='button' className='relative w-full' onClick={(e) => e.preventDefault()}>
+		<Popover modal={false} open={open} onOpenChange={setOpen}>
+			<PopoverTrigger className='relative w-full' type='button' onClick={(e) => e.preventDefault()}>
 				<DebouncedInput
-					id={id}
-					ref={resolvedRef}
-					name={name}
-					value={currentValue}
 					autoComplete='off'
+					data-icon={props['data-icon']}
+					id={id}
+					name={name}
 					placeholder={placeholder}
+					ref={resolvedRef}
+					value={currentValue}
 					className={cn(
 						'peer focus-within:border-primary! aria-invalid:border-destructive aria-invalid:focus-within:border-destructive rounded-md py-1 pr-9 pl-3 text-sm shadow-sm transition-colors duration-200 placeholder:text-sm',
 						className
@@ -89,9 +90,8 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 					style={{
 						border: '1px solid var(--border)'
 					}}
-					data-icon={props['data-icon']}
-					onKeyDown={handleKeyDown}
 					onClick={() => setOpen(true)}
+					onKeyDown={handleKeyDown}
 					onChange={(value) => {
 						if (typeof onInput === 'function') onInput(value)
 					}}
@@ -104,7 +104,7 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 				onOpenAutoFocus={(e) => e.preventDefault()}>
 				{loading ? (
 					<Div className='flex items-center justify-center p-10 text-center'>
-						<Icon name='LoaderCircle' size={18} className='animate-spin' />
+						<Icon className='animate-spin' name='LoaderCircle' size={18} />
 					</Div>
 				) : filteredDatalist?.length > 0 ? (
 					filteredDatalist?.map((item) => {
@@ -116,7 +116,7 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 									setOpen(false)
 									if (typeof onSelect === 'function') onSelect(String(item[valueField]))
 								}}>
-								<Typography variant='small' className='line-clamp-1 flex-1'>
+								<Typography className='line-clamp-1 flex-1' variant='small'>
 									{String(item[labelField])}
 								</Typography>
 								<CheckIcon
@@ -129,7 +129,7 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 						)
 					})
 				) : (
-					<Typography variant='small' color='muted' className='block h-full p-10 text-center'>
+					<Typography className='block h-full p-10 text-center' color='muted' variant='small'>
 						{t('ns_common:table.no_data')}
 					</Typography>
 				)}

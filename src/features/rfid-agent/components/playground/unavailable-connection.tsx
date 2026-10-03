@@ -12,14 +12,14 @@ const UnavailableConnection: React.FC = () => {
 	return (
 		<Div className='flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center *:text-pretty'>
 			<Icon
+				className='stroke-muted-foreground mb-6 rotate-12'
 				name='ZapOff'
 				size={44}
 				stroke='var(--muted-foreground)'
 				strokeWidth={1}
-				className='stroke-muted-foreground mb-6 rotate-12'
 			/>
 			<Typography className='font-medium'>{t('ns_rfid:rfid_agent_connection_failure.title')}</Typography>
-			<Typography variant='small' color='muted' className='mb-3'>
+			<Typography className='mb-3' color='muted' variant='small'>
 				{t('ns_rfid:rfid_agent_connection_failure.description')}
 			</Typography>
 			<Div className='inline-flex items-center gap-x-1'>
@@ -27,7 +27,7 @@ const UnavailableConnection: React.FC = () => {
 					<Icon name='RefreshCcw' />
 					{t('ns_common:actions.retry')}
 				</Button>
-				<Link to='/rfid-agent' className={cn(buttonVariants({ variant: 'link', size: 'sm' }))}>
+				<Link className={cn(buttonVariants({ variant: 'link', size: 'sm' }))} to='/rfid-agent'>
 					{t('ns_common:actions.learn_more')} <Icon name='ArrowUpRight' />
 				</Link>
 			</Div>

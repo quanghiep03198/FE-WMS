@@ -43,9 +43,9 @@ const NavSidebar: React.FC = () => {
 	const { setOpen } = useSidebar()
 
 	return (
-		<Sidebar variant='sidebar' side='left' collapsible='icon' className='max-w-96'>
+		<Sidebar className='max-w-96' collapsible='icon' side='left' variant='sidebar'>
 			<SidebarHeader className='overflow-hidden'>
-				<Link to='/dashboard' preload='intent' className='max-w-full'>
+				<Link className='max-w-full' preload='intent' to='/dashboard'>
 					<AppLogo />
 				</Link>
 			</SidebarHeader>
@@ -53,7 +53,7 @@ const NavSidebar: React.FC = () => {
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('navigation.main_menu_label')}</SidebarGroupLabel>
 					<div className='scroll-fade max-h-[40vh] scrollbar-none! overflow-x-hidden overflow-y-auto'>
-						<SidebarMenu role='menu' aria-label='Main menu'>
+						<SidebarMenu aria-label='Main menu' role='menu'>
 							{navigationConfig.main.map((item, index) => {
 								if (!Array.isArray(item.items))
 									return (
@@ -65,12 +65,12 @@ const NavSidebar: React.FC = () => {
 										/>
 									)
 								return (
-									<Collapsible key={uuid()} defaultOpen={true} className='group/collapsible w-full'>
+									<Collapsible className='group/collapsible w-full' defaultOpen={true} key={uuid()}>
 										<CollapsibleTrigger asChild={true}>
 											<SidebarMenuButton
-												tooltip={t(item.title, { ns: 'ns_common', defaultValue: item.title })}
-												size='sm'
 												className='w-full font-medium'
+												size='sm'
+												tooltip={t(item.title, { ns: 'ns_common', defaultValue: item.title })}
 												aria-disabled={item.items.every(
 													(subItem) =>
 														subItem.authorizedRoles !== '*' &&
@@ -85,14 +85,14 @@ const NavSidebar: React.FC = () => {
 													setOpen(true)
 												}}>
 												{item.icon && (
-													<Icon name={item.icon} size={18} className='size-4.5!' strokeWidth={2} />
+													<Icon className='size-4.5!' name={item.icon} size={18} strokeWidth={2} />
 												)}
 												<SidebarMenuTitle data-indice={index + 1}>
 													{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
 												</SidebarMenuTitle>
 												<Icon
-													name='ChevronRight'
 													className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90'
+													name='ChevronRight'
 												/>
 											</SidebarMenuButton>
 										</CollapsibleTrigger>
@@ -117,7 +117,7 @@ const NavSidebar: React.FC = () => {
 				<SidebarSeparator />
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('navigation.integration_menu_label')}</SidebarGroupLabel>
-					<SidebarMenu role='menu' aria-label='Administration'>
+					<SidebarMenu aria-label='Administration' role='menu'>
 						{navigationConfig.integrations.map((item) => {
 							return (
 								<SidebarMenuLink indice='none' key={uuid()} {...item} viewTransition={{ types: ['fade'] }} />
@@ -130,13 +130,13 @@ const NavSidebar: React.FC = () => {
 						<SidebarSeparator />
 						<SidebarGroup>
 							<SidebarGroupLabel>{t('navigation.administration_menu_label')}</SidebarGroupLabel>
-							<SidebarMenu role='menu' aria-label='Administration'>
+							<SidebarMenu aria-label='Administration' role='menu'>
 								{navigationConfig.administration.map((item) => {
 									return (
 										<SidebarMenuLink
 											indice='none'
-											viewTransition={{ types: ['fade'] }}
 											key={uuid()}
+											viewTransition={{ types: ['fade'] }}
 											{...item}
 										/>
 									)
@@ -148,11 +148,11 @@ const NavSidebar: React.FC = () => {
 				<SidebarSeparator className={cn(user?.roles?.includes(UserRole.ADMIN) && 'xxl:block hidden')} />
 				<SidebarGroup className={cn(user?.roles?.includes(UserRole.ADMIN) && 'xxl:flex hidden')}>
 					<SidebarGroupLabel>{t('navigation.preference_menu_label')}</SidebarGroupLabel>
-					<SidebarMenu role='menu' aria-label='Preferences menu'>
+					<SidebarMenu aria-label='Preferences menu' role='menu'>
 						{navigationConfig.preferences
 							.filter((item) => item.url !== '/preferences/account')
 							.map((item, index) => (
-								<SidebarMenuLink indice='none' key={index.toString()} viewTransition {...item} />
+								<SidebarMenuLink viewTransition indice='none' key={index.toString()} {...item} />
 							))}
 					</SidebarMenu>
 				</SidebarGroup>
@@ -189,28 +189,28 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 
 	return (
 		<SidebarMenuItem
-			role='menuitem'
 			aria-disabled={!isLinkActive}
 			className='group/menuitem aria-disabled:opacity-50'
 			ref={ref}
+			role='menuitem'
 			onClick={() => {
 				if (isMobile) setOpenMobile(!openMobile)
 			}}>
 			<SidebarMenuButton
 				asChild
-				size='sm'
 				className='group-aria-disabled/menuitem:cursor-not-allowed'
+				size='sm'
 				tooltip={t(title, { defaultValue: title })}>
 				<Link
-					to={url as FileRouteTypes['to']}
 					search={isActive ? location.search : {}}
+					to={url as FileRouteTypes['to']}
 					viewTransition={viewTransition}
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10 '
 					}}>
-					<Icon name={icon!} size={18} className='size-4.5!' />
+					<Icon className='size-4.5!' name={icon!} size={18} />
 					<SidebarMenuTitle data-indice={indice}>{t(title, { defaultValue: title })}</SidebarMenuTitle>
-					{!isLinkActive && <Icon name='Lock' size={14} className='stroke-muted-foreground ml-auto size-3.5!' />}
+					{!isLinkActive && <Icon className='stroke-muted-foreground ml-auto size-3.5!' name='Lock' size={14} />}
 				</Link>
 			</SidebarMenuButton>
 		</SidebarMenuItem>
@@ -247,18 +247,18 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 
 	return (
 		<SidebarMenuSubItem
-			role='menuitem'
-			ref={ref}
 			aria-disabled={!isAccessible}
 			className='group/menuitem relative aria-disabled:cursor-help aria-disabled:opacity-50'
+			ref={ref}
+			role='menuitem'
 			onClick={() => {
 				if (isSmallScreen) setOpenMobile(!openMobile)
 			}}>
-			<SidebarMenuSubButton asChild size='md' className='group-aria-disabled/menuitem:cursor-not-allowed'>
+			<SidebarMenuSubButton asChild className='group-aria-disabled/menuitem:cursor-not-allowed' size='md'>
 				<Link
-					to={url as FileRouteTypes['to']}
-					search={isActive ? location.search : {}}
 					preload='intent'
+					search={isActive ? location.search : {}}
+					to={url as FileRouteTypes['to']}
 					viewTransition={viewTransition}
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10'
@@ -270,9 +270,9 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 			</SidebarMenuSubButton>
 			{!isAccessible && (
 				<Icon
+					className='stroke-muted-foreground absolute top-1/2 right-0 translate-x-3.5 -translate-y-1/2'
 					name='Lock'
 					size={14}
-					className='stroke-muted-foreground absolute top-1/2 right-0 translate-x-3.5 -translate-y-1/2'
 				/>
 			)}
 		</SidebarMenuSubItem>

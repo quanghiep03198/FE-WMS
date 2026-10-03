@@ -16,8 +16,8 @@ const OutboundReportDetailTable: React.FC<Pick<IOutboundReport, 'detail' | 'over
 					<TableRow className='sticky'>
 						<TableHead
 							align='left'
-							style={{ width: 'var(--sticky-left-col-width)', minWidth: 'var(--sticky-left-col-width)' }}
-							className='left-0 z-20 whitespace-nowrap shadow-[1px_0px_0px_var(--border)] xl:sticky'>
+							className='left-0 z-20 whitespace-nowrap shadow-[1px_0px_0px_var(--border)] xl:sticky'
+							style={{ width: 'var(--sticky-left-col-width)', minWidth: 'var(--sticky-left-col-width)' }}>
 							{t('ns_erp:fields.mo_no')}
 						</TableHead>
 						<TableHead align='center'>Size</TableHead>
@@ -28,10 +28,10 @@ const OutboundReportDetailTable: React.FC<Pick<IOutboundReport, 'detail' | 'over
 				</TableHeader>
 				<TableBody>
 					{Array.isArray(detail) && detail.length > 0 ? (
-						detail.map((item) => <ReportDetailRow key={item.mo_no} data={item} />)
+						detail.map((item) => <ReportDetailRow data={item} key={item.mo_no} />)
 					) : (
 						<TableRow>
-							<TableCell align='center' colSpan={4} className='text-muted-foreground border-b! p-20'>
+							<TableCell align='center' className='text-muted-foreground border-b! p-20' colSpan={4}>
 								<Div className='inline-flex items-center justify-center gap-x-2'>
 									<Icon name='Inbox' size={24} strokeWidth={1} />
 									{t('ns_common:table.no_data')}

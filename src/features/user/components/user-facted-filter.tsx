@@ -46,18 +46,18 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<Button variant='outline' className='border-dashed'>
+				<Button className='border-dashed' variant='outline'>
 					<Icon name='CirclePlus' />
 					{title}
 					{selectedValues?.size > 0 && (
 						<Div className='inline-flex items-center gap-x-2 md:hidden'>
-							<Separator orientation='vertical' className='mx-2 h-4' />
-							<Badge variant='secondary' className='hidden rounded-sm px-1.5 font-normal'>
+							<Separator className='mx-2 h-4' orientation='vertical' />
+							<Badge className='hidden rounded-sm px-1.5 font-normal' variant='secondary'>
 								{selectedValues.size}
 							</Badge>
 							<Div className='flex gap-1'>
 								{selectedValues.size > 2 ? (
-									<Badge variant='secondary' className='rounded-sm px-1.5 font-normal'>
+									<Badge className='rounded-sm px-1.5 font-normal' variant='secondary'>
 										{t('ns_common:pagination.selected_records', {
 											selectedRecords: selectedValues.size,
 											defaultValue: null
@@ -68,9 +68,9 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 										.filter((option) => selectedValues.has(option.value))
 										.map((option) => (
 											<Badge
-												variant='secondary'
+												className='rounded-sm px-1.5 font-normal'
 												key={option.value}
-												className='rounded-sm px-1.5 font-normal'>
+												variant='secondary'>
 												{option.label}
 											</Badge>
 										))
@@ -80,7 +80,7 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 					)}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className='w-72 p-0' align='start'>
+			<PopoverContent align='start' className='w-72 p-0'>
 				<Command>
 					<CommandInput placeholder={title} />
 					<CommandList>
@@ -110,7 +110,7 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 											<CheckIcon className='text-primary-foreground size-3.5' />
 										</Div>
 										{option.icon && (
-											<Icon name={option.icon} size={18} className='text-muted-foreground size-[18px]' />
+											<Icon className='text-muted-foreground size-[18px]' name={option.icon} size={18} />
 										)}
 										<span>{option.label}</span>
 										{facets?.get(option.value) && (
@@ -127,8 +127,8 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 								<CommandSeparator />
 								<CommandGroup>
 									<CommandItem
-										onSelect={() => column?.setFilterValue(undefined)}
-										className='justify-center text-center'>
+										className='justify-center text-center'
+										onSelect={() => column?.setFilterValue(undefined)}>
 										{t('ns_common:actions.clear_filter')}
 									</CommandItem>
 								</CommandGroup>

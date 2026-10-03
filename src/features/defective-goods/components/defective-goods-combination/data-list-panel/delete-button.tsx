@@ -46,22 +46,26 @@ const DeleteButton: React.FC<ButtonProps> = () => {
 		<Fragment>
 			<Tooltip message={t('ns_common:actions.delete')} triggerProps={{ asChild: true }}>
 				<Button
-					size='icon'
-					variant='ghost'
 					className='[&:disabled_svg]:stroke-muted-foreground [&_svg]:stroke-destructive'
 					disabled={!hasSelection}
+					size='icon'
+					variant='ghost'
 					onClick={() => setConfirmDialogOpen(true)}>
 					<Icon name='Trash2' />
 				</Button>
 			</Tooltip>
 			<ConfirmDialog
-				open={confirmDialogOpen || isPending || isError}
-				onOpenChange={setConfirmDialogOpen}
-				isPending={isPending}
-				isError={isError}
-				title={t('ns_common:confirmation.delete_title')}
 				description={t('ns_common:confirmation.delete_description')}
 				dialogActionProps={{ variant: 'destructive', children: t('ns_common:actions.delete') }}
+				isError={isError}
+				isPending={isPending}
+				open={confirmDialogOpen || isPending || isError}
+				title={t('ns_common:confirmation.delete_title')}
+				onOpenChange={setConfirmDialogOpen}
+				onCancel={() => {
+					reset()
+					setConfirmDialogOpen(false)
+				}}
 				onConfirm={() =>
 					toast.promise(
 						deleteAsync({
@@ -78,10 +82,6 @@ const DeleteButton: React.FC<ButtonProps> = () => {
 						}
 					)
 				}
-				onCancel={() => {
-					reset()
-					setConfirmDialogOpen(false)
-				}}
 			/>
 		</Fragment>
 	)

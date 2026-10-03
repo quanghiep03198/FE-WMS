@@ -15,19 +15,19 @@ const DataRestoration: React.FC = () => {
 			</Typography>
 			<Div className='grid min-h-24 grid-cols-[3fr_1fr] items-center rounded-md border p-4'>
 				<Div className='leading-none text-pretty'>
-					<Typography variant='small' as='h5' className='mb-1 font-medium'>
+					<Typography as='h5' className='mb-1 font-medium' variant='small'>
 						{t('ns_inoutbound:scanner_setting.restore_deleted_epcs')}
 					</Typography>
-					<Typography variant='small' color='muted'>
+					<Typography color='muted' variant='small'>
 						{t('ns_inoutbound:scanner_setting.data_restoration_note')}
 					</Typography>
 				</Div>
 				<Div className='place-self-center justify-self-end'>
 					<RoleBaseAccessControl authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 						<Label
-							role='button'
 							className={buttonVariants({ variant: 'outline', size: 'sm' })}
-							htmlFor='data-restoration-sheet-trigger'>
+							htmlFor='data-restoration-sheet-trigger'
+							role='button'>
 							{t('ns_common:actions.open')}
 						</Label>
 						<DataRestorationSheet dataType={StockFlow.INBOUND} />

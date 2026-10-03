@@ -222,14 +222,15 @@ export const Default = () => {
 			<Div className='w-full space-y-6'>
 				<Div>
 					<Typography variant='h3'>User list</Typography>
-					<Typography variant='small' className='text-muted-foreground'>
+					<Typography className='text-muted-foreground' variant='small'>
 						This is a sample user list with various fields. You can sort, filter, and resize columns.
 					</Typography>
 				</Div>
 				<Separator />
 				<DataTable
-					data={users}
 					columns={columns}
+					containerProps={{ style: { height: window.innerHeight - 300 } }}
+					data={users}
 					enableColumnPinning={true}
 					initialState={{
 						pagination: {
@@ -237,7 +238,6 @@ export const Default = () => {
 							pageIndex: 0
 						}
 					}}
-					containerProps={{ style: { height: window.innerHeight - 300 } }}
 				/>
 			</Div>
 		</I18nextProvider>

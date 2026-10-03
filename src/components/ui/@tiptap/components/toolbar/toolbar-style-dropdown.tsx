@@ -76,7 +76,7 @@ export const StyleDropdownMenu: React.FC = () => {
 		<DropdownMenu>
 			<Tooltip message={t('ns_common:editor.typography')}>
 				<DropdownMenuTrigger asChild>
-					<Button type='button' variant='secondary' size='sm' className='h-8 min-w-32 gap-x-2'>
+					<Button className='h-8 min-w-32 gap-x-2' size='sm' type='button' variant='secondary'>
 						<Icon name={getCurrentStyle.icon} /> {getCurrentStyle.label}
 					</Button>
 				</DropdownMenuTrigger>
@@ -96,7 +96,7 @@ export const StyleDropdownMenu: React.FC = () => {
 							.run()
 					}}>
 					{presetStyles.map((style) => (
-						<DropdownMenuRadioItem key={style.value} value={String(style.value)} className='gap-x-2'>
+						<DropdownMenuRadioItem className='gap-x-2' key={style.value} value={String(style.value)}>
 							<Icon name={style.icon} /> {style.label}
 						</DropdownMenuRadioItem>
 					))}

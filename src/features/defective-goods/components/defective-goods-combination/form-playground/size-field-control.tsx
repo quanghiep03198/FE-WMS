@@ -94,7 +94,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 				<Div
 					aria-disabled={disabled}
 					className='flex-1 space-y-4 rounded-md border border-dashed py-3 aria-disabled:opacity-50'>
-					<Div ref={scrollRef} className={cn('px-3', fields.length > 0 && 'scroll-fade max-h-40')}>
+					<Div className={cn('px-3', fields.length > 0 && 'scroll-fade max-h-40')} ref={scrollRef}>
 						{fields.length === 0 ? (
 							<Empty>
 								<EmptyHeader>
@@ -106,10 +106,10 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 								</EmptyHeader>
 								<EmptyContent>
 									<Button
-										variant='outline'
+										disabled={disabled}
 										size='sm'
 										type='button'
-										disabled={disabled}
+										variant='outline'
 										onClick={() => append({ size_code: null, qty: null })}>
 										<Icon name='ListPlus' />
 										{t('ns_common:actions.add')}
@@ -118,28 +118,28 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 							</Empty>
 						) : (
 							fields.map((field, index) => (
-								<Div key={field.id} className='mb-2 flex items-stretch gap-x-2'>
+								<Div className='mb-2 flex items-stretch gap-x-2' key={field.id}>
 									<Div className='flex-1'>
 										<AutoCompleteFieldControl
 											{...props}
-											type='text'
+											datalist={sizeOptions}
+											disabled={disabled}
+											labelField='label'
+											loading={loading}
 											name={`sizes.${index}.size_code`}
+											type='text'
+											valueField='value'
 											placeholder={t('ns_common:form_placeholder.fill', {
 												object: 'size',
 												defaultValue: null
 											})}
-											disabled={disabled}
-											loading={loading}
-											datalist={sizeOptions}
-											labelField='label'
-											valueField='value'
 										/>
 									</Div>
 									<Div className='flex-1'>
 										<InputFieldControl
 											name={`sizes.${index}.qty`}
-											type='number'
 											placeholder={t('ns_common:common_fields.quantity')}
+											type='number'
 										/>
 									</Div>
 									<GhostButton onClick={() => remove(index)}>
@@ -152,10 +152,10 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 					{fields.length > 0 && (
 						<Div className='grid place-content-center place-items-center'>
 							<Button
-								variant='outline'
-								type='button'
-								size='sm'
 								disabled={disabled}
+								size='sm'
+								type='button'
+								variant='outline'
 								onClick={() => {
 									append({ size_code: null, qty: null })
 									scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
@@ -172,17 +172,17 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 	return (
 		<AutoCompleteFieldControl
 			{...props}
-			name={name}
+			datalist={sizeOptions}
+			disabled={disabled}
 			label='Size'
+			labelField='label'
+			loading={loading}
+			name={name}
+			valueField='value'
 			placeholder={t('ns_common:form_placeholder.fill', {
 				object: 'size',
 				defaultValue: null
 			})}
-			disabled={disabled}
-			loading={loading}
-			datalist={sizeOptions}
-			labelField='label'
-			valueField='value'
 		/>
 	)
 }

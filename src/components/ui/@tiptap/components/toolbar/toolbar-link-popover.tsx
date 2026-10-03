@@ -47,7 +47,7 @@ export const LinkPopover: React.FC = () => {
 		<Popover open={open} onOpenChange={setOpen}>
 			<Tooltip message={t('ns_common:editor.link')}>
 				<PopoverTrigger asChild>
-					<Button variant='ghost' size='icon' className='aspect-square h-8 w-8'>
+					<Button className='aspect-square h-8 w-8' size='icon' variant='ghost'>
 						<Icon name='Link' />
 					</Button>
 				</PopoverTrigger>
@@ -70,11 +70,11 @@ export const LinkPopover: React.FC = () => {
 								form.handleSubmit(handleInsertLink)(e)
 							}}>
 							<InputFieldControl
-								placeholder={t('ns_common:editor.insert_link_placeholder')}
-								name='url'
 								className='h-8! w-full flex-1 text-sm'
+								name='url'
+								placeholder={t('ns_common:editor.insert_link_placeholder')}
 							/>
-							<Button variant='default' size='sm'>
+							<Button size='sm' variant='default'>
 								{t('ns_common:actions.apply')}
 							</Button>
 						</form>

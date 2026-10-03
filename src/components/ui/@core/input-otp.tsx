@@ -5,8 +5,8 @@ import * as React from 'react'
 
 const InputOTP: React.FC<React.ComponentProps<typeof OTPInput>> = ({ className, containerClassName, ...props }) => (
 	<OTPInput
-		containerClassName={cn('flex items-center gap-2 has-disabled:opacity-50', containerClassName)}
 		className={cn('disabled:cursor-not-allowed', className)}
+		containerClassName={cn('flex items-center gap-2 has-disabled:opacity-50', containerClassName)}
 		{...props}
 	/>
 )

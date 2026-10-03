@@ -172,27 +172,27 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 				<Div className='flex items-center gap-1'>
 					{value.map((item, index) => (
 						<Badge
+							aria-current={inputValue === item}
+							aria-disabled={shouldDisableItem}
+							data-active={activeIndex === index}
 							key={item}
 							tabIndex={activeIndex !== -1 ? 0 : activeIndex}
 							variant='secondary'
-							aria-disabled={shouldDisableItem}
-							data-active={activeIndex === index}
-							aria-current={inputValue === item}
 							className={cn(
 								'relative flex items-center gap-2 truncate rounded px-1',
 								'aria-current:animate-[pulse_1s_ease_forwards] aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
 								'data-[active=true]:ring-primary data-[active=true]:ring-2'
 							)}>
-							<Typography variant='small' className='align-middle leading-none'>
+							<Typography className='align-middle leading-none' variant='small'>
 								{item}
 							</Typography>
 							<RemoveButton
-								type='button'
 								aria-label={`Remove ${item} option`}
 								aria-roledescription='button to remove option'
 								disabled={shouldDisableItem}
-								onMouseDown={mousePreventDefault}
-								onClick={() => removeValue(item)}>
+								type='button'
+								onClick={() => removeValue(item)}
+								onMouseDown={mousePreventDefault}>
 								<Typography as='span' className='sr-only'>
 									Remove {item} option
 								</Typography>
@@ -203,20 +203,20 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 				</Div>
 			)}
 			<Input
-				tabIndex={0}
 				aria-label='Tags input'
 				disabled={shouldDisableInput}
 				placeholder={placeholder}
+				tabIndex={0}
 				value={inputValue}
-				onKeyDown={handleKeyDown}
-				onPaste={handlePaste}
-				onSelect={handleSelect}
-				onChange={activeIndex === -1 ? handleChange : undefined}
-				onFocus={() => setActiveIndex(-1)}
 				className={cn(
 					'placeholder:text-muted-foreground h-max min-w-fit flex-1 border-none px-1 shadow-none outline-0 focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-0',
 					activeIndex !== -1 && 'caret-transparent'
 				)}
+				onChange={activeIndex === -1 ? handleChange : undefined}
+				onFocus={() => setActiveIndex(-1)}
+				onKeyDown={handleKeyDown}
+				onPaste={handlePaste}
+				onSelect={handleSelect}
 			/>
 		</Div>
 	)

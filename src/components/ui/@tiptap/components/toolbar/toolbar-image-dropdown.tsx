@@ -41,7 +41,7 @@ const ImageDropdown: React.FC = () => {
 			<DropdownMenu>
 				<Tooltip message='Chèn ảnh'>
 					<DropdownMenuTrigger asChild>
-						<Button variant='ghost' size='icon' className='aspect-square h-8 w-8'>
+						<Button className='aspect-square h-8 w-8' size='icon' variant='ghost'>
 							<Icon name='ImagePlus' />
 						</Button>
 					</DropdownMenuTrigger>
@@ -49,15 +49,15 @@ const ImageDropdown: React.FC = () => {
 				<DropdownMenuContent align='end'>
 					<DropdownMenuItem asChild>
 						<Label
-							htmlFor='image-upload'
 							className='flex items-center gap-x-2 font-normal'
+							htmlFor='image-upload'
 							onClick={() => {
 								editor?.chain().focus().insertImagePlaceholder().run()
 							}}>
 							<Icon name='Upload' /> {t('ns_common:editor.choose_image_from_device')}
 						</Label>
 					</DropdownMenuItem>
-					<DropdownMenuItem className='gap-x-2' asChild>
+					<DropdownMenuItem asChild className='gap-x-2'>
 						<label htmlFor={dialogTriggerId}>
 							<Icon name='Link2' /> {t('ns_common:editor.choose_from_url')}
 						</label>
@@ -66,7 +66,7 @@ const ImageDropdown: React.FC = () => {
 			</DropdownMenu>
 
 			<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-				<DialogTrigger id={dialogTriggerId} className='hidden' />
+				<DialogTrigger className='hidden' id={dialogTriggerId} />
 				<DialogContent className='items-stretch'>
 					<DialogHeader className='text-left'>{t('ns_common:editor.add_image')}</DialogHeader>
 					<Form {...form}>
@@ -80,10 +80,10 @@ const ImageDropdown: React.FC = () => {
 								})(e)
 							}}>
 							<InputFieldControl
-								type='url'
-								name='url'
 								className='w-full'
+								name='url'
 								placeholder={t('ns_common:form_placeholder.fill', { object: 'URL', defaultValue: null })}
+								type='url'
 							/>
 							<Button type='submit' onClick={(e) => e.stopPropagation()}>
 								{t('ns_common:actions.apply')}

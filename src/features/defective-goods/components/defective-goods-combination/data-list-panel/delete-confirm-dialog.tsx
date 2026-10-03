@@ -37,13 +37,13 @@ const DeleteConfirmDialog: React.FC = () => {
 
 	return (
 		<ConfirmDialog
-			open={confirmDialogOpen || isPending || isError}
-			onOpenChange={setConfirmDialogOpen}
-			title={t('ns_common:confirmation.delete_title')}
 			description={t('ns_common:confirmation.delete_description')}
-			onConfirm={handleDelete}
-			onCancel={resetDeleteId}
 			dialogActionProps={{ variant: 'destructive', children: t('ns_common:actions.delete') }}
+			open={confirmDialogOpen || isPending || isError}
+			title={t('ns_common:confirmation.delete_title')}
+			onCancel={resetDeleteId}
+			onConfirm={handleDelete}
+			onOpenChange={setConfirmDialogOpen}
 		/>
 	)
 }

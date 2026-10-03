@@ -51,72 +51,72 @@ const BeamAnimated: React.FC = () => {
 
 	return (
 		<div
+			className='group/chip relative container mx-auto w-full sm:w-full sm:max-w-xs sm:zoom-[1.1] md:max-w-162.5 lg:max-w-3xl xl:max-w-3xl'
 			ref={containerRef}
 			style={
 				{
 					'--green': '#22c55e',
 					'--yellow': '#eab308'
 				} as React.CSSProperties
-			}
-			className='group/chip relative container mx-auto w-full sm:w-full sm:max-w-xs sm:zoom-[1.1] md:max-w-162.5 lg:max-w-3xl xl:max-w-3xl'>
+			}>
 			<svg
-				width='100%'
-				height='200'
-				viewBox='0 0 650 200'
-				fill='none'
-				xmlns='http://www.w3.org/2000/svg'
 				className='w-[inherit]'
-				ref={svgRef}>
+				fill='none'
+				height='200'
+				ref={svgRef}
+				viewBox='0 0 650 200'
+				width='100%'
+				xmlns='http://www.w3.org/2000/svg'>
 				<defs>
-					<linearGradient offset={1} id='right-to-left'>
+					<linearGradient id='right-to-left' offset={1}>
 						<stop offset={1} stopColor='var(--muted)'>
 							<animate
-								dur={0.35}
 								attributeName='offset'
-								fill='freeze'
-								from={1}
-								to={0}
 								begin={1}
 								calcMode='spline'
+								dur={0.35}
+								fill='freeze'
+								from={1}
 								keySplines='0.45 0.35 1 1'
+								to={0}
 							/>
 						</stop>
 						<stop offset={1} stopColor='var(--green)'>
 							<animate
-								dur={0.35}
 								attributeName='offset'
-								fill='freeze'
-								from={1}
-								to={0}
 								begin={1}
 								calcMode='spline'
+								dur={0.35}
+								fill='freeze'
+								from={1}
 								keySplines='0.45 0.35 1 1'
+								to={0}
 							/>
 						</stop>
 					</linearGradient>
-					<linearGradient offset={0} id='left-to-right'>
-						<stop offset={0} begin={1.5} stopColor='var(--yellow)'>
+					<linearGradient id='left-to-right' offset={0}>
+						<stop begin={1.5} offset={0} stopColor='var(--yellow)'>
 							<animate
-								dur={0.35}
 								attributeName='offset'
-								fill='freeze'
-								from={0}
-								to={1}
 								begin={1}
 								calcMode='spline'
+								dur={0.35}
+								fill='freeze'
+								from={0}
 								keySplines='0.45 0.35 1 1'
+								to={1}
 							/>
 						</stop>
 						<stop offset={0} stopColor='var(--border)'>
 							<animate
-								dur={0.35}
 								attributeName='offset'
-								fill='freeze'
-								from={0}
-								to={1}
 								begin={1}
 								calcMode='spline'
+								dur={0.35}
+								fill='freeze'
+								from={0}
 								keySplines='0.45 0.35 1 1'
+								to={1}
 							/>
 						</stop>
 					</linearGradient>
@@ -125,20 +125,20 @@ const BeamAnimated: React.FC = () => {
 					{/* Standalone */}
 					<g className='standalone-chip__base relative'>
 						<rect
-							width='35.0955'
+							className='fill-neutral-100 dark:fill-neutral-800'
 							height='35.0923'
 							rx='5.87331'
 							transform='matrix(-0.845602 0.533814 -0.895247 -0.44557 611.937 102.855)'
-							className='fill-neutral-100 dark:fill-neutral-800'
+							width='35.0955'
 						/>
 						<rect
-							width='35.0955'
+							className='stroke-neutral-200 dark:stroke-neutral-700'
 							height='35.0923'
 							rx='5.87331'
-							transform='matrix(-0.845602 0.533814 -0.895247 -0.44557 611.937 102.855)'
-							className='stroke-neutral-200 dark:stroke-neutral-700'
 							strokeOpacity='0.4'
 							strokeWidth='4'
+							transform='matrix(-0.845602 0.533814 -0.895247 -0.44557 611.937 102.855)'
+							width='35.0955'
 						/>
 					</g>
 					<g
@@ -147,8 +147,8 @@ const BeamAnimated: React.FC = () => {
 							isAnimated ? ACTIVE_STANDALONE_CUBE_CLASS : INACTIVE_CUBE_CLASS
 						)}>
 						<path
-							stroke='var(--border)'
 							d='M573.798 105.165L573.684 96.2398L581.79 90.9291L590.029 96.0306L590.143 104.956L582.027 109.523L573.798 105.165Z'
+							stroke='var(--border)'
 						/>
 						<path
 							d='M573.798 105.165L573.684 96.2398L581.79 90.9291L590.029 96.0306L590.143 104.956L582.027 109.523L573.798 105.165Z'
@@ -158,63 +158,63 @@ const BeamAnimated: React.FC = () => {
 					</g>
 					<path
 						className='clustered-chip__connection'
-						fillRule='evenodd'
 						clipRule='evenodd'
-						fill={clusteredConnectionColor}
-						stroke={clusteredConnectionColor}
 						d='M440.083 64.7972L456.9 53.3972C463.204 49.4177 473.724 48.8842 480.397 52.2055L565 94.5L562.717 95.9411L478.114 53.6466C472.776 50.9895 464.359 51.4164 459.316 54.6L442.5 66L440.083 64.7972Z'
+						fill={clusteredConnectionColor}
+						fillRule='evenodd'
+						stroke={clusteredConnectionColor}
 						strokeWidth='1.2'
 					/>
 					<path
 						className='standalone-chip__connection animate-in duration-500'
-						strokeDashoffset={0}
-						fillRule='evenodd'
 						clipRule='evenodd'
 						d='M270 130L230.567 154.669C224.263 158.648 213.743 159.182 207.07 155.86L122.717 113.941L125 112.5L209.353 154.419C214.691 157.076 223.108 156.65 228.151 153.466L267.583 128.797L270 130Z'
 						fill={standaloneConnectionColor}
+						fillRule='evenodd'
 						stroke={standaloneConnectionColor}
+						strokeDashoffset={0}
 						strokeWidth='1.2'
 					/>
 					{/* Clustered */}
 					<g className='clustered-chip__base'>
 						<rect
-							width='35.0955'
+							className='sm:zoom-in-110 fill-neutral-100 dark:fill-neutral-800'
 							height='35.0923'
 							rx='5.87331'
-							transform='matrix(0.845602 -0.533814 0.895247 0.44557 76.1337 105.512)'
-							className='sm:zoom-in-110 fill-neutral-100 dark:fill-neutral-800'
 							shapeRendering='crispEdges'
+							transform='matrix(0.845602 -0.533814 0.895247 0.44557 76.1337 105.512)'
+							width='35.0955'
 						/>
 						<rect
-							width='35.0955'
+							className='stroke-neutral-200 dark:stroke-neutral-700'
 							height='35.0923'
 							rx='5.87331'
-							transform='matrix(0.845602 -0.533814 0.895247 0.44557 76.1337 105.512)'
-							className='stroke-neutral-200 dark:stroke-neutral-700'
+							shapeRendering='crispEdges'
 							strokeOpacity='0.4'
 							strokeWidth='4.39073'
-							shapeRendering='crispEdges'
+							transform='matrix(0.845602 -0.533814 0.895247 0.44557 76.1337 105.512)'
+							width='35.0955'
 						/>
 						<rect
-							x='-0.0335319'
-							y='-0.661506'
-							width='152.647'
 							height='152.647'
 							rx='11.4823'
-							transform='matrix(0.895247 0.44557 -0.845602 0.533814 330.028 12.7942)'
 							stroke='url(#gradient-vite-chip-right-specular)'
 							strokeWidth='1.2'
-						/>
-						<rect
+							transform='matrix(0.895247 0.44557 -0.845602 0.533814 330.028 12.7942)'
+							width='152.647'
 							x='-0.0335319'
 							y='-0.661506'
-							width='152.647'
+						/>
+						<rect
 							height='152.647'
 							rx='11.4823'
-							transform='matrix(0.895247 0.44557 -0.845602 0.533814 330.028 12.7942)'
 							stroke='url(#gradient-vite-chip-left-specular)'
 							strokeOpacity='0.1'
 							strokeWidth='1.2'
+							transform='matrix(0.895247 0.44557 -0.845602 0.533814 330.028 12.7942)'
+							width='152.647'
+							x='-0.0335319'
+							y='-0.661506'
 						/>
 					</g>
 					<g
@@ -266,10 +266,6 @@ const BeamAnimated: React.FC = () => {
 				</g>
 			</svg>
 			<div
-				style={{
-					transform: 'translate(-50%,-50%) rotateX(50deg) rotateY(-5deg) rotateZ(44deg)',
-					boxShadow: '16px 16px 24px #0a0a0a80'
-				}}
 				className={cn(
 					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl border-2 border-neutral-200 sm:rounded-md dark:border-neutral-700',
 					'from-background to-accent left-[calc(50%+2.5rem)] bg-linear-to-br to-30%',
@@ -277,7 +273,11 @@ const BeamAnimated: React.FC = () => {
 					'md:left-[calc(50%+0.5rem)] md:min-w-52! @[520px]:zoom-[0.85] @[620px]:zoom-[1]',
 					'lg:left-[calc(50%+1rem)] lg:min-w-52!',
 					'xxl:min-w-54! xl:left-[calc(50%+1rem)] xl:min-w-48!'
-				)}>
+				)}
+				style={{
+					transform: 'translate(-50%,-50%) rotateX(50deg) rotateY(-5deg) rotateZ(44deg)',
+					boxShadow: '16px 16px 24px #0a0a0a80'
+				}}>
 				<div className='relative grid h-full w-full flex-1 place-content-center'>
 					<div
 						className={cn(

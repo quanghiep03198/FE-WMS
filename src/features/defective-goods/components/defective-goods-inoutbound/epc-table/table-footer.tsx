@@ -26,23 +26,23 @@ const DataTableFooter: React.FC<TableFooterProps> = ({ onResetColumnFilter }) =>
 
 	return (
 		<Div
-			role='row'
-			className='bg-background sticky bottom-0 z-50 mt-auto flex h-(--row-height) items-center justify-between gap-x-1 px-4 py-2 @4xl:gap-x-2'>
+			className='bg-background sticky bottom-0 z-50 mt-auto flex h-(--row-height) items-center justify-between gap-x-1 px-4 py-2 @4xl:gap-x-2'
+			role='row'>
 			<Div className='@6xl:hidden'>
 				<InoutboundStrategySelect />
 			</Div>
 			<Separator className='mx-2 h-6 w-0.5 @6xl:hidden' />
-			<Button variant='outline' disabled={isLoading} onClick={() => refetch()}>
-				{isLoading ? <Icon name='LoaderCircle' className='animate-spin' /> : <Icon name='RefreshCcw' />}
+			<Button disabled={isLoading} variant='outline' onClick={() => refetch()}>
+				{isLoading ? <Icon className='animate-spin' name='LoaderCircle' /> : <Icon name='RefreshCcw' />}
 				{t('ns_common:actions.reload')}
 			</Button>
 			<Button
-				variant='destructive'
 				disabled={Object.keys(omit(searchParams, ['action'])).length === 0}
+				variant='destructive'
 				onClick={handleClearFilters}>
 				<Icon name='FunnelX' /> {t('ns_common:actions.clear_filter')}
 			</Button>
-			<Typography role='cell' className='ml-auto text-right font-medium'>
+			<Typography className='ml-auto text-right font-medium' role='cell'>
 				{`${t('ns_common:common_fields.total')}: ${Array.isArray(data) ? formatIntlNumber(data.length) : 0}`}
 			</Typography>
 		</Div>

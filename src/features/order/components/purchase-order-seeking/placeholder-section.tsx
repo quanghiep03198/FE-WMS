@@ -11,12 +11,12 @@ const PlaceholderSection: React.FC = () => {
 		<Fragment>
 			<Div className='mx-auto mt-4 flex items-center'>
 				<Icon
+					className='animate-in zoom-in-0 slide-in-from-bottom-2 mr-2 duration-500'
 					name='BotMessageSquare'
 					size={24}
-					className='animate-in zoom-in-0 slide-in-from-bottom-2 mr-2 duration-500'
 				/>
 				&quot;
-				<Typewriter text={t('ns_erp:descriptions.provide_po_info')} delay={200} className='italic' />
+				<Typewriter className='italic' delay={200} text={t('ns_erp:descriptions.provide_po_info')} />
 				&quot;
 			</Div>
 			<CardGroup>

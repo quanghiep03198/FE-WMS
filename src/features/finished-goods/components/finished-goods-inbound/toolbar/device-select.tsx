@@ -46,7 +46,7 @@ const DeviceSelect: React.FC = () => {
 				handleResetScanningAction()
 			}}>
 			<SelectTrigger className='h-9 max-w-full items-center gap-x-2 rounded-md border px-3 py-2 shadow-none sm:hidden @[1366px]:flex'>
-				<SelectValue placeholder={t('ns_inoutbound:placeholders.select_rfid_device')} className='truncate' />
+				<SelectValue className='truncate' placeholder={t('ns_inoutbound:placeholders.select_rfid_device')} />
 			</SelectTrigger>
 			<SelectContent>
 				{inboundDevices.map((device) => {
@@ -64,7 +64,7 @@ const DeviceSelect: React.FC = () => {
 								{deviceNameLocalization[i18n.language] ?? (
 									<Div className='text-muted-foreground text-sm'>{t('ns_common:titles.unknown')}</Div>
 								)}
-								<Typography variant='small' color='muted'>
+								<Typography color='muted' variant='small'>
 									({device.device_sn})
 								</Typography>
 							</Div>

@@ -9,8 +9,8 @@ import useMediaQuery from '@hooks/use-media-query'
 const GithubLinkButton: React.FC = () => {
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 	return (
-		<a href='https://github.com/quanghiep03198/rfid-agent' className='flex h-full items-center gap-x-2 font-medium'>
-			<GithubIcon width={24} height={24} />
+		<a className='flex h-full items-center gap-x-2 font-medium' href='https://github.com/quanghiep03198/rfid-agent'>
+			<GithubIcon height={24} width={24} />
 			{!isSmallScreen && (
 				<>
 					<span>Github</span>
@@ -29,7 +29,7 @@ const NavHeader: React.FC = () => {
 		<header className='bg-background/80 flex h-14 items-center justify-between border-b px-6 py-2 backdrop-blur-sm sm:px-4'>
 			<nav className='flex items-center gap-x-2'>
 				{!isLargeScreen && (
-					<Button variant='ghost' size='icon' onClick={() => toggleSidebar()}>
+					<Button size='icon' variant='ghost' onClick={() => toggleSidebar()}>
 						<Icon name='Menu' />
 					</Button>
 				)}

@@ -20,8 +20,8 @@ export function InstallPwaDialog() {
 	return (
 		<>
 			<Button
-				variant='link'
 				className='text-muted-foreground text-sm transition-[colors,opacity] duration-500 hover:text-(--primary-alt) hover:no-underline hover:opacity-80'
+				variant='link'
 				onClick={() => setOpen(true)}>
 				Install
 			</Button>
@@ -30,7 +30,7 @@ export function InstallPwaDialog() {
 				<DialogContent className='max-w-2xl overflow-hidden p-0'>
 					<div className='p-8'>
 						<div className='flex items-start gap-4'>
-							<img src='/pwa-192x192.png' alt='logo' className='size-16' />
+							<img alt='logo' className='size-16' src='/pwa-192x192.png' />
 							<div>
 								<h1 className='text-xl font-bold'>Warehouse Management System</h1>
 								<p className='text-muted-foreground text-sm'>Production warehouse management system</p>
@@ -46,7 +46,7 @@ export function InstallPwaDialog() {
 									))}
 								</ul>
 							</div>
-							<img src='/screenshot.png' className='rounded-lg border' />
+							<img className='rounded-lg border' src='/screenshot.png' />
 						</div>
 
 						<div className='mt-6'>

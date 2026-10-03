@@ -66,7 +66,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 						format(value, 'yyyy-MM-dd')
 					) : (
 						<Div className='place-items-center'>
-							<Icon name='CalendarOff' className='stroke-muted-foreground' />
+							<Icon className='stroke-muted-foreground' name='CalendarOff' />
 						</Div>
 					)
 				},
@@ -114,10 +114,10 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 
 	return (
 		<DataTable
+			caption={t('ns_inoutbound:description.inbound_directive')}
+			columns={columns}
 			data={data ?? []}
 			dataType={StockFlow.INBOUND}
-			columns={columns}
-			caption={t('ns_inoutbound:description.inbound_directive')}
 			footer={({ rows }) => <DataTableFooter rows={rows} />}
 		/>
 	)
@@ -128,7 +128,7 @@ const DataTableFooter = memo(({ rows }: { rows: Row<IInboundInventory>[] }) => {
 	return (
 		<TableFooter className='sticky bottom-0 z-20'>
 			<TableRow className='bg-table-head [&_td:not(first-child)]:bg-table-head [&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t'>
-				<TableCell colSpan={3} align='left' className='sticky left-0 z-10 bg-transparent! font-semibold'>
+				<TableCell align='left' className='sticky left-0 z-10 bg-transparent! font-semibold' colSpan={3}>
 					{t('ns_common:common_fields.total')}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>

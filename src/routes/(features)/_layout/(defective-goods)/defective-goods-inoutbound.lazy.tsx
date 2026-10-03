@@ -41,30 +41,30 @@ function RouteComponent() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.defective_goods_inoutbound')}</title>
-			<meta name='description' content='Defective goods inoutbound' />
+			<meta content='Defective goods inoutbound' name='description' />
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}>
 				<IpPolicyGuard>
 					<HostCompatibleGuard>
 						<PageContextProvider>
 							<Div
+								className={cn(
+									'divide-border @container flex h-(--outlet-wrapper-height) border-collapse flex-col divide-y rounded-md border',
+									!isSmallScreen && 'overflow-hidden'
+								)}
 								style={
 									{
 										'--header-height': '64px',
 										'--bar-height': '48px'
 									} as React.CSSProperties
-								}
-								className={cn(
-									'divide-border @container flex h-(--outlet-wrapper-height) border-collapse flex-col divide-y rounded-md border',
-									!isSmallScreen && 'overflow-hidden'
-								)}>
+								}>
 								<InoutboundController />
 								{currInoutboundMethod === 'manually' ? (
 									<EpcTable />
 								) : (
 									<ResizablePanelGroup
-										direction={isSmallScreen ? 'vertical' : 'horizontal'}
 										className={cn('h-[calc(var(--outlet-wrapper-height)-var(--header-height))]')}
+										direction={isSmallScreen ? 'vertical' : 'horizontal'}
 										style={
 											{
 												'--rfid-playground-panel-height': rfidPlaygroundPanelSize
@@ -76,18 +76,18 @@ function RouteComponent() {
 											} as React.CSSProperties
 										}>
 										<ResizablePanel
-											minSize={isSmallScreen ? 35 : 65}
+											defaultSize={isSmallScreen ? 30 : 65}
 											maxSize={isSmallScreen ? 50 : 75}
-											defaultSize={isSmallScreen ? 30 : 65}>
+											minSize={isSmallScreen ? 35 : 65}>
 											<PanelContent ref={detailTablePanelRef}>
 												<EpcDetailTable />
 											</PanelContent>
 										</ResizablePanel>
-										<ResizableHandle withHandle={true} className='z-30' />
+										<ResizableHandle className='z-30' withHandle={true} />
 										<ResizablePanel
+											defaultSize={isSmallScreen ? 65 : 30}
 											maxSize={isSmallScreen ? 65 : 35}
-											minSize={isSmallScreen ? 50 : 25}
-											defaultSize={isSmallScreen ? 65 : 30}>
+											minSize={isSmallScreen ? 50 : 25}>
 											<PanelContent ref={rfidPlaygroundPanelRef}>
 												<ReaderPlaygroundProvider>
 													<RfidReaderPlayground

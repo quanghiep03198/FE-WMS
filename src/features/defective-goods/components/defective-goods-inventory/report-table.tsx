@@ -115,7 +115,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 					const value = getValue()
 					if (value) return t(`ns_inoutbound:shoes_source.${value}`)
 					return (
-						<Typography variant='small' color='muted'>
+						<Typography color='muted' variant='small'>
 							{t('ns_common:titles.unknown')}
 						</Typography>
 					)
@@ -151,10 +151,10 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 					if (typeof value !== 'string' || !value) return t('ns_common:titles.unknown')
 					return (
 						<EllipsisList
-							threshhold={3}
 							data={split(value, ',').sort((a: string, b: string) => a.localeCompare(b)) as string[]}
+							threshhold={3}
 							template={({ data }) => (
-								<Badge variant='secondary' className='whitespace-nowrap'>
+								<Badge className='whitespace-nowrap' variant='secondary'>
 									{data.trim()}
 								</Badge>
 							)}
@@ -198,13 +198,16 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 		<DataTable
 			columns={columns}
 			data={data}
-			loading={isLoading}
-			enableExpanding={true}
 			enableColumnResizing={true}
+			enableExpanding={true}
+			loading={isLoading}
+			renderSubComponent={renderSubComponent}
 			containerProps={{
 				style: { height: 'calc(var(--outlet-wrapper-height) - 12rem - 2 * var(--row-height))' }
 			}}
-			renderSubComponent={renderSubComponent}
+			footerProps={{
+				slot: () => <ReportTableSummary summaryData={summaryData} />
+			}}
 			toolbarProps={{
 				slotRight: () => (
 					<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
@@ -213,9 +216,6 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 						</Button>
 					</Tooltip>
 				)
-			}}
-			footerProps={{
-				slot: () => <ReportTableSummary summaryData={summaryData} />
 			}}
 		/>
 	)

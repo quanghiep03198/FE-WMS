@@ -74,7 +74,7 @@ const UpdateLocationFormDialog: React.FC = () => {
 						<FieldGroup>
 							<FormItem>
 								<Label>{t('ns_warehouse:fields.warehouse_name')}</Label>
-								<Input value={warehouseName} disabled />
+								<Input disabled value={warehouseName} />
 							</FormItem>
 							<InputFieldControl
 								label={t('ns_warehouse:fields.storage_name')}
@@ -92,8 +92,8 @@ const UpdateLocationFormDialog: React.FC = () => {
 									{t('ns_common:actions.cancel')}
 								</Button>
 							</DialogClose>
-							<Button type='submit' disabled={isPending}>
-								{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
+							<Button disabled={isPending} type='submit'>
+								{isPending && <Icon className='animate-spin' name='LoaderCircle' />}
 								{t('ns_common:actions.submit')}
 							</Button>
 						</DialogFooter>

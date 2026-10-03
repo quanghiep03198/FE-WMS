@@ -241,18 +241,18 @@ const DefectiveGoodsForm: React.FC = () => {
 			<Form data-action={formAction === CommonActions.UPDATE} onSubmit={form.handleSubmit(handleSubmitForm)}>
 				{/* Form controls */}
 				<Div
-					id='combination-form-header'
-					className='bg-background col-span-full flex h-max max-h-full min-h-(--bar-height) items-center justify-between gap-x-6 px-2'>
+					className='bg-background col-span-full flex h-max max-h-full min-h-(--bar-height) items-center justify-between gap-x-6 px-2'
+					id='combination-form-header'>
 					<ListPanelToggle />
 					<DataListPanelSheetTrigger />
 					<RoleBaseAccessControl
-						mode='fallback'
 						authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}
+						mode='fallback'
 						fallbackComponent={
 							<Button
+								className='cursor-not-allowed'
 								size='sm'
 								type='button'
-								className='cursor-not-allowed'
 								onClick={() =>
 									toast.warning(t('ns_common:errors.403_notification'), { id: ACTION_RESTRICTED_TOAST_ID })
 								}>
@@ -261,9 +261,9 @@ const DefectiveGoodsForm: React.FC = () => {
 						}>
 						{isNil(formAction) ? (
 							<Button
-								type='button'
-								size='sm'
 								className='ml-auto'
+								size='sm'
+								type='button'
 								onClick={() => setFormAction(CommonActions.CREATE)}>
 								<Icon name='CircleFadingPlus' size={18} />
 								{t('ns_common:actions.add')}
@@ -272,17 +272,17 @@ const DefectiveGoodsForm: React.FC = () => {
 							<Div className='ml-auto flex items-center gap-x-2'>
 								<Button
 									disabled={isPending}
-									variant='destructive'
 									size='sm'
 									type='button'
+									variant='destructive'
 									onClick={handleCancel}>
 									<Icon name='X' /> {t('ns_common:actions.cancel')}
 								</Button>
 								<Button
 									disabled={isPending}
-									variant='secondary'
 									size='sm'
 									type='button'
+									variant='secondary'
 									onClick={() => handleResetForm()}>
 									<Icon name='Undo2' /> {t('ns_common:actions.reset')}
 								</Button>
@@ -297,7 +297,7 @@ const DefectiveGoodsForm: React.FC = () => {
 												: 'animate-in fade-in-100 slide-in-from-left-2'
 										)
 									)}>
-									<Icon name={isPending ? 'LoaderCircle' : 'Check'} className={isPending && 'animate-spin'} />{' '}
+									<Icon className={isPending && 'animate-spin'} name={isPending ? 'LoaderCircle' : 'Check'} />{' '}
 									{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 								</Button>
 							</Div>
@@ -317,17 +317,17 @@ const DefectiveGoodsForm: React.FC = () => {
 					{(currentStrategy === 'usb' || formAction === CommonActions.UPDATE) && (
 						<Div className='col-span-full'>
 							<InputFieldControl
-								name='epc'
-								label='EPC'
 								autoFocus
 								autoComplete='off'
-								type='search'
-								tabIndex={0}
+								description={t('ns_inoutbound:description.defective_epc_caption')}
+								disabled={isNil(formAction)}
+								label='EPC'
+								name='epc'
 								placeholder='E28*********************'
+								tabIndex={0}
+								type='search'
 								onKeyDown={handleEpcChange}
 								onKeyDownCapture={handleEpcChange}
-								disabled={isNil(formAction)}
-								description={t('ns_inoutbound:description.defective_epc_caption')}
 							/>
 						</Div>
 					)}
@@ -336,8 +336,8 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 					<Div className='col-span-full'>
 						<BrandFieldControl
-							disabled={isNil(formAction)}
 							className={shouldRequireFullInfo && 'pointer-event-none'}
+							disabled={isNil(formAction)}
 						/>
 					</Div>
 					{shouldRequireFullInfo && !isNil(formAction) && (
@@ -357,7 +357,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								? '@xl/combination-form:col-span-2'
 								: '@xl/combination-form:col-span-3'
 						)}>
-						<FactoryShoeStyleFieldControl loading={isLoading} disabled={isNil(formAction)} />
+						<FactoryShoeStyleFieldControl disabled={isNil(formAction)} loading={isLoading} />
 					</Div>
 					<Div
 						className={cn(
@@ -366,7 +366,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								? '@xl/combination-form:col-span-2'
 								: '@xl/combination-form:col-span-3'
 						)}>
-						<CustShoeStyleFieldControl loading={isLoading} disabled={isNil(formAction)} />
+						<CustShoeStyleFieldControl disabled={isNil(formAction)} loading={isLoading} />
 					</Div>
 					<Div
 						className={cn(
@@ -376,9 +376,9 @@ const DefectiveGoodsForm: React.FC = () => {
 								: 'col-span-full @xl/combination-form:col-span-3'
 						)}>
 						<ColorFieldControl
+							disabled={isNil(formAction)}
 							loading={isLoading}
 							readOnly={shouldRequireFullInfo}
-							disabled={isNil(formAction)}
 						/>
 					</Div>
 					<Div
@@ -386,8 +386,8 @@ const DefectiveGoodsForm: React.FC = () => {
 							currentStrategy === 'manually' ? 'col-span-full' : 'col-span-full @xl/combination-form:col-span-3'
 						)}>
 						<SizeFieldControl
-							loading={isLoading}
 							disabled={isNil(formAction)}
+							loading={isLoading}
 							name={currentStrategy === 'manually' ? 'sizes' : 'size_code'}
 							datalist={
 								Array.isArray(orderDetail?.sizes)
@@ -407,17 +407,17 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 					<Div className='col-span-full @xl/combination-form:col-span-3'>
 						<SelectFieldControl
-							name='defective_location'
-							label={t('ns_erp:fields.defective_location')}
 							disabled={isNil(formAction)}
+							label={t('ns_erp:fields.defective_location')}
+							labelField='label'
+							name='defective_location'
+							valueField='value'
 							datalist={[
 								{ label: t('ns_common:others.all'), value: DefectiveLocation.ALL },
 								{ label: t('ns_erp:shoes_parts.upper'), value: DefectiveLocation.UPPER },
 								{ label: t('ns_erp:shoes_parts.bottom'), value: DefectiveLocation.BOTTOM },
 								{ label: t('ns_common:others.other'), value: DefectiveLocation.OTHER }
 							]}
-							labelField='label'
-							valueField='value'
 						/>
 					</Div>
 					<Div className='col-span-full @xl/combination-form:col-span-3'>
@@ -425,14 +425,14 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 					<Div className='relative col-span-full'>
 						<Div className='absolute top-0 right-0 inline-flex items-center gap-x-3'>
-							<Label htmlFor='toggle-use-desc-template' className='inline-flex items-center gap-x-2'>
+							<Label className='inline-flex items-center gap-x-2' htmlFor='toggle-use-desc-template'>
 								<Icon name='Sparkles' strokeWidth={1.5} />
 								{t('ns_common:editor.use_available_template')}
 							</Label>
 							<Checkbox
-								id='toggle-use-desc-template'
 								checked={useAvailableTemplate}
 								disabled={isNil(formAction)}
+								id='toggle-use-desc-template'
 								onCheckedChange={(checked) => {
 									setUseAvailabelTemplate(Boolean(checked))
 									if (!checked) setDefaultEditorContent('')
@@ -440,12 +440,12 @@ const DefectiveGoodsForm: React.FC = () => {
 							/>
 						</Div>
 						<EditorFieldControl
-							name='defective_description'
-							label={t('ns_erp:fields.defective_description')}
 							className='group/container-has-[#toggle-fullscreen[data-state=checked]]:h-screen h-60'
-							errorMessage={t('ns_validation:required')}
 							defaultValue={defaultEditorContent}
 							disabled={!formAction}
+							errorMessage={t('ns_validation:required')}
+							label={t('ns_erp:fields.defective_description')}
+							name='defective_description'
 						/>
 					</Div>
 				</Div>

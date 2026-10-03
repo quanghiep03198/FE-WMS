@@ -27,8 +27,8 @@ export default function Loading({ withContent = true }: { withContent?: boolean 
 			<title>Loading ...</title>
 			{withContent && (
 				<Div
-					data-state='expanded'
-					className='group relative grid h-screen w-screen place-content-center place-items-center'>
+					className='group relative grid h-screen w-screen place-content-center place-items-center'
+					data-state='expanded'>
 					<Div className='z-10 h-full w-full animate-[fade-in_0.25s_ease-out_forwards]'>
 						<AppLogo />
 					</Div>

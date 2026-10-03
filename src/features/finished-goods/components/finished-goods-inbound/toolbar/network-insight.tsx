@@ -17,8 +17,8 @@ const NetworkInsight: React.FC<React.ComponentProps<'div'>> = () => {
 		<Div className='relative mr-2'>
 			<MorphIcon
 				className={!isNetworkAvailable ? 'stroke-muted-foreground' : 'stroke-foreground'}
-				size={18}
 				icon={isNetworkAvailable ? Server : ServerCrash}
+				size={18}
 				spring='smooth'
 			/>
 

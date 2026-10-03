@@ -258,18 +258,18 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 		<Popover open={filterOpen} onOpenChange={setFilterOpen}>
 			<PopoverTrigger className='group bg-background relative flex h-10 items-center justify-between gap-x-3 rounded-md border px-3 py-1'>
 				<Icon
-					name='Search'
-					stroke='var(--muted-foreground)'
 					className='absolute top-1/2 left-3 -translate-y-1/2'
+					name='Search'
 					size={20}
+					stroke='var(--muted-foreground)'
 				/>
 				<Input
 					className='static z-10 h-max border-none bg-transparent px-0 pl-8 shadow-none focus:border-none focus:outline-none'
+					value={search}
 					placeholder={t('ns_common:form_placeholder.search', {
 						object: 'EPC',
 						defaultValue: 'Search EPC ...'
 					})}
-					value={search}
 					onClick={(e) => e.stopPropagation()}
 					onFocus={(e) => e.stopPropagation()}
 					onInput={(e) => setSearch(e.currentTarget.value)}
@@ -298,9 +298,9 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 				</Tooltip>
 			</PopoverTrigger>
 			<PopoverContent
+				className='w-radix-popover relative p-6'
 				side='bottom'
 				sideOffset={8}
-				className='w-radix-popover relative p-6'
 				onOpenAutoFocus={(e) => e.preventDefault()}
 				onWheel={(e) => e.stopPropagation()}>
 				<PopoverClose className='text-muted-foreground hover:text-foreground absolute top-3 right-3 transition-colors duration-200'>
@@ -314,57 +314,57 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 							</Typography>
 							<Div className='space-y-3'>
 								<AutoCompleteFieldControl
+									datalist={shoesStyleOptions}
 									label={t('ns_erp:fields.factory_shoes_style')}
+									labelField='shoes_style_factory_code'
 									name='shoes_style'
+									orientation='horizontal'
+									valueField='shoes_style_factory_code'
 									placeholder={capitalize(
 										t('ns_common:form_placeholder.fill', {
 											object: t('ns_erp:fields.factory_shoes_style'),
 											defaultValue: null
 										})
 									)}
-									orientation='horizontal'
-									datalist={shoesStyleOptions}
-									labelField='shoes_style_factory_code'
-									valueField='shoes_style_factory_code'
 								/>
 								<AutoCompleteFieldControl
+									datalist={colorOptions}
 									label={t('ns_erp:fields.color_sn')}
+									labelField='color_sn'
 									name='color_sn'
+									orientation='horizontal'
+									valueField='color_sn'
 									placeholder={capitalize(
 										t('ns_common:form_placeholder.fill', {
 											object: t('ns_erp:fields.color_sn'),
 											defaultValue: null
 										})
 									)}
-									orientation='horizontal'
-									datalist={colorOptions}
-									labelField='color_sn'
-									valueField='color_sn'
 								/>
 								<AutoCompleteFieldControl
+									datalist={commandNumberOptions}
 									label={t('ns_erp:fields.mo_no')}
+									labelField='mo_no'
 									name='mo_no'
+									orientation='horizontal'
+									valueField='mo_no'
 									placeholder={capitalize(
 										t('ns_common:form_placeholder.fill', {
 											object: t('ns_erp:fields.mo_no'),
 											defaultValue: null
 										})
 									)}
-									orientation='horizontal'
-									datalist={commandNumberOptions}
-									labelField='mo_no'
-									valueField='mo_no'
 								/>
 								<AutoCompleteFieldControl
+									datalist={sizeOptions}
 									label='Size'
+									labelField='size_numcode'
 									name='size_numcode'
 									orientation='horizontal'
-									datalist={sizeOptions}
+									valueField='size_numcode'
 									placeholder={capitalize(
 										t('ns_common:form_placeholder.fill', { object: 'Size', defaultValue: null })
 									)}
-									labelField='size_numcode'
-									valueField='size_numcode'
 								/>
 							</Div>
 						</Div>
@@ -374,14 +374,14 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 								{t('ns_common:common_fields.status')}
 							</Typography>
 							<FormField
-								name={stockFlow === StockFlow.INBOUND ? 'scannable' : 'scanned'}
 								control={form.control}
+								name={stockFlow === StockFlow.INBOUND ? 'scannable' : 'scanned'}
 								render={({ field }) => (
 									<FormItem>
 										<RadioGroup
+											className='flex items-center gap-x-10'
 											value={field.value}
-											onValueChange={field.onChange}
-											className='flex items-center gap-x-10'>
+											onValueChange={field.onChange}>
 											<FormItem className='flex items-center space-y-0 gap-x-3'>
 												<FormControl>
 													<RadioGroupItem

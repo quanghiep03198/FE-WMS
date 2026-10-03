@@ -29,12 +29,12 @@ const Header: React.FunctionComponent = () => {
 				'peer bg-background/90 sticky top-10 z-40 h-20 border-b p-6 bg-blend-screen backdrop-blur-2xl sm:top-16 sm:p-4'
 			)}>
 			<Div
+				aria-label='Global'
 				as='nav'
-				className='xxl:max-w-8xl mx-auto flex h-full max-w-7xl items-center justify-between'
-				aria-label='Global'>
+				className='xxl:max-w-8xl mx-auto flex h-full max-w-7xl items-center justify-between'>
 				<Div className='inline-flex items-center gap-x-2'>
 					<NavHeaderDrawerMenu />
-					<Link to='/' className='group sm:zoom-[0.8]' data-state='expanded'>
+					<Link className='group sm:zoom-[0.8]' data-state='expanded' to='/'>
 						<AppLogo />
 					</Link>
 				</Div>
@@ -52,15 +52,15 @@ const NavHeaderMenu: React.FC = () => {
 		<Div className='flex flex-1 items-center justify-center gap-x-1 rounded-full sm:hidden md:hidden'>
 			{navigationConfig.map((item, index) => (
 				<Button
-					variant='link'
 					key={index}
-					onClick={() => {
-						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(index)
-					}}
+					variant='link'
 					className={cn(
 						'text-muted-foreground text-sm transition-[colors,opacity] duration-500 hover:no-underline hover:opacity-80',
 						pageContext?.activeMenu === item.href && 'text-(--primary-alt)'
-					)}>
+					)}
+					onClick={() => {
+						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(index)
+					}}>
 					{item.title}
 				</Button>
 			))}
@@ -113,13 +113,13 @@ const NavHeaderDrawerMenu: React.FC = () => {
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
 			<SheetTrigger asChild>
-				<Button variant='ghost' size='icon' className='hidden sm:inline-flex md:inline-flex'>
+				<Button className='hidden sm:inline-flex md:inline-flex' size='icon' variant='ghost'>
 					<Icon name='Menu' />
 				</Button>
 			</SheetTrigger>
 			<SheetContent className='max-w-full' side='top'>
 				<SheetHeader>
-					<Link to='/' className='text-left'>
+					<Link className='text-left' to='/'>
 						<AppLogo />
 					</Link>
 				</SheetHeader>
@@ -127,13 +127,13 @@ const NavHeaderDrawerMenu: React.FC = () => {
 					<Div className='flex flex-col items-stretch gap-y-1 py-4'>
 						{navigationConfig.map((item, index) => (
 							<Button
-								variant='ghost'
 								className='justify-start'
+								key={index}
+								variant='ghost'
 								onClick={() => {
 									if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(index)
 									setOpen(!open)
-								}}
-								key={index}>
+								}}>
 								{item.title}
 							</Button>
 						))}
@@ -141,7 +141,7 @@ const NavHeaderDrawerMenu: React.FC = () => {
 					<Separator />
 					<Div className='flex items-center gap-x-6'>
 						<Label className='inline-flex items-center gap-x-2'>
-							<Icon name='SunMoon' className='size-4' />
+							<Icon className='size-4' name='SunMoon' />
 							Theme
 						</Label>
 						<ThemeSwitcher />

@@ -40,9 +40,9 @@ export function TextareaFieldControl<T extends FieldValues>(props: TextareaField
 					className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 					{label && (
 						<FormLabel
-							htmlFor={id}
 							aria-orientation={orientation}
-							className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
+							className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'
+							htmlFor={id}>
 							{label}
 						</FormLabel>
 					)}
@@ -50,22 +50,22 @@ export function TextareaFieldControl<T extends FieldValues>(props: TextareaField
 						<Div className='space-y-2'>
 							<Textarea
 								{...field}
+								disabled={disabled}
 								id={id}
 								placeholder={placeholder}
+								rows={rows}
+								value={field.value}
 								className={cn(
 									className,
 									getFieldState(name).error && 'border-destructive focus-visible:ring-0'
 								)}
-								value={field.value}
-								disabled={disabled}
-								onChange={(e) => {
-									field.onChange(e)
-									if (typeof onChange === 'function') onChange(e)
-								}}
-								rows={rows}
 								ref={(e) => {
 									field.ref(e)
 									resolvedRef.current = e
+								}}
+								onChange={(e) => {
+									field.onChange(e)
+									if (typeof onChange === 'function') onChange(e)
 								}}
 								{...restProps}>
 								{defaultValue}

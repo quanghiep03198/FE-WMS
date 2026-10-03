@@ -49,15 +49,15 @@ const CellEditor: React.FC<CellEditorProps> = ({
 		case 'input':
 			return (
 				<Input
-					role='textbox'
-					placeholder={cellEditorProps.placeholder ?? 'Type ...'}
 					className='focus-within:ring-offset-transparen h-full rounded-none p-0 px-4 py-0 ring-0 outline-none focus-within:ring-0'
+					placeholder={cellEditorProps.placeholder ?? 'Type ...'}
+					role='textbox'
+					style={{ height: DEFAULT_ESTIMATE_SIZE }}
+					value={value as InputProps['value']}
 					onChange={(e) => {
 						setValue(e.target.value)
 						table.options.meta?.updateRow(row.index, column.id, value)
 					}}
-					style={{ height: DEFAULT_ESTIMATE_SIZE }}
-					value={value as InputProps['value']}
 					{...cellEditorProps}
 				/>
 			)
@@ -74,6 +74,10 @@ const CellEditor: React.FC<CellEditorProps> = ({
 					datalist={transformedData}
 					labelField='customLabel'
 					valueField={cellEditorProps.valueField}
+					selectContentProps={{
+						sideOffset: 8,
+						...cellEditorProps?.selectContentProps
+					}}
 					selectProps={{
 						value: (value ?? undefined) as string | undefined,
 						onValueChange: (value) => {
@@ -86,10 +90,6 @@ const CellEditor: React.FC<CellEditorProps> = ({
 						className: `${className} border-none outline-none focus-within:ring-0 rounded-none px-4 h-full`,
 						style: { height: DEFAULT_ESTIMATE_SIZE }
 					}}
-					selectContentProps={{
-						sideOffset: 8,
-						...cellEditorProps?.selectContentProps
-					}}
 				/>
 			)
 		}
@@ -97,18 +97,18 @@ const CellEditor: React.FC<CellEditorProps> = ({
 		case 'combobox': {
 			return (
 				<Combobox
+					contentProps={{ sideOffset: 12, ...cellEditorProps.contentProps }}
 					value={value as string}
-					onSelect={(value) => {
-						setValue(value)
-						table.options.meta?.updateRow(row.index, column.id, value)
-					}}
 					triggerProps={{
 						role: 'combobox',
 						style: { height: DEFAULT_ESTIMATE_SIZE },
 						className:
 							'rounded-none border-none hover:bg-inherit focus-within:ring-0 focus-within:ring-offset-transparent h-full py-0 px-4'
 					}}
-					contentProps={{ sideOffset: 12, ...cellEditorProps.contentProps }}
+					onSelect={(value) => {
+						setValue(value)
+						table.options.meta?.updateRow(row.index, column.id, value)
+					}}
 					{...cellEditorProps}
 				/>
 			)

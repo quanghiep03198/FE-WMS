@@ -25,7 +25,7 @@ const DataRestorationSheet: React.FC<ArchivedRestorationSheetProps> = ({ dataTyp
 	return (
 		<DataRestorationProvider>
 			<Sheet>
-				<SheetTrigger id='data-restoration-sheet-trigger' className='hidden' />
+				<SheetTrigger className='hidden' id='data-restoration-sheet-trigger' />
 				<SheetContent className='max-w-xl gap-y-6'>
 					<SheetHeader>
 						<SheetTitle>{t('ns_inoutbound:titles.archived_restoration')}</SheetTitle>

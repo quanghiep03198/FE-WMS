@@ -16,6 +16,7 @@ const App: React.FC = () => {
 		<QueryErrorResetBoundary>
 			{({ reset: resetQueryError }) => (
 				<Sentry.ErrorBoundary
+					showDialog={true}
 					fallback={({ error, resetError, ...props }) => (
 						<ErrorBoundaryFallback
 							error={error as Error}
@@ -25,16 +26,15 @@ const App: React.FC = () => {
 							}}
 							{...props}
 						/>
-					)}
-					showDialog={true}>
+					)}>
 					<QueryClientProvider>
 						<I18nextProvider i18n={i18n}>
 							<ThemeProvider>
 								<RouterProvider />
 								<Toaster
 									className='pointer-events-auto'
-									position='bottom-right'
 									duration={AppConfigs.TOAST_DURATION}
+									position='bottom-right'
 								/>
 							</ThemeProvider>
 						</I18nextProvider>

@@ -40,18 +40,18 @@ export function MultiSelectFieldControl<T extends FieldValues, D extends Record<
 
 	return (
 		<FormField
-			name={name}
 			control={control}
+			name={name}
 			render={({ field }) => (
 				<FormItem
 					aria-orientation={orientation}
 					className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 					{label && (
 						<FormLabel
-							htmlFor={id}
 							aria-hidden={hidden}
 							aria-orientation={orientation}
-							className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
+							className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'
+							htmlFor={id}>
 							{label}
 						</FormLabel>
 					)}
@@ -59,16 +59,16 @@ export function MultiSelectFieldControl<T extends FieldValues, D extends Record<
 						<Div className='space-y-2'>
 							<MultiSelect
 								{...props}
-								id={id}
-								shouldFilter={shouldFilter}
-								placeholder={placeholder}
 								aria-invalid={isInvalid}
-								datalist={datalist!}
-								labelField={labelField!}
-								valueField={valueField!}
-								defaultValue={defaultValue}
 								classNames={classNames}
+								datalist={datalist!}
+								defaultValue={defaultValue}
+								id={id}
+								labelField={labelField!}
+								placeholder={placeholder}
+								shouldFilter={shouldFilter}
 								value={field.value}
+								valueField={valueField!}
 								onInput={(value) => {
 									if (typeof onInput === 'function') onInput(value)
 								}}

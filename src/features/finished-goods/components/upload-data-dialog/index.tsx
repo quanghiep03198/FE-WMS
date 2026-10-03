@@ -137,49 +137,49 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 					<DialogDescription>{t('ns_common:descriptions.import_data')}</DialogDescription>
 				</DialogHeader>
 				<DroppableArea
-					htmlFor={dropFileAreaId}
-					data-drag-active={isDragActive}
 					aria-disabled={files.length >= maxFiles}
-					onDrop={onDrop}
+					data-drag-active={isDragActive}
+					htmlFor={dropFileAreaId}
+					onDragLeave={onDragLeave}
 					onDragOver={onDragOver}
-					onDragLeave={onDragLeave}>
+					onDrop={onDrop}>
 					<Input
+						multiple
+						accept='.csv'
+						className='hidden'
 						id={dropFileAreaId}
 						ref={inputRef}
 						type='file'
-						accept='.csv'
-						multiple
-						className='hidden'
 						onChange={handleFileChange}
 					/>
-					<Icon name='CloudUpload' size={40} strokeWidth={1} stroke={'var(--active)'} />
+					<Icon name='CloudUpload' size={40} stroke={'var(--active)'} strokeWidth={1} />
 					<Typography color='muted'>{t('ns_common:actions.csv_upload')}</Typography>
 				</DroppableArea>
 				{files.length > 0 && (
 					<Div className='scroll-fade max-h-32'>
 						{files.map((file, idx) => (
 							<FileItem
-								key={file.name + idx}
-								file={file}
 								disabled={isPending}
+								file={file}
+								key={file.name + idx}
 								onRemove={() => setFiles((prev) => prev.filter((_, i) => i !== idx))}
 							/>
 						))}
 					</Div>
 				)}
 				<Div className='flex items-center justify-between'>
-					<Typography variant='small' color='muted'>
+					<Typography color='muted' variant='small'>
 						{t('ns_common:descriptions.chosen_files', {
 							qty: `${files.length}/${maxFiles}`,
 							defaultValue: `${files.length}/${maxFiles}`
 						})}
 					</Typography>
-					<Typography variant='small' color='muted'>
+					<Typography color='muted' variant='small'>
 						{filesize(files.map((item) => item.size).reduce<number>((acc, curr) => acc + curr, 0))}
 					</Typography>
 				</Div>
-				<Button size='lg' disabled={isPending || files.length === 0} onClick={() => mutateAsync()}>
-					<Icon name={isPending ? 'LoaderCircle' : 'Upload'} className={cn({ 'animate-spin': isPending })} />{' '}
+				<Button disabled={isPending || files.length === 0} size='lg' onClick={() => mutateAsync()}>
+					<Icon className={cn({ 'animate-spin': isPending })} name={isPending ? 'LoaderCircle' : 'Upload'} />{' '}
 					Upload
 				</Button>
 			</DialogContent>
@@ -193,10 +193,10 @@ const FileItem: React.FC<{ file: File; disabled: boolean; onRemove: () => void }
 			aria-disabled={disabled}
 			className='group hover:bg-accent flex grow items-center gap-x-2 rounded px-3 py-1.5 transition-colors duration-200 aria-disabled:pointer-events-none aria-disabled:opacity-80'>
 			<Icon name='File' />
-			<Typography variant='small' className='line-clamp-1 block flex-1'>
+			<Typography className='line-clamp-1 block flex-1' variant='small'>
 				{file.name}
 			</Typography>
-			<Typography variant='small' color='muted'>
+			<Typography color='muted' variant='small'>
 				{filesize(file.size, { round: 2 })}
 			</Typography>
 			<button

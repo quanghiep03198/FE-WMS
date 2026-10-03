@@ -30,8 +30,8 @@ const PageHeading: React.FC = () => {
 						</Button>
 					}>
 					<label
-						htmlFor='add-storage-location-dialog-trigger'
-						className={cn(buttonVariants({ variant: 'default' }))}>
+						className={cn(buttonVariants({ variant: 'default' }))}
+						htmlFor='add-storage-location-dialog-trigger'>
 						<Icon name='CirclePlus' /> {t('ns_common:actions.add')}
 					</label>
 				</RoleBaseAccessControl>

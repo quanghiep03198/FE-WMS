@@ -41,24 +41,24 @@ const DroppableFieldItem: React.FC<{
 					{...listeners}
 					ref={setNodeRef}
 					type='button'
-					onClick={(e) => {
-						e.stopPropagation()
-						onRemove(index)
-					}}
 					className={cn(
 						'text-muted-foreground hover:text-foreground inline-flex h-9 basis-4 items-center justify-center rounded transition-colors duration-200',
 						isDragging ? 'cursor-grabbing' : 'cursor-grab'
-					)}>
+					)}
+					onClick={(e) => {
+						e.stopPropagation()
+						onRemove(index)
+					}}>
 					<Icon name='GripVertical' size={14} />
 				</button>
 				<Div className='flex-1'>
 					<SelectFieldControl
-						name={`sizes.${index}.size_numcode`}
 						datalist={sizes}
-						labelField='size_numcode'
-						valueField='size_numcode'
 						disabled={!watch('mo_no')}
+						labelField='size_numcode'
+						name={`sizes.${index}.size_numcode`}
 						placeholder='Select size'
+						valueField='size_numcode'
 						onValueChange={(value) => {
 							const maxSizeQty = sizes.find((item) => item.size_numcode === value)?.count ?? 0
 							setValue(`sizes.${index}.size_qty`, maxSizeQty)
@@ -67,9 +67,9 @@ const DroppableFieldItem: React.FC<{
 				</Div>
 				<Div className='flex-1'>
 					<InputFieldControl
+						disabled={!watch(`sizes.${index}.size_numcode`)}
 						name={`sizes.${index}.qty`}
 						type='number'
-						disabled={!watch(`sizes.${index}.size_numcode`)}
 						placeholder={t('ns_common:common_fields.quantity_with_limit', {
 							limit: watch(`sizes.${index}.size_qty`) || 0,
 							defaultValue: `Quantity (max ${watch(`sizes.${index}.size_qty`)})`
@@ -77,9 +77,9 @@ const DroppableFieldItem: React.FC<{
 					/>
 				</Div>
 				<button
+					className='text-muted-foreground hover:text-destructive inline-flex h-9 basis-4 items-center justify-center transition-colors duration-200'
 					type='button'
-					onClick={() => onRemove(index)}
-					className='text-muted-foreground hover:text-destructive inline-flex h-9 basis-4 items-center justify-center transition-colors duration-200'>
+					onClick={() => onRemove(index)}>
 					<Icon name='X' size={14} strokeWidth={3} />
 				</button>
 			</Div>

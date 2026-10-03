@@ -13,14 +13,14 @@ const ScannedEpcCounter: React.FC = () => {
 
 	return (
 		<Div
-			data-slot='epc-counter'
-			className='relative flex flex-col items-center justify-center overflow-clip rounded-lg border px-4 py-10 lg:py-4 @5xl:py-8'>
+			className='relative flex flex-col items-center justify-center overflow-clip rounded-lg border px-4 py-10 lg:py-4 @5xl:py-8'
+			data-slot='epc-counter'>
 			<ScanningSkeleton />
 			<ScanningCounter />
 			<Typography
-				variant='small'
 				className='xxl:text-sm relative z-10 mb-6 text-center text-xs whitespace-nowrap'
-				color='muted'>
+				color='muted'
+				variant='small'>
 				{t('ns_inoutbound:counter_box.caption')}
 			</Typography>
 			<ScanningTimer />
@@ -32,9 +32,9 @@ const ScanningSkeleton: React.FC = () => {
 	const { scanningStatus } = usePageContext('scanningStatus')
 	return (
 		<Div
-			data-status={scanningStatus}
+			className='absolute inset-0 z-0 h-full rounded-[inherit] opacity-0 transition-opacity duration-500 ease-in-out data-[status=connected]:opacity-100'
 			data-slot='epc-counter-skeleton'
-			className='absolute inset-0 z-0 h-full rounded-[inherit] opacity-0 transition-opacity duration-500 ease-in-out data-[status=connected]:opacity-100'>
+			data-status={scanningStatus}>
 			<Skeleton className='inset-0 h-full w-full animate-[pulse_1.25s_cubic-bezier(0.4,0,0.6,1)_infinite] rounded-none' />
 		</Div>
 	)
@@ -69,7 +69,7 @@ const ScanningCounter: React.FC = () => {
 			<Separator className='bg-foreground h-0.5 w-1.5 self-center' />
 			<Typography className='inline-flex gap-x-1 font-bold'>
 				{formatIntlNumber(count)}
-				<Typography as='small' variant='small' className='text-xs font-medium'>
+				<Typography as='small' className='text-xs font-medium' variant='small'>
 					prs
 				</Typography>
 			</Typography>

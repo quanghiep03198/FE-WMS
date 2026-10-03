@@ -141,10 +141,10 @@ const EpcDetailTable: React.FC = () => {
 						{!Array.isArray(data) || data.length === 0 ? (
 							<TableRow>
 								<TableCell
-									colSpan={4}
 									align='center'
-									className='z-0 h-[calc(var(--detail-table-panel-height)-2*var(--bar-height)-2*var(--scrollbar-thickness))]'>
-									<Typography color='muted' className='inline-flex items-center gap-x-2'>
+									className='z-0 h-[calc(var(--detail-table-panel-height)-2*var(--bar-height)-2*var(--scrollbar-thickness))]'
+									colSpan={4}>
+									<Typography className='inline-flex items-center gap-x-2' color='muted'>
 										<Icon name='Inbox' size={32} strokeWidth={1} />
 										{t('ns_common:table.no_data')}
 									</Typography>
@@ -171,7 +171,7 @@ const EpcDetailTable: React.FC = () => {
 									<TableCell align='left' className='p-0'>
 										<NestedTable>
 											{item.sizes.map((size) => (
-												<NestedColumn key={size.size_code} className='min-w-24 basis-24'>
+												<NestedColumn className='min-w-24 basis-24' key={size.size_code}>
 													<NestedCell>
 														{size.size_code === FALLBACK_VALUE
 															? t('ns_common:titles.unknown')

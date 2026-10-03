@@ -44,7 +44,7 @@ function RouteComponent() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.defective_goods_epc_combination')}</title>
-			<meta name='description' content='Matching EPCs for defective goods' />
+			<meta content='Matching EPCs for defective goods' name='description' />
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}>
 				<IpPolicyGuard>
@@ -60,9 +60,9 @@ function RouteComponent() {
 										} as React.CSSProperties
 									}>
 									<ResizablePanel
-										minSize={listPanelOpen ? 30 : 0}
-										maxSize={listPanelOpen ? 40 : 0}
 										defaultSize={listPanelOpen ? 30 : 0}
+										maxSize={listPanelOpen ? 40 : 0}
+										minSize={listPanelOpen ? 30 : 0}
 										className={cn(
 											'transtion-max-width linear hidden h-full duration-200 will-change-transform @7xl/playground-wrapper:block',
 											'group-has-[div[data-resize-handle-state=drag]]/container:transition-none',
@@ -76,14 +76,14 @@ function RouteComponent() {
 											className='hidden w-px border-0 shadow-none ring-transparent @7xl/playground-wrapper:flex'
 										/>
 									)}
-									<ResizablePanel defaultSize={50} minSize={isMobile ? 50 : 40} className='h-full'>
+									<ResizablePanel className='h-full' defaultSize={50} minSize={isMobile ? 50 : 40}>
 										<DefectiveGoodsForm />
 									</ResizablePanel>
 									{isUsingUHFReader && !isMobile && <ResizableHandle disabled />}
 									<ResizablePanel
-										minSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
-										maxSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
 										defaultSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
+										maxSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
+										minSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
 										className={cn(
 											'transtion-max-width linear h-full duration-200 will-change-transform',
 											'group-has-[div[data-resize-handle-state=drag]]/container:transition-none',

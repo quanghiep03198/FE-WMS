@@ -86,24 +86,24 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 	return (
 		<Div className='flex h-full flex-col gap-6'>
 			<Div className='relative overflow-clip rounded-md border'>
-				<Icon name='Search' className='absolute top-1/2 left-3 z-10 -translate-y-1/2' />
+				<Icon className='absolute top-1/2 left-3 z-10 -translate-y-1/2' name='Search' />
 				<AutoComplete
-					datalist={autoCompleteDatalist}
 					className='border-none! pl-10'
-					shouldFilter={true}
+					datalist={autoCompleteDatalist}
 					labelField={orderField!}
-					valueField={orderField!}
-					value={search}
-					onInput={(value) => setSearch(value)}
 					placeholder={t('ns_common:actions.search') + '...'}
+					shouldFilter={true}
+					value={search}
+					valueField={orderField!}
+					onInput={(value) => setSearch(value)}
 				/>
 			</Div>
 			<Div
 				className='scrollbar-track-accent/10 flex-1 space-y-1 overflow-y-auto'
+				ref={refCallback}
 				style={{
 					container: 'table / size'
-				}}
-				ref={refCallback}>
+				}}>
 				<Table
 					className='w-full table-fixed border-separate border-spacing-0 [&_td]:border-x-0 [&_th]:border-x-0'
 					style={
@@ -133,20 +133,20 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 								<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 									<GhostButton onClick={() => refetch()}>
 										<Icon
-											name={isFetching ? 'Loader' : 'RefreshCcw'}
 											className={cn('h-full', isFetching && 'animate-spin')}
+											name={isFetching ? 'Loader' : 'RefreshCcw'}
 										/>
 									</GhostButton>
 								</Tooltip>
 							</TableHead>
 						</TableRow>
 					</TableHeader>
-					<TableBody className='group/body' aria-busy={isFetching}>
+					<TableBody aria-busy={isFetching} className='group/body'>
 						{isLoading ? (
 							Array.from({ length: 10 }, (_, i) => (
 								<TableRow key={i.toString()}>
 									{Array.from({ length: 6 }, (_, j) => (
-										<TableCell key={`${i}.${j}`} className='h-9'>
+										<TableCell className='h-9' key={`${i}.${j}`}>
 											<Skeleton />
 										</TableCell>
 									))}
@@ -155,11 +155,11 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 						) : !Array.isArray(filteredData) || filteredData?.length === 0 ? (
 							<TableRow>
 								<TableCell
-									colSpan={6}
-									className='h-[calc(100cqh-var(--header-height)-var(--footer-height)-2*var(--border-width,1px))]'>
+									className='h-[calc(100cqh-var(--header-height)-var(--footer-height)-2*var(--border-width,1px))]'
+									colSpan={6}>
 									<Div className='flex h-full items-center justify-center gap-x-3'>
-										<Icon name='PackageOpen' size={36} strokeWidth={1} stroke='var(--muted-foreground)' />
-										<Typography variant='small' color='muted' className='font-medium'>
+										<Icon name='PackageOpen' size={36} stroke='var(--muted-foreground)' strokeWidth={1} />
+										<Typography className='font-medium' color='muted' variant='small'>
 											{t('ns_common:table.no_data')}
 										</Typography>
 									</Div>
@@ -172,17 +172,17 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 									const item = data![virtualItem.index]
 									return virtualizer.isScrolling ? (
 										<MemoizedStockTransactionRow
-											key={item.id}
 											data={item}
-											stockFlow={stockFlow}
+											key={item.id}
 											size={virtualItem.size}
+											stockFlow={stockFlow}
 										/>
 									) : (
 										<StockTransactionRow
-											key={item.id}
 											data={item}
-											stockFlow={stockFlow}
+											key={item.id}
 											size={virtualItem.size}
+											stockFlow={stockFlow}
 										/>
 									)
 								})}

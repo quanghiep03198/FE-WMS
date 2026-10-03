@@ -56,9 +56,9 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 
 	return (
 		<FormField
-			name={name!}
-			defaultValue={getValues(name)}
 			control={control}
+			defaultValue={getValues(name)}
+			name={name!}
 			render={({ field }) => {
 				return (
 					<FormItem
@@ -66,17 +66,17 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 						className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 						{label && (
 							<FormLabel
-								htmlFor={id}
 								aria-orientation={orientation}
-								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'>
+								className='text-pretty aria-[orientation=horizontal]:translate-y-3/4 aria-[orientation=horizontal]:align-middle aria-[orientation=horizontal]:leading-none'
+								htmlFor={id}>
 								{label}
 							</FormLabel>
 						)}
 						<Div className='space-y-2'>
 							<Select
 								{...restProps}
-								value={field.value ?? ''}
 								defaultValue={field.value ?? ''}
+								value={field.value ?? ''}
 								onValueChange={(value) => {
 									field.onChange(value)
 									if (typeof onValueChange === 'function') {
@@ -94,8 +94,8 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 									}}>
 									<FormControl>
 										<SelectTrigger
-											id={id}
 											disabled={field.disabled}
+											id={id}
 											className={cn(
 												'bg-background focus:border-primary',
 												className,
@@ -116,9 +116,9 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 										))
 									) : (
 										<SelectItem
-											value={null!}
 											disabled
-											className='flex items-center justify-center text-center text-xs font-medium'>
+											className='flex items-center justify-center text-center text-xs font-medium'
+											value={null!}>
 											No option
 										</SelectItem>
 									)}

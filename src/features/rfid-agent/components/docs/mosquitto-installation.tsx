@@ -24,8 +24,8 @@ const MosquittoInstallation: React.FC = () => {
 					<Div className='my-6'>
 						<Div className='inline-flex items-center gap-x-2'>
 							<DownloadButton
-								href='https://mosquitto.org/files/binary/win64/mosquitto-2.0.22-install-windows-x64.exe'
-								download>
+								download
+								href='https://mosquitto.org/files/binary/win64/mosquitto-2.0.22-install-windows-x64.exe'>
 								<MicrosoftIcon /> Mosquitto Windows Installer (.exe)
 							</DownloadButton>
 						</Div>
@@ -47,7 +47,7 @@ const MosquittoInstallation: React.FC = () => {
 						</KbdGroup>{' '}
 						to open <b>Command Prompt</b>.
 					</Typography>
-					<Terminal command={/* template */ `setx PATH "%PATH%;%MOSQUITTO_DIR%" /M`} className='my-4'>
+					<Terminal className='my-4' command={/* template */ `setx PATH "%PATH%;%MOSQUITTO_DIR%" /M`}>
 						{`setx PATH "%PATH%;%MOSQUITTO_DIR%" /M`}
 					</Terminal>
 				</ListItem>
@@ -56,7 +56,7 @@ const MosquittoInstallation: React.FC = () => {
 						Open new <b>Command Prompt</b> window and type the below command. If you see the following output, it
 						means Mosquitto is installed correctly and working.
 					</Typography>
-					<Terminal command={/* template */ `mosquitto -h`} className='my-4'>
+					<Terminal className='my-4' command={/* template */ `mosquitto -h`}>
 						mosquitto -h
 						<br />
 						<br />

@@ -20,17 +20,17 @@ const CategoryFieldControl: React.FC<CategoryFieldControlProps> = ({ disabled, .
 	return (
 		<SelectFieldControl
 			{...props}
-			name='defective_category'
-			label={t('ns_erp:fields.category')}
 			datalist={defectiveCategoryList}
 			disabled={disabled}
+			label={t('ns_erp:fields.category')}
+			labelField='label'
+			name='defective_category'
+			valueField='value'
 			onValueChange={(value) => {
 				if (value === DefectiveCategory.RESEARCH_DEVELOPMENT) {
 					reset(omit(getValues(), ['po', 'mo_no']))
 				}
 			}}
-			labelField='label'
-			valueField='value'
 		/>
 	)
 }

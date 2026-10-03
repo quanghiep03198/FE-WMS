@@ -100,15 +100,15 @@ function DataTable<T extends TableRowData>({
 	return (
 		<Container>
 			<DataTableGlobalFilter
+				dataType={dataType}
 				globalFilter={table.getState().globalFilter ?? ''}
 				onGlobalFilterChange={table.setGlobalFilter}
-				dataType={dataType}
 			/>
-			<ScrollArea ref={containerRef} className='h-72'>
+			<ScrollArea className='h-72' ref={containerRef}>
 				<Table
 					className='w-full table-fixed border-separate border-spacing-0'
 					style={{ '--table-width': containerSize?.width - 10 + 'px' } as React.CSSProperties}>
-					<TableCaption id={captionId} className='sr-only'>
+					<TableCaption className='sr-only' id={captionId}>
 						{caption}
 					</TableCaption>
 					{virtualizer.isScrolling ? (
@@ -117,10 +117,10 @@ function DataTable<T extends TableRowData>({
 						<DataTableHeader headerGroups={table.getHeaderGroups()} />
 					)}
 					<DataTableBody
-						rows={rows}
 						columnCount={columns.length}
-						virtualizer={virtualizer}
 						isSomeRowsExpanded={isSomeRowsExpanded}
+						rows={rows}
+						virtualizer={virtualizer}
 					/>
 					<DataTableFooter rows={rows} />
 				</Table>

@@ -23,7 +23,7 @@ const Alert: React.FC<React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof
 	className,
 	variant,
 	...props
-}) => <div role='alert' className={cn(alertVariants({ variant }), className)} {...props} />
+}) => <div className={cn(alertVariants({ variant }), className)} role='alert' {...props} />
 Alert.displayName = 'Alert'
 
 const AlertTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({ className, ...props }) => (

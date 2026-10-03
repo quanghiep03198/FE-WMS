@@ -12,10 +12,10 @@ const UserTableRefreshButton: React.FC<ButtonProps> = (props) => {
 	const { t } = useTranslation()
 
 	return (
-		<Tooltip message={t('ns_common:actions.reload')} contentProps={{ hidden: !isMobile }}>
+		<Tooltip contentProps={{ hidden: !isMobile }} message={t('ns_common:actions.reload')}>
 			<Button
-				variant={isMobile ? 'ghost' : 'outline'}
 				size={isMobile ? 'icon' : 'default'}
+				variant={isMobile ? 'ghost' : 'outline'}
 				onClick={() => refetch()}
 				{...props}>
 				<Icon name='RefreshCcw' /> {!isMobile && t('ns_common:actions.reload')}

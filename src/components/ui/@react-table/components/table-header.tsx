@@ -46,7 +46,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 	const computeStickyOffsetPosition = useMemoizedFn(getStickyOffsetPosition)
 
 	return (
-		<TableRow data-role='data-grid-row' className='h-(--header-row-height,40px)'>
+		<TableRow className='h-(--header-row-height,40px)' data-role='data-grid-row'>
 			{headerGroup.headers.map((header) => {
 				const rowSpan = header.column.columnDef.meta?.rowSpan
 				if (!header.isPlaceholder && rowSpan !== undefined && header.id === header.column.id) {
@@ -55,13 +55,13 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 
 				return (
 					<TableHead
+						align={header.column.columnDef.meta?.align}
+						className={cn('group bg-table-head relative z-50 p-0')}
+						colSpan={header.colSpan}
 						data-role='data-grid-head'
 						key={header.id}
-						colSpan={header.colSpan}
-						rowSpan={rowSpan}
-						className={cn('group bg-table-head relative z-50 p-0')}
-						align={header.column.columnDef.meta?.align}
 						ref={(node) => columnSizingHandler(node, table, header.column)}
+						rowSpan={rowSpan}
 						style={{
 							height: 'var(--header-row-height)',
 							width: `var(--header-${header?.id}-size)`,
@@ -85,15 +85,15 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({
 	const computeStickyOffsetPosition = useMemoizedFn(getStickyOffsetPosition)
 
 	return (
-		<TableRow data-role='data-grid-row' className='max-h-(--header-row-height,40px)'>
+		<TableRow className='max-h-(--header-row-height,40px)' data-role='data-grid-row'>
 			{headerGroup.headers.map((header) => {
 				if (header.column.columns.length === 0)
 					return (
 						<TableHead
-							key={header.id}
+							className='group relative z-40 p-0'
 							colSpan={header.colSpan}
 							data-role='data-grid-row'
-							className='group relative z-40 p-0'
+							key={header.id}
 							rowSpan={header.column.getIsPinned() ? headerGroup.headers.length : 1}
 							style={{
 								...computeStickyOffsetPosition(header?.column),

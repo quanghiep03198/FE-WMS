@@ -24,8 +24,8 @@ export const MobileReaderPlayground: React.FC = () => {
 				})}
 			/>
 			<SheetContent
-				side='bottom'
 				className='h-[80vh] p-0 [&>button:first-of-type]:hidden'
+				side='bottom'
 				onOpenAutoFocus={(event) => event.preventDefault()}>
 				<ReaderPlaygroundProvider>
 					<RFIDReaderPlayground resetOnUnmount={false} />

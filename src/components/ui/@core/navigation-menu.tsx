@@ -44,10 +44,10 @@ const NavigationMenuTrigger: React.FC<
 	<NavigationMenuPrimitive.Trigger className={cn(navigationMenuTriggerStyle(), 'group', className)} {...props}>
 		{children}{' '}
 		<Icon
-			size={triggerIconProps?.size || 16}
-			name='ChevronDown'
-			className='relative ml-2 transition duration-300 group-data-[state=open]:rotate-180'
 			aria-hidden='true'
+			className='relative ml-2 transition duration-300 group-data-[state=open]:rotate-180'
+			name='ChevronDown'
+			size={triggerIconProps?.size || 16}
 		/>
 	</NavigationMenuPrimitive.Trigger>
 )

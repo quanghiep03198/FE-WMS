@@ -8,8 +8,8 @@ const FullScreenToggler: React.FC<ButtonProps> = (props) => {
 
 	return (
 		<Button
-			variant={isFullScreen ? 'secondary' : 'ghost'}
 			size='icon'
+			variant={isFullScreen ? 'secondary' : 'ghost'}
 			onClick={() => {
 				if (isFullScreen) exitFullscreen()
 				enterFullscreen()

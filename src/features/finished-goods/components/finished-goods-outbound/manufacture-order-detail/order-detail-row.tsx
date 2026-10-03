@@ -33,13 +33,13 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 			</TableCell>
 			<TableCell style={{ height: virtualRow.size }}>{data?.factory_shoes_style}</TableCell>
 			<TableCell style={{ height: virtualRow.size }}>{data?.color_sn}</TableCell>
-			<TableCell style={{ height: virtualRow.size }} className={cn('p-0!')}>
+			<TableCell className={cn('p-0!')} style={{ height: virtualRow.size }}>
 				<Div className='flex grow border-collapse flex-nowrap divide-x' onContextMenu={(e) => e.preventDefault()}>
 					{Array.isArray(data?.sizes) &&
 						sortBy(data.sizes, 'size_numcode').map((size) => (
 							<NestedColumn
-								key={size?.size_numcode}
-								className='group/cell inline-grid min-w-20 shrink-0 basis-20 grid-rows-2 divide-y last:flex-1'>
+								className='group/cell inline-grid min-w-20 shrink-0 basis-20 grid-rows-2 divide-y last:flex-1'
+								key={size?.size_numcode}>
 								<NestedCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
@@ -56,10 +56,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 						))}
 				</Div>
 			</TableCell>
-			<TableCell style={{ height: virtualRow.size }} align='right' className='font-medium'>
+			<TableCell align='right' className='font-medium' style={{ height: virtualRow.size }}>
 				{formatIntlNumber(aggregateSizeCount)}
 			</TableCell>
-			<TableCell style={{ height: virtualRow.size }} align='center'>
+			<TableCell align='center' style={{ height: virtualRow.size }}>
 				<DeleteOrderPopover data={data} />
 			</TableCell>
 		</TableRow>

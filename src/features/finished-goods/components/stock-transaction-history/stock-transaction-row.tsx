@@ -92,28 +92,28 @@ const StockTransactionRow: React.FC<StockTransactionRowProps<StockFlow>> = ({ da
 				{data.id}
 			</TableCell>
 			<TableCell align='left'>
-				<Typography variant='small' className='inline-flex items-center gap-2'>
+				<Typography className='inline-flex items-center gap-2' variant='small'>
 					<Icon name={BADGE_PROPS.get(data.tx_type)!.icon} stroke={BADGE_PROPS.get(data.tx_type)!.color} />
 					{stockFlow === StockFlow.OUTBOUND ? data.po : data.mo_no}
 				</Typography>
 			</TableCell>
 			<TableCell align='left'>{formatIntlNumber(data.qty * directionCoefficient)} </TableCell>
 			<TableCell align='left'>
-				<Typography variant='small' className='inline-flex items-center gap-2'>
+				<Typography className='inline-flex items-center gap-2' variant='small'>
 					<Icon name='Clock' stroke='var(--muted-foreground)' />
 					{format(new Date(data.tx_at), 'HH:mm:ss')}
 				</Typography>
 			</TableCell>
 			<TableCell align='left'>
 				<RollbackStockTransactionPopover
+					reversible={data.reversible}
 					stockFlow={stockFlow}
 					transactionId={data.id}
-					reversible={data.reversible}
 				/>
 			</TableCell>
 			<TableCell align='right'>
 				{Array.isArray(details) && details.length > 0 ? (
-					<HoverCard openDelay={100} closeDelay={100}>
+					<HoverCard closeDelay={100} openDelay={100}>
 						<HoverCardTrigger asChild>
 							<GhostButton>
 								<Icon name='Ellipsis' />
@@ -121,21 +121,21 @@ const StockTransactionRow: React.FC<StockTransactionRowProps<StockFlow>> = ({ da
 						</HoverCardTrigger>
 						<HoverCardContent
 							align='end'
+							className='bg-popover text-popover-foreground flex w-160 flex-col rounded-md'
 							side='bottom'
-							sideOffset={8}
-							className='bg-popover text-popover-foreground flex w-160 flex-col rounded-md'>
+							sideOffset={8}>
 							<Table className='table-fixed border-collapse [&_th,td]:border'>
 								<TableHeader>
 									<TableRow className='[&>th]:bg-table-head'>
 										{stockFlow === 'outbound' && (
-											<TableHead scope='col' align='left'>
+											<TableHead align='left' scope='col'>
 												{t('ns_erp:fields.mo_no')}
 											</TableHead>
 										)}
-										<TableHead scope='col' align='left'>
+										<TableHead align='left' scope='col'>
 											Size
 										</TableHead>
-										<TableHead scope='col' align='left'>
+										<TableHead align='left' scope='col'>
 											{t('ns_common:common_fields.quantity')}
 										</TableHead>
 									</TableRow>
@@ -144,20 +144,20 @@ const StockTransactionRow: React.FC<StockTransactionRowProps<StockFlow>> = ({ da
 									{details.map((item) => {
 										if (Array.isArray(item.size_ledger) && Object.hasOwn(item, 'mo_no'))
 											return item.size_ledger.map((i, idx) => (
-												<TableRow key={i.mo_no} className='last:[&>td]:border-b-0!'>
+												<TableRow className='last:[&>td]:border-b-0!' key={i.mo_no}>
 													{idx === 0 && (
 														<TableCell
 															align='left'
-															scope='col'
+															className='border-b-0!'
 															rowSpan={item.size_ledger.length}
-															className='border-b-0!'>
+															scope='col'>
 															{item.mo_no}
 														</TableCell>
 													)}
 													<TableCell
 														align='left'
-														scope='col'
-														className='before:text-muted-foreground before:content-["#"]'>
+														className='before:text-muted-foreground before:content-["#"]'
+														scope='col'>
 														{i.size}
 													</TableCell>
 													<TableCell align='left' scope='col'>
@@ -170,8 +170,8 @@ const StockTransactionRow: React.FC<StockTransactionRowProps<StockFlow>> = ({ da
 											<TableRow key={item.size}>
 												<TableCell
 													align='left'
-													scope='col'
-													className='before:text-muted-foreground before:content-["#"]'>
+													className='before:text-muted-foreground before:content-["#"]'
+													scope='col'>
 													{item?.size}
 												</TableCell>
 												<TableCell align='left' scope='col'>
@@ -185,7 +185,7 @@ const StockTransactionRow: React.FC<StockTransactionRowProps<StockFlow>> = ({ da
 						</HoverCardContent>
 					</HoverCard>
 				) : (
-					<Icon name='Ellipsis' className='stroke-muted-foreground' />
+					<Icon className='stroke-muted-foreground' name='Ellipsis' />
 				)}
 			</TableCell>
 		</TableRow>

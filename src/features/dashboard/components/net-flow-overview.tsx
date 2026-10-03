@@ -39,7 +39,7 @@ export function NetFlowOverview() {
 	const isEmpty = !Array.isArray(data) || data.length === 0
 
 	return (
-		<Card data-role='card' className='h-full'>
+		<Card className='h-full' data-role='card'>
 			<CardHeader>
 				<CardTitle>{t('ns_dashboard:statistic.net_flow')}</CardTitle>
 				<CardDescription>{t('ns_dashboard:net_flow_description')}</CardDescription>
@@ -54,13 +54,13 @@ export function NetFlowOverview() {
 					</Div>
 				) : (
 					<ChartContainer
+						className={isEmpty ? 'h-full max-w-full' : 'w-full @xs:h-72 @xl:h-80 @3xl:max-h-full @3xl:min-h-80'}
 						config={{
 							net_flow: {
 								label: t('ns_dashboard:statistic.net_flow'),
 								color: 'var(--chart-1)'
 							}
-						}}
-						className={isEmpty ? 'h-full max-w-full' : 'w-full @xs:h-72 @xl:h-80 @3xl:max-h-full @3xl:min-h-80'}>
+						}}>
 						<LineChart
 							accessibilityLayer
 							data={data.map((period) => ({
@@ -74,13 +74,13 @@ export function NetFlowOverview() {
 								right: 12
 							}}>
 							<CartesianGrid vertical={false} />
-							<XAxis dataKey='month' tickLine={false} axisLine={false} tickMargin={8} minTickGap={32} />
+							<XAxis axisLine={false} dataKey='month' minTickGap={32} tickLine={false} tickMargin={8} />
 							<ChartTooltip
-								cursor={false}
-								content={<ChartTooltipContent className='min-w-48' />}
 								useTranslate3d
+								content={<ChartTooltipContent className='min-w-48' />}
+								cursor={false}
 							/>
-							<Line dataKey='net_flow' type='natural' stroke='var(--color-net_flow)' strokeWidth={2} />
+							<Line dataKey='net_flow' stroke='var(--color-net_flow)' strokeWidth={2} type='natural' />
 						</LineChart>
 					</ChartContainer>
 				)}
@@ -101,8 +101,8 @@ export function NetFlowOverview() {
 								<Icon name={getTrendingIcon(percentageChange)} />
 							</Typography>
 							<Typography
-								color='muted'
-								className='text-muted-foreground flex items-center gap-2 leading-none capitalize'>
+								className='text-muted-foreground flex items-center gap-2 leading-none capitalize'
+								color='muted'>
 								{format(new Date(new Date().getFullYear(), data.at(0).month - 1, 1), 'PPP', {
 									locale: dateLocale
 								})}

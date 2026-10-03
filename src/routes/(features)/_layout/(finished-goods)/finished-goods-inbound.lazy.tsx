@@ -38,7 +38,7 @@ function Page() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.finished_goods_inbound')}</title>
-			<meta name='description' content='RFID Scanner integration for inbound process' />
+			<meta content='RFID Scanner integration for inbound process' name='description' />
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 				<HostCompatibleGuard>

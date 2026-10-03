@@ -23,25 +23,25 @@ const CombinationStrategySelect: React.FC<{ disabled: boolean }> = ({ disabled }
 	return (
 		<Div className='ml-auto w-auto'>
 			<RadioGroup
+				className='hidden items-center gap-x-6 @2xl/combination-form:flex [&>div[role=radiogroup]]:inline-flex [&>div[role=radiogroup]]:items-center [&>div[role=radiogroup]]:gap-x-2'
 				disabled={disabled}
 				value={currentStrategy}
-				onValueChange={(value: 'usb' | 'uhf' | 'manually') => setStrategy(value)}
-				className='hidden items-center gap-x-6 @2xl/combination-form:flex [&>div[role=radiogroup]]:inline-flex [&>div[role=radiogroup]]:items-center [&>div[role=radiogroup]]:gap-x-2'>
+				onValueChange={(value: 'usb' | 'uhf' | 'manually') => setStrategy(value)}>
 				<Div role='radiogroup'>
-					<RadioGroupItem value='uhf' id='uhf-device-strategy' disabled={disabled} />
-					<RadioGroupLabel htmlFor='uhf-device-strategy' aria-disabled={disabled}>
+					<RadioGroupItem disabled={disabled} id='uhf-device-strategy' value='uhf' />
+					<RadioGroupLabel aria-disabled={disabled} htmlFor='uhf-device-strategy'>
 						UHF <Icon name='Router' size={18} />
 					</RadioGroupLabel>
 				</Div>
 				<Div role='radiogroup'>
-					<RadioGroupItem value='usb' id='usb-strategy' />
-					<RadioGroupLabel htmlFor='usb-strategy' aria-disabled={disabled}>
+					<RadioGroupItem id='usb-strategy' value='usb' />
+					<RadioGroupLabel aria-disabled={disabled} htmlFor='usb-strategy'>
 						USB <Icon name='Usb' size={18} />
 					</RadioGroupLabel>
 				</Div>
 				<Div role='radiogroup'>
-					<RadioGroupItem value='manually' id='manually-strategy' />
-					<RadioGroupLabel htmlFor='manually-strategy' aria-disabled={disabled}>
+					<RadioGroupItem id='manually-strategy' value='manually' />
+					<RadioGroupLabel aria-disabled={disabled} htmlFor='manually-strategy'>
 						{t('ns_common:titles.manually')} <Icon name='Keyboard' size={18} />
 					</RadioGroupLabel>
 				</Div>

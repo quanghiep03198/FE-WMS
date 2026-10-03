@@ -44,25 +44,25 @@ const OrderDetailTableHeader: React.FC<OrderSizeHeaderProps> = ({ onColumnFilter
 			<TableRow className='sticky'>
 				<TableHead align='center'>
 					<Input
-						role='textbox'
-						placeholder='Search ...'
 						className='w-full border-none font-normal shadow-none transition-none'
+						placeholder='Search ...'
+						role='textbox'
 						onChange={(e) => onColumnFilterChange((prev) => ({ ...prev, mo_no: e.target.value }))}
 					/>
 				</TableHead>
 				<TableHead align='center'>
 					<Input
-						role='textbox'
-						placeholder='Search ...'
 						className='w-full border-none font-normal shadow-none transition-none'
+						placeholder='Search ...'
+						role='textbox'
 						onChange={(e) => onColumnFilterChange((prev) => ({ ...prev, factory_shoes_style: e.target.value }))}
 					/>
 				</TableHead>
 				<TableHead align='center'>
 					<Input
-						role='textbox'
-						placeholder='Search ...'
 						className='w-full border-none font-normal shadow-none transition-none'
+						placeholder='Search ...'
+						role='textbox'
 						onChange={(e) =>
 							onColumnFilterChange((prev) => ({
 								...prev,

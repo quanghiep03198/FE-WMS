@@ -37,14 +37,14 @@ const Toolbar: React.FC = () => {
 			<Div className='flex h-full items-center gap-x-1 overflow-y-hidden p-1.5'>
 				<SearchAndReplaceToolbar />
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' />
+				<Separator className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' orientation='vertical' />
 
 				{/* Undo */}
 				<Tooltip message={t('ns_common:actions.undo')}>
 					<Button
 						className='aspect-square size-8'
-						type='button'
 						size='icon'
+						type='button'
 						variant='ghost'
 						onClick={() => editor.chain().focus().undo().run()}>
 						<Icon name='Undo2' />
@@ -54,15 +54,15 @@ const Toolbar: React.FC = () => {
 				<Tooltip message={t('ns_common:actions.redo')}>
 					<Button
 						className='aspect-square size-8'
-						type='button'
 						size='icon'
+						type='button'
 						variant='ghost'
 						onClick={() => editor.chain().focus().redo().run()}>
 						<Icon name='Redo2' />
 					</Button>
 				</Tooltip>
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' />
+				<Separator className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' orientation='vertical' />
 
 				{/* Change style */}
 				<StyleDropdownMenu />
@@ -72,18 +72,18 @@ const Toolbar: React.FC = () => {
 					<FontSizeInput />
 				</Tooltip>
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' />
+				<Separator className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' orientation='vertical' />
 
 				<AlignmentDropdownMenu />
 
 				{/* Toggle bold */}
 				<Tooltip message={t('ns_common:editor.bold')}>
 					<Button
-						variant='ghost'
-						type='button'
-						size='icon'
 						aria-pressed={editorState.isBold}
 						className={cn('aria-pressed:bg-accent aria-pressed:text-accent-foreground aspect-square size-8')}
+						size='icon'
+						type='button'
+						variant='ghost'
 						onClick={() => editor.chain().focus().toggleBold().run()}>
 						<Icon name='Bold' />
 					</Button>
@@ -92,9 +92,9 @@ const Toolbar: React.FC = () => {
 				{/* Toggle italic */}
 				<Tooltip message={t('ns_common:editor.italic')}>
 					<Button
-						variant='ghost'
-						type='button'
 						size='icon'
+						type='button'
+						variant='ghost'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editorState.isItalic
 						})}
@@ -106,9 +106,9 @@ const Toolbar: React.FC = () => {
 				{/* Toggle quote */}
 				<Tooltip message={t('ns_common:editor.blockquote')}>
 					<Button
-						variant='ghost'
-						type='button'
 						size='icon'
+						type='button'
+						variant='ghost'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editorState.isBlockquote
 						})}
@@ -120,9 +120,9 @@ const Toolbar: React.FC = () => {
 				{/* Toggle underline */}
 				<Tooltip message={t('ns_common:editor.underline')}>
 					<Button
-						variant='ghost'
-						type='button'
 						size='icon'
+						type='button'
+						variant='ghost'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editorState.isUnderline
 						})}
@@ -134,9 +134,9 @@ const Toolbar: React.FC = () => {
 				{/* Toggle code block */}
 				<Tooltip message={t('ns_common:editor.code_block')}>
 					<Button
-						variant='ghost'
-						type='button'
 						size='icon'
+						type='button'
+						variant='ghost'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editorState.isCodeBlock
 						})}
@@ -148,31 +148,31 @@ const Toolbar: React.FC = () => {
 				{/* Toggle strike linethough */}
 				<Tooltip message={t('ns_common:editor.strikethrough')}>
 					<Button
-						variant='ghost'
-						type='button'
 						size='icon'
+						type='button'
+						variant='ghost'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editorState.isStrike
 						})}
 						onClick={() => editor.chain().focus().toggleStrike().run()}>
-						<Icon name='Strikethrough' className='h-4 w-4' />
+						<Icon className='h-4 w-4' name='Strikethrough' />
 					</Button>
 				</Tooltip>
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' />
+				<Separator className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' orientation='vertical' />
 
 				{/* Text color and highlight */}
-				<ToolbarColorPicker label={t('ns_common:editor.text_color')} icon='Baseline' type='textStyle' />
-				<ToolbarColorPicker label={t('ns_common:editor.highlight')} icon='Highlighter' type='highlight' />
+				<ToolbarColorPicker icon='Baseline' label={t('ns_common:editor.text_color')} type='textStyle' />
+				<ToolbarColorPicker icon='Highlighter' label={t('ns_common:editor.highlight')} type='highlight' />
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' />
+				<Separator className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' orientation='vertical' />
 
 				{/* Toggle ordered list */}
 				<Tooltip message={t('ns_common:editor.ordered_list')}>
 					<Button
-						variant='ghost'
-						type='button'
 						size='icon'
+						type='button'
+						variant='ghost'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editorState.isOrderedList
 						})}
@@ -184,9 +184,9 @@ const Toolbar: React.FC = () => {
 				{/* Toggle bullet list */}
 				<Tooltip message={t('ns_common:editor.bullet_list')}>
 					<Button
-						variant='ghost'
 						size='icon'
 						type='button'
+						variant='ghost'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editorState.isBulletList
 						})}
@@ -197,9 +197,9 @@ const Toolbar: React.FC = () => {
 				{/* Toggle task list */}
 				<Tooltip message={t('ns_common:editor.task_list')}>
 					<Button
-						variant='ghost'
-						type='button'
 						size='icon'
+						type='button'
+						variant='ghost'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editorState.isTaskList
 						})}
@@ -211,10 +211,10 @@ const Toolbar: React.FC = () => {
 				{/* Horizontal ruler */}
 				<Tooltip message={t('ns_common:editor.separator')}>
 					<Button
-						variant='ghost'
+						className='aspect-square size-8'
 						size='icon'
 						type='button'
-						className='aspect-square size-8'
+						variant='ghost'
 						onClick={() => editor.commands.setHorizontalRule()}>
 						<Icon name='PencilLine' />
 					</Button>

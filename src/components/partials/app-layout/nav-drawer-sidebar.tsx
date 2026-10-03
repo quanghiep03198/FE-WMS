@@ -27,8 +27,8 @@ const NavDrawerSidebar: React.FC = () => {
 						return (
 							<MenuItem key={item.id} onClick={() => setOpen(!open)}>
 								<Link
-									to={item.url}
 									activeProps={{ className: 'text-primary hover:text-primary' }}
+									to={item.url}
 									className={cn(
 										buttonVariants({ variant: 'ghost' }),
 										'w-full justify-start gap-x-2 text-base font-normal'
@@ -43,8 +43,8 @@ const NavDrawerSidebar: React.FC = () => {
 						return (
 							<MenuItem key={item.id} onClick={() => setOpen(!open)}>
 								<Link
-									to={item.url}
 									activeProps={{ className: 'text-primary hover:text-primary' }}
+									to={item.url}
 									className={cn(
 										buttonVariants({ variant: 'ghost' }),
 										'w-full justify-start gap-x-2 text-base font-normal'

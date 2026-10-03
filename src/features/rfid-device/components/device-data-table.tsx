@@ -90,7 +90,7 @@ const DeviceDataTable: React.FC = () => {
 					const value = getValue()
 					return (
 						value[i18n.language] ?? (
-							<Typography variant='small' color='muted'>
+							<Typography color='muted' variant='small'>
 								{t('ns_common:titles.unknown')}
 							</Typography>
 						)
@@ -117,11 +117,11 @@ const DeviceDataTable: React.FC = () => {
 				minSize: 200,
 				cell: ({ row }) =>
 					isNil(row.original.device_ant) || row.original.device_ant === '0' ? (
-						<Badge variant='secondary' className='gap-x-2'>
+						<Badge className='gap-x-2' variant='secondary'>
 							<Icon name='SmartphoneNfc' /> Handhold
 						</Badge>
 					) : (
-						<Badge variant='secondary' className='gap-x-2'>
+						<Badge className='gap-x-2' variant='secondary'>
 							<Icon name='Router' /> Attenna
 						</Badge>
 					)
@@ -162,15 +162,15 @@ const DeviceDataTable: React.FC = () => {
 				enableResizing: true,
 				enableColumnFilter: true,
 				cell: (info) => (
-					<Badge variant='outline' className={cn('justify-center gap-x-2 rounded whitespace-nowrap')}>
+					<Badge className={cn('justify-center gap-x-2 rounded whitespace-nowrap')} variant='outline'>
 						{!info.getValue() ? (
 							<Fragment>
-								<Icon name='CircleCheck' className='fill-success stroke-success-foreground size-4' />
+								<Icon className='fill-success stroke-success-foreground size-4' name='CircleCheck' />
 								{t('ns_common:status.active')}
 							</Fragment>
 						) : (
 							<Fragment>
-								<Icon name='CircleMinus' className='stroke-muted-foreground size-4' />
+								<Icon className='stroke-muted-foreground size-4' name='CircleMinus' />
 								{t('ns_common:status.deactivated')}
 							</Fragment>
 						)}
@@ -201,11 +201,12 @@ const DeviceDataTable: React.FC = () => {
 	return (
 		<Fragment>
 			<DataTable
-				ref={tableRef}
-				data={data!}
 				columns={columns}
-				loading={isLoading}
+				data={data!}
 				enableColumnFilters={true}
+				enableColumnResizing={true}
+				loading={isLoading}
+				ref={tableRef}
 				containerProps={{
 					style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
 				}}
@@ -215,8 +216,8 @@ const DeviceDataTable: React.FC = () => {
 							{tableRef.current?.getFilteredSelectedRowModel()?.flatRows?.length > 0 && (
 								<Tooltip message={t('ns_common:actions.delete')} triggerProps={{ asChild: true }}>
 									<Button
-										variant='destructive'
 										size='icon'
+										variant='destructive'
 										onClick={() => {
 											deleteItemsRef.current =
 												table
@@ -229,24 +230,23 @@ const DeviceDataTable: React.FC = () => {
 								</Tooltip>
 							)}
 							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-								<Button variant='outline' size='icon' onClick={() => refetch()}>
+								<Button size='icon' variant='outline' onClick={() => refetch()}>
 									<Icon name='RefreshCcw' />
 								</Button>
 							</Tooltip>
 						</Fragment>
 					)
 				}}
-				enableColumnResizing={true}
 			/>
 
 			<ConfirmDialog
-				open={confirmDialogOpen || isDeleting || isFailedToDelete}
-				onOpenChange={setConfirmDialogOpen}
-				isPending={isDeleting}
-				isError={isFailedToDelete}
-				title={t('ns_common:confirmation.delete_title')}
 				description={t('ns_common:confirmation.delete_description')}
+				isError={isFailedToDelete}
+				isPending={isDeleting}
+				open={confirmDialogOpen || isDeleting || isFailedToDelete}
+				title={t('ns_common:confirmation.delete_title')}
 				onConfirm={handleDeleteDevices}
+				onOpenChange={setConfirmDialogOpen}
 				onCancel={() => {
 					deleteItemsRef.current = []
 				}}

@@ -20,16 +20,16 @@ function MultiSelectColumnFilter<TData extends Record<'label' | 'value', string>
 
 	return (
 		<MultiSelect
-			value={value}
 			datalist={filteredDataList as TData[]}
-			shouldFilter={false}
 			labelField='label'
+			shouldFilter={false}
+			value={value}
 			valueField='value'
-			onInput={(search) => setSearchTerm(search)}
-			onValueChange={(value) => onValueChange(value)}
 			classNames={{
 				popoverTrigger: 'h-10 border-none shadow-none'
 			}}
+			onInput={(search) => setSearchTerm(search)}
+			onValueChange={(value) => onValueChange(value)}
 		/>
 	)
 }

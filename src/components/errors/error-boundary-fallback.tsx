@@ -36,18 +36,18 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 		<Div className='grid min-h-(--outlet-wrapper-height,100vh) w-full place-items-center gap-y-6 @3xl:grid-cols-[1fr_1.5fr] @5xl:grid-cols-2'>
 			<Div className='mx-auto flex max-w-3xl flex-col items-start gap-y-3'>
 				<Div className='flex items-center gap-x-4'>
-					<Typography color='destructive' className='font-semibold'>
+					<Typography className='font-semibold' color='destructive'>
 						{HttpStatusCode.InternalServerError}
 					</Typography>
-					<Separator orientation='vertical' className='h-5 w-0.5' />
+					<Separator className='h-5 w-0.5' orientation='vertical' />
 					<Typography variant='h4'>{t('ns_common:errors.500')}</Typography>
 				</Div>
-				<Typography color='muted' className='text-pretty'>
+				<Typography className='text-pretty' color='muted'>
 					{t('ns_common:errors.500_message')}
 				</Typography>
 				<Dialog>
 					<DialogTrigger asChild>
-						<Button variant='link' className='p-0'>
+						<Button className='p-0' variant='link'>
 							Show error details
 						</Button>
 					</DialogTrigger>
@@ -56,7 +56,7 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 							<DialogTitle className='text-destructive'>Error</DialogTitle>
 						</DialogHeader>
 						<Div className='scroll-fade max-h-96 scrollbar-none!'>
-							<Typography color='muted' className='font-medium'>
+							<Typography className='font-medium' color='muted'>
 								{error?.stack}
 							</Typography>
 						</Div>

@@ -129,10 +129,10 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleCombineEpcInfo)}>
 						<ComboboxFieldControl
-							name='mo_no_actual'
-							label={t('ns_erp:fields.mo_no_actual')}
 							datalist={commandNumbers}
+							label={t('ns_erp:fields.mo_no_actual')}
 							labelField='mo_no'
+							name='mo_no_actual'
 							valueField='mo_no'
 							onInput={setSearchTerm}
 							onSelect={(value) => form.reset({ mo_no_actual: value })}
@@ -145,8 +145,8 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 						/>
 						<InputFieldControl
 							label={t('ns_erp:fields.factory_shoes_style')}
-							placeholder={t('ns_erp:fields.factory_shoes_style')}
 							name='factory_shoes_style_actual'
+							placeholder={t('ns_erp:fields.factory_shoes_style')}
 							readOnly={true}
 						/>
 						<InputFieldControl
@@ -156,10 +156,10 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 							readOnly={true}
 						/>
 						<SelectFieldControl
-							label='Size'
-							name='size_numcode_actual'
 							datalist={availableSizes}
+							label='Size'
 							labelField='size_numcode'
+							name='size_numcode_actual'
 							valueField='size_numcode'
 							onValueChange={(value) => {
 								const selectedSize = availableSizes.find((size) => size.size_numcode === value)
@@ -169,23 +169,23 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 						<InputFieldControl
 							label={t('ns_common:common_fields.quantity')}
 							name='quantity'
-							type='number'
 							placeholder='0'
+							type='number'
 						/>
 						<Div className='col-span-full space-y-4'>
 							<Div className='flex flex-col space-y-1.5 leading-none'>
 								<Typography className='text-warning inline-flex items-center gap-x-2 font-semibold'>
 									<Icon name='TriangleAlert' /> {t('ns_common:titles.caution')}
 								</Typography>
-								<Typography variant='small' className='text-pretty'>
+								<Typography className='text-pretty' variant='small'>
 									{t('ns_inoutbound:notification.exchange_order_caution')}
 								</Typography>
 							</Div>
 							<Separator />
 							<Div className='inline-flex items-center gap-x-2'>
 								<Checkbox
-									id={checkboxId}
 									checked={isConfirmed}
+									id={checkboxId}
 									onCheckedChange={(value) => setIsConfirmed(value)}
 								/>
 								<Label htmlFor={checkboxId}>{t('ns_common:confirmation.understand_and_proceed')}</Label>
@@ -193,15 +193,15 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 						</Div>
 						<DialogFooter className='col-span-full'>
 							<DialogClose
-								type='button'
 								className={cn(buttonVariants({ variant: 'secondary' }))}
+								type='button'
 								onClick={() => {
 									form.reset(DEFAULT_FORM_VALUES)
 									form.clearErrors()
 								}}>
 								{t('ns_common:actions.cancel')}
 							</DialogClose>
-							<Button type='submit' disabled={!isConfirmed}>
+							<Button disabled={!isConfirmed} type='submit'>
 								{t('ns_common:actions.proceed')}
 							</Button>
 						</DialogFooter>

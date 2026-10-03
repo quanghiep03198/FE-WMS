@@ -11,7 +11,7 @@ const TableCellText: React.FC<CellContext<any, any> & React.ComponentProps<'smal
 
 	if (isNil(value) || isEmpty(value))
 		return (
-			<Typography variant='small' color='muted' className={cn('line-clamp-1', props.className)}>
+			<Typography className={cn('line-clamp-1', props.className)} color='muted' variant='small'>
 				{t('ns_common:titles.unknown')}
 			</Typography>
 		)

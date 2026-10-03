@@ -87,9 +87,9 @@ const FormControl: React.FC<React.ComponentProps<typeof Slot>> = (props) => {
 
 	return (
 		<Slot
-			id={formItemId}
 			aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
 			aria-invalid={!!error}
+			id={formItemId}
 			{...props}
 		/>
 	)
@@ -100,7 +100,7 @@ FormControl.displayName = 'FormControl'
 const FormDescription: React.FC<React.ComponentProps<'p'>> = ({ className, ...props }) => {
 	const { formDescriptionId } = useFormField()
 
-	return <p id={formDescriptionId} className={cn('text-muted-foreground text-[0.8rem]', className)} {...props} />
+	return <p className={cn('text-muted-foreground text-[0.8rem]', className)} id={formDescriptionId} {...props} />
 }
 
 FormDescription.displayName = 'FormDescription'
@@ -126,8 +126,8 @@ const FormMessage: React.FC<React.ComponentProps<'p'>> = ({ className, children,
 
 	return (
 		<p
-			id={formMessageId}
 			className={cn('text-destructive inline-flex items-center gap-x-1 text-[0.8rem] font-medium', className)}
+			id={formMessageId}
 			{...props}>
 			<Icon name='TriangleAlert' />
 			{message}

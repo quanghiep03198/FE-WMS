@@ -14,32 +14,32 @@ const LogoCloud: React.FC = () => {
 
 	return (
 		<Div
-			id='logo-cloud'
 			as='section'
+			className='from-accent/40 animate-in fade-in-0 slide-in-from-bottom-4 relative w-full bg-linear-to-t to-transparent to-30% duration-700 sm:px-2'
+			id='logo-cloud'
 			ref={ref}
 			style={{
 				animationFillMode: 'both',
 				animationPlayState: inViewport ? 'running' : 'paused'
-			}}
-			className='from-accent/40 animate-in fade-in-0 slide-in-from-bottom-4 relative w-full bg-linear-to-t to-transparent to-30% duration-700 sm:px-2'>
+			}}>
 			<Div className='xxl:max-w-8xl mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 text-center'>
 				<Div className='border-foreground/20 inline-grid size-56 translate-y-12 place-items-center rounded-full border mask-[linear-gradient(to_bottom,var(--background)_50%,var(--background)_50%,transparent)]'>
 					<Div className='border-foreground/35 inline-grid size-40 place-items-center rounded-full border-[1.5px]'>
 						<Div className='border-foreground/50 relative inline-grid size-24 place-items-center rounded-full border'>
 							<Icon
-								name='Codesandbox'
 								className='z-20'
-								strokeWidth={1}
+								name='Codesandbox'
 								size={60}
-								stroke='url(#codesandbox-gradient)'>
+								stroke='url(#codesandbox-gradient)'
+								strokeWidth={1}>
 								<defs>
 									<linearGradient
+										gradientUnits='userSpaceOnUse'
 										id='codesandbox-gradient'
 										x1='0'
-										y1='20'
 										x2='0'
-										y2='0'
-										gradientUnits='userSpaceOnUse'>
+										y1='20'
+										y2='0'>
 										<stop stopColor='hsl(var(--muted-foreground)' />
 										<stop offset='1' stopColor='var(--foreground)' />
 									</linearGradient>
@@ -49,7 +49,7 @@ const LogoCloud: React.FC = () => {
 						</Div>
 					</Div>
 				</Div>
-				<Typography variant='h1' className='mt-4 mb-2'>
+				<Typography className='mt-4 mb-2' variant='h1'>
 					Developed with trusted technologies
 				</Typography>
 				<Typography className='text-pretty xl:text-lg'>
@@ -72,63 +72,63 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 		className='group-hover/scroll:paused mx-auto flex w-max animate-[marquee_10s_forwards_linear_infinite] flex-nowrap items-center space-x-4 py-8 will-change-transform'>
 		<LinkCard href='#'>
 			<img
-				src='/react.svg'
 				alt='React'
-				loading='lazy'
 				className='max-w-7 saturate-0 transition-all group-hover/card:saturate-100'
+				loading='lazy'
+				src='/react.svg'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='/tanstack.png'
 				alt='Tanstack'
-				loading='lazy'
 				className='max-w-9 object-contain saturate-0 transition-all group-hover/card:saturate-100 xl:max-w-9'
+				loading='lazy'
+				src='/tanstack.png'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='/vite.svg'
 				alt='Vite'
-				loading='lazy'
 				className='max-w-7 saturate-0 transition-all group-hover/card:saturate-100'
+				loading='lazy'
+				src='/vite.svg'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
-			<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256' className='h-6 w-6'>
-				<rect width='256' height='256' fill='none'></rect>
+			<svg className='h-6 w-6' viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'>
+				<rect fill='none' height='256' width='256'></rect>
 				<line
+					className='stroke-muted-foreground group-hover/card:stroke-current'
+					fill='none'
+					strokeLinecap='round'
+					strokeLinejoin='round'
+					strokeWidth='32'
 					x1='208'
-					y1='128'
 					x2='128'
-					y2='208'
-					fill='none'
-					className='stroke-muted-foreground group-hover/card:stroke-current'
-					strokeLinecap='round'
-					strokeLinejoin='round'
-					strokeWidth='32'></line>
+					y1='128'
+					y2='208'></line>
 				<line
-					x1='192'
-					y1='40'
-					x2='40'
-					y2='192'
-					fill='none'
 					className='stroke-muted-foreground group-hover/card:stroke-current'
+					fill='none'
 					strokeLinecap='round'
 					strokeLinejoin='round'
-					strokeWidth={32}></line>
+					strokeWidth={32}
+					x1='192'
+					x2='40'
+					y1='40'
+					y2='192'></line>
 			</svg>
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='/tailwindcss.svg'
 				alt='Tailwind CSS'
-				loading='lazy'
 				className='h-8 saturate-0 transition-all group-hover/card:saturate-100 xl:h-9'
+				loading='lazy'
+				src='/tailwindcss.svg'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
-			<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22' fill='none'>
+			<svg fill='none' height='22' viewBox='0 0 22 22' width='22' xmlns='http://www.w3.org/2000/svg'>
 				<path
 					d='M10.9999 0C8.97378 0 7.07561 0.547792 5.44543 1.50334C5.11704 1.69583 4.97302 2.12364 5.25193 2.38269C5.49733 2.61062 5.82611 2.75 6.18743 2.75H15.8123C16.1737 2.75 16.5024 2.61062 16.7478 2.38269C17.0267 2.12364 16.8827 1.69583 16.5543 1.50334C14.9242 0.547792 13.026 0 10.9999 0Z'
 					fill='currentColor'></path>
@@ -148,78 +148,78 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 		</LinkCard>
 		<LinkCard href='#'>
 			<svg
-				viewBox='0 0 256 256'
-				xmlns='http://www.w3.org/2000/svg'
+				className='max-w-7 xl:max-w-8'
 				preserveAspectRatio='xMinYMin meet'
-				className='max-w-7 xl:max-w-8'>
+				viewBox='0 0 256 256'
+				xmlns='http://www.w3.org/2000/svg'>
 				<circle
+					className='stroke-muted-foreground group-hover/card:stroke-current'
 					cx='128'
 					cy='128'
-					r='114'
-					className='stroke-muted-foreground group-hover/card:stroke-current'
-					strokeWidth='20'
 					fill='none'
+					r='114'
+					strokeWidth='20'
 				/>
 				<path
-					d='M97.637 121.69c27.327-22.326 54.058-45.426 81.98-67.097-14.646 22.505-29.708 44.711-44.354 67.215-12.562.06-25.123.06-37.626-.119zM120.737 134.132c12.621 0 25.183 0 37.745.179-27.505 22.206-54.117 45.484-82.099 67.096 14.646-22.505 29.708-44.77 44.354-67.275z'
 					className='fill-muted-foreground group-hover/card:fill-current'
+					d='M97.637 121.69c27.327-22.326 54.058-45.426 81.98-67.097-14.646 22.505-29.708 44.711-44.354 67.215-12.562.06-25.123.06-37.626-.119zM120.737 134.132c12.621 0 25.183 0 37.745.179-27.505 22.206-54.117 45.484-82.099 67.096 14.646-22.505 29.708-44.77 44.354-67.275z'
 				/>
 			</svg>
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='/nest.svg'
 				alt='NestJS'
-				loading='lazy'
 				className='max-w-8 saturate-0 transition-all group-hover/card:saturate-100'
+				loading='lazy'
+				src='/nest.svg'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='/mongodb.svg'
 				alt='MongoDB'
-				loading='lazy'
 				className='h-8 saturate-0 transition-all group-hover/card:saturate-100 xl:h-9'
+				loading='lazy'
+				src='/mongodb.svg'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='/redis.svg'
 				alt='Redis'
-				loading='lazy'
 				className='max-w-8 saturate-0 transition-all group-hover/card:saturate-100'
+				loading='lazy'
+				src='/redis.svg'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='/mosquitto.png'
 				alt='Mosquitto'
-				loading='lazy'
 				className='max-w-8 saturate-[0] transition-all group-hover/card:saturate-100'
+				loading='lazy'
+				src='/mosquitto.png'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='/sentry.svg'
 				alt='Prometheus'
-				loading='lazy'
 				className='max-w-8 saturate-0 transition-all group-hover/card:brightness-125 group-hover/card:saturate-100 xl:max-w-9'
+				loading='lazy'
+				src='/sentry.svg'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='/prometheus.svg'
 				alt='Prometheus'
-				loading='lazy'
 				className='saturate-0 transition-all group-hover/card:saturate-100 xl:h-8'
+				loading='lazy'
+				src='/prometheus.svg'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='/grafana.svg'
 				alt='Grafana'
-				loading='lazy'
 				className='max-w-8 saturate-0 transition-all group-hover/card:saturate-100'
+				loading='lazy'
+				src='/grafana.svg'
 			/>
 		</LinkCard>
 	</div>

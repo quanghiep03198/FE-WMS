@@ -98,7 +98,7 @@ export const AlignmentDropdownMenu: React.FC = () => {
 		<DropdownMenu>
 			<Tooltip message={t('ns_common:editor.alignment')}>
 				<DropdownMenuTrigger asChild>
-					<Button variant='ghost' size='icon' className='aspect-square h-8 w-8' type='button'>
+					<Button className='aspect-square h-8 w-8' size='icon' type='button' variant='ghost'>
 						<Icon name={alignmentState?.icon} />
 					</Button>
 				</DropdownMenuTrigger>
@@ -112,7 +112,7 @@ export const AlignmentDropdownMenu: React.FC = () => {
 						setAlignmentState(getCurrentAlignment())
 					}}>
 					{presetAlignments.map((option) => (
-						<Tooltip message={option.label} key={option.value}>
+						<Tooltip key={option.value} message={option.label}>
 							<DropdownMenuRadioItem
 								key={option.value}
 								value={option.value}

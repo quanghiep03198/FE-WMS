@@ -72,9 +72,9 @@ const ReaderSettingSheet: React.FC = () => {
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
 			<Tooltip
+				contentProps={{ side: 'left' }}
 				message={t('ns_rfid:reader_settings_form.title')}
-				triggerProps={{ asChild: true }}
-				contentProps={{ side: 'left' }}>
+				triggerProps={{ asChild: true }}>
 				<SheetTrigger className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}>
 					<Icon name='Settings' size={18} />
 				</SheetTrigger>
@@ -94,31 +94,31 @@ const ReaderSettingSheet: React.FC = () => {
 							})
 						})}>
 						<InputFieldControl
+							autoFocus={false}
+							description={t('ns_rfid:reader_settings_form.reader_ip.description')}
 							label={t('ns_rfid:reader_settings_form.reader_ip.label')}
 							name='readerIP'
 							orientation='horizontal'
 							placeholder='192.xxx.xxx.xxx'
-							autoFocus={false}
-							description={t('ns_rfid:reader_settings_form.reader_ip.description')}
 						/>
 						<FormField
-							name='readerAnt'
 							control={form.control}
+							name='readerAnt'
 							render={({ field }) => (
 								<FormItem className='grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'>
 									<FormLabel>Antenna</FormLabel>
 									<Div className='flex flex-col gap-y-2'>
 										<RadioGroup
+											className='flex flex-col space-y-2'
 											value={field.value}
-											onValueChange={field.onChange}
-											className='flex flex-col space-y-2'>
+											onValueChange={field.onChange}>
 											{[
 												{ label: 'Antenna 1', value: ReaderAntenna.ANT_1 },
 												{ label: 'Antenna 2', value: ReaderAntenna.ANT_2 },
 												{ label: 'Antenna 3', value: ReaderAntenna.ANT_3 },
 												{ label: 'Antenna 4', value: ReaderAntenna.ANT_4 }
 											].map((item) => (
-												<FormItem key={item.value} className='flex items-center space-y-0 gap-x-3'>
+												<FormItem className='flex items-center space-y-0 gap-x-3' key={item.value}>
 													<FormControl>
 														<RadioGroupItem value={item.value} />
 													</FormControl>
@@ -136,8 +136,8 @@ const ReaderSettingSheet: React.FC = () => {
 						/>
 						<FormField
 							control={form.control}
-							name='readerPower'
 							disabled={false}
+							name='readerPower'
 							render={({ field }) => (
 								<FormItem className='grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'>
 									<FormLabel>{t('ns_rfid:reader_settings_form.reader_power.label')}</FormLabel>
@@ -145,36 +145,36 @@ const ReaderSettingSheet: React.FC = () => {
 										<Div className='space-y-2'>
 											<Div className='flex items-center justify-between gap-x-2'>
 												<Icon
+													className='stroke-muted-foreground -translate-y-3 rotate-45'
 													name='WifiLow'
 													size={24}
 													strokeWidth={1.5}
-													className='stroke-muted-foreground -translate-y-3 rotate-45'
 												/>
 												<Div className='flex-1 space-y-2'>
 													<Slider
-														step={5}
-														min={5}
+														className='cursor-pointer focus:cursor-grabbing [&_span[role=slider]]:cursor-grab'
 														max={30}
+														min={5}
+														step={5}
 														value={[field.value]}
 														onValueChange={(value) => field.onChange(value[0])}
-														className='cursor-pointer focus:cursor-grabbing [&_span[role=slider]]:cursor-grab'
 													/>
 													<Div className='flex items-baseline justify-between px-1'>
 														{Array.from({ length: 6 }, (_, i) => (
 															<Typography
+																className='translate-x-0.5 text-center text-[10px]! first:translate-x-0 last:translate-x-0'
 																key={i}
-																variant='small'
-																className='translate-x-0.5 text-center text-[10px]! first:translate-x-0 last:translate-x-0'>
+																variant='small'>
 																{(i + 1) * 5}
 															</Typography>
 														))}
 													</Div>
 												</Div>
 												<Icon
+													className='-translate-y-3 rotate-45'
 													name='WifiHigh'
 													size={24}
 													strokeWidth={1.5}
-													className='-translate-y-3 rotate-45'
 												/>
 											</Div>
 											<FormMessage />
@@ -192,19 +192,19 @@ const ReaderSettingSheet: React.FC = () => {
 								<Typography className='font-medium'>
 									{t('ns_rfid:reader_settings_form.sync_settings.title')}
 								</Typography>
-								<Typography variant='small' color='muted' className='max-w-xs text-pretty'>
+								<Typography className='max-w-xs text-pretty' color='muted' variant='small'>
 									{t('ns_rfid:reader_settings_form.sync_settings.description')}
 								</Typography>
 							</Div>
 							<Button
-								type='button'
-								size='sm'
 								disabled={isEqual(currentFormValues, readerSettings)}
+								size='sm'
+								type='button'
 								onClick={() => publishMessage(PublishedTopics.REQUEST_SETTINGS, { action: 'get' })}>
 								<Icon name='RefreshCcw' /> {t('ns_common:actions.sync')}
 							</Button>
 						</Div>
-						<Button id='submit' type='submit' className='hidden' value='Submit' />
+						<Button className='hidden' id='submit' type='submit' value='Submit' />
 					</SheetForm>
 				</FormProvider>
 				<Separator />
@@ -213,8 +213,8 @@ const ReaderSettingSheet: React.FC = () => {
 						{t('ns_common:actions.cancel')}
 					</SheetClose>
 					<Label
-						htmlFor='submit'
-						className={cn(buttonVariants({ variant: 'default', className: 'cursor-pointer' }))}>
+						className={cn(buttonVariants({ variant: 'default', className: 'cursor-pointer' }))}
+						htmlFor='submit'>
 						{t('ns_common:actions.save')}
 					</Label>
 				</SheetFooter>

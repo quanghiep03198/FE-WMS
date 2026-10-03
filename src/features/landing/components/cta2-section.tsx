@@ -17,20 +17,20 @@ const CTA2Section: React.FC = () => {
 	return (
 		<Div className='from-accent/40 w-full border-b bg-linear-to-t to-transparent to-20% px-3 py-10 xl:px-0'>
 			<Div
-				ref={topSectionRef}
 				className='animate-in fade-in-0 slide-in-from-bottom-4 xxl:max-w-8xl mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 duration-700 lg:grid-cols-[1fr_1.5fr] xl:grid-cols-[1fr_1.5fr]'
+				ref={topSectionRef}
 				style={{
 					animationFillMode: 'both',
 					animationPlayState: isSectionInViewPort ? 'running' : 'paused'
 				}}>
 				<Div className='flex flex-col gap-y-6 sm:gap-y-3 sm:text-center md:text-center'>
-					<Typography variant='small' className='font-jetbrains text-(--primary-alt)'>
+					<Typography className='font-jetbrains text-(--primary-alt)' variant='small'>
 						EDGE DEPLOYMENT
 					</Typography>
-					<Typography variant='h1' className='text-pretty'>
+					<Typography className='text-pretty' variant='h1'>
 						High Availability at our factories across Asia
 					</Typography>
-					<Typography variant='p' className='leading-relaxed xl:text-lg'>
+					<Typography className='leading-relaxed xl:text-lg' variant='p'>
 						Our app is designed to provide exceptional reliability and performance at factories throughout Asia.
 						Ensure seamless operations and robust connectivity where it is needed most—empower your facilities
 						today
@@ -41,8 +41,8 @@ const CTA2Section: React.FC = () => {
 				</Div>
 			</Div>
 			<Div
-				ref={bottomSectionRef}
 				className='animate-in fade-in-0 slide-in-from-bottom-4 xxl:max-w-8xl mx-auto grid w-full max-w-7xl grid-cols-4 gap-6 duration-700 sm:grid-cols-1 md:grid-cols-2'
+				ref={bottomSectionRef}
 				style={{
 					animationFillMode: 'both',
 					animationPlayState: isSectionInViewPort ? 'running' : 'paused'
@@ -50,14 +50,14 @@ const CTA2Section: React.FC = () => {
 				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 *:first:basis-1/6 sm:flex-row'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
 						<Icon
-							name='Rocket'
-							strokeWidth={1.5}
-							size={24}
 							className='transition-colors duration-200 group-hover/cta2:stroke-(--primary-alt)'
+							name='Rocket'
+							size={24}
+							strokeWidth={1.5}
 						/>
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
-						<Typography variant='h4' className='text-base sm:col-span-5'>
+						<Typography className='text-base sm:col-span-5' variant='h4'>
 							Automatic Deployment
 						</Typography>
 						<Typography color='muted'>
@@ -69,14 +69,14 @@ const CTA2Section: React.FC = () => {
 				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 *:first:basis-1/6 sm:flex-row'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
 						<Icon
-							name='CloudCog'
-							strokeWidth={1.5}
-							size={24}
 							className='transition-colors duration-200 group-hover/cta2:stroke-(--primary-alt)'
+							name='CloudCog'
+							size={24}
+							strokeWidth={1.5}
 						/>
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
-						<Typography variant='h4' className='text-base sm:col-span-5'>
+						<Typography className='text-base sm:col-span-5' variant='h4'>
 							Fully managed
 						</Typography>
 						<Typography color='muted'>
@@ -88,14 +88,14 @@ const CTA2Section: React.FC = () => {
 				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 *:first:basis-1/6 sm:flex-row'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
 						<Icon
-							name='Blocks'
-							strokeWidth={1.5}
-							size={24}
 							className='transition-colors duration-200 group-hover/cta2:stroke-(--primary-alt)'
+							name='Blocks'
+							size={24}
+							strokeWidth={1.5}
 						/>
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
-						<Typography variant='h4' className='text-base sm:col-span-5'>
+						<Typography className='text-base sm:col-span-5' variant='h4'>
 							Monitoring
 						</Typography>
 						<Typography
@@ -113,14 +113,14 @@ const CTA2Section: React.FC = () => {
 				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 *:first:basis-1/6 sm:flex-row'>
 					<AnimatedBorderCard className='animate-shimmer bg-accent aspect-square size-12 min-h-12 min-w-12'>
 						<Icon
-							name='Server'
-							strokeWidth={1.5}
-							size={24}
 							className='transition-colors duration-200 group-hover/cta2:stroke-(--primary-alt)'
+							name='Server'
+							size={24}
+							strokeWidth={1.5}
 						/>
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
-						<Typography variant='h4' className='text-base sm:col-span-5'>
+						<Typography className='text-base sm:col-span-5' variant='h4'>
 							Server & Backup
 						</Typography>
 						<Typography color='muted'>
