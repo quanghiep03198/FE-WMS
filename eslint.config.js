@@ -36,9 +36,18 @@ export default [
 			'react/no-unknown-property': 'warn',
 			'react/no-unescaped-entities': 'warn',
 			'react/jsx-no-target-blank': 'warn',
-			'react/jsx-key': 'error'
+			'react/jsx-key': 'error',
+			'react/jsx-sort-props': [
+				'warn',
+				{
+					callbacksLast: true,
+					multiline: 'last',
+					ignoreCase: false,
+					shorthandFirst: true
+				}
+			]
 		},
 		languageOptions: { globals: globals.browser },
-		ignores: ['dist', 'node_modules', 'eslint.config.js', 'tailwind.config.js']
+		ignores: ['dist', 'node_modules', 'eslint.config.js']
 	}
 ]
