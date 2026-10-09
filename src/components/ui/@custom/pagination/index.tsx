@@ -1,5 +1,5 @@
+import { cn } from '@common/utils/cn'
 import { Button, Div, Icon } from '@components/ui'
-import useQueryParams from '@hooks/use-query-params'
 import type { LucideProps } from 'lucide-react'
 import { EllipsisIcon } from 'lucide-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -11,7 +11,8 @@ type PaginationProps = Omit<Pagination<unknown>, 'data'> & {
 	onPrefetch?: (page: number) => void | Promise<void>
 	maxContinuousPrefetch?: number // Maximum number of pages to prefetch continuously
 	continuousInterval?: number // Interval for continuous prefetching in ms
-}
+	onPageChange: (page) => void
+} & React.HTMLAttributes<HTMLDivElement>
 
 /**
  * Calculates the range of page numbers to display in the pagination component.
@@ -68,11 +69,14 @@ const Pagination: React.FC<PaginationProps> = ({
 	hasPrevPage,
 	nextPage,
 	range,
-	onPrefetch: handlePrefetch,
+	onPrefetch,
+	onPageChange,
 	maxContinuousPrefetch = 5,
-	continuousInterval = 200
+	continuousInterval = 200,
+	className,
+	...props
 }) => {
-	const { setParams } = useQueryParams<{ page: number }>()
+	// const { setParams } = useQueryParams<{ page: number }>()
 	const paginationRange = calculatePaginationRange(currentPage, totalPages, range)
 	const { t } = useTranslation()
 
@@ -102,7 +106,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
 	const debouncedPrefetch = useCallback(
 		async (page: number, delay: number = 150) => {
-			if (!handlePrefetch || prefetchedPagesRef.current.has(page) || page < 1 || page > totalPages) return
+			if (!onPrefetch || prefetchedPagesRef.current.has(page) || page < 1 || page > totalPages) return
 
 			// Clear existing timeout
 			if (prefetchTimeoutRef.current) {
@@ -112,20 +116,20 @@ const Pagination: React.FC<PaginationProps> = ({
 			// Set new timeout
 			prefetchTimeoutRef.current = setTimeout(async () => {
 				try {
-					await Promise.resolve(handlePrefetch(page))
+					await Promise.resolve(onPrefetch(page))
 					prefetchedPagesRef.current.add(page)
 				} catch (error) {
 					console.warn('Prefetch failed for page', page, error)
 				}
 			}, delay)
 		},
-		[handlePrefetch, totalPages]
+		[onPrefetch, totalPages]
 	)
 
 	// Continuous prefetch function - keeps prefetching while hovering
 	const startContinuousPrefetch = useCallback(
 		(direction: 'next' | 'prev', targetPage: number) => {
-			if (!handlePrefetch) return
+			if (!onPrefetch) return
 
 			// Stop any existing continuous prefetch
 			if (continuousIntervalRef.current) {
@@ -173,7 +177,7 @@ const Pagination: React.FC<PaginationProps> = ({
 				currentDelay = Math.min(currentDelay * 1.2, 2000)
 			}, currentDelay)
 		},
-		[handlePrefetch, debouncedPrefetch, currentPage, totalPages, maxContinuousPrefetch, continuousInterval]
+		[onPrefetch, debouncedPrefetch, currentPage, totalPages, maxContinuousPrefetch, continuousInterval]
 	)
 
 	// Stop continuous prefetch
@@ -192,12 +196,12 @@ const Pagination: React.FC<PaginationProps> = ({
 	// Smart prefetch for adjacent pages when hovering navigation buttons
 	const handleNavButtonHover = useCallback(
 		(targetPage: number, direction: 'next' | 'prev') => {
-			if (!handlePrefetch) return
+			if (!onPrefetch) return
 
 			// Start continuous prefetching
 			startContinuousPrefetch(direction, targetPage)
 		},
-		[handlePrefetch, startContinuousPrefetch]
+		[onPrefetch, startContinuousPrefetch]
 	)
 
 	// Clear timeout and intervals on unmount
@@ -213,17 +217,18 @@ const Pagination: React.FC<PaginationProps> = ({
 	}, [])
 
 	return (
-		<Div className='mx-auto flex w-full max-w-full items-center justify-center gap-x-0.5'>
+		<Div
+			{...props}
+			as='nav'
+			className={cn('flex w-auto max-w-full items-center justify-center gap-x-0.5', className)}
+			role='navigation'>
 			<Button
+				aria-busy={continuousPrefetchState.isActive && continuousPrefetchState.direction === 'prev'}
+				className='aria-busy:animate-pulse aria-busy:delay-100'
 				disabled={!hasPrevPage}
 				size='sm'
 				variant='ghost'
-				className={
-					continuousPrefetchState.isActive &&
-					continuousPrefetchState.direction === 'prev' &&
-					'animate-pulse delay-100'
-				}
-				onClick={() => setParams({ page: currentPage - 1 })}
+				onClick={() => onPageChange(currentPage - 1)}
 				onMouseEnter={() => hasPrevPage && handleNavButtonHover(currentPage - 1, 'prev')}
 				onMouseLeave={stopContinuousPrefetch}>
 				<Icon name='ChevronLeft' />
@@ -233,7 +238,7 @@ const Pagination: React.FC<PaginationProps> = ({
 				className='size-8 text-sm'
 				size='icon'
 				variant={currentPage === 1 ? 'outline' : 'ghost'}
-				onClick={() => setParams({ page: 1 })}
+				onClick={() => onPageChange(1)}
 				onMouseEnter={() => debouncedPrefetch(1)}>
 				1
 			</Button>
@@ -245,34 +250,31 @@ const Pagination: React.FC<PaginationProps> = ({
 						key={pageIndex}
 						size='icon'
 						variant={pageIndex === currentPage ? 'outline' : 'ghost'}
-						onClick={() => setParams({ page: pageIndex })}
+						onClick={() => onPageChange(pageIndex)}
 						onMouseEnter={() => debouncedPrefetch(pageIndex)}>
 						{pageIndex}
 					</Button>
 				)
 			})}
-			{paginationRange.at(-1) + 1 < totalPages && <PaginationElipsis />}
+			{paginationRange[paginationRange.length - 1] + 1 < totalPages && <PaginationElipsis />}
 			{totalPages > 1 && (
 				<Button
 					className='size-8 text-sm'
 					size='icon'
 					variant={currentPage === totalPages ? 'outline' : 'ghost'}
-					onClick={() => setParams({ page: totalPages })}
+					onClick={() => onPageChange(totalPages)}
 					onMouseEnter={() => debouncedPrefetch(totalPages)}>
 					{totalPages}
 				</Button>
 			)}
 			<Button
+				aria-busy={continuousPrefetchState.isActive && continuousPrefetchState.direction === 'next'}
+				className='aria-busy:animate-pulse aria-busy:delay-100'
 				disabled={!hasNextPage}
 				size='sm'
 				variant='ghost'
-				className={
-					continuousPrefetchState.isActive &&
-					continuousPrefetchState.direction === 'next' &&
-					'animate-pulse delay-100'
-				}
-				onClick={() => setParams({ page: currentPage + 1 })}
-				onMouseEnter={() => hasNextPage && handleNavButtonHover(nextPage, 'next')}
+				onClick={() => onPageChange(currentPage + 1)}
+				onMouseEnter={() => hasNextPage && typeof nextPage === 'number' && handleNavButtonHover(nextPage, 'next')}
 				onMouseLeave={stopContinuousPrefetch}>
 				{t('ns_common:pagination.next_page')}
 				<Icon name='ChevronRight' />
