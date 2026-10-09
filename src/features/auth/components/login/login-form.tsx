@@ -17,7 +17,7 @@ import { AuthService } from '@features/auth/services/auth.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'
 import { useMutation } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import { useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
@@ -29,7 +29,7 @@ import { loginSchema } from '../../schemas/login.schema'
 
 const LoginForm: React.FC = () => {
 	const { t } = useTranslation()
-	const { setAccessToken } = useAuth()
+	const { setUserProfile, setAccessToken } = useAuth()
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
 		defaultValue: '',
 		listenStorageChange: true
@@ -45,6 +45,8 @@ const LoginForm: React.FC = () => {
 		}
 	})
 
+	const navigate = useNavigate({ from: '/login' })
+
 	const { mutateAsync: login, isPending } = useMutation({
 		meta: { invalidates: [[AuthQueryKeys.PROFILE]] },
 		mutationFn: AuthService.login,
@@ -54,6 +56,7 @@ const LoginForm: React.FC = () => {
 		onSuccess: async (data, _variables, context) => {
 			if (typeof data.metadata?.accessToken !== 'string') return
 			setAccessToken(data.metadata.accessToken)
+			if (data.metadata?.user) setUserProfile(data.metadata.user)
 			toast.success(t('ns_common:notification.success'), { id: context })
 		},
 		onError(_error, _variables, context) {

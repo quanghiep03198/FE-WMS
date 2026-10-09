@@ -11,4 +11,5 @@ export interface IUser extends IBaseEntity {
 	roles: Array<UserRole>
 	current_factory_code: FactoryCode
 	is_system_user: boolean
+	deleted: boolean
 }
