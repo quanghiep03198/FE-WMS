@@ -23,6 +23,7 @@ import isEqual from 'react-fast-compare'
 import tw from 'tailwind-styled-components'
 import type { StoreApi } from 'zustand'
 import { create } from 'zustand'
+import { Separator } from '../@core/separator'
 import { MemoizedTableRowCount, TableRowCount } from './components/row-count'
 import DataTable from './components/table'
 import DataTablePagination from './components/table-pagination'
@@ -51,7 +52,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 	containerProps,
 	defaultFilterOpen = false,
 	expanded = {},
-	paginationProps = { enableInputPageSize: true },
+	paginationProps = { variant: 'default', enableInputPageSize: true },
 	toolbarProps,
 	footerProps = { hidden: true } satisfies TableFooterProps,
 	manualExpanding = false,
@@ -298,6 +299,9 @@ const DataGrid: React.FC<DataTableProps> = ({
 							manualTotalDocs={paginationProps?.totalDocs ?? 0}
 						/>
 					)}
+					{paginationProps.variant === 'numbered' && (
+						<Separator className='mx-3 h-6 w-0.5' orientation='vertical' />
+					)}
 					<DataTablePagination
 						controlledPaginationProps={paginationProps}
 						enableInputPageSize={paginationProps.enableInputPageSize}
@@ -305,6 +309,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 						manualPagination={manualPagination}
 						prefetch={paginationProps.prefetch}
 						table={table}
+						variant={paginationProps.variant}
 						onPaginationChange={onPaginationChange}
 					/>
 				</FooterGroup>
@@ -320,6 +325,7 @@ const DataTableWrapper = tw.div`
 	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:border-x-0!
 	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:shadow-none!
 `
-const FooterGroup = tw.div`flex items-center justify-between`
+const FooterGroup: React.FC<React.ComponentProps<'div'>> =
+	tw.div`flex items-center justify-between has-[nav[role=navigation][data-variant=numbered]]:justify-center sm:justify-center md:justify-center`
 
 export default DataGrid

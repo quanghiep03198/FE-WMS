@@ -12,10 +12,10 @@ import { MemoizedVirtualTableRow, VirtualPlaceholderRow } from './table-row'
 
 export type TableBodyProps = {
 	table: Table<any>
-	containerRef: React.RefObject<HTMLDivElement>
+	containerRef: React.RefObject<HTMLDivElement | null>
 	estimatedRowHeight: number
 	shouldEnableVirtualizer: boolean
-	renderSubComponent: RenderSubComponent<any>
+	renderSubComponent: RenderSubComponent<any> | undefined
 }
 
 export const DataTableBody: React.FC<TableBodyProps> = ({

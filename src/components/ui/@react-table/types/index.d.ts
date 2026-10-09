@@ -28,14 +28,16 @@ export type ToolbarProps =
 			slotRight?: React.FC<{ table: Table<any> }>
 	  }
 
-export type TableFooterProps = {
-	hidden?: boolean
-	rtl?: boolean
-	slot?: React.FC<{ table: Table<any> }>
-} & React.PropsWithChildren
+export type TableFooterProps = Partial<{
+	hidden: Nullish<boolean>
+	rtl: Nullish<boolean>
+	slot: Nullish<React.FC<{ table: Table<any> }>>
+}> &
+	Nullish<React.PropsWithChildren>
 
 // #region Pagination prop types
 type PaginationBaseProps = {
+	variant?: 'default' | 'numbered'
 	enableInputPageSize?: boolean
 	prefetch?: (params: Record<string, any>) => void
 } & Partial<Omit<Pagination<any>, 'data'>>

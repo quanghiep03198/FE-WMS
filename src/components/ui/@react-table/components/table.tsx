@@ -24,7 +24,7 @@ const DataTable: React.FC<TableProps> = (props) => {
 
 	const {
 		containerProps = { className: cn('h-87.5 xxl:h-125') },
-		footerProps = { hidden: true, slot: null },
+		footerProps = { rtl: false, hidden: true, slot: null },
 		caption,
 		loading,
 		virtualizerOptions = {
@@ -56,7 +56,7 @@ const DataTable: React.FC<TableProps> = (props) => {
 
 	useUpdateEffect(() => {
 		table.setColumnPinning((prev) => {
-			if (prev.right.includes(ROW_ACTIONS_COLUMN_ID)) {
+			if (Array.isArray(prev.right) && prev.right.includes(ROW_ACTIONS_COLUMN_ID)) {
 				prev.right = prev.right.filter((id) => id !== ROW_ACTIONS_COLUMN_ID).concat(ROW_ACTIONS_COLUMN_ID)
 			}
 			return prev
@@ -89,9 +89,9 @@ const DataTable: React.FC<TableProps> = (props) => {
 					) : (
 						<DataTableBody
 							containerRef={containerRef}
-							estimatedRowHeight={virtualizerOptions.estimateSize}
+							estimatedRowHeight={virtualizerOptions.estimateSize!}
 							renderSubComponent={renderSubComponent}
-							shouldEnableVirtualizer={virtualizerOptions.enabled}
+							shouldEnableVirtualizer={!!virtualizerOptions.enabled}
 							table={table}
 						/>
 					)}

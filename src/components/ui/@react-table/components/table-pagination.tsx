@@ -1,14 +1,16 @@
 import type { PaginationState, Table } from '@tanstack/react-table'
 import type { AxiosRequestConfig } from 'axios'
-import React, { memo, useEffect } from 'react'
+import React, { memo, useEffect, useRef } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { Button, ButtonGroup, Div, Icon, Label, Separator, Tooltip, Typography } from '../..'
 import AutoComplete from '../../@custom/auto-complete'
+import Pagination from '../../@custom/pagination'
 import { type PaginationBaseProps } from '../types'
 
 export type DataTablePaginationProps = {
 	table: Table<any>
+	variant?: 'default' | 'numbered'
 	manualPagination?: boolean
 	enableInputPageSize?: boolean
 	controlledPaginationProps: Partial<Omit<Pagination<any>, 'data'>>
@@ -19,6 +21,7 @@ export type DataTablePaginationProps = {
 const TablePagination: React.FC<DataTablePaginationProps> = ({
 	table,
 	loading,
+	variant = 'default',
 	manualPagination,
 	controlledPaginationProps,
 	enableInputPageSize,
@@ -51,6 +54,8 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 
 	const pageIndexContext = String(pageIndex ?? 1) + '/' + String(pageCount ?? 1)
 
+	const timer = useRef<NodeJS.Timeout | null>(null)
+
 	const changePageSize = (value: string) => {
 		if (Number.isNaN(+value)) return
 
@@ -78,13 +83,20 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 
 	const handlePrefetch = (params: AxiosRequestConfig['params'] & Pick<Pagination<any>, 'page' | 'limit'>) => {
 		if (!manualPagination || typeof prefetch !== 'function' || !canNextPage) return
-		prefetch(params)
+		timer.current = setTimeout(() => prefetch(params), 120)
 	}
 
-	useEffect(() => {
-		if (typeof pageIndex !== 'number' && typeof pageSize !== 'number') return
-		handlePrefetch({ page: pageIndex + 1, limit: pageSize })
-	}, [canNextPage, pageIndex, pageSize])
+	const cancelPrefetch = () => {
+		if (timer.current) {
+			clearTimeout(timer.current)
+			timer.current = null
+		}
+	}
+
+	// useEffect(() => {
+	// 	if (typeof pageIndex !== 'number' && typeof pageSize !== 'number') return
+	// 	handlePrefetch({ page: pageIndex + 1, limit: pageSize })
+	// }, [canNextPage, pageIndex, pageSize])
 
 	const goToFirstPage = () => {
 		if (manualPagination && typeof onPaginationChange === 'function') {
@@ -106,9 +118,26 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 		if (pageIndex > pageCount) goToFirstPage()
 	}, [pageCount])
 
+	if (variant === 'numbered')
+		return (
+			<Pagination
+				data-variant={variant}
+				hasNextPage={!!canNextPage}
+				hasPrevPage={!!canPreviousPage}
+				limit={pageSize}
+				nextPage={canNextPage ? pageIndex + 1 : null}
+				page={pageIndex}
+				prevPage={canPreviousPage ? pageIndex - 1 : null}
+				totalDocs={rowCount}
+				totalPages={pageCount}
+				onPageChange={(page) => onPaginationChange?.({ pageIndex: page, pageSize })}
+			/>
+		)
 	return (
 		<Div
+			as='nav'
 			className='ml-auto flex items-center space-x-2 py-0.5 sm:space-x-2 lg:space-x-4 xl:space-x-4'
+			data-variant={variant}
 			role='navigation'>
 			<Div className='flex items-center space-x-2'>
 				<Label className='font-medium whitespace-nowrap'>{t('ns_common:table.rows_per_page')}</Label>
@@ -149,7 +178,8 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 						size='icon'
 						variant='outline'
 						onClick={goToFirstPage}
-						onPointerEnter={() => handlePrefetch({ limit: pageSize, page: 1 })}>
+						onPointerEnter={() => handlePrefetch({ limit: pageSize, page: 1 })}
+						onPointerLeave={cancelPrefetch}>
 						<Icon name='ChevronsLeft' />
 					</Button>
 				</Tooltip>
@@ -164,6 +194,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 						size='icon'
 						variant='outline'
 						onClick={goToPrevPage}
+						onPointerLeave={cancelPrefetch}
 						onPointerEnter={() => {
 							if (canPreviousPage) handlePrefetch({ limit: pageSize, page: pageIndex - 1 })
 						}}>
@@ -181,6 +212,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 						size='icon'
 						variant='outline'
 						onClick={goToNextPage}
+						onPointerLeave={cancelPrefetch}
 						onPointerEnter={() => {
 							if (canNextPage) handlePrefetch({ limit: pageSize, page: pageIndex + 1 })
 						}}>
@@ -199,7 +231,8 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 						size='icon'
 						variant='outline'
 						onClick={goToLastPage}
-						onPointerEnter={() => handlePrefetch({ limit: pageSize, page: pageCount })}>
+						onPointerEnter={() => handlePrefetch({ limit: pageSize, page: pageCount })}
+						onPointerLeave={cancelPrefetch}>
 						<Icon name='ChevronsRight' />
 					</Button>
 				</Tooltip>
