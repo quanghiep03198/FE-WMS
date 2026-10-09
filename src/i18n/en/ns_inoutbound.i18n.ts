@@ -16,8 +16,7 @@ export default {
 		archived_restoration: 'Restore archived data. Use only when necessary.',
 		container_condition_assessment:
 			'Please select all that apply regarding the condition of the container (if exists)',
-		container_number_field:
-			'BIC container code format. Skip this field in case container number is not available now.',
+		container_number_field: 'BIC container code format including the country code and owner code.',
 		create_truckload_delivery: 'Create new container loading information for outbound shipments from the factory',
 		current_stock_transaction: 'View the current stock transaction for the selected stock flow.',
 		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations daily.',
@@ -26,7 +25,7 @@ export default {
 		defective_goods_outbound_report: 'Manage and track the outbound of defective goods in the warehouse.',
 		defective_goods_inventory_report: 'Manage and track the inventory of defective goods in the warehouse.',
 		duplicate_po_added:
-			'Do not add duplicate purchase orders, outbound quantity must not exceed the total ordered quantity.',
+			'Do not add duplicate purchase orders and outbound quantity must not exceed the total ordered quantity.',
 		exchange_all: 'You can exchange the entire EPC belonging to the selected size.',
 		exchange_epc_dialog_desc:
 			'Allows users to replace or update EPC tags on a product with a new manufacturing order.',
@@ -47,6 +46,7 @@ export default {
 			'No inbound/outbound history found for this order. Please check the order code you entered again.',
 		po_outbound: 'The scanned EPC data will be counted according to this order after performing stock out.',
 		inventory_estimation: 'Estimate the inventory levels based on the current production and shipping status.',
+		seal_number_field: 'Seal number that coresponding to container number',
 		select_readable_database:
 			'Select a database connection to read the data. You can change it when there is no connection or the current connection has been interrupted.',
 		select_writable_database:
@@ -186,6 +186,7 @@ export default {
 		daily_inbound_report: 'Daily inbound report',
 		daily_outbound_report: 'Daily outbound report',
 		defective_goods_inventory_report: 'Defective goods inventory report',
+		dispatch_order_detail: 'Dispatch order detail',
 		exchange_epc: 'Exchange EPC',
 		exchange_order: 'Exchange manufacturing order',
 		file_daily_inbound_report: 'Daily Inbound Report {{factory}} - {{date}}',

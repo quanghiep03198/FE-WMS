@@ -35,9 +35,10 @@ export default {
 	description: {
 		add_outbound_size: 'Thêm size và số lượng để tiến hành xuất tách đơn.',
 		archived_restoration: 'Khôi phục dữ liệu đã lưu trữ. Chỉ sử dụng khi cần thiết.',
+		close_monthly_inventory:
+			'Bạn có chắc chắn muốn đóng tồn kho hàng tháng không? Sau khi kết đơn, bạn sẽ không thể thay đổi thông tin tồn kho của tháng này.',
 		container_condition_assessment: 'Vui lòng đánh giá tình trạng container dưới đây (nếu có)',
-		container_number_field:
-			'Định dạng mã container BIC. Bỏ qua trường này trong trường hợp không có số container hiện tại.',
+		container_number_field: 'Định dạng mã container BIC bao gồm mã quốc gia và mã chủ sở hữu',
 		create_truckload_delivery: 'Tạo mới thông tin đóng container xuất hàng khỏi nhà máy',
 		current_stock_transaction: 'Các giao dịch nhập/xuất kho hiện tại',
 		daily_inbound_report: 'Theo dõi và quản lý tiến độ nhập hàng kho thành phẩm hàng ngày',
@@ -51,8 +52,7 @@ export default {
 		exchange_qty: 'Số lượng sản phẩm được hoán đổi cho đơn hàng thực tế',
 		inoutbound_form_note: 'Dừng thiết bị RFID trước khi thao tác nhập/xuất',
 		list_of_already_scanned_epcs: 'Danh sách các EPC đã quét nhập kho trước đây.',
-		license_plate_field:
-			'Biển số xe tương ứng với số container. Cũng bỏ qua việc nhập biển số xe nếu không biết số container.',
+		license_plate_field: 'Biển số xe tương ứng với số container.',
 		monthly_inventory_report: 'Quản lý và theo dõi tồn kho hàng kho thành phẩm hàng tháng',
 		no_added_size: 'Chưa có size nào được thêm',
 		no_dispatch_order_item_added: 'Chưa có mục đơn hàng nào được thêm',
@@ -68,6 +68,7 @@ export default {
 		inoutbound_history_not_found:
 			'Không tìm thấy lịch sử nhập/xuất kho cho đơn hàng này. Vui lòng kiểm tra lại mã đơn hàng bạn đã nhập.',
 		po_outbound: 'Dữ liệu xuất kho các tem đã quét sẽ được tính theo đơn hàng này.',
+		seal_number_field: 'Số chì niêm phong gắn trên container.',
 		select_readable_database:
 			'Chọn kết nối database để đọc dữ liệu. Bạn có thể thay đổi khi không có kết nối nào hoặc kết nối hiện tại đã ngắt',
 		select_writable_database:
@@ -176,12 +177,14 @@ export default {
 	titles: {
 		archived_restoration: 'Khôi phục dữ liệu',
 		defective_goods_inventory_report: 'Báo biểu tồn kho hàng loại 2',
+		close_monthly_inventory: 'Xác nhận kết đơn tồn kho tháng này ?',
 		combination_history: 'Lịch sử phối tem',
 		container_condition_assessment: 'Đánh giá tình trạng container',
 		create_truckload_delivery: 'Tạo mới thông tin đóng container',
 		current_stock_transaction: 'Giao dịch gần đây',
 		daily_inbound_report: 'Báo cáo nhập kho hàng ngày',
 		daily_outbound_report: 'Báo cáo xuất kho hàng ngày',
+		dispatch_order_detail: 'Chi tiết đơn hàng xuất',
 		file_daily_inbound_report: 'Báo biểu nhập kho {{factory}} - {{date}}',
 		file_daily_outbound_report: 'Báo biểu xuất kho {{factory}} - {{date}}',
 		file_daily_defective_goods_inbound_report: 'Báo biểu nhập kho hàng loại 2 {{factory}} - {{date}}',
