@@ -105,7 +105,7 @@ export function AutoCompleteFieldControl<T extends FieldValues, D>(props: AutoCo
 	}
 
 	const { error } = getFieldState(name)
-	const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>(null)
+	const [scrollElement, setScrollElement] = useState<Nullish<HTMLDivElement>>(null)
 	const refCallback = useCallback((node: HTMLDivElement) => {
 		if (node) {
 			setScrollElement(node)
