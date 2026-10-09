@@ -42,7 +42,6 @@ const UpdateLocationFormDialog: React.FC = () => {
 	})
 
 	event$.useSubscription(({ action, payload }) => {
-		console.log({ action, payload })
 		if (action !== CommonActions.UPDATE) return
 		form.reset(payload)
 		setOpen(true)
