@@ -1,6 +1,5 @@
 import * as Sentry from '@sentry/react'
 import { QueryErrorResetBoundary } from '@tanstack/react-query'
-
 import React from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { ErrorBoundaryFallback } from './components/errors/error-boundary-fallback'
