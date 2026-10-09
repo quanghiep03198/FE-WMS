@@ -1,7 +1,7 @@
 import { DefectiveGoodsService } from '@features/defective-goods/services/defective-goods.service'
 import { StockFlow } from '@features/finished-goods/constants/enums'
 import useQueryParams from '@hooks/use-query-params'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
 import { omitBy, pick, pickBy } from 'lodash-es'
 import { useCallback } from 'react'
@@ -26,24 +26,6 @@ export enum DefectiveGoodsQueryKey {
 	DEFECTIVE_GOODS_INOUTBOUND_EPC = 'DEFECTIVE_GOODS_INOUTBOUND_EPC',
 	DEFECTIVE_GOODS_INBOUND_REPORT = 'DEFECTIVE_GOODS_INBOUND_REPORT',
 	DEFECTIVE_GOODS_OUTBOUND_REPORT = 'DEFECTIVE_GOODS_OUTBOUND_REPORT'
-}
-
-const useInvalidateQuery = () => {
-	const queryClient = useQueryClient()
-	const invalidateQueries = () =>
-		queryClient.invalidateQueries({
-			predicate: (query) =>
-				query.queryKey.some(
-					(key) =>
-						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS ||
-						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INVENTORY ||
-						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT ||
-						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_OUTBOUND_REPORT ||
-						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC
-				)
-		})
-
-	return invalidateQueries
 }
 
 export const useGetDefectiveGoodsInventoryQuery = () => {
@@ -71,20 +53,15 @@ export const useGetDefectiveGoodsQuery = () => {
 		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)],
 		queryFn: async () =>
 			await DefectiveGoodsService.getDefectiveGoods(pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)),
+		placeholderData: keepPreviousData,
 		select: (response) => response.metadata
 	})
 }
 
 export const useCreateDefectiveGoodsMutation = () => {
-	const invalidateQueries = useInvalidateQuery()
-
 	return useMutation({
 		meta: { invalidates: [Object.values(DefectiveGoodsQueryKey)] },
-		mutationFn: async (data: CreateDefectiveGoodsFormValues) =>
-			await DefectiveGoodsService.createDefectiveGoods(data),
-		onSuccess: () => {
-			invalidateQueries()
-		}
+		mutationFn: async (data: CreateDefectiveGoodsFormValues) => await DefectiveGoodsService.createDefectiveGoods(data)
 	})
 }
 
