@@ -14,11 +14,8 @@ export class UserService {
 		return await axiosInstance.post<void, ResponseBody<unknown>, CreateUserFormValues>('/user/create', payload)
 	}
 
-	static async updateUser({ username, ...payload }: UpdateUserFormValues) {
-		return await axiosInstance.patch<void, ResponseBody<unknown>, UpdateUserFormValues>(
-			`/user/update/${username}`,
-			payload
-		)
+	static async updateUser({ _id, ...payload }: UpdateUserFormValues) {
+		return await axiosInstance.patch<void, ResponseBody<unknown>>(`/user/update/${_id}`, payload)
 	}
 
 	static async updateUserStatus({ username, is_active }: { username: string; is_active: boolean }) {

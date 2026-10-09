@@ -30,7 +30,7 @@ const UserStatusFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 
 	const { data } = table.options
 
-	const currentFilterValue = table.getColumn('is_active').getFilterValue()
+	const currentFilterValue = table.getColumn('deleted').getFilterValue()
 
 	const dropdownOptions: DropdownOption[] = useMemo(
 		() =>
@@ -48,7 +48,7 @@ const UserStatusFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 			].map((item: DropdownOption) => ({
 				...item,
 				count: data.filter((user) =>
-					user.is_active ? item.value === RecordStatus.ACTIVE : item.value === RecordStatus.INACTIVE
+					user.deleted ? item.value === RecordStatus.ACTIVE : item.value === RecordStatus.INACTIVE
 				).length
 			})),
 		[data, i18n.language]
@@ -97,8 +97,8 @@ const UserStatusFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
 					className='justify-center gap-x-2'
-					disabled={!table.getColumn('is_active').getFilterValue()}
-					onClick={() => table.getColumn('is_active').setFilterValue(null)}>
+					disabled={!table.getColumn('deleted').getFilterValue()}
+					onClick={() => table.getColumn('deleted').setFilterValue(null)}>
 					<Icon name='X' />
 					{t('ns_common:actions.clear_filter')}
 				</DropdownMenuItem>

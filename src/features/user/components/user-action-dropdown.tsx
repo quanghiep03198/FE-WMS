@@ -26,6 +26,7 @@ const UserActionDropdown: React.FC<CellContext<IUser, unknown>> = ({ row }) => {
 						event$.emit({
 							action: CommonActions.UPDATE,
 							payload: pick(row.original, [
+								'_id',
 								'username',
 								'display_name',
 								'email',

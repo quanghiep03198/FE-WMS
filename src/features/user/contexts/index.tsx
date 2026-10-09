@@ -6,7 +6,7 @@ import type { UpdateUserFormValues } from '../schemas/user.schema'
 
 type EventEmitterValue =
 	| { action: CommonActions.CREATE; payload?: never }
-	| { action: CommonActions.UPDATE; payload: Required<UpdateUserFormValues> }
+	| { action: CommonActions.UPDATE; payload: Required<UpdateUserFormValues> & { _id: string } }
 
 type TPageContext = {
 	event$: EventEmitter<EventEmitterValue>

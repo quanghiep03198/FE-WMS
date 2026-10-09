@@ -1,6 +1,5 @@
 import { UserService } from '@features/user/services/user.service'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useRef } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -17,53 +16,48 @@ export const useGetUsersQuery = () => {
 }
 
 export const useCreateUserMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+	const { t } = useTranslation()
 
 	return useMutation({
+		meta: { invalidates: [[UserQueryKeys.USERS]] },
 		mutationFn: UserService.createUser,
-		onSuccess: invalidateQueries
+		onSuccess: () => {
+			toast.success(t('ns_common:notification.success'))
+		},
+		onError: () => {
+			toast.error(t('ns_common:notification.error'))
+		}
 	})
 }
 
 export const useUpdateUserMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+	const { t } = useTranslation()
 
 	return useMutation({
+		meta: { invalidates: [[UserQueryKeys.USERS]] },
 		mutationFn: UserService.updateUser,
-		onSuccess: invalidateQueries
+		onSuccess: () => {
+			toast.success(t('ns_common:notification.success'))
+		},
+		onError: () => {
+			toast.error(t('ns_common:notification.error'))
+		}
 	})
 }
 
 export const useUpdateUserStatusMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
 	const { t } = useTranslation()
-	const toastRef = useRef<string | number | null>(null)
 
 	return useMutation({
+		meta: { invalidates: [[UserQueryKeys.USERS]] },
 		mutationFn: UserService.updateUserStatus,
-		onMutate: () => {
-			toastRef.current = toast.loading(t('ns_common:notification.processing_request'))
-		},
 		onSuccess: () => {
-			if (toastRef.current) {
-				toast.success(t('ns_common:notification.success'), { id: toastRef.current })
-			}
-			invalidateQueries()
+			toast.success(t('ns_common:notification.success'))
 		},
 		onError: () => {
-			if (toastRef.current) {
-				toast.error(t('ns_common:notification.error'), { id: toastRef.current })
-			}
+			toast.error(t('ns_common:notification.error'))
 		}
 	})
 }
 
 export const useDeleteUserMutation = () => {}
-
-const useInvalidateQueries = () => {
-	const queryClient = useQueryClient()
-
-	return () => {
-		queryClient.invalidateQueries({ predicate: (query) => query.queryKey.includes(UserQueryKeys.USERS) })
-	}
-}

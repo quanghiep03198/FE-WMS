@@ -16,7 +16,7 @@ export const createUserSchema = object({
 	// })
 })
 
-export const updateUserSchema = createUserSchema.partial().required({ username: true }).omit({ password: true })
+export const updateUserSchema = createUserSchema.partial().required({ username: true }).extend({ _id: string() })
 
 export type CreateUserFormValues = Infer<typeof createUserSchema>
 export type UpdateUserFormValues = Infer<typeof updateUserSchema>

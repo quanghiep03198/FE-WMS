@@ -59,14 +59,7 @@ const UserTable: React.FC = () => {
 				enableResizing: true,
 				enableHiding: false
 			}),
-			columnHelper.accessor('employee_code', {
-				header: t('ns_auth:fields.employee_code'),
-				cell: TableCellText,
-				enableSorting: true,
-				enableColumnFilter: true,
-				enableGlobalFilter: true,
-				enableResizing: true
-			}),
+
 			columnHelper.accessor('roles', {
 				header: t('ns_auth:fields.role'),
 				cell: ({ getValue }) => {
@@ -86,7 +79,7 @@ const UserTable: React.FC = () => {
 				enableResizing: true,
 				enableHiding: true
 			}),
-			columnHelper.accessor('created', {
+			columnHelper.accessor('created_at', {
 				header: t('ns_auth:fields.joined_system_date'),
 				enableSorting: true,
 				enableResizing: true,
@@ -102,22 +95,22 @@ const UserTable: React.FC = () => {
 					return capitalize(format(new Date(value), 'yyyy-MM-dd', { locale: dateLocale }))
 				}
 			}),
-			columnHelper.accessor('is_active', {
-				id: 'is_active',
+			columnHelper.accessor('deleted', {
+				id: 'deleted',
 				header: t('ns_common:common_fields.status'),
 				enableHiding: true,
 				cell: ({ getValue }) => {
-					const isActive = getValue()
+					const deleted = getValue()
 					return (
 						<Badge
 							className='justify-center gap-x-2 rounded-l-full rounded-r-full whitespace-nowrap'
 							variant='outline'>
 							<Icon
-								aria-current={isActive}
+								aria-current={!deleted}
 								className='stroke-muted-foreground aria-current:stroke-success'
-								name={isActive ? 'CircleCheck' : 'CircleMinus'}
+								name={!deleted ? 'CircleCheck' : 'CircleMinus'}
 							/>
-							{t(isActive ? 'ns_common:status.active' : 'ns_common:status.deactivated')}
+							{t(!deleted ? 'ns_common:status.active' : 'ns_common:status.deactivated')}
 						</Badge>
 					)
 				},
