@@ -14,7 +14,7 @@ import { VitePWA as pwa, type VitePWAOptions } from 'vite-plugin-pwa'
 import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
 
 /**
- * @see https://vitejs.dev/config/
+ * @see https://vite.dev/config/
  */
 export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
@@ -31,7 +31,8 @@ export default defineConfig(({ mode }) => {
 			tailwindcss(),
 			devtools({ removeDevtoolsOnBuild: true, consolePiping: { enabled: mode === 'development' } }),
 			tanstackRouter({
-				target: 'react'
+				target: 'react',
+				autoCodeSplitting: false
 			}),
 			react(),
 			babel({ presets: [reactCompilerPreset()] }),
@@ -164,9 +165,20 @@ export default defineConfig(({ mode }) => {
 			host: true,
 			headers: {
 				['Cache-Control']: 'public, max-age=0, must-revalidate',
+				['Content-Security-Policy']:
+					"script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
+				['Strict-Transport-Security']: 'max-age=63072000; includeSubDomains; preload',
+				['Cross-Origin-Resource-Policy']: 'cross-origin',
 				['X-Content-Type-Options']: 'nosniff',
 				['X-Frame-Options']: 'DENY',
 				['X-XSS-Protection']: '1; mode=block'
+			},
+			proxy: {
+				'/api': {
+					target: process.env.VITE_API_BASE_URL,
+					changeOrigin: true,
+					rewrite: (path) => path.replace(/^\/api/, '')
+				}
 			}
 		},
 		build: {
@@ -177,7 +189,6 @@ export default defineConfig(({ mode }) => {
 			chunkSizeWarningLimit: 500,
 			assetsInlineLimit: 4096, // Inline files < 4KB
 			rolldownOptions: {
-				transform: { dropLabels: ['DEV', 'DEBUG'] },
 				logLevel: mode === 'production' ? 'silent' : 'debug',
 				output: {
 					codeSplitting: {
