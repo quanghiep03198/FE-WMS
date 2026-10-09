@@ -1,5 +1,4 @@
 import { UserRole } from '@common/constants/enums'
-import HostCompatibleGuard from '@components/guards/host-compatible-guard'
 import { RoleGuard } from '@components/guards/role-guard'
 import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
 import { MonthPickerFilter } from '@features/inventory/components/inventory-audit/month-picker-filter'
@@ -43,21 +42,19 @@ function Page() {
 					UserRole.FG_WAREHOUSE_STAFF,
 					UserRole.INDUSTRIAL_ENGINEERING_STAFF
 				]}>
-				<HostCompatibleGuard>
-					<SocketProvider namespace='/inventory'>
-						<PageWrapper>
-							<PageHeader className='flex-1'>
-								<PageTitle>{t('ns_inoutbound:titles.monthly_inventory_report')}</PageTitle>
-								<PageDescription>{t('ns_inoutbound:description.monthly_inventory_report')}</PageDescription>
-								<PageAction>
-									<MonthPickerFilter />
-								</PageAction>
-							</PageHeader>
-							<PageSeparator />
-							<InventoryReportMasterTable />
-						</PageWrapper>
-					</SocketProvider>
-				</HostCompatibleGuard>
+				<SocketProvider namespace='/inventory'>
+					<PageWrapper>
+						<PageHeader className='flex-1'>
+							<PageTitle>{t('ns_inoutbound:titles.monthly_inventory_report')}</PageTitle>
+							<PageDescription>{t('ns_inoutbound:description.monthly_inventory_report')}</PageDescription>
+							<PageAction>
+								<MonthPickerFilter />
+							</PageAction>
+						</PageHeader>
+						<PageSeparator />
+						<InventoryReportMasterTable />
+					</PageWrapper>
+				</SocketProvider>
 			</RoleGuard>
 		</Fragment>
 	)

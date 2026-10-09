@@ -1,5 +1,4 @@
 import { UserRole } from '@common/constants/enums'
-import HostCompatibleGuard from '@components/guards/host-compatible-guard'
 import { RoleGuard } from '@components/guards/role-guard'
 import { Div } from '@components/ui'
 import ScannedEpcCounter from '@features/finished-goods/components/finished-goods-outbound/epc-counter'
@@ -30,33 +29,31 @@ function Page() {
 			<meta content='RFID Scanner integration for outbound process' name='description' />
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
-				<HostCompatibleGuard>
-					{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
-					{/* <PageNavigationBlocker /> */}
-					<PageProvider>
-						<Div className='static gap-4 @7xl/layout-wrapper:grid @7xl/layout-wrapper:grid-cols-12 @7xl/layout-wrapper:p-0'>
-							<Div className='@container/playground h-full @7xl/layout-wrapper:col-span-4'>
-								<Div className='flex flex-col items-stretch gap-0 @4xl/playground:grid @4xl/playground:grid-flow-col @4xl/playground:auto-rows-auto @4xl/playground:grid-cols-2 @4xl/playground:gap-4 @7xl/layout-wrapper:gap-0'>
-									<Div className='order-first col-span-full @[1400px]/playground:hidden @4xl/playground:col-span-1'>
+				{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
+				{/* <PageNavigationBlocker /> */}
+				<PageProvider>
+					<Div className='static gap-4 @7xl/layout-wrapper:grid @7xl/layout-wrapper:grid-cols-12 @7xl/layout-wrapper:p-0'>
+						<Div className='@container/playground h-full @7xl/layout-wrapper:col-span-4'>
+							<Div className='flex flex-col items-stretch gap-0 @4xl/playground:grid @4xl/playground:grid-flow-col @4xl/playground:auto-rows-auto @4xl/playground:grid-cols-2 @4xl/playground:gap-4 @7xl/layout-wrapper:gap-0'>
+								<Div className='order-first col-span-full @[1400px]/playground:hidden @4xl/playground:col-span-1'>
+									<ScannedEpcCounter />
+								</Div>
+								<Div className='col-span-full mb-4 flex-1 @4xl/playground:order-last @4xl/playground:col-span-1 @4xl/playground:col-start-2 @4xl/playground:row-span-6 @4xl/playground:mb-0 @7xl/layout-wrapper:order-first @7xl/layout-wrapper:mb-6'>
+									<Div className='hidden @[1400px]/playground:block'>
 										<ScannedEpcCounter />
 									</Div>
-									<Div className='col-span-full mb-4 flex-1 @4xl/playground:order-last @4xl/playground:col-span-1 @4xl/playground:col-start-2 @4xl/playground:row-span-6 @4xl/playground:mb-0 @7xl/layout-wrapper:order-first @7xl/layout-wrapper:mb-6'>
-										<Div className='hidden @[1400px]/playground:block'>
-											<ScannedEpcCounter />
-										</Div>
-										<ScannedEpcList />
-									</Div>
-									<Div className='order-last col-span-full @4xl/playground:order-2 @4xl/playground:col-span-1'>
-										<OutboundForm />
-									</Div>
+									<ScannedEpcList />
+								</Div>
+								<Div className='order-last col-span-full @4xl/playground:order-2 @4xl/playground:col-span-1'>
+									<OutboundForm />
 								</Div>
 							</Div>
-							<Div className='hidden @7xl/layout-wrapper:col-span-8 @7xl/layout-wrapper:block'>
-								<OrderSizeDetailTable />
-							</Div>
 						</Div>
-					</PageProvider>
-				</HostCompatibleGuard>
+						<Div className='hidden @7xl/layout-wrapper:col-span-8 @7xl/layout-wrapper:block'>
+							<OrderSizeDetailTable />
+						</Div>
+					</Div>
+				</PageProvider>
 			</RoleGuard>
 		</Fragment>
 	)

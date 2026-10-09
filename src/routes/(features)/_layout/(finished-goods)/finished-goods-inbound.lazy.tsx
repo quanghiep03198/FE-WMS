@@ -1,5 +1,4 @@
 import { UserRole } from '@common/constants/enums'
-import HostCompatibleGuard from '@components/guards/host-compatible-guard'
 import { RoleGuard } from '@components/guards/role-guard'
 import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
 import AlreadyScannedEpcsAlert from '@features/finished-goods/components/finished-goods-inbound/already-scanned-epcs-alert'
@@ -41,32 +40,30 @@ function Page() {
 			<meta content='RFID Scanner integration for inbound process' name='description' />
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
-				<HostCompatibleGuard>
-					<SocketProvider namespace='/finished-goods'>
-						<PageProvider>
-							<AlreadyScannedEpcsAlert />
-							<PageComposition.Container>
-								<PageComposition.Wrapper>
-									<div className='hidden @[920px]/page-container:block'>
+				<SocketProvider namespace='/finished-goods'>
+					<PageProvider>
+						<AlreadyScannedEpcsAlert />
+						<PageComposition.Container>
+							<PageComposition.Wrapper>
+								<div className='hidden @[920px]/page-container:block'>
+									<EpcListBox />
+								</div>
+								<div className='flex flex-col gap-6'>
+									<Toolbar />
+									<ScannedEpcCounter />
+									<div className='block @[920px]/page-container:hidden'>
 										<EpcListBox />
 									</div>
-									<div className='flex flex-col gap-6'>
-										<Toolbar />
-										<ScannedEpcCounter />
-										<div className='block @[920px]/page-container:hidden'>
-											<EpcListBox />
-										</div>
-										<RemindMessage />
-										<InoutboundForm />
-									</div>
-									<SideToolbar />
-								</PageComposition.Wrapper>
-							</PageComposition.Container>
-							{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
-							{/* <PageNavigationBlocker /> */}
-						</PageProvider>
-					</SocketProvider>
-				</HostCompatibleGuard>
+									<RemindMessage />
+									<InoutboundForm />
+								</div>
+								<SideToolbar />
+							</PageComposition.Wrapper>
+						</PageComposition.Container>
+						{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
+						{/* <PageNavigationBlocker /> */}
+					</PageProvider>
+				</SocketProvider>
 			</RoleGuard>
 		</Fragment>
 	)
