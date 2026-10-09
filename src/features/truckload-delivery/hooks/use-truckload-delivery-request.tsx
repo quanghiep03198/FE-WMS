@@ -1,10 +1,13 @@
 import { TruckloadDeliveryService } from '@features/truckload-delivery/services/truckload-delivery.service'
+import useAuth from '@hooks/use-auth'
 import { keepPreviousData, queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { format } from 'date-fns'
+import { uniqBy } from 'lodash-es'
 import { useMemo } from 'react'
 import type { TruckloadDeliveryStatus } from '../constants'
 import type { SignatureType } from '../contexts/page-context'
 import type { UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../schemas'
-import type { ITruckloadDelivery, ITruckloadDeliveryDetail, TruckloadDeliveryDispatchOrder } from '../types'
+import type { ITruckloadDelivery, ITruckloadDeliveryPacking, TruckloadDeliveryDispatchOrder } from '../types'
 import type { PageQueryParams } from './use-page-query-params'
 import { usePageQueryParams } from './use-page-query-params'
 
@@ -24,9 +27,7 @@ export const getTruckloadDeliveryQueryOptions = (searchParams: PageQueryParams) 
 	queryOptions({
 		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams],
 		queryFn: async () => await TruckloadDeliveryService.getDispatchOrders(searchParams),
-		refetchOnMount: true,
-		refetchOnReconnect: true,
-		staleTime: 5000,
+		staleTime: 30_000,
 		enabled: typeof searchParams.page === 'number' && typeof searchParams.limit === 'number',
 		placeholderData: keepPreviousData,
 		select: (response) => {
@@ -37,15 +38,6 @@ export const getTruckloadDeliveryQueryOptions = (searchParams: PageQueryParams) 
 			}
 		}
 	})
-
-export const getTruckloadDeliveryDetailQueryOptions = (dispatchOrder: string) => {
-	return queryOptions({
-		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY_DETAIL, dispatchOrder],
-		queryFn: async () => await TruckloadDeliveryService.getDispatchOrderDetail(dispatchOrder),
-		select: (response) =>
-			Array.isArray(response.metadata) ? response.metadata.map((item) => ({ ...item, keyid: item.id })) : []
-	})
-}
 
 export const useGetTruckloadDeliveryQuery = () => {
 	const { searchParams } = usePageQueryParams()
@@ -58,6 +50,12 @@ export const useSearchDispatchPurchaseOrder = (search: string) => {
 		queryKey: [TruckloadDeliveryQueryKeys.DISPATCH_PURCHASE_ORDER, search],
 		queryFn: async () => await TruckloadDeliveryService.searchDispatchPurchaseOrder(search),
 		staleTime: 0,
+		initialData: { metadata: [] } as unknown as ResponseBody<
+			Pick<
+				ITruckloadDeliveryPacking,
+				'po' | 'brand_name' | 'factory_shoes_style' | 'color_sn' | 'max_outbound_qty'
+			>[]
+		>,
 		select: (response) => {
 			return Array.isArray(response.metadata) ? response.metadata : []
 		}
@@ -74,48 +72,46 @@ export const useCreateTruckloadDeliveryMutation = () => {
 }
 
 export const useUpdateDispatchOrderMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+	const { searchParams } = usePageQueryParams()
 
 	return useMutation({
+		meta: { invalidates: [[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams]] },
 		mutationFn: ({ dispatch_order, ...update }: UpdateDispatchOrderFormValues) => {
 			return TruckloadDeliveryService.bulkUpdate(dispatch_order, update)
-		},
-		onSuccess: () => invalidateQueries()
+		}
 	})
 }
 
-export const useDeleteTruckloadDeliveryMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+export const useDeleteTruckloadPurchaseOrderMutation = () => {
+	const { searchParams } = usePageQueryParams()
 
 	return useMutation({
-		mutationKey: [TruckloadDeliveryMutationKeys.DELETE_PURCHASE_ORDER],
-		mutationFn: (id: number) => {
-			return TruckloadDeliveryService.deleteOne(id)
-		},
-		onSuccess: () => invalidateQueries()
+		meta: { invalidates: [[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams]] },
+		mutationFn: (params: { dispatch_order: TruckloadDeliveryDispatchOrder; po: string }) => {
+			return TruckloadDeliveryService.deleteOne(params)
+		}
 	})
 }
 
 export const useDeleteDispatchOrdersMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+	const { searchParams } = usePageQueryParams()
 
 	return useMutation({
+		meta: { invalidates: [[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams]] },
 		mutationFn: (dispatchOrder: TruckloadDeliveryDispatchOrder) => {
 			return TruckloadDeliveryService.bulkDelete(dispatchOrder)
-		},
-		onSuccess: () => invalidateQueries()
+		}
 	})
 }
 
-export const useUpsertPurchaseOrdersMutation = (dispatchOrder: string) => {
+export const useUpsertPurchaseOrdersMutation = () => {
 	// const invalidateQueries = useInvalidateQueries(dispatchOrder)
+	const { user } = useAuth()
 	const queryClient = useQueryClient()
 	const { searchParams } = usePageQueryParams()
 
 	return useMutation({
-		meta: {
-			invalidates: [[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY_DETAIL, dispatchOrder]]
-		},
+		meta: { invalidates: [[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams]] },
 		mutationFn: (payload: UpsertPurchaseOrdersFormValues) => TruckloadDeliveryService.upsertPurchaseOrders(payload),
 		onMutate: async (variables) => {
 			// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
@@ -125,11 +121,6 @@ export const useUpsertPurchaseOrdersMutation = (dispatchOrder: string) => {
 			const prevMasterData = queryClient.getQueryData<ResponseBody<Pagination<ITruckloadDelivery>>>([
 				TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY,
 				searchParams
-			])
-
-			const prevDetailData = queryClient.getQueryData<ResponseBody<ITruckloadDeliveryDetail[]>>([
-				TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY_DETAIL,
-				dispatchOrder
 			])
 
 			// Optimistically update to the new value
@@ -150,6 +141,17 @@ export const useUpsertPurchaseOrdersMutation = (dispatchOrder: string) => {
 												total_outbound_qty: variables.outbound_purchase_orders.reduce(
 													(acc, curr) => acc + curr.outbound_qty,
 													0
+												),
+												packing: uniqBy(
+													[
+														...item.packing,
+														...variables.outbound_purchase_orders.map((item) => ({
+															...item,
+															created_by: user,
+															created_at: format(new Date(), 'yyyy-MM-dd HH:mm')
+														}))
+													],
+													'po'
 												)
 											}
 										return item
@@ -159,39 +161,14 @@ export const useUpsertPurchaseOrdersMutation = (dispatchOrder: string) => {
 				}
 			)
 
-			queryClient.setQueryData<ResponseBody<ITruckloadDeliveryDetail[]>>(
-				[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY_DETAIL, dispatchOrder],
-				(oldData) => {
-					if (!oldData || !Array.isArray(oldData.metadata)) return oldData
-
-					return {
-						...oldData,
-						metadata: oldData.metadata.map((item) => {
-							const matched = variables.outbound_purchase_orders.find((order) => order.po === item.po)
-							if (matched)
-								return {
-									...item,
-									outbound_qty: matched.outbound_qty,
-									max_outbound_qty: item.po_qty - matched.outbound_qty
-								}
-							return item
-						})
-					}
-				}
-			)
 			// Return a context object with the snapshotted value
-			return { prevMasterData, prevDetailData }
+			return { prevMasterData }
 		},
 		onError: (_error, _variables, context) => {
 			if (context && context.prevMasterData) {
 				queryClient.setQueryData<ResponseBody<Pagination<ITruckloadDelivery>>>(
 					[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
 					context.prevMasterData
-				)
-
-				queryClient.setQueryData<ResponseBody<ITruckloadDeliveryDetail[]>>(
-					[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY_DETAIL, dispatchOrder],
-					context.prevDetailData
 				)
 			}
 		}

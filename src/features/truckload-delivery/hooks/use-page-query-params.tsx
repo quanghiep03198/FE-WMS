@@ -1,10 +1,10 @@
+import { usePageContext } from '@features/truckload-delivery/contexts/page-context'
 import type { SortDirection } from '@tanstack/react-table'
 import { format, isValid } from 'date-fns'
 import { omitBy } from 'lodash-es'
 import { useCallback } from 'react'
 import { isDateRange } from 'react-day-picker'
 import type { TruckloadDeliveryStatus } from '../constants'
-import { usePageContext } from '../contexts/page-context'
 import type { FilterOperator, TruckloadDeliveryFilterFormValues } from '../schemas'
 import type { ITruckloadDelivery } from '../types'
 
@@ -56,9 +56,13 @@ export const useBuildQueryParams = () => {
 			key.startsWith('where')
 		)
 
+		if (!Array.isArray(value.where)) {
+			return noneFilterParams as PageQueryParams
+		}
+
 		// * Build filter params from the form values
 		const filterParams = value.where.reduce<Record<string, string>>((acc, { column, operator, value }) => {
-			if (!column) return acc
+			if (!column || !operator) return acc
 
 			let paramValue: string
 			if (isDateRange(value)) {

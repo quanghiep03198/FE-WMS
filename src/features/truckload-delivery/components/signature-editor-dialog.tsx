@@ -25,6 +25,7 @@ import { SignatureCanvas, type SignatureCanvasInstance } from '@components/ui/@c
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { useReactiveRef } from '@hooks/use-reactive-ref'
 import { useWorkerFn } from '@hooks/use-worker-fn'
+import { format } from 'date-fns'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -32,7 +33,7 @@ import tw from 'tailwind-styled-components'
 import { TruckloadDeliveryStatus } from '../constants'
 import type { SignatureType } from '../contexts/page-context'
 import { usePageContext } from '../contexts/page-context'
-import { useUpdateDispatchOrderSignatureMutation } from '../hooks/use-truckload-delivery-asm'
+import { useUpdateDispatchOrderSignatureMutation } from '../hooks/use-truckload-delivery-request'
 import type { ITruckloadDelivery } from '../types'
 
 const SignatureEditorDialog: React.FC = () => {
@@ -52,10 +53,10 @@ const SignatureEditorDialog: React.FC = () => {
 		}
 	>({
 		title: null,
-		dispatch_order: null,
-		approval_status: null,
-		license_plate: null,
-		signature_type: null
+		dispatch_order: `GL0-EXP-${format(new Date(), 'yyyyMMdd')}-001`,
+		approval_status: TruckloadDeliveryStatus.PENDING,
+		license_plate: '',
+		signature_type: 'warehouse_officer_signature'
 	})
 	const canvasRef = useRef<SignatureCanvasInstance>(null)
 
@@ -143,18 +144,18 @@ const SignatureEditorDialog: React.FC = () => {
 						<Div className='flex flex-col gap-y-3'>
 							<Label htmlFor='confirmation'>{t('ns_inoutbound:labels.security_confirmation')}</Label>
 							<RadioGroup
+								className='grid grid-cols-2 md:grid-cols-1'
+								defaultValue={TruckloadDeliveryStatus.CONFIRMED}
 								id='confirmation'
 								orientation='horizontal'
-								className='grid grid-cols-2 md:grid-cols-1'
 								value={statusToUpdate}
-								defaultValue={TruckloadDeliveryStatus.CONFIRMED}
 								onValueChange={(value) => {
 									setStatusToUpdate(
 										value as TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 									)
 									if (value === TruckloadDeliveryStatus.REQUEST_CHANGE) handleReset()
 								}}>
-								<FieldLabel htmlFor='confirm-radio' className='hover:border-primary p-4 duration-200'>
+								<FieldLabel className='hover:border-primary p-4 duration-200' htmlFor='confirm-radio'>
 									<Field orientation='horizontal'>
 										<FieldContent>
 											<FieldTitle>{t('ns_common:actions.confirm')}</FieldTitle>
@@ -162,10 +163,10 @@ const SignatureEditorDialog: React.FC = () => {
 												{t('ns_inoutbound:description.confirm_dispatch_order_info')}
 											</FieldDescription>
 										</FieldContent>
-										<RadioGroupItem value={TruckloadDeliveryStatus.CONFIRMED} id='confirm-radio' />
+										<RadioGroupItem id='confirm-radio' value={TruckloadDeliveryStatus.CONFIRMED} />
 									</Field>
 								</FieldLabel>
-								<FieldLabel htmlFor='request-change-radio' className='hover:border-primary p-4 duration-200'>
+								<FieldLabel className='hover:border-primary p-4 duration-200' htmlFor='request-change-radio'>
 									<Field orientation='horizontal'>
 										<FieldContent>
 											<FieldTitle>{t('ns_common:actions.request_change')}</FieldTitle>
@@ -174,25 +175,25 @@ const SignatureEditorDialog: React.FC = () => {
 											</FieldDescription>
 										</FieldContent>
 										<RadioGroupItem
-											value={TruckloadDeliveryStatus.REQUEST_CHANGE}
 											id='request-change-radio'
+											value={TruckloadDeliveryStatus.REQUEST_CHANGE}
 										/>
 									</Field>
 								</FieldLabel>
 							</RadioGroup>
 						</Div>
 					)}
-					<Div className='group/signature flex h-full flex-col gap-y-3' aria-invalid={isMissingSignature}>
-						<Label htmlFor='signature' className='group-aria-invalid/signature:text-destructive'>
+					<Div aria-invalid={isMissingSignature} className='group/signature flex h-full flex-col gap-y-3'>
+						<Label className='group-aria-invalid/signature:text-destructive' htmlFor='signature'>
 							{t('ns_inoutbound:labels.signature')}
 						</Label>
 						<Div
-							id='signature'
-							className='group-aria-invalid/signature:border-destructive @container relative cursor-crosshair overflow-clip rounded-lg border bg-white duration-200 group-aria-invalid/signature:border-2'>
+							className='group-aria-invalid/signature:border-destructive @container relative cursor-crosshair overflow-clip rounded-lg border bg-white duration-200 group-aria-invalid/signature:border-2'
+							id='signature'>
 							{isCompressing && <OptimizingLoader />}
 							<SignatureCanvas
-								ref={canvasRef}
 								className='h-[40vh] w-[100cqw] touch-none overscroll-none @[1366px]:h-[50vh]'
+								ref={canvasRef}
 								padOptions={{
 									minWidth: 2,
 									maxWidth: 2
@@ -202,9 +203,9 @@ const SignatureEditorDialog: React.FC = () => {
 						</Div>
 						{isMissingSignature && (
 							<Typography
-								variant='small'
+								className='inline-flex items-center gap-x-2 font-medium'
 								color='destructive'
-								className='inline-flex items-center gap-x-2 font-medium'>
+								variant='small'>
 								<Icon name='TriangleAlert' />
 								{t('ns_validation:missing_signature')}
 							</Typography>
@@ -216,7 +217,7 @@ const SignatureEditorDialog: React.FC = () => {
 						{t('ns_common:actions.reset')}
 					</Button>
 					<Button disabled={isPending} onClick={() => handleSignSignature()}>
-						{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
+						{isPending && <Icon className='animate-spin' name='LoaderCircle' />}
 						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.confirm')}
 					</Button>
 				</DialogFooter>
@@ -230,7 +231,7 @@ const DialogBody = tw.div`flex-1 space-y-6`
 const OptimizingLoader: React.FC = () => {
 	return (
 		<div className='bg-muted/50 animate-in fade-in-0 absolute inset-0 z-10 grid flex-col place-items-center gap-x-2 backdrop-blur duration-200'>
-			<Icon name='LoaderCircle' className='animate-spin' />
+			<Icon className='animate-spin' name='LoaderCircle' />
 		</div>
 	)
 }

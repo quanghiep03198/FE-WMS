@@ -1,5 +1,4 @@
 import { CommonActions, UserRole } from '@common/constants/enums'
-import { cn } from '@common/utils/cn'
 import generateAvatar from '@common/utils/generate-avatar'
 import RoleBaseAccessControl from '@components/guards/role-base-access-control'
 import {
@@ -8,29 +7,38 @@ import {
 	AvatarImage,
 	Div,
 	Icon,
+	Item,
+	ItemContent,
+	ItemDescription,
+	ItemMedia,
+	ItemTitle,
 	TableCell,
 	TableRow,
 	Tooltip,
 	Typography
 } from '@components/ui'
-import type { IPurchaseOrderResult } from '@features/order/services/order.service'
+import useAuth from '@hooks/use-auth'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { format } from 'date-fns'
 import { isNil, pick } from 'lodash-es'
-import React, { Fragment, useCallback, useState } from 'react'
+import React, { Fragment, useCallback } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { GhostButton } from '../../../components/shared/ghost-button'
 import { usePageContext } from '../contexts/page-context'
-import type { ITruckloadDeliveryDetail } from '../types'
+import { type UpsertPurchaseOrdersFormValues } from '../schemas'
+import type { ITruckloadDeliveryPacking, TruckloadDeliveryDispatchOrder } from '../types'
 import OutboundQtyInputFieldControl from './outbound-qty-field-control'
 import PurchaseOrderFieldControl from './purchase-order-field-control'
 
 type TruckloadDeliveryDetailRowProps = {
-	index: number
-	readOnly: boolean
+	defaultValues: ITruckloadDeliveryPacking
 	deletable: boolean
+	dispatchOrder: TruckloadDeliveryDispatchOrder
 	isLargeScreen: boolean
-	defaultValues: ITruckloadDeliveryDetail
+	index: number
+	isPersisted: boolean
+	readOnly: boolean
 	onRemove: (index?: number | number[]) => void
 }
 
@@ -39,52 +47,75 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 	readOnly,
 	defaultValues,
 	deletable,
+	dispatchOrder,
 	isLargeScreen,
+	isPersisted,
 	onRemove
 }) => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-	const [snapshotData, setSnapshotData] = useState<ITruckloadDeliveryDetail>(defaultValues)
 	const dateLocale = useDateLocale()
+	const { user } = useAuth()
+	const { control, setValue } = useFormContext<UpsertPurchaseOrdersFormValues>()
+	const currentRowValue = useWatch({ control, name: `outbound_purchase_orders.${index}` })
 
-	const handleSelectPurchaseOrder = useCallback((selectedItem: IPurchaseOrderResult) => {
-		setSnapshotData((prev) => {
-			return {
-				...prev,
-				...pick(selectedItem, ['po', 'brand_name', 'factory_shoes_style', 'color_sn'])
-			}
-		})
-	}, [])
+	const handleSelectPurchaseOrder = useCallback(
+		(
+			selectedItem:
+				| Pick<
+						ITruckloadDeliveryPacking,
+						'po' | 'brand_name' | 'factory_shoes_style' | 'color_sn' | 'max_outbound_qty'
+				  >
+				| undefined
+		) => {
+			if (!selectedItem) return
+			setValue(`outbound_purchase_orders.${index}`, {
+				...currentRowValue,
+				...pick(selectedItem, ['po', 'brand_name', 'factory_shoes_style', 'color_sn', 'max_outbound_qty'])
+			})
+		},
+		[currentRowValue]
+	)
+
+	const createdBy = currentRowValue?.created_by ?? user?.username
+
+	const isPlaceholderData =
+		currentRowValue?.brand_name === t('ns_common:titles.unknown') &&
+		currentRowValue?.factory_shoes_style === t('ns_common:titles.unknown') &&
+		currentRowValue?.color_sn === t('ns_common:titles.unknown')
 
 	return (
-		<TableRow aria-readonly={readOnly} className={cn('transition-allow-discrete')}>
+		<TableRow
+			aria-invalid={isPlaceholderData}
+			aria-readonly={readOnly}
+			className='transition-allow-discrete aria-invalid:[&_span]:text-muted-foreground'>
 			<TableCell align='left' className='w-[30%] xl:w-[15%]'>
 				<PurchaseOrderFieldControl
 					{...(readOnly && { 'aria-haspopup': 'false' })}
-					name={`outbound_purchase_orders.${index}.po`}
-					className='focus:border-primary h-8 rounded-sm border-transparent py-1.5 shadow-none read-only:cursor-auto read-only:focus:border-transparent'
-					tabIndex={index}
 					autoFocus={true}
-					data-index={index}
-					readOnly={readOnly}
-					data-icon={false}
+					className='focus:border-primary h-8 rounded-sm border-transparent py-1.5 shadow-none read-only:cursor-auto read-only:focus:border-transparent'
 					data-action={CommonActions.UPDATE}
-					onValueChange={(selectedItem) => handleSelectPurchaseOrder(selectedItem as IPurchaseOrderResult)}
+					data-icon={false}
+					data-index={index}
+					name={`outbound_purchase_orders.${index}.po`}
+					readOnly={readOnly}
+					tabIndex={index}
+					onValueChange={(selectedItem) => handleSelectPurchaseOrder(selectedItem)}
 				/>
 			</TableCell>
 			{!isLargeScreen ? (
-				<TableCell className='w-[30%] xl:hidden' align='left'>
-					{Object.values(pick(snapshotData, ['brand_name', 'factory_shoes_style', 'color_sn'])).every(
+				<TableCell align='left' className='w-[30%] xl:hidden'>
+					{Object.values(pick(currentRowValue, ['brand_name', 'factory_shoes_style', 'color_sn'])).every(
 						(item) => !isNil(item)
 					) ? (
 						<Div className='flex flex-col'>
-							<span className='line-clamp-1 font-medium'>{snapshotData?.brand_name}</span>
+							<span className='line-clamp-1 font-medium'>{currentRowValue?.brand_name}</span>
 							<span className='line-clamp-1'>
-								{snapshotData?.factory_shoes_style}/{snapshotData?.color_sn}
+								{currentRowValue?.factory_shoes_style}/{currentRowValue?.color_sn}
 							</span>
 						</Div>
 					) : (
-						<Typography variant='small' color='muted'>
+						<Typography color='muted' variant='small'>
 							{t('ns_common:titles.unknown')}
 						</Typography>
 					)}
@@ -93,8 +124,8 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 				<Fragment>
 					<TableCell align='left' className='xl:w-[15%]'>
 						<span>
-							{snapshotData?.brand_name ?? (
-								<Typography variant='small' color='muted'>
+							{currentRowValue?.brand_name ?? (
+								<Typography color='muted' variant='small'>
 									{t('ns_common:titles.unknown')}
 								</Typography>
 							)}
@@ -102,8 +133,8 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 					</TableCell>
 					<TableCell align='left' className='xl:w-[15%]'>
 						<span>
-							{snapshotData?.factory_shoes_style ?? (
-								<Typography variant='small' color='muted'>
+							{currentRowValue?.factory_shoes_style ?? (
+								<Typography color='muted' variant='small'>
 									{t('ns_common:titles.unknown')}
 								</Typography>
 							)}
@@ -111,8 +142,8 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 					</TableCell>
 					<TableCell align='left' className='xl:w-[15%]'>
 						<span>
-							{snapshotData?.color_sn ?? (
-								<Typography variant='small' color='muted'>
+							{currentRowValue?.color_sn ?? (
+								<Typography color='muted' variant='small'>
 									{t('ns_common:titles.unknown')}
 								</Typography>
 							)}
@@ -123,64 +154,67 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 			<TableCell align='left' className='w-[30%] xl:w-[15%]'>
 				<OutboundQtyInputFieldControl
 					aria-readonly={readOnly}
-					readOnly={readOnly}
-					name={`outbound_purchase_orders.${index}.outbound_qty`}
-					className='focus:border-primary h-8 rounded-sm border-transparent py-1.5 shadow-none read-only:cursor-auto aria-readonly:focus:border-transparent'
-					autoFocus={false}
 					autoComplete='off'
-					tabIndex={index + 1}
+					autoFocus={false}
+					className='focus:border-primary h-8 rounded-sm border-transparent py-1.5 shadow-none read-only:cursor-auto aria-readonly:focus:border-transparent'
 					data-action={CommonActions.CREATE}
 					data-index={index}
+					name={`outbound_purchase_orders.${index}.outbound_qty`}
+					readOnly={readOnly}
+					tabIndex={index + 1}
 				/>
 			</TableCell>
 			{isLargeScreen && (
 				<Fragment>
 					<TableCell align='left' className='xl:w-[15%]'>
-						<Div className='grid grid-cols-[auto_1fr] items-center gap-x-2'>
-							<Avatar className='row-span-2 size-8'>
-								<AvatarImage
-									src={generateAvatar({ name: snapshotData?.user_code_created })}
-									alt={snapshotData?.user_code_created}
-								/>
-								<AvatarFallback>G</AvatarFallback>
-							</Avatar>
-							<Typography variant='small' className='col-start-2 font-medium before:content-["@"]'>
-								{snapshotData?.user_code_created}
-							</Typography>
-							<Typography
-								variant='small'
-								color='muted'
-								className='col-start-2 line-clamp-1 first-letter:uppercase'
-								title={
-									snapshotData?.created &&
-									format(new Date(snapshotData?.created), 'yyyy-MM-dd HH:mm:ss', { locale: dateLocale })
-								}>
-								{snapshotData?.created ? (
-									format(new Date(snapshotData?.created), 'yyyy-MM-dd HH:mm:ss', { locale: dateLocale })
-								) : (
-									<Icon name='CalendarClock' stroke='var(--muted-foreground)' />
-								)}
-							</Typography>
-						</Div>
+						<Item className='p-0' size='sm'>
+							<ItemMedia>
+								<Avatar className='row-span-2 size-9'>
+									<AvatarImage
+										alt={createdBy}
+										src={createdBy ? generateAvatar({ name: createdBy }) : undefined}
+									/>
+									<AvatarFallback>G</AvatarFallback>
+								</Avatar>
+							</ItemMedia>
+							<ItemContent>
+								<ItemTitle className='gap-0 before:content-["@"]'>{createdBy}</ItemTitle>
+								<ItemDescription
+									className='line-clamp-1 first-letter:uppercase'
+									title={
+										!isNil(currentRowValue?.created_at)
+											? format(new Date(currentRowValue?.created_at), 'yyyy-MM-dd HH:mm:ss', {
+													locale: dateLocale
+												})
+											: undefined
+									}>
+									{currentRowValue?.created_at
+										? format(new Date(currentRowValue?.created_at), 'yyyy-MM-dd HH:mm:ss', {
+												locale: dateLocale
+											})
+										: format(new Date(), 'yyyy-MM-dd HH:mm:ss', { locale: dateLocale })}
+								</ItemDescription>
+							</ItemContent>
+						</Item>
 					</TableCell>
 				</Fragment>
 			)}
 			<TableCell align='right' className='w-[10%]'>
 				<Tooltip message={t('ns_common:actions.delete')}>
 					<RoleBaseAccessControl
-						mode='mask'
-						authorizedRoles={[UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}>
+						authorizedRoles={[UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}
+						mode='mask'>
 						<GhostButton
-							type='button'
+							aria-haspopup={isPersisted}
+							className='text-muted-foreground aria-haspopup:text-destructive'
 							disabled={!deletable}
-							className={
-								typeof snapshotData?.id === 'number'
-									? 'text-destructive hover:text-destructive'
-									: 'text-muted-foreground'
-							}
+							type='button'
 							onClick={() => {
-								if (typeof snapshotData?.id === 'number') {
-									event$.emit({ action: CommonActions.DELETE, payload: snapshotData.id })
+								if (isPersisted) {
+									event$.emit({
+										action: CommonActions.DELETE,
+										payload: { dispatch_order: dispatchOrder, po: defaultValues.po, index: index }
+									})
 									return
 								}
 								onRemove(index)
@@ -196,13 +230,4 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 
 TruckloadDeliveryDetailRow.displayName = 'TruckloadDeliveryDetailRow'
 
-export default React.memo(
-	TruckloadDeliveryDetailRow,
-	(prev, next) =>
-		prev.index === next.index &&
-		prev.readOnly === next.readOnly &&
-		prev.deletable === next.deletable &&
-		prev.isLargeScreen === next.isLargeScreen &&
-		prev.defaultValues?.id === next.defaultValues?.id &&
-		prev.onRemove === next.onRemove
-)
+export default TruckloadDeliveryDetailRow

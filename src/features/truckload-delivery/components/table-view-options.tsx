@@ -12,19 +12,29 @@ import {
 } from '@components/ui'
 import useMediaQuery from '@hooks/use-media-query'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
-import { type Table } from '@tanstack/react-table'
+import { type Table, type VisibilityState } from '@tanstack/react-table'
+import { useLocalStorageState } from 'ahooks'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type ITruckloadDelivery } from '../types'
 
 export function TableViewOptions({ table }: { table: Table<ITruckloadDelivery> }) {
 	const { t } = useTranslation()
+	const [, setStoredHiddenState] = useLocalStorageState<VisibilityState>('truckloadDeliveryTableColumnVisibility', {
+		defaultValue: { dispatch_order: false },
+		listenStorageChange: true
+	})
 	const isMobile = useMediaQuery('(max-width: 1023px)')
+
+	useEffect(() => {
+		setStoredHiddenState(table.getState().columnVisibility)
+	}, [table.getState().columnVisibility])
 
 	if (isMobile) return null
 
 	return (
 		<DropdownMenu>
-			<Tooltip message={t('ns_common:table.column_settings')} contentProps={{ hidden: !isMobile }}>
+			<Tooltip contentProps={{ hidden: !isMobile }} message={t('ns_common:table.column_settings')}>
 				<DropdownMenuTrigger asChild>
 					<Button variant='outline'>
 						<Icon name='Settings2' />
@@ -41,10 +51,14 @@ export function TableViewOptions({ table }: { table: Table<ITruckloadDelivery> }
 					.map((column) => {
 						return (
 							<DropdownMenuCheckboxItem
-								key={column.id}
-								className='capitalize'
 								checked={column.getIsVisible()}
-								onCheckedChange={(value) => column.toggleVisibility(!!value)}>
+								className='capitalize'
+								key={column.id}
+								onSelect={(e) => e.preventDefault()}
+								onCheckedChange={(value) => {
+									column.toggleVisibility(!!value)
+									// setStoredHiddenState((prev) => ({ ...prev, [column.id]: value }))
+								}}>
 								{column.columnDef.header?.toString()}
 							</DropdownMenuCheckboxItem>
 						)

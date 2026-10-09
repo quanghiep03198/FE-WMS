@@ -8,7 +8,7 @@ import { format } from 'date-fns'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../constants'
-import { useUpdateContainerConditionMutation } from '../hooks/use-truckload-delivery-asm'
+import { useUpdateContainerConditionMutation } from '../hooks/use-truckload-delivery-request'
 import type { ITruckloadDelivery } from '../types'
 import LicensePlateHoverCard from './license-plate-hover-card'
 
@@ -26,7 +26,7 @@ export const DispatchOrderStatusBadge: ColumnDefBase<ITruckloadDelivery, Trucklo
 	}
 
 	return (
-		<Badge variant='outline' className='rounded-l-full rounded-r-full'>
+		<Badge className='rounded-l-full rounded-r-full' variant='outline'>
 			<Icon
 				name={statusIconVariants[value] ?? 'CircleDotDashed'}
 				size={14}
@@ -48,8 +48,8 @@ export const LicensePlateColumnCell: React.FC<CellContext<ITruckloadDelivery, st
 	const value = getValue()
 	if (!value)
 		return (
-			<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-				<Icon name='Truck' className='stroke-muted-foreground self-center' />
+			<Typography className='flex items-center gap-x-2' color='muted' variant='small'>
+				<Icon className='stroke-muted-foreground self-center' name='Truck' />
 				{t('ns_common:titles.unknown')}
 			</Typography>
 		)
@@ -62,9 +62,9 @@ export const LicensePlateColumnCell: React.FC<CellContext<ITruckloadDelivery, st
 			/>
 			{row.original.container_number && (
 				<Typography
-					variant='small'
+					className='col-start-2 inline-grid grid-cols-[auto_1fr] gap-x-2 font-normal @5xl:hidden'
 					color='muted'
-					className='col-start-2 inline-grid grid-cols-[auto_1fr] gap-x-2 font-normal @5xl:hidden'>
+					variant='small'>
 					<Icon name='Container' />
 					{row.original.container_number}
 				</Typography>
@@ -85,16 +85,16 @@ export const DepartureTimeCell: React.FC<CellContext<ITruckloadDelivery, Date> &
 			<DateTimeCell {...props} className='hidden @5xl:flex' />
 			<Div className='flex flex-col gap-y-1 @5xl:hidden'>
 				<Typography
-					variant='small'
-					color={value ? 'default' : 'muted'}
+					aria-invalid={props['aria-invalid']}
 					className={cn('inline-flex items-center gap-x-2', props.className)}
-					aria-invalid={props['aria-invalid']}>
+					color={value ? 'default' : 'muted'}
+					variant='small'>
 					<Icon name={value ? 'LogOut' : 'ClockAlert'} />
 					{value ? format(new Date(value), 'yyyy-MM-dd HH:mm') : t('ns_common:titles.unknown')}
 				</Typography>
 
 				{props.row.original.actual_departure_time && (
-					<Typography variant='small' className='inline-flex items-center gap-x-2' color='muted'>
+					<Typography className='inline-flex items-center gap-x-2' color='muted' variant='small'>
 						<Icon name='Cctv' />
 						{format(new Date(props.row.original.actual_departure_time), 'yyyy-MM-dd HH:mm')}
 					</Typography>
@@ -116,18 +116,18 @@ export const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>
 
 	return (
 		<RoleBaseAccessControl
+			authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF]}
 			mode='mask'
 			classNames={{
 				innerWrapper: 'grid place-items-center group-hover/rbac:opacity-0'
-			}}
-			authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF]}>
+			}}>
 			<Checkbox
 				aria-busy={isPending}
 				aria-invalid={isError}
-				className='aria-invalid:border-destructive aria-busy:opacity-50'
-				disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED || isPending}
-				defaultChecked={currentValue}
 				checked={currentValue}
+				className='aria-invalid:border-destructive aria-busy:opacity-50'
+				defaultChecked={currentValue}
+				disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED || isPending}
 				onCheckedChange={async (value) =>
 					await mutateAsync({
 						dispatch_order: row.original.dispatch_order,
@@ -147,13 +147,13 @@ export const DateTimeCell: React.FC<
 
 	if (value)
 		return (
-			<Typography {...props} variant='small' className={className}>
+			<Typography {...props} className={className} variant='small'>
 				{format(new Date(value), 'yyyy-MM-dd HH:mm')}
 			</Typography>
 		)
 
 	return (
-		<Typography variant='small' color='muted' className={cn('flex items-center gap-x-2', className)} {...props}>
+		<Typography className={cn('flex items-center gap-x-2', className)} color='muted' variant='small' {...props}>
 			<Icon name='ClockAlert' stroke='var(--muted-foreground)' />
 			{t('ns_common:titles.unknown')}
 		</Typography>

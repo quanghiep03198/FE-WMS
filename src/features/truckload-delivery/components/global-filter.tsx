@@ -23,7 +23,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { isNil, omit, omitBy } from 'lodash-es'
 import React, { useEffect, useId, useMemo } from 'react'
-import { useForm, useFormContext, useWatch } from 'react-hook-form'
+import type { Resolver } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { GhostButton } from '../../../components/shared/ghost-button'
@@ -46,26 +47,13 @@ type FieldItemProps = {
 	type: 'text' | 'date' | 'select'
 }
 
-const defaultValue: TruckloadDeliveryFilterFormValues = {
-	where: [
-		{ column: null, operator: '=:@value', value: null },
-		{ column: null, operator: 'like:%@value%', value: '' },
-		{ column: null, operator: 'like:%@value%', value: '' },
-		{ column: null, operator: 'like:%@value%', value: '' },
-		{ column: null, operator: 'between:@value1,@value2', value: null },
-		{ column: null, operator: 'between:@value1,@value2', value: null },
-		{ column: null, operator: 'between:@value1,@value2', value: null },
-		{ column: null, operator: 'between:@value1,@value2', value: null }
-	]
-}
-
 const GlobalFilter: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const { searchParams, setParams } = usePageQueryParams()
 	const [storedGlobalFilters, setStoredGlobalFilters] = useStoreFilterParams()
 
 	const form = useForm<TruckloadDeliveryFilterFormValues>({
-		resolver: zodResolver(truckloadDeliveryFilterSchema),
+		resolver: zodResolver(truckloadDeliveryFilterSchema) as unknown as Resolver<TruckloadDeliveryFilterFormValues>,
 		defaultValues: storedGlobalFilters
 	})
 
@@ -90,6 +78,12 @@ const GlobalFilter: React.FC = () => {
 				type: 'text'
 			},
 			{
+				icon: 'Lock',
+				name: 'seal_number',
+				label: t('ns_erp:fields.seal_number'),
+				type: 'text'
+			},
+			{
 				icon: 'NotepadText',
 				name: 'po',
 				label: t('ns_erp:fields.po'),
@@ -99,6 +93,12 @@ const GlobalFilter: React.FC = () => {
 				icon: 'CalendarPlus',
 				name: 'created_at',
 				label: t('ns_common:common_fields.created_at'),
+				type: 'date'
+			},
+			{
+				icon: 'CalendarCheck',
+				name: 'factory_entrance_time',
+				label: t('ns_erp:fields.factory_entrance_time'),
 				type: 'date'
 			},
 			{
@@ -140,9 +140,10 @@ const GlobalFilter: React.FC = () => {
 	}
 
 	const handleClearFilters: React.MouseEventHandler = (e) => {
+		const defaultValues = truckloadDeliveryFilterSchema.safeParse(undefined).data as TruckloadDeliveryFilterFormValues
 		e.stopPropagation()
-		form.reset(defaultValue)
-		setStoredGlobalFilters(defaultValue)
+		form.reset(defaultValues)
+		setStoredGlobalFilters(defaultValues)
 		setParams(omitBy(searchParams, (_value, key) => key.startsWith('where')) as PageQueryParams)
 	}
 
@@ -151,59 +152,55 @@ const GlobalFilter: React.FC = () => {
 	const appliedFilters = Array.isArray(columnFilters) ? columnFilters.filter((filter) => !isNil(filter.column)) : []
 
 	return (
-		<Div className='relative overflow-visible'>
-			<Popover>
-				<PopoverTrigger asChild>
-					<Div className={buttonVariants({ variant: 'outline', className: 'cursor-pointer' })}>
-						<Icon name='Funnel' />
-						{t('ns_common:table.filter')}
-						<Badge>{appliedFilters.length}</Badge>
-						{appliedFilters.length > 0 && (
-							<GhostButton onClick={handleClearFilters} className='aspect-square size-6 basis-6'>
-								<Icon name='X' />
-							</GhostButton>
-						)}
-					</Div>
-				</PopoverTrigger>
-				<PopoverContent
-					align='start'
-					className='w-[calc(100vw-1rem)] space-y-6 lg:w-auto xl:w-auto'
-					onOpenAutoFocus={(e) => e.preventDefault()}>
-					<FormProvider {...form}>
-						<Form onSubmit={form.handleSubmit(handleSubmit)}>
-							<FieldSet>
-								<FieldLegend>{t('ns_common:titles.advanced_search')}</FieldLegend>
-								<Field>
-									{fields.map((field, index) => (
-										<FormItem key={index} {...{ ...field, index }} />
-									))}
-								</Field>
-								<Field orientation='horizontal' className='justify-end gap-x-2'>
-									<PopoverClose asChild>
-										<Button type='submit'>{t('ns_common:actions.search')}</Button>
-									</PopoverClose>
-									<PopoverClose asChild>
-										<Button variant='outline' type='button' onClick={handleClearFilters}>
-											{t('ns_common:actions.cancel')}
-										</Button>
-									</PopoverClose>
-								</Field>
-							</FieldSet>
-						</Form>
-					</FormProvider>
-				</PopoverContent>
-			</Popover>
-		</Div>
+		<Popover>
+			<PopoverTrigger asChild>
+				<Div className={buttonVariants({ variant: 'outline', className: 'cursor-pointer' })}>
+					<Icon name='Funnel' />
+					{t('ns_common:table.filter')}
+					<Badge>{appliedFilters.length}</Badge>
+					{appliedFilters.length > 0 && (
+						<GhostButton className='aspect-square size-6 basis-6' onClick={handleClearFilters}>
+							<Icon name='X' />
+						</GhostButton>
+					)}
+				</Div>
+			</PopoverTrigger>
+			<PopoverContent
+				align='start'
+				className='w-[calc(100vw-1rem)] space-y-6 lg:w-auto xl:w-auto'
+				onOpenAutoFocus={(e) => e.preventDefault()}>
+				<FormProvider {...form}>
+					<Form onSubmit={form.handleSubmit(handleSubmit)}>
+						<FieldSet>
+							<FieldLegend>{t('ns_common:titles.advanced_search')}</FieldLegend>
+							<Field>
+								{fields.map((field, index) => (
+									<FormItem key={index} {...{ ...field, index }} />
+								))}
+							</Field>
+							<Field className='justify-end gap-x-2' orientation='horizontal'>
+								<Button type='submit'>{t('ns_common:actions.search')}</Button>
+
+								<PopoverClose asChild>
+									<Button type='button' variant='outline' onClick={handleClearFilters}>
+										{t('ns_common:actions.cancel')}
+									</Button>
+								</PopoverClose>
+							</Field>
+						</FieldSet>
+					</Form>
+				</FormProvider>
+			</PopoverContent>
+		</Popover>
 	)
 }
 
 const FormItem: React.FC<FieldItemProps> = ({ index, name, label, icon, type }) => {
-	'use no memo'
-
 	const { t, i18n } = useTranslation()
-	const { control, setValue, resetField } = useFormContext()
-	const currentColumnValue = useWatch({ control, name: `where.${index}.column` })
-	const currentOperator = useWatch({ control, name: `where.${index}.operator` })
+	const { setValue, resetField, watch } = useFormContext<TruckloadDeliveryFilterFormValues>()
+	const currentColumnValue = watch(`where.${index}.column`)
+	const currentOperator = watch(`where.${index}.operator`)
+	const currentValue = watch(`where.${index}.value`)
 
 	const operators: Array<{ label: string; value: FilterOperator }> = useMemo(() => {
 		const expressions: Array<{ label: string; value: FilterOperator; types: FieldItemProps['type'][] }> = [
@@ -223,13 +220,13 @@ const FormItem: React.FC<FieldItemProps> = ({ index, name, label, icon, type }) 
 	return (
 		<FieldGroup>
 			<FieldLabel
-				htmlFor={id}
 				aria-disabled={!isIncluded}
-				onClick={(e) => e.stopPropagation()}
-				className='aria-disabled:text-muted-foreground font-normal'>
+				className='aria-disabled:text-muted-foreground font-normal'
+				htmlFor={id}
+				onClick={(e) => e.stopPropagation()}>
 				<Checkbox
-					id={id}
 					checked={isIncluded}
+					id={id}
 					onCheckedChange={(checked) => {
 						if (checked) setValue(`where.${index}.column`, name)
 						else {
@@ -243,33 +240,33 @@ const FormItem: React.FC<FieldItemProps> = ({ index, name, label, icon, type }) 
 				</span>
 			</FieldLabel>
 			<SelectFieldControl
-				name={`where.${index}.operator`}
-				defaultValue={operators[0].value}
-				disabled={!isIncluded}
 				datalist={operators}
-				labelField='label'
-				valueField='value'
+				defaultValue={operators[0].value!}
+				disabled={!isIncluded}
 				errorMessageVariant='tooltip'
+				labelField='label'
+				name={`where.${index}.operator`}
+				valueField='value'
 				onValueChange={() => {
 					if (type === 'date') resetField(`where.${index}.value`)
 				}}
 			/>
 			{type === 'text' && (
 				<InputFieldControl
-					name={`where.${index}.value`}
-					placeholder={t('ns_common:actions.search') + '...'}
 					disabled={!isIncluded}
 					errorMessageVariant='tooltip'
+					name={`where.${index}.value`}
+					placeholder={t('ns_common:actions.search') + '...'}
 				/>
 			)}
 			{type === 'date' && (
 				<DatePickerFieldControl
-					name={`where.${index}.value`}
-					disabled={!isIncluded}
 					calendarProps={{ mode: currentOperator === '=:@value' ? 'single' : 'range', disabled: !isIncluded }}
+					disabled={!isIncluded}
+					name={`where.${index}.value`}
 				/>
 			)}
-			{type === 'select' && <StatusFieldControl name={`where.${index}.value`} disabled={!isIncluded} />}
+			{type === 'select' && <StatusFieldControl disabled={!isIncluded} name={`where.${index}.value`} />}
 		</FieldGroup>
 	)
 }

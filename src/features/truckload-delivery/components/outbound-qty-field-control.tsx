@@ -1,3 +1,5 @@
+'use no memo'
+
 import { CommonActions } from '@common/constants/enums'
 import type { InputFieldControlProps } from '@components/forms/input'
 import { InputFieldControl } from '@components/forms/input'
@@ -9,45 +11,52 @@ import type { CreateDeliveryFormValues } from '../schemas'
 const OutboundQtyInputFieldControl: React.FC<
 	InputFieldControlProps<CreateDeliveryFormValues> & {
 		['data-action']: CommonActions.CREATE | CommonActions.UPDATE
-		['data-index']?: number
+		['data-index']: number
 	}
 > = ({ name, ...props }) => {
 	const { control, setValue } = useFormContext<CreateDeliveryFormValues>()
 	const { t } = useTranslation()
 
-	const currentOutboundQty = useWatch({ name, control })
+	const fieldIndex = props['data-index']
+	const fieldAction = props['data-action']
+
+	const currentOutboundQty = useWatch({ name, control, defaultValue: 0 })
 	const currentMaxOutboundQty = useWatch({
 		control,
-		name: `outbound_purchase_orders.${props['data-index']}.max_outbound_qty`
+		name: `outbound_purchase_orders.${fieldIndex}.max_outbound_qty`,
+		defaultValue: 0
 	})
 
 	const currentPurchaseOrder = useWatch({
 		control,
-		name: `outbound_purchase_orders.${props['data-index']}.po`
+		name: `outbound_purchase_orders.${fieldIndex}.po`
 	})
 
 	const actualMaxOutboundQty = useMemo(() => {
 		if (!currentMaxOutboundQty && typeof currentMaxOutboundQty !== 'number') return Infinity
-		if (props['data-action'] === CommonActions.UPDATE) return currentMaxOutboundQty + (currentOutboundQty ?? 0)
+		if (fieldAction === CommonActions.UPDATE) return currentMaxOutboundQty + (currentOutboundQty ?? 0)
 		return currentMaxOutboundQty
 	}, [currentPurchaseOrder, currentOutboundQty, currentMaxOutboundQty])
 
 	return (
 		<InputFieldControl
-			name={name}
-			type='number'
+			errorMessageVariant='tooltip'
 			inputMode='numeric'
 			min={1}
-			// max={actualMaxOutboundQty === Infinity ? undefined : actualMaxOutboundQty}
+			name={name}
 			step={1}
-			errorMessageVariant='tooltip'
-			onChange={(e) =>
-				setValue(`outbound_purchase_orders.${props['data-index']}.outbound_qty`, Math.abs(+e.currentTarget.value))
-			}
+			type='number'
+			value={currentOutboundQty === 0 ? null : currentOutboundQty}
 			placeholder={
 				actualMaxOutboundQty === Infinity
-					? 'Unlimited (∞)'
-					: t('ns_inoutbound:placeholders.max_qty', { qty: actualMaxOutboundQty, defaultValue: null })
+					? '0 (prs)'
+					: t('ns_inoutbound:placeholders.max_qty', {
+							qty: actualMaxOutboundQty,
+							defaultValue: actualMaxOutboundQty
+						})
+			}
+			onChange={(e) =>
+				setValue(`outbound_purchase_orders.${props['data-index']}.outbound_qty`, Math.abs(+e.currentTarget.value))
 			}
 			{...props}
 		/>

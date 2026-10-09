@@ -6,7 +6,7 @@ import type {
 	UpdateDispatchOrderFormValues,
 	UpsertPurchaseOrdersFormValues
 } from '@features/truckload-delivery/schemas'
-import type { ITruckloadDelivery, ITruckloadDeliveryDetail, TruckloadDeliveryDispatchOrder } from '../types'
+import type { ITruckloadDelivery, ITruckloadDeliveryPacking, TruckloadDeliveryDispatchOrder } from '../types'
 
 export class TruckloadDeliveryService {
 	static async getDispatchOrders(
@@ -22,7 +22,7 @@ export class TruckloadDeliveryService {
 	}
 
 	public static async getDispatchOrderDetail(dispatchOrder: string) {
-		return await axiosInstance.get<void, ResponseBody<ITruckloadDeliveryDetail[]>>(
+		return await axiosInstance.get<void, ResponseBody<ITruckloadDeliveryPacking[]>>(
 			`/truckload-delivery/${dispatchOrder}`
 		)
 	}
@@ -31,20 +31,25 @@ export class TruckloadDeliveryService {
 		return await axiosInstance.post<unknown, CreateDeliveryFormValues>('/truckload-delivery/create', payload)
 	}
 
-	static async deleteOne(id: number) {
-		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/delete/${id}`)
+	static async deleteOne({ dispatch_order, po }: { dispatch_order: TruckloadDeliveryDispatchOrder; po: string }) {
+		return await axiosInstance.delete<void, unknown>(
+			`/truckload-delivery/delete/${dispatch_order}/purchase-orders/${po}`
+		)
 	}
 
-	static async bulkUpdate(dispatchOrder: string, payload: Omit<UpdateDispatchOrderFormValues, 'dispatch_order'>) {
+	static async bulkUpdate(
+		dispatchOrder: TruckloadDeliveryDispatchOrder,
+		payload: Omit<Partial<UpdateDispatchOrderFormValues>, 'dispatch_order'>
+	) {
 		return await axiosInstance.patch(`/truckload-delivery/bulk-update/${dispatchOrder}`, payload)
 	}
 
 	static async searchDispatchPurchaseOrder(search: string) {
 		return await axiosInstance.get<
-			void,
+			unknown,
 			ResponseBody<
 				Pick<
-					ITruckloadDeliveryDetail,
+					ITruckloadDeliveryPacking,
 					'po' | 'brand_name' | 'factory_shoes_style' | 'color_sn' | 'max_outbound_qty'
 				>[]
 			>
@@ -52,17 +57,7 @@ export class TruckloadDeliveryService {
 	}
 
 	static async upsertPurchaseOrders({ dispatch_order, ...update }: UpsertPurchaseOrdersFormValues) {
-		const payload = {
-			...update,
-			outbound_purchase_orders: update.outbound_purchase_orders.map(({ keyid, ...item }) => {
-				return {
-					...item,
-					id: typeof item.id === 'number' ? item.id : null
-				}
-			})
-		}
-
-		return await axiosInstance.put(`/truckload-delivery/upsert-purchase-orders/${dispatch_order}`, payload)
+		return await axiosInstance.put(`/truckload-delivery/upsert-purchase-orders/${dispatch_order}`, update)
 	}
 
 	static async bulkDelete(dispatchOrder: TruckloadDeliveryDispatchOrder) {

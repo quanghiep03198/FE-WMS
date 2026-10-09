@@ -1,11 +1,12 @@
-import type { CommonActions } from '@common/constants/enums'
+import { type CommonActions } from '@common/constants/enums'
 import { useEventEmitter, useSessionStorageState } from 'ahooks'
 import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use, useMemo } from 'react'
-import type { TruckloadDeliveryFilterFormValues } from '../schemas'
-import { truckloadDeliveryFilterSchema } from '../schemas'
+import type { UpdateDispatchOrderFormValues} from '../schemas';
+import { type TruckloadDeliveryFilterFormValues } from '../schemas'
 import type { ITruckloadDelivery, TruckloadDeliveryDispatchOrder } from '../types'
 // type-only import — safe for circular module resolution (erased at runtime)
+import useMediaQuery from '@hooks/use-media-query'
 import type { PageQueryParams } from '../hooks/use-page-query-params'
 
 // Mirror the string literals from the hook files to avoid circular runtime imports
@@ -23,6 +24,7 @@ export type SignatureType = keyof TruckloadDeliveryKeys
 // 'ie_signature' | 'warehouse_officer_signature' | 'security_1_signature' | 'security_2_signature'
 
 type EventPayload =
+	| { action: CommonActions.READ; payload: ITruckloadDelivery }
 	| { action: CommonActions.CREATE; payload: null }
 	| {
 			action: CommonActions.UPDATE
@@ -34,17 +36,24 @@ type EventPayload =
 	  }
 	| {
 			action: CommonActions.UPDATE_MANY
-			payload: Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'container_number'>
+			payload: Partial<UpdateDispatchOrderFormValues>
 	  }
 	| { action: CommonActions.SET_STATUS; payload: string }
-	| { action: CommonActions.DELETE; payload: number }
-	| { action: CommonActions.DELETE_MANY; payload: TruckloadDeliveryDispatchOrder }
+	| {
+			action: CommonActions.DELETE
+			payload: { dispatch_order: TruckloadDeliveryDispatchOrder; po: string; index: number }
+	  }
+	| {
+			action: CommonActions.DELETE_MANY
+			payload: { dispatch_order: TruckloadDeliveryDispatchOrder }
+	  }
 	| {
 			action: 'UPDATE_DISPATCH_ORDER_SIGNATURE'
 			payload: Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status' | 'license_plate'> & {
 				signature_type: SignatureType
 			}
 	  }
+	| { action: 'RESET_DELIVERY_DETAILS'; payload: number | undefined }
 
 type SetStorageState<T> = ReturnType<typeof useSessionStorageState<T>>[1]
 
@@ -60,15 +69,31 @@ const PageContext = createContext<PageContextValue>({} as PageContextValue)
 
 export const PageContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const event$ = useEventEmitter<EventPayload>()
-
+	const isMobile = useMediaQuery('(max-width: 919px)')
 	// ─── Registered ONCE here — all consumers read from context, no extra listeners ───
 	const [storedFilterParams, setStoredFilterParams] = useSessionStorageState<TruckloadDeliveryFilterFormValues>(
 		_STORAGE_FILTER_KEY,
-		{ defaultValue: truckloadDeliveryFilterSchema.parse(undefined), listenStorageChange: true }
+		{
+			defaultValue: {
+				where: [
+					{ column: null, operator: '=:@value', value: null },
+					{ column: null, operator: 'like:%@value%', value: '' },
+					{ column: null, operator: 'like:%@value%', value: '' },
+					{ column: null, operator: 'like:%@value%', value: '' },
+					{ column: null, operator: 'like:%@value%', value: '' },
+					{ column: null, operator: 'between:@value1,@value2', value: null },
+					{ column: null, operator: 'between:@value1,@value2', value: null },
+					{ column: null, operator: 'between:@value1,@value2', value: null },
+					{ column: null, operator: 'between:@value1,@value2', value: null },
+					{ column: null, operator: 'between:@value1,@value2', value: null }
+				]
+			},
+			listenStorageChange: true
+		}
 	)
 
 	const [searchParams, setParams] = useSessionStorageState<PageQueryParams>(_STORAGE_PARAMS_KEY, {
-		defaultValue: { page: 1, limit: 20 } as PageQueryParams,
+		defaultValue: { page: 1, limit: isMobile ? 10 : 15 } as PageQueryParams,
 		listenStorageChange: true
 	})
 

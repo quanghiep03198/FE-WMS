@@ -10,11 +10,11 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
+	Div,
 	Field,
 	FieldDescription,
 	FieldGroup,
 	FieldLegend,
-	FieldSeparator,
 	FieldSet,
 	FormControl,
 	FormField,
@@ -28,22 +28,23 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import useMediaQuery from '@hooks/use-media-query'
 import { capitalize } from 'lodash-es'
-import { Fragment, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useRef, useState } from 'react'
+import { type Resolver, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../contexts/page-context'
-import { useUpdateDispatchOrderMutation } from '../hooks/use-truckload-delivery-asm'
+import { useUpdateDispatchOrderMutation } from '../hooks/use-truckload-delivery-request'
 import type { UpdateDispatchOrderFormValues } from '../schemas'
 import { updateDispatchOrderSchema } from '../schemas'
+import { DateTimePickerFieldControl } from './datetime-picker-field-control'
 
 const UpdateDispatchOrderFormDialog: React.FC = () => {
 	const [open, setOpen] = useState(false)
 	const { event$ } = usePageContext()
 	const { t } = useTranslation()
 	const form = useForm<UpdateDispatchOrderFormValues>({
-		resolver: zodResolver(updateDispatchOrderSchema)
+		resolver: zodResolver(updateDispatchOrderSchema) as Resolver<UpdateDispatchOrderFormValues>
 	})
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 	const { mutateAsync, isPending, isError } = useUpdateDispatchOrderMutation()
@@ -69,107 +70,110 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 
 	return (
 		<Dialog defaultOpen={false} open={open} onOpenChange={setOpen}>
-			<DialogContent className='max-h-[80vh] max-w-lg scrollbar-none overflow-auto'>
+			<DialogContent className='scroll-fade-y h-screen w-full max-w-screen scrollbar-none overflow-auto rounded-none lg:max-h-[80vh] lg:max-w-lg lg:rounded-lg xl:h-max xl:max-h-[80vh] xl:max-w-xl xl:rounded-lg'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.update_truckload_delivery')}</DialogTitle>
 					<DialogDescription>{t('ns_inoutbound:description.update_truckload_delivery')}</DialogDescription>
 				</DialogHeader>
 				<FormProvider {...form}>
-					<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
-						<FieldGroup>
-							<FieldSet>
+					<Form
+						onSubmit={form.handleSubmit(
+							async (data) => await handleSaveChanges(data as UpdateDispatchOrderFormValues)
+						)}>
+						<FieldSet className='grid grid-cols-2 gap-x-6'>
+							<Div className='col-span-2'>
+								<DateTimePickerFieldControl name='factory_entrance_time' />
+							</Div>
+							<Div className='col-span-2'>
+								<DateTimePickerFieldControl name='factory_departure_time' />
+							</Div>
+							<InputFieldControl
+								description={t('ns_inoutbound:description.container_number_field')}
+								label={t('ns_erp:fields.container_number')}
+								name='container_number'
+								placeholder='e.g., ABCU1234567'
+								onChange={(e) => {
+									form.setValue('container_number', e.currentTarget.value.toUpperCase() || null)
+								}}
+							/>
+							<InputFieldControl
+								description={t('ns_inoutbound:description.seal_number_field')}
+								label={t('ns_erp:fields.seal_number')}
+								name='seal_number'
+								placeholder='e.g., 7355608'
+								onChange={(e) => form.setValue('seal_number', e.currentTarget.value.toUpperCase() || null)}
+							/>
+							<FieldGroup className='col-span-2'>
 								<InputFieldControl
-									label={t('ns_erp:fields.container_number')}
-									name='container_number'
-									placeholder='e.g., ABCU1234567'
-									description={t('ns_inoutbound:description.container_number_field')}
-									onChange={(e) => {
-										form.setValue('container_number', e.currentTarget.value.toUpperCase() || null)
-									}}
-								/>
-								<InputFieldControl
+									description={t('ns_inoutbound:description.license_plate_field')}
 									label={t('ns_erp:fields.license_plate')}
 									name='license_plate'
-									placeholder='e.g., ABC-12345'
-									description={t('ns_inoutbound:description.license_plate_field')}
+									placeholder='e.g., 1A23456'
 									onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase() || null)}
 								/>
-							</FieldSet>
-						</FieldGroup>
-						{isMobile && (
-							<Fragment>
-								<FieldSeparator />
-								<FieldGroup>
-									<FieldSet>
-										<FieldLegend variant='label' className='mb-1'>
-											{t('ns_inoutbound:titles.container_condition_assessment')}
-										</FieldLegend>
-										<FieldDescription>
-											{t('ns_inoutbound:description.container_condition_assessment')}
-										</FieldDescription>
-										<FieldGroup className='gap-3'>
-											<FormField
-												name='punctured_container'
-												control={form.control}
-												render={({ field }) => (
-													<FormItem>
-														<Field orientation='horizontal'>
-															<FormControl>
-																<Checkbox
-																	checked={Boolean(field.value)}
-																	onCheckedChange={field.onChange}
-																/>
-															</FormControl>
-															<FormLabel>{t('ns_erp:fields.punctured_container')}</FormLabel>
-														</Field>
-													</FormItem>
-												)}
-											/>
-											<FormField
-												name='smelling_container'
-												control={form.control}
-												render={({ field }) => (
-													<FormItem>
-														<Field orientation='horizontal'>
-															<FormControl>
-																<Checkbox
-																	checked={Boolean(field.value)}
-																	onCheckedChange={field.onChange}
-																/>
-															</FormControl>
+							</FieldGroup>
+						</FieldSet>
 
-															<FormLabel>{t('ns_erp:fields.smelling_container')}</FormLabel>
-														</Field>
-													</FormItem>
-												)}
-											/>
-											<FormField
-												name='moist_container'
-												control={form.control}
-												render={({ field }) => (
-													<FormItem>
-														<Field orientation='horizontal'>
-															<FormControl>
-																<Checkbox
-																	checked={Boolean(field.value)}
-																	onCheckedChange={field.onChange}
-																/>
-															</FormControl>
-															<FormLabel>{t('ns_erp:fields.moist_container')}</FormLabel>
-														</Field>
-													</FormItem>
-												)}
-											/>
-										</FieldGroup>
-									</FieldSet>
+						{isMobile && (
+							<FieldSet>
+								<FieldLegend className='mb-1' variant='label'>
+									{t('ns_inoutbound:titles.container_condition_assessment')}
+								</FieldLegend>
+								<FieldDescription>
+									{t('ns_inoutbound:description.container_condition_assessment')}
+								</FieldDescription>
+								<FieldGroup className='gap-3'>
+									<FormField
+										control={form.control}
+										name='punctured_container'
+										render={({ field }) => (
+											<FormItem>
+												<Field orientation='horizontal'>
+													<FormControl>
+														<Checkbox checked={Boolean(field.value)} onCheckedChange={field.onChange} />
+													</FormControl>
+													<FormLabel>{t('ns_erp:fields.punctured_container')}</FormLabel>
+												</Field>
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name='smelling_container'
+										render={({ field }) => (
+											<FormItem>
+												<Field orientation='horizontal'>
+													<FormControl>
+														<Checkbox checked={Boolean(field.value)} onCheckedChange={field.onChange} />
+													</FormControl>
+
+													<FormLabel>{t('ns_erp:fields.smelling_container')}</FormLabel>
+												</Field>
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name='moist_container'
+										render={({ field }) => (
+											<FormItem>
+												<Field orientation='horizontal'>
+													<FormControl>
+														<Checkbox checked={Boolean(field.value)} onCheckedChange={field.onChange} />
+													</FormControl>
+													<FormLabel>{t('ns_erp:fields.moist_container')}</FormLabel>
+												</Field>
+											</FormItem>
+										)}
+									/>
 								</FieldGroup>
-							</Fragment>
+							</FieldSet>
 						)}
 						<FieldGroup>
 							<FieldSet>
 								<TextareaFieldControl
-									name='remark'
 									label={t('ns_common:common_fields.remark')}
+									name='remark'
 									placeholder={capitalize(
 										t('ns_common:form_placeholder.fill', {
 											object: t('ns_common:common_fields.remark'),
@@ -185,7 +189,11 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 								{t('ns_common:actions.cancel')}
 							</DialogClose>
 							<Button>
-								<Icon name={isPending ? 'LoaderCircle' : 'Check'} className={isPending && 'animate-spin'} />
+								<Icon
+									aria-busy={isPending}
+									className='aria-busy:animate-spin'
+									name={isPending ? 'LoaderCircle' : 'Check'}
+								/>
 								{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save_changes')}
 							</Button>
 						</DialogFooter>
@@ -196,7 +204,7 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 	)
 }
 
-export const Form = tw.form`flex flex-col gap-y-4`
+export const Form = tw.form`flex flex-col gap-y-4 overflow-y-auto scroll-fade-y`
 
 export default UpdateDispatchOrderFormDialog
 

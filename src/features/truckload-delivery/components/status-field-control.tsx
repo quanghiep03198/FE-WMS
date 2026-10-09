@@ -58,17 +58,17 @@ const StatusFieldControl: React.FC<StatusFieldControlProps> = ({ name, disabled 
 
 	return (
 		<FormField
-			name={name!}
-			defaultValue={getValues(name)}
 			control={control}
+			defaultValue={getValues(name)}
+			name={name!}
 			render={({ field }) => {
 				return (
 					<FormItem>
 						<Select
-							value={field.value ?? ''}
 							defaultValue={field.value ?? ''}
-							onValueChange={field.onChange}
-							disabled={disabled}>
+							disabled={disabled}
+							value={field.value ?? ''}
+							onValueChange={field.onChange}>
 							<Tooltip
 								message={t(error?.message as ResourceKey) || ''}
 								triggerProps={{ type: 'button', className: 'w-full' }}
@@ -110,9 +110,9 @@ const StatusFieldControl: React.FC<StatusFieldControlProps> = ({ name, disabled 
 									))
 								) : (
 									<SelectItem
-										value={null}
 										disabled
-										className='flex items-center justify-center text-center text-xs font-medium'>
+										className='flex items-center justify-center text-center text-xs font-medium'
+										value={null}>
 										No option
 									</SelectItem>
 								)}

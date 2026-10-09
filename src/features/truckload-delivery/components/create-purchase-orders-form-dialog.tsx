@@ -32,7 +32,7 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { GhostButton } from '../../../components/shared/ghost-button'
 import { usePageContext } from '../contexts/page-context'
-import { useCreateTruckloadDeliveryMutation } from '../hooks/use-truckload-delivery-asm'
+import { useCreateTruckloadDeliveryMutation } from '../hooks/use-truckload-delivery-request'
 import type { CreateDeliveryFormValues } from '../schemas'
 import { createDeliverySchema } from '../schemas'
 import OutboundQtyInputFieldControl from './outbound-qty-field-control'
@@ -94,19 +94,19 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 								<Fragment>
 									<Div className='grid grid-cols-2 gap-x-2'>
 										<InputFieldControl
+											description={t('ns_inoutbound:description.container_number_field')}
 											label={t('ns_erp:fields.container_number')}
 											name='container_number'
 											placeholder='e.g., ABCU1234567'
-											description={t('ns_inoutbound:description.container_number_field')}
 											onChange={(e) => {
 												form.setValue('container_number', e.currentTarget.value.toUpperCase())
 											}}
 										/>
 										<InputFieldControl
+											description={t('ns_inoutbound:description.license_plate_field')}
 											label={t('ns_erp:fields.license_plate')}
 											name='license_plate'
 											placeholder='e.g., ABC-12345'
-											description={t('ns_inoutbound:description.license_plate_field')}
 											onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase())}
 										/>
 									</Div>
@@ -128,32 +128,32 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 											</TableHeader>
 											<TableBody ref={scrollRef}>
 												{fields.map((field, index) => (
-													<TableRow key={field.id} className='*:border-none'>
+													<TableRow className='*:border-none' key={field.id}>
 														<TableCell>
 															<Typography
-																color='muted'
-																className='h-9 py-2 align-middle text-sm before:content-["#"]'>
+																className='h-9 py-2 align-middle text-sm before:content-["#"]'
+																color='muted'>
 																{index + 1}
 															</Typography>
 														</TableCell>
 														<TableCell className='self-start px-1'>
 															<PurchaseOrderFieldControl
-																data-index={index}
 																data-action={CommonActions.CREATE}
+																data-index={index}
 																name={`outbound_purchase_orders.${index}.po`}
 															/>
 														</TableCell>
 														<TableCell className='self-start px-1'>
 															<OutboundQtyInputFieldControl
-																data-index={index}
 																data-action={CommonActions.CREATE}
+																data-index={index}
 																name={`outbound_purchase_orders.${index}.outbound_qty`}
 															/>
 														</TableCell>
 														<TableCell>
 															<GhostButton
-																type='button'
 																className='h-9 place-self-center self-center py-2'
+																type='button'
 																onClick={() => remove(index)}>
 																<Icon name='X' />
 															</GhostButton>
@@ -162,11 +162,11 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 												))}
 											</TableBody>
 											<TableFooter>
-												<ButtonGroup className='h-fit w-fit' aria-label='Dynamic field controls'>
+												<ButtonGroup aria-label='Dynamic field controls' className='h-fit w-fit'>
 													<Button
+														size='sm'
 														type='button'
 														variant='outline'
-														size='sm'
 														onClick={() =>
 															append({ po: '', outbound_qty: null, max_outbound_qty: Infinity })
 														}>
@@ -174,9 +174,9 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 														{t('ns_common:table.add_row')}
 													</Button>
 													<Button
+														size='sm'
 														type='button'
 														variant='outline'
-														size='sm'
 														onClick={() => remove(fields.map((_, idx) => idx))}>
 														<Icon name='ListX' size={20} strokeWidth={1.5} />{' '}
 														{t('ns_inoutbound:labels.delete_all')}
@@ -184,16 +184,16 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 												</ButtonGroup>
 												<Div className='col-span-full inline-flex items-center'>
 													<Icon
+														className='animate-in zoom-in-0 slide-in-from-bottom-2 mr-2 duration-500'
 														name='BotMessageSquare'
 														size={24}
-														className='animate-in zoom-in-0 slide-in-from-bottom-2 mr-2 duration-500'
 													/>
 													&quot;
 													<Typewriter
 														className='text-sm italic'
+														delay={350}
 														text={t('ns_inoutbound:description.duplicate_po_added')}
 														typeSpeed={20}
-														delay={350}
 													/>
 													&quot;
 												</Div>
@@ -204,12 +204,12 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 							) : (
 								<Empty className='border border-dashed'>
 									<EmptyHeader className='w-full max-w-md'>
-										<EmptyMedia variant='default' className='place-items place-content-center'>
+										<EmptyMedia className='place-items place-content-center' variant='default'>
 											<Icon
 												name='CircleFadingPlus'
 												size={48}
-												strokeWidth={1}
 												stroke='var(--muted-foreground)'
+												strokeWidth={1}
 											/>
 										</EmptyMedia>
 										<EmptyTitle>{t('ns_inoutbound:description.no_dispatch_order_item_added')}</EmptyTitle>
@@ -219,10 +219,10 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 									</EmptyHeader>
 									<EmptyContent>
 										<Button
+											className='border-dashed'
+											size='sm'
 											type='button'
 											variant='outline'
-											size='sm'
-											className='border-dashed'
 											onClick={() => append({ po: '', outbound_qty: null, max_outbound_qty: Infinity })}>
 											<Icon name='Plus' /> {t('ns_common:actions.add')}
 										</Button>
@@ -231,10 +231,10 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 							)}
 							{fields.length > 0 && (
 								<DialogFooter>
-									<Button type='submit' disabled={isPending}>
+									<Button disabled={isPending} type='submit'>
 										<Icon
-											name={isPending ? 'LoaderCircle' : 'Check'}
 											className={isPending && 'animate-spin'}
+											name={isPending ? 'LoaderCircle' : 'Check'}
 										/>
 										{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 									</Button>

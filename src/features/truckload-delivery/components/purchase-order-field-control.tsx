@@ -1,13 +1,15 @@
+'use no memo'
+
 import { CommonActions } from '@common/constants/enums'
 import type { AutoCompleteFieldControlProps } from '@components/forms/auto-complete'
 import { AutoCompleteFieldControl } from '@components/ui'
-import { useDebounce, useUpdateEffect } from 'ahooks'
-import React, { useEffect, useState } from 'react'
+import { useDebounce } from 'ahooks'
+import React, { memo, useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useSearchDispatchPurchaseOrder } from '../hooks/use-truckload-delivery-asm'
+import { useSearchDispatchPurchaseOrder } from '../hooks/use-truckload-delivery-request'
 import type { CreateDeliveryFormValues, UpsertPurchaseOrdersFormValues } from '../schemas'
-import type { ITruckloadDeliveryDetail } from '../types'
+import type { ITruckloadDeliveryPacking } from '../types'
 
 type PurchaseOrderFieldControlProps = Partial<
 	Omit<
@@ -21,61 +23,65 @@ type PurchaseOrderFieldControlProps = Partial<
 	>
 > & {
 	onValueChange?: (
-		selectedItem: Pick<ITruckloadDeliveryDetail, 'po' | 'brand_name' | 'factory_shoes_style' | 'color_sn'> & {
-			max_outbound_qty?: number
-		}
+		selectedItem:
+			| Pick<
+					ITruckloadDeliveryPacking,
+					'po' | 'brand_name' | 'factory_shoes_style' | 'color_sn' | 'max_outbound_qty'
+			  >
+			| undefined
 	) => any
 	['data-action']: CommonActions.CREATE | CommonActions.UPDATE
-	['data-index']?: number
+	['data-index']: number
 }
 
 const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ name, onValueChange, ...props }) => {
-	const fieldIndex: number | undefined = props['data-index']
+	const fieldIndex: number = props['data-index']
 	const fieldAction: CommonActions.CREATE | CommonActions.UPDATE = props['data-action']
 
 	const { t } = useTranslation()
 	const { control, setValue } = useFormContext<CreateDeliveryFormValues | UpsertPurchaseOrdersFormValues>()
 	const currentPurchaseOrderValue = useWatch({ control, name })
-	const currentOutboundQty = useWatch({ control, name: `outbound_purchase_orders.${fieldIndex}.outbound_qty` })
+	const currentOutboundQty = useWatch({ control, name: `outbound_purchase_orders.${fieldIndex}.outbound_qty` }) ?? 0
 	const [searchTerm, setSearchTerm] = useState(typeof fieldIndex === 'number' ? (currentPurchaseOrderValue ?? '') : '')
 	const debouncedSearchTerm = useDebounce(searchTerm, { wait: 500 })
 	const { data: purchaseOrders, isLoading } = useSearchDispatchPurchaseOrder(debouncedSearchTerm)
 
 	useEffect(() => {
-		if (!currentPurchaseOrderValue) return
-
-		const matchPurchaseOrder = purchaseOrders?.find?.((item) => item.po === currentPurchaseOrderValue)
+		if (!Array.isArray(purchaseOrders) || purchaseOrders.length === 0) return
+		const matchPurchaseOrder = purchaseOrders.find((item) => item.po === currentPurchaseOrderValue)
 		if (!matchPurchaseOrder) return
 
-		const maxOutboundQty =
-			fieldAction === CommonActions.UPDATE
-				? matchPurchaseOrder.max_outbound_qty + currentOutboundQty
-				: matchPurchaseOrder.max_outbound_qty
+		const maxOutboundQty = matchPurchaseOrder.max_outbound_qty
+		const discardedQty = fieldAction === CommonActions.UPDATE ? currentOutboundQty : 0
+		const nextMaxOutboundQty = typeof maxOutboundQty === 'number' ? maxOutboundQty + discardedQty : 0
+		setValue(`outbound_purchase_orders.${fieldIndex}.max_outbound_qty`, nextMaxOutboundQty, {
+			shouldValidate: true
+		})
+	}, [purchaseOrders, currentOutboundQty, currentPurchaseOrderValue, fieldIndex, fieldAction])
 
-		setValue(`outbound_purchase_orders.${fieldIndex}.max_outbound_qty`, Math.max(0, maxOutboundQty))
-	}, [purchaseOrders, currentPurchaseOrderValue])
-
-	useUpdateEffect(() => {
-		if (typeof onValueChange === 'function') onValueChange(purchaseOrders?.find((item) => item?.po === searchTerm))
+	useEffect(() => {
+		const purchaseOrder = purchaseOrders.find((item) => item?.po === searchTerm)
+		if (typeof onValueChange === 'function') onValueChange(purchaseOrder!)
 	}, [searchTerm, purchaseOrders])
 
 	return (
 		<AutoCompleteFieldControl
+			className='bg-transparent!'
+			datalist={purchaseOrders!}
+			errorMessageVariant='tooltip'
+			labelField='po'
+			loading={isLoading}
 			name={name}
 			placeholder={t('ns_common:common_fields.quantiy_with_limit', { limit: 'PO', defaultValue: 'PO' })}
-			className='bg-transparent!'
-			labelField='po'
 			valueField='po'
-			loading={isLoading}
-			datalist={purchaseOrders}
-			errorMessageVariant='tooltip'
 			onInput={(value) => setSearchTerm(value)}
 			onSelect={(value) => {
-				if (typeof onValueChange === 'function') onValueChange(purchaseOrders?.find((item) => item?.po === value))
+				const purchaseOrder = purchaseOrders.find((item) => item?.po === value)
+				if (typeof onValueChange === 'function') onValueChange(purchaseOrder)
 			}}
 			{...props}
 		/>
 	)
 }
 
-export default PurchaseOrderFieldControl
+export default memo(PurchaseOrderFieldControl)

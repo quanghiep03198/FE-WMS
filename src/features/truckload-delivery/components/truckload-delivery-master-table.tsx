@@ -1,22 +1,20 @@
-import { cn } from '@common/utils/cn'
 import formatIntlNumber from '@common/utils/format-intl-number'
-import { DataTable, Icon, Tooltip } from '@components/ui'
+import { DataTable } from '@components/ui'
 import TableCellText from '@components/ui/@react-table/components/table-cell-text'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@components/ui/@react-table/constants'
-import type { DataTableProps, RenderSubComponentProps } from '@components/ui/@react-table/types'
+import type { DataTableProps } from '@components/ui/@react-table/types'
 import useMediaQuery from '@hooks/use-media-query'
 import { useQueryClient } from '@tanstack/react-query'
-import type { CellContext, OnChangeFn, PaginationState, SortingState } from '@tanstack/react-table'
+import type { CellContext, OnChangeFn, PaginationState, SortingState, VisibilityState } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
-import { useDeepCompareEffect } from 'ahooks'
+import { useDeepCompareEffect, useLocalStorageState } from 'ahooks'
 import { unflatten } from 'flat'
 import { omit, omitBy } from 'lodash-es'
-import { useCallback, useMemo, useState, useTransition } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { GhostButton } from '../../../components/shared/ghost-button'
 import type { FlattenedPageQueryParams, PageQueryParams } from '../hooks/use-page-query-params'
 import { usePageQueryParams } from '../hooks/use-page-query-params'
-import { getTruckloadDeliveryQueryOptions, useGetTruckloadDeliveryQuery } from '../hooks/use-truckload-delivery-asm'
+import { getTruckloadDeliveryQueryOptions, useGetTruckloadDeliveryQuery } from '../hooks/use-truckload-delivery-request'
 import type { ITruckloadDelivery } from '../types'
 import RowActions from './row-actions'
 import RowExpansionCell from './row-expansion-cell'
@@ -27,7 +25,6 @@ import {
 	DispatchOrderStatusBadge,
 	LicensePlateColumnCell
 } from './truck-load-delivery-table-cells'
-import TruckloadDeliveryDetailTable from './truckload-delivery-detail-table'
 import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
 
 const columnHelper = createColumnHelper<ITruckloadDelivery>()
@@ -35,8 +32,7 @@ const columnHelper = createColumnHelper<ITruckloadDelivery>()
 const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1179px)')
-	const { data, isLoading, isRefetching } = useGetTruckloadDeliveryQuery()
-	const [isTransitioning, startTransition] = useTransition()
+	const { data, isLoading, isPlaceholderData } = useGetTruckloadDeliveryQuery()
 	const queryClient = useQueryClient()
 	const { searchParams, setParams } = usePageQueryParams()
 	const defaultSortingState = useMemo(() => {
@@ -45,6 +41,11 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			? Object.entries(flattenedSearchParams.sort).map(([key, value]) => ({ id: key, desc: value === 'desc' }))
 			: []
 	}, [searchParams])
+
+	const [storedHiddenState] = useLocalStorageState<VisibilityState>('truckloadDeliveryTableColumnVisibility', {
+		defaultValue: { dispatch_order: false }
+	})
+
 	const [sorting, setSorting] = useState<SortingState>(defaultSortingState)
 
 	const licensePlateColumnHeader = !isMobile
@@ -55,20 +56,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		() => [
 			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
-				header: ({ table }) => (
-					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
-						<GhostButton
-							className='absolute inset-0'
-							onClick={() => {
-								table.resetExpanded()
-								table.resetColumnFilters()
-							}}>
-							<Icon name='ListCollapse' size={18} />
-						</GhostButton>
-					</Tooltip>
-				),
-				size: 50,
-				maxSize: 50,
+				size: 60,
+				maxSize: 60,
 				enableHiding: false,
 				enableResizing: false,
 				enableSorting: false,
@@ -213,7 +202,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				cell: (props) => (
 					<DateTimeCell
 						{...{
-							...props,
+							...(props as unknown as CellContext<ITruckloadDelivery, Date | null>),
 							fallbackValue: props.row.original.actual_snap_time ?? undefined,
 							['aria-invalid']: props.row.original.possible_signing_late,
 							className: 'aria-invalid:text-destructive!'
@@ -237,14 +226,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		[i18n.language, isMobile]
 	)
 
-	const renderSubTable: DataTableProps['renderSubComponent'] = useCallback(
-		({ row }: RenderSubComponentProps<ITruckloadDelivery>) => {
-			const data = row.original
-			return <TruckloadDeliveryDetailTable data={data} />
-		},
-		[]
-	)
-
 	const toolbarProps: DataTableProps['toolbarProps'] = useMemo(
 		() => ({
 			override: true,
@@ -253,7 +234,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		[]
 	)
 
-	const virtualizerOptions = useMemo(() => ({ estimateSize: isMobile ? 60 : 40 }), [isMobile])
+	const virtualizerOptions = useMemo(() => ({ enabled: false, estimateSize: isMobile ? 60 : 40 }), [isMobile])
 
 	const changePagination = useCallback(
 		({ pageIndex, pageSize }: PaginationState) => {
@@ -278,57 +259,52 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		setParams({ ...noneSortingParams, ...sortingParams } as PageQueryParams)
 	}, [sorting])
 
-	const handlePrefetch = useCallback(
-		async (params: Pick<Pagination<ITruckloadDelivery>, 'page' | 'limit'>) => {
-			return await queryClient.query(getTruckloadDeliveryQueryOptions({ ...searchParams, ...params }))
-		},
-		[searchParams]
-	)
+	// Prefetch trang kế tiếp
+	useEffect(() => {
+		if (!isPlaceholderData || !data || !data.hasNextPage) return
 
-	const isPending = isLoading || isRefetching
+		const run = async () =>
+			await queryClient.query(getTruckloadDeliveryQueryOptions({ ...searchParams, page: data.page + 1 }))
+
+		const id = 'requestIdleCallback' in window ? requestIdleCallback(run, { timeout: 120 }) : setTimeout(run, 0)
+
+		return () => {
+			if ('cancelIdleCallback' in window) cancelIdleCallback(id as number)
+			else clearTimeout(id as number)
+		}
+	}, [data?.page, isPlaceholderData, data?.hasNextPage])
 
 	return (
 		<DataTable
+			border='bottom-only'
 			columns={columns}
 			data={data?.data ?? []}
-			border='bottom-only'
-			loading={isPending}
-			enableExpanding={true}
-			getRowCanExpand={() => true}
+			enableMultiSort={false}
 			getColumnCanGlobalFilter={() => true}
 			getRowId={(originalRow: ITruckloadDelivery) => originalRow.dispatch_order}
-			sorting={sorting}
-			enableMultiSort={false}
-			manualExpanding={false}
+			globalFilterFn='includesString'
+			initialState={{ columnVisibility: storedHiddenState, sorting: [{ id: 'dispatch_order', desc: true }] }}
+			loading={isLoading}
 			manualFiltering={false}
 			manualPagination={true}
 			manualSorting={true}
 			sortDescFirst={true}
+			sorting={sorting}
+			toolbarProps={toolbarProps}
+			virtualizerOptions={virtualizerOptions}
+			containerProps={{
+				'aria-busy': isPlaceholderData,
+				style: { height: 'calc(var(--outlet-wrapper-height) - 10rem)' },
+				className: 'aria-busy:opacity-80 aria-busy:pointer-events-none ease-in-out transition-opacity duration-200'
+			}}
 			paginationProps={{
 				...omit(data, 'data'),
 				enableInputPageSize: false,
-				prefetch: (params) => {
-					startTransition(() => {
-						handlePrefetch(params as Pick<Pagination<ITruckloadDelivery>, 'page' | 'limit'>)
-					})
-				}
+				variant: 'numbered'
+				// prefetch: handlePrefetch
 			}}
 			onPaginationChange={changePagination as OnChangeFn<PaginationState>}
 			onSortingChange={setSorting}
-			globalFilterFn='includesString'
-			initialState={{ columnVisibility: { dispatch_order: false }, sorting: [{ id: 'dispatch_order', desc: true }] }}
-			virtualizerOptions={virtualizerOptions}
-			toolbarProps={toolbarProps}
-			containerProps={{
-				'aria-busy': !isPending && isTransitioning,
-				style: { height: 'calc(var(--outlet-wrapper-height) - 10.5rem)' },
-				className: cn(
-					'aria-busy:opacity-80 aria-busy:pointer-events-none ease-in-out transition-opacity duration-300',
-					'[&_tr[data-role=expandable-row]_*[data-state=open]]:animate-none!',
-					'[&_tr[data-role=expandable-row]_*[data-state=closed]]:animate-none!'
-				)
-			}}
-			renderSubComponent={renderSubTable as any}
 		/>
 	)
 }
