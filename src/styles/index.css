@@ -14,7 +14,8 @@
 }
 
 @custom-variant dark (&:is(.dark *));
-@custom-variant aria-invalid (&[aria-invalid="true"]);
+@custom-variant aria-invalid (&[aria-invalid=true]);
+@custom-variant aria-current (&[aria-current=true]);
 
 @custom-variant sm (@media (min-width: 360px) and (max-width: 599px));
 @custom-variant md (@media (min-width: 600px) and (max-width: 919px));
