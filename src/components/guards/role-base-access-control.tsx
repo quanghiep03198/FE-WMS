@@ -17,6 +17,7 @@ type RoleBaseAccessControlVariant =
 
 type RoleBaseAccessControlProps = React.PropsWithChildren &
 	RoleBaseAccessControlVariant & {
+		strict?: boolean
 		authorizedRoles: UserRole[]
 		classNames?: {
 			wrapper?: string
@@ -29,6 +30,7 @@ export const ACTION_RESTRICTED_TOAST_ID = 'action-restricted-toast'
 const RoleBaseAccessControl: React.FC<RoleBaseAccessControlProps> = ({
 	children,
 	classNames,
+	strict = false,
 	mode = 'mask',
 	authorizedRoles,
 	fallbackComponent
@@ -37,7 +39,7 @@ const RoleBaseAccessControl: React.FC<RoleBaseAccessControlProps> = ({
 
 	const isAccessible = useMemo(() => {
 		if (!user) return false
-		if (user.is_system_user && user.roles.every((role) => role === UserRole.ADMIN)) return true
+		if (!strict && user.is_system_user && user.roles.every((role) => role === UserRole.ADMIN)) return true
 
 		const roles = user.roles
 		if (!Array.isArray(roles) || roles.length === 0) return false
