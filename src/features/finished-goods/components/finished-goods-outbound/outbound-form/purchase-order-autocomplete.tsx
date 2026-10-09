@@ -8,12 +8,10 @@ import { useTranslation } from 'react-i18next'
 
 const PurchaseOrderAutoComplete: React.FC = () => {
 	const { t } = useTranslation()
-	const { control, setValue, getErrors } = useFormContext()
+	const { control, setValue } = useFormContext()
 	const value = useWatch({ control, name: 'po' })
 	const debouncedSearchTerm = useDebounce(value, { wait: 500 })
 	const { data: purchaseOrders, isLoading } = useSearchPurchaseOrderQuery(debouncedSearchTerm)
-
-	console.log(getErrors())
 
 	return (
 		<AutoCompleteFieldControl
