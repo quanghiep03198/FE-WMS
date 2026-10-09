@@ -4,10 +4,14 @@ import { isIPv4 } from '@common/utils/ip'
 import { Div, Typography } from '@components/ui'
 import { __hostRegistry } from '@configs/host-registry.config'
 import { HttpStatusCode } from 'axios'
-
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * @deprecated This guard is no longer necessary as host compatibility is handled elsewhere.
+ * @param param0
+ * @returns
+ */
 const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { t } = useTranslation()
 	const currentHostRegistry = __hostRegistry.get(env<FactoryCode>('VITE_APP_TENANT'))!
