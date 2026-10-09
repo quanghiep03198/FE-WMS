@@ -1,6 +1,5 @@
 import { UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
-import HostCompatibleGuard from '@components/guards/host-compatible-guard'
 import IpPolicyGuard from '@components/guards/ip-policy-guard'
 import { RoleGuard } from '@components/guards/role-guard'
 import { Div, ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@components/ui'
@@ -45,67 +44,65 @@ function RouteComponent() {
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}>
 				<IpPolicyGuard>
-					<HostCompatibleGuard>
-						<PageContextProvider>
-							<Div
-								className={cn(
-									'divide-border @container flex h-(--outlet-wrapper-height) border-collapse flex-col divide-y rounded-md border',
-									!isSmallScreen && 'overflow-hidden'
-								)}
-								style={
-									{
-										'--header-height': '64px',
-										'--bar-height': '48px'
-									} as React.CSSProperties
-								}>
-								<InoutboundController />
-								{currInoutboundMethod === 'manually' ? (
-									<EpcTable />
-								) : (
-									<ResizablePanelGroup
-										className={cn('h-[calc(var(--outlet-wrapper-height)-var(--header-height))]')}
-										direction={isSmallScreen ? 'vertical' : 'horizontal'}
-										style={
-											{
-												'--rfid-playground-panel-height': rfidPlaygroundPanelSize
-													? rfidPlaygroundPanelSize.height + 'px'
-													: '100%',
-												'--detail-table-panel-height': detailTablePanelSize
-													? detailTablePanelSize.height + 'px'
-													: '100%'
-											} as React.CSSProperties
-										}>
-										<ResizablePanel
-											defaultSize={isSmallScreen ? 30 : 65}
-											maxSize={isSmallScreen ? 50 : 75}
-											minSize={isSmallScreen ? 35 : 65}>
-											<PanelContent ref={detailTablePanelRef}>
-												<EpcDetailTable />
-											</PanelContent>
-										</ResizablePanel>
-										<ResizableHandle className='z-30' withHandle={true} />
-										<ResizablePanel
-											defaultSize={isSmallScreen ? 65 : 30}
-											maxSize={isSmallScreen ? 65 : 35}
-											minSize={isSmallScreen ? 50 : 25}>
-											<PanelContent ref={rfidPlaygroundPanelRef}>
-												<ReaderPlaygroundProvider>
-													<RfidReaderPlayground
-														style={
-															{
-																'--playground-header-height': 'var(--bar-height)',
-																'--playground-actions-height': 'var(--bar-height)'
-															} as React.CSSProperties
-														}
-													/>{' '}
-												</ReaderPlaygroundProvider>
-											</PanelContent>
-										</ResizablePanel>
-									</ResizablePanelGroup>
-								)}
-							</Div>
-						</PageContextProvider>
-					</HostCompatibleGuard>
+					<PageContextProvider>
+						<Div
+							className={cn(
+								'divide-border @container flex h-(--outlet-wrapper-height) border-collapse flex-col divide-y rounded-md border',
+								!isSmallScreen && 'overflow-hidden'
+							)}
+							style={
+								{
+									'--header-height': '64px',
+									'--bar-height': '48px'
+								} as React.CSSProperties
+							}>
+							<InoutboundController />
+							{currInoutboundMethod === 'manually' ? (
+								<EpcTable />
+							) : (
+								<ResizablePanelGroup
+									className={cn('h-[calc(var(--outlet-wrapper-height)-var(--header-height))]')}
+									direction={isSmallScreen ? 'vertical' : 'horizontal'}
+									style={
+										{
+											'--rfid-playground-panel-height': rfidPlaygroundPanelSize
+												? rfidPlaygroundPanelSize.height + 'px'
+												: '100%',
+											'--detail-table-panel-height': detailTablePanelSize
+												? detailTablePanelSize.height + 'px'
+												: '100%'
+										} as React.CSSProperties
+									}>
+									<ResizablePanel
+										defaultSize={isSmallScreen ? 30 : 65}
+										maxSize={isSmallScreen ? 50 : 75}
+										minSize={isSmallScreen ? 35 : 65}>
+										<PanelContent ref={detailTablePanelRef}>
+											<EpcDetailTable />
+										</PanelContent>
+									</ResizablePanel>
+									<ResizableHandle className='z-30' withHandle={true} />
+									<ResizablePanel
+										defaultSize={isSmallScreen ? 65 : 30}
+										maxSize={isSmallScreen ? 65 : 35}
+										minSize={isSmallScreen ? 50 : 25}>
+										<PanelContent ref={rfidPlaygroundPanelRef}>
+											<ReaderPlaygroundProvider>
+												<RfidReaderPlayground
+													style={
+														{
+															'--playground-header-height': 'var(--bar-height)',
+															'--playground-actions-height': 'var(--bar-height)'
+														} as React.CSSProperties
+													}
+												/>{' '}
+											</ReaderPlaygroundProvider>
+										</PanelContent>
+									</ResizablePanel>
+								</ResizablePanelGroup>
+							)}
+						</Div>
+					</PageContextProvider>
 				</IpPolicyGuard>
 			</RoleGuard>
 		</Fragment>
