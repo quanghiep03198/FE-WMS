@@ -1,4 +1,3 @@
-import { Languages, RecordStatus } from '@common/constants/enums'
 import { Div, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Typography } from '@components/ui'
 import { useGetRFIDDeviceQuery } from '@features/rfid-device/hooks/use-rfid-device-request'
 import { useQueryClient } from '@tanstack/react-query'
@@ -35,7 +34,7 @@ const DeviceSelect: React.FC = () => {
 
 	const inboundDevices = useMemo(() => {
 		if (!Array.isArray(data)) return []
-		return data.filter((device) => device.is_active === RecordStatus.ACTIVE && device.station_no.endsWith('WH101'))
+		return data.filter((device) => device.station_no.endsWith('WH101'))
 	}, [data])
 
 	return (
@@ -50,18 +49,13 @@ const DeviceSelect: React.FC = () => {
 			</SelectTrigger>
 			<SelectContent>
 				{inboundDevices.map((device) => {
-					const deviceNameLocalization = {
-						[Languages.VIETNAMESE]: device.device_name_vi,
-						[Languages.ENGLISH]: device.device_name_en,
-						[Languages.CHINESE]: device.device_name_cn
-					}
 					return (
 						<SelectItem key={device.device_sn} value={device.device_sn}>
 							<Div className='flex items-center gap-2'>
 								<Icon
 									name={isNil(device.device_ant) || device.device_ant === '0' ? 'SmartphoneNfc' : 'Router'}
 								/>
-								{deviceNameLocalization[i18n.language] ?? (
+								{device.device_name[i18n.language] ?? (
 									<Div className='text-muted-foreground text-sm'>{t('ns_common:titles.unknown')}</Div>
 								)}
 								<Typography color='muted' variant='small'>
