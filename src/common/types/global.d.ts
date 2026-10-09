@@ -90,6 +90,8 @@ export declare global {
 
 	type ArrayElement<T> = T extends (infer U)[] ? U : never
 
+	type Nullish<T> = T | null | undefined
+
 	interface Set<T> {
 		at(index: number): T | undefined
 	}
