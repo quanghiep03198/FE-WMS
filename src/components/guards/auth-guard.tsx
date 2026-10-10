@@ -12,13 +12,13 @@ const AuthGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const router = useRouter()
 
 	useEffect(() => {
-		if (isError) AuthService.logout()
-		setUserProfile(data)
-	}, [data, isError])
-
-	useEffect(() => {
-		if (!isAuthenticated) router.invalidate().finally(() => router.navigate({ to: '/login' }))
-	}, [isAuthenticated])
+		if (isError || !isAuthenticated) {
+			AuthService.logout()
+			router.navigate({ to: '/login' })
+			return
+		}
+		if (data) setUserProfile(data)
+	}, [data, isError, isAuthenticated])
 
 	if (isLoading)
 		return (
