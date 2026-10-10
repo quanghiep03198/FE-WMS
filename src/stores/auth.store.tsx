@@ -1,15 +1,13 @@
-import type { FactoryCode } from '@common/constants/enums'
 import type { IUser } from '@features/auth/types'
 import { shared } from 'use-broadcast-ts'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 export interface IAuthState {
-	user: IUser | null
+	user: Partial<IUser> | null
 	accessToken: string | null
 	setAccessToken: (token: string) => void
 	setUserProfile: (profile: Partial<IUser>) => void
-	setCurrentFactory: (factoryCode: FactoryCode) => void
 	resetCredentials: () => void
 }
 
@@ -32,10 +30,6 @@ export const useAuthStore = create(
 							...profile
 						}
 					})
-				},
-				setCurrentFactory: (factoryCode: FactoryCode) => {
-					const state = get()
-					set({ user: { ...state.user, current_factory_code: factoryCode } })
 				},
 				resetCredentials: () => {
 					set(initialState)
