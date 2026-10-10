@@ -28,7 +28,7 @@ const UserActivityInfo: React.FC<UserActivityInfoProps> = ({ createdBy, createdA
 					</Typography>
 				</Div>
 
-				{isValid(lastUpdatedAt) && (
+				{lastUpdatedAt && isValid(lastUpdatedAt) && (
 					<Typography
 						className='ml-auto inline-flex items-center gap-x-2 self-start'
 						color='muted'

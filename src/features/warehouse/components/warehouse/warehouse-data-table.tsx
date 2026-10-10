@@ -28,7 +28,7 @@ import type { IWarehouse } from '@features/warehouse/types'
 import type { Row, Table } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
-import { format } from 'date-fns'
+import { format, isValid } from 'date-fns'
 import { Fragment, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDeleteWarehouseMutation, useGetWarehouseQuery } from '../../hooks/use-warehouse-request'
@@ -166,7 +166,10 @@ const WarehouseDataTable: React.FC = () => {
 				filterFn: 'inDateRange',
 				sortingFn: fuzzySort,
 				meta: { filterVariant: 'date' },
-				cell: ({ getValue }) => format(getValue(), 'yyyy-MM-dd HH:mm')
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return value ? format(value, 'yyyy-MM-dd HH:mm') : <span className='text-muted-foreground'>-</span>
+				}
 			}),
 			columnHelper.accessor('updated_by', {
 				header: t('ns_common:common_fields.updated_by'),
@@ -204,8 +207,14 @@ const WarehouseDataTable: React.FC = () => {
 				filterFn: 'inDateRange',
 				sortingFn: fuzzySort,
 				meta: { filterVariant: 'date' },
-				cell: ({ getValue }) =>
-					getValue() ? format(getValue(), 'yyyy-MM-dd HH:mm') : <span className='text-muted-foreground'>-</span>
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return !!value && isValid(value) ? (
+						format(value, 'yyyy-MM-dd HH:mm')
+					) : (
+						<span className='text-muted-foreground'>-</span>
+					)
+				}
 			}),
 			columnHelper.accessor('_id', {
 				id: ROW_ACTIONS_COLUMN_ID,

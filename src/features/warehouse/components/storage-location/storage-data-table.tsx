@@ -137,7 +137,10 @@ const StorageList: React.FC = () => {
 				filterFn: 'inDateRange',
 				sortingFn: fuzzySort,
 				meta: { filterVariant: 'date' },
-				cell: ({ getValue }) => format(getValue(), 'yyyy-MM-dd HH:mm')
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return value ? format(value, 'yyyy-MM-dd HH:mm') : <span className='text-muted-foreground'>-</span>
+				}
 			}),
 			columnHelper.accessor('updated_by', {
 				header: t('ns_common:common_fields.updated_by'),
@@ -175,8 +178,10 @@ const StorageList: React.FC = () => {
 				filterFn: 'inDateRange',
 				sortingFn: fuzzySort,
 				meta: { filterVariant: 'date' },
-				cell: ({ getValue }) =>
-					getValue() ? format(getValue(), 'yyyy-MM-dd HH:mm') : <span className='text-muted-foreground'>-</span>
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return value ? format(value, 'yyyy-MM-dd HH:mm') : <span className='text-muted-foreground'>-</span>
+				}
 			}),
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
