@@ -6,14 +6,14 @@ import { pick } from 'lodash-es'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../contexts'
-import { useUpdateUserStatusMutation } from '../hooks/use-user-request'
+import { useUpdateUserMutation } from '../hooks/use-user-request'
 
 const UserActionDropdown: React.FC<CellContext<IUser, unknown>> = ({ row }) => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
 	const [open, setOpen] = useState<boolean>(false)
 
-	const { mutateAsync, isPending } = useUpdateUserStatusMutation()
+	const { mutateAsync, isPending } = useUpdateUserMutation()
 
 	return (
 		<DropdownMenu open={open || isPending} onOpenChange={setOpen}>
@@ -30,7 +30,6 @@ const UserActionDropdown: React.FC<CellContext<IUser, unknown>> = ({ row }) => {
 								'username',
 								'display_name',
 								'email',
-								'employee_code',
 								'roles'
 								// 'authorized_factory_codes'
 							])
@@ -41,7 +40,11 @@ const UserActionDropdown: React.FC<CellContext<IUser, unknown>> = ({ row }) => {
 				<DropdownMenuItem
 					disabled={isPending}
 					onClick={async () => {
-						await mutateAsync({ username: row.original.username, is_active: !row.original.is_active })
+						await mutateAsync({
+							_id: row.original._id,
+							username: row.original.username,
+							deleted: !row.original.deleted
+						})
 					}}>
 					{isPending && <Icon className='animate-spin' name='LoaderCircle' />}
 					{row.original.is_active ? t('ns_common:actions.deactivate') : t('ns_common:actions.activate')}

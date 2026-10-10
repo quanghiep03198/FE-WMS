@@ -12,7 +12,7 @@ type TPageContext = {
 	event$: EventEmitter<EventEmitterValue>
 }
 
-const PageContext = createContext<TPageContext>(null)
+const PageContext = createContext<TPageContext>(null!)
 
 export const PageContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const event$ = useEventEmitter<EventEmitterValue>()

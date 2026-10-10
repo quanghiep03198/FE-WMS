@@ -25,7 +25,7 @@ import tw from 'tailwind-styled-components'
 import type z from 'zod'
 import { usePageContext } from '../contexts'
 import { useCreateUserMutation, useUpdateUserMutation } from '../hooks/use-user-request'
-import type { CreateUserFormValues, UpdateUserFormValues} from '../schemas/user.schema';
+import type { CreateUserFormValues, UpdateUserFormValues } from '../schemas/user.schema'
 import { createUserSchema, updateUserSchema } from '../schemas/user.schema'
 
 const UserFormDialogTrigger: React.FC = () => {
@@ -156,6 +156,8 @@ const UserFormDialog: React.FC = () => {
 		}
 		if (action === CommonActions.UPDATE) delete payload.password
 		await formActionRef.current(payload)
+
+		setOpen(false)
 	}
 
 	return (
@@ -205,12 +207,12 @@ const UserFormDialog: React.FC = () => {
 										defaultValue: null
 									})
 								)}
-								onChange={(e) => form.setValue('display_name', e.target.value.toUpperCase())}
 							/>
 						</Div>
 
 						<Div className='col-span-full'>
 							<InputFieldControl
+								inputMode='email'
 								label={t('ns_auth:fields.email')}
 								name='email'
 								placeholder={'example@vn.well-union.com'}

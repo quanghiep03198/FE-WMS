@@ -22,8 +22,8 @@ export class UserService {
 		return await axiosInstance.patch(`/user/update-status/${username}`, { is_active })
 	}
 
-	static async profile(config?: AxiosRequestConfig): Promise<IUser> {
-		return await axiosInstance.get('/user/profile', config)
+	static async profile(config?: AxiosRequestConfig) {
+		return await axiosInstance.get<void, ResponseBody<IUser>>('/user/profile', config)
 	}
 
 	static async updateProfile(payload: UpdateProfileFormValues) {

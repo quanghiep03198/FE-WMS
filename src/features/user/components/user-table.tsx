@@ -32,7 +32,7 @@ const UserTable: React.FC = () => {
 				cell: ({ row, getValue }) => (
 					<Div className='inline-flex items-center gap-x-2'>
 						<Avatar className='size-7'>
-							<AvatarImage alt={getValue()} src={row.original?.picture} />
+							<AvatarImage alt={getValue()} src={row.original?.avatar} />
 							<AvatarFallback>G</AvatarFallback>
 						</Avatar>
 						<Typography className='line-clamp-1 font-medium' variant='small'>
