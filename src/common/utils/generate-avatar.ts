@@ -9,27 +9,11 @@ type TAvatarGenOptions = {
 	format?: 'svg' | 'png'
 }
 
-export default function generateAvatar({
-	background = '#525252',
-	color = '#fafafa',
-	length = 1,
-	bold = true,
-	format = 'svg',
-	name
-}: TAvatarGenOptions) {
-	const BASE_AVATAR_URL = 'https://ui-avatars.com/api/'
-	return (
-		BASE_AVATAR_URL +
-		stringify(
-			{
-				background,
-				color,
-				length,
-				bold,
-				format,
-				name
-			},
-			{ addQueryPrefix: true }
-		)
-	)
+export default function generateAvatar({ name }: TAvatarGenOptions) {
+	const BASE_AVATAR_URL = 'https://api.dicebear.com'
+	const avatarURL = new URL(`/10.x/glass/svg`, BASE_AVATAR_URL)
+
+	avatarURL.search = stringify({ seed: name })
+
+	return avatarURL.toString()
 }
