@@ -2,7 +2,6 @@ import { UserService } from '@features/user/services/user.service'
 import useAuth from '@hooks/use-auth'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { AxiosRequestConfig } from 'axios'
-import { AxiosError } from 'axios'
 import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -12,7 +11,7 @@ export enum AuthQueryKeys {
 }
 
 export const getUserProfileQuery = (enabled?: boolean, config?: AxiosRequestConfig) => {
-	const unexpectedErrorCodes = [AxiosError.ERR_NETWORK, AxiosError.ETIMEDOUT, AxiosError.ECONNABORTED]
+	// const unexpectedErrorCodes = [AxiosError.ERR_NETWORK, AxiosError.ETIMEDOUT, AxiosError.ECONNABORTED]
 
 	return queryOptions({
 		queryKey: [AuthQueryKeys.PROFILE, config],
@@ -21,31 +20,31 @@ export const getUserProfileQuery = (enabled?: boolean, config?: AxiosRequestConf
 		refetchOnReconnect: 'always',
 		networkMode: 'always',
 		enabled,
-		select: (response) => response.metadata,
-		retry: (failureCount, error) => {
-			if (unexpectedErrorCodes.includes(error.code)) return enabled
-			return failureCount <= 2 && enabled
-		}
+		select: (response) => response.metadata
+		// retry: ((failureCount, error) => {
+		// 	if (unexpectedErrorCodes.includes(error.code!)) return enabled
+		// 	return failureCount <= 2 && enabled
+		// } )as Exclude<RetryValue>
 	})
 }
 
 export const useGetUserProfileQuery = () => {
 	const { isAuthenticated } = useAuth()
-	const abortControllerRef = useRef<AbortController>(null)
+	const abortControllerRef = useRef<AbortController | null>(null)
 
 	if (!abortControllerRef.current) {
 		abortControllerRef.current = new AbortController()
 	}
 
 	useEffect(() => {
-		if (!isAuthenticated) {
+		if (!isAuthenticated && abortControllerRef.current) {
 			abortControllerRef.current.abort()
 			abortControllerRef.current = null
 		}
 	}, [isAuthenticated])
 
 	const queryOptions = useMemo(() => {
-		return getUserProfileQuery(isAuthenticated, { signal: abortControllerRef.current.signal })
+		return getUserProfileQuery(isAuthenticated, { signal: abortControllerRef.current?.signal })
 	}, [isAuthenticated, abortControllerRef.current.signal.aborted])
 
 	return useQuery(queryOptions)

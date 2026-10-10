@@ -8,7 +8,7 @@ const ProfileWallpaper: React.FC = () => {
 		<Div className='from-secondary/50 to-secondary/25 grid grid-cols-[128px_auto] items-center gap-x-10 rounded-xl bg-linear-to-r p-4'>
 			<Div className='relative row-span-full aspect-square w-full'>
 				<Avatar className='inset-0 h-full w-full'>
-					<AvatarImage src={user?.picture} />
+					<AvatarImage src={user?.avatar} />
 					<AvatarFallback>Unknown</AvatarFallback>
 				</Avatar>
 				<Icon
