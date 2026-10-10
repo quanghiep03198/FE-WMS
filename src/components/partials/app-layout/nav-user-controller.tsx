@@ -15,6 +15,7 @@ import { navigationConfig } from '@configs/navigation.config'
 import useAuth from '@hooks/use-auth'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { FileRouteTypes } from '../../../route-tree.gen'
 
 const NavUserControl: React.FC = () => {
 	const { user, logout } = useAuth()
@@ -24,7 +25,7 @@ const NavUserControl: React.FC = () => {
 		<DropdownMenu>
 			<DropdownMenuTrigger className='inline-flex h-full items-center justify-center ring-0 outline-none focus:border-none'>
 				<Avatar className='size-8'>
-					<AvatarImage alt={user?.display_name} src={user?.picture} />
+					<AvatarImage alt={user?.display_name} src={user?.avatar} />
 					<AvatarFallback>G</AvatarFallback>
 				</Avatar>
 			</DropdownMenuTrigger>
@@ -35,9 +36,12 @@ const NavUserControl: React.FC = () => {
 					.filter((item) => item.url !== '/preferences/keybindings')
 					.map((item) => (
 						<DropdownMenuItem asChild key={item.title}>
-							<Link className='whitespace-nowrap' to={item.url}>
-								<Icon className='mr-2' name={item.icon} /> {t(item.title as any)}
-								<DropdownMenuShortcut>{item.keybinding.split('.').join('+')}</DropdownMenuShortcut>
+							<Link className='whitespace-nowrap' to={item.url as FileRouteTypes['to']}>
+								{item.icon && <Icon className='mr-2' name={item.icon} />}
+								{t(item.title as any)}
+								{item.keybinding && (
+									<DropdownMenuShortcut>{item.keybinding.split('.').join('+')}</DropdownMenuShortcut>
+								)}
 							</Link>
 						</DropdownMenuItem>
 					))}
