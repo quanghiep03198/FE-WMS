@@ -20,11 +20,45 @@ export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
 	normalizePath(path.resolve(import.meta.dirname, './infrastructure'))
 
+	const resolveAlias = (directories: Array<string>, rootPath: string) =>
+		directories.reduce(
+			(acc, dir) => {
+				acc[`@${dir}`] = path.resolve(import.meta.dirname, path.join(rootPath, dir))
+				return acc
+			},
+			{} as Record<string, string>
+		)
+
 	return {
+		devtools: {
+			apply: 'build',
+			build: {
+				withApp: true // generate DevTools output during `vite build`
+				// outDir: 'custom-dir', // optional, defaults to Vite's build.outDir
+			}
+		},
 		resolve: {
 			tsconfigPaths: true,
 			alias: {
-				'@': path.resolve(import.meta.dirname, './src')
+				...resolveAlias(['tests'], '.'),
+				...resolveAlias(
+					[
+						'assets',
+						'common',
+						'components',
+						'configs',
+						'contexts',
+						'features',
+						'hooks',
+						'i18n',
+						'integrations',
+						'providers',
+						'routes',
+						'stores',
+						'styles'
+					],
+					'./src'
+				)
 			}
 		},
 		plugins: [
@@ -116,6 +150,7 @@ export default defineConfig(({ mode }) => {
 				project: process.env.VITE_SENTRY_PROJECT,
 				telemetry: false,
 				sourcemaps: {
+					disable: true,
 					// * Delete sourcemap after they're uploaded to Sentry.
 					filesToDeleteAfterUpload: ['./dist/**/*.map']
 				}
@@ -191,48 +226,7 @@ export default defineConfig(({ mode }) => {
 			rolldownOptions: {
 				logLevel: mode === 'production' ? 'silent' : 'debug',
 				output: {
-					codeSplitting: {
-						groups: [
-							{ name: '@dnd-kit', test: /@dnd-kit/ },
-							{ name: '@radix-ui', test: /@radix-ui/ },
-							{ name: '@tiptap', test: /@tiptap/ },
-							{ name: 'ahooks', test: /ahooks/ },
-							{ name: 'axios', test: /axios/ },
-							{ name: 'bcryptjs-react', test: /bcryptjs-react/ },
-							{ name: 'buffer', test: /buffer/ },
-							{ name: 'clsx', test: /clsx/ },
-							{ name: 'color', test: /color/ },
-							{ name: 'cmdk', test: /cmdk/ },
-							{ name: 'copy-to-clipboard', test: /copy-to-clipboard/ },
-							{ name: 'd3-shape', test: /d3-shape/ },
-							{ name: 'date-fns', test: /date-fns/ },
-							{ name: 'file-saver', test: /file-saver/ },
-							{ name: 'filesize', test: /filesize/ },
-							{ name: 'flat', test: /flat/ },
-							{ name: 'i18next', test: /i18next/ },
-							{ name: 'i18next-browser-languagedetector', test: /i18next-browser-languagedetector/ },
-							{ name: 'immer', test: /immer/ },
-							{ name: 'lodash-es', test: /lodash-es/ },
-							{ name: 'lucide', test: /lucide-react/ },
-							{ name: 'lz-string', test: /lz-string/ },
-							{ name: 'nprogress', test: /nprogress/ },
-							{ name: 'qs', test: /qs/ },
-							{ name: 'react-day-picker', test: /react-day-picker/ },
-							{ name: 'react-hook-form', test: /react-hook-form/ },
-							{ name: 'react-resizable-panels', test: /react-resizable-panels/ },
-							{ name: 'recharts', test: /recharts/ },
-							{ name: '@sentry', test: /@sentry/ },
-							{ name: 'sonner', test: /sonner/ },
-							{ name: 'socket.io-client', test: /socket.io-client/ },
-							{ name: 'tailwind-merge', test: /tailwind-merge/ },
-							{ name: 'tailwind-styled-components', test: /tailwind-styled-components/ },
-							{ name: 'signature_pad', test: /signature_pad/ },
-							{ name: 'uuid', test: /uuid/ },
-							{ name: 'zod', test: /zod/ },
-							{ name: 'zustand', test: /zustand/ },
-							{ name: 'zlib', test: /zlib/ }
-						]
-					}
+					codeSplitting: true
 				}
 			}
 		}
