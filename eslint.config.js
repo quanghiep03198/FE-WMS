@@ -1,9 +1,12 @@
 import pluginJs from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
 import pluginRouter from '@tanstack/eslint-plugin-router'
+import noBarrelFiles from 'eslint-plugin-no-barrel-files'
 import pluginReact from 'eslint-plugin-react'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
+
+// const resolveSourceDirectory = (dir) => [path.resolve(import.meta.dirname, 'src', dir)]
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -11,8 +14,8 @@ export default [
 	pluginReact.configs.flat.recommended,
 	...pluginQuery.configs['flat/recommended'],
 	...pluginRouter.configs['flat/recommended'],
+	...noBarrelFiles.configs['flat/recommended'],
 	...tseslint.configs.recommended,
-
 	{
 		files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
 		settings: {
@@ -45,7 +48,8 @@ export default [
 					ignoreCase: false,
 					shorthandFirst: true
 				}
-			]
+			],
+			'no-barrel-files/prefer-source-imports': ['error', { fixStyle: 'auto' }]
 		},
 		languageOptions: { globals: globals.browser },
 		ignores: ['dist', 'node_modules', 'eslint.config.js']
