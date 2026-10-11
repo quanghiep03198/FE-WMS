@@ -1,5 +1,5 @@
+import { convertSvgStringToWebp, convertSvgToWebp, downloadWebpFromSvg } from '@common/libs/convert-webp'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { convertSvgStringToWebp, convertSvgToWebp, downloadWebpFromSvg } from '../../src/common/libs/convert-webp'
 
 // SKIP: These tests require real browser environment (Image loading, SVG serialization)
 // TODO: Move to E2E tests with Playwright or Puppeteer
@@ -370,7 +370,7 @@ describe.skip('convert-webp', () => {
 		})
 
 		it('should handle multiple sequential conversions', async () => {
-			const results = []
+			const results: string[] = []
 
 			for (let i = 0; i < 5; i++) {
 				const result = await convertSvgToWebp(mockSvgElement, {

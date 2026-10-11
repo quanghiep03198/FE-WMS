@@ -1,4 +1,4 @@
-import ChatBubble from '@/components/ui/@custom/chat-bubble'
+import ChatBubble from '@components/customs/chat-bubble'
 import '@testing-library/jest-dom/vitest'
 import { render } from '@testing-library/react'
 

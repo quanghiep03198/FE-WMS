@@ -1,5 +1,5 @@
-import { Stepper, TStep, useStepContext } from '@/components/ui/@custom/stepper'
-import { i18n } from '@/i18n'
+import { Stepper, TStep, useStepContext } from '@components/customs/stepper'
+import { i18n } from '@i18n/'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { I18nextProvider } from 'react-i18next'
 

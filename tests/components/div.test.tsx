@@ -1,4 +1,4 @@
-import { Div } from '@/components/ui/@custom/div'
+import { Div } from '@components/customs/div'
 import '@testing-library/jest-dom'
 import { render } from '@testing-library/react'
 

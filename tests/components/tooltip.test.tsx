@@ -1,4 +1,4 @@
-import { Tooltip } from '@/components/ui/@override/tooltip'
+import { Tooltip } from '@components/customs/tooltip'
 import { render, screen, waitFor } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
 

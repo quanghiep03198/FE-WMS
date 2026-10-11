@@ -1,4 +1,4 @@
-import { Typography } from '@/components/ui/@custom/typography'
+import { Typography } from '@components/customs/typography'
 import { render } from '@testing-library/react'
 
 describe('Typography Component', () => {
