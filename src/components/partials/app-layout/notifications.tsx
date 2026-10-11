@@ -1,5 +1,8 @@
 import { cn } from '@common/utils/cn'
-import { buttonVariants, Icon, Popover, PopoverContent, PopoverTrigger, Typography } from '@components/ui'
+import { Typography } from '@components/customs/typography'
+import { buttonVariants } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
 import React from 'react'
 
 const Notification: React.FC = () => {

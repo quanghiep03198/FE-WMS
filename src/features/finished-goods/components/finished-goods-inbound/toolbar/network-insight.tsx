@@ -1,6 +1,6 @@
+import { Div } from '@components/customs/div'
+import { StatusIndicator } from '@components/customs/status-indicator'
 import { NETWORK_CONNECTION_CHANGE } from '@components/shared/network-detector'
-import { Div } from '@components/ui'
-import { StatusIndicator } from '@components/ui/@custom/status-indicator'
 import { useEventListener } from 'ahooks'
 import { Server, ServerCrash } from 'lucide'
 import { MorphIcon } from 'morphicons/react'

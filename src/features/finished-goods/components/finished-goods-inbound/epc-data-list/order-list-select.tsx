@@ -1,17 +1,8 @@
-import {
-	Div,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-	Icon,
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-	Typography
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@components/ui/hover-card'
+import { Icon } from '@components/ui/icon'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 import { usePageContext } from '@features/finished-goods/contexts/finished-goods-inbound/page-context'
 import { useGetScanningInboundEpcQuery } from '@features/finished-goods/hooks/use-inbound-request'
 import { useDeepCompareEffect, usePrevious } from 'ahooks'

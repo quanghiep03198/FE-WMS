@@ -1,4 +1,5 @@
-import { Button, Form } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Form } from '@components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { Meta, StoryFn, StoryObj } from '@storybook/react'
 import { useState } from 'react'

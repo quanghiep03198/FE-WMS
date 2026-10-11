@@ -1,26 +1,13 @@
 import { cn } from '@common/utils/cn'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { Typography } from '@components/customs/typography'
 import AppLogo from '@components/shared/app-logo'
-import {
-	Badge,
-	Breadcrumb,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbSeparator,
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	ChartContainer,
-	ChartLegend,
-	ChartLegendContent,
-	Icon,
-	Separator,
-	Typography
-} from '@components/ui'
+import { Badge } from '@components/ui/badge'
+import { Breadcrumb, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@components/ui/breadcrumb'
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
+import { ChartContainer, ChartLegend, ChartLegendContent } from '@components/ui/chart'
+import { Icon } from '@components/ui/icon'
+import { Separator } from '@components/ui/separator'
 import { HomeIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'

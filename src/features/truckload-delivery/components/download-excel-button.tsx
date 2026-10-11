@@ -1,6 +1,7 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import env from '@common/utils/env'
-import { Button, Icon } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import { TruckloadDeliveryService } from '@features/truckload-delivery/services/truckload-delivery.service'
 import useAuth from '@hooks/use-auth'
 import { saveAs } from 'file-saver'

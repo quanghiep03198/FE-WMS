@@ -1,27 +1,22 @@
 import compressBase64 from '@common/libs/compress-base64'
 import { cn } from '@common/utils/cn'
 import env from '@common/utils/env'
+import { Div } from '@components/customs/div'
+import { SignatureCanvas, type SignatureCanvasInstance } from '@components/customs/signature'
+import { Typography } from '@components/customs/typography'
+import { Button } from '@components/ui/button'
 import {
-	Button,
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
-	DialogTitle,
-	Div,
-	Field,
-	FieldContent,
-	FieldDescription,
-	FieldLabel,
-	FieldTitle,
-	Icon,
-	Label,
-	RadioGroup,
-	RadioGroupItem,
-	Typography
-} from '@components/ui'
-import { SignatureCanvas, type SignatureCanvasInstance } from '@components/ui/@custom/signature'
+	DialogTitle
+} from '@components/ui/dialog'
+import { Field, FieldContent, FieldDescription, FieldLabel, FieldTitle } from '@components/ui/field'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { useReactiveRef } from '@hooks/use-reactive-ref'
 import { useWorkerFn } from '@hooks/use-worker-fn'

@@ -1,6 +1,8 @@
 'use no memo'
 
-import { Button, Div, Icon } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import { matchQuery, useQueryClient } from '@tanstack/react-query'
 import { type Table } from '@tanstack/react-table'
 import React from 'react'

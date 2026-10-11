@@ -1,0 +1,81 @@
+import React from 'react'
+import { createPortal } from 'react-dom'
+import { useTranslation } from 'react-i18next'
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle
+} from '../ui/alert-dialog'
+import { Icon } from '../ui/icon'
+
+type ConfirmDialogProps = {
+	open: boolean
+	title: string
+	description: string
+	isPending?: boolean
+	isError?: boolean
+	onOpenChange?: React.Dispatch<React.SetStateAction<boolean>>
+	onConfirm: (...args: any[]) => unknown
+	onCancel?: (...args: any[]) => unknown
+	dialogActionProps?: React.ComponentProps<typeof AlertDialogAction>
+}
+
+const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+	open,
+	title,
+	description,
+	isPending,
+	isError,
+	dialogActionProps,
+	onOpenChange,
+	onConfirm,
+	onCancel
+}) => {
+	const { t } = useTranslation()
+
+	return createPortal(
+		<AlertDialog
+			open={open}
+			onOpenChange={(open) => {
+				if (typeof onOpenChange === 'function') onOpenChange(open)
+			}}>
+			<AlertDialogContent>
+				<AlertDialogHeader className='text-left'>
+					<AlertDialogTitle>{title}</AlertDialogTitle>
+					<AlertDialogDescription dangerouslySetInnerHTML={{ __html: description }} />
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					<AlertDialogCancel
+						onClick={() => {
+							if (typeof onOpenChange === 'function') onOpenChange(!open)
+							if (onCancel && typeof onCancel === 'function') onCancel()
+						}}>
+						{t('ns_common:actions.cancel')}
+					</AlertDialogCancel>
+					<AlertDialogAction
+						className='has-[svg]:gap-x-2'
+						disabled={isPending}
+						onClick={() => {
+							if (typeof onConfirm === 'function') onConfirm()
+						}}
+						{...dialogActionProps}>
+						{isPending && <Icon className='animate-spin' name='LoaderCircle' />}
+						{isError
+							? t('ns_common:actions.retry')
+							: dialogActionProps?.children
+								? dialogActionProps.children
+								: t('ns_common:actions.confirm')}
+					</AlertDialogAction>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>,
+		document.body
+	)
+}
+
+export default ConfirmDialog

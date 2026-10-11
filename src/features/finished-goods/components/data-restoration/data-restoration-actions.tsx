@@ -1,4 +1,6 @@
-import { Button, Icon, SheetClose } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
+import { SheetClose } from '@components/ui/sheet'
 
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'

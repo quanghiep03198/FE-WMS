@@ -4,7 +4,7 @@ import { useInterval } from 'ahooks'
 import axios, { AxiosError } from 'axios'
 import { useRef } from 'react'
 import { toast } from 'sonner'
-import { Icon } from '../ui'
+import { Icon } from '../ui/icon'
 
 /**
  * @event

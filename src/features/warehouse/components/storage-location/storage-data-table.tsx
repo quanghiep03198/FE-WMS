@@ -1,27 +1,19 @@
 // #region Modules
 import { CommonActions } from '@common/constants/enums'
 import generateAvatar from '@common/utils/generate-avatar'
-import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-	Button,
-	DataTable,
-	Icon,
-	Item,
-	ItemContent,
-	ItemDescription,
-	ItemMedia,
-	ItemTitle,
-	Tooltip
-} from '@components/ui'
-import ConfirmDialog from '@components/ui/@override/confirm-dialog'
+import { default as DataTable } from '@components/addons/tanstack-table'
 import {
 	IndeterminateCheckbox,
 	RowSelectionCheckbox
-} from '@components/ui/@react-table/components/row-selection-checkbox'
-import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@components/ui/@react-table/constants'
-import { fuzzySort } from '@components/ui/@react-table/utils/fuzzy-sort.util'
+} from '@components/addons/tanstack-table/components/row-selection-checkbox'
+import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@components/addons/tanstack-table/constants'
+import { fuzzySort } from '@components/addons/tanstack-table/utils/fuzzy-sort.util'
+import ConfirmDialog from '@components/customs/confirm-dialog'
+import { Tooltip } from '@components/customs/tooltip'
+import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@components/ui/item'
 import { useStorageLocationPageContext } from '@features/warehouse/contexts/storage-location-page-context'
 import { useGetOneWarehouseQuery } from '@features/warehouse/hooks/use-warehouse-request'
 import type { IStorageLocation } from '@features/warehouse/types'

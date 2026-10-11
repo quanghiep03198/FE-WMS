@@ -1,5 +1,6 @@
+import { Div } from '@components/customs/div'
 import { LanguageDropdown } from '@components/shared/language-selector'
-import { Div, Separator } from '@components/ui'
+import { Separator } from '@components/ui/separator'
 import useAuth from '@hooks/use-auth'
 import { useKeyPress } from 'ahooks'
 import React from 'react'

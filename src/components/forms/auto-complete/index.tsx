@@ -11,22 +11,13 @@ import type { FieldValues } from 'react-hook-form'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import {
-	Div,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Icon,
-	Input,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	Tooltip,
-	Typography
-} from '../../ui'
+import { Div } from '../../customs/div'
+import { Tooltip } from '../../customs/tooltip'
+import { Typography } from '../../customs/typography'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form'
+import { Icon } from '../../ui/icon'
+import { Input } from '../../ui/input'
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover'
 
 export type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
 	BaseFieldControl<T>,

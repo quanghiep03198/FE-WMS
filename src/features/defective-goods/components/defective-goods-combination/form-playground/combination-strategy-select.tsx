@@ -1,15 +1,8 @@
-import {
-	Div,
-	Icon,
-	Label,
-	RadioGroup,
-	RadioGroupItem,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 import { capitalize } from 'lodash-es'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'

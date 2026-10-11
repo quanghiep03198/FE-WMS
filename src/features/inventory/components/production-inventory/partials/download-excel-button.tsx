@@ -1,6 +1,7 @@
 import { FactoryAgencyCode } from '@common/constants/enums'
 import env from '@common/utils/env'
-import { Button, Icon } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import { InventoryService } from '@features/inventory/services/inventory.service'
 import useMediaQuery from '@hooks/use-media-query'
 import { saveAs } from 'file-saver'

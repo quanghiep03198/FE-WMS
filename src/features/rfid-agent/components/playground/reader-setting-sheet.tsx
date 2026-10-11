@@ -1,21 +1,23 @@
 import { cn } from '@common/utils/cn'
+import { Div } from '@components/customs/div'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
+import { InputFieldControl } from '@components/forms/input'
+import { Button, buttonVariants } from '@components/ui/button'
 import {
-	Button,
-	buttonVariants,
-	Div,
 	FormControl,
 	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-	Form as FormProvider,
-	Icon,
-	InputFieldControl,
-	Label,
-	RadioGroup,
-	RadioGroupItem,
-	Separator,
+	Form as FormProvider
+} from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
+import { Separator } from '@components/ui/separator'
+import {
 	Sheet,
 	SheetClose,
 	SheetContent,
@@ -23,11 +25,9 @@ import {
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
-	SheetTrigger,
-	Slider,
-	Tooltip,
-	Typography
-} from '@components/ui'
+	SheetTrigger
+} from '@components/ui/sheet'
+import { Slider } from '@components/ui/slider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { useUpdateEffect } from 'ahooks'

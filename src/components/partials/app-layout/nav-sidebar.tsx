@@ -1,10 +1,9 @@
 import { UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import AppLogo from '@components/shared/app-logo'
+import { Collapsible, CollapsibleContent } from '@components/ui/collapsible'
+import { Icon } from '@components/ui/icon'
 import {
-	Collapsible,
-	CollapsibleContent,
-	Icon,
 	Sidebar,
 	SidebarContent,
 	SidebarGroup,
@@ -19,7 +18,7 @@ import {
 	SidebarRail,
 	SidebarSeparator,
 	useSidebar
-} from '@components/ui'
+} from '@components/ui/sidebar'
 import { navigationConfig, type NavigationConfig } from '@configs/navigation.config'
 import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'

@@ -1,25 +1,16 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { Div } from '@components/customs/div'
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card'
 import {
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
 	ChartContainer,
 	ChartLegend,
 	ChartLegendContent,
 	ChartTooltip,
-	ChartTooltipContent,
-	Div,
-	Icon,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-	Skeleton
-} from '@components/ui'
+	ChartTooltipContent
+} from '@components/ui/chart'
+import { Icon } from '@components/ui/icon'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
+import { Skeleton } from '@components/ui/skeleton'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'

@@ -1,15 +1,16 @@
 'use no memo'
 
 import type { BaseFieldControl } from '@common/types/hook-form'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@components/ui'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@components/ui/form'
 import { useUpdateEffect } from 'ahooks'
 import { isEmpty } from 'lodash-es'
-import { useLayoutEffect, useState } from 'react'
+import { lazy, useLayoutEffect, useState } from 'react'
 import type { FieldValues, Path, PathValue } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import type { EditorProps } from '../../ui/@tiptap'
-import { Editor } from '../../ui/@tiptap'
+import type { EditorProps } from '../../addons/tiptap'
+
+const Editor = lazy(() => import('../../addons/tiptap'))
 
 type EditorFieldControlProps<T extends FieldValues> = Omit<BaseFieldControl<T>, 'control'> &
 	Partial<EditorProps> & {

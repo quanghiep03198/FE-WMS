@@ -1,4 +1,6 @@
-import { Div, Icon, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Icon } from '@components/ui/icon'
 import { Link } from '@tanstack/react-router'
 import { useGetLatestRelease } from '../../rfid-agent/hooks/use-get-latest-release'
 

@@ -9,18 +9,11 @@ import type { ControllerRenderProps, FieldValues, Path } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import type { BaseFieldControl } from '../../../common/types/hook-form'
-import {
-	Div,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Toggle,
-	Tooltip
-} from '../../ui'
-import { Input } from '../../ui/@core/input'
+import { Div } from '../../customs/div'
+import { Tooltip } from '../../customs/tooltip'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form'
+import { Input } from '../../ui/input'
+import { Toggle } from '../../ui/toggle'
 
 export type InputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & React.ComponentProps<'input'>
 

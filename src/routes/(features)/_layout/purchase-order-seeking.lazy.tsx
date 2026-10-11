@@ -1,6 +1,7 @@
 import { UserRole } from '@common/constants/enums'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
 import { RoleGuard } from '@components/guards/role-guard'
-import { Div, Typography } from '@components/ui'
 import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
 import DataTable from '@features/order/components/purchase-order-seeking/data-table'
 import PlaceholderSection from '@features/order/components/purchase-order-seeking/placeholder-section'

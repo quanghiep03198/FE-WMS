@@ -1,6 +1,6 @@
 import { UserRole } from '@common/constants/enums'
+import { Div } from '@components/customs/div'
 import { RoleGuard } from '@components/guards/role-guard'
-import { Div } from '@components/ui'
 import ScannedEpcCounter from '@features/finished-goods/components/finished-goods-outbound/epc-counter'
 import ScannedEpcList from '@features/finished-goods/components/finished-goods-outbound/epc-data-list'
 import OrderSizeDetailTable from '@features/finished-goods/components/finished-goods-outbound/manufacture-order-detail/order-detail-table'

@@ -1,4 +1,5 @@
-import { Div, Separator } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Separator } from '@components/ui/separator'
 import ChangePasswordForm from '@features/account/components/change-password-form'
 import ProfileForm from '@features/account/components/profile-form'
 import ProfileWallpaper from '@features/account/components/profile-wallpaper'

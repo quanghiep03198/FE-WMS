@@ -1,9 +1,15 @@
 'use no memo'
 
 import { cn } from '@common/utils/cn'
-import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Tooltip, Typography } from '@components/ui'
-import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@components/ui/@custom/alert'
-import ConfirmDialog from '@components/ui/@override/confirm-dialog'
+import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@components/customs/alert'
+import ConfirmDialog from '@components/customs/confirm-dialog'
+import { Div } from '@components/customs/div'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
+import { ComboboxFieldControl } from '@components/forms/combobox'
+import { Button } from '@components/ui/button'
+import { Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import {
 	closestCenter,

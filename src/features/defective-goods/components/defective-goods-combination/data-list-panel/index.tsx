@@ -1,17 +1,10 @@
 import { cn } from '@common/utils/cn'
+import { Div } from '@components/customs/div'
+import Pagination from '@components/customs/pagination'
 import type { Label } from '@components/ui'
-import {
-	buttonVariants,
-	Div,
-	Icon,
-	Sheet,
-	SheetContent,
-	SheetFooter,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger
-} from '@components/ui'
-import Pagination from '@components/ui/@custom/pagination'
+import { buttonVariants } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@components/ui/sheet'
 import useQueryParams from '@hooks/use-query-params'
 import { omit } from 'lodash-es'
 import React, { Fragment } from 'react'

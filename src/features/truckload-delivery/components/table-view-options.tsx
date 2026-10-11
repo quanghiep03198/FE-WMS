@@ -1,15 +1,15 @@
 'use no memo'
 
+import { Tooltip } from '@components/customs/tooltip'
+import { Button } from '@components/ui/button'
 import {
-	Button,
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	Icon,
-	Tooltip
-} from '@components/ui'
+	DropdownMenuSeparator
+} from '@components/ui/dropdown-menu'
+import { Icon } from '@components/ui/icon'
 import useMediaQuery from '@hooks/use-media-query'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { type Table, type VisibilityState } from '@tanstack/react-table'

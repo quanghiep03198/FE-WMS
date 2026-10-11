@@ -1,5 +1,6 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
-import { Div, TableCell, TableFooter, TableRow } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { TableCell, TableFooter, TableRow } from '@components/ui/table'
 import type { IOutboundReport } from '@features/report/types'
 import { capitalize, sortBy } from 'lodash-es'
 import React, { useMemo } from 'react'

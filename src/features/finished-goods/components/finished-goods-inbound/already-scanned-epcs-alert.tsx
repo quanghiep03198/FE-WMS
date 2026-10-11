@@ -1,4 +1,6 @@
 import { Json } from '@common/utils/json'
+import { default as DataTable } from '@components/addons/tanstack-table'
+import { ROW_ACTIONS_COLUMN_ID } from '@components/addons/tanstack-table/constants'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -7,17 +9,11 @@ import {
 	AlertDialogDescription,
 	AlertDialogFooter,
 	AlertDialogHeader,
-	AlertDialogTitle,
-	Button,
-	DataTable,
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	Icon
-} from '@components/ui'
-import { ROW_ACTIONS_COLUMN_ID } from '@components/ui/@react-table/constants'
+	AlertDialogTitle
+} from '@components/ui/alert-dialog'
+import { Button } from '@components/ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@components/ui/dialog'
+import { Icon } from '@components/ui/icon'
 import type { DeleteScannedEpcsFormValues } from '@features/finished-goods/schemas/delete-epc.schema'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { useSocketContext } from '@stores/socket.store'

@@ -1,4 +1,6 @@
-import { Div, Separator, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Separator } from '@components/ui/separator'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

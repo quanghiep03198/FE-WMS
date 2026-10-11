@@ -1,6 +1,7 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import env from '@common/utils/env'
-import { Button, Icon } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import { PackingService } from '@features/packing-manifest/services/packing.service'
 import { format } from 'date-fns'
 import saveAs from 'file-saver'

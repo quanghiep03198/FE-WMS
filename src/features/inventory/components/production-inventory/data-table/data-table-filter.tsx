@@ -1,5 +1,6 @@
-import { Div, Icon } from '@components/ui'
-import { DebouncedInput } from '@components/ui/@custom/debounced-input'
+import { DebouncedInput } from '@components/customs/debounced-input'
+import { Div } from '@components/customs/div'
+import { Icon } from '@components/ui/icon'
 import type { StockFlow } from '@features/finished-goods/constants/enums'
 import type { Updater } from '@tanstack/react-table'
 import { capitalize } from 'lodash-es'

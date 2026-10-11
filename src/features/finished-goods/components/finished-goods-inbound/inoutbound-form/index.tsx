@@ -1,24 +1,16 @@
 import { FALLBACK_VALUE } from '@common/constants/constants'
 import { cn } from '@common/utils/cn'
-import type { IconProps } from '@components/ui'
-import {
-	Button,
-	ComboboxFieldControl,
-	Div,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Form as FormProvider,
-	Icon,
-	Input,
-	RadioGroup,
-	RadioGroupItem,
-	SelectFieldControl,
-	Tooltip
-} from '@components/ui'
-import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@components/ui/@custom/alert'
+import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@components/customs/alert'
+import { Div } from '@components/customs/div'
+import { Tooltip } from '@components/customs/tooltip'
+import { ComboboxFieldControl } from '@components/forms/combobox'
+import { SelectFieldControl } from '@components/forms/select'
+import { Button } from '@components/ui/button'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form as FormProvider } from '@components/ui/form'
+import type { IconProps } from '@components/ui/icon'
+import { Icon } from '@components/ui/icon'
+import { Input } from '@components/ui/input'
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
 import { useGetShapingProductLineQuery } from '@features/department/hooks/use-department-request'
 import { FinishedGoodsStockAction, StockTransactionPurpose } from '@features/finished-goods/constants/enums'
 import { useGetWarehouseQuery } from '@features/warehouse/hooks/use-warehouse-request'

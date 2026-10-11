@@ -1,4 +1,4 @@
-import { StatusIndicator } from '@components/ui/@custom/status-indicator'
+import { StatusIndicator } from '@components/customs/status-indicator'
 import { useTranslation } from 'react-i18next'
 import { useReaderPlaygroundStore } from '../../contexts/rfid-reader-playground-context'
 

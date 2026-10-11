@@ -1,6 +1,6 @@
 import { PresetBreakPoints } from '@common/constants/enums'
-import { TableBody, TableCell, TableRow } from '@components/ui'
-import Skeleton from '@components/ui/@custom/skeleton'
+import Skeleton from '@components/customs/skeleton'
+import { TableBody, TableCell, TableRow } from '@components/ui/table'
 import type { IDefectiveGoods } from '@features/defective-goods/types'
 import useMediaQuery from '@hooks/use-media-query'
 import type { ColumnDef } from '@tanstack/react-table'

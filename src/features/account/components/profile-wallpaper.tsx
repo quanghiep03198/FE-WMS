@@ -1,4 +1,7 @@
-import { Avatar, AvatarFallback, AvatarImage, Div, Icon, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
+import { Icon } from '@components/ui/icon'
 import useAuth from '@hooks/use-auth'
 
 const ProfileWallpaper: React.FC = () => {

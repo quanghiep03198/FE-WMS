@@ -1,5 +1,6 @@
-import { Table, TableCaption, Typography } from '@components/ui'
-import { fuzzyFilter } from '@components/ui/@react-table/utils'
+import { fuzzyFilter } from '@components/addons/tanstack-table/utils/fuzzy-filter.util'
+import { Typography } from '@components/customs/typography'
+import { Table, TableCaption } from '@components/ui/table'
 import type { StockFlow } from '@features/finished-goods/constants/enums'
 import type { SizeQuantity } from '@features/inventory/types'
 import useScrollToFn from '@hooks/use-scroll-fn'

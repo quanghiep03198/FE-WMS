@@ -1,5 +1,6 @@
 import RFIDAgentConfigImage from '@assets/images/rfid-agent-configuration.png'
-import { Dialog, DialogContent, DialogTrigger, Typography } from '@components/ui'
+import { Typography } from '@components/customs/typography'
+import { Dialog, DialogContent, DialogTrigger } from '@components/ui/dialog'
 import { DocumentHashNavigation } from '../../constants/document-hash-navigation'
 import SectionHeading from './section-heading'
 import { Section } from './styled'

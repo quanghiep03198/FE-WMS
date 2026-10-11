@@ -1,8 +1,8 @@
 'use no memo'
 
 import { CommonActions } from '@common/constants/enums'
-import type { AutoCompleteFieldControlProps } from '@components/forms/auto-complete'
-import { AutoCompleteFieldControl } from '@components/ui'
+import { type AutoCompleteFieldControlProps, AutoCompleteFieldControl } from '@components/forms/auto-complete'
+
 import { useDebounce } from 'ahooks'
 import React, { memo, useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'

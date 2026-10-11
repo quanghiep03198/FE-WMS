@@ -1,15 +1,9 @@
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
 import FeedbackFormTrigger from '@components/shared/feedback-form-trigger'
-import {
-	Button,
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-	Div,
-	Separator,
-	Typography
-} from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@components/ui/dialog'
+import { Separator } from '@components/ui/separator'
 import type { FallbackRender } from '@sentry/react'
 import { captureException } from '@sentry/react'
 import { HttpStatusCode } from 'axios'

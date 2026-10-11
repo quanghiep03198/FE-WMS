@@ -1,24 +1,15 @@
 import { cn } from '@common/utils/cn'
-import {
-	AutoCompleteFieldControl,
-	Button,
-	Div,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	Icon,
-	Input,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	RadioGroup,
-	RadioGroupItem,
-	Separator,
-	Tooltip,
-	Typography
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
+import { AutoCompleteFieldControl } from '@components/forms/auto-complete'
+import { Button } from '@components/ui/button'
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
+import { Input } from '@components/ui/input'
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
+import { Separator } from '@components/ui/separator'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useResetState } from 'ahooks'
 import { capitalize, isEmpty } from 'lodash-es'

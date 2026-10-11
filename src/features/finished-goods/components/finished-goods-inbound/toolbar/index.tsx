@@ -1,4 +1,7 @@
-import { buttonVariants, Div, Icon, Label } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { buttonVariants } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
 import { useTranslation } from 'react-i18next'
 
 import ConnectButton from './connect-button'

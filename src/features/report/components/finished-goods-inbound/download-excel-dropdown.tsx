@@ -1,16 +1,16 @@
 import { cn } from '@common/utils/cn'
+import { Tooltip } from '@components/customs/tooltip'
+import { buttonVariants } from '@components/ui/button'
 import {
-	buttonVariants,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-	Icon,
-	Tooltip
-} from '@components/ui'
+	DropdownMenuTrigger
+} from '@components/ui/dropdown-menu'
+import { Icon } from '@components/ui/icon'
 import useMediaQuery from '@hooks/use-media-query'
 import { useTranslation } from 'react-i18next'
 import { useDownloadReport } from '../../hooks/finished-goods-inbound/use-download-report'

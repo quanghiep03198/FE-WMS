@@ -1,19 +1,11 @@
 'use no memo'
 
 import { cn } from '@common/utils/cn'
-import type { IconProps } from '@components/ui'
-import {
-	FormControl,
-	FormField,
-	FormItem,
-	Icon,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-	Tooltip
-} from '@components/ui'
+import { Tooltip } from '@components/customs/tooltip'
+import { FormControl, FormField, FormItem } from '@components/ui/form'
+import type { IconProps } from '@components/ui/icon'
+import { Icon } from '@components/ui/icon'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 import type { ResourceKey } from 'i18next'
 import React, { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'

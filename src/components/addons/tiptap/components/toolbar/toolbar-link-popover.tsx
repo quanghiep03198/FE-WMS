@@ -1,0 +1,82 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { object, url, type infer as Infer } from 'zod'
+import { Div } from '../../../../customs/div'
+import { Tooltip } from '../../../../customs/tooltip'
+import { Typography } from '../../../../customs/typography'
+import { InputFieldControl } from '../../../../forms/input'
+import { Button } from '../../../../ui/button'
+import { Form } from '../../../../ui/form'
+import { Icon } from '../../../../ui/icon'
+import { Popover, PopoverContent, PopoverTrigger } from '../../../../ui/popover'
+import { useEditorContext } from '../../context/editor-context'
+
+const urlSchema = object({ url: url({ message: 'ns_common:editor.validations.invalid_url' }).optional() })
+type UrlSchema = Infer<typeof urlSchema>
+
+export const LinkPopover: React.FC = () => {
+	const { editor } = useEditorContext()
+	const { t } = useTranslation()
+
+	const [open, setOpen] = useState<boolean>(false)
+
+	const form = useForm<UrlSchema>({
+		resolver: zodResolver(urlSchema)
+	})
+
+	const handleInsertLink = ({ url }: UrlSchema) => {
+		if (!url) return
+		// empty
+		if (url === '') {
+			editor.chain().focus().extendMarkRange('link').unsetLink().run()
+			return
+		}
+		// update link
+		editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+		form.reset()
+		setOpen(false)
+	}
+
+	return (
+		<Popover open={open} onOpenChange={setOpen}>
+			<Tooltip message={t('ns_common:editor.link')}>
+				<PopoverTrigger asChild>
+					<Button className='aspect-square h-8 w-8' size='icon' variant='ghost'>
+						<Icon name='Link' />
+					</Button>
+				</PopoverTrigger>
+			</Tooltip>
+			<PopoverContent className='w-80'>
+				<Div className='grid gap-4'>
+					<Div className='space-y-2'>
+						<Typography className='leading-none font-medium'>
+							{t('ns_common:editor.insert_link_title')}
+						</Typography>
+						<Typography className='text-muted-foreground text-sm'>
+							{t('ns_common:editor.insert_link_description')}
+						</Typography>
+					</Div>
+					<Form {...form}>
+						<form
+							className='flex items-stretch gap-x-2'
+							onSubmit={(e) => {
+								e.stopPropagation()
+								form.handleSubmit(handleInsertLink)(e)
+							}}>
+							<InputFieldControl
+								className='h-8! w-full flex-1 text-sm'
+								name='url'
+								placeholder={t('ns_common:editor.insert_link_placeholder')}
+							/>
+							<Button size='sm' variant='default'>
+								{t('ns_common:actions.apply')}
+							</Button>
+						</form>
+					</Form>
+				</Div>
+			</PopoverContent>
+		</Popover>
+	)
+}

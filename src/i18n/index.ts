@@ -1,10 +1,10 @@
 import { Languages } from '@common/constants/enums'
-import i18n from 'i18next'
+import i18next from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
-import { resources, type Resources } from './i18n-resources'
+import { resources } from './i18n-resources'
 
-i18n
+i18next
 	.use(LanguageDetector)
 	.use(initReactI18next)
 	.init({
@@ -26,7 +26,7 @@ i18n
 		}
 	})
 
-export { i18n, type Resources }
+export { i18next as i18n }
 
 /**
  * @deprecated

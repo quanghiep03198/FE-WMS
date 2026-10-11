@@ -1,6 +1,11 @@
 'use no memo'
 
-import { Button, Div, Form as FormProvider, Icon, InputFieldControl, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { InputFieldControl } from '@components/forms/input'
+import { Button } from '@components/ui/button'
+import { Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
 import { useUpdatePasswordMutation } from '@features/auth/hooks/use-profile-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'

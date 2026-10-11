@@ -1,4 +1,6 @@
-import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Icon } from '@components/ui/icon'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table'
 import type { IOutboundReport } from '@features/report/types'
 import { useTranslation } from 'react-i18next'
 import ReportDetailFooter from './report-detail-footer'

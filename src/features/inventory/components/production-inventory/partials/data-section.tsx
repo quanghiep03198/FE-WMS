@@ -1,4 +1,6 @@
-import { Div, Icon, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Icon } from '@components/ui/icon'
 import useQueryParams from '@hooks/use-query-params'
 import { isEmpty } from 'lodash-es'
 import { useMemo } from 'react'

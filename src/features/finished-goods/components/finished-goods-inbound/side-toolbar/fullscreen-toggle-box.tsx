@@ -1,4 +1,7 @@
-import { Div, Label, Switch, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Label } from '@components/ui/label'
+import { Switch } from '@components/ui/switch'
 import { useFullscreen, useKeyPress, useUnmount } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 

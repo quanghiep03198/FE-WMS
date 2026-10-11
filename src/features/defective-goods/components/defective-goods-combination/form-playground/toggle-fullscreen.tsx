@@ -1,4 +1,7 @@
-import { Button, Icon, Label, Switch } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
+import { Switch } from '@components/ui/switch'
 import useMediaQuery from '@hooks/use-media-query'
 import { useFullscreen, useKeyPress, useUnmount } from 'ahooks'
 import React, { memo } from 'react'

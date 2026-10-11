@@ -1,5 +1,5 @@
 import { cn } from '@common/utils/cn'
-import { Div } from '@components/ui'
+import { Div } from '@components/customs/div'
 import { useUnmount } from 'ahooks'
 import { memo } from 'react'
 import { PublishedTopics, useReaderPlaygroundStore } from '../../contexts/rfid-reader-playground-context'

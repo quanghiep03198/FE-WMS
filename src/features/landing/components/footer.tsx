@@ -1,5 +1,9 @@
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
 import { ThemeSwitcher } from '@components/shared/theme-switcher'
-import { Button, Div, Input, Label, Typography } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Input } from '@components/ui/input'
+import { Label } from '@components/ui/label'
 import { Separator } from '@radix-ui/react-context-menu'
 
 const Footer: React.FC = () => {

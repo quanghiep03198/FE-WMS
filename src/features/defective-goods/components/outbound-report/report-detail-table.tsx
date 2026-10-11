@@ -1,5 +1,6 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
-import { Div, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table'
 import type { IInboundReport } from '@features/report/types'
 import { useTranslation } from 'react-i18next'
 

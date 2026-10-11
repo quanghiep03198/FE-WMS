@@ -1,6 +1,7 @@
 import { UserRole } from '@common/constants/enums'
 import RoleBaseAccessControl from '@components/guards/role-base-access-control'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@components/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@components/ui/dropdown-menu'
+import { Icon } from '@components/ui/icon'
 import { getOneWarehouseQueryOptions } from '@features/warehouse/hooks/use-warehouse-request'
 import type { IWarehouse } from '@features/warehouse/types'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'

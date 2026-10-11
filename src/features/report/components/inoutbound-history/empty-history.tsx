@@ -1,4 +1,6 @@
-import { Button, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle, Icon } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@components/ui/empty'
+import { Icon } from '@components/ui/icon'
 import type { StockFlow } from '@features/finished-goods/constants/enums'
 import useQueryParams from '@hooks/use-query-params'
 import React from 'react'

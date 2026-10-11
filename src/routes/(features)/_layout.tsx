@@ -1,6 +1,6 @@
 import Loading from '@components/shared/loading'
 import NetworkDetector from '@components/shared/network-detector'
-import { SidebarProvider } from '@components/ui'
+import { SidebarProvider } from '@components/ui/sidebar'
 import { getUserProfileQuery } from '@features/auth/hooks/use-profile-request'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'

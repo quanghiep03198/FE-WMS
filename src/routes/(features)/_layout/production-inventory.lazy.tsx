@@ -1,6 +1,6 @@
 import { UserRole } from '@common/constants/enums'
+import { Div } from '@components/customs/div'
 import { RoleGuard } from '@components/guards/role-guard'
-import { Div } from '@components/ui'
 import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
 import DataSection from '@features/inventory/components/production-inventory/partials/data-section'
 import PageHeader from '@features/inventory/components/production-inventory/partials/page-header'

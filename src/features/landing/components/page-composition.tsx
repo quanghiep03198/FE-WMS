@@ -1,4 +1,4 @@
-import { Div } from '@components/ui'
+import { Div } from '@components/customs/div'
 import tw from 'tailwind-styled-components'
 import { navigationConfig, usePageContext } from '../contexts/page-context'
 import { ExploreRfidAgentBanner } from './explore-rfid-agent-banner'

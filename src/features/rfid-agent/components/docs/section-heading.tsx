@@ -1,5 +1,5 @@
-import type { TypographyProps } from '@components/ui'
-import { Typography } from '@components/ui'
+import type { TypographyProps } from '@components/customs/typography'
+import { Typography } from '@components/customs/typography'
 import { useInViewport } from 'ahooks'
 import React, { useEffect, useRef } from 'react'
 import type { DocumentHashNavigation } from '../../constants/document-hash-navigation'

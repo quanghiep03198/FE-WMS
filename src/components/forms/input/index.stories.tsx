@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { object, string, type infer as Infer } from 'zod'
 import type { InputFieldControlProps } from '.'
 import { InputFieldControl } from '.'
-import { Button } from '../../ui/@core/button'
+import { Button } from '../../ui/button'
 
 type Story = StoryObj<typeof InputFieldControl>
 type StoryArgs = InputFieldControlProps<Record<'name', string>>

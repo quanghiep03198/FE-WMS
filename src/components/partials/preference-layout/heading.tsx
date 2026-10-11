@@ -1,4 +1,7 @@
-import { Button, Div, Tooltip, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
+import { Button } from '@components/ui/button'
 import { ArrowLeftIcon, ArrowRightIcon, HomeIcon } from '@radix-ui/react-icons'
 import { Link, useRouter } from '@tanstack/react-router'
 import React from 'react'

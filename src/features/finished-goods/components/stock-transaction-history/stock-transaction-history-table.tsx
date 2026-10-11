@@ -1,22 +1,14 @@
 'use no memo'
 
 import { cn } from '@common/utils/cn'
-import {
-	Div,
-	Icon,
-	Table,
-	TableBody,
-	TableCell,
-	TableFooter,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Tooltip,
-	Typography
-} from '@components/ui'
-import AutoComplete from '@components/ui/@custom/auto-complete'
-import Skeleton from '@components/ui/@custom/skeleton'
-import { VirtualPlaceholderRow } from '@components/ui/@react-table/components/table-row'
+import { VirtualPlaceholderRow } from '@components/addons/tanstack-table/components/table-row'
+import AutoComplete from '@components/customs/auto-complete'
+import { Div } from '@components/customs/div'
+import Skeleton from '@components/customs/skeleton'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
+import { Icon } from '@components/ui/icon'
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@components/ui/table'
 import { useGetCurrentStockTransactionQuery } from '@features/finished-goods/hooks/use-stock-transaction-request'
 import useScrollToFn from '@hooks/use-scroll-fn'
 import useVirtualScrollPadding from '@hooks/use-virtual-scroll-padding'

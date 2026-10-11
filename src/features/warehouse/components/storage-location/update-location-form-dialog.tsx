@@ -2,21 +2,13 @@
 
 import { CommonActions } from '@common/constants/enums'
 import { InputFieldControl } from '@components/forms/input'
-import {
-	Button,
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	FieldGroup,
-	FormItem,
-	Form as FormProvider,
-	Icon,
-	Input,
-	Label
-} from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@components/ui/dialog'
+import { FieldGroup } from '@components/ui/field'
+import { FormItem, Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
+import { Input } from '@components/ui/input'
+import { Label } from '@components/ui/label'
 import { useStorageLocationPageContext } from '@features/warehouse/contexts/storage-location-page-context'
 import { useUpdateStorageMutation } from '@features/warehouse/hooks/use-warehouse-storage-request'
 import { zodResolver } from '@hookform/resolvers/zod'

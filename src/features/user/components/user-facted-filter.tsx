@@ -1,24 +1,22 @@
 'use no memo'
 
 import { cn } from '@common/utils/cn'
-import type { IconProps } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Badge } from '@components/ui/badge'
+import { Button } from '@components/ui/button'
 import {
-	Badge,
-	Button,
 	Command,
 	CommandEmpty,
 	CommandGroup,
 	CommandInput,
 	CommandItem,
 	CommandList,
-	CommandSeparator,
-	Div,
-	Icon,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	Separator
-} from '@components/ui'
+	CommandSeparator
+} from '@components/ui/command'
+import type { IconProps } from '@components/ui/icon'
+import { Icon } from '@components/ui/icon'
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
+import { Separator } from '@components/ui/separator'
 import type { IUser } from '@features/auth/types'
 import { CheckIcon } from '@radix-ui/react-icons'
 import { type Column } from '@tanstack/react-table'

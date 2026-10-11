@@ -1,7 +1,10 @@
 'use no memo'
 
-import { Div, DropdownSelect, Icon, Input } from '@components/ui'
-import AutoComplete from '@components/ui/@custom/auto-complete'
+import AutoComplete from '@components/customs/auto-complete'
+import { Div } from '@components/customs/div'
+import { DropdownSelect } from '@components/customs/dropdown-select'
+import { Icon } from '@components/ui/icon'
+import { Input } from '@components/ui/input'
 import { useFilterQuery } from '@features/defective-goods/hooks/use-filter-query'
 import type { Column } from '@tanstack/react-table'
 import { useDebounceEffect } from 'ahooks'

@@ -1,11 +1,15 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { default as DataTable } from '@components/addons/tanstack-table'
+import TableCellText from '@components/addons/tanstack-table/components/table-cell-text'
+import { ROW_EXPANSION_COLUMN_ID } from '@components/addons/tanstack-table/constants'
+import type { RenderSubComponent } from '@components/addons/tanstack-table/types'
+import EllipsisList from '@components/customs/ellipsis-list'
+import { Tooltip } from '@components/customs/tooltip'
 import AutoRefreshToggle from '@components/shared/auto-refresh-toggle'
 import SizeTable from '@components/shared/size-table'
-import { Badge, Button, DataTable, Icon, Tooltip } from '@components/ui'
-import EllipsisList from '@components/ui/@custom/ellipsis-list'
-import TableCellText from '@components/ui/@react-table/components/table-cell-text'
-import { ROW_EXPANSION_COLUMN_ID } from '@components/ui/@react-table/constants'
-import type { RenderSubComponent } from '@components/ui/@react-table/types'
+import { Badge } from '@components/ui/badge'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import useMediaQuery from '@hooks/use-media-query'
 import type { Table as TTable } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -33,7 +37,7 @@ const InboundReportMasterTable: React.FC = () => {
 	const dataTableRef = useRef<TTable<IDefectiveGoodsInboundReport>>(null)
 	const columnHelper = createColumnHelper<IDefectiveGoodsInboundReport>()
 	const defectiveCategoryList = useDefectiveCategoryList()
-	const factedUniqueStorageLocations = useGetUniqStorageLocation(data)
+	const factedUniqueStorageLocations = useGetUniqStorageLocation(data!)
 
 	useEffect(() => {
 		if (dataTableRef.current) dataTableRef.current.toggleAllRowsExpanded(false)
@@ -148,6 +152,7 @@ const InboundReportMasterTable: React.FC = () => {
 				},
 				cell: ({ getValue }) => {
 					const value = getValue()
+					if (!value) return t('ns_common:titles.unknown')
 					return t(TRANSLATED_DEFECTIVE_CATEGORY[value], {
 						ns: 'ns_inoutbound',
 						defaultValue: t('ns_common:titles.unknown')
@@ -212,7 +217,7 @@ const InboundReportMasterTable: React.FC = () => {
 		[i18n.language]
 	)
 
-	const summaryData = useGetCategoriesQty(data)
+	const summaryData = useGetCategoriesQty(data!)
 
 	return (
 		<DataTable

@@ -1,21 +1,19 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
 import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuShortcut,
-	DropdownMenuTrigger,
-	Icon
-} from '@components/ui'
+	DropdownMenuTrigger
+} from '@components/ui/dropdown-menu'
+import { Icon } from '@components/ui/icon'
 import { navigationConfig } from '@configs/navigation.config'
 import useAuth from '@hooks/use-auth'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { FileRouteTypes } from '../../../route-tree.gen'
+import type { FileRouteTypes } from '../../../route-tree.gen'
 
 const NavUserControl: React.FC = () => {
 	const { user, logout } = useAuth()

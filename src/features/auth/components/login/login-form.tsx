@@ -1,17 +1,13 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import env from '@common/utils/env'
-import {
-	Button,
-	Checkbox,
-	Div,
-	FormItem,
-	FormLabel,
-	Form as FormProvider,
-	Icon,
-	Input,
-	InputFieldControl,
-	Label
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { InputFieldControl } from '@components/forms/input'
+import { Button } from '@components/ui/button'
+import { Checkbox } from '@components/ui/checkbox'
+import { FormItem, FormLabel, Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
+import { Input } from '@components/ui/input'
+import { Label } from '@components/ui/label'
 import { AuthQueryKeys } from '@features/auth/hooks/use-profile-request'
 import { AuthService } from '@features/auth/services/auth.service'
 import { zodResolver } from '@hookform/resolvers/zod'

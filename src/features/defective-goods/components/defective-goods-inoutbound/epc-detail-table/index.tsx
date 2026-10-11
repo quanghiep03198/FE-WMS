@@ -1,16 +1,9 @@
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
 import { NestedCell, NestedColumn, NestedTable } from '@components/shared/horizontal-nested-table'
-import {
-	Div,
-	Icon,
-	Separator,
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Typography
-} from '@components/ui'
+import { Icon } from '@components/ui/icon'
+import { Separator } from '@components/ui/separator'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table'
 
 import { FALLBACK_VALUE } from '@common/constants/constants'
 import { CommonActions } from '@common/constants/enums'

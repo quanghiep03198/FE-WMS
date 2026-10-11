@@ -1,21 +1,20 @@
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import { Div } from '@components/customs/div'
+import { InputFieldControl } from '@components/forms/input'
+import { MultiSelectFieldControl } from '@components/forms/multi-select'
+import { Button, buttonVariants } from '@components/ui/button'
 import {
-	Button,
-	buttonVariants,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
-	DialogTitle,
-	Div,
-	Form as FormProvider,
-	Icon,
-	InputFieldControl,
-	MultiSelectFieldControl
-} from '@components/ui'
+	DialogTitle
+} from '@components/ui/dialog'
+import { Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { capitalize } from 'lodash-es'
 import React, { useMemo, useRef, useState } from 'react'

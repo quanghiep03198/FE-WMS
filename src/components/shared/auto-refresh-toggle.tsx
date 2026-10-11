@@ -1,14 +1,10 @@
-import {
-	Div,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-	Icon,
-	Label,
-	Slider,
-	Switch,
-	Typography
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@components/ui/hover-card'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
+import { Slider } from '@components/ui/slider'
+import { Switch } from '@components/ui/switch'
 import useQueryParams from '@hooks/use-query-params'
 import { HoverCardPortal } from '@radix-ui/react-hover-card'
 import { useDebounce, usePrevious } from 'ahooks'

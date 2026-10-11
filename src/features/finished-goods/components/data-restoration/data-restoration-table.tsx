@@ -1,23 +1,15 @@
 'use no memo'
 
 import { cn } from '@common/utils/cn'
-import {
-	Button,
-	Checkbox,
-	Div,
-	Icon,
-	Table,
-	TableBody,
-	TableCell,
-	TableFooter,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Tooltip,
-	Typography
-} from '@components/ui'
-import Skeleton from '@components/ui/@custom/skeleton'
-import { VirtualPlaceholderRow } from '@components/ui/@react-table/components/table-row'
+import { VirtualPlaceholderRow } from '@components/addons/tanstack-table/components/table-row'
+import { Div } from '@components/customs/div'
+import Skeleton from '@components/customs/skeleton'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
+import { Button } from '@components/ui/button'
+import { Checkbox } from '@components/ui/checkbox'
+import { Icon } from '@components/ui/icon'
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@components/ui/table'
 import useScrollToFn from '@hooks/use-scroll-fn'
 import useVirtualScrollPadding from '@hooks/use-virtual-scroll-padding'
 import type { CheckedState } from '@radix-ui/react-checkbox'

@@ -3,7 +3,7 @@ import GridBackground from '@components/shared/grid-background'
 import { useEventListener } from 'ahooks'
 import nProgress from 'nprogress'
 import { Fragment, useEffect } from 'react'
-import { Div } from '../ui'
+import { Div } from '../customs/div'
 
 export default function Loading({ withContent = true }: { withContent?: boolean }) {
 	nProgress.configure({

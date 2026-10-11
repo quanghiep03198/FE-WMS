@@ -1,5 +1,7 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
-import { Div, Separator, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Separator } from '@components/ui/separator'
 import type { IPurchaseOrder } from '@features/order/types'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

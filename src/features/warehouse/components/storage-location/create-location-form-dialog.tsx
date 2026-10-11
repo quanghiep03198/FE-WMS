@@ -1,30 +1,22 @@
 'use no memo'
 
+import { Tooltip } from '@components/customs/tooltip'
 import { InputFieldControl } from '@components/forms/input'
+import { Alert, AlertDescription, AlertTitle } from '@components/ui/alert'
+import { Button } from '@components/ui/button'
 import {
-	Alert,
-	AlertDescription,
-	AlertTitle,
-	Button,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
-	FieldGroup,
-	Form as FormProvider,
-	Icon,
-	Table,
-	TableBody,
-	TableCell,
-	TableFooter,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Tooltip
-} from '@components/ui'
+	DialogTrigger
+} from '@components/ui/dialog'
+import { FieldGroup } from '@components/ui/field'
+import { Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@components/ui/table'
 import { useCreateStorageMutation } from '@features/warehouse/hooks/use-warehouse-storage-request'
 import type { IWarehouse } from '@features/warehouse/types'
 import { zodResolver } from '@hookform/resolvers/zod'

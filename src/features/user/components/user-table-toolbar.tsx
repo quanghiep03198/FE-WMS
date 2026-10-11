@@ -1,7 +1,9 @@
 'use no memo'
 
 import { UserRole } from '@common/constants/enums'
-import { Button, Icon, Tooltip } from '@components/ui'
+import { Tooltip } from '@components/customs/tooltip'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import type { IUser } from '@features/auth/types'
 import useMediaQuery from '@hooks/use-media-query'
 import type { Table } from '@tanstack/react-table'

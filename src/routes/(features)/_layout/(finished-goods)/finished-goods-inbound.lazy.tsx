@@ -60,8 +60,6 @@ function Page() {
 								<SideToolbar />
 							</PageComposition.Wrapper>
 						</PageComposition.Container>
-						{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
-						{/* <PageNavigationBlocker /> */}
 					</PageProvider>
 				</SocketProvider>
 			</RoleGuard>

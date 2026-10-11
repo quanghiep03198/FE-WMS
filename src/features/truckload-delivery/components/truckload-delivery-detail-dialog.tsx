@@ -3,32 +3,25 @@
 import { CommonActions, PresetBreakPoints, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import env from '@common/utils/env'
+import { Div } from '@components/customs/div'
+import { Typewriter } from '@components/customs/type-writter'
+import { Typography } from '@components/customs/typography'
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
 import { GhostButton } from '@components/shared/ghost-button'
+import { Button } from '@components/ui/button'
 import {
-	Button,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
-	Div,
-	FieldGroup,
-	FieldSet,
-	Icon,
-	Separator,
-	Table,
-	TableBody,
-	TableCell,
-	TableFooter,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Typography
-} from '@components/ui'
-import { Typewriter } from '@components/ui/@custom/type-writter'
+	DialogTrigger
+} from '@components/ui/dialog'
+import { FieldGroup, FieldSet } from '@components/ui/field'
+import { Icon } from '@components/ui/icon'
+import { Separator } from '@components/ui/separator'
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@components/ui/table'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'
 import useCopyToClipboard from '@hooks/use-copy-to-clipboard'

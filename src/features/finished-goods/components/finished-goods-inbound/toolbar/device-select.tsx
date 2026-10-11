@@ -1,4 +1,7 @@
-import { Div, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Icon } from '@components/ui/icon'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 import { useGetRFIDDeviceQuery } from '@features/rfid-device/hooks/use-rfid-device-request'
 import { useQueryClient } from '@tanstack/react-query'
 import { isNil } from 'lodash-es'

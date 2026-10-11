@@ -1,22 +1,10 @@
 import { coalesce } from '@common/utils/common'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { Div } from '@components/customs/div'
 import { NestedCell, NestedCellHead, NestedColumn, NestedTable } from '@components/shared/horizontal-nested-table'
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogTitle,
-	DialogTrigger,
-	Div,
-	Icon,
-	Table,
-	TableBody,
-	TableCell,
-	TableFooter,
-	TableHead,
-	TableHeader,
-	TableRow
-} from '@components/ui'
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@components/ui/dialog'
+import { Icon } from '@components/ui/icon'
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@components/ui/table'
 import type { IInboundHistory } from '@features/report/types'
 import { useResetState } from 'ahooks'
 import { isNil, sortBy } from 'lodash-es'

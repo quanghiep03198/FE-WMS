@@ -1,5 +1,6 @@
-import { Div, Icon } from '@components/ui'
-import type Pagination from '@components/ui/@custom/pagination'
+import { Div } from '@components/customs/div'
+import type Pagination from '@components/customs/pagination'
+import { Icon } from '@components/ui/icon'
 import type { IDefectiveGoods } from '@features/defective-goods/types'
 import type { UseQueryResult } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'

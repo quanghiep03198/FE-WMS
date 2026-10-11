@@ -1,4 +1,4 @@
-import { AutoCompleteFieldControl, type AutoCompleteFieldControlProps } from '@components/ui'
+import { AutoCompleteFieldControl, type AutoCompleteFieldControlProps } from '@components/forms/auto-complete'
 import { useDebounce } from 'ahooks'
 import { omit } from 'lodash-es'
 import { useMemo } from 'react'

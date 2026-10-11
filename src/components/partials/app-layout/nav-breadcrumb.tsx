@@ -4,12 +4,9 @@ import {
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
-	BreadcrumbSeparator,
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger
-} from '@components/ui'
+	BreadcrumbSeparator
+} from '@components/ui/breadcrumb'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@components/ui/dropdown-menu'
 import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
 import { HomeIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'

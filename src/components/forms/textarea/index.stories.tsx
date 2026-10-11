@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { object, string, type infer as Infer } from 'zod'
 import type { TextareaFieldControlProps } from '.'
 import { TextareaFieldControl } from '.'
-import { Button } from '../../ui/@core/button'
+import { Button } from '../../ui/button'
 
 type Story = StoryObj<typeof TextareaFieldControl>
 type StoryArgs = TextareaFieldControlProps<Record<'name', string>>

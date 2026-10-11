@@ -1,32 +1,32 @@
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import env from '@common/utils/env'
+import { Div } from '@components/customs/div'
+import { InputFieldControl } from '@components/forms/input'
+import { SelectFieldControl } from '@components/forms/select'
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
+import { Button, buttonVariants } from '@components/ui/button'
 import {
-	Button,
-	buttonVariants,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
-	Div,
+	DialogTrigger
+} from '@components/ui/dialog'
+import {
 	FormControl,
 	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-	Form as FormProvider,
-	Icon,
-	InputFieldControl,
-	RadioGroup,
-	RadioGroupItem,
-	SelectFieldControl,
-	Separator
-} from '@components/ui'
+	Form as FormProvider
+} from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
+import { Separator } from '@components/ui/separator'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'
 import { useResetState } from 'ahooks'
@@ -130,7 +130,7 @@ const RFIDDeviceFormDialog: React.FC = () => {
 								</Div>
 								<Div className='col-span-2'>
 									<InputFieldControl
-										disabled={!user?.roles.includes(UserRole.ADMIN)}
+										disabled={!user?.roles?.includes(UserRole.ADMIN)}
 										label={t('ns_common:languages.en')}
 										name='device_name.en'
 										placeholder='Display name'

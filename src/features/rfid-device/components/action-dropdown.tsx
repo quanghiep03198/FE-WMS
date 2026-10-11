@@ -4,9 +4,9 @@ import {
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-	Icon
-} from '@components/ui'
+	DropdownMenuTrigger
+} from '@components/ui/dropdown-menu'
+import { Icon } from '@components/ui/icon'
 import type { IRFIDReaderDevice } from '@features/rfid-device/types'
 import type { CellContext } from '@tanstack/react-table'
 import { pick } from 'lodash-es'

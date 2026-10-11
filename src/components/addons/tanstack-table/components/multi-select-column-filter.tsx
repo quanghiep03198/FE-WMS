@@ -1,0 +1,40 @@
+import { sortBy, uniqBy } from 'lodash-es'
+import { useMemo, useState } from 'react'
+import type { MultiSelectProps } from '../../../customs/multi-select'
+import { MultiSelect } from '../../../customs/multi-select'
+
+function MultiSelectColumnFilter<TData extends Record<'label' | 'value', string>>({
+	datalist,
+	value,
+	onValueChange
+}: Pick<MultiSelectProps<TData>, 'datalist' | 'value' | 'onValueChange'>) {
+	const [searchTerm, setSearchTerm] = useState<string>('')
+
+	const filteredDataList = useMemo(() => {
+		if (!datalist?.length) return []
+		const normalizedSearchTerm = searchTerm.trim().toLowerCase()
+		const result = datalist.filter(({ value }) => value.trim().toLowerCase().includes(normalizedSearchTerm))
+		const uniqueValues = uniqBy(
+			[...result, Array.isArray(value) ? [...value.map((val) => ({ label: val, value: val }))] : []],
+			'value'
+		)
+		return sortBy(uniqueValues, 'value')
+	}, [datalist, searchTerm, value])
+
+	return (
+		<MultiSelect
+			datalist={filteredDataList as TData[]}
+			labelField='label'
+			shouldFilter={false}
+			value={value}
+			valueField='value'
+			classNames={{
+				popoverTrigger: 'h-10 border-none shadow-none'
+			}}
+			onInput={(search) => setSearchTerm(search)}
+			onValueChange={(value) => onValueChange(value)}
+		/>
+	)
+}
+
+export default MultiSelectColumnFilter

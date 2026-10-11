@@ -1,18 +1,12 @@
 'use no memo'
 
 import { cn } from '@common/utils/cn'
-import {
-	Div,
-	FormControl,
-	FormField,
-	FormItem,
-	Icon,
-	Input,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	Typography
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { FormControl, FormField, FormItem } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
+import { Input } from '@components/ui/input'
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
 import { StockFlow } from '@features/finished-goods/constants/enums'
 import { CheckIcon } from '@radix-ui/react-icons'
 import { capitalize } from 'lodash-es'

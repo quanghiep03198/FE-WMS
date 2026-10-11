@@ -1,9 +1,11 @@
 import SearchDialog from './search-dialog'
 
-import { GithubIcon } from '@components/icons'
+import { GithubIcon } from '@components/icons/github-icon'
 import { ThemeSwitcher } from '@components/shared/theme-switcher'
 import ThemeToggle from '@components/shared/theme-toggle'
-import { Button, Icon, useSidebar } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
+import { useSidebar } from '@components/ui/sidebar'
 import useMediaQuery from '@hooks/use-media-query'
 
 const GithubLinkButton: React.FC = () => {

@@ -1,6 +1,7 @@
 import { cn } from '@common/utils/cn'
 import formatIntlNumber from '@common/utils/format-intl-number'
-import { Div, Table } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Table } from '@components/ui/table'
 import type { OrderItem } from '@features/finished-goods/types'
 import useMeasureElement from '@hooks/use-measure-element'
 import useScrollToFn from '@hooks/use-scroll-fn'

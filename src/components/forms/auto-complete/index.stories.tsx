@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form'
 import { object, string, type infer as Infer } from 'zod'
 import type { AutoCompleteFieldControlProps } from '.'
 import { AutoCompleteFieldControl } from '.'
-import { Button } from '../../ui/@core/button'
-import { Form } from '../../ui/@core/form'
+import { Button } from '../../ui/button'
+import { Form } from '../../ui/form'
 
 type Story = Meta<typeof AutoCompleteFieldControl<any, Record<'name', string>>>
 type StoryArgs = AutoCompleteFieldControlProps<Record<'name', string>>

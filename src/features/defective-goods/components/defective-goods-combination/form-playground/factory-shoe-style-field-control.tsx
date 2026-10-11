@@ -1,5 +1,5 @@
-import type { AutoCompleteFieldControlProps } from '@components/ui'
-import { AutoCompleteFieldControl } from '@components/ui'
+import type { AutoCompleteFieldControlProps } from '@components/forms/auto-complete'
+import { AutoCompleteFieldControl } from '@components/forms/auto-complete'
 import React, { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

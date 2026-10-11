@@ -1,6 +1,9 @@
 import { PresetBreakPoints } from '@common/constants/enums'
+import { Kbd, KbdKey } from '@components/customs/kbd'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
+import { Button } from '@components/ui/button'
 import {
-	Button,
 	Command,
 	CommandDialog,
 	CommandEmpty,
@@ -9,12 +12,9 @@ import {
 	CommandItem,
 	CommandList,
 	CommandSeparator,
-	CommandShortcut,
-	Icon,
-	Tooltip,
-	Typography
-} from '@components/ui'
-import { Kbd, KbdKey } from '@components/ui/@custom/kbd'
+	CommandShortcut
+} from '@components/ui/command'
+import { Icon } from '@components/ui/icon'
 import { navigationConfig } from '@configs/navigation.config'
 import useMediaQuery from '@hooks/use-media-query'
 import { Link } from '@tanstack/react-router'

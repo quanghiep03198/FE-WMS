@@ -8,10 +8,10 @@ import {
 	AlertDialogHeader,
 	AlertDialogMedia,
 	AlertDialogTitle,
-	AlertDialogTrigger,
-	Button,
-	Icon
-} from '@components/ui'
+	AlertDialogTrigger
+} from '@components/ui/alert-dialog'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import { useCheckoutInventoryAuditMutation } from '@features/inventory/hooks/use-inventory-audit-request'
 import { Lock, LockOpen } from 'lucide'
 import { MorphIcon } from 'morphicons/react'

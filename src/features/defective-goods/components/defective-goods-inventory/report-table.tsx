@@ -1,8 +1,13 @@
+import { default as DataTable } from '@components/addons/tanstack-table'
+import TableCellText from '@components/addons/tanstack-table/components/table-cell-text'
+import { ROW_EXPANSION_COLUMN_ID } from '@components/addons/tanstack-table/constants'
+import EllipsisList from '@components/customs/ellipsis-list'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
 import SizeTable from '@components/shared/size-table'
-import { Badge, Button, DataTable, Icon, Tooltip, Typography } from '@components/ui'
-import EllipsisList from '@components/ui/@custom/ellipsis-list'
-import TableCellText from '@components/ui/@react-table/components/table-cell-text'
-import { ROW_EXPANSION_COLUMN_ID } from '@components/ui/@react-table/constants'
+import { Badge } from '@components/ui/badge'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import { createColumnHelper } from '@tanstack/react-table'
 import { split } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
@@ -17,11 +22,11 @@ import ReportTableSummary from '../report-table-footer'
 
 const DefectiveGoodsInventoryTable: React.FC = () => {
 	const { data, isLoading, refetch } = useGetDefectiveGoodsInventoryQuery()
-	const summaryData = useGetCategoriesQty(data)
+	const summaryData = useGetCategoriesQty(data!)
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<IDefectiveGoodsInventory>()
 	const defectiveCategoryList = useDefectiveCategoryList()
-	const factedUniqueStorageLocations = useGetUniqStorageLocation(data)
+	const factedUniqueStorageLocations = useGetUniqStorageLocation(data!)
 
 	const columns = useMemo(
 		() => [
@@ -134,10 +139,8 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				},
 				cell: ({ getValue }) => {
 					const value = getValue()
-					return t(TRANSLATED_DEFECTIVE_CATEGORY[value], {
-						ns: 'ns_inoutbound',
-						defaultValue: t('ns_common:titles.unknown')
-					})
+					if (!value) return t('ns_common:titles.unknown')
+					return t(TRANSLATED_DEFECTIVE_CATEGORY[value], { ns: 'ns_inoutbound' })
 				}
 			}),
 			columnHelper.accessor('storage_location', {

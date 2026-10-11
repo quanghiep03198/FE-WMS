@@ -1,23 +1,22 @@
-import type { DivProps, TypographyProps } from '@components/ui'
+import type { DivProps } from '@components/customs/div'
+import { Div } from '@components/customs/div'
+import type { TypographyProps } from '@components/customs/typography'
+import { Typography } from '@components/customs/typography'
+import { ComboboxFieldControl } from '@components/forms/combobox'
+import { InputFieldControl } from '@components/forms/input'
+import { Button } from '@components/ui/button'
+import { Checkbox } from '@components/ui/checkbox'
 import {
-	Button,
-	Checkbox,
-	ComboboxFieldControl,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
-	DialogTitle,
-	Div,
-	FormDescription,
-	FormLabel,
-	Form as FormProvider,
-	Icon,
-	InputFieldControl,
-	Typography
-} from '@components/ui'
+	DialogTitle
+} from '@components/ui/dialog'
+import { FormDescription, FormLabel, Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
 import { useUpsertEpcsMatchMutation } from '@features/finished-goods/hooks/use-finished-goods-mo-request'
 import { type ExchangeEpcFormValue, exchangeEpcSchema } from '@features/finished-goods/schemas/exchange-epc.schema'
 import {

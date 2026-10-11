@@ -1,5 +1,5 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
-import { Div } from '@components/ui'
+import { Div } from '@components/customs/div'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'

@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { coerce, object, type infer as Infer } from 'zod'
 import type { DatePickerFieldControlProps } from '.'
 import { DatePickerFieldControl } from '.'
-import { Button } from '../../ui/@core/button'
+import { Button } from '../../ui/button'
 
 type Story = StoryObj<typeof DatePickerFieldControl>
 type StoryArgs = DatePickerFieldControlProps<any>

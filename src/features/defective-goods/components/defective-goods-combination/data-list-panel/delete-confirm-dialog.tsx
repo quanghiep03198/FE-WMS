@@ -1,9 +1,8 @@
 import { CommonActions } from '@common/constants/enums'
-import ConfirmDialog from '@components/ui/@override/confirm-dialog'
+import ConfirmDialog from '@components/customs/confirm-dialog'
 import { useResetState } from 'ahooks'
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { usePageContext } from '../../../contexts/page-context'
 import { useDeleteDefectiveGoodsMutation } from '../../../hooks/use-defective-goods-request'
 
@@ -24,15 +23,10 @@ const DeleteConfirmDialog: React.FC = () => {
 	})
 
 	const handleDelete = useCallback(async () => {
-		try {
-			toastIdRef.current = toast.loading(t('ns_common:notification.processing_request'))
-			await deleteAsync(deleteId)
-			toast.success(t('ns_common:notification.success'), { id: toastIdRef.current })
-			resetDeleteId()
-			setConfirmDialogOpen(false)
-		} catch {
-			toast.error(t('ns_common:notification.error'), { id: toastIdRef.current })
-		}
+		if (!deleteId) return
+		await deleteAsync(deleteId)
+		resetDeleteId()
+		setConfirmDialogOpen(false)
 	}, [deleteId])
 
 	return (

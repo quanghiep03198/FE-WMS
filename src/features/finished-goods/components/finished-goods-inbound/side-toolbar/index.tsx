@@ -1,4 +1,6 @@
-import { Div, Sheet, SheetContent, SheetTrigger, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Sheet, SheetContent, SheetTrigger } from '@components/ui/sheet'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import DataRestoration from './data-restoration'

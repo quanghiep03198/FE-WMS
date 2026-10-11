@@ -1,0 +1,157 @@
+import { cn } from '@common/utils/cn'
+import { ArrowDownIcon, ArrowUpIcon, EyeClosedIcon, WidthIcon } from '@radix-ui/react-icons'
+import type { Header } from '@tanstack/react-table'
+import { flexRender } from '@tanstack/react-table'
+import { useUpdate } from 'ahooks'
+import { pick } from 'lodash-es'
+import type { icons } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { Typography } from '../../../customs/typography'
+import {
+	ContextMenu,
+	ContextMenuCheckboxItem,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuSeparator,
+	ContextMenuSub,
+	ContextMenuSubContent,
+	ContextMenuSubTrigger,
+	ContextMenuTrigger
+} from '../../../ui/context-menu'
+import { Icon } from '../../../ui/icon'
+import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
+import { useTableContext } from '../context/table.context'
+
+type TableCellHeadProps = {
+	header: Header<any, any>
+}
+
+const FIXED_COLUMN_IDS = [ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID, ROW_ACTIONS_COLUMN_ID]
+
+const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
+	const { t } = useTranslation()
+	const { columnDef, getIsResizing, getIsSorted, getToggleSortingHandler, getNextSortingOrder } = header.column
+	const toggleSorting = columnDef.enableSorting ? getToggleSortingHandler() : undefined
+	const rerender = useUpdate()
+	const { table, event$ } = useTableContext('table', 'event$')
+
+	const currentSortingState: keyof typeof icons = (() => {
+		switch (getIsSorted()) {
+			case 'asc':
+				return 'ArrowUp'
+			case 'desc':
+				return 'ArrowDown'
+			default:
+				return 'ArrowUpDown'
+		}
+	})()
+
+	const headerTitle = header.column.getCanSort()
+		? getNextSortingOrder() === 'asc'
+			? t('ns_common:table.sort_asc')
+			: getNextSortingOrder() === 'desc'
+				? t('ns_common:table.sort_desc')
+				: t('ns_common:table.clear_sort')
+		: undefined
+
+	if (header.colSpan > 1) return <>{flexRender(columnDef.header, header.getContext())}</>
+
+	return (
+		<ContextMenu>
+			<ContextMenuTrigger
+				title={headerTitle}
+				className={cn(
+					'flex h-max w-full cursor-auto grid-cols-[14px_auto] items-center px-4 py-2 text-left text-sm capitalize select-none has-[[role=button]]:w-full has-[[role=button]]:justify-center has-[[role=checkbox]]:w-full has-[[role=checkbox]]:justify-center!',
+					{
+						'hover:text-foreground cursor-pointer gap-x-2': columnDef.enableSorting,
+						'cursor-col-resize': getIsResizing(),
+						'justify-center text-center': header.colSpan > 1 || columnDef.meta?.align === 'center',
+						'justify-start text-left': columnDef.meta?.align === 'left',
+						'justify-end': columnDef.meta?.align === 'right'
+					}
+				)}
+				style={
+					{
+						'--icon-size': '14px',
+						minWidth: `var(--header-${header?.id}-size)`
+					} as React.CSSProperties
+				}
+				onClick={(e) => {
+					if (typeof toggleSorting === 'function') toggleSorting(e)
+					rerender()
+				}}>
+				{columnDef.enableSorting && (
+					<Icon
+						className='h-(--icon-size) max-w-(--icon-size) min-w-(--icon-size)'
+						name={currentSortingState}
+						size={14}
+					/>
+				)}
+				<Typography as='small' className='line-clamp-1 text-left text-inherit' variant='small'>
+					{flexRender(columnDef.header, header.getContext())}
+				</Typography>
+			</ContextMenuTrigger>
+			<ContextMenuContent className='w-64' hidden={FIXED_COLUMN_IDS.includes(header.column.id)}>
+				<ContextMenuItem
+					className='gap-x-2'
+					disabled={!columnDef.enableSorting}
+					onClick={() => header.column.toggleSorting(false)}>
+					<ArrowUpIcon />
+					{t('ns_common:table.sort_asc')}
+				</ContextMenuItem>
+				<ContextMenuItem
+					className='gap-x-2'
+					disabled={!columnDef.enableSorting}
+					onClick={() => header.column.toggleSorting(true)}>
+					<ArrowDownIcon />
+					{t('ns_common:table.sort_desc')}
+				</ContextMenuItem>
+				<ContextMenuSeparator />
+				<ContextMenuSub>
+					<ContextMenuSubTrigger
+						aria-disabled={!header.isPlaceholder && !header.column.columnDef.enablePinning}
+						className='aria-disabled:text-muted-foreground gap-x-2'
+						disabled={!header.isPlaceholder && !header.column.columnDef.enablePinning}>
+						<Icon name='Pin' size={14} />
+						{t('ns_common:actions.pin')}
+					</ContextMenuSubTrigger>
+					<ContextMenuSubContent className='w-56'>
+						<ContextMenuCheckboxItem
+							checked={header.column.getIsPinned() === false}
+							onCheckedChange={() => {
+								header.column.pin(false)
+								event$.emit(pick(table.getState(), ['columnPinning']))
+							}}>
+							{t('ns_common:table.unpin')}
+						</ContextMenuCheckboxItem>
+						<ContextMenuCheckboxItem
+							checked={header.column.getIsPinned() === 'left'}
+							onCheckedChange={() => {
+								header.column.pin('left')
+								event$.emit(pick(table.getState(), ['columnPinning']))
+							}}>
+							{t('ns_common:table.pin_left')}
+						</ContextMenuCheckboxItem>
+						<ContextMenuCheckboxItem
+							checked={header.column.getIsPinned() === 'right'}
+							onCheckedChange={() => {
+								header.column.pin('right')
+								event$.emit(pick(table.getState(), ['columnPinning']))
+							}}>
+							{t('ns_common:table.pin_right')}
+						</ContextMenuCheckboxItem>
+					</ContextMenuSubContent>
+				</ContextMenuSub>
+				<ContextMenuSeparator className='h-[0.5px]' />
+				<ContextMenuItem className='gap-x-2' onClick={header.column.resetSize}>
+					<WidthIcon /> {t('ns_common:table.reset_size')}
+				</ContextMenuItem>
+				<ContextMenuItem className='gap-x-2' onClick={header.column.getToggleVisibilityHandler()}>
+					<EyeClosedIcon /> {t('ns_common:table.hide_column')}
+				</ContextMenuItem>
+			</ContextMenuContent>
+		</ContextMenu>
+	)
+}
+
+export default TableCellHead

@@ -1,0 +1,22 @@
+import { cn } from '@common/utils/cn'
+import { Div } from '@components/customs/div'
+import { Separator } from '@components/ui/separator'
+import { Fragment, memo } from 'react'
+import { useTableContext } from '../context/table.context'
+import { type TableFooterProps } from '../types'
+
+function TableFooter({ hidden, slot: Slot, rtl }: TableFooterProps) {
+	const { table } = useTableContext('table')
+	if (hidden || !Slot) return null
+
+	return (
+		<Fragment>
+			<Separator />
+			<Div className={cn('bg-background flex items-center gap-x-1', rtl ? 'justify-start' : 'justify-end')}>
+				<Slot table={table} />
+			</Div>
+		</Fragment>
+	)
+}
+
+export default memo(TableFooter)

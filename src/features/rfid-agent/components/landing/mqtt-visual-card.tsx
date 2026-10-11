@@ -1,5 +1,6 @@
 import { cn } from '@common/utils/cn'
-import { Badge, Icon } from '@components/ui'
+import { Badge } from '@components/ui/badge'
+import { Icon } from '@components/ui/icon'
 import useTheme from '@hooks/use-theme'
 import { useEventListener } from 'ahooks'
 import React, { cloneElement, useRef, useState } from 'react'

@@ -1,5 +1,5 @@
 import { CommonActions } from '@common/constants/enums'
-import ConfirmDialog from '@components/ui/@override/confirm-dialog'
+import ConfirmDialog from '@components/customs/confirm-dialog'
 import { useCallback, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'

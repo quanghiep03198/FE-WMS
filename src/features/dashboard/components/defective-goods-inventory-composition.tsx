@@ -3,26 +3,12 @@
 import { Label, Pie, PieChart, Sector } from 'recharts'
 import type { PieSectorDataItem } from 'recharts/types/polar/Pie'
 
-import {
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
-	Div,
-	Icon,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-	Skeleton
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@components/ui/chart'
+import { Icon } from '@components/ui/icon'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
+import { Skeleton } from '@components/ui/skeleton'
 import type { SelectProps } from '@radix-ui/react-select'
 import { capitalize } from 'lodash-es'
 import { useMemo, useState } from 'react'

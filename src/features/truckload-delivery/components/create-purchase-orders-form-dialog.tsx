@@ -1,28 +1,22 @@
 import { CommonActions } from '@common/constants/enums'
+import { Div } from '@components/customs/div'
+import { Typewriter } from '@components/customs/type-writter'
+import { Typography } from '@components/customs/typography'
+import { InputFieldControl } from '@components/forms/input'
+import { Button, buttonVariants } from '@components/ui/button'
+import { ButtonGroup } from '@components/ui/button-group'
 import {
-	Button,
-	ButtonGroup,
-	buttonVariants,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
-	DialogTitle,
-	Div,
-	Empty,
-	EmptyContent,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyMedia,
-	EmptyTitle,
-	Form as FormProvider,
-	Icon,
-	InputFieldControl,
-	Typography
-} from '@components/ui'
-import { Typewriter } from '@components/ui/@custom/type-writter'
+	DialogTitle
+} from '@components/ui/dialog'
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@components/ui/empty'
+import { Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateEffect } from 'ahooks'
 import { Fragment, useRef, useState } from 'react'
@@ -168,7 +162,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 														type='button'
 														variant='outline'
 														onClick={() =>
-															append({ po: '', outbound_qty: null, max_outbound_qty: Infinity })
+															append({ po: '', outbound_qty: 0, max_outbound_qty: Infinity })
 														}>
 														<Icon name='ListPlus' size={20} strokeWidth={1.5} />{' '}
 														{t('ns_common:table.add_row')}
@@ -223,7 +217,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 											size='sm'
 											type='button'
 											variant='outline'
-											onClick={() => append({ po: '', outbound_qty: null, max_outbound_qty: Infinity })}>
+											onClick={() => append({ po: '', outbound_qty: 0, max_outbound_qty: Infinity })}>
 											<Icon name='Plus' /> {t('ns_common:actions.add')}
 										</Button>
 									</EmptyContent>
@@ -233,7 +227,8 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 								<DialogFooter>
 									<Button disabled={isPending} type='submit'>
 										<Icon
-											className={isPending && 'animate-spin'}
+											aria-busy={isPending}
+											className='aria-busy:animate-spin'
 											name={isPending ? 'LoaderCircle' : 'Check'}
 										/>
 										{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}

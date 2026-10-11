@@ -1,4 +1,7 @@
-import { Badge, Div, Icon, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Badge } from '@components/ui/badge'
+import { Icon } from '@components/ui/icon'
 import React, { useRef } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

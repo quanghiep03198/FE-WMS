@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form'
 import { object, string, type infer as Infer } from 'zod'
 import type { ComboboxFieldControlProps } from '.'
 import { ComboboxFieldControl } from '.'
-import { Button } from '../../ui/@core/button'
-import { Form } from '../../ui/@core/form'
+import { Button } from '../../ui/button'
+import { Form } from '../../ui/form'
 
 const meta = {
 	title: 'Components/Field Controls/Combobox',

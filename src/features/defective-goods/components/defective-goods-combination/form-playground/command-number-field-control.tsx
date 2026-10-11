@@ -1,4 +1,4 @@
-import { AutoCompleteFieldControl, type AutoCompleteFieldControlProps } from '@components/ui'
+import { AutoCompleteFieldControl, type AutoCompleteFieldControlProps } from '@components/forms/auto-complete'
 import { useSearchManufacturingOrderQuery } from '@features/order/hooks/use-order-request'
 import { useDebounce } from 'ahooks'
 import { capitalize } from 'lodash-es'

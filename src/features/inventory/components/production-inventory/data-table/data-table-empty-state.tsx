@@ -1,4 +1,6 @@
-import { Div, Icon, TableCell, TableRow } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Icon } from '@components/ui/icon'
+import { TableCell, TableRow } from '@components/ui/table'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -1,4 +1,6 @@
-import { Div, Icon, Skeleton } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Icon } from '@components/ui/icon'
+import { Skeleton } from '@components/ui/skeleton'
 import tw from 'tailwind-styled-components'
 
 const BrowserMockup: React.FC = () => {

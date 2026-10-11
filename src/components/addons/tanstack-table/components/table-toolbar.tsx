@@ -1,0 +1,96 @@
+'use no memo'
+
+import { cn } from '@common/utils/cn'
+import { useMemoizedFn } from 'ahooks'
+import { pick } from 'lodash-es'
+import { useTranslation } from 'react-i18next'
+import { Div } from '../../../customs/div'
+import { Tooltip } from '../../../customs/tooltip'
+import { Button } from '../../../ui/button'
+import { Icon } from '../../../ui/icon'
+import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
+import { useTableContext } from '../context/table.context'
+import type { ToolbarProps } from '../types'
+import ColumnFilterToggle from './column-filter-toggle'
+import { GlobalFilterPopover } from './global-filter'
+import { TableViewOptions } from './table-view-options'
+
+const TableToolbar: React.FC<ToolbarProps> = (props) => {
+	const { table, event$ } = useTableContext('table', 'event$')
+	const {
+		columnPinning: { left, right },
+		globalFilter,
+		columnFilters
+	} = table.getState()
+
+	const { t } = useTranslation()
+	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
+
+	const isSomeColumnsPinned =
+		(Array.isArray(left) &&
+			left.some((columnId) => columnId !== ROW_SELECTION_COLUMN_ID && columnId !== ROW_EXPANSION_COLUMN_ID)) ||
+		(Array.isArray(right) && right.some((columnId) => columnId !== ROW_ACTIONS_COLUMN_ID))
+
+	const resetAllFilters = useMemoizedFn(() => {
+		table.resetGlobalFilter(table.initialState.globalFilter)
+		table.resetColumnFilters(true)
+	})
+
+	// Handle override case
+	if (props.override === true) {
+		return props.render({ table, event$ })
+	}
+
+	const { slotLeft: SlotLeft, slotRight: SlotRight, rtl } = props
+
+	return (
+		<Div className={cn('flex items-center justify-between py-0.5', rtl && 'flex-row-reverse')} role='toolbar'>
+			{SlotLeft && <SlotLeft table={table} />}
+			<Div className='ml-auto grid auto-cols-fr grid-flow-col items-center gap-x-1'>
+				<Tooltip message={t('ns_common:actions.unpin_all_columns')} triggerProps={{ asChild: true }}>
+					<Button
+						className={cn(!isSomeColumnsPinned && 'hidden')}
+						size='icon'
+						variant='destructive'
+						onClick={() => {
+							table.resetColumnPinning()
+							event$.emit(pick(table.getState(), ['columnPinning']))
+						}}>
+						<Icon name='PinOff' />
+					</Button>
+				</Tooltip>
+				<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
+					<Button
+						className={cn(!isFilterDirty && 'hidden')}
+						size='icon'
+						variant='destructive'
+						onClick={() => resetAllFilters()}>
+						<Icon name='FunnelX' />
+					</Button>
+				</Tooltip>
+				{SlotRight && <SlotRight table={table} />}
+				{table.options.enableGlobalFilter && (
+					<GlobalFilterPopover
+						enableGlobalFilter={table.options.enableGlobalFilter}
+						globalFilter={table.getState().globalFilter}
+						onGlobalFilterChange={table.setGlobalFilter}
+					/>
+				)}
+				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && <ColumnFilterToggle />}
+				{(table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableResizing) ||
+					table.options.enableColumnResizing) && (
+					<Tooltip message={t('ns_common:table.reset_size')} triggerProps={{ asChild: true }}>
+						<Button size='icon' variant='outline' onClick={() => table.resetColumnSizing()}>
+							<Icon name='FoldHorizontal' size={18} />
+						</Button>
+					</Tooltip>
+				)}
+				{table.options.enableHiding && <TableViewOptions />}
+			</Div>
+		</Div>
+	)
+}
+
+TableToolbar.displayName = 'TableToolbar'
+
+export default TableToolbar

@@ -1,16 +1,10 @@
-import type { IconProps } from '@components/ui'
-import {
-	Div,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	Icon,
-	RadioGroup,
-	RadioGroupItem,
-	Typography
-} from '@components/ui'
-import { Typewriter } from '@components/ui/@custom/type-writter'
+import { Div } from '@components/customs/div'
+import { Typewriter } from '@components/customs/type-writter'
+import { Typography } from '@components/customs/typography'
+import { FormControl, FormField, FormItem, FormLabel } from '@components/ui/form'
+import type { IconProps } from '@components/ui/icon'
+import { Icon } from '@components/ui/icon'
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
 import { StockFlow } from '@features/finished-goods/constants/enums'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'

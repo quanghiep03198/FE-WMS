@@ -1,4 +1,4 @@
-import { TableCell, TableRow } from '@components/ui'
+import { TableCell, TableRow } from '@components/ui/table'
 import type { IDefectiveGoods } from '@features/defective-goods/types'
 import type { Row } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'

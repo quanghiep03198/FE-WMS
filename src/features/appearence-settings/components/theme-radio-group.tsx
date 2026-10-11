@@ -1,5 +1,8 @@
 import type { Theme } from '@common/constants/enums'
-import { Div, Label, RadioGroup, RadioGroupItem, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Label } from '@components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
 import useTheme from '@hooks/use-theme'
 import React from 'react'
 

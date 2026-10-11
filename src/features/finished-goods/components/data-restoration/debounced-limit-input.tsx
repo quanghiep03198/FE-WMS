@@ -1,4 +1,6 @@
-import { Div, Input, Label } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Input } from '@components/ui/input'
+import { Label } from '@components/ui/label'
 import { useDebounceEffect } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

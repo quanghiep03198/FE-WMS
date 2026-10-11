@@ -1,20 +1,11 @@
 import { cn } from '@common/utils/cn'
-import {
-	Button,
-	buttonVariants,
-	Checkbox,
-	Div,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	Form as FormProvider,
-	Icon,
-	MultiSelectFieldControl,
-	Popover,
-	PopoverContent,
-	PopoverTrigger
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { MultiSelectFieldControl } from '@components/forms/multi-select'
+import { Button, buttonVariants } from '@components/ui/button'
+import { Checkbox } from '@components/ui/checkbox'
+import { FormControl, FormField, FormItem, FormLabel, Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
 import { StockFlow } from '@features/finished-goods/constants/enums'
 import { useGetScanningEpcs } from '@features/finished-goods/hooks/use-finished-goods-epc-request'
 import type { DeleteScannedEpcsFormValues } from '@features/finished-goods/schemas/delete-epc.schema'

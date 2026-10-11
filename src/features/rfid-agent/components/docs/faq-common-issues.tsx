@@ -1,4 +1,4 @@
-import { Typography } from '@components/ui'
+import { Typography } from '@components/customs/typography'
 import { DocumentHashNavigation } from '../../constants/document-hash-navigation'
 import SectionHeading from './section-heading'
 import { ListItem, OrderedList, Section } from './styled'

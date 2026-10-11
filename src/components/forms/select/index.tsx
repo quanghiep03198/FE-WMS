@@ -6,21 +6,10 @@ import type { FieldValues } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import type { BaseFieldControl } from '../../../common/types/hook-form'
-import {
-	Div,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-	Tooltip
-} from '../../ui'
+import { Div } from '../../customs/div'
+import { Tooltip } from '../../customs/tooltip'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select'
 
 export type SelectFieldControlProps<T extends FieldValues, D> = BaseFieldControl<T> &
 	React.ComponentProps<typeof Select> & {

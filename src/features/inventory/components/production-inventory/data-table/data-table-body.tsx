@@ -1,5 +1,5 @@
-import { TableBody } from '@components/ui'
-import { VirtualPlaceholderRow } from '@components/ui/@react-table/components/table-row'
+import { VirtualPlaceholderRow } from '@components/addons/tanstack-table/components/table-row'
+import { TableBody } from '@components/ui/table'
 import useVirtualScrollPadding from '@hooks/use-virtual-scroll-padding'
 import type { Row } from '@tanstack/react-table'
 import type { Virtualizer } from '@tanstack/react-virtual'

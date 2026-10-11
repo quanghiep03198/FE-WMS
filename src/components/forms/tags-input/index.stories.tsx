@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Button } from '../../ui/@core/button'
+import { Button } from '../../ui/button'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { array, object, string, type infer as Infer } from 'zod'
-import { Form } from '../../ui/@core/form'
+import { Form } from '../../ui/form'
 import type { TagInputFieldControlProps } from './index'
 import { TagInputFieldControl } from './index'
 

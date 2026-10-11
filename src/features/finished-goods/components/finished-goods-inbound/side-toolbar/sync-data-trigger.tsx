@@ -1,21 +1,21 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import { cn } from '@common/utils/cn'
 import { Json } from '@common/utils/json'
+import { Div } from '@components/customs/div'
+import { StatusIndicator } from '@components/customs/status-indicator'
+import { Typewriter } from '@components/customs/type-writter'
+import { Typography } from '@components/customs/typography'
+import { Button } from '@components/ui/button'
 import {
-	Button,
-	Div,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuLabel,
 	DropdownMenuRadioGroup,
 	DropdownMenuRadioItem,
 	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-	Icon,
-	Typography
-} from '@components/ui'
-import { StatusIndicator } from '@components/ui/@custom/status-indicator'
-import { Typewriter } from '@components/ui/@custom/type-writter'
+	DropdownMenuTrigger
+} from '@components/ui/dropdown-menu'
+import { Icon } from '@components/ui/icon'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { useSocketContext } from '@stores/socket.store'
 import { hasIn } from 'lodash-es'

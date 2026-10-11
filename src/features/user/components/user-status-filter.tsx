@@ -2,21 +2,21 @@
 
 import { RecordStatus } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
-import type { IconProps } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Badge } from '@components/ui/badge'
+import { buttonVariants } from '@components/ui/button'
 import {
-	Badge,
-	buttonVariants,
-	Div,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuRadioGroup,
 	DropdownMenuRadioItem,
 	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-	Icon,
-	Separator
-} from '@components/ui'
+	DropdownMenuTrigger
+} from '@components/ui/dropdown-menu'
+import type { IconProps } from '@components/ui/icon'
+import { Icon } from '@components/ui/icon'
+import { Separator } from '@components/ui/separator'
 import type { IUser } from '@features/auth/types'
 import type { Table } from '@tanstack/react-table'
 import { isNil } from 'lodash-es'

@@ -1,20 +1,11 @@
-import {
-	Button,
-	Checkbox,
-	Div,
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	RadioGroup,
-	RadioGroupItem,
-	Separator,
-	TextareaFieldControl,
-	Typography
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { TextareaFieldControl } from '@components/forms/textarea'
+import { Button } from '@components/ui/button'
+import { Checkbox } from '@components/ui/checkbox'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@components/ui/form'
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
+import { Separator } from '@components/ui/separator'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { Meta } from '@storybook/react'
 import { useState } from 'react'

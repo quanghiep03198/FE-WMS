@@ -1,27 +1,16 @@
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import { Div } from '@components/customs/div'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
 import RoleBaseAccessControl from '@components/guards/role-base-access-control'
-import {
-	Badge,
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-	Checkbox,
-	Collapsible,
-	CollapsibleContent,
-	Div,
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-	Icon,
-	Separator,
-	Tooltip,
-	Typography
-} from '@components/ui'
+import { Badge } from '@components/ui/badge'
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card'
+import { Checkbox } from '@components/ui/checkbox'
+import { Collapsible, CollapsibleContent } from '@components/ui/collapsible'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@components/ui/dropdown-menu'
+import { Icon } from '@components/ui/icon'
+import { Separator } from '@components/ui/separator'
 import type { IDefectiveGoods } from '@features/defective-goods/types'
 import useCopyToClipboard from '@hooks/use-copy-to-clipboard'
 import { useDateLocale } from '@hooks/use-date-locale'

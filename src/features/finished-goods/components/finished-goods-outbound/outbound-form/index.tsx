@@ -1,15 +1,8 @@
-import {
-	Div,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-	Icon,
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-	Typography
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@components/ui/hover-card'
+import { Icon } from '@components/ui/icon'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs'
 
 import { useTranslation } from 'react-i18next'
 import CentralizedPoOutboundForm from './centralized-po-form'

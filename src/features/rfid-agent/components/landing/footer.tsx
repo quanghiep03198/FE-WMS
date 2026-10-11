@@ -1,5 +1,5 @@
+import { Typography } from '@components/customs/typography'
 import { ThemeSwitcher } from '@components/shared/theme-switcher'
-import { Typography } from '@components/ui'
 import React from 'react'
 
 const Footer: React.FC = () => {

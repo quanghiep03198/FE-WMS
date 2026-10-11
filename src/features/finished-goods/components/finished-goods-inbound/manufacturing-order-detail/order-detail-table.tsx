@@ -1,29 +1,22 @@
 import { cn } from '@common/utils/cn'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Button, buttonVariants } from '@components/ui/button'
+import { Checkbox } from '@components/ui/checkbox'
 import {
-	Button,
-	Checkbox,
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
-	Div,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-	Icon,
-	Input,
-	Separator,
-	Table,
-	TableBody,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Typography,
-	buttonVariants
-} from '@components/ui'
+	DialogTrigger
+} from '@components/ui/dialog'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@components/ui/hover-card'
+import { Icon } from '@components/ui/icon'
+import { Input } from '@components/ui/input'
+import { Separator } from '@components/ui/separator'
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@components/ui/table'
 import { type OrderItem } from '@features/finished-goods/types'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'

@@ -1,6 +1,7 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { Div } from '@components/customs/div'
 import { NestedCell, NestedColumn } from '@components/shared/horizontal-nested-table'
-import { Div, TableCell, TableRow } from '@components/ui'
+import { TableCell, TableRow } from '@components/ui/table'
 import type { IOutboundReport } from '@features/report/types'
 import { sortBy } from 'lodash-es'
 import { useMemo } from 'react'

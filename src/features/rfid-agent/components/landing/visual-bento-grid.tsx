@@ -1,4 +1,4 @@
-import { Div } from '@components/ui'
+import { Div } from '@components/customs/div'
 import MQTTVisualCard from './mqtt-visual-card'
 import OSVisualCard from './os-visual-card'
 import RealtimeVisualCard from './realtime-visual-card'

@@ -1,20 +1,14 @@
 import { PresetBreakPoints } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import { Div } from '@components/customs/div'
 import AppLogo from '@components/shared/app-logo'
 import { InstallPwaDialog } from '@components/shared/install-pwa-dialog'
 import { ThemeSwitcher } from '@components/shared/theme-switcher'
-import {
-	Button,
-	Div,
-	Icon,
-	Label,
-	Separator,
-	Sheet,
-	SheetContent,
-	SheetHeader,
-	SheetTrigger,
-	buttonVariants
-} from '@components/ui'
+import { Button, buttonVariants } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
+import { Separator } from '@components/ui/separator'
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from '@components/ui/sheet'
 import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'
 import { ArrowRightIcon } from '@radix-ui/react-icons'

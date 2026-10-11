@@ -5,9 +5,9 @@ import {
 	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuItem,
-	DropdownMenuTrigger,
-	Icon
-} from '@components/ui'
+	DropdownMenuTrigger
+} from '@components/ui/dropdown-menu'
+import { Icon } from '@components/ui/icon'
 import type { ColumnDefBase } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { isEmpty, isNil, omitBy, pick } from 'lodash-es'

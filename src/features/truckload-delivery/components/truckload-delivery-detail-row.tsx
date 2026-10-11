@@ -1,22 +1,13 @@
 import { CommonActions, UserRole } from '@common/constants/enums'
 import generateAvatar from '@common/utils/generate-avatar'
+import { Div } from '@components/customs/div'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
 import RoleBaseAccessControl from '@components/guards/role-base-access-control'
-import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-	Div,
-	Icon,
-	Item,
-	ItemContent,
-	ItemDescription,
-	ItemMedia,
-	ItemTitle,
-	TableCell,
-	TableRow,
-	Tooltip,
-	Typography
-} from '@components/ui'
+import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
+import { Icon } from '@components/ui/icon'
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@components/ui/item'
+import { TableCell, TableRow } from '@components/ui/table'
 import useAuth from '@hooks/use-auth'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { format } from 'date-fns'

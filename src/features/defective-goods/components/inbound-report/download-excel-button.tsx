@@ -1,6 +1,7 @@
 import type { FactoryCode } from '@common/constants/enums'
 import env from '@common/utils/env'
-import { Button, Icon } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import useMediaQuery from '@hooks/use-media-query'
 import useQueryParams from '@hooks/use-query-params'
 import { useQueryClient } from '@tanstack/react-query'

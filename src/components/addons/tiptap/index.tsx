@@ -1,0 +1,146 @@
+'use no memo'
+
+import { cn } from '@common/utils/cn'
+import { Div } from '@components/customs/div'
+import { ScrollArea } from '@components/ui/scroll-area'
+import { EditorContent, useEditor } from '@tiptap/react'
+import { useDeepCompareEffect } from 'ahooks'
+import { uniqueId } from 'lodash-es'
+import React, { memo, useImperativeHandle, useState } from 'react'
+import isEqual from 'react-fast-compare'
+import type { RefCallBack } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from '../../ui/context-menu'
+import BubbleMenu from './components/bubble-menu'
+import CommonContextMenuItems from './components/context-menu/common-context-menu-items'
+import LinkContextMenuItems from './components/context-menu/link-context-menu-items'
+import TableContextMenuItems from './components/context-menu/table-context-menu-items'
+import Toolbar from './components/toolbar'
+import { EditorContextProvider } from './context/editor-context'
+import { editorExtensions } from './extensions'
+
+export interface EditorProps {
+	onUpdate: (state: { value: string; isEmpty: boolean }) => unknown
+	id?: string
+	ref?: React.RefObject<typeof EditorContent.prototype> | RefCallBack
+	name?: string
+	defaultValue?: string
+	disabled?: boolean
+	height?: number
+}
+
+/**
+ * @author quanghiep03198
+ * @description A rich text editor component using Tiptap with a customizable toolbar, context menus, and support for various content types.
+ *
+ * Props:
+ * - `onUpdate`: Callback function triggered on content update, providing the current HTML value and empty state.
+ * - `id`: Optional ID for the editor element.
+ * - `ref`: Optional ref for accessing the editor instance.
+ * - `name`: Optional name attribute for the editor element.
+ * - `defaultValue`: Initial HTML content for the editor.
+ * - `disabled`: Boolean to disable editing.
+ * - `height`: Height of the editor area in pixels (default is 350).
+ * Returns:
+ * - A React functional component rendering a rich text editor with toolbar and context menus.
+ */
+
+const Editor: React.FC<EditorProps> = memo(
+	({ defaultValue = '', id = uniqueId(), ref, disabled, name, height = 350, onUpdate: handleUpdate }) => {
+		const { i18n } = useTranslation()
+		const [contextMenuType, setContextMenuType] = useState<keyof HTMLElementTagNameMap | null>(null)
+
+		const editor = useEditor(
+			{
+				content: defaultValue,
+				extensions: editorExtensions,
+				editorProps: {
+					attributes: {
+						class: cn(
+							'p-4 rounded-lg max-w-full max-h-full overflow-auto scrollbar-none border-none outline-none focus:outline-none focus:border-none min-h-[50vh] text-foreground bg-background',
+							'prose prose-li:p-0 prose-p:text-sm prose-strong:text-inherit'
+						)
+					}
+				},
+				enableCoreExtensions: true,
+				editable: !disabled,
+				immediatelyRender: true
+			},
+			[defaultValue, disabled, i18n.language]
+		)
+
+		useDeepCompareEffect(() => {
+			if (!editor || !defaultValue) return
+			if (isEqual(editor.getHTML(), defaultValue)) return // guard tránh loop
+			editor.commands.setContent(defaultValue)
+		}, [defaultValue]) // editor không cần trong dep vì stable ref
+
+		useImperativeHandle(
+			ref,
+			() => ({
+				getHTML: () => editor?.getHTML() ?? '',
+				isEmpty: () => editor?.isEmpty ?? true
+			}),
+			[editor]
+		)
+
+		const handleContextMenuOpen: React.MouseEventHandler<HTMLSpanElement> = (e) => {
+			const target = e.target as typeof e.currentTarget
+			switch (true) {
+				case Boolean(target.closest('table')):
+					setContextMenuType('table')
+					break
+				case Boolean(target.closest('a')):
+					setContextMenuType('a')
+					break
+				case Boolean(target.closest('img')):
+					setContextMenuType('img')
+					break
+
+				default:
+					setContextMenuType(null)
+			}
+		}
+
+		return (
+			<Div
+				className={cn(
+					'divide-border relative flex w-full max-w-full flex-col items-stretch divide-y overflow-clip rounded-lg border shadow-sm',
+					disabled && 'cursor-not-allowed opacity-50 [&>nav]:pointer-events-none'
+				)}>
+				<EditorContextProvider editor={editor}>
+					<Toolbar />
+					<ContextMenu>
+						<ContextMenuTrigger onContextMenu={handleContextMenuOpen}>
+							<ScrollArea className='relative w-full max-w-full resize-y overflow-auto' style={{ height }}>
+								<EditorContent
+									content={defaultValue}
+									controls={true}
+									disabled={disabled}
+									editor={editor}
+									id={id}
+									name={name}
+									ref={(e) => {
+										if (!ref) return
+										if (typeof ref === 'function') ref(e)
+										else ref.current = e
+									}}
+								/>
+							</ScrollArea>
+						</ContextMenuTrigger>
+						<ContextMenuContent className='min-w-80'>
+							<CommonContextMenuItems editor={editor} />
+							{contextMenuType === 'table' && <TableContextMenuItems editor={editor} />}
+							{contextMenuType === 'a' && <LinkContextMenuItems editor={editor} />}
+						</ContextMenuContent>
+					</ContextMenu>
+				</EditorContextProvider>
+				<BubbleMenu editor={editor} />
+			</Div>
+		)
+	}
+)
+
+Editor.displayName = 'Editor'
+
+export default Editor

@@ -1,5 +1,6 @@
 import { CommonActions } from '@common/constants/enums'
-import { Dialog, DialogContent, Div } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Dialog, DialogContent } from '@components/ui/dialog'
 import { Buffer } from 'buffer'
 import React, { useState } from 'react'
 import { gunzipSync } from 'zlib'

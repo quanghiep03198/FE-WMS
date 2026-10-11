@@ -1,5 +1,6 @@
+import { Div } from '@components/customs/div'
 import { LanguageSelect } from '@components/shared/language-selector'
-import { Div, Label } from '@components/ui'
+import { Label } from '@components/ui/label'
 import { useTranslation } from 'react-i18next'
 
 const LanguageDropdownSelect: React.FC = () => {

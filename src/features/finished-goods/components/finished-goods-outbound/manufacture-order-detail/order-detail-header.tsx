@@ -1,4 +1,5 @@
-import { Input, TableHead, TableHeader, TableRow } from '@components/ui'
+import { Input } from '@components/ui/input'
+import { TableHead, TableHeader, TableRow } from '@components/ui/table'
 import type { OrderItem } from '@features/finished-goods/types'
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'

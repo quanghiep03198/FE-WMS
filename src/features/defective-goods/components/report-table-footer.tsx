@@ -1,7 +1,7 @@
 'use no memo'
 
 import formatIntlNumber from '@common/utils/format-intl-number'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DefectiveCategory } from '../constants/enums'

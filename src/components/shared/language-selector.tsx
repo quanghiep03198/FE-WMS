@@ -1,22 +1,18 @@
 import { LOCALES } from '@common/constants/constants'
-import type { ButtonProps } from '@components/ui'
+import { Tooltip } from '@components/customs/tooltip'
+import type { ButtonProps } from '@components/ui/button'
+import { Button } from '@components/ui/button'
 import {
-	Button,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuLabel,
 	DropdownMenuRadioGroup,
 	DropdownMenuRadioItem,
 	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-	Icon,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-	Tooltip
-} from '@components/ui'
+	DropdownMenuTrigger
+} from '@components/ui/dropdown-menu'
+import { Icon } from '@components/ui/icon'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 
 import { useTranslation } from 'react-i18next'
 

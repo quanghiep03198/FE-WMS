@@ -1,5 +1,6 @@
-import { HoverCard, HoverCardContent, HoverCardTrigger, Icon } from '@components/ui'
-import { Typewriter } from '@components/ui/@custom/type-writter'
+import { Typewriter } from '@components/customs/type-writter'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@components/ui/hover-card'
+import { Icon } from '@components/ui/icon'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
 import { usePageContext } from '../contexts/page-context'

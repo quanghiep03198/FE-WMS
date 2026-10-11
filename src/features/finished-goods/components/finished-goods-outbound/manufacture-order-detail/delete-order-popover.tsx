@@ -1,16 +1,11 @@
 import { cn } from '@common/utils/cn'
-import {
-	Button,
-	buttonVariants,
-	Checkbox,
-	Div,
-	Icon,
-	Label,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	Typography
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Button, buttonVariants } from '@components/ui/button'
+import { Checkbox } from '@components/ui/checkbox'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
 import type { OrderItem } from '@features/finished-goods/types'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useMemoizedFn } from 'ahooks'

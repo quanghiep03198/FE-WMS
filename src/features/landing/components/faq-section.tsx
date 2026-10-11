@@ -1,18 +1,12 @@
 import generateAvatar from '@common/utils/generate-avatar'
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-	Avatar,
-	AvatarImage,
-	Div,
-	Icon,
-	Separator,
-	Typography
-} from '@components/ui'
-import ChatBubble from '@components/ui/@custom/chat-bubble'
-import { Typewriter } from '@components/ui/@custom/type-writter'
+import ChatBubble from '@components/customs/chat-bubble'
+import { Div } from '@components/customs/div'
+import { Typewriter } from '@components/customs/type-writter'
+import { Typography } from '@components/customs/typography'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@components/ui/accordion'
+import { Avatar, AvatarImage } from '@components/ui/avatar'
+import { Icon } from '@components/ui/icon'
+import { Separator } from '@components/ui/separator'
 import { useInViewport } from 'ahooks'
 import { format } from 'date-fns'
 import { Fragment, useLayoutEffect, useRef } from 'react'

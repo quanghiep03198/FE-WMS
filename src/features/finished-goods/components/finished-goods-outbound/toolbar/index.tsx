@@ -1,4 +1,6 @@
-import { Button, Div, Icon } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import UploadDataFileDialog from '@features/finished-goods/components/upload-data-dialog'
 import { useTranslation } from 'react-i18next'
 

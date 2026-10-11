@@ -1,4 +1,6 @@
-import { Div, Icon, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Icon } from '@components/ui/icon'
 import { useInViewport } from 'ahooks'
 import { cloneElement, useRef } from 'react'
 import tw from 'tailwind-styled-components'

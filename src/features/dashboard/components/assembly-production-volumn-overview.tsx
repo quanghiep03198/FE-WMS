@@ -1,30 +1,16 @@
 import { useMemo, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
-import type { ChartConfig } from '@components/ui'
-import {
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
-	Div,
-	Icon,
-	Label,
-	RadioGroup,
-	RadioGroupItem,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-	Skeleton,
-	Typography
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card'
+import type { ChartConfig } from '@components/ui/chart'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@components/ui/chart'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
+import { Skeleton } from '@components/ui/skeleton'
 
 import { cn } from '@common/utils/cn'
 import { format, subDays, subMonths } from 'date-fns'

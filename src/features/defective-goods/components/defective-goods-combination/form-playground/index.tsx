@@ -1,17 +1,15 @@
 import { CommonActions, UserRole } from '@common/constants/enums'
 import type { IBaseEntity } from '@common/types/entities'
 import { cn } from '@common/utils/cn'
+import { Div } from '@components/customs/div'
 import { EditorFieldControl } from '@components/forms/editor'
-import {
-	Button,
-	Checkbox,
-	Div,
-	Form as FormProvider,
-	Icon,
-	InputFieldControl,
-	Label,
-	SelectFieldControl
-} from '@components/ui'
+import { InputFieldControl } from '@components/forms/input'
+import { SelectFieldControl } from '@components/forms/select'
+import { Button } from '@components/ui/button'
+import { Checkbox } from '@components/ui/checkbox'
+import { Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
 import { useGetManufacturingOrderQuery } from '@features/order/hooks/use-order-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'

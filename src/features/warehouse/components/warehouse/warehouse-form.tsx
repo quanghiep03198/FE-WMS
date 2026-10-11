@@ -1,14 +1,8 @@
 import { CommonActions } from '@common/constants/enums'
-import {
-	Button,
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	Form as FormProvider,
-	InputFieldControl
-} from '@components/ui'
+import { InputFieldControl } from '@components/forms/input'
+import { Button } from '@components/ui/button'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@components/ui/dialog'
+import { Form as FormProvider } from '@components/ui/form'
 import { useWarehousePageContext } from '@features/warehouse/contexts/warehouse-page-context'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useResetState } from 'ahooks'

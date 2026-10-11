@@ -5,6 +5,8 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import { useSessionStorageState } from 'ahooks'
 import { omitBy, pick, pickBy } from 'lodash-es'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { useReportPageQueryParams } from '../../report/hooks/use-report-page-query-params'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../constants/storage-keys'
 import {
@@ -74,9 +76,14 @@ export const useUpdateDefectiveGoodsMutation = () => {
 }
 
 export const useDeleteDefectiveGoodsMutation = () => {
+	const { t } = useTranslation()
+
 	return useMutation({
 		meta: { invalidates: [Object.values(DefectiveGoodsQueryKey)] },
-		mutationFn: DefectiveGoodsService.deleteDefectiveGoods
+		mutationFn: DefectiveGoodsService.deleteDefectiveGoods,
+		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
+		onSuccess: (_data, _variables, result) => toast.success(t('ns_common:notification.success'), { id: result }),
+		onError: (_error, _variables, result) => toast.error(t('ns_common:notification.error'), { id: result })
 	})
 }
 
@@ -107,7 +114,7 @@ export const useGetDefectiveGoodsInboundReportQuery = () => {
 		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT, pick(searchParams, 'date:eq')],
 		queryFn: async () => await DefectiveGoodsService.getInboundReport(pick(searchParams, 'date:eq')),
 		refetchInterval: searchParams['auto-refresh'],
-		select: (response) => response.metadata
+		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 }
 

@@ -1,4 +1,5 @@
-import { Div, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
 import React from 'react'
 
 const UnsupportedScreen: React.FC = () => {

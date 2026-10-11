@@ -1,15 +1,10 @@
-import {
-	Badge,
-	Checkbox,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-	Icon,
-	Label,
-	TableCell,
-	TableRow,
-	Typography
-} from '@components/ui'
+import { Typography } from '@components/customs/typography'
+import { Badge } from '@components/ui/badge'
+import { Checkbox } from '@components/ui/checkbox'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@components/ui/hover-card'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
+import { TableCell, TableRow } from '@components/ui/table'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StockFlow } from '../../constants/enums'

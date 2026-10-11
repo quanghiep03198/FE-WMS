@@ -1,23 +1,23 @@
 import { FALLBACK_VALUE } from '@common/constants/constants'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { ComboboxFieldControl } from '@components/forms/combobox'
 import { InputFieldControl } from '@components/forms/input'
+import { Button } from '@components/ui/button'
+import { Checkbox } from '@components/ui/checkbox'
 import {
-	Button,
-	Checkbox,
-	ComboboxFieldControl,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
-	DialogTitle,
-	Div,
-	Form as FormProvider,
-	Icon,
-	Label,
-	Separator,
-	Typography
-} from '@components/ui'
+	DialogTitle
+} from '@components/ui/dialog'
+import { Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
+import { Separator } from '@components/ui/separator'
 import { useOrderDetailContext } from '@features/finished-goods/contexts/finished-goods-inbound/order-detail-context'
 import { usePageContext } from '@features/finished-goods/contexts/finished-goods-inbound/page-context'
 import {

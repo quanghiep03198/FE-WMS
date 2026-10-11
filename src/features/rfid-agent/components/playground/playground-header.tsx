@@ -1,5 +1,6 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
-import { Div, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
 import { useReaderPlaygroundStore } from '../../contexts/rfid-reader-playground-context'
 import PlaygroundStatusIndicator from './playground-status-indicator'
 import ReaderSettingSheet from './reader-setting-sheet'

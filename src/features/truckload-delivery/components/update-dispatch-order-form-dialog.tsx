@@ -1,30 +1,21 @@
 import { CommonActions } from '@common/constants/enums'
+import { Div } from '@components/customs/div'
+import { InputFieldControl } from '@components/forms/input'
+import { TextareaFieldControl } from '@components/forms/textarea'
+import { Button, buttonVariants } from '@components/ui/button'
+import { Checkbox } from '@components/ui/checkbox'
 import {
-	Button,
-	buttonVariants,
-	Checkbox,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
-	DialogTitle,
-	Div,
-	Field,
-	FieldDescription,
-	FieldGroup,
-	FieldLegend,
-	FieldSet,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	Form as FormProvider,
-	Icon,
-	InputFieldControl,
-	TextareaFieldControl
-} from '@components/ui'
+	DialogTitle
+} from '@components/ui/dialog'
+import { Field, FieldDescription, FieldGroup, FieldLegend, FieldSet } from '@components/ui/field'
+import { FormControl, FormField, FormItem, FormLabel, Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useMediaQuery from '@hooks/use-media-query'
 import { capitalize } from 'lodash-es'

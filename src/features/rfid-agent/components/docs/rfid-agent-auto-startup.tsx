@@ -1,5 +1,6 @@
-import { Badge, Typography } from '@components/ui'
-import { Kbd, KbdKey } from '@components/ui/@custom/kbd'
+import { Kbd, KbdKey } from '@components/customs/kbd'
+import { Typography } from '@components/customs/typography'
+import { Badge } from '@components/ui/badge'
 import { DocumentHashNavigation } from '../../constants/document-hash-navigation'
 import SectionHeading from './section-heading'
 import { ListItem, OrderedList, Section } from './styled'

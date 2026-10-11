@@ -1,5 +1,7 @@
 import { CommonActions } from '@common/constants/enums'
-import { Button, Div, Icon } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../../defective-goods/contexts/page-context'
 import { PublishedTopics, useReaderPlaygroundStore } from '../../contexts/rfid-reader-playground-context'

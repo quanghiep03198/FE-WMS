@@ -1,6 +1,6 @@
 import { CommonActions } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
-import { Div } from '@components/ui'
+import { Div } from '@components/customs/div'
 import useScrollToFn from '@hooks/use-scroll-fn'
 import type { VirtualItem } from '@tanstack/react-virtual'
 import { useVirtualizer } from '@tanstack/react-virtual'

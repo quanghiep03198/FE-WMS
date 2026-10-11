@@ -1,7 +1,8 @@
 import { PresetBreakPoints } from '@common/constants/enums'
+import { Typography } from '@components/customs/typography'
+import { Badge } from '@components/ui/badge'
+import { Button } from '@components/ui/button'
 import {
-	Badge,
-	Button,
 	Command,
 	CommandDialog,
 	CommandEmpty,
@@ -9,10 +10,9 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
-	CommandSeparator,
-	Icon,
-	Typography
-} from '@components/ui'
+	CommandSeparator
+} from '@components/ui/command'
+import { Icon } from '@components/ui/icon'
 import useMediaQuery from '@hooks/use-media-query'
 import { Link } from '@tanstack/react-router'
 import { useKeyPress, useResetState } from 'ahooks'

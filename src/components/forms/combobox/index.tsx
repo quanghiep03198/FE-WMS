@@ -6,28 +6,14 @@ import type { FieldValues, Path, PathValue } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import type { BaseFieldControl } from '../../../common/types/hook-form'
-import type { ButtonProps } from '../../ui'
-import {
-	Button,
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-	Div,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Icon,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	Typography
-} from '../../ui'
+import { Div } from '../../customs/div'
+import { Typography } from '../../customs/typography'
+import type { ButtonProps } from '../../ui/button'
+import { Button } from '../../ui/button'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../../ui/command'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../../ui/form'
+import { Icon } from '../../ui/icon'
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover'
 
 export type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
 	BaseFieldControl<T>,

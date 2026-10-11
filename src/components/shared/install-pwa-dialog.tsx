@@ -1,5 +1,6 @@
 // components/install-pwa-dialog.tsx
-import { Button, Dialog, DialogContent } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Dialog, DialogContent } from '@components/ui/dialog'
 import { usePwaInstall } from '@hooks/use-pwa-install'
 
 import { useState } from 'react'

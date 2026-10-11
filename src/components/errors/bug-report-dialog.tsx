@@ -1,14 +1,10 @@
 import { cn } from '@common/utils/cn'
-import {
-	Button,
-	buttonVariants,
-	Dialog,
-	DialogTrigger,
-	Form as FormProvider,
-	Icon,
-	InputFieldControl,
-	TextareaFieldControl
-} from '@components/ui'
+import { InputFieldControl } from '@components/forms/input'
+import { TextareaFieldControl } from '@components/forms/textarea'
+import { Button, buttonVariants } from '@components/ui/button'
+import { Dialog, DialogTrigger } from '@components/ui/dialog'
+import { Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DialogContent } from '@radix-ui/react-dialog'
 import { captureFeedback } from '@sentry/react'

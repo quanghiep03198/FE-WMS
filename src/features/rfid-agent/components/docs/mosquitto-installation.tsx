@@ -1,5 +1,7 @@
-import { MicrosoftIcon } from '@components/icons'
-import { Div, Kbd, KbdGroup, Typography } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { MicrosoftIcon } from '@components/icons/microsoft-icon'
+import { Kbd, KbdGroup } from '@components/ui/kbd'
 
 import React from 'react'
 import { DocumentHashNavigation } from '../../constants/document-hash-navigation'

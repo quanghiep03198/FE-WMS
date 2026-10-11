@@ -1,5 +1,6 @@
 import { CommonActions } from '@common/constants/enums'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@components/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@components/ui/dropdown-menu'
+import { Icon } from '@components/ui/icon'
 import type { IUser } from '@features/auth/types'
 import type { CellContext } from '@tanstack/react-table'
 import { pick } from 'lodash-es'

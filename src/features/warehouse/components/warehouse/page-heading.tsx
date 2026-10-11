@@ -1,6 +1,7 @@
 import { CommonActions, UserRole } from '@common/constants/enums'
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
-import { Button, Icon } from '@components/ui'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import { useWarehousePageContext } from '@features/warehouse/contexts/warehouse-page-context'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

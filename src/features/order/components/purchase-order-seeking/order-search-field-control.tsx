@@ -1,22 +1,16 @@
 'use no memo'
 
 import { cn } from '@common/utils/cn'
-import {
-	buttonVariants,
-	Div,
-	FormControl,
-	FormField,
-	FormItem,
-	Icon,
-	Input,
-	Label,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	Separator,
-	Tooltip,
-	Typography
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
+import { buttonVariants } from '@components/ui/button'
+import { FormControl, FormField, FormItem } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
+import { Input } from '@components/ui/input'
+import { Label } from '@components/ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
+import { Separator } from '@components/ui/separator'
 import useMediaQuery from '@hooks/use-media-query'
 import { capitalize } from 'lodash-es'
 import React, { useId, useMemo, useRef, useState } from 'react'

@@ -1,4 +1,7 @@
-import { Button, Div, Form as FormProvider, Icon } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Button } from '@components/ui/button'
+import { Form as FormProvider } from '@components/ui/form'
+import { Icon } from '@components/ui/icon'
 import useQueryParams from '@hooks/use-query-params'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'

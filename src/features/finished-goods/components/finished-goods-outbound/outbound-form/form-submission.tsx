@@ -1,5 +1,7 @@
 import { cn } from '@common/utils/cn'
-import { Button, Div, Icon } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Button } from '@components/ui/button'
+import { Icon } from '@components/ui/icon'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 

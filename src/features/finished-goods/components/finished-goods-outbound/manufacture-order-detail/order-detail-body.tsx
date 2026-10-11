@@ -1,4 +1,4 @@
-import { TableBody, TableCell, TableRow } from '@components/ui'
+import { TableBody, TableCell, TableRow } from '@components/ui/table'
 import type { OrderItem } from '@features/finished-goods/types'
 import type { Virtualizer } from '@tanstack/react-virtual'
 import { notUndefined } from '@tanstack/react-virtual'

@@ -1,5 +1,7 @@
 import { cn } from '@common/utils/cn'
-import { Div, Typography, buttonVariants } from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { buttonVariants } from '@components/ui/button'
 import { navigationConfig } from '@configs/navigation.config'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'

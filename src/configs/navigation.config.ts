@@ -1,6 +1,6 @@
 import { UserRole } from '@common/constants/enums'
 import env from '@common/utils/env'
-import type { IconProps } from '@components/ui'
+import type { IconProps } from '@components/ui/icon'
 import type { ResourceKeys } from 'i18next'
 import type { FileRouteTypes } from '../route-tree.gen'
 

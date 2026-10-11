@@ -1,18 +1,8 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
-import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-	Icon,
-	type IconProps,
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Typography
-} from '@components/ui'
+import { Typography } from '@components/customs/typography'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@components/ui/hover-card'
+import { Icon, type IconProps } from '@components/ui/icon'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table'
 import { format } from 'date-fns'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

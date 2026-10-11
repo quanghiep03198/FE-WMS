@@ -1,20 +1,11 @@
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
 
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
-	Div,
-	Icon,
-	Skeleton,
-	Typography
-} from '@components/ui'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@components/ui/chart'
+import { Icon } from '@components/ui/icon'
+import { Skeleton } from '@components/ui/skeleton'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'

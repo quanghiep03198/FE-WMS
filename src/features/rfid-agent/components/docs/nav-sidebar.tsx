@@ -1,6 +1,6 @@
 import { cn } from '@common/utils/cn'
+import { Icon } from '@components/ui/icon'
 import {
-	Icon,
 	Sidebar,
 	SidebarContent,
 	SidebarGroup,
@@ -11,7 +11,7 @@ import {
 	SidebarMenuItem,
 	SidebarSeparator,
 	useSidebar
-} from '@components/ui'
+} from '@components/ui/sidebar'
 import useMediaQuery from '@hooks/use-media-query'
 import { Link, useLocation } from '@tanstack/react-router'
 import { useState } from 'react'

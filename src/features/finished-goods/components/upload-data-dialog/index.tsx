@@ -2,20 +2,19 @@ import type { FactoryCode } from '@common/constants/enums'
 import { PresetBreakPoints, RequestHeaders } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import env from '@common/utils/env'
+import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
+import { Button, buttonVariants } from '@components/ui/button'
 import {
-	Button,
-	buttonVariants,
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
-	Div,
-	Icon,
-	Input,
-	Typography
-} from '@components/ui'
+	DialogTrigger
+} from '@components/ui/dialog'
+import { Icon } from '@components/ui/icon'
+import { Input } from '@components/ui/input'
 import axiosInstance from '@configs/axios.config'
 import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'
