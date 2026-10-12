@@ -20,27 +20,27 @@ export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
 	normalizePath(path.resolve(import.meta.dirname, './infrastructure'))
 
-	const resolveAlias = (directories: Array<string>, rootPath: string) =>
+	const resolveAlias = (directories: Array<string>, rootPath: string, prefix: string = '@') =>
 		directories.reduce(
 			(acc, dir) => {
-				acc[`@${dir}`] = path.resolve(import.meta.dirname, path.join(rootPath, dir))
+				const alias = `${prefix}${dir}`
+				acc[alias] = path.resolve(import.meta.dirname, path.join(rootPath, dir))
 				return acc
 			},
 			{} as Record<string, string>
 		)
 
 	return {
-		devtools: {
-			apply: 'build',
-			build: {
-				withApp: true // generate DevTools output during `vite build`
-				// outDir: 'custom-dir', // optional, defaults to Vite's build.outDir
-			}
-		},
+		// devtools: {
+		// 	apply: 'build',
+		// 	build: {
+		// 		withApp: true // generate DevTools output during `vite build`
+		// 		// outDir: 'custom-dir', // optional, defaults to Vite's build.outDir
+		// 	}
+		// },
 		resolve: {
 			tsconfigPaths: true,
 			alias: {
-				...resolveAlias(['tests'], '.'),
 				...resolveAlias(
 					[
 						'assets',
@@ -225,9 +225,7 @@ export default defineConfig(({ mode }) => {
 			assetsInlineLimit: 4096, // Inline files < 4KB
 			rolldownOptions: {
 				logLevel: mode === 'production' ? 'silent' : 'debug',
-				output: {
-					codeSplitting: true
-				}
+				output: { codeSplitting: true }
 			}
 		}
 	}
