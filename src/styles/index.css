@@ -502,7 +502,7 @@
 
 	/* Global styles */
 	* {
-		@apply border-border scrollbar-thumb-scrollbar scrollbar-track-transparent antialiased selection:bg-neutral-300 dark:selection:bg-neutral-600 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-button]:size-px [&::-webkit-scrollbar-thumb]:rounded-full;
+		@apply scrollbar-thumb-scrollbar scrollbar-track-transparent border-border antialiased selection:bg-neutral-300 dark:selection:bg-neutral-600 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-button]:size-px [&::-webkit-scrollbar-thumb]:rounded-full;
 	}
 
 	*,
@@ -512,14 +512,14 @@
 	}
 
 	body {
-		@apply bg-background text-foreground pointer-events-auto!;
+		@apply pointer-events-auto! bg-background text-foreground;
 	}
 
 	/* Slide Left Transition */
 
 	html:active-view-transition-type(fade) {
 		&::view-transition-new(main-content) {
-			@apply blur-in-xs fade-in-50 animate-in duration-500 ease-in-out;
+			@apply animate-in duration-500 ease-in-out fade-in-50 blur-in-xs;
 		}
 	}
 }
