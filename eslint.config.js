@@ -6,8 +6,6 @@ import pluginReact from 'eslint-plugin-react'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
-// const resolveSourceDirectory = (dir) => [path.resolve(import.meta.dirname, 'src', dir)]
-
 /** @type {import('eslint').Linter.Config[]} */
 export default [
 	pluginJs.configs.recommended,
@@ -17,7 +15,7 @@ export default [
 	...noBarrelFiles.configs['flat/recommended'],
 	...tseslint.configs.recommended,
 	{
-		files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+		files: ['./src/**/*.{js,mjs,cjs,ts,jsx,tsx}'],
 		settings: {
 			react: {
 				fragment: 'Fragment', // Fragment to use (may be a property of <pragma>), default to "Fragment"
@@ -49,7 +47,8 @@ export default [
 					shorthandFirst: true
 				}
 			],
-			'no-barrel-files/prefer-source-imports': ['error', { fixStyle: 'auto' }]
+			'no-barrel-files/prefer-source-imports': ['error', { fixStyle: 'auto' }],
+			'no-barrel-files/no-barrel-files': 'warn'
 		},
 		languageOptions: { globals: globals.browser },
 		ignores: ['dist', 'node_modules', 'eslint.config.js']
