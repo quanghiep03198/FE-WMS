@@ -1,6 +1,6 @@
 import type { FactoryCode } from '@common/constants/enums'
 import { Languages, RequestHeaders } from '@common/constants/enums'
-import { UnauthorizedError } from '@common/errors'
+import { RequestTimeoutError, UnauthorizedError } from '@common/errors'
 import env from '@common/utils/env'
 import { Json } from '@common/utils/json'
 import { AuthService } from '@features/auth/services/auth.service'
@@ -67,12 +67,9 @@ export class AxiosClient {
 			(response) => response.data,
 			async (error: AxiosError<ResponseBody<unknown>>) => {
 				if (error.code === AxiosError.ETIMEDOUT || error.code === AxiosError.ECONNABORTED) {
-					toast.error('Request timeout')
-					return Promise.reject(new Error('Request timeout'))
+					toast.error(i18n.t('ns_common:errors.request_timeout'))
+					return Promise.reject(new RequestTimeoutError())
 				}
-				// if (this.NOTIFIABLE_ERROR_CODES.includes(error.response?.status!)) {
-				// 	toast.error(error.response?.data?.message, { id: error.response?.data?.path, duration: 5000 })
-				// }
 
 				const originalRequest = error.config
 				const errorStatus = error.response?.status
