@@ -130,7 +130,7 @@ export function OrderSearchFieldControl() {
 									</PopoverTrigger>
 								</FormControl>
 								<PopoverContent
-									className='max-h-52 w-[var(--radix-popover-trigger-width)] overflow-auto p-1'
+									className='max-h-52 w-radix-popover overflow-auto p-1'
 									sideOffset={8}
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{Array.isArray(filteredDatalist) && filteredDatalist?.length > 0 ? (

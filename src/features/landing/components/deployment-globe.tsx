@@ -141,7 +141,7 @@ const DeploymentGlobe: React.FC = () => {
 				</HoverCardContent>
 			</HoverCard>
 
-			<div className='absolute top-[10%] left-[51.15%] h-[20%] w-[2px] overflow-hidden'>
+			<div className='absolute top-[10%] left-[51.15%] h-[20%] w-0.5 overflow-hidden'>
 				<span
 					className='data-[viewport=visible]:running data-[viewport=invisible]:paused absolute inset-0 h-full w-full origin-center animate-[slide-in_0.25s_ease-out_1s_both] bg-linear-to-t from-current to-transparent'
 					data-viewport={inViewport ? 'visible' : 'invisible'}

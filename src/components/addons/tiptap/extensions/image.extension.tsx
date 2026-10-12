@@ -360,7 +360,7 @@ function TiptapImage(props: NodeViewProps) {
 							onClick={() => updateAttributes({ align: 'right' })}>
 							<AlignRight className='size-4' />
 						</Button>
-						<Separator className='h-[20px]' orientation='vertical' />
+						<Separator className='h-5' orientation='vertical' />
 						<DropdownMenu open={openedMore} onOpenChange={setOpenedMore}>
 							<DropdownMenuTrigger asChild>
 								<Button className='size-7' size='icon' type='button' variant='ghost'>

@@ -56,7 +56,7 @@ const InoutboundOverview: React.FC = () => {
 							defaultValue={new Date().getFullYear().toString()}
 							value={year.toString()}
 							onValueChange={(value) => setYear(Number.parseInt(value))}>
-							<SelectTrigger defaultChecked className='inline-flex w-[180px] items-center gap-x-2'>
+							<SelectTrigger defaultChecked className='inline-flex w-45 items-center gap-x-2'>
 								<Icon name='CalendarDays' size={18} />
 								<SelectValue placeholder='Select' />
 							</SelectTrigger>

@@ -100,7 +100,7 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 										}}>
 										<Div
 											className={cn(
-												'flex size-4 items-center justify-center rounded-[4px] border',
+												'flex size-4 items-center justify-center rounded-lg border',
 												isSelected
 													? 'border-primary bg-primary text-primary-foreground'
 													: 'border-input [&_svg]:invisible'
@@ -108,7 +108,7 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 											<CheckIcon className='text-primary-foreground size-3.5' />
 										</Div>
 										{option.icon && (
-											<Icon className='text-muted-foreground size-[18px]' name={option.icon} size={18} />
+											<Icon className='text-muted-foreground size-4.5' name={option.icon} size={18} />
 										)}
 										<span>{option.label}</span>
 										{facets?.get(option.value) && (

@@ -144,7 +144,7 @@ export function AssemblyProductivityOverview() {
 			</CardHeader>
 			<CardContent className='px-2 sm:p-6'>
 				{isLoading ? (
-					<Skeleton className='h-[250px] w-full' />
+					<Skeleton className='h-62.5 w-full' />
 				) : !Array.isArray(chartData) || chartData.length === 0 ? (
 					<Div className='bg-muted text-muted-foreground mx-3 flex h-64 items-center justify-center gap-x-2 rounded-lg'>
 						<Icon name='ChartArea' size={32} strokeWidth={1} />
@@ -179,7 +179,7 @@ export function AssemblyProductivityOverview() {
 							<ChartTooltip
 								content={
 									<ChartTooltipContent
-										className='w-[150px]'
+										className='w-37.5'
 										nameKey='brand_name'
 										labelFormatter={(value) => {
 											return capitalize(

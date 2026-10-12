@@ -66,7 +66,7 @@ export function SearchAndReplaceToolbar() {
 			</PopoverTrigger>
 			<PopoverContent
 				align='start'
-				className='relative flex w-[400px] px-3 py-2.5'
+				className='relative flex w-100 px-3 py-2.5'
 				sideOffset={12}
 				onCloseAutoFocus={(e) => {
 					e.preventDefault()

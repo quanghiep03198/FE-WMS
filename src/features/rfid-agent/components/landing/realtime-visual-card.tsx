@@ -125,7 +125,7 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 							/>
 						</svg>
 
-						<div className='border-border bg-muted/50 absolute -top-6 left-full flex h-[28px]! w-[55px]! items-center justify-center gap-1 rounded-full border opacity-0 transition-opacity group-hover:opacity-100'>
+						<div className='border-border bg-muted/50 absolute -top-6 left-full flex h-7! w-13.75! items-center justify-center gap-1 rounded-full border opacity-0 transition-opacity group-hover:opacity-100'>
 							<div className='pause group-hover:run bg-muted-foreground h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_infinite] rounded-full' />
 							<div className='pause group-hover:run bg-muted-foreground h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_200ms_infinite] rounded-full' />
 							<div className='pause group-hover:run bg-muted-foreground h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_400ms_infinite] rounded-full' />
@@ -148,7 +148,7 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 						</div>
 					</div>
 					{/* Gradient to hide animation under text to maintain readability */}
-					<div className='visual-overlay pointer-events-none absolute inset-0 top-auto h-full max-h-[400px] w-full bg-[linear-gradient(to_top,transparent_0%,transparent_50%,var(--background-surface-75)_85%)] lg:max-h-none' />
+					<div className='visual-overlay pointer-events-none absolute inset-0 top-auto h-full max-h-100 w-full bg-[linear-gradient(to_top,transparent_0%,transparent_50%,var(--background-surface-75)_85%)] lg:max-h-none' />
 				</figure>
 			</VisualCard.Content>
 		</VisualCard.Wrapper>
