@@ -41,17 +41,17 @@ export interface IProductSizeInventory {
 	shoes_style: string
 	color: string
 	total_qty: number
-	inv_sizes: SizeQuantity
+	size_ledger: SizeQuantity
 }
 interface IBaseInventory {
 	shoes_style: string
 	color: string
-	inv_sizes: SizeQuantity
+	size_ledger: SizeQuantity
 }
 
 export interface IOutboundEstimation extends IBaseInventory {
 	po: string
-	po_qty: number
+	order_qty: number
 	outbound_date: Date
 	outbound_qty: number
 	last_outbound_time: Date

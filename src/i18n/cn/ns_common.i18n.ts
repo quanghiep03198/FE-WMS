@@ -196,7 +196,8 @@ export default {
 		'502_message':
 			'主機目前因 IP 政策限制, 無法處理您的請求. 請用公司內部網路的 IP 位址訪問 {{url}} 及繼續 {{factoryCode}} 的此功能. 若需要了解更多詳細訊息, 請聯繫 IT 部門',
 		'503': '功能不可用',
-		'503_message': '功能正在开发/维护中. 请稍后再试'
+		'503_message': '功能正在开发/维护中. 请稍后再试',
+		request_timeout: '请求超时'
 	},
 	filter: {
 		contains: '包含',

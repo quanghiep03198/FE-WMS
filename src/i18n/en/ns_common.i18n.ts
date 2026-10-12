@@ -198,7 +198,8 @@ export default {
 		'502_message':
 			'The server is currently unable to handle the request due to IP policy. Please try accessing {{url}} to continue using this feature for factory {{factoryCode}}. For more details, please contact the IT department.',
 		'503': 'Service Unavailable',
-		'503_message': 'This feature is currently under development/maintenance. Please try again later.'
+		'503_message': 'This feature is currently under development/maintenance. Please try again later.',
+		request_timeout: 'Request timeout'
 	},
 	filter: {
 		contains: 'Contains',

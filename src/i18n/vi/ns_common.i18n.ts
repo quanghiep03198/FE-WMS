@@ -118,7 +118,8 @@ export default {
 		'502_message':
 			'Máy chủ hiện không thể xử lý yêu cầu do chính sách IP. Vui lòng thử truy cập vào {{url}} để tiếp tục sử dụng chức năng này với nhà máy {{factoryCode}}. Để biết thêm thông tin chi tiết, vui lòng liên hệ với bộ phận IT.',
 		'503': 'Tính Năng Không Khả Dụng',
-		'503_message': 'Tính năng đang trong quá trình phát triển / bảo trì. Vui lòng thử lại sau'
+		'503_message': 'Tính năng đang trong quá trình phát triển / bảo trì. Vui lòng thử lại sau',
+		request_timeout: 'Thời gian yêu cầu đã hết hạn'
 	},
 	editor: {
 		alignment: 'Căn chỉnh và thụt lề',

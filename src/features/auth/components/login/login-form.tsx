@@ -13,12 +13,11 @@ import { AuthService } from '@features/auth/services/auth.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'
 import { useMutation } from '@tanstack/react-query'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import { useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import type { LoginFormValues } from '../../schemas/login.schema'
 import { loginSchema } from '../../schemas/login.schema'
@@ -41,22 +40,13 @@ const LoginForm: React.FC = () => {
 		}
 	})
 
-	const navigate = useNavigate({ from: '/login' })
-
 	const { mutateAsync: login, isPending } = useMutation({
 		meta: { invalidates: [[AuthQueryKeys.PROFILE]] },
 		mutationFn: AuthService.login,
-		onMutate: () => {
-			return toast.loading(t('ns_common:notification.processing_request'))
-		},
-		onSuccess: async (data, _variables, context) => {
+		onSuccess: async (data) => {
 			if (typeof data.metadata?.accessToken !== 'string') return
 			setAccessToken(data.metadata.accessToken)
 			if (data.metadata?.user) setUserProfile(data.metadata.user)
-			toast.success(t('ns_common:notification.success'), { id: context })
-		},
-		onError(_error, _variables, context) {
-			toast.error(t('ns_auth:notification.login_failed'), { id: context })
 		}
 	})
 
@@ -113,7 +103,11 @@ const LoginForm: React.FC = () => {
 					</Button>
 				</Div>
 				<Button className='w-full gap-x-2' disabled={isPending} size='lg' type='submit'>
-					<Icon name='LogIn' />
+					<Icon
+						aria-busy={isPending}
+						className='aria-busy:animate-spin'
+						name={isPending ? 'LoaderCircle' : 'LogIn'}
+					/>
 					{t('ns_common:actions.login')}
 				</Button>
 			</Form>

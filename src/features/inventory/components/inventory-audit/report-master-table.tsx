@@ -20,7 +20,6 @@ import { Button } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
 import { InventoryService } from '@features/inventory/services/inventory.service'
 import type { IMonthlyInventoryAudit } from '@features/inventory/types'
-import useAuth from '@hooks/use-auth'
 import useQueryParams from '@hooks/use-query-params'
 import { useQueryClient } from '@tanstack/react-query'
 import type { ExpandedState } from '@tanstack/react-table'
@@ -29,7 +28,7 @@ import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { pick } from 'lodash-es'
-import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { InventoryAuditQueryKeys, useGetInventoryAuditReport } from '../../hooks/use-inventory-audit-request'
@@ -291,11 +290,12 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 	const { table } = useTableContext('table')
 	const { searchParams } = useQueryParams<{ 'month:eq': string }>()
 	const queryClient = useQueryClient()
-	const { user } = useAuth()
+	const [isDownloading, setIsDownloading] = useState<boolean>(false)
 
 	const selectedRows = table.getSelectedRowModel().rows
 
 	const handleDownloadExcel = useCallback(async () => {
+		setIsDownloading(true)
 		const id = toast.loading(t('ns_common:notification.downloading'))
 		try {
 			const blob = await InventoryService.downloadInventoryAuditReport({
@@ -316,13 +316,19 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 			toast.success(t('ns_common:notification.success'), { id })
 		} catch {
 			toast.error('ns_common:notification.error', { id })
+		} finally {
+			setIsDownloading(false)
 		}
 	}, [selectedRows])
 
 	return (
 		<Fragment>
 			<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-				<Button disabled={!downloadable} size='icon' variant='outline' onClick={() => handleDownloadExcel()}>
+				<Button
+					disabled={!downloadable || isDownloading}
+					size='icon'
+					variant='outline'
+					onClick={() => handleDownloadExcel()}>
 					<Icon name='Download' />
 				</Button>
 			</Tooltip>

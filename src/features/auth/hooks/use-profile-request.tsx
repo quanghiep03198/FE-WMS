@@ -1,10 +1,8 @@
 import { UserService } from '@features/user/services/user.service'
 import useAuth from '@hooks/use-auth'
-import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { queryOptions, useMutation, useQuery } from '@tanstack/react-query'
 import type { AxiosRequestConfig } from 'axios'
 import { useEffect, useMemo, useRef } from 'react'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 
 export enum AuthQueryKeys {
 	PROFILE = 'PROFILE'
@@ -30,16 +28,15 @@ export const getUserProfileQuery = (enabled?: boolean, config?: AxiosRequestConf
 
 export const useGetUserProfileQuery = () => {
 	const { isAuthenticated } = useAuth()
-	const abortControllerRef = useRef<AbortController | null>(null)
-
-	if (!abortControllerRef.current) {
-		abortControllerRef.current = new AbortController()
-	}
+	const abortControllerRef = useRef<AbortController>(new AbortController())
 
 	useEffect(() => {
-		if (!isAuthenticated && abortControllerRef.current) {
+		if (!isAuthenticated) {
 			abortControllerRef.current.abort()
-			abortControllerRef.current = null
+		} else {
+			if (abortControllerRef.current.signal.aborted) {
+				abortControllerRef.current = new AbortController()
+			}
 		}
 	}, [isAuthenticated])
 
@@ -51,43 +48,15 @@ export const useGetUserProfileQuery = () => {
 }
 
 export const useUpdateProfileMutation = () => {
-	const { t } = useTranslation()
-	const invalidateQueries = useInvalidateQueries()
-
 	return useMutation({
-		mutationKey: [AuthQueryKeys.PROFILE],
-		mutationFn: UserService.updateProfile,
-		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
-		onSuccess: (_data, _variables, context) => {
-			toast.success(t('ns_common:notification.success'), { id: context })
-			invalidateQueries()
-		},
-		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context })
+		meta: { invalidates: [[AuthQueryKeys.PROFILE]] },
+		mutationFn: UserService.updateProfile
 	})
 }
 
 export const useUpdatePasswordMutation = () => {
-	const { t } = useTranslation()
-	const invalidateQueries = useInvalidateQueries()
-
 	return useMutation({
-		mutationKey: [AuthQueryKeys.PROFILE],
-		mutationFn: UserService.updatePassword,
-		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
-		onSuccess: (_data, _variables, context) => {
-			toast.success(t('ns_common:notification.success'), { id: context })
-			invalidateQueries()
-		},
-		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context })
+		meta: { invalidates: [[AuthQueryKeys.PROFILE]] },
+		mutationFn: UserService.updatePassword
 	})
-}
-
-const useInvalidateQueries = () => {
-	const queryClient = useQueryClient()
-
-	return () => {
-		queryClient.invalidateQueries({
-			predicate: (query) => query.queryKey.some((key) => key === AuthQueryKeys.PROFILE)
-		})
-	}
 }

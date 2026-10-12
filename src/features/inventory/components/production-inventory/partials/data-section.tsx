@@ -21,7 +21,7 @@ const DataSection: React.FC = () => {
 
 	const sizeData = useMemo(() => {
 		const currentSizeData = data?.sizes?.find((item) => item?.color === searchParams?.color)
-		return { data: currentSizeData?.inv_sizes ?? [], total: currentSizeData?.total_qty || 0 }
+		return { data: currentSizeData?.size_ledger ?? [], total: currentSizeData?.total_qty || 0 }
 	}, [data])
 
 	if (isLoading)

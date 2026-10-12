@@ -57,16 +57,10 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 				}
 			})
 		},
-		onMutate: () => {
-			return toast.loading(t('ns_common:notification.processing_request'))
-		},
-		onSuccess: (_data, _variables, id) => {
+
+		onSuccess: () => {
 			resetFiles()
-			inputRef.current.value = ''
-			toast.success(t('ns_common:notification.success'), { id })
-		},
-		onError: (_data, _variables, id) => {
-			toast.error(t('ns_common:notification.error'), { id })
+			if (inputRef.current) inputRef.current.value = ''
 		}
 	})
 
@@ -79,7 +73,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 				return
 			}
 			setIsDragActive(false)
-			const shouldAcceptDroppedFile = e.dataTransfer.files.item(0).type === 'text/csv'
+			const shouldAcceptDroppedFile = e.dataTransfer.files.item(0)?.type === 'text/csv'
 			if (!shouldAcceptDroppedFile) {
 				toast.warning('Please select a CSV file')
 				return
@@ -106,8 +100,9 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 	}, [])
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const filesArray = e.target.files ? Array.from(e.target.files) : []
 		e.preventDefault()
-		if (files.length > maxFiles || e.target.files.length > maxFiles) {
+		if (files.length > maxFiles || filesArray.length > maxFiles) {
 			toast.warning(`You can only upload ${maxFiles} files at a time`)
 			return
 		}

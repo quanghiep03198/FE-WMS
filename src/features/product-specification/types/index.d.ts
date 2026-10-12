@@ -5,7 +5,7 @@ export interface IProductSpecification {
 		cust_shoes_style: string
 		specs: Array<{
 			color_sn: string
-			sizes: Array<{ size: string }>
+			sizes: Array<string>
 		}>
 	}>
 }

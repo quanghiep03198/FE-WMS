@@ -146,13 +146,8 @@ const PurchaseOrdersTableForm: React.FC<{ data: ITruckloadDelivery; open: boolea
 	}, [open, data.packing, data.dispatch_order])
 
 	const handleSaveChanges = async (payload: UpsertPurchaseOrdersFormValues) => {
-		const toastId = toast.loading(t('ns_common:notification.processing_request'))
 		try {
 			await mutateAsync(payload)
-			toast.success(t('ns_common:notification.success'), { id: toastId })
-		} catch (e) {
-			console.error('Error on handleSaveChanges :>>', e)
-			toast.error(t('ns_common:notification.error'), { id: toastId })
 		} finally {
 			form.reset({
 				dispatch_order: data.dispatch_order,

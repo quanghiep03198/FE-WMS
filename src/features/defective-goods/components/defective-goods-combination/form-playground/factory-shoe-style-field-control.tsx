@@ -1,5 +1,6 @@
 import type { AutoCompleteFieldControlProps } from '@components/forms/auto-complete'
 import { AutoCompleteFieldControl } from '@components/forms/auto-complete'
+import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
 import React, { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -14,14 +15,14 @@ const FactoryShoeStyleFieldControl: React.FC<
 	>
 > = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()
-	const { reset, setValue, getValues, control, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { reset, setValue, getValues, control } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { data: productSpecification } = useGetProductSpecsQuery()
 
-	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
 	const currentBrand = useWatch({ name: 'brand_name', control })
 
 	// Memoized options for shoe style select
 	const factoryShoeStyleOptions = useMemo(() => {
-		if (!productSpecification.length) return []
+		if (!productSpecification?.length) return []
 		if (!currentBrand)
 			return productSpecification
 				.flatMap((item) =>

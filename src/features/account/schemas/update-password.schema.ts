@@ -1,3 +1,4 @@
+import type { FieldValues } from 'react-hook-form'
 import { object, string, type infer as Infer } from 'zod'
 
 export const updatePasswordFormValues = object({
@@ -7,4 +8,4 @@ export const updatePasswordFormValues = object({
 	})
 })
 
-export type UpdatePasswordFormValues = Infer<typeof updatePasswordFormValues>
+export type UpdatePasswordFormValues = Infer<typeof updatePasswordFormValues> & FieldValues

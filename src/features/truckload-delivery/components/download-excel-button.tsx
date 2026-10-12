@@ -3,15 +3,15 @@ import env from '@common/utils/env'
 import { Button } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
 import { TruckloadDeliveryService } from '@features/truckload-delivery/services/truckload-delivery.service'
-import useAuth from '@hooks/use-auth'
 import { saveAs } from 'file-saver'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageQueryParams } from '../hooks/use-page-query-params'
 
 const DownloadExcelButton: React.FC = () => {
 	const { t } = useTranslation()
-	const { user } = useAuth()
+	const [isDownloading, setIsDownloading] = useState<boolean>(false)
 	const { searchParams } = usePageQueryParams()
 
 	const handleDownloadExcel = async () => {
@@ -33,11 +33,13 @@ const DownloadExcelButton: React.FC = () => {
 			toast.success(t('ns_common:notification.success'), { id })
 		} catch {
 			toast.error('ns_common:notification.error', { id })
+		} finally {
+			setIsDownloading(false)
 		}
 	}
 
 	return (
-		<Button variant='outline' onClick={handleDownloadExcel}>
+		<Button disabled={isDownloading} variant='outline' onClick={handleDownloadExcel}>
 			<Icon name='Download' /> {t('ns_common:actions.download_excel')}
 		</Button>
 	)

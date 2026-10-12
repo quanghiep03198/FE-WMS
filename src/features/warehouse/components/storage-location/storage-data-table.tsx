@@ -207,7 +207,7 @@ const StorageList: React.FC = () => {
 		<Fragment>
 			<DataTable
 				columns={columns}
-				data={data?.storage_locations!}
+				data={data?.storage_locations}
 				enableColumnFilters={true}
 				enableColumnResizing={true}
 				enableRowSelection={true}

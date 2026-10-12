@@ -7,6 +7,7 @@ import { Button } from '@components/ui/button'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@components/ui/empty'
 import { Icon } from '@components/ui/icon'
 import { Label } from '@components/ui/label'
+import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
 import { useLocation } from '@tanstack/react-router'
 import { uniqBy } from 'lodash-es'
 import React, { useMemo, useRef } from 'react'
@@ -31,7 +32,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 	const scrollRef = useRef<HTMLDivElement>(null)
 	const { currentStrategy } = useSwitchCombinationStrategy()
 
-	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
+	const { data: productSpecification } = useGetProductSpecsQuery()
 	const currentCategory = useWatch({ control: control, name: 'defective_category' })
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })
@@ -49,31 +50,31 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 
 	// Memoized options for size select
 	const sizeOptions = useMemo(() => {
-		if (!productSpecification.length) return []
+		if (!Array.isArray(productSpecification) || !productSpecification.length) return []
 		if (shouldFilterAllSizes)
 			return uniqBy(
 				productSpecification
 					.flatMap((item) => {
 						return item.product_variants.flatMap((variant) => {
 							return variant.specs.flatMap((spec) => {
-								return spec.sizes.map(({ size }) => {
+								return spec.sizes.map((size) => {
 									size = Number.parseFloat(size).toString()
 									return { label: size, value: size }
 								})
 							})
 						})
 					})
-					.sort((a, b) => Number.parseFloat(a.value) - Number.parseFloat(b.value)),
+					.sort((a, b) => a.value.localeCompare(b.value, undefined, { numeric: true })),
 				(size) => size.value
 			)
 
-		if (shouldRequireFullInfo) return datalist
+		if (shouldRequireFullInfo) return Array.isArray(datalist) ? datalist : []
 		const brand = productSpecification.find((item) => item.brand_name === currentBrand)
 		const variant = brand?.product_variants?.find((item) => item.factory_shoes_style === currentFactoryShoeStyle)
 		const spec = variant?.specs?.find((item) => item.color_sn === currentColor)
 		if (!spec?.sizes) return []
 		return spec.sizes
-			.map(({ size }) => {
+			.map((size) => {
 				size = Number.parseFloat(size).toString()
 				return { label: size, value: size }
 			})
@@ -150,8 +151,8 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 								type='button'
 								variant='outline'
 								onClick={() => {
-									append({ size_code: null, qty: null })
-									scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
+									append({ size_code: '', qty: 0 })
+									scrollRef.current!.scrollTo({ top: scrollRef.current!.scrollHeight, behavior: 'smooth' })
 								}}>
 								<Icon name='ListPlus' />
 								{t('ns_common:actions.add')}

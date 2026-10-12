@@ -14,9 +14,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useQueryClient } from '@tanstack/react-query'
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Resolver, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useDeleteEpcMutation } from '../../../hooks/use-outbound-request'
 
@@ -31,7 +30,7 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 	const { t } = useTranslation()
 	const [open, setOpen] = useState<boolean>(false)
 	const form = useForm<DeleteScannedEpcsFormValues>({
-		resolver: zodResolver(deleteScannedEpcsSchema),
+		resolver: zodResolver(deleteScannedEpcsSchema) as Resolver<DeleteScannedEpcsFormValues>,
 		mode: 'onChange'
 	})
 
@@ -48,15 +47,9 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 	const { mutateAsync: deleteAsync, isPending } = useDeleteEpcMutation()
 
 	const handleDeleteEpcs = async (data: DeleteScannedEpcsFormValues) => {
-		const id = toast.loading(t('ns_common:notification.processing_request'))
-		try {
-			await deleteAsync(data)
-			toast.success(t('ns_common:notification.success'), { id })
-			setOpen(false)
-			form.reset()
-		} catch (e) {
-			toast.error(e.message, { id })
-		}
+		await deleteAsync(data)
+		setOpen(false)
+		form.reset()
 	}
 
 	return (

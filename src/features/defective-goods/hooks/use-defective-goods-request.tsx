@@ -5,8 +5,6 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import { useSessionStorageState } from 'ahooks'
 import { omitBy, pick, pickBy } from 'lodash-es'
 import { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { useReportPageQueryParams } from '../../report/hooks/use-report-page-query-params'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../constants/storage-keys'
 import {
@@ -76,14 +74,9 @@ export const useUpdateDefectiveGoodsMutation = () => {
 }
 
 export const useDeleteDefectiveGoodsMutation = () => {
-	const { t } = useTranslation()
-
 	return useMutation({
 		meta: { invalidates: [Object.values(DefectiveGoodsQueryKey)] },
-		mutationFn: DefectiveGoodsService.deleteDefectiveGoods,
-		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
-		onSuccess: (_data, _variables, result) => toast.success(t('ns_common:notification.success'), { id: result }),
-		onError: (_error, _variables, result) => toast.error(t('ns_common:notification.error'), { id: result })
+		mutationFn: DefectiveGoodsService.deleteDefectiveGoods
 	})
 }
 

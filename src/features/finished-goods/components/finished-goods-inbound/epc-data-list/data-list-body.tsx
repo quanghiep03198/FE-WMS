@@ -18,7 +18,6 @@ import { DEFAULT_PROPS, usePageContext } from '@features/finished-goods/contexts
 import { useGetScanningInboundEpcQuery } from '@features/finished-goods/hooks/use-inbound-request'
 import type { IElectronicProductCode } from '@features/finished-goods/types'
 import { type RFIDStreamEventData } from '@features/finished-goods/types'
-import useAuth from '@hooks/use-auth'
 import useMediaQuery from '@hooks/use-media-query'
 import useScrollToFn from '@hooks/use-scroll-fn'
 import type { EventSourceMessage } from '@microsoft/fetch-event-source'
@@ -48,7 +47,6 @@ const SSE_TOAST_ID = 'FETCH_SSE'
 
 const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = ({ listBoxFooterRef }) => {
 	const { t } = useTranslation()
-	const { user } = useAuth()
 	const isLargeScreen = useMediaQuery('(min-width: 920px)')
 	const [isExpanded, setIsExpanded] = useSessionStorageState<boolean>('rfid:inbound:epc_list_expanded', {
 		defaultValue: true,
@@ -104,7 +102,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
-		if (retryCountRef.current > 3) return
+		if (retryCountRef.current > 3 || !selectedDevice) return
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
@@ -147,8 +145,8 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
 						setHasInvalidEpcAlert(Boolean(data?.has_invalid) && !isInvalidEpcDismissedRef.current)
-					} catch (error) {
-						throw new FatalError(error)
+					} catch {
+						throw new FatalError()
 					}
 				},
 				onclose() {
@@ -176,8 +174,8 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 					setScanningStatus('connecting')
 				}
 			})
-		} catch (e) {
-			toast('Failed to connect', { id: SSE_TOAST_ID, description: e.message })
+		} catch {
+			toast(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
 			setScanningStatus('disconnected')
 		} finally {
 			if (scanningStatus !== 'disconnected') toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
@@ -244,7 +242,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 			setScannedEpc({
 				...metadata,
 				data: uniqBy([...previousPageData, ...nextPageData], 'epc')
-			})
+			} as Pagination<IElectronicProductCode>)
 		} catch {
 			throw new RetriableError()
 		}
@@ -260,7 +258,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 			setScannedEpc({
 				...metadata,
 				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
-			})
+			} as Pagination<IElectronicProductCode>)
 		} catch {
 			throw new RetriableError()
 		}

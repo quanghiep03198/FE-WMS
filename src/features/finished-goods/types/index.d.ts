@@ -35,12 +35,12 @@ export type SearchEpcParams = {
 	'size_numcode:eq': string
 }
 
-export type SearchCustOrderParams = {
+export type SearchCustOrderParams = Partial<{
 	'mo_no:eq': string
 	'color_sn:eq': string
-	'factory_shoes_style:eq'?: string
+	'factory_shoes_style:eq': string
 	q: string
-}
+}>
 
 export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
 

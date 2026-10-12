@@ -73,15 +73,9 @@ const RFIDDeviceFormDialog: React.FC = () => {
 
 	const handleSubmitForm = async (data) => {
 		if (isNil(action)) return
-		const id = toast.loading(t('ns_common:notification.processing_request'))
-		try {
-			if (action === CommonActions.CREATE) createAsync(data)
-			else if (action === CommonActions.UPDATE) updateAsync(data)
-			toast.success(t('ns_common:notification.success'), { id })
-			setOpen(false)
-		} catch {
-			toast.error(t('ns_common:notification.error'), { id })
-		}
+		if (action === CommonActions.CREATE) createAsync(data)
+		else if (action === CommonActions.UPDATE) updateAsync(data)
+		setOpen(false)
 	}
 
 	return (

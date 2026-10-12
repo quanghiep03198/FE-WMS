@@ -1,7 +1,5 @@
 import { CommonActions } from '@common/constants/enums'
-import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
+import { queryOptions, useMutation, useQuery } from '@tanstack/react-query'
 import type { CreateWarehouseFormValue, UpdateWarehouseFormValue } from '../schemas/warehouse.schema'
 import { WarehouseService } from '../services/warehouse.service'
 import type { IWarehouse } from '../types'
@@ -42,9 +40,6 @@ type MutationHandlerMap = {
 }
 
 export const useCreateOrUpdateWarehouseMutation = (action: CommonActions.CREATE | CommonActions.UPDATE | 'none') => {
-	const { t } = useTranslation()
-	const queryClient = useQueryClient()
-
 	const mutationHandlers: MutationHandlerMap = {
 		[CommonActions.CREATE]: WarehouseService.create,
 		[CommonActions.UPDATE]: WarehouseService.update,
@@ -55,29 +50,14 @@ export const useCreateOrUpdateWarehouseMutation = (action: CommonActions.CREATE 
 
 	return useMutation({
 		meta: { invalidates: [[WarehouseQueryKeys.WAREHOUSE]] },
-		mutationFn: (payload: CreateWarehouseFormValue & UpdateWarehouseFormValue) => handler(payload),
-		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
-		onSuccess: (_data, _variables, context) => {
-			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WarehouseQueryKeys.WAREHOUSE] })
-		},
-		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
+		mutationFn: (payload: CreateWarehouseFormValue & UpdateWarehouseFormValue) => handler(payload)
 	})
 }
 
 export function useDeleteWarehouseMutation(settledHandler: () => void) {
-	const queryClient = useQueryClient()
-	const { t } = useTranslation()
-
 	return useMutation({
-		mutationKey: [WarehouseQueryKeys.WAREHOUSE],
+		meta: { invalidates: [[WarehouseQueryKeys.WAREHOUSE]] },
 		mutationFn: WarehouseService.delete,
-		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
-		onSuccess: (_data, _variables, context) => {
-			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WarehouseQueryKeys.WAREHOUSE] })
-		},
-		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context }),
 		onSettled: settledHandler
 	})
 }

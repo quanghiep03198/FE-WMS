@@ -46,7 +46,7 @@ export interface EditorProps {
  */
 
 const Editor: React.FC<EditorProps> = memo(
-	({ defaultValue = '', id = uniqueId(), ref, disabled, name, height = 350, onUpdate: handleUpdate }) => {
+	({ defaultValue = '', id = uniqueId(), ref, disabled, name, height = 350 }) => {
 		const { i18n } = useTranslation()
 		const [contextMenuType, setContextMenuType] = useState<keyof HTMLElementTagNameMap | null>(null)
 

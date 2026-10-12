@@ -1,10 +1,7 @@
 import Loading from '@components/shared/loading'
 import NetworkDetector from '@components/shared/network-detector'
 import { SidebarProvider } from '@components/ui/sidebar'
-import { getUserProfileQuery } from '@features/auth/hooks/use-profile-request'
-import { useEffectOnce } from '@hooks/use-effect-once'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
-import { useLocalStorageState } from 'ahooks'
 import { Fragment } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import tw from 'tailwind-styled-components'
@@ -20,22 +17,19 @@ export const Route = createFileRoute('/(features)/_layout')({
 	pendingComponent: Loading,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated) throw redirect({ to: '/login' })
-	},
-	loader: async ({ context: { queryClient, isAuthenticated } }) => {
-		return await queryClient.query(getUserProfileQuery(isAuthenticated))
 	}
 })
 
 function Layout() {
-	const [font] = useLocalStorageState<string>('font', {
-		defaultValue: '*:font-sans!',
-		listenStorageChange: true
-	})
+	// const [font] = useLocalStorageState<string>('font', {
+	// 	defaultValue: '*:font-sans!',
+	// 	listenStorageChange: true
+	// })
 
-	useEffectOnce(() => {
-		if (document.body.classList.contains(font)) document.body.classList.remove(font)
-		document.body.classList.add(font)
-	})
+	// useEffectOnce(() => {
+	// 	if (document.body.classList.contains(font)) document.body.classList.remove(font)
+	// 	document.body.classList.add(font)
+	// })
 
 	return (
 		<Fragment>

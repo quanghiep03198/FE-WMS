@@ -17,7 +17,12 @@ export class AuthService {
 	private static __refreshTokenRequest: Promise<RefreshTokenResponse> | null = null
 
 	static async login(data: LoginFormValues): Promise<ResponseBody<Pick<IAuthState, 'user' | 'accessToken'>>> {
-		return await axiosInstance.post('/login', data)
+		return await axiosInstance.post<
+			any,
+			ResponseBody<Pick<IAuthState, 'user' | 'accessToken'>>,
+			LoginFormValues,
+			ResponseBody<any>
+		>('/login', data)
 	}
 
 	static logout() {

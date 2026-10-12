@@ -1,5 +1,6 @@
 import { type SelectFieldControlProps, SelectFieldControl } from '@components/forms/select'
 
+import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
 import React, { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -12,17 +13,17 @@ type BrandFieldControl = Partial<
 
 const BrandFieldControl: React.FC<BrandFieldControl> = ({ disabled, ...props }) => {
 	const { t } = useTranslation()
-	const { reset, getValues, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
-
+	const { reset, getValues } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { data: productSpecification } = useGetProductSpecsQuery()
 	// Memoized options for brand select
 	const { currentStrategy } = useSwitchCombinationStrategy()
 	const brandOptions = useMemo(() => {
-		if (!Array.isArray(ctx['productSpecification'])) return []
-		return ctx['productSpecification'].map(({ brand_name }) => ({
+		if (!Array.isArray(productSpecification)) return []
+		return productSpecification.map(({ brand_name }) => ({
 			label: brand_name,
 			value: brand_name
 		}))
-	}, [ctx['productSpecification']])
+	}, [productSpecification])
 
 	return (
 		<SelectFieldControl

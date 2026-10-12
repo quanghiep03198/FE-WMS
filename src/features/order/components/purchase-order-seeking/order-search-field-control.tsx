@@ -109,7 +109,11 @@ export function OrderSearchFieldControl() {
 												<Separator className='h-4 w-0.5' orientation='vertical' />
 												<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 													<GhostButton disabled={isLoading} onClick={() => refetch()}>
-														<Icon className={isLoading && 'animate-spin'} name='RefreshCcw' />
+														<Icon
+															aria-busy={isLoading}
+															className='aria-busy:animate-spin'
+															name='RefreshCcw'
+														/>
 													</GhostButton>
 												</Tooltip>
 											</Div>

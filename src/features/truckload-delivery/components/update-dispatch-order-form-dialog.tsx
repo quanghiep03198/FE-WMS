@@ -19,10 +19,9 @@ import { Icon } from '@components/ui/icon'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useMediaQuery from '@hooks/use-media-query'
 import { capitalize } from 'lodash-es'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { type Resolver, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../contexts/page-context'
 import { useUpdateDispatchOrderMutation } from '../hooks/use-truckload-delivery-request'
@@ -39,7 +38,6 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 	})
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 	const { mutateAsync, isPending, isError } = useUpdateDispatchOrderMutation()
-	const toastRef = useRef<string | number | null>(null)
 
 	event$.useSubscription(({ action, payload }) => {
 		if (action !== CommonActions.UPDATE_MANY) return
@@ -48,15 +46,9 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 	})
 
 	const handleSaveChanges = async (data: UpdateDispatchOrderFormValues) => {
-		toastRef.current = toast.loading(t('ns_common:notification.processing_request'))
-		try {
-			await mutateAsync(data)
-			toast.success(t('ns_common:notification.success'), { id: toastRef.current })
-			setOpen(false)
-			form.reset()
-		} catch {
-			toast.error(t('ns_common:notification.error'), { id: toastRef.current })
-		}
+		await mutateAsync(data)
+		setOpen(false)
+		form.reset()
 	}
 
 	return (

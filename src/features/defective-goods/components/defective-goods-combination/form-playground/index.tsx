@@ -235,7 +235,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
 
 	return (
-		<FormProvider {...{ ...form, productSpecification }}>
+		<FormProvider {...form}>
 			<Form data-action={formAction === CommonActions.UPDATE} onSubmit={form.handleSubmit(handleSubmitForm)}>
 				{/* Form controls */}
 				<Div

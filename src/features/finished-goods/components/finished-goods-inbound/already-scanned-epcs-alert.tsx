@@ -23,7 +23,6 @@ import { format } from 'date-fns'
 import { uniqBy } from 'lodash-es'
 import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { usePageContext } from '../../contexts/finished-goods-inbound/page-context'
 import { useDeleteEpcMutation } from '../../hooks/use-inbound-request'
 import { GhostButton } from '../styled'
@@ -64,21 +63,13 @@ const AlreadyScannedEpcsAlert: React.FC = () => {
 	})
 
 	const handleDeleteEpcs = useMemoizedFn(async (data: string | string[]) => {
-		const id = toast.loading(t('ns_common:notification.processing_request'))
-		try {
-			await deleteAsync({
-				epcs: typeof data === 'string' ? [data] : data,
-				rescannable: false
-			} satisfies DeleteScannedEpcsFormValues)
-			setDuplicatedEpcs((prev) =>
-				prev?.filter((item) =>
-					typeof data === 'string' ? item.epc !== data : !data.some((epc) => epc === item.epc)
-				)
-			)
-			toast.success(t('ns_common:notification.success'), { id })
-		} catch (e) {
-			toast.error(e.message, { id })
-		}
+		await deleteAsync({
+			epcs: typeof data === 'string' ? [data] : data,
+			rescannable: false
+		} satisfies DeleteScannedEpcsFormValues)
+		setDuplicatedEpcs((prev) =>
+			prev?.filter((item) => (typeof data === 'string' ? item.epc !== data : !data.some((epc) => epc === item.epc)))
+		)
 	})
 
 	const columnHelper = createColumnHelper<AlreadyScannedEpc>()

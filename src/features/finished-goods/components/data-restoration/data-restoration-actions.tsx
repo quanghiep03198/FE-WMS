@@ -4,7 +4,6 @@ import { SheetClose } from '@components/ui/sheet'
 
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import type { StockFlow } from '../../constants/enums'
 import { useDataRestorationContext } from '../../contexts/data-restoration-context'
 import { useRestoreDeletedEpcsMutation } from '../../hooks/use-deleted-epc-request'
@@ -19,15 +18,8 @@ const RestorationDataActions: React.FC<RestorationDataActionsProps> = ({ stockFl
 	const { mutateAsync, isPending, isError } = useRestoreDeletedEpcsMutation(stockFlow)
 
 	const handleRestoreArchivedEpcs = async () => {
-		const id = toast.loading(t('ns_common:notification.processing_request'))
-
-		try {
-			await mutateAsync(selectedItems.map((item) => item.epc))
-			toast.success(t('ns_common:notification.success'), { id })
-			removeAllItemsFromSet()
-		} catch {
-			toast.error(t('ns_common:notification.error'), { id })
-		}
+		await mutateAsync(selectedItems.map((item) => item.epc))
+		removeAllItemsFromSet()
 	}
 
 	return (

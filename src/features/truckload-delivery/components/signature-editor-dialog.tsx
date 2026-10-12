@@ -23,13 +23,12 @@ import { useWorkerFn } from '@hooks/use-worker-fn'
 import { format } from 'date-fns'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { TruckloadDeliveryStatus } from '../constants'
 import type { SignatureType } from '../contexts/page-context'
 import { usePageContext } from '../contexts/page-context'
 import { useUpdateDispatchOrderSignatureMutation } from '../hooks/use-truckload-delivery-request'
-import type { ITruckloadDelivery } from '../types'
+import type { ITruckloadDelivery, TruckloadDeliveryDispatchOrder } from '../types'
 
 const SignatureEditorDialog: React.FC = () => {
 	const [open, setOpen] = useState<boolean>(false)
@@ -40,7 +39,7 @@ const SignatureEditorDialog: React.FC = () => {
 	>(TruckloadDeliveryStatus.CONFIRMED)
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
+	const { mutateAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
 	const dialogData = useReactiveRef<
 		Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status' | 'license_plate'> & {
 			signature_type: SignatureType
@@ -53,7 +52,7 @@ const SignatureEditorDialog: React.FC = () => {
 		license_plate: '',
 		signature_type: 'warehouse_officer_signature'
 	})
-	const canvasRef = useRef<SignatureCanvasInstance>(null)
+	const canvasRef = useRef<SignatureCanvasInstance>(null!)
 
 	event$.useSubscription(({ action, payload }) => {
 		if (action === 'UPDATE_DISPATCH_ORDER_SIGNATURE') {
@@ -74,33 +73,31 @@ const SignatureEditorDialog: React.FC = () => {
 		setIsSubmitted(true)
 		if (!canvasRef.current || !canvasRef.current.toData().length) return
 
-		toast.loading(t('ns_common:notification.processing_request'), { id: 'update_signature' })
-		try {
-			// * compress image
-			const base64Image = canvasRef.current.toDataURL({ trim: true })
-			const compressedBase64 = await compress(base64Image, {
-				type: 'image/webp',
-				width: 192,
-				height: 128,
-				max: 10, // Max 10KB
-				quality: 0.8,
-				debug: env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development'
-			})
+		// * compress image
+		const base64Image = canvasRef.current.toDataURL({ trim: true })
+		const compressedBase64 = await compress(base64Image, {
+			type: 'image/webp',
+			width: 192,
+			height: 128,
+			max: 10, // Max 10KB
+			quality: 0.8,
+			debug: env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development'
+		})
 
-			await setStatusAsync({
-				signature_type: dialogData.current.signature_type,
-				dispatch_order: dialogData.current.dispatch_order,
-				signature: compressedBase64,
-				...((dialogData.current.signature_type === 'security_1_signature' ||
-					dialogData.current.signature_type === 'security_2_signature') && { approval_status: statusToUpdate })
-			})
-			toast.success(t('ns_common:notification.success'), { id: 'update_signature' })
-			setOpen(false)
-			setIsSubmitted(false)
-		} catch (error) {
-			console.error('Signature error :>>>', error)
-			toast.error(t('ns_common:notification.error'), { id: 'update_signature' })
-		}
+		await mutateAsync({
+			signature_type: dialogData.current.signature_type,
+			dispatch_order: dialogData.current.dispatch_order,
+			signature: compressedBase64,
+			...((dialogData.current.signature_type === 'security_1_signature' ||
+				dialogData.current.signature_type === 'security_2_signature') && { approval_status: statusToUpdate })
+		} as {
+			dispatch_order: TruckloadDeliveryDispatchOrder
+			signature_type: SignatureType
+			approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
+			signature: string
+		})
+		setOpen(false)
+		setIsSubmitted(false)
 	}
 
 	useEffectOnce(() => {
@@ -114,7 +111,7 @@ const SignatureEditorDialog: React.FC = () => {
 	})
 
 	const handleReset = () => {
-		canvasRef.current.clear()
+		if (canvasRef.current) canvasRef.current.clear()
 		setIsEmpty(true)
 		setIsSubmitted(false)
 	}

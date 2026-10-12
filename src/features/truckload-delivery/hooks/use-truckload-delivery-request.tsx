@@ -4,8 +4,6 @@ import { keepPreviousData, queryOptions, useMutation, useQuery, useQueryClient }
 import { format } from 'date-fns'
 import { uniqBy } from 'lodash-es'
 import { useMemo } from 'react'
-import type { TruckloadDeliveryStatus } from '../constants'
-import type { SignatureType } from '../contexts/page-context'
 import type { UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../schemas'
 import type { ITruckloadDelivery, ITruckloadDeliveryPacking, TruckloadDeliveryDispatchOrder } from '../types'
 import type { PageQueryParams } from './use-page-query-params'
@@ -179,12 +177,7 @@ export const useUpdateDispatchOrderSignatureMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
-		mutationFn: (payload: {
-			dispatch_order: TruckloadDeliveryDispatchOrder
-			signature_type: SignatureType
-			approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
-			signature: string
-		}) => TruckloadDeliveryService.updateDispatchOrderSignature(payload),
+		mutationFn: TruckloadDeliveryService.updateDispatchOrderSignature,
 		onSuccess: () => invalidateQueries()
 	})
 }

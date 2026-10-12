@@ -1,4 +1,5 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import env from '@common/utils/env'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { default as DataTable } from '@components/addons/tanstack-table'
 import TableCellText from '@components/addons/tanstack-table/components/table-cell-text'
@@ -6,7 +7,6 @@ import { Button } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
 import type { IPackingReport } from '@features/packing-manifest/types'
 import { ReportService } from '@features/report/services/report.service'
-import useAuth from '@hooks/use-auth'
 import useQueryParams from '@hooks/use-query-params'
 import { useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
@@ -14,14 +14,14 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { pick } from 'lodash-es'
-import React, { Fragment, useMemo } from 'react'
+import React, { Fragment, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import AutoRefreshToggle from '../../../../components/shared/auto-refresh-toggle'
 
 const ReportMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const { user } = useAuth()
+	const [isDownloading, setIsDownloading] = useState<boolean>(false)
 	const { searchParams } = useQueryParams<{ 'date:eq': string; 'auto-refresh': number | false }>({
 		'date:eq': format(new Date(), 'yyyy-MM-dd'),
 		'auto-refresh': false
@@ -133,13 +133,18 @@ const ReportMasterTable: React.FC = () => {
 	)
 
 	const handleDownloadExcel = async () => {
+		setIsDownloading(true)
 		const id = toast.loading(t('ns_common:notification.downloading'))
+		const factory = env<FactoryCode>('VITE_APP_TENANT')
 		try {
 			const blob = await ReportService.downloadWeighingReport(searchParams)
 			saveAs(
 				blob,
 				t('ns_packing:titles.file_daily_weighing_report', {
-					factory: t(TRANSLATED_FACTORY[env<FactoryCode>('VITE_APP_TENANT')], { ns: 'ns_common' }),
+					factory: t(TRANSLATED_FACTORY[factory], {
+						ns: 'ns_common',
+						defaultValue: null
+					}),
 					date: searchParams['date:eq'],
 					defaultValue: `Packing weight Report ~ ${format(new Date(), 'yyyy-MM-dd')}`
 				}) + '.xlsx'
@@ -147,6 +152,8 @@ const ReportMasterTable: React.FC = () => {
 			toast.success(t('ns_common:notification.success'), { id })
 		} catch {
 			toast.error('ns_common:notification.error', { id })
+		} finally {
+			setIsDownloading(false)
 		}
 	}
 
@@ -166,7 +173,7 @@ const ReportMasterTable: React.FC = () => {
 							<Button size='icon' variant='outline' onClick={() => handleDownloadExcel()}>
 								<Icon name='Download' />
 							</Button>
-							<Button size='icon' variant='outline' onClick={() => refetch()}>
+							<Button disabled={isDownloading} size='icon' variant='outline' onClick={() => refetch()}>
 								<Icon name='RefreshCcw' />
 							</Button>
 						</Fragment>

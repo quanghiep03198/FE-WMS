@@ -147,7 +147,7 @@ const ScannedEpcList: React.FC = () => {
 				method: RequestMethod.GET,
 				credentials: 'include',
 				headers: {
-					[RequestHeaders.USER_REQUEST]: user?.username!,
+					...(user?.username && { [RequestHeaders.USER_REQUEST]: user?.username }),
 					[RequestHeaders.FACTORY_CODE]: env<FactoryCode>('VITE_APP_TENANT')
 				},
 				signal: abortControllerRef.current.signal,

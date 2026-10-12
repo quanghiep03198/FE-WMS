@@ -121,7 +121,7 @@ const DataTableFooter: React.FC<{ rows: Row<IOutboundEstimation>[] }> = memo(({ 
 					{t('ns_common:common_fields.total')}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>
-					{formatIntlNumber(rows?.reduce((acc, curr) => acc + curr.original.po_qty, 0) ?? 0)}
+					{formatIntlNumber(rows?.reduce((acc, curr) => acc + curr.original.order_qty, 0) ?? 0)}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>
 					{formatIntlNumber(rows?.reduce((acc, curr) => acc + curr.original.outbound_qty, 0) ?? 0)}

@@ -24,7 +24,7 @@ const DownloadExcelButton: React.FC<React.ComponentProps<typeof Button>> = (prop
 				}) + '.xlsx'
 			)
 			toast.success(t('ns_common:notification.success'), { id })
-		} catch (e) {
+		} catch {
 			toast.error(t('ns_common:notification.error'), { id })
 		}
 	}

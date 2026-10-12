@@ -33,7 +33,6 @@ import { debounce, uniqBy } from 'lodash-es'
 import { useEffect, useId, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useGetScanningInboundEpcQuery } from '../../../hooks/use-inbound-request'
 
@@ -76,7 +75,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 		if (timeoutRef.current) clearTimeout(timeoutRef.current)
 		timeoutRef.current = setTimeout(() => fetchExchangableOrder(), 200)
 		return () => {
-			clearTimeout(timeoutRef.current)
+			if (timeoutRef.current) clearTimeout(timeoutRef.current)
 		}
 	}, [searchTerm, defaultValues])
 
@@ -85,17 +84,13 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	}, [defaultValues])
 
 	const handleExchangeEpc = async (data: ExchangeOrderFormValue) => {
-		try {
-			await mutateAsync(data)
-			toast.success(t('ns_common:notification.success'))
-			if (scanningStatus === 'disconnected' && Array.isArray(currentEpcData?.data)) {
-				setScannedEpc({ ...currentEpcData, data: uniqBy([...scannedEpc.data, ...currentEpcData.data], 'epc') })
-			}
-			resetSelectedRows()
-			setOpen(!open)
-		} catch {
-			toast.error(t('ns_common:notification.error'))
+		await mutateAsync(data)
+
+		if (scanningStatus === 'disconnected' && Array.isArray(currentEpcData?.data)) {
+			setScannedEpc({ ...currentEpcData, data: uniqBy([...scannedEpc.data, ...currentEpcData.data], 'epc') })
 		}
+		resetSelectedRows()
+		setOpen(!open)
 	}
 
 	const handleOpenChange = (open: boolean) => {

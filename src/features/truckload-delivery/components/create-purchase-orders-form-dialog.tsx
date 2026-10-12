@@ -20,7 +20,7 @@ import { Icon } from '@components/ui/icon'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateEffect } from 'ahooks'
 import { Fragment, useRef, useState } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { type Resolver, useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -37,7 +37,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 	const [open, setOpen] = useState<boolean>(false)
 	const { event$ } = usePageContext()
 	const form = useForm<CreateDeliveryFormValues>({
-		resolver: zodResolver(createDeliverySchema)
+		resolver: zodResolver(createDeliverySchema) as Resolver<CreateDeliveryFormValues>
 	})
 	const { fields, append, remove } = useFieldArray({ control: form.control, name: 'outbound_purchase_orders' })
 	const { mutateAsync, isPending, isError } = useCreateTruckloadDeliveryMutation()
@@ -59,19 +59,14 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 	}, [fields.length])
 
 	const handleCreateSubmit = async (data: CreateDeliveryFormValues) => {
-		toast.loading(t('ns_common:notification.processing_request'), { id: 'create_truckload_delivery' })
-		try {
-			await mutateAsync(data)
-			toast.success(t('ns_common:notification.success'), { id: 'create_truckload_delivery' })
-			setOpen(false)
-			form.reset({
-				license_plate: null,
-				container_number: null,
-				outbound_purchase_orders: []
-			})
-		} catch {
-			toast.error(t('ns_common:notification.error'), { id: 'create_truckload_delivery' })
-		}
+		await mutateAsync(data)
+		toast.success(t('ns_common:notification.success'), { id: 'create_truckload_delivery' })
+		setOpen(false)
+		form.reset({
+			license_plate: null,
+			container_number: null,
+			outbound_purchase_orders: []
+		})
 	}
 
 	return (

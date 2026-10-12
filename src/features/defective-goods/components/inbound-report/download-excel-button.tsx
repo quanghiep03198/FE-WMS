@@ -11,23 +11,31 @@ import { DefectiveGoodsQueryKey } from '../../hooks/use-defective-goods-request'
 
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import { DefectiveGoodsService } from '@features/defective-goods/services/defective-goods.service'
-import { useMemoizedFn } from 'ahooks'
 import { saveAs } from 'file-saver'
 import { toast } from 'sonner'
 
+import { useState } from 'react'
 import type { IDefectiveGoodsInboundReport } from '../../types'
-import type { PageQueryParams } from './report-master-table'
 
 const TOAST_ID = 'download_defective_goods_inbound_report'
 
-const useDownloadReport = () => {
-	const { searchParams } = useQueryParams<PageQueryParams>()
+const DownloadExcelButton: React.FC = () => {
 	const { t } = useTranslation()
+	const queryClient = useQueryClient()
+	const [isDownloading, setIsDownloading] = useState<boolean>(false)
+	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
+	const { searchParams } = useQueryParams()
 
-	return useMemoizedFn(async () => {
+	const queryData = queryClient.getQueryData<ResponseBody<IDefectiveGoodsInboundReport>>([
+		DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT,
+		pick(searchParams, ['date:eq'])
+	])
+
+	const handleDownloadReport = async () => {
 		const factory = env<FactoryCode>('VITE_APP_TENANT')
 		toast.loading(t('ns_common:notification.downloading'), { id: TOAST_ID })
 		const translatedFactory = t(TRANSLATED_FACTORY[factory], { ns: 'ns_common', defaultValue: factory })
+		setIsDownloading(true)
 
 		try {
 			const blob = await DefectiveGoodsService.downloadInboundReport(searchParams)
@@ -42,25 +50,14 @@ const useDownloadReport = () => {
 			toast.success(t('ns_common:notification.success'), { id: TOAST_ID })
 		} catch {
 			toast.error('ns_common:notification.error', { id: TOAST_ID })
+		} finally {
+			setIsDownloading(false)
 		}
-	})
-}
-
-const DownloadExcelButton: React.FC = () => {
-	const { t } = useTranslation()
-	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
-	const handleDownloadReport = useDownloadReport()
-	const { searchParams } = useQueryParams()
-	const queryClient = useQueryClient()
-
-	const queryData = queryClient.getQueryData<ResponseBody<IDefectiveGoodsInboundReport>>([
-		DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT,
-		pick(searchParams, ['date:eq'])
-	])
+	}
 
 	return (
 		<Button
-			disabled={!Array.isArray(queryData?.metadata) || queryData?.metadata?.length === 0}
+			disabled={isDownloading || !Array.isArray(queryData?.metadata) || queryData?.metadata?.length === 0}
 			size={isLargeScreen ? 'default' : 'icon'}
 			variant={isLargeScreen ? 'default' : 'outline'}
 			onClick={() => handleDownloadReport()}>

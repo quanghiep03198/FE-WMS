@@ -7,3 +7,10 @@ export class UnauthorizedError extends Error {
 		this.name = 'UnauthorizedError'
 	}
 }
+export class RequestTimeoutError extends Error {
+	constructor(message: string = 'Request timeout') {
+		super(message)
+		Object.setPrototypeOf(this, RequestTimeoutError.prototype)
+		this.name = 'RequestTimeoutError'
+	}
+}

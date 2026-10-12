@@ -1,4 +1,5 @@
 import { AutoCompleteFieldControl } from '@components/forms/auto-complete'
+import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
 import { uniqBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
@@ -9,8 +10,8 @@ import type { DefAutoCompleteFieldControlProps } from './type'
 
 const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()
-	const { control, reset, getValues, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
-	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
+	const { control, reset, getValues } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { data: productSpecification } = useGetProductSpecsQuery()
 	const currentCategory = useWatch({ control: control, name: 'defective_category' })
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })
@@ -18,7 +19,7 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 
 	// Memoized options for color select
 	const colorOptions = useMemo(() => {
-		if (!productSpecification.length) return []
+		if (!Array.isArray(productSpecification) || !productSpecification.length) return []
 		if (
 			currentCategory === DefectiveCategory.RESEARCH_DEVELOPMENT ||
 			!currentCategory ||
