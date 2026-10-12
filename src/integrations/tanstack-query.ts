@@ -1,11 +1,13 @@
+import { i18n } from '@i18n/index'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Sentry from '@sentry/react'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
 import type { QueryKey } from '@tanstack/react-query'
-import { matchQuery, MutationCache, QueryClient } from '@tanstack/react-query'
-import { type AxiosError } from 'axios'
+import { matchQuery, MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
+import { AxiosResponse, HttpStatusCode, isAxiosError, type AxiosError } from 'axios'
 import { compress, decompress } from 'lz-string'
+import { toast } from 'sonner'
 
 declare module '@tanstack/react-query' {
 	interface Register {
@@ -34,13 +36,28 @@ export const queryClient = new QueryClient({
 			networkMode: 'always'
 		}
 	},
+	queryCache: new QueryCache({
+		onError: (error) => {
+			if (isAxiosError(error) && error.response?.status !== HttpStatusCode.InternalServerError) {
+				const response = error.response as AxiosResponse<ResponseBody<any>>
+				toast.error(response.data.message)
+			}
+		}
+	}),
 	mutationCache: new MutationCache({
-		onSuccess: (_data, _variables, _context, mutation) => {
+		onSuccess: async (_data, _variables, _context, mutation) => {
 			// * invalidate all matching tags at once
-			queryClient.invalidateQueries({
+			await queryClient.invalidateQueries({
 				predicate: (query) =>
 					mutation.meta?.invalidates?.some((queryKey) => matchQuery({ queryKey }, query)) ?? false
 			})
+			toast.success(i18n.t('ns_common:notification.success'))
+		},
+		onError: (error) => {
+			if (isAxiosError(error) && error.response?.status !== HttpStatusCode.InternalServerError) {
+				const response = error.response as AxiosResponse<ResponseBody<any>>
+				toast.error(response.data.message)
+			} else toast.error(i18n.t('ns_common:notification.unknown_error'))
 		}
 	})
 })
