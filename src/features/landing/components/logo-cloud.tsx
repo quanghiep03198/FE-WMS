@@ -28,25 +28,7 @@ const LogoCloud: React.FC = () => {
 				<Div className='border-foreground/20 inline-grid size-56 translate-y-12 place-items-center rounded-full border mask-[linear-gradient(to_bottom,var(--background)_50%,var(--background)_50%,transparent)]'>
 					<Div className='border-foreground/35 inline-grid size-40 place-items-center rounded-full border-[1.5px]'>
 						<Div className='border-foreground/50 relative inline-grid size-24 place-items-center rounded-full border'>
-							<Icon
-								className='z-20'
-								name='Codesandbox'
-								size={60}
-								stroke='url(#codesandbox-gradient)'
-								strokeWidth={1}>
-								<defs>
-									<linearGradient
-										gradientUnits='userSpaceOnUse'
-										id='codesandbox-gradient'
-										x1='0'
-										x2='0'
-										y1='20'
-										y2='0'>
-										<stop stopColor='hsl(var(--muted-foreground)' />
-										<stop offset='1' stopColor='var(--foreground)' />
-									</linearGradient>
-								</defs>
-							</Icon>
+							<Icon className='z-20' name='Codesandbox' size={60} strokeWidth={1}></Icon>
 							{/* /> */}
 						</Div>
 					</Div>
@@ -130,45 +112,6 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
-			<svg fill='none' height='22' viewBox='0 0 22 22' width='22' xmlns='http://www.w3.org/2000/svg'>
-				<path
-					d='M10.9999 0C8.97378 0 7.07561 0.547792 5.44543 1.50334C5.11704 1.69583 4.97302 2.12364 5.25193 2.38269C5.49733 2.61062 5.82611 2.75 6.18743 2.75H15.8123C16.1737 2.75 16.5024 2.61062 16.7478 2.38269C17.0267 2.12364 16.8827 1.69583 16.5543 1.50334C14.9242 0.547792 13.026 0 10.9999 0Z'
-					fill='currentColor'></path>
-				<path
-					d='M21.9998 11C21.9998 10.2406 21.3842 9.625 20.6248 9.625H1.37499C0.615588 9.625 0 10.2406 0 11C0 11.7594 0.615588 12.375 1.37499 12.375H20.6248C21.3842 12.375 21.9998 11.7594 21.9998 11Z'
-					fill='currentColor'></path>
-				<path
-					d='M16.7478 19.6173C17.0267 19.8764 16.8827 20.3042 16.5543 20.4967C14.9242 21.4522 13.026 22 10.9999 22C8.97378 22 7.0756 21.4522 5.44542 20.4967C5.11704 20.3042 4.97302 19.8764 5.25192 19.6173C5.49732 19.3894 5.8261 19.25 6.18743 19.25H15.8123C16.1737 19.25 16.5024 19.3894 16.7478 19.6173Z'
-					fill='currentColor'></path>
-				<path
-					d='M1.37499 6.1875C1.37499 5.42809 1.99057 4.8125 2.74997 4.8125H19.2498C20.0092 4.8125 20.6248 5.42809 20.6248 6.1875C20.6248 6.94691 20.0092 7.5625 19.2498 7.5625H2.74997C1.99057 7.5625 1.37499 6.94691 1.37499 6.1875Z'
-					fill='currentColor'></path>
-				<path
-					d='M1.37499 15.8125C1.37499 15.0531 1.99057 14.4375 2.74997 14.4375H19.2498C20.0092 14.4375 20.6248 15.0531 20.6248 15.8125C20.6248 16.5719 20.0092 17.1875 19.2498 17.1875H2.74997C1.99057 17.1875 1.37499 16.5719 1.37499 15.8125Z'
-					fill='currentColor'></path>
-			</svg>
-		</LinkCard>
-		<LinkCard href='#'>
-			<svg
-				className='max-w-7 xl:max-w-8'
-				preserveAspectRatio='xMinYMin meet'
-				viewBox='0 0 256 256'
-				xmlns='http://www.w3.org/2000/svg'>
-				<circle
-					className='stroke-muted-foreground group-hover/card:stroke-current'
-					cx='128'
-					cy='128'
-					fill='none'
-					r='114'
-					strokeWidth='20'
-				/>
-				<path
-					className='fill-muted-foreground group-hover/card:fill-current'
-					d='M97.637 121.69c27.327-22.326 54.058-45.426 81.98-67.097-14.646 22.505-29.708 44.711-44.354 67.215-12.562.06-25.123.06-37.626-.119zM120.737 134.132c12.621 0 25.183 0 37.745.179-27.505 22.206-54.117 45.484-82.099 67.096 14.646-22.505 29.708-44.77 44.354-67.275z'
-				/>
-			</svg>
-		</LinkCard>
-		<LinkCard href='#'>
 			<img
 				alt='NestJS'
 				className='max-w-8 saturate-0 transition-all group-hover/card:saturate-100'
@@ -182,6 +125,14 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 				className='h-8 saturate-0 transition-all group-hover/card:saturate-100 xl:h-9'
 				loading='lazy'
 				src='/mongodb.svg'
+			/>
+		</LinkCard>
+		<LinkCard href='#'>
+			<img
+				alt='SQL Server'
+				className='h-8 saturate-0 transition-all group-hover/card:saturate-100 xl:h-9'
+				loading='lazy'
+				src='/sql-server.svg'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
