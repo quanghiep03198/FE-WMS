@@ -61,7 +61,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 				filterFn: fuzzyFilter,
 				meta: { title: t('ns_erp:fields.mo_no') }
 			}),
-			columnHelper.accessor('last_inbound_time', {
+			columnHelper.accessor('last_inbound_date', {
 				header: t('ns_erp:fields.last_inbound_time'),
 				cell: (info) => {
 					const value = info.getValue()
@@ -78,36 +78,23 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 				enableGlobalFilter: false,
 				meta: { title: t('ns_erp:fields.last_inbound_time'), align: 'center' }
 			}),
-			columnHelper.accessor('mo_qty', {
+			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.order_qty'),
 				enableSorting: true,
 				enableGlobalFilter: false,
 				cell: (info) => formatIntlNumber(info.getValue()),
 				meta: {
-					title: t('ns_erp:fields.last_inbound_time'),
+					title: t('ns_erp:fields.order_qty'),
 					align: 'right'
 				}
 			}),
-			columnHelper.accessor('inbound_qty', {
+			columnHelper.accessor('instock_qty', {
 				header: t('ns_erp:fields.inbound_qty'),
 				cell: (info) => formatIntlNumber(info.getValue()),
 				enableSorting: true,
 				enableGlobalFilter: false,
 				meta: {
 					title: t('ns_erp:fields.inbound_qty'),
-					align: 'right',
-					filterVariant: 'range'
-				}
-			}),
-
-			columnHelper.accessor('inspected_qty', {
-				header: t('ns_erp:fields.inspected_qty'),
-				cell: (info) => formatIntlNumber(info.getValue()),
-				size: 180,
-				enableSorting: true,
-				enableGlobalFilter: false,
-				meta: {
-					title: t('ns_erp:fields.inspected_qty'),
 					align: 'right',
 					filterVariant: 'range'
 				}
@@ -135,14 +122,14 @@ const DataTableFooter = memo(({ rows }: { rows: Row<IInboundInventory>[] }) => {
 					{t('ns_common:common_fields.total')}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>
-					{formatIntlNumber(rows?.reduce((total, item) => total + item.original.mo_qty, 0) ?? 0)}
+					{formatIntlNumber(rows?.reduce((total, item) => total + item.original.order_qty, 0) ?? 0)}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>
-					{formatIntlNumber(rows?.reduce((total, item) => total + item.original.inbound_qty, 0) ?? 0)}
+					{formatIntlNumber(rows?.reduce((total, item) => total + item.original.instock_qty, 0) ?? 0)}
 				</TableCell>
-				<TableCell align='right' className='font-semibold'>
-					{formatIntlNumber(rows?.reduce((total, item) => total + item.original.inspected_qty, 0) ?? 0)}
-				</TableCell>
+				{/* <TableCell align='right' className='font-semibold'>
+					{formatIntlNumber(rows?.reduce((total, item) => total + item.original?.inspected_qty, 0) ?? 0)}
+				</TableCell> */}
 			</TableRow>
 		</TableFooter>
 	)

@@ -56,20 +56,20 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 				enableColumnFilter: true,
 				meta: { title: t('ns_erp:fields.po') }
 			}),
-			columnHelper.accessor('outbound_date', {
-				header: t('ns_erp:fields.outbound_date'),
-				cell: (info) => format(info.getValue(), 'yyyy-MM-dd'),
-				size: 160,
-				enableSorting: true,
-				enableGlobalFilter: false,
-				meta: { title: t('ns_erp:fields.outbound_date') }
-			}),
-			columnHelper.accessor('last_outbound_time', {
+			// columnHelper.accessor('last', {
+			// 	header: t('ns_erp:fields.outbound_date'),
+			// 	cell: (info) => format(info.getValue(), 'yyyy-MM-dd'),
+			// 	size: 160,
+			// 	enableSorting: true,
+			// 	enableGlobalFilter: false,
+			// 	meta: { title: t('ns_erp:fields.outbound_date') }
+			// }),
+			columnHelper.accessor('last_outbound_date', {
 				header: t('ns_erp:fields.last_outbound_time'),
 				cell: (info) => {
 					const value = info.getValue()
 					return value ? (
-						format(value, 'yyyy-MM-dd')
+						format(new Date(value), 'yyyy-MM-dd')
 					) : (
 						<Div className='place-items-center'>
 							<Icon className='stroke-muted-foreground' name='CalendarOff' />
@@ -81,7 +81,7 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 				enableGlobalFilter: false,
 				meta: { title: t('ns_erp:fields.last_outbound_time'), align: 'center' }
 			}),
-			columnHelper.accessor('po_qty', {
+			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.order_qty'),
 				cell: (info) => formatIntlNumber(info.getValue()),
 				size: 160,
@@ -117,7 +117,7 @@ const DataTableFooter: React.FC<{ rows: Row<IOutboundEstimation>[] }> = memo(({ 
 	return (
 		<TableFooter className='sticky bottom-0 z-20'>
 			<TableRow className='bg-table-head [&_td:not(first-child)]:bg-table-head [&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t'>
-				<TableCell align='left' className='sticky left-0 z-10 bg-transparent! font-semibold' colSpan={4}>
+				<TableCell align='left' className='sticky left-0 z-10 bg-transparent! font-semibold' colSpan={3}>
 					{t('ns_common:common_fields.total')}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>

@@ -1,4 +1,5 @@
 import { fuzzyFilter } from '@components/addons/tanstack-table/utils/fuzzy-filter.util'
+import { dateRangeFilter } from '@components/addons/tanstack-table/utils/in-date-range-filter.util'
 import { Typography } from '@components/customs/typography'
 import { Table, TableCaption } from '@components/ui/table'
 import type { StockFlow } from '@features/finished-goods/constants/enums'
@@ -54,7 +55,7 @@ function DataTable<T extends TableRowData>({
 		columns,
 		filterFns: {
 			fuzzy: fuzzyFilter,
-			inDateRange: null
+			inDateRange: dateRangeFilter
 		},
 		initialState: {
 			sorting: [],
@@ -96,7 +97,7 @@ function DataTable<T extends TableRowData>({
 		scrollToFn
 	})
 
-	const containerSize = useSize(containerRef)
+	const containerSize = useSize(containerRef) ?? { width: 0, height: 0 }
 
 	return (
 		<Container>
@@ -108,7 +109,7 @@ function DataTable<T extends TableRowData>({
 			<ScrollArea className='h-72' ref={containerRef}>
 				<Table
 					className='w-full table-fixed border-separate border-spacing-0'
-					style={{ '--table-width': containerSize?.width - 10 + 'px' } as React.CSSProperties}>
+					style={{ '--table-width': containerSize.width - 10 + 'px' } as React.CSSProperties}>
 					<TableCaption className='sr-only' id={captionId}>
 						{caption}
 					</TableCaption>

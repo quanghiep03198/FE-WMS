@@ -8,7 +8,7 @@ export enum ProductionInventoryQueryKeys {
 }
 
 export const useGetProductionInventoryQuery = () => {
-	const { searchParams } = useQueryParams<Record<'brand_name' | 'shoes_style' | 'color', string>>()
+	const { searchParams } = useQueryParams<Record<'brand_name' | 'factory_shoes_style' | 'color_sn', string>>()
 
 	return useQuery({
 		queryKey: [ProductionInventoryQueryKeys.PRODUCTION_INVENTORY, searchParams],

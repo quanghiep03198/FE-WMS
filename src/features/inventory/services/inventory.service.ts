@@ -4,8 +4,7 @@ import type {
 	IInboundInventory,
 	IMonthlyInventoryAudit,
 	IOutboundEstimation,
-	IProductionInventoryFeature,
-	IProductSizeInventory
+	IProductionInventoryFeature
 } from '../types'
 
 export class InventoryService {
@@ -33,19 +32,21 @@ export class InventoryService {
 		return await axiosInstance.put<void, ResponseBody<void>>(`/inventory/audit/checkout/${month}`)
 	}
 
-	static async getProductionInventoryReport(params: Record<'brand_name' | 'shoes_style' | 'color', string>) {
+	static async getProductionInventoryReport(
+		params: Record<'brand_name' | 'factory_shoes_style' | 'color_sn', string>
+	) {
 		return await axiosInstance.get<
 			void,
 			ResponseBody<{
-				sizes: IProductSizeInventory[]
-				inbound: IInboundInventory[]
-				outbound: IOutboundEstimation[]
+				sizes: Array<{ size_numcode: string; qty: number }>
+				inbound: Array<IInboundInventory>
+				outbound: Array<IOutboundEstimation>
 			}>
 		>('/inventory/summary', {
 			params: {
 				'brand_name:eq': params.brand_name,
-				'shoes_style:eq': params.shoes_style,
-				'color:eq': params.color
+				'factory_shoes_style:eq': params.factory_shoes_style,
+				'color_sn:eq': params.color_sn
 			}
 		})
 	}

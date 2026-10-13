@@ -44,25 +44,25 @@ export interface IProductSizeInventory {
 	size_ledger: SizeQuantity
 }
 interface IBaseInventory {
-	shoes_style: string
-	color: string
+	// shoes_style: string
+	// color: string
 	size_ledger: SizeQuantity
 }
 
 export interface IOutboundEstimation extends IBaseInventory {
 	po: string
 	order_qty: number
-	outbound_date: Date
+	last_outbound_date: Date
 	outbound_qty: number
-	last_outbound_time: Date
+	last_outbound_date: Date
 }
 
 export interface IInboundInventory extends IBaseInventory {
 	mo_no: string
-	mo_qty: number
-	inbound_qty: number
+	order_qty: number
+	instock_qty: number
 	inspected_qty: number
-	last_inbound_time: Date
+	last_inbound_date: Date
 }
 export interface IProductionInventoryFeature {
 	brand_name: string

@@ -12,7 +12,7 @@ import InboundOrderTable from './inbound-order-table'
 import { OutboundEstimationTable } from './outbound-estimation-table'
 
 const DataSection: React.FC = () => {
-	const { searchParams } = useQueryParams<Record<'brand_name' | 'shoes_style' | 'color', string>>()
+	const { searchParams } = useQueryParams<Record<'brand_name' | 'factory_shoes_style' | 'color_sn', string>>()
 	const { t } = useTranslation()
 
 	const { data, isLoading } = useGetProductionInventoryQuery()
@@ -20,9 +20,14 @@ const DataSection: React.FC = () => {
 	const shouldRender = !isEmpty(searchParams)
 
 	const sizeData = useMemo(() => {
-		const currentSizeData = data?.sizes?.find((item) => item?.color === searchParams?.color)
-		return { data: currentSizeData?.size_ledger ?? [], total: currentSizeData?.total_qty || 0 }
+		// const currentSizeData = data?.sizes?.find((item) => item?.color === searchParams?.color_sn)
+		const sizes = Array.isArray(data?.sizes) ? data.sizes : []
+		const total = sizes.reduce((acc, item) => acc + (item?.qty || 0), 0)
+
+		return { data: sizes, total }
 	}, [data])
+
+	console.log(data)
 
 	if (isLoading)
 		return (
@@ -38,13 +43,13 @@ const DataSection: React.FC = () => {
 		return (
 			<Div className='animate-in fade-in-0 grid grid-cols-1 gap-6 transition-opacity duration-300 ease-out @7xl:grid-cols-2'>
 				<Div className='col-span-1'>
-					<InboundOrderTable data={data?.inbound} />
+					<InboundOrderTable data={data?.inbound!} />
 				</Div>
 				<Div className='col-span-1'>
-					<OutboundEstimationTable data={data?.outbound} />
+					<OutboundEstimationTable data={data?.outbound!} />
 				</Div>
-				<Div className='relative col-span-full space-y-4 rounded-md border p-4 shadow-sm'>
-					<SizeTable data={sizeData.data} total={sizeData.total} />
+				<Div className='relative col-span-full space-y-4 rounded-md border p-4 shadow-sm overflow-hidden'>
+					<SizeTable data={sizeData.data!} total={sizeData.total} />
 					<Typography className='block text-center' color='muted' variant='small'>
 						{t('ns_inoutbound:description.size_qty_caption')}
 					</Typography>
