@@ -26,32 +26,34 @@ const SizeTable: React.FC<SizeTableProps> = ({ data, total, ...props }) => {
 	})
 
 	return (
-		<Table {...props}>
-			<TableRow className='*:border-b'>
-				<TableVerticalHeader>Size</TableVerticalHeader>
-				{sortedData.map((item) => (
-					<TableCellHead className='bg-table-head' key={item.size_numcode} variant='small'>
-						{item.size_numcode}
-					</TableCellHead>
-				))}
-				{total && (
-					<TableCellHead className='bg-background text-foreground sticky right-0 font-medium'>
-						{t('ns_common:common_fields.total')}
-					</TableCellHead>
-				)}
-			</TableRow>
-			<TableRow>
-				<TableVerticalHeader>{t('ns_common:common_fields.quantity')}</TableVerticalHeader>
-				{sortedData.map((item) => (
-					<TableCell key={item.size_numcode}>{formatIntlNumber(item.qty)}</TableCell>
-				))}
-				{total && <TableCell className='sticky right-0 font-medium'>{formatIntlNumber(total)}</TableCell>}
-			</TableRow>
-		</Table>
+		<Div className='overflow-x-auto w-full'>
+			<Table {...props}>
+				<TableRow className='*:border-b'>
+					<TableVerticalHeader>Size</TableVerticalHeader>
+					{sortedData.map((item) => (
+						<TableCellHead className='bg-table-head relative' key={item.size_numcode} variant='small'>
+							{item.size_numcode}
+						</TableCellHead>
+					))}
+					{total && (
+						<TableCellHead className='bg-background text-foreground sticky right-0 font-medium'>
+							{t('ns_common:common_fields.total')}
+						</TableCellHead>
+					)}
+				</TableRow>
+				<TableRow>
+					<TableVerticalHeader>{t('ns_common:common_fields.quantity')}</TableVerticalHeader>
+					{sortedData.map((item) => (
+						<TableCell key={item.size_numcode}>{formatIntlNumber(item.qty)}</TableCell>
+					))}
+					{total && <TableCell className='sticky right-0 font-medium'>{formatIntlNumber(total)}</TableCell>}
+				</TableRow>
+			</Table>
+		</Div>
 	)
 }
 
-const Table = tw.div`relative **:last:top-0 **:first:basis-28 **:first:min-w-28 **:first:bg-background **:first:sticky **:first:left-0 *:text-sm w-full overflow-x-auto`
+const Table = tw.div`relative **:last:top-0 **:first:basis-28 **:first:min-w-28 **:first:bg-background **:first:sticky **:first:left-0 *:text-sm w-full`
 const TableRow = tw.div`flex *:px-4 *:not-last:border-l *:py-2 *:whitespace-nowrap *:last:shadow-[1px_0px_0px_var(--border)] *:first:border-l-0 *:last:border-r-0 *:last:border-l *:last:flex-1 *:basis-24 *:min-w-24`
 const TableCell = tw.div`text-foreground text-left bg-background`
 const TableCellHead = tw.div`text-table-head-foreground font-medium text-left bg-table-head`
