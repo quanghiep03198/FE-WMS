@@ -1,70 +1,36 @@
 import { AutoCompleteFieldControl } from '@components/forms/auto-complete'
+import { DefectiveCategory } from '@features/defective-goods/constants/enums'
 import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
 import { uniqBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { DefectiveCategory } from '../../../constants/enums'
-import type { DefectiveGoodsCombinationFormValues } from '../../../schemas/defective-goods.schema'
 import type { DefAutoCompleteFieldControlProps } from './type'
 
 const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()
-	const { control, reset, getValues } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { control, reset, getValues } = useFormContext()
 	const { data: productSpecification } = useGetProductSpecsQuery()
 	const currentCategory = useWatch({ control: control, name: 'defective_category' })
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })
 	const currentStrategy = useWatch({ control: control, name: 'ri_type' })
 
+	const shouldFilterAllSizes: boolean = currentCategory === DefectiveCategory.RESEARCH_DEVELOPMENT
+
 	// Memoized options for color select
 	const colorOptions = useMemo(() => {
-		if (!Array.isArray(productSpecification) || !productSpecification.length) return []
-		if (
-			currentCategory === DefectiveCategory.RESEARCH_DEVELOPMENT ||
-			!currentCategory ||
-			(!currentBrand && !currentFactoryShoeStyle)
-		) {
-			return uniqBy(
-				productSpecification
-					.flatMap((item) =>
-						item.product_variants.flatMap((variant) =>
-							variant.specs.map(({ color_sn }) => ({
-								label: color_sn,
-								value: color_sn
-							}))
-						)
-					)
-					.sort((a, b) => a.label?.localeCompare(b.label)),
-				(color) => color.value
-			)
-		}
-		if (!currentBrand && currentFactoryShoeStyle) {
-			return uniqBy(
-				productSpecification
-					.flatMap((item) =>
-						item.product_variants
-							.filter((variant) => variant.factory_shoes_style === currentFactoryShoeStyle)
-							.flatMap((variant) =>
-								variant.specs.map(({ color_sn }) => ({
-									label: color_sn,
-									value: color_sn
-								}))
-							)
-					)
-					.sort((a, b) => a.label?.localeCompare(b.label)),
-				(color) => color.value
-			)
-		}
-		const brand = productSpecification.find((item) => item.brand_name === currentBrand)
-		const variant = brand?.product_variants?.find((item) => item.factory_shoes_style === currentFactoryShoeStyle)
-		if (!variant?.specs) return []
-		return variant.specs
-			.map(({ color_sn }) => ({
-				label: color_sn,
-				value: color_sn
-			}))
-			.sort((a, b) => a.label?.localeCompare(b.label))
+		if (!Array.isArray(productSpecification)) return []
+
+		return uniqBy(
+			productSpecification
+				.filter((item) => {
+					if (!currentFactoryShoeStyle || shouldFilterAllSizes) return true
+					return item.factory_shoes_style === currentFactoryShoeStyle
+				})
+				.flatMap((item) => item.product_variants.map((item) => ({ label: item.color_sn, value: item.color_sn }))),
+			(item) => item.value
+		)
 	}, [productSpecification, currentCategory, currentBrand, currentFactoryShoeStyle])
 
 	return (

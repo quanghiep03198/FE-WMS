@@ -13,15 +13,15 @@ type BrandFieldControl = Partial<
 
 const BrandFieldControl: React.FC<BrandFieldControl> = ({ disabled, ...props }) => {
 	const { t } = useTranslation()
-	const { reset, getValues } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { reset, getValues } = useFormContext()
 	const { data: productSpecification } = useGetProductSpecsQuery()
 	// Memoized options for brand select
 	const { currentStrategy } = useSwitchCombinationStrategy()
 	const brandOptions = useMemo(() => {
 		if (!Array.isArray(productSpecification)) return []
-		return productSpecification.map(({ brand_name }) => ({
-			label: brand_name,
-			value: brand_name
+		return [...new Set(productSpecification.map((item) => item.brand_name))].map((brand) => ({
+			label: brand,
+			value: brand
 		}))
 	}, [productSpecification])
 

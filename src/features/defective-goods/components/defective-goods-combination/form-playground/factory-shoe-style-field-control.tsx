@@ -15,31 +15,20 @@ const FactoryShoeStyleFieldControl: React.FC<
 	>
 > = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()
-	const { reset, setValue, getValues, control } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { reset, setValue, getValues, control } = useFormContext()
 	const { data: productSpecification } = useGetProductSpecsQuery()
 
 	const currentBrand = useWatch({ name: 'brand_name', control })
 
 	// Memoized options for shoe style select
 	const factoryShoeStyleOptions = useMemo(() => {
-		if (!productSpecification?.length) return []
-		if (!currentBrand)
-			return productSpecification
-				.flatMap((item) =>
-					item.product_variants.map(({ factory_shoes_style, cust_shoes_style }) => ({
-						factory_shoes_style,
-						cust_shoes_style
-					}))
-				)
-				.sort((a, b) => b.factory_shoes_style?.localeCompare(a.factory_shoes_style))
-		const brand = productSpecification.find((item) => item.brand_name === currentBrand)
-		if (!brand?.product_variants) return []
-		return brand.product_variants
-			.map(({ factory_shoes_style, cust_shoes_style }) => ({
-				factory_shoes_style,
-				cust_shoes_style
-			}))
-			.sort((a, b) => b.factory_shoes_style?.localeCompare(a.factory_shoes_style))
+		if (!Array.isArray(productSpecification)) return []
+		return productSpecification
+			.filter((item) => {
+				if (!currentBrand) return true
+				return item.brand_name === currentBrand
+			})
+			.toSorted((a, b) => b.factory_shoes_style.localeCompare(a.factory_shoes_style))
 	}, [productSpecification, currentBrand])
 
 	const handleValueChange = (value) => {

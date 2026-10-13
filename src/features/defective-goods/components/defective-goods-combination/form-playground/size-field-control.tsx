@@ -1,3 +1,5 @@
+'use no memo'
+
 import { cn } from '@common/utils/cn'
 import { Div } from '@components/customs/div'
 import { AutoCompleteFieldControl } from '@components/forms/auto-complete'
@@ -15,7 +17,6 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { DefectiveCategory } from '../../../constants/enums'
 import { useSwitchCombinationStrategy } from '../../../hooks/use-switch-combination-strategy'
-import type { DefectiveGoodsCombinationFormValues } from '../../../schemas/defective-goods.schema'
 import type { DefAutoCompleteFieldControlProps } from './type'
 
 const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
@@ -27,7 +28,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 }) => {
 	const { t } = useTranslation()
 	const { hash } = useLocation()
-	const { control, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { control } = useFormContext()
 	const { fields, append, remove } = useFieldArray({ control, name })
 	const scrollRef = useRef<HTMLDivElement>(null)
 	const { currentStrategy } = useSwitchCombinationStrategy()
@@ -38,48 +39,60 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })
 	const currentColor = useWatch({ control: control, name: 'color_sn' })
 
-	const shouldFilterAllSizes: boolean =
-		currentCategory === DefectiveCategory.RESEARCH_DEVELOPMENT ||
-		!currentCategory ||
-		!currentBrand ||
-		!currentFactoryShoeStyle ||
-		!currentColor
+	const shouldFilterAllSizes: boolean = currentCategory === DefectiveCategory.RESEARCH_DEVELOPMENT
+
 	const shouldRequireFullInfo: boolean =
-		currentCategory === DefectiveCategory.B_GRADE ||
-		(currentCategory === DefectiveCategory.C_GRADE && Array.isArray(datalist))
+		Array.isArray(datalist) &&
+		(currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE)
 
 	// Memoized options for size select
 	const sizeOptions = useMemo(() => {
 		if (!Array.isArray(productSpecification) || !productSpecification.length) return []
-		if (shouldFilterAllSizes)
-			return uniqBy(
-				productSpecification
-					.flatMap((item) => {
-						return item.product_variants.flatMap((variant) => {
-							return variant.specs.flatMap((spec) => {
-								return spec.sizes.map((size) => {
-									size = Number.parseFloat(size).toString()
-									return { label: size, value: size }
-								})
-							})
-						})
-					})
-					.sort((a, b) => a.value.localeCompare(b.value, undefined, { numeric: true })),
-				(size) => size.value
-			)
+		return uniqBy(
+			productSpecification
+				.filter((item) => {
+					if (shouldFilterAllSizes) return true
+					return (
+						item.brand_name === currentBrand &&
+						item.factory_shoes_style === currentFactoryShoeStyle &&
+						item.product_variants.some((variant) => variant.color_sn === currentColor)
+					)
+				})
+				.flatMap((item) =>
+					item.product_variants.flatMap((variant) => variant.sizes.map((size) => ({ label: size, value: size })))
+				)
+				.sort((a, b) => a?.value?.localeCompare(b?.value, undefined, { numeric: true })),
+			(item) => item.value
+		)
+		// const fallbackDataList = uniqBy(
+		// 	productSpecification.flatMap((item) => {
+		// 		return item.product_variants.flatMap((variant) => {
+		// 			return variant.sizes
+		// 					.map((size) => ({ label: size, value: size }))
 
-		if (shouldRequireFullInfo) return Array.isArray(datalist) ? datalist : []
-		const brand = productSpecification.find((item) => item.brand_name === currentBrand)
-		const variant = brand?.product_variants?.find((item) => item.factory_shoes_style === currentFactoryShoeStyle)
-		const spec = variant?.specs?.find((item) => item.color_sn === currentColor)
-		if (!spec?.sizes) return []
-		return spec.sizes
-			.map((size) => {
-				size = Number.parseFloat(size).toString()
-				return { label: size, value: size }
-			})
-			.sort((a, b) => Number.parseFloat(a.value) - Number.parseFloat(b.value))
-	}, [datalist, productSpecification, currentBrand, currentFactoryShoeStyle, currentColor, shouldRequireFullInfo])
+		// 		})
+		// 	}),
+		// 	(size) => size.value
+		// )
+		// if (shouldRequireFullInfo) return Array.isArray(datalist) ? datalist : fallbackDataList
+		// if (shouldFilterAllSizes) return fallbackDataList
+
+		// const brand = productSpecification.find((item) => item.brand_name === currentBrand)
+		// const variant = brand?.product_variants?.find((item) => item.factory_shoes_style === currentFactoryShoeStyle)
+		// const spec = variant?.specs?.find((item) => item.color_sn === currentColor)
+		// if (!Array.isArray(spec?.sizes)) return fallbackDataList
+		// return spec.sizes
+		// 	.sort((s1, s2) => s1?.localeCompare(s2, undefined, { numeric: true }))
+		// 	.map((size) => ({ label: size, value: size }))
+	}, [
+		datalist,
+		productSpecification,
+		currentBrand,
+		currentFactoryShoeStyle,
+		currentColor,
+		shouldFilterAllSizes,
+		shouldRequireFullInfo
+	])
 
 	if (name === 'sizes' && currentStrategy === 'manually' && !hash)
 		return (

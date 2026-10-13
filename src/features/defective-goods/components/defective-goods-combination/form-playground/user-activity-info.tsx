@@ -5,10 +5,11 @@ import { Avatar, AvatarImage } from '@components/ui/avatar'
 import { Icon } from '@components/ui/icon'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { format, formatRelative, isValid } from 'date-fns'
+import { Fragment } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useTranslation } from 'react-i18next'
 
-type UserActivityInfoProps = { createdBy: string; createdAt: Date | string; lastUpdatedAt: Date | string | null }
+type UserActivityInfoProps = Partial<{ createdBy: string; createdAt: Date | string; lastUpdatedAt: Date | string }>
 
 const UserActivityInfo: React.FC<UserActivityInfoProps> = ({ createdBy, createdAt, lastUpdatedAt }) => {
 	const { t } = useTranslation()
@@ -17,19 +18,24 @@ const UserActivityInfo: React.FC<UserActivityInfoProps> = ({ createdBy, createdA
 	return (
 		<ErrorBoundary fallbackRender={() => <Typography color='destructive'>Error</Typography>}>
 			<Div className='flex h-(--bar-height) items-center gap-x-2 border-b px-6 py-2'>
-				<Avatar className='size-9'>
-					<AvatarImage src={generateAvatar({ name: createdBy })} />
-				</Avatar>
-				<Div className='flex flex-col space-y-0.5'>
-					<Typography className='font-medium' variant='small'>
-						@{createdBy}
-					</Typography>
-					<Typography className='text-xs first-letter:uppercase' color='muted' variant='small'>
-						{format(new Date(createdAt), 'MMM dd, YYY - hh:mm:ss ', {
-							locale: dateLocale
-						})}
-					</Typography>
-				</Div>
+				{createdBy && createdAt && (
+					<Fragment>
+						<Avatar className='size-9'>
+							<AvatarImage src={generateAvatar({ name: createdBy })} />
+						</Avatar>
+						<Div className='flex flex-col space-y-0.5'>
+							<Typography className='font-medium' variant='small'>
+								@{createdBy}
+							</Typography>
+
+							<Typography className='text-xs first-letter:uppercase' color='muted' variant='small'>
+								{format(new Date(createdAt), 'MMM dd, YYY - hh:mm:ss ', {
+									locale: dateLocale
+								})}
+							</Typography>
+						</Div>
+					</Fragment>
+				)}
 
 				{lastUpdatedAt && isValid(lastUpdatedAt) && (
 					<Typography

@@ -4,12 +4,17 @@ import { useEventEmitter } from 'ahooks'
 import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'
 
+type EventPayload =
+	| { action: CommonActions.UPDATE; payload: IDefectiveGoods }
+	| { action: CommonActions.IMPORT; payload: string[] }
+	| { action: CommonActions.SAVE; payload: [] }
+
 const PageContext = createContext<{
-	event$: EventEmitter<{ action: CommonActions; payload: IDefectiveGoods | number | string | string[] }>
-}>(null)
+	event$: EventEmitter<EventPayload>
+}>(null!)
 
 export const PageContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const event$ = useEventEmitter<{ action: CommonActions; payload: IDefectiveGoods | string }>()
+	const event$ = useEventEmitter<EventPayload>()
 
 	return <PageContext.Provider value={{ event$ }}>{children}</PageContext.Provider>
 }

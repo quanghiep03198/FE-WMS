@@ -1,5 +1,6 @@
+'use no memo'
+
 import { CommonActions, UserRole } from '@common/constants/enums'
-import type { IBaseEntity } from '@common/types/entities'
 import { cn } from '@common/utils/cn'
 import { Div } from '@components/customs/div'
 import { EditorFieldControl } from '@components/forms/editor'
@@ -26,7 +27,6 @@ import type { CreateDefectiveGoodsFormValues } from '../../../schemas/defective-
 import { createDefectiveGoodsSchema, updateDefectiveGoodsSchema } from '../../../schemas/defective-goods.schema'
 
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
-import type { IDefectiveGoods } from '@features/defective-goods/types'
 import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
 import { MobileReaderPlaygroundTrigger } from '../../../../rfid-agent/components/playground/mobile-playground'
 import PurchaseOrderFieldControl from '../../../../rfid-agent/components/playground/purchase-order-field-control'
@@ -55,9 +55,9 @@ import UserActivityInfo from './user-activity-info'
 
 const DefectiveGoodsForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const { hash, search } = useLocation()
-	const navigate = useNavigate()
-	const [formAction, setFormAction, resetFormAction] = useResetState<CommonActions>(null)
+	const { hash, search } = useLocation({ structuralSharing: false })
+	const navigate = useNavigate({ from: '/defective-goods-epc-combination' })
+	const [formAction, setFormAction, resetFormAction] = useResetState<Nullish<CommonActions>>(null)
 	const [useAvailableTemplate, setUseAvailabelTemplate] = useLocalStorageState('useAvailableTemplate', {
 		defaultValue: true,
 		listenStorageChange: true
@@ -68,11 +68,9 @@ const DefectiveGoodsForm: React.FC = () => {
 		useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
 	)
 
-	const schemaRef = useRef(
-		formAction === CommonActions.UPDATE ? updateDefectiveGoodsSchema : createDefectiveGoodsSchema
-	)
+	const schemaRef = useRef<any>(createDefectiveGoodsSchema)
 
-	const form = useForm<CreateDefectiveGoodsFormValues & Partial<IBaseEntity>>({
+	const form = useForm({
 		resolver: zodResolver(schemaRef.current),
 		defaultValues: {
 			shoe_source: DefectiveGoodsSource.FINAL_INSPECTION,
@@ -84,7 +82,7 @@ const DefectiveGoodsForm: React.FC = () => {
 	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no' })
 	const currentCategory = useWatch({ control: form.control, name: 'defective_category' })
 
-	const { data: productSpecification, isLoading } = useGetProductSpecsQuery()
+	const { isLoading } = useGetProductSpecsQuery()
 	const { data: orderDetail } = useGetManufacturingOrderQuery(currentManufacturingOrder)
 
 	const {
@@ -101,15 +99,16 @@ const DefectiveGoodsForm: React.FC = () => {
 
 	const { event$ } = usePageContext()
 
-	event$.useSubscription((e: { action: CommonActions; payload: IDefectiveGoods }) => {
+	event$.useSubscription((e) => {
 		if (e.action === CommonActions.UPDATE) {
+			schemaRef.current = updateDefectiveGoodsSchema
 			setFormAction(CommonActions.UPDATE)
 			form.reset(e.payload)
 			setDefaultEditorContent(e.payload.defective_description)
 		}
 	})
 
-	event$.useSubscription((e: { action: CommonActions; payload: string[] }) => {
+	event$.useSubscription((e) => {
 		if (e.action === CommonActions.IMPORT) {
 			form.setValue('epc', e.payload)
 		}
@@ -117,14 +116,12 @@ const DefectiveGoodsForm: React.FC = () => {
 
 	useEffect(() => {
 		if (!orderDetail) return
-		const orderInfo = orderDetail?.orders?.at(0)
-		if (!orderInfo) return
 		form.reset({
 			...form.getValues(),
-			cust_shoes_style: orderInfo.cust_shoes_style,
-			factory_shoes_style: orderInfo.factory_shoes_style,
-			brand_name: orderInfo.brand_name,
-			color_sn: orderInfo.color_sn
+			cust_shoes_style: orderDetail.cust_shoes_style,
+			factory_shoes_style: orderDetail.factory_shoes_style,
+			brand_name: orderDetail.brand_name,
+			color_sn: orderDetail.color_sn
 		})
 	}, [orderDetail])
 
@@ -141,7 +138,6 @@ const DefectiveGoodsForm: React.FC = () => {
 	}, [formAction, currentCategory])
 
 	useEffect(() => {
-		schemaRef.current = formAction === CommonActions.UPDATE ? updateDefectiveGoodsSchema : createDefectiveGoodsSchema
 		if (formAction === CommonActions.CREATE) form.setValue('ri_type', currentStrategy)
 		if (formAction === CommonActions.UPDATE) setStrategy(null)
 	}, [formAction, currentStrategy])
@@ -202,7 +198,7 @@ const DefectiveGoodsForm: React.FC = () => {
 			delete data.size_code
 		}
 		const payload = {
-			...data,
+			...data.data,
 			po: isNil(data.po) || isEmpty(data.po) ? 'PRELOAD' : data.po,
 			defective_description: gzipSync(data.defective_description, { level: 6, chunkSize: 1024 }).toString('base64')
 		}
@@ -236,7 +232,7 @@ const DefectiveGoodsForm: React.FC = () => {
 
 	return (
 		<FormProvider {...form}>
-			<Form data-action={formAction === CommonActions.UPDATE} onSubmit={form.handleSubmit(handleSubmitForm)}>
+			<Form data-action={formAction} onSubmit={form.handleSubmit(handleSubmitForm)}>
 				{/* Form controls */}
 				<Div
 					className='bg-background col-span-full flex h-max max-h-full min-h-(--bar-height) items-center justify-between gap-x-6 px-2'
@@ -295,7 +291,11 @@ const DefectiveGoodsForm: React.FC = () => {
 												: 'animate-in fade-in-100 slide-in-from-left-2'
 										)
 									)}>
-									<Icon className={isPending && 'animate-spin'} name={isPending ? 'LoaderCircle' : 'Check'} />{' '}
+									<Icon
+										aria-busy={isPending}
+										className='aria-busy:animate-spin'
+										name={isPending ? 'LoaderCircle' : 'Check'}
+									/>{' '}
 									{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 								</Button>
 							</Div>
@@ -389,10 +389,13 @@ const DefectiveGoodsForm: React.FC = () => {
 							name={currentStrategy === 'manually' ? 'sizes' : 'size_code'}
 							datalist={
 								Array.isArray(orderDetail?.sizes)
-									? orderDetail.sizes.map((item) => {
-											const sizeCode = Number.parseFloat(item.size_numcode).toString()
-											return { label: sizeCode, value: sizeCode }
-										})
+									? orderDetail.sizes
+											.sort((s1, s2) =>
+												s1.size_numcode.localeCompare(s2.size_numcode, undefined, { numeric: true })
+											)
+											.map((s) => {
+												return { label: s.size_numcode, value: s.size_numcode }
+											})
 									: []
 							}
 						/>
