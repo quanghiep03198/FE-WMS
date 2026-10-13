@@ -1,4 +1,4 @@
-import { number, object, string, type infer as Infer } from 'zod'
+import { number, object, string, type Infer } from 'zod'
 
 // const currentYear = new Date().getFullYear() - 1911
 // const validYears = [currentYear - 1, currentYear, currentYear + 1].map((year) => year.toString().padStart(3, '0'))

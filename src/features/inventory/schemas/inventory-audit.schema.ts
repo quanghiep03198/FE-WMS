@@ -1,4 +1,4 @@
-import { array, number, object, string, type infer as Infer } from 'zod'
+import { array, number, object, string, type Infer } from 'zod'
 
 export const reportDataSchema = object({
 	data: array(

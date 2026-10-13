@@ -1,4 +1,4 @@
-import { email, object, string, type infer as Infer } from 'zod'
+import { email, object, string, type Infer } from 'zod'
 
 export const updateProfileFormValues = object({
 	display_name: string({ error: 'ns_validation:required' }).optional(),

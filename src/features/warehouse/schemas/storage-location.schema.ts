@@ -1,4 +1,4 @@
-import { array, object, string, type infer as Infer } from 'zod'
+import { array, object, string, type Infer } from 'zod'
 
 export const createStorageLocationSchema = object({
 	warehouse: string().trim().nonempty({ message: 'ns_validation:required' }),

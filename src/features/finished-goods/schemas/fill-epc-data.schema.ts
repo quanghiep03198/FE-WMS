@@ -1,4 +1,4 @@
-import { number, object, string, type infer as Infer } from 'zod'
+import { number, object, string, type Infer } from 'zod'
 
 export const updateEpcFormSchema = object({
 	color_sn: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),

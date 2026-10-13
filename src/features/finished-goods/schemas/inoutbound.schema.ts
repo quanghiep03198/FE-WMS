@@ -1,4 +1,4 @@
-import { enum as enums, object, string, type infer as Infer } from 'zod'
+import { enum as enums, object, string, type Infer } from 'zod'
 import { FinishedGoodsStockAction, StockTransactionPurpose } from '../constants/enums'
 
 export const outboundSchema = object({

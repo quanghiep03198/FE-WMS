@@ -1,4 +1,4 @@
-import { array, boolean, object, string, type infer as Infer } from 'zod'
+import { array, boolean, object, string, type Infer } from 'zod'
 
 /**
  * A valid EPC is a 24-character string.

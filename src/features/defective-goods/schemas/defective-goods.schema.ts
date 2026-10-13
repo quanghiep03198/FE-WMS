@@ -1,7 +1,6 @@
 import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '@features/defective-goods/constants/enums'
 import { isEmpty, isNil } from 'lodash-es'
-import type { FieldValues } from 'react-hook-form'
-import { array, enum as enums, number, object, string, type infer as Infer } from 'zod'
+import { array, enum as enums, number, object, string, type Infer } from 'zod'
 
 export const baseDefectiveGoodsSchema = object({
 	ri_type: enums(['uhf', 'usb', 'manually'], { message: 'ns_validation:required' }).nullish(),
@@ -121,10 +120,13 @@ export const updateDefectiveGoodsSchema = baseDefectiveGoodsSchema.partial().ref
 	return true
 })
 
-export type CreateDefectiveGoodsFormValues = Infer<typeof createDefectiveGoodsSchema> & FieldValues
-export type UpdateDefectiveGoodsFormValues = Infer<typeof updateDefectiveGoodsSchema> & FieldValues
+export type CreateDefectiveGoodsSchema = typeof createDefectiveGoodsSchema
+export type UpdateDefectiveGoodsSchema = typeof updateDefectiveGoodsSchema
 
-export type DefectiveGoodsCombinationFormValues = CreateDefectiveGoodsFormValues | UpdateDefectiveGoodsFormValues
+export type CreateDefectiveGoodsFormValues = Infer<CreateDefectiveGoodsSchema>
+export type UpdateDefectiveGoodsFormValues = Infer<UpdateDefectiveGoodsSchema>
+
+export type DefectiveGoodsCombinationFormValues = CreateDefectiveGoodsFormValues & UpdateDefectiveGoodsFormValues
 export type DefectiveGoodQueryParams = Partial<Omit<DefectiveGoodsCombinationFormValues, 'defective_description'>> & {
 	page: number
 	epc: string

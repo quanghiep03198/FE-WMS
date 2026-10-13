@@ -1,5 +1,5 @@
 import { FieldValues } from 'react-hook-form'
-import { array, object, string, type infer as Infer } from 'zod'
+import { array, object, string, type Infer } from 'zod'
 import { DefectiveGoodsOutboundPurpose } from '../constants/enums'
 
 export const defectiveGoodsInboundFormValues = object({

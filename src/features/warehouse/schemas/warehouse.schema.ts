@@ -1,4 +1,4 @@
-import { int, number, object, string, type infer as Infer } from 'zod'
+import { int, number, object, string, type Infer } from 'zod'
 
 export const createWarehouseFormSchema = object({
 	name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),

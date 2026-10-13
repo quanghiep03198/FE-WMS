@@ -1,4 +1,4 @@
-import { enum as enums, ipv4, object, string, type infer as Infer } from 'zod'
+import { enum as enums, ipv4, object, string, type Infer } from 'zod'
 import { RFIDDeviceType } from '../constants'
 
 export const createRFIDReaderSchema = object({

@@ -1,5 +1,5 @@
 import type { FieldValues } from 'react-hook-form'
-import { object, string, type infer as Infer } from 'zod'
+import { object, string, type Infer } from 'zod'
 
 export const updatePasswordFormValues = object({
 	currentPassword: string({ error: 'ns_validation:required' }).nonempty({ error: 'ns_validation:required' }),

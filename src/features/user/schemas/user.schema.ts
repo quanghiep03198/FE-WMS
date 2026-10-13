@@ -1,5 +1,5 @@
 import { UserRole } from '@common/constants/enums'
-import type { infer as Infer } from 'zod'
+import type { Infer } from 'zod'
 import { array, boolean, email, enum as enums, object, string } from 'zod'
 
 export const createUserSchema = object({

@@ -1,4 +1,4 @@
-import type { infer as Infer } from 'zod'
+import type { Infer } from 'zod'
 import { object, string } from 'zod'
 
 export const loginSchema = object({
