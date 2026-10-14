@@ -143,9 +143,9 @@ const BrandNameComboboxFieldControl: React.FC<ComboboxProps> = ({ data, isLoadin
 				labelField='label'
 				loading={isLoading}
 				name='brand_name'
+				placeholder={placeholder}
 				shouldFilter={false}
 				valueField='value'
-				placeholder={placeholder}
 				onInput={setSearchTerm}
 			/>
 		</Div>
