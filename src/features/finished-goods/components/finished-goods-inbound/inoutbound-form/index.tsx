@@ -22,7 +22,7 @@ import type { AxiosError } from 'axios'
 import { HttpStatusCode } from 'axios'
 import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { useForm } from 'react-hook-form'
+import { Resolver, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -43,7 +43,9 @@ const InoutboundForm: React.FC = () => {
 	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 
 	const form = useForm<FormValues>({
-		resolver: zodResolver(action === FinishedGoodsStockAction.IMPORT ? stockBalancesSchema : outboundSchema),
+		resolver: zodResolver(
+			action === FinishedGoodsStockAction.IMPORT ? stockBalancesSchema : outboundSchema
+		) as unknown as Resolver<FormValues>,
 		defaultValues: {
 			action: FinishedGoodsStockAction.IMPORT,
 			purpose: StockTransactionPurpose.NORMAL_IMPORT,
@@ -269,7 +271,7 @@ const InoutboundForm: React.FC = () => {
 										labelField='name'
 										name='storage_location'
 										shouldFilter={true}
-										valueField='_id'
+										valueField='name'
 									/>
 								</Div>
 							</Fragment>
