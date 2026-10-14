@@ -59,7 +59,7 @@ window.addEventListener('unhandledrejection', (event) => {
 })
 
 // App Rendering
-const container = document.getElementById('root')
+const container = document.getElementById('root')!
 
 createRoot(container, {
 	onRecoverableError: (error) => {
