@@ -269,7 +269,7 @@ const InoutboundForm: React.FC = () => {
 										labelField='name'
 										name='storage_location'
 										shouldFilter={true}
-										valueField='name'
+										valueField='_id'
 									/>
 								</Div>
 							</Fragment>
