@@ -5,7 +5,7 @@ import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persi
 import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
 import type { QueryKey } from '@tanstack/react-query'
 import { matchQuery, MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
-import type { AxiosResponse} from 'axios';
+import type { AxiosResponse } from 'axios'
 import { HttpStatusCode, isAxiosError, type AxiosError } from 'axios'
 import { compress, decompress } from 'lz-string'
 import { toast } from 'sonner'

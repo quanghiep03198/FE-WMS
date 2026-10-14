@@ -15,12 +15,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useQueryClient } from '@tanstack/react-query'
 import React, { useState } from 'react'
-import type { Resolver} from 'react-hook-form';
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useDeleteEpcMutation } from '../../../hooks/use-inbound-request'
-import type { DeleteScannedEpcsFormValues } from '../../../schemas/delete-epc.schema'
 import { deleteScannedEpcsSchema } from '../../../schemas/delete-epc.schema'
 
 type DeleteSizePopoverProps = {
@@ -33,8 +31,8 @@ type DeleteSizePopoverProps = {
 const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 	const { t } = useTranslation()
 	const [open, setOpen] = useState<boolean>(false)
-	const form = useForm<DeleteScannedEpcsFormValues>({
-		resolver: zodResolver(deleteScannedEpcsSchema) as Resolver<DeleteScannedEpcsFormValues>,
+	const form = useForm({
+		resolver: zodResolver(deleteScannedEpcsSchema),
 		mode: 'onSubmit',
 		reValidateMode: 'onChange'
 	})
@@ -51,7 +49,7 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 
 	const { mutateAsync: deleteAsync, isPending } = useDeleteEpcMutation()
 
-	const handleDeleteEpcs = async (data: DeleteScannedEpcsFormValues) => {
+	const handleDeleteEpcs = async (data) => {
 		await deleteAsync(data)
 		setOpen(false)
 		form.reset()

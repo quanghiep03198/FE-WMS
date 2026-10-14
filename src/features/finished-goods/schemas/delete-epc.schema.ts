@@ -9,7 +9,6 @@ export const deleteScannedEpcsSchema = object({
 	epcs: array(
 		string().refine((value) => value.length === VALID_EPC_LENGTH, { message: 'ns_validation:invalid_value' })
 	).nonempty({ message: 'ns_validation:required' }),
-
 	rescannable: boolean().optional().default(false)
 })
 
