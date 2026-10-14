@@ -22,7 +22,7 @@ import type { AxiosError } from 'axios'
 import { HttpStatusCode } from 'axios'
 import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import type { Resolver} from 'react-hook-form';
+import type { Resolver } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
