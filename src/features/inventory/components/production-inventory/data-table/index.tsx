@@ -23,7 +23,7 @@ import { DataTableBody } from './data-table-body'
 import DataTableGlobalFilter from './data-table-filter'
 import { DataTableHeader, MemoizedDataTableHeader } from './data-table-header'
 
-export type TableRowData = RowData & { inv_sizes: SizeQuantity }
+export type TableRowData = RowData & { size_ledger: SizeQuantity }
 
 type DataTableProps<T extends TableRowData> = {
 	data: Array<T>

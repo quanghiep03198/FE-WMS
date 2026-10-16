@@ -27,8 +27,6 @@ const DataSection: React.FC = () => {
 		return { data: sizes, total }
 	}, [data])
 
-	console.log(data)
-
 	if (isLoading)
 		return (
 			<Div className='flex h-48 items-center justify-center gap-x-2'>

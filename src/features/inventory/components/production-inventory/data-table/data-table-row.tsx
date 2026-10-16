@@ -53,10 +53,11 @@ const DataTableRow: React.FC<DataTableRowProps> = ({ row, size }) => {
 						<CollapsibleContent className='bg-accent/50 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down sticky left-0 w-[calc(100cqw-10px)] overflow-hidden transition-none'>
 							<Div className='p-3'>
 								<SizeTable
-									data={row.original.inv_sizes}
+									data={row.original.size_ledger}
 									total={
-										Array.isArray(row.original.inv_sizes) &&
-										row.original.inv_sizes.reduce((acc, curr) => acc + curr.qty, 0)
+										Array.isArray(row.original.size_ledger)
+											? row.original.size_ledger.reduce((acc, curr) => acc + curr.qty, 0)
+											: 0
 									}
 								/>
 							</Div>
