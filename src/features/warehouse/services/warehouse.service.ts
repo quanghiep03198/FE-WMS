@@ -8,7 +8,7 @@ export class WarehouseService {
 	}
 
 	static getSummary() {
-		return axiosInstance.get<void, ResponseBody<{ total_storage_capacity: number; total_number_of_storage: number }>>(
+		return axiosInstance.get<void, ResponseBody<{ total_capacity: number; total_storage_locations: number }>>(
 			`/warehouse/summary`
 		)
 	}

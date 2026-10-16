@@ -107,12 +107,12 @@ const StorageList: React.FC = () => {
 					return (
 						<Item className='p-0' size='sm'>
 							<ItemMedia>
-								<Avatar className='size-8'>
+								<Avatar className='size-7'>
 									<AvatarImage src={generateAvatar({ name: user.display_name })} />
 									<AvatarFallback>{user.display_name.charAt(0).toUpperCase()}</AvatarFallback>
 								</Avatar>
 							</ItemMedia>
-							<ItemContent className='gap-0'>
+							<ItemContent className='gap-0!'>
 								<ItemTitle>{user.display_name}</ItemTitle>
 								<ItemDescription className='before:content-["@"]'>{user.username}</ItemDescription>
 							</ItemContent>
@@ -207,15 +207,14 @@ const StorageList: React.FC = () => {
 		<Fragment>
 			<DataTable
 				columns={columns}
+				containerProps={{ style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' } }}
 				data={data?.storage_locations}
 				enableColumnFilters={true}
 				enableColumnResizing={true}
 				enableRowSelection={true}
 				loading={isLoading}
 				ref={tableRef}
-				containerProps={{
-					style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
-				}}
+				virtualizerOptions={{ estimateSize: 50 }}
 				toolbarProps={{
 					slotRight: ({ table }) => (
 						<Fragment>
