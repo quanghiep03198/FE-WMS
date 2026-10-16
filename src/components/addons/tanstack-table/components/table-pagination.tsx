@@ -1,18 +1,18 @@
+import AutoComplete from '@components/customs/auto-complete'
+import { Div } from '@components/customs/div'
+import Pagination from '@components/customs/pagination'
+import { Tooltip } from '@components/customs/tooltip'
+import { Typography } from '@components/customs/typography'
+import { Button } from '@components/ui/button'
+import { ButtonGroup } from '@components/ui/button-group'
+import { Icon } from '@components/ui/icon'
+import { Label } from '@components/ui/label'
+import { Separator } from '@components/ui/separator'
 import type { PaginationState, Table } from '@tanstack/react-table'
 import type { AxiosRequestConfig } from 'axios'
 import React, { memo, useEffect, useRef } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
-import AutoComplete from '../../../customs/auto-complete'
-import { Div } from '../../../customs/div'
-import Pagination from '../../../customs/pagination'
-import { Tooltip } from '../../../customs/tooltip'
-import { Typography } from '../../../customs/typography'
-import { Button } from '../../../ui/button'
-import { ButtonGroup } from '../../../ui/button-group'
-import { Icon } from '../../../ui/icon'
-import { Label } from '../../../ui/label'
-import { Separator } from '../../../ui/separator'
 import { type PaginationBaseProps } from '../types'
 
 export type DataTablePaginationProps = {
@@ -38,7 +38,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 	'use no memo'
 
 	const { t } = useTranslation()
-	const { firstPage, lastPage, nextPage, previousPage, setPageSize } = table
+	const { firstPage, lastPage, nextPage, previousPage, setPageSize, setPageIndex } = table
 
 	const canNextPage = manualPagination ? controlledPaginationProps?.hasNextPage : table.getCanNextPage()
 	const canPreviousPage = manualPagination ? controlledPaginationProps?.hasPrevPage : table.getCanPreviousPage()
@@ -137,7 +137,11 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 				prevPage={canPreviousPage ? pageIndex - 1 : null}
 				totalDocs={rowCount}
 				totalPages={pageCount}
-				onPageChange={(page) => onPaginationChange?.({ pageIndex: page, pageSize })}
+				onPageChange={(page) => {
+					if (manualPagination && typeof onPaginationChange === 'function')
+						onPaginationChange?.({ pageIndex: page, pageSize })
+					else setPageIndex(page - 1)
+				}}
 			/>
 		)
 	return (
