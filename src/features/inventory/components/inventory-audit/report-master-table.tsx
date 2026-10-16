@@ -158,7 +158,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
 					const value = getValue()
-					if (!value)
+					if (!Array.isArray(value))
 						return (
 							<Typography color='muted' variant='small'>
 								{t('ns_common:titles.unknown')}
@@ -249,25 +249,21 @@ export const InventoryReportMasterTable: React.FC = () => {
 				data={data ?? []}
 				enableColumnResizing={true}
 				enableExpanding={true}
-				enableRowSelection={true}
 				expanded={expanded}
 				footerProps={{ slot: () => <DataTableSummary data={data ?? []} isLoading={isLoading} /> }}
 				getRowCanExpand={() => true}
 				getRowId={(originalRow: IMonthlyInventoryAudit) => originalRow.mo_no}
+				initialState={{ pagination: { pageIndex: 0, pageSize: 15 } }}
 				loading={isLoading}
 				manualExpanding={true}
+				paginationProps={{ variant: 'numbered' }}
 				ref={dataTableRef as React.RefObject<Table<IMonthlyInventoryAudit>>}
 				renderSubComponent={renderSubComponents}
+				virtualizerOptions={{ enabled: false }}
 				containerProps={{
 					style: {
 						height:
 							'calc(var(--outlet-wrapper-height) -  2 * var(--row-height) - 2 * var(--outlet-padding) - 9.5rem)'
-					}
-				}}
-				initialState={{
-					pagination: {
-						pageIndex: 0,
-						pageSize: 50
 					}
 				}}
 				toolbarProps={{

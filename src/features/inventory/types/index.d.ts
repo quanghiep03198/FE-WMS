@@ -3,11 +3,8 @@ export declare type BaseUpdateUpdateQuery = Pick<IMonthlyInventoryAudit, 'mo_no'
 }
 export interface IMonthlyInventoryAudit {
 	brand_name: string
-	actual_po: string
-	po: string
 	mo_no: string
 	order_qty: number
-	or_no: string
 	color_sn: string
 	factory_shoes_style: string | null
 	storage_locations: Array<string>

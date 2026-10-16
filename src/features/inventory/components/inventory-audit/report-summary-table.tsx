@@ -63,10 +63,10 @@ const DataTableSummary: React.FC<{ data: IMonthlyInventoryAudit[]; isLoading: bo
 						{isLoading ? <Skeleton /> : formatIntlNumber(finalInventoryQuantity)}
 					</TableCell>
 					<TableCell align='right'>
-						{isLoading ? <Skeleton /> : formatIntlNumber(storageSummary?.total_number_of_storage ?? 0)}
+						{isLoading ? <Skeleton /> : formatIntlNumber(storageSummary?.total_storage_locations ?? 0)}
 					</TableCell>
 					<TableCell align='right'>
-						{isLoading ? <Skeleton /> : formatIntlNumber(storageSummary?.total_storage_capacity ?? 0)}
+						{isLoading ? <Skeleton /> : formatIntlNumber(storageSummary?.total_capacity ?? 0)}
 					</TableCell>
 				</TableRow>
 			</TableBody>
