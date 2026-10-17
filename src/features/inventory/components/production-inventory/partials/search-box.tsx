@@ -116,6 +116,8 @@ const SearchBox: React.FC = () => {
 }
 
 const BrandNameComboboxFieldControl: React.FC<ComboboxProps> = ({ data, isLoading }) => {
+	'use no memo'
+
 	const { t } = useTranslation()
 
 	const [searchTerm, setSearchTerm] = useState<string>('')
@@ -153,6 +155,8 @@ const BrandNameComboboxFieldControl: React.FC<ComboboxProps> = ({ data, isLoadin
 }
 
 const ShoesStyleCombobox: React.FC<ComboboxProps> = ({ data, isLoading }) => {
+	'use no memo'
+
 	const { t } = useTranslation()
 
 	const [searchTerm, setSearchTerm] = useState<string>('')
@@ -190,6 +194,8 @@ const ShoesStyleCombobox: React.FC<ComboboxProps> = ({ data, isLoading }) => {
 }
 
 const ColorCombobox: React.FC<ComboboxProps> = ({ data, isLoading }) => {
+	'use no memo'
+
 	const { t } = useTranslation()
 
 	const [searchTerm, setSearchTerm] = useState<string>('')
