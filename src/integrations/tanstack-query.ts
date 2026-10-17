@@ -6,7 +6,7 @@ import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimen
 import type { QueryKey } from '@tanstack/react-query'
 import { matchQuery, MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
 import type { AxiosResponse } from 'axios'
-import { HttpStatusCode, isAxiosError, type AxiosError } from 'axios'
+import { AxiosError, HttpStatusCode, isAxiosError } from 'axios'
 import { compress, decompress } from 'lz-string'
 import { toast } from 'sonner'
 
@@ -39,9 +39,8 @@ export const queryClient = new QueryClient({
 	},
 	queryCache: new QueryCache({
 		onError: (error) => {
-			if (isAxiosError(error) && error.response?.status !== HttpStatusCode.InternalServerError) {
-				const response = error.response as AxiosResponse<ResponseBody<any>>
-				toast.error(response.data.message)
+			if (isAxiosError(error) && (error.code === AxiosError.ETIMEDOUT || error.code === AxiosError.ECONNABORTED)) {
+				toast.error(i18n.t('ns_common:errors.request_timeout'))
 			}
 		}
 	}),

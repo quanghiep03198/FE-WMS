@@ -1,11 +1,11 @@
 import type { FactoryCode } from '@common/constants/enums'
 import { Languages, RequestHeaders } from '@common/constants/enums'
-import { RequestTimeoutError, UnauthorizedError } from '@common/errors'
+import { UnauthorizedError } from '@common/errors'
 import env from '@common/utils/env'
 import { Json } from '@common/utils/json'
 import { AuthService } from '@features/auth/services/auth.service'
 import { i18n } from '@i18n/index'
-import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
+import axios, { HttpStatusCode, type AxiosError, type AxiosInstance } from 'axios'
 import qs from 'qs'
 import { toast } from 'sonner'
 import { AppConfigs } from './app.config'
@@ -19,18 +19,6 @@ export class AxiosClient {
 	public instance: AxiosInstance
 	private isRefreshingToken = false
 	private unauthorizedRequestHandlers: Array<PromiseExecutor<string | null>> = []
-
-	/**
-	 * @description List of error codes that should be notified to the user
-	 */
-	private readonly NOTIFIABLE_ERROR_CODES = [
-		HttpStatusCode.BadRequest,
-		HttpStatusCode.Forbidden,
-		HttpStatusCode.NotFound,
-		HttpStatusCode.PayloadTooLarge,
-		HttpStatusCode.Conflict,
-		HttpStatusCode.TooManyRequests
-	]
 
 	constructor(baseURL: string, version: string = '1.0') {
 		// * Instance configuration
@@ -66,11 +54,6 @@ export class AxiosClient {
 		this.instance.interceptors.response.use(
 			(response) => response.data,
 			async (error: AxiosError<ResponseBody<unknown>>) => {
-				if (error.code === AxiosError.ETIMEDOUT || error.code === AxiosError.ECONNABORTED) {
-					toast.error(i18n.t('ns_common:errors.request_timeout'))
-					return Promise.reject(new RequestTimeoutError())
-				}
-
 				const originalRequest = error.config
 				const errorStatus = error.response?.status
 
