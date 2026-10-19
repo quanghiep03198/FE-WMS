@@ -45,6 +45,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 	const columnHelper = createColumnHelper<IMonthlyInventoryAudit>()
 	const [expanded, setExpanded, resetExpanded] = useResetState<ExpandedState>({})
 
+	const isPlaceholder = data?.isPlaceholder ?? false
+	const inventoryData = Array.isArray(data?.values) ? data.values : []
+
 	useEffect(() => {
 		if (dataTableRef.current) dataTableRef.current.toggleAllRowsExpanded(false)
 	}, [data])
@@ -246,11 +249,11 @@ export const InventoryReportMasterTable: React.FC = () => {
 		<Div className='relative space-y-10'>
 			<DataTable
 				columns={columns}
-				data={data ?? []}
+				data={inventoryData}
 				enableColumnResizing={true}
 				enableExpanding={true}
 				expanded={expanded}
-				footerProps={{ slot: () => <DataTableSummary data={data ?? []} isLoading={isLoading} /> }}
+				footerProps={{ slot: () => <DataTableSummary data={inventoryData} isLoading={isLoading} /> }}
 				getRowCanExpand={() => true}
 				getRowId={(originalRow: IMonthlyInventoryAudit) => originalRow.mo_no}
 				initialState={{ pagination: { pageIndex: 0, pageSize: 15 } }}
@@ -269,6 +272,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				toolbarProps={{
 					slotLeft: () => (
 						<CheckoutInventoryAuditConfirmDialog
+							isPlaceholder={isPlaceholder}
 							isClosed={
 								Array.isArray(data) && data.every((item) => item.inventory_closure_status === 'completed')
 							}

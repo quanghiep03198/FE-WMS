@@ -9,9 +9,12 @@ import type {
 
 export class InventoryService {
 	static async getInventoryAuditReport(params: { 'month:eq': string }) {
-		return await axiosInstance.get<void, ResponseBody<IMonthlyInventoryAudit[]>>('/inventory/audit', {
-			params: params
-		})
+		return await axiosInstance.get<void, ResponseBody<{ values: IMonthlyInventoryAudit[]; isPlaceholder: boolean }>>(
+			'/inventory/audit',
+			{
+				params: params
+			}
+		)
 	}
 
 	static async downloadInventoryAuditReport(filter: { 'month:eq': string; 'mo_no:in': string }) {

@@ -18,18 +18,23 @@ import { MorphIcon } from 'morphicons/react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-const CheckoutInventoryAuditConfirmDialog: React.FC<{ isClosed: boolean }> = ({ isClosed }) => {
+const CheckoutInventoryAuditConfirmDialog: React.FC<{ isClosed: boolean; isPlaceholder: boolean }> = ({
+	isClosed,
+	isPlaceholder
+}) => {
 	const { t } = useTranslation()
 	const { isPending, mutateAsync } = useCheckoutInventoryAuditMutation()
 
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger asChild>
-				<Button disabled={isPending || isClosed}>
+				<Button disabled={isPending || isClosed || isPlaceholder}>
 					<MorphIcon icon={!isClosed ? LockOpen : Lock} size={16} spring='smooth' />
-					{isClosed
-						? t('ns_common:status.confirmed')
-						: t('inoutbound_actions.close_monthly_inventory', 'Close inventory')}
+					{isPlaceholder
+						? t('inoutbound_actions.close_monthly_inventory', 'Close inventory')
+						: isClosed
+							? t('ns_common:status.confirmed')
+							: t('inoutbound_actions.close_monthly_inventory', 'Close inventory')}
 				</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent>
