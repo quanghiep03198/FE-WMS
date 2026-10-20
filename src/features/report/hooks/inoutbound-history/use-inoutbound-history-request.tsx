@@ -20,6 +20,7 @@ export const useGetInboundHistoryQuery = () => {
 				headers: { [RequestHeaders.API_VERSION]: '2' }
 			}),
 		enabled: searchParams.type === StockFlow.INBOUND,
+		refetchOnMount: true,
 		select: (response) => response.metadata
 	})
 }
