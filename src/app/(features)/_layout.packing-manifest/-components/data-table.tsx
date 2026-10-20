@@ -82,7 +82,7 @@ const ReportMasterTable: React.FC = () => {
 				meta: { align: 'left', filterVariant: 'select' },
 				cell: TableCellText
 			}),
-			columnHelper.accessor('shoes_style', {
+			columnHelper.accessor('factory_shoes_style', {
 				header: t('ns_erp:fields.factory_shoes_style'),
 				enableSorting: true,
 				enableMultiSort: true,
@@ -93,7 +93,7 @@ const ReportMasterTable: React.FC = () => {
 				meta: { align: 'left', filterVariant: 'select' },
 				cell: TableCellText
 			}),
-			columnHelper.accessor('color', {
+			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
 				enableSorting: true,
 				enableMultiSort: true,

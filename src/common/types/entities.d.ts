@@ -197,10 +197,8 @@ export interface IPackingReport {
 	unweighed_box_qty: number
 }
 
-export interface IPackingManifest extends Omit<IPackingReport, 'color_sn' | 'factory_shoes_style'> {
-	shoes_style: string
+export interface IPackingManifest extends IPackingReport {
 	original_size_data: string
-	color: string
 	standard_weight: number
 	actual_avg_weight: number | null
 	factory_code_produce: string
