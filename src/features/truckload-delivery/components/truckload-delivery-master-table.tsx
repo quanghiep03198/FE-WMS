@@ -98,6 +98,22 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				maxSize: 250,
 				cell: TableCellText
 			}),
+			columnHelper.accessor('seal_number', {
+				id: 'seal_number',
+				header: t('ns_erp:fields.seal_number'),
+				meta: { hidden: isMobile },
+				enableResizing: true,
+				enableSorting: true,
+				enableMultiSort: false,
+				enableGlobalFilter: true,
+				enablePinning: true,
+				sortDescFirst: true,
+				filterFn: 'fuzzy',
+				minSize: 150,
+				size: 150,
+				maxSize: 250,
+				cell: TableCellText
+			}),
 			columnHelper.accessor('total_outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
 				enableSorting: true,
@@ -149,6 +165,25 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				size: 200,
 				maxSize: 250,
 				cell: DateTimeCell
+			}),
+			columnHelper.accessor('factory_entrance_time', {
+				header: t('ns_erp:fields.factory_entrance_time'),
+				enableResizing: true,
+				enableSorting: true,
+				enableMultiSort: false,
+				enablePinning: true,
+				enableColumnFilter: false,
+				enableGlobalFilter: false,
+				minSize: 150,
+				size: 200,
+				maxSize: 250,
+				cell: (props) => (
+					<DateTimeCell
+						{...props}
+						aria-invalid={props.row.original.possible_signing_late}
+						className='aria-invalid:text-destructive!'
+					/>
+				)
 			}),
 			columnHelper.accessor('container_sealing_time', {
 				header: t('ns_erp:fields.container_sealing_time'),
