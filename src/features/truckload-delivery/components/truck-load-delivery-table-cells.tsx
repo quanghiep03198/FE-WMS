@@ -145,7 +145,7 @@ export const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>
 }
 
 export const DateTimeCell: React.FC<
-	CellContext<ITruckloadDelivery, Date | null> & { fallbackValue?: Date } & TypographyProps
+	CellContext<ITruckloadDelivery, Nullish<Date>> & { fallbackValue?: Date } & TypographyProps
 > = ({ getValue, fallbackValue, className, ...props }) => {
 	const { t } = useTranslation()
 	const value = getValue() ?? fallbackValue

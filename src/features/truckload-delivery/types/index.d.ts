@@ -7,26 +7,26 @@ export type TruckloadDeliveryDispatchOrder = `GL${number}-EXP-${string}-${string
 export interface ITruckloadDelivery {
 	dispatch_order: TruckloadDeliveryDispatchOrder
 	factory_code: string
-	container_number: string | null
-	license_plate: string | null
-	seal_number: string | null
+	container_number: Nullish<string>
+	license_plate: Nullish<string>
+	seal_number: Nullish<string>
 	outbound_qty: number
-	factory_entrance_time?: Date | null
+	factory_entrance_time: Nullish<Date>
 	approval_status: TruckloadDeliveryStatus
-	ie_signature?: string | null
-	warehouse_officer_signature?: string | null
-	security_1_signature?: string | null
-	security_2_signature?: string | null
+	ie_signature?: Nullish<string>
+	warehouse_officer_signature?: Nullish<string>
+	security_1_signature?: Nullish<string>
+	security_2_signature?: Nullish<string>
 	punctured_container: boolean
 	smelling_container: boolean
 	moist_container: boolean
 	total_outbound_qty: number
-	container_sealing_time: Date | null
-	factory_departure_time?: Date | null
-	actual_snap_time?: Date | null
-	actual_departure_time?: Date | null
-	license_plate_image?: string | null
-	possible_signing_late?: boolean
+	container_sealing_time: Nullish<Date>
+	factory_departure_time: Nullish<Date>
+	actual_snap_time: Nullish<Date>
+	actual_departure_time: Nullish<Date>
+	license_plate_image: Nullish<string>
+	possible_signing_late: boolean
 	packing: Array<ITruckloadDeliveryPacking>
 	created_at: Date
 	updated_at?: Date | null
@@ -36,9 +36,9 @@ export interface ITruckloadDelivery {
 
 export interface ITruckloadDeliveryPacking extends Omit<IBaseEntity, 'id'> {
 	po: string
-	brand_name: string | null
-	factory_shoes_style: string | null
-	color_sn: string | null
+	brand_name: Nullish<string>
+	factory_shoes_style: Nullish<string>
+	color_sn: Nullish<string>
 	order_qty: number
 	outbound_qty: number
 	dispatched_outbound_qty: number

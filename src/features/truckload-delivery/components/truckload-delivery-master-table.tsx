@@ -236,12 +236,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				maxSize: 250,
 				cell: (props) => (
 					<DateTimeCell
-						{...{
-							...(props as unknown as CellContext<ITruckloadDelivery, Date | null>),
-							fallbackValue: props.row.original.actual_snap_time ?? undefined,
-							['aria-invalid']: props.row.original.possible_signing_late,
-							className: 'aria-invalid:text-destructive!'
-						}}
+						{...props}
+						aria-invalid={props.row.original.possible_signing_late}
+						className='aria-invalid:text-destructive!'
 					/>
 				)
 			}),

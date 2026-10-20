@@ -4,8 +4,8 @@ import { Icon } from '@components/ui/icon'
 import { url } from 'zod'
 
 const LicensePlateHoverCard: React.FC<{
-	licensePlate: string | null
-	licensePlateImage: string | null | undefined
+	licensePlate: Nullish<string>
+	licensePlateImage: Nullish<string>
 }> = ({ licensePlate, licensePlateImage }) => {
 	const disabled = !url().safeParse(licensePlateImage).success
 
