@@ -3,6 +3,7 @@ import { Typography } from '@components/customs/typography'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@components/ui/hover-card'
 import { Icon, type IconProps } from '@components/ui/icon'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table'
+import { Link } from '@tanstack/react-router'
 import { format } from 'date-fns'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -76,16 +77,21 @@ const StockTransactionRow: React.FC<StockTransactionRowProps<StockFlow>> = ({ da
 	return (
 		<TableRow
 			aria-disabled={data.voided || !data.reversible}
-			className='group/row transition-all duration-200 ease-in-out group-aria-busy/body:opacity-50 [&[aria-disabled=true]_*:not(button)]:line-through [&[aria-disabled=true]>td:not(:has(button))]:opacity-50'
+			className='group/row transition-all duration-200 ease-in-out group-aria-busy/body:opacity-50 [&[aria-disabled=true]>td:not(:has(button))]:opacity-50'
 			style={{ height: size }}>
-			<TableCell align='left' className='before:text-muted-foreground uppercase before:mr-1 before:content-["#"]'>
+			<TableCell
+				align='left'
+				className='group-aria-disabled/row:line-through before:text-muted-foreground uppercase before:mr-1 before:content-["#"]'>
 				{data.id}
 			</TableCell>
 			<TableCell align='left'>
-				<Typography className='inline-flex items-center gap-2' variant='small'>
+				<Link
+					className='inline-flex items-center gap-2 hover:underline underline-offset-2'
+					search={{ type: stockFlow, order: stockFlow === StockFlow.OUTBOUND ? data.po : data.mo_no }}
+					to='/inoutbound-history'>
 					<Icon name={BADGE_PROPS.get(data.tx_type)!.icon} stroke={BADGE_PROPS.get(data.tx_type)!.color} />
 					{stockFlow === StockFlow.OUTBOUND ? data.po : data.mo_no}
-				</Typography>
+				</Link>
 			</TableCell>
 			<TableCell align='left'>{formatIntlNumber(data.qty * directionCoefficient)} </TableCell>
 			<TableCell align='left'>
