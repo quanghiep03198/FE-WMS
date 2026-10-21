@@ -15,7 +15,9 @@ export const createRFIDReaderSchema = object({
 		.regex(/^\d+$/, { message: 'ns_validation:invalid_value' }),
 	device_type: enums(RFIDDeviceType, { message: 'ns_validation:required' })
 })
-export const updateRFIDReaderSchema = createRFIDReaderSchema.partial()
+export const updateRFIDReaderSchema = createRFIDReaderSchema.partial().extend({ _id: string().nonempty() })
 
 export type CreateRFIDReaderFormValues = Infer<typeof createRFIDReaderSchema>
 export type UpdateRFIDReaderFormValues = Infer<typeof updateRFIDReaderSchema>
+
+export type RFIDReaderFormValues = CreateRFIDReaderFormValues & UpdateRFIDReaderFormValues

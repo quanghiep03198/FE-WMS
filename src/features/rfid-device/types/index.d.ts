@@ -1,6 +1,7 @@
 import type { RecordStatus } from '@common/constants/enums'
+import { IBaseEntity } from '@common/types/entities'
 
-export interface IRFIDReaderDevice {
+export interface IRFIDReaderDevice extends IBaseEntity {
 	device_name: Partial<{ vi: string; en: string; cn: string }>
 	station_no: string
 	device_ant: string

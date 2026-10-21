@@ -2,7 +2,7 @@ import axiosInstance from '@configs/axios.config'
 import type { IDepartment } from '../types'
 
 export class DepartmentService {
-	static async getShapingDepartments() {
+	static async getAssemblyLines() {
 		return await axiosInstance.get<void, ResponseBody<IDepartment[]>>('/department/assembly')
 	}
 

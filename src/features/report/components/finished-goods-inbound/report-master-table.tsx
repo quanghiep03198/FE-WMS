@@ -119,14 +119,14 @@ const InboundReportMasterTable: React.FC = () => {
 				cell: TableCellText
 			}),
 			columnHelper.accessor('assembly_lines', {
-				header: t('ns_erp:fields.shaping_dept_name'),
+				header: t('ns_erp:fields.assembly_dept_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				filterFn: 'includesString',
 				cell: ({ getValue }) => {
 					return (
 						<EllipsisList
-							data={getValue().map((name) => t('ns_company:assembly_line', { name, defaultValue: name }))}
+							data={getValue().map((name) => name[i18n.language])}
 							threshhold={3}
 							template={({ data }) => (
 								<Badge className='max-h-fit font-normal whitespace-nowrap' variant='outline'>

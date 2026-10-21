@@ -46,8 +46,9 @@ const ActionDropdown: React.FC<
 						onClick={() =>
 							event$.emit({
 								action: CommonActions.UPDATE,
-								defaultValues: {
+								payload: {
 									...pick(row.original, [
+										'_id',
 										'device_sn',
 										'device_name',
 										'device_type',
@@ -56,7 +57,7 @@ const ActionDropdown: React.FC<
 										'tcp_port'
 									])
 									// device_ant: row.original.device_ant === '0' || isNil(row.original.device_ant) ? '0' : '1'
-								}
+								} as never
 							})
 						}>
 						{t('ns_common:actions.update')}

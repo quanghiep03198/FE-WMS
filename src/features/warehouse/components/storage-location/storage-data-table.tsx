@@ -1,6 +1,5 @@
 // #region Modules
 import { CommonActions } from '@common/constants/enums'
-import generateAvatar from '@common/utils/generate-avatar'
 import { default as DataTable } from '@components/addons/tanstack-table'
 import {
 	IndeterminateCheckbox,
@@ -10,10 +9,9 @@ import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@components/addo
 import { fuzzySort } from '@components/addons/tanstack-table/utils/fuzzy-sort.util'
 import ConfirmDialog from '@components/customs/confirm-dialog'
 import { Tooltip } from '@components/customs/tooltip'
-import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
+import UserHoverCard from '@components/shared/user-hover-card'
 import { Button } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
-import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@components/ui/item'
 import { useStorageLocationPageContext } from '@features/warehouse/contexts/storage-location-page-context'
 import { useGetOneWarehouseQuery } from '@features/warehouse/hooks/use-warehouse-request'
 import type { IStorageLocation } from '@features/warehouse/types'
@@ -104,20 +102,7 @@ const StorageList: React.FC = () => {
 				sortingFn: fuzzySort,
 				cell: ({ getValue }) => {
 					const user = getValue()
-					return (
-						<Item className='p-0' size='sm'>
-							<ItemMedia>
-								<Avatar className='size-7'>
-									<AvatarImage src={generateAvatar({ name: user.display_name })} />
-									<AvatarFallback>{user.display_name.charAt(0).toUpperCase()}</AvatarFallback>
-								</Avatar>
-							</ItemMedia>
-							<ItemContent className='gap-0!'>
-								<ItemTitle>{user.display_name}</ItemTitle>
-								<ItemDescription className='before:content-["@"]'>{user.username}</ItemDescription>
-							</ItemContent>
-						</Item>
-					)
+					return <UserHoverCard user={user} />
 				}
 			}),
 			columnHelper.accessor('created_at', {
@@ -144,21 +129,8 @@ const StorageList: React.FC = () => {
 				sortingFn: fuzzySort,
 				cell: ({ getValue }) => {
 					const user = getValue()
-					if (!user) return
-					return (
-						<Item className='p-0' size='sm'>
-							<ItemMedia>
-								<Avatar className='size-8'>
-									<AvatarImage src={generateAvatar({ name: user.display_name })} />
-									<AvatarFallback>{user.display_name.charAt(0).toUpperCase()}</AvatarFallback>
-								</Avatar>
-							</ItemMedia>
-							<ItemContent className='gap-0'>
-								<ItemTitle>{user.display_name}</ItemTitle>
-								<ItemDescription className='before:content-["@"]'>{user.username}</ItemDescription>
-							</ItemContent>
-						</Item>
-					)
+					if (!user) return <span className='text-muted-foreground'>-</span>
+					return <UserHoverCard user={user} />
 				}
 			}),
 			columnHelper.accessor('updated_at', {
@@ -178,8 +150,8 @@ const StorageList: React.FC = () => {
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
 				header: t('ns_common:common_fields.actions'),
-				size: 100,
-				maxSize: 100,
+				size: 60,
+				maxSize: 60,
 				cell: ({ row }) => {
 					return (
 						<StorageRowActions
@@ -206,6 +178,7 @@ const StorageList: React.FC = () => {
 	return (
 		<Fragment>
 			<DataTable
+				border='bottom-only'
 				columns={columns}
 				containerProps={{ style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' } }}
 				data={data?.storage_locations}
@@ -214,7 +187,6 @@ const StorageList: React.FC = () => {
 				enableRowSelection={true}
 				loading={isLoading}
 				ref={tableRef}
-				virtualizerOptions={{ estimateSize: 50 }}
 				toolbarProps={{
 					slotRight: ({ table }) => (
 						<Fragment>

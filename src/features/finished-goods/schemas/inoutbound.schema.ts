@@ -11,10 +11,7 @@ export const stockBalancesSchema = outboundSchema.extend({
 	storage_location: string({ message: 'ns_validation:required' })
 		.trim()
 		.nonempty({ message: 'ns_validation:required' }),
-	assembly_line: object({
-		name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
-		code: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })
-	})
+	assembly_line: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })
 	// dept_code: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	// dept_name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })
 })

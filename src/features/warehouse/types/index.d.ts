@@ -4,8 +4,8 @@ export interface IWarehouse extends IBaseEntity {
 	name: string
 	capacity: number
 	total_locations_storage: number
-	created_by: { _id: string; username: string; display_name: string }
-	updated_by: { _id: string; username: string; display_name: string } | null
+	created_by: Partial<IUser>
+	updated_by: Nullish<Partial<IUser>>
 	storage_locations?: IStorageLocation[]
 }
 

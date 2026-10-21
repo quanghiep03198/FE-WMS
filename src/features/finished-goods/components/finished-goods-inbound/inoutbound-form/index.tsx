@@ -11,7 +11,7 @@ import type { IconProps } from '@components/ui/icon'
 import { Icon } from '@components/ui/icon'
 import { Input } from '@components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
-import { useGetShapingProductLineQuery } from '@features/department/hooks/use-department-request'
+import { useGetAssemblyLineQuery } from '@features/department/hooks/use-department-request'
 import { FinishedGoodsStockAction, StockTransactionPurpose } from '@features/finished-goods/constants/enums'
 import { useGetWarehouseQuery } from '@features/warehouse/hooks/use-warehouse-request'
 import { useGetStorageLocationByWarehouseQuery } from '@features/warehouse/hooks/use-warehouse-storage-request'
@@ -20,7 +20,7 @@ import useMediaQuery from '@hooks/use-media-query'
 import { useMemoizedFn } from 'ahooks'
 import type { AxiosError } from 'axios'
 import { HttpStatusCode } from 'axios'
-import React, { Fragment, useEffect, useMemo, useState } from 'react'
+import React, { Activity, Fragment, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { Resolver } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
@@ -52,27 +52,24 @@ const InoutboundForm: React.FC = () => {
 			purpose: StockTransactionPurpose.NORMAL_IMPORT,
 			warehouse: '',
 			storage_location: '',
-			assembly_line: { code: '', name: '' }
+			assembly_line: ''
 		},
 		mode: 'onChange'
 	})
 
-	const warehouseName = form.watch('warehouse')
+	const warehouse = form.watch('warehouse')
 
 	const { data: warehouseOptions, isLoading } = useGetWarehouseQuery()
 
-	const { data: assemblyLines } = useGetShapingProductLineQuery()
+	const { data: assemblyLines } = useGetAssemblyLineQuery()
 	const { data: currentEpcData } = useGetScanningInboundEpcQuery()
-	const { data: storageLocations } = useGetStorageLocationByWarehouseQuery(warehouseName)
+	const { data: storageLocations } = useGetStorageLocationByWarehouseQuery(warehouse)
 
 	const translatedAssemblyLines = useMemo(() => {
 		if (!Array.isArray(assemblyLines)) return []
 		return assemblyLines.map((item) => ({
-			code: item.code,
-			name: t('ns_company:assembly_line', {
-				name: item.name.replace(/[^A-Za-z0-9]/g, ''),
-				defaultValue: item.name
-			})
+			_id: item._id,
+			name: item.name[i18n.language]
 		}))
 	}, [assemblyLines, i18n.language])
 
@@ -81,7 +78,7 @@ const InoutboundForm: React.FC = () => {
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({
 			...form.getValues(),
-			assembly_line: { code: '', name: '' },
+			assembly_line: '',
 			warehouse: '',
 			storage_location: ''
 		})
@@ -237,46 +234,38 @@ const InoutboundForm: React.FC = () => {
 								)}
 							/>
 						</Div>
-						{action === FinishedGoodsStockAction.IMPORT && (
-							<Fragment>
-								<Div className='col-span-1 sm:col-span-full'>
-									<SelectFieldControl
-										datalist={translatedAssemblyLines}
-										label={t('ns_erp:fields.assembly_line_code')}
-										labelField='name'
-										name='assembly_line.code'
-										valueField='code'
-										onValueChange={(value) => {
-											if (!Array.isArray(assemblyLines)) return
-											const matchedItem = assemblyLines.find((item) => item.code === value)
-											if (matchedItem && 'name' in matchedItem)
-												form.setValue('assembly_line.name', matchedItem.name)
-										}}
-									/>
-								</Div>
-								<Div className='col-span-1 sm:col-span-full'>
-									<SelectFieldControl
-										datalist={warehouseOptions ?? []}
-										disabled={isLoading}
-										label={t('ns_inoutbound:labels.io_archive_warehouse')}
-										labelField='name'
-										name='warehouse'
-										valueField='name'
-									/>
-								</Div>
-								<Div className='col-span-1 sm:col-span-full'>
-									<ComboboxFieldControl
-										datalist={storageLocations}
-										disabled={warehouseOptions?.length === 0}
-										label={t('ns_inoutbound:labels.io_storage_location')}
-										labelField='name'
-										name='storage_location'
-										shouldFilter={true}
-										valueField='name'
-									/>
-								</Div>
-							</Fragment>
-						)}
+						<Activity mode={action === FinishedGoodsStockAction.IMPORT ? 'visible' : 'hidden'}>
+							<Div className='col-span-1 sm:col-span-full'>
+								<SelectFieldControl
+									datalist={translatedAssemblyLines}
+									label={t('ns_erp:fields.assembly_line')}
+									labelField='name'
+									name='assembly_line'
+									valueField='_id'
+								/>
+							</Div>
+							<Div className='col-span-1 sm:col-span-full'>
+								<SelectFieldControl
+									datalist={warehouseOptions ?? []}
+									disabled={isLoading}
+									label={t('ns_inoutbound:labels.io_archive_warehouse')}
+									labelField='name'
+									name='warehouse'
+									valueField='_id'
+								/>
+							</Div>
+							<Div className='col-span-1 sm:col-span-full'>
+								<ComboboxFieldControl
+									datalist={storageLocations}
+									disabled={warehouseOptions?.length === 0}
+									label={t('ns_inoutbound:labels.io_storage_location')}
+									labelField='name'
+									name='storage_location'
+									shouldFilter={true}
+									valueField='_id'
+								/>
+							</Div>
+						</Activity>
 						<Div className='col-span-full grid grid-cols-2 gap-x-2'>
 							<Button
 								className='w-full'

@@ -1,12 +1,12 @@
 import { AutoCompleteFieldControl } from '@components/forms/auto-complete'
-import { useGetShapingProductLineQuery } from '@features/department/hooks/use-department-request'
+import { useGetAssemblyLineQuery } from '@features/department/hooks/use-department-request'
 import { capitalize } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DefAutoCompleteFieldControlProps } from './type'
 
 const AssemblyLineFieldControl: React.FC<DefAutoCompleteFieldControlProps> = (props) => {
-	const { data } = useGetShapingProductLineQuery()
+	const { data } = useGetAssemblyLineQuery()
 	const { t } = useTranslation()
 
 	const datalist = useMemo(() => {

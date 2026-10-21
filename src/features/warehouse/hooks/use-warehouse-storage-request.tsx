@@ -7,9 +7,9 @@ export enum WarehouseStorageQueryKeys {
 	WAREHOUSE_STORAGE = 'WAREHOUSE_STORAGE'
 }
 
-export function useGetStorageLocationByWarehouseQuery(warehouseName: string) {
+export function useGetStorageLocationByWarehouseQuery(warehouseId: string) {
 	return useQuery(
-		getOneWarehouseQueryOptions(warehouseName, (response) =>
+		getOneWarehouseQueryOptions(warehouseId, (response) =>
 			Array.isArray(response.metadata?.storage_locations)
 				? response.metadata.storage_locations.sort((a, b) =>
 						a.name.localeCompare(b.name, undefined, { numeric: true })

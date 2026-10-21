@@ -31,20 +31,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import useAuth from '@hooks/use-auth'
 import { useResetState } from 'ahooks'
 import { capitalize, isNil } from 'lodash-es'
-import React, { memo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import React, { memo, useRef, useState } from 'react'
+import { Resolver, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { RFIDDeviceType } from '../constants'
 import { usePageContext } from '../contexts/page-context'
 import { useCreateRFIDDeviceMutation, useUpdateRFIDDeviceMutation } from '../hooks/use-rfid-device-request'
-import {
-	type CreateRFIDReaderFormValues,
-	createRFIDReaderSchema,
-	type UpdateRFIDReaderFormValues,
-	updateRFIDReaderSchema
-} from '../schemas/rfid-device.schema'
+import { createRFIDReaderSchema, RFIDReaderFormValues, updateRFIDReaderSchema } from '../schemas/rfid-device.schema'
 
 const RFIDDeviceFormDialog: React.FC = () => {
 	const [open, setOpen] = useState<boolean>(false)
@@ -52,26 +47,47 @@ const RFIDDeviceFormDialog: React.FC = () => {
 	const { event$ } = usePageContext()
 	const { t } = useTranslation()
 	const { user } = useAuth()
+	const schemaRef = useRef<typeof createRFIDReaderSchema | typeof updateRFIDReaderSchema>(createRFIDReaderSchema)
 
-	const form = useForm<CreateRFIDReaderFormValues | UpdateRFIDReaderFormValues>({
-		resolver: zodResolver(action === CommonActions.UPDATE ? updateRFIDReaderSchema : createRFIDReaderSchema)
+	const form = useForm({
+		resolver: zodResolver(schemaRef.current) as unknown as Resolver<RFIDReaderFormValues>
 	})
 
-	event$.useSubscription(({ action, defaultValues }) => {
+	event$.useSubscription(({ action, payload: defaultValues }) => {
 		setOpen((prev) => !prev)
 		setAction(action)
+
 		if (action === CommonActions.UPDATE && defaultValues) {
+			schemaRef.current = updateRFIDReaderSchema
 			form.reset(defaultValues)
+		} else {
+			schemaRef.current = createRFIDReaderSchema
 		}
 	})
 
-	const { mutateAsync: createAsync, isPending: isCreating, isError: isFailedToCreate } = useCreateRFIDDeviceMutation()
-	const { mutateAsync: updateAsync, isPending: isUpdating, isError: isFailedToUpdate } = useUpdateRFIDDeviceMutation()
+	const {
+		mutateAsync: createAsync,
+		isPending: isCreating,
+		isError: isFailedToCreate,
+		reset: resetCreateError
+	} = useCreateRFIDDeviceMutation()
+	const {
+		mutateAsync: updateAsync,
+		isPending: isUpdating,
+		isError: isFailedToUpdate,
+		reset: resetUpdateError
+	} = useUpdateRFIDDeviceMutation()
 
 	const isPending = isCreating || isUpdating
 	const isError = isFailedToCreate || isFailedToUpdate
+	const resetError = () => {
+		resetCreateError()
+		resetUpdateError()
+	}
 
 	const handleSubmitForm = async (data) => {
+		console.log('data', data)
+
 		if (isNil(action)) return
 		if (action === CommonActions.CREATE) createAsync(data)
 		else if (action === CommonActions.UPDATE) updateAsync(data)
@@ -218,6 +234,7 @@ const RFIDDeviceFormDialog: React.FC = () => {
 										variant='outline'
 										onClick={() => {
 											form.reset()
+											resetError()
 											resetAction()
 										}}>
 										<Icon name='X' /> {t('ns_common:actions.cancel')}

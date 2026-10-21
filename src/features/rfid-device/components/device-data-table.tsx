@@ -7,10 +7,12 @@ import {
 	RowSelectionCheckbox
 } from '@components/addons/tanstack-table/components/row-selection-checkbox'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@components/addons/tanstack-table/constants'
+import { fuzzySort } from '@components/addons/tanstack-table/utils/fuzzy-sort.util'
 import { notNullFilter } from '@components/addons/tanstack-table/utils/not-null-filter.util'
 import ConfirmDialog from '@components/customs/confirm-dialog'
 import { Tooltip } from '@components/customs/tooltip'
 import { Typography } from '@components/customs/typography'
+import UserHoverCard from '@components/shared/user-hover-card'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
@@ -20,7 +22,7 @@ import { useDateLocale } from '@hooks/use-date-locale'
 import { useReactiveRef } from '@hooks/use-reactive-ref'
 import type { Table } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
-import { formatRelative } from 'date-fns'
+import { format, formatRelative } from 'date-fns'
 import { capitalize, isNil } from 'lodash-es'
 import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -181,6 +183,61 @@ const DeviceDataTable: React.FC = () => {
 						)}
 					</Badge>
 				)
+			}),
+			columnHelper.accessor('created_by', {
+				header: t('ns_common:common_fields.created_by'),
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true,
+				enableSorting: true,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
+				cell: ({ getValue }) => {
+					const user = getValue()
+					return <UserHoverCard user={user} />
+				}
+			}),
+			columnHelper.accessor('created_at', {
+				header: t('ns_common:common_fields.created_at'),
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true,
+				enableSorting: true,
+				filterFn: 'inDateRange',
+				sortingFn: fuzzySort,
+				meta: { filterVariant: 'date' },
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return value ? format(value, 'yyyy-MM-dd HH:mm') : <span className='text-muted-foreground'>-</span>
+				}
+			}),
+			columnHelper.accessor('updated_by', {
+				header: t('ns_common:common_fields.updated_by'),
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true,
+				enableSorting: true,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
+				cell: ({ getValue }) => {
+					const user = getValue()
+					if (!user) return <span className='text-muted-foreground'>-</span>
+					return <UserHoverCard user={user} />
+				}
+			}),
+			columnHelper.accessor('updated_at', {
+				header: t('ns_common:common_fields.updated_at'),
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true,
+				enableSorting: true,
+				filterFn: 'inDateRange',
+				sortingFn: fuzzySort,
+				meta: { filterVariant: 'date' },
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return value ? format(value, 'yyyy-MM-dd HH:mm') : <span className='text-muted-foreground'>-</span>
+				}
 			}),
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,

@@ -1,14 +1,13 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
-import { Fragment, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-
 import { UserRole } from '@common/constants/enums'
 import { RoleGuard } from '@components/guards/role-guard'
 import { PageAction, PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '@components/shared/page'
 import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
 import DeviceDataTable from '@features/rfid-device/components/device-data-table'
-import RFIDDeviceFormDialog from '@features/rfid-device/components/rfid-device-form-dialog'
+import RFIDDeviceFormDialog from '@features/rfid-device/components/device-form-dialog'
 import { PageContextProvider } from '@features/rfid-device/contexts/page-context'
+import { createLazyFileRoute } from '@tanstack/react-router'
+import { Fragment, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createLazyFileRoute('/(features)/_layout/rfid-devices-management')({
 	component: Page

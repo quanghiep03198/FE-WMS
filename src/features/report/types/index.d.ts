@@ -1,3 +1,5 @@
+import type { IDepartment } from '@features/department/types'
+
 export interface IInOutBoundReport {
 	mo_no: string
 	mat_code: string
@@ -14,7 +16,7 @@ export interface IInOutBoundReport {
 }
 
 export interface IInboundReport extends IInOutBoundReport {
-	assembly_lines: Array<string>
+	assembly_lines: Array<IDepartment>
 	storage_locations: Array<string>
 	daily_inbound_qty: number
 }

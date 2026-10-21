@@ -16,10 +16,7 @@ export class RFIDDeviceService {
 	}
 
 	static async updateWarehouseRFIDDevice(payload: UpdateRFIDReaderFormValues) {
-		return await axiosInstance.patch<unknown, ResponseBody<unknown>, UpdateRFIDReaderFormValues>(
-			`/rfid/devices/update/${payload.device_sn}`,
-			omit(payload, ['device_sn'])
-		)
+		return await axiosInstance.patch(`/rfid/devices/update/${payload._id}`, omit(payload, ['_id']))
 	}
 
 	static async deleteWarehouseRFIDDevice(deviceSeriesNumbers: string[]) {

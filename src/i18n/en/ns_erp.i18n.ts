@@ -97,8 +97,8 @@ export default {
 		recalled_qty: 'Recalled Quantity', // Recalled Quantity
 		ri_type: 'Combination type',
 		shaping_dept_productivity: 'Shaping department productivity', // Shaping Department Productivity
-		assembly_line_code: 'Shaping department code',
-		shaping_dept_name: 'Shaping department name',
+		assembly_line_code: 'Assembly department code',
+		assembly_dept_name: 'Assembly department name',
 		shoe_source: 'Shoes source',
 		sno_car_number: 'Container number',
 		container_number: 'Container number',

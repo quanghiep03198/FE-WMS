@@ -92,7 +92,12 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 													'border-destructive focus:border-destructive active:border-destructive w-full',
 												!field.value && 'text-muted-foreground'
 											)}>
-											<SelectValue placeholder={!field.value && placeholder} />
+											<SelectValue placeholder={!field.value && placeholder}>
+												{field.value &&
+													datalist?.find((item) => String(item[valueField]) === String(field.value))?.[
+														labelField
+													]}
+											</SelectValue>
 										</SelectTrigger>
 									</FormControl>
 								</Tooltip>

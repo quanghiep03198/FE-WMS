@@ -27,10 +27,10 @@ export function useGetDepartmentQuery(
 	})
 }
 
-export const useGetShapingProductLineQuery = () => {
+export const useGetAssemblyLineQuery = () => {
 	return useQuery({
 		queryKey: [DepartmentQueryKeys.ASSEMBLY_DEPARTMENT],
-		queryFn: DepartmentService.getShapingDepartments,
+		queryFn: DepartmentService.getAssemblyLines,
 		select: (response) => response.metadata
 	})
 }

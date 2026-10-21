@@ -95,7 +95,7 @@ export default {
 		sewing_line: 'Chuyền may',
 		assembly_line: 'Chuyền thành hình',
 		assembly_line_code: 'Mã chuyền thành hình',
-		shaping_dept_name: 'Chuyền thành hình',
+		assembly_dept_name: 'Chuyền thành hình',
 		shaping_dept_productivity: 'Sản lượng thành hình', // Shaping Department Productivity
 		shoe_source: 'Nguồn giày',
 		sno_car_number: 'Số xe container',

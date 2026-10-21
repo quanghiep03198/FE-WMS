@@ -1,6 +1,7 @@
 import { cn } from '@common/utils/cn'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { CommandLoading } from 'cmdk'
+import { isEmpty, isNil } from 'lodash-es'
 import { Fragment, useId, useMemo, useState } from 'react'
 import type { FieldValues, Path, PathValue } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
@@ -110,7 +111,9 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 												'bg-background aria-invalid:border-destructive aria-invalid:focus-within:border-destructive hover:bg-background focus:border-primary w-full justify-between px-3 font-normal'
 											)}>
 											<Typography className='line-clamp-1' variant='small'>
-												{field.value || placeholder}
+												{isNil(field.value) || isEmpty(field.value)
+													? placeholder
+													: options.find((item) => item[valueField] === field.value)?.[labelField]}
 											</Typography>
 											<CaretSortIcon className='ml-auto h-4 w-4 opacity-50' />
 										</Button>
