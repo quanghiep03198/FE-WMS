@@ -50,7 +50,7 @@ function LoginPage() {
 			<Container>
 				<ThemeSelector />
 				<HomeNavigator />
-				<Card className='relative z-10 mx-auto grid w-full max-w-7xl auto-rows-max gap-y-0 overflow-clip rounded-lg border p-0 shadow-2xl md:max-w-xl lg:max-w-lg xl:grid-cols-[1.5fr_1fr]'>
+				<Card className='bg-accent/25 relative z-10 mx-auto grid w-full max-w-7xl auto-rows-max gap-y-0 overflow-clip rounded-lg border p-0 shadow-2xl md:max-w-xl lg:max-w-lg xl:grid-cols-[1.5fr_1fr]'>
 					<Div className='row-span-3 hidden overflow-clip p-0 xl:block' onContextMenu={(e) => e.preventDefault()}>
 						<video
 							autoPlay

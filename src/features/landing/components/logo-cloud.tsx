@@ -65,9 +65,9 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 		<LinkCard href='#'>
 			<img
 				alt='Tanstack'
-				className='max-w-9 object-contain saturate-0 transition-all group-hover/card:saturate-100 xl:max-w-9'
+				className='max-w-7 object-contain saturate-0 transition-all group-hover/card:saturate-100 fill-foreground opacity-50 group-hover/card:opacity-100 dark:invert'
 				loading='lazy'
-				src='/tanstack.png'
+				src='/tanstack.svg'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
