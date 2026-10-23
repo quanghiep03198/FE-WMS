@@ -475,7 +475,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								}}
 							/>
 						</Div>
-						<Field className='space-y-2 group/container-has-[#toggle-fullscreen[data-state=checked]]:h-screen h-60'>
+						<Field className='space-y-2'>
 							<Label htmlFor='defective-description'>{t('ns_erp:fields.defective_description')}</Label>
 							<Editor
 								id='defective-description'
