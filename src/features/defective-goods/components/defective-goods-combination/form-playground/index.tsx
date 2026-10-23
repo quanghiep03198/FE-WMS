@@ -17,7 +17,7 @@ import { useGetManufacturingOrderQuery } from '@features/order/hooks/use-order-r
 import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'
-import { SingleCommands } from '@tiptap/core'
+import type { SingleCommands } from '@tiptap/core'
 import { useLocalStorageState, usePrevious, useResetState, useUpdateEffect } from 'ahooks'
 import { isEmpty, isNil } from 'lodash-es'
 import { Fragment, useCallback, useEffect, useRef } from 'react'

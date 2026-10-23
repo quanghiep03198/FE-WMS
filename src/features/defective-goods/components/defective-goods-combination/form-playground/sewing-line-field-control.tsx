@@ -1,4 +1,5 @@
-import { SelectFieldControl, SelectFieldControlProps } from '@components/forms/select'
+import type { SelectFieldControlProps } from '@components/forms/select';
+import { SelectFieldControl } from '@components/forms/select'
 import type { DefectiveGoodsCombinationFormValues } from '@features/defective-goods/schemas/defective-goods.schema'
 import { useGetSewingProductLineQuery } from '@features/department/hooks/use-department-request'
 import { capitalize } from 'lodash-es'
