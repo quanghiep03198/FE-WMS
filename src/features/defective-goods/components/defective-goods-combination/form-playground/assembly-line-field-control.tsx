@@ -1,21 +1,25 @@
-import { AutoCompleteFieldControl } from '@components/forms/auto-complete'
+import { SelectFieldControl, type SelectFieldControlProps } from '@components/forms/select'
+import type { DefectiveGoodsCombinationFormValues } from '@features/defective-goods/schemas/defective-goods.schema'
 import { useGetAssemblyLineQuery } from '@features/department/hooks/use-department-request'
 import { capitalize } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { DefAutoCompleteFieldControlProps } from './type'
 
-const AssemblyLineFieldControl: React.FC<DefAutoCompleteFieldControlProps> = (props) => {
+const AssemblyLineFieldControl: React.FC<
+	Partial<SelectFieldControlProps<DefectiveGoodsCombinationFormValues, Record<'label' | 'value', string>>>
+> = (props) => {
 	const { data } = useGetAssemblyLineQuery()
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 
 	const datalist = useMemo(() => {
 		if (!Array.isArray(data)) return []
-		return data.map(({ name: dept_name }) => ({ label: dept_name, value: dept_name }))
-	}, [data])
+		return data
+			.map(({ _id, name }) => ({ label: name[i18n.language], value: _id! }))
+			.sort((a, b) => a.label.localeCompare(b.label, undefined, { numeric: true, alphabetic: true }))
+	}, [data, i18n.language])
 
 	return (
-		<AutoCompleteFieldControl
+		<SelectFieldControl
 			datalist={datalist}
 			label={t('ns_erp:fields.assembly_line')}
 			labelField='label'

@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 // #endregion
 
 // #region Router declaration
-export const Route = createLazyFileRoute('/(features)/_layout/(warehouse)/storage-locations/$warehouseName')({
+export const Route = createLazyFileRoute('/(features)/_layout/(warehouse)/storage-locations/$warehouseId')({
 	component: Page
 })
 // #endregion
@@ -24,31 +24,34 @@ export const Route = createLazyFileRoute('/(features)/_layout/(warehouse)/storag
 function Page() {
 	const { t, i18n } = useTranslation()
 
-	const warehouseName = Route.useParams({ select: (params) => params.warehouseName })
+	const warehouseId = Route.useParams({ select: (params) => params.warehouseId })
+
+	const { data: warehouseData } = useGetOneWarehouseQuery(warehouseId)
 
 	// Set page breadcrumb navigation
 	const { setBreadcrumb } = useBreadcrumbContext()
 
 	useEffect(() => {
+		if (!warehouseData) return
 		setBreadcrumb([
 			{
 				text: t('ns_common:navigation.warehouse_management'),
 				to: '/warehouses'
 			},
 			{
-				text: warehouseName!,
-				to: '/storage-locations/$warehouseName',
-				params: { warehouseName }
+				text: warehouseData.name!,
+				to: '/storage-locations/$warehouseId',
+				params: { warehouseId }
 			},
 			{
 				text: t('ns_common:navigation.storage_locations'),
-				to: '/storage-locations/$warehouseName',
-				params: { warehouseName }
+				to: '/storage-locations/$warehouseId',
+				params: { warehouseId }
 			}
 		])
 	}, [i18n.language])
 
-	const { data } = useGetOneWarehouseQuery(warehouseName)
+	const { data } = useGetOneWarehouseQuery(warehouseId)
 
 	return (
 		<Fragment>

@@ -1,3 +1,5 @@
+import type { IStorageLocation } from '@features/warehouse/types'
+
 export declare type BaseUpdateUpdateQuery = Pick<IMonthlyInventoryAudit, 'mo_no' | 'year_month'> & {
 	size_numcode: string
 }
@@ -7,7 +9,7 @@ export interface IMonthlyInventoryAudit {
 	order_qty: number
 	color_sn: string
 	factory_shoes_style: string | null
-	storage_locations: Array<string>
+	storage_locations: Array<IStorageLocation>
 	inventory_closure_status: 'pending' | 'completed'
 	cust_shoes_style: string
 	beginning_inventory_qty: number

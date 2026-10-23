@@ -1,21 +1,25 @@
-import { AutoCompleteFieldControl } from '@components/forms/auto-complete'
+import { SelectFieldControl, SelectFieldControlProps } from '@components/forms/select'
+import type { DefectiveGoodsCombinationFormValues } from '@features/defective-goods/schemas/defective-goods.schema'
 import { useGetSewingProductLineQuery } from '@features/department/hooks/use-department-request'
 import { capitalize } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { DefAutoCompleteFieldControlProps } from './type'
 
-const SewingLineFieldControl: React.FC<DefAutoCompleteFieldControlProps> = (props) => {
+const SewingLineFieldControl: React.FC<
+	Partial<SelectFieldControlProps<DefectiveGoodsCombinationFormValues, Record<'label' | 'value', string>>>
+> = (props) => {
 	const { data } = useGetSewingProductLineQuery()
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 
 	const datalist = useMemo(() => {
 		if (!Array.isArray(data)) return []
-		return data.map(({ name }) => ({ label: name, value: name }))
-	}, [data])
+		return data
+			.map(({ _id, name }) => ({ label: name[i18n.language], value: _id! }))
+			.sort((a, b) => a.label.localeCompare(b.label, undefined, { numeric: true }))
+	}, [data, i18n.language])
 
 	return (
-		<AutoCompleteFieldControl
+		<SelectFieldControl
 			datalist={datalist}
 			label={t('ns_erp:fields.sewing_line')}
 			labelField='label'

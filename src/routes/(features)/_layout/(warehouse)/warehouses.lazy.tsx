@@ -2,14 +2,14 @@
 import { UserRole } from '@common/constants/enums'
 import { RoleGuard } from '@components/guards/role-guard'
 import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
+import PageHeading from '@features/warehouse/components/warehouse/page-heading'
+import WarehouseDataTable from '@features/warehouse/components/warehouse/warehouse-data-table'
+import WarehouseFormDialog from '@features/warehouse/components/warehouse/warehouse-form'
 import { WarehousePageProvider } from '@features/warehouse/contexts/warehouse-page-context'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageSeparator, PageWrapper } from '../../../../components/shared/page'
-import PageHeading from '../../../../features/warehouse/components/warehouse/page-heading'
-import WarehouseDataTable from '../../../../features/warehouse/components/warehouse/warehouse-data-table'
-import WarehouseFormDialog from '../../../../features/warehouse/components/warehouse/warehouse-form'
 // #endregion
 
 // #region Router declaration

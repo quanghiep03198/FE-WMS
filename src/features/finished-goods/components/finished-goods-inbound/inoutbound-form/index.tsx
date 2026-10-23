@@ -67,10 +67,12 @@ const InoutboundForm: React.FC = () => {
 
 	const translatedAssemblyLines = useMemo(() => {
 		if (!Array.isArray(assemblyLines)) return []
-		return assemblyLines.map((item) => ({
-			_id: item._id,
-			name: item.name[i18n.language]
-		}))
+		return assemblyLines
+			.map((item) => ({
+				_id: item._id,
+				name: item.name[i18n.language]
+			}))
+			.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, alphabetic: true }))
 	}, [assemblyLines, i18n.language])
 
 	const { mutateAsync, isPending, isError, error, reset } = useUpdateStockVariationMutation()
