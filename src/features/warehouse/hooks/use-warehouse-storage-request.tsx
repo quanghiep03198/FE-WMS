@@ -19,25 +19,25 @@ export function useGetStorageLocationByWarehouseQuery(warehouseId: string) {
 	)
 }
 
-export function useCreateStorageMutation(warehouseName: string) {
+export function useCreateStorageMutation(warehouseId: string) {
 	return useMutation({
-		meta: { invalidates: [[WarehouseQueryKeys.WAREHOUSE, warehouseName]] },
+		meta: { invalidates: [[WarehouseQueryKeys.WAREHOUSE, warehouseId]] },
 		mutationFn: StorageLocationService.createWarehouseStorage
 	})
 }
 
-export function useUpdateStorageMutation(warehouseName: string) {
+export function useUpdateStorageMutation(warehouseId: string) {
 	return useMutation({
-		meta: { invalidates: [[WarehouseQueryKeys.WAREHOUSE, warehouseName]] },
+		meta: { invalidates: [[WarehouseQueryKeys.WAREHOUSE, warehouseId]] },
 		throwOnError: true,
 		mutationFn: async ({ _id, ...payload }: UpdateStorageLocationFormValue) =>
 			await StorageLocationService.updateWarehouseStorage(_id, payload)
 	})
 }
 
-export function useDeleteStorageMutation(warehouseName: string) {
+export function useDeleteStorageMutation(warehouseId: string) {
 	return useMutation({
-		meta: { invalidates: [[WarehouseQueryKeys.WAREHOUSE, warehouseName]] },
+		meta: { invalidates: [[WarehouseQueryKeys.WAREHOUSE, warehouseId]] },
 		mutationFn: StorageLocationService.deleteWarehouseStorage
 	})
 }

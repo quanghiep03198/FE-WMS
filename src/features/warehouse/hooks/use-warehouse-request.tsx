@@ -10,13 +10,13 @@ export enum WarehouseQueryKeys {
 }
 
 export function getOneWarehouseQueryOptions(
-	warehouseName: string,
+	warehouseId: string,
 	select?: (response: ResponseBody<Required<IWarehouse>>) => any
 ) {
 	return queryOptions({
-		queryKey: [WarehouseQueryKeys.WAREHOUSE, warehouseName],
-		queryFn: () => WarehouseService.getOne(warehouseName),
-		enabled: Boolean(warehouseName),
+		queryKey: [WarehouseQueryKeys.WAREHOUSE, warehouseId],
+		queryFn: () => WarehouseService.getOne(warehouseId),
+		enabled: Boolean(warehouseId),
 		select: typeof select === 'function' ? select : (response) => response.metadata
 	})
 }
@@ -29,8 +29,8 @@ export function useGetWarehouseQuery() {
 	})
 }
 
-export const useGetOneWarehouseQuery = (name: string) => {
-	return useQuery(getOneWarehouseQueryOptions(name))
+export const useGetOneWarehouseQuery = (id: string) => {
+	return useQuery(getOneWarehouseQueryOptions(id))
 }
 
 type MutationHandlerMap = {

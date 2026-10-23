@@ -17,19 +17,18 @@ import { capitalize } from 'lodash-es'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import type { UpdateStorageLocationFormValue } from '../../schemas/storage-location.schema'
 import { updateStorageLocationSchema } from '../../schemas/storage-location.schema'
 
 const UpdateLocationFormDialog: React.FC = () => {
 	const { t } = useTranslation()
-	const warehouseName = useParams({
-		from: '/(features)/_layout/(warehouse)/storage-locations/$warehouseName',
-		select: (params) => params.warehouseName
+	const warehouseId = useParams({
+		from: '/(features)/_layout/(warehouse)/storage-locations/$warehouseId',
+		select: (params) => params.warehouseId
 	})
 
 	const { event$ } = useStorageLocationPageContext()
 
-	const form = useForm<UpdateStorageLocationFormValue>({
+	const form = useForm({
 		resolver: zodResolver(updateStorageLocationSchema)
 	})
 
@@ -40,9 +39,9 @@ const UpdateLocationFormDialog: React.FC = () => {
 	})
 
 	const [open, setOpen] = useState<boolean>(false)
-	const { mutateAsync, isPending } = useUpdateStorageMutation(warehouseName)
+	const { mutateAsync, isPending } = useUpdateStorageMutation(warehouseId)
 
-	const formSubmitHandler = async (data: UpdateStorageLocationFormValue) => {
+	const formSubmitHandler = async (data) => {
 		await mutateAsync(data)
 		setOpen((prev) => !prev)
 	}
@@ -65,7 +64,7 @@ const UpdateLocationFormDialog: React.FC = () => {
 						<FieldGroup>
 							<FormItem>
 								<Label>{t('ns_warehouse:fields.warehouse_name')}</Label>
-								<Input disabled value={warehouseName} />
+								<Input disabled value={warehouseId} />
 							</FormItem>
 							<InputFieldControl
 								label={t('ns_warehouse:fields.storage_name')}

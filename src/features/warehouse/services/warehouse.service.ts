@@ -13,8 +13,8 @@ export class WarehouseService {
 		)
 	}
 
-	static getOne(name: string) {
-		return axiosInstance.get<string, ResponseBody<Required<IWarehouse>>>(`/warehouse/${name}`)
+	static getOne(id: string) {
+		return axiosInstance.get<string, ResponseBody<Required<IWarehouse>>>(`/warehouse/${id}`)
 	}
 
 	static async create(payload: CreateWarehouseFormValue) {

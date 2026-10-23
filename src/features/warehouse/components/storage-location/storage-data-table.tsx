@@ -30,13 +30,13 @@ const StorageList: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const tableRef = useRef<Table<any>>({} as Table<any>)
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
-	const warehouseName = useParams({
+	const warehouseId = useParams({
 		strict: true,
-		from: '/(features)/_layout/(warehouse)/storage-locations/$warehouseName',
-		select: (params) => params.warehouseName
+		from: '/(features)/_layout/(warehouse)/storage-locations/$warehouseId',
+		select: (params) => params.warehouseId
 	})
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
-	const { data, isLoading, refetch } = useGetOneWarehouseQuery(warehouseName)
+	const { data, isLoading, refetch } = useGetOneWarehouseQuery(warehouseId)
 
 	const { event$ } = useStorageLocationPageContext()
 
@@ -53,7 +53,7 @@ const StorageList: React.FC = () => {
 	}
 
 	// Delete selected warehouse storage locations
-	const { mutateAsync: deleteWarehouseStorage } = useDeleteStorageMutation(warehouseName)
+	const { mutateAsync: deleteWarehouseStorage } = useDeleteStorageMutation(warehouseId)
 
 	const columnHelper = createColumnHelper<IStorageLocation>()
 

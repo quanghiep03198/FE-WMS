@@ -32,9 +32,9 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 			<DropdownMenuContent align='end' className='min-w-40'>
 				<DropdownMenuItem asChild={true} className='flex items-center gap-x-3'>
 					<Link
-						params={{ warehouseName: row.original.name }}
-						to='/storage-locations/$warehouseName'
-						onMouseEnter={() => queryClient.query(getOneWarehouseQueryOptions(row.original.name))}>
+						params={{ warehouseId: row.original._id! }}
+						to='/storage-locations/$warehouseId'
+						onMouseEnter={() => queryClient.query(getOneWarehouseQueryOptions(row.original._id!))}>
 						<Icon name='SquareDashedMousePointer' />
 						{t('ns_common:actions.detail')}
 					</Link>
