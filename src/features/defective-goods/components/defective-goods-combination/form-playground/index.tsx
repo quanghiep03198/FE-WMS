@@ -2,41 +2,45 @@
 
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import Editor from '@components/addons/tiptap'
 import { Div } from '@components/customs/div'
-import { EditorFieldControl } from '@components/forms/editor'
 import { InputFieldControl } from '@components/forms/input'
 import { SelectFieldControl } from '@components/forms/select'
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
 import { Button } from '@components/ui/button'
 import { Checkbox } from '@components/ui/checkbox'
+import { Field } from '@components/ui/field'
 import { Form as FormProvider } from '@components/ui/form'
 import { Icon } from '@components/ui/icon'
 import { Label } from '@components/ui/label'
 import { useGetManufacturingOrderQuery } from '@features/order/hooks/use-order-request'
+import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'
+import { SingleCommands } from '@tiptap/core'
 import { useLocalStorageState, usePrevious, useResetState, useUpdateEffect } from 'ahooks'
 import { isEmpty, isNil } from 'lodash-es'
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { gzipSync } from 'zlib'
-import { DefectDescriptionTemplate } from '../../../constants/templates'
-import type { CreateDefectiveGoodsFormValues } from '../../../schemas/defective-goods.schema'
-import { createDefectiveGoodsSchema, updateDefectiveGoodsSchema } from '../../../schemas/defective-goods.schema'
-
-import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
-import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
 import { MobileReaderPlaygroundTrigger } from '../../../../rfid-agent/components/playground/mobile-playground'
 import PurchaseOrderFieldControl from '../../../../rfid-agent/components/playground/purchase-order-field-control'
 import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../../constants/enums'
+import { DefectDescriptionTemplate } from '../../../constants/templates'
 import { usePageContext } from '../../../contexts/page-context'
 import {
 	useCreateDefectiveGoodsMutation,
 	useUpdateDefectiveGoodsMutation
 } from '../../../hooks/use-defective-goods-request'
 import { useSwitchCombinationStrategy } from '../../../hooks/use-switch-combination-strategy'
+import type {
+	CreateDefectiveGoodsFormValues,
+	DefectiveGoodsCombinationFormValues
+} from '../../../schemas/defective-goods.schema'
+import { createDefectiveGoodsSchema, updateDefectiveGoodsSchema } from '../../../schemas/defective-goods.schema'
 import { DataListPanelSheetTrigger } from '../data-list-panel'
 import AssemblyLineFieldControl from './assembly-line-field-control'
 import BrandFieldControl from './brand-field-control'
@@ -64,13 +68,22 @@ const DefectiveGoodsForm: React.FC = () => {
 	})
 	const { currentStrategy, setStrategy } = useSwitchCombinationStrategy()
 	const previousStrategy = usePrevious(currentStrategy)
-	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(() =>
-		useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
-	)
+	// const [defaultEditorContent, setDefaultEditorContent] = useState<string>(() =>
+	// 	useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
+	// )
+	const editorRef = useRef<{
+		getHTML: () => string
+		isEmpty: () => boolean
+		commands: () => SingleCommands
+	}>({
+		getHTML: () => '',
+		isEmpty: () => true,
+		commands: () => ({ setContent: (content: string) => {} }) as SingleCommands
+	})
 
 	const schemaRef = useRef<any>(createDefectiveGoodsSchema)
 
-	const form = useForm({
+	const form = useForm<DefectiveGoodsCombinationFormValues>({
 		resolver: zodResolver(schemaRef.current),
 		defaultValues: {
 			shoe_source: DefectiveGoodsSource.FINAL_INSPECTION,
@@ -104,7 +117,8 @@ const DefectiveGoodsForm: React.FC = () => {
 			schemaRef.current = updateDefectiveGoodsSchema
 			setFormAction(CommonActions.UPDATE)
 			form.reset(e.payload)
-			setDefaultEditorContent(e.payload.defective_description)
+			editorRef.current.commands().setContent(e.payload.defective_description)
+			// setDefaultEditorContent(e.payload.defective_description)
 		}
 	})
 
@@ -138,12 +152,17 @@ const DefectiveGoodsForm: React.FC = () => {
 	}, [formAction, currentCategory])
 
 	useEffect(() => {
-		if (formAction === CommonActions.CREATE) form.setValue('ri_type', currentStrategy)
+		if (formAction === CommonActions.CREATE) {
+			editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
+			form.setValue('ri_type', currentStrategy)
+		}
 		if (formAction === CommonActions.UPDATE) setStrategy(null)
 	}, [formAction, currentStrategy])
 
 	useUpdateEffect(() => {
-		if (useAvailableTemplate) setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
+		if (typeof editorRef.current?.commands !== 'function') return
+		if (useAvailableTemplate) editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
+		else if (editorRef.current) editorRef.current?.commands().setContent('')
 	}, [i18n.language, useAvailableTemplate])
 
 	const handleEpcChange: React.KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
@@ -183,6 +202,7 @@ const DefectiveGoodsForm: React.FC = () => {
 			}
 		}
 		form.reset(currentFormValues)
+		if (editorRef.current) editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
 	}
 
 	const handleCancel = () => {
@@ -192,43 +212,56 @@ const DefectiveGoodsForm: React.FC = () => {
 		navigate({ search })
 	}
 
-	const handleSubmitForm = (data: CreateDefectiveGoodsFormValues) => {
+	const handleSubmitForm = async (data: CreateDefectiveGoodsFormValues) => {
 		if (data.ri_type === 'manually' && formAction === CommonActions.CREATE) {
 			delete data.epc
 			delete data.size_code
 		}
+
 		const payload = {
 			...data.data,
 			po: isNil(data.po) || isEmpty(data.po) ? 'PRELOAD' : data.po,
-			defective_description: gzipSync(data.defective_description, { level: 6, chunkSize: 1024 }).toString('base64')
+			defective_description: gzipSync(data.defective_description, {
+				level: 6,
+				chunkSize: 1024
+			}).toString('base64')
 		}
+
+		console.log({
+			...data.data,
+			po: isNil(data.po) || isEmpty(data.po) ? 'PRELOAD' : data.po,
+			defective_description: data.defective_description
+		})
+
 		const mutateAsync = async () =>
 			formAction === CommonActions.UPDATE
 				? await updateAsync({ id: +hash, data: payload })
 				: await createAsync(payload)
-		toast.promise(mutateAsync(), {
-			loading: t('ns_common:notification.processing_request'),
-			success: () => {
-				if (formAction === CommonActions.CREATE)
-					form.reset({
-						...form.getValues(),
-						...(data.ri_type === 'usb' && { epc: '' }),
-						...(data.ri_type === 'manually' && { sizes: [{}] })
-					})
-				if (formAction === CommonActions.UPDATE) {
-					handleCancel()
-				}
-				if (data.ri_type === 'uhf') event$.emit({ action: CommonActions.SAVE, payload: [] })
-				return t('ns_common:notification.success')
-			},
-			error: t('ns_common:notification.error')
-		})
+
+		await mutateAsync()
+
+		if (formAction === CommonActions.CREATE)
+			form.reset({
+				...form.getValues(),
+				...(data.ri_type === 'usb' && { epc: '' }),
+				...(data.ri_type === 'manually' && { sizes: [{}] })
+			})
+		if (formAction === CommonActions.UPDATE) {
+			handleCancel()
+		}
+		if (data.ri_type === 'uhf') event$.emit({ action: CommonActions.SAVE, payload: [] })
+	}
+
+	if (editorRef.current?.isEmpty?.() && form.formState.isSubmitted) {
+		form.setError('defective_description', { type: 'required', message: t('ns_common:errors.required') })
 	}
 
 	const isPending: boolean = isCreating || isUpdating
 	const isError: boolean = isFailedToCreate || isFailedToUpdate
 	const shouldRequireFullInfo: boolean =
 		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
+
+	console.log(form.getValues('defective_description'))
 
 	return (
 		<FormProvider {...form}>
@@ -436,18 +469,34 @@ const DefectiveGoodsForm: React.FC = () => {
 								id='toggle-use-desc-template'
 								onCheckedChange={(checked) => {
 									setUseAvailabelTemplate(Boolean(checked))
-									if (!checked) setDefaultEditorContent('')
+									if (!checked) editorRef.current?.commands?.()?.setContent?.('')
 								}}
 							/>
 						</Div>
-						<EditorFieldControl
-							className='group/container-has-[#toggle-fullscreen[data-state=checked]]:h-screen h-60'
+						<Field className='space-y-2 group/container-has-[#toggle-fullscreen[data-state=checked]]:h-screen h-60'>
+							<Label htmlFor='defective-description'>{t('ns_erp:fields.defective_description')}</Label>
+							<Editor
+								id='defective-description'
+								ref={editorRef}
+								defaultValue={
+									form.getValues('defective_description') ||
+									(useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : '')
+								}
+								onUpdate={({ value }) => {
+									form.setValue('defective_description', value || '')
+								}}
+							/>
+
+							{/* <FieldError errors={[form.getErrors('defective_description')]} /> */}
+						</Field>
+						{/* <EditorFieldControl
+							className=''
 							defaultValue={defaultEditorContent}
 							disabled={!formAction}
 							errorMessage={t('ns_validation:required')}
 							label={t('ns_erp:fields.defective_description')}
 							name='defective_description'
-						/>
+						/> */}
 					</Div>
 				</Div>
 				{/* Footer bar */}
