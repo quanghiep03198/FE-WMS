@@ -59,30 +59,66 @@ export const useGetDefectiveGoodsQuery = () => {
 }
 
 export const useCreateDefectiveGoodsMutation = () => {
+	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
+	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
+		listenStorageChange: true
+	})
+
 	return useMutation({
-		meta: { invalidates: [Object.values(DefectiveGoodsQueryKey)] },
+		meta: {
+			invalidates: [
+				[DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)]
+			]
+		},
 		mutationFn: async (data: CreateDefectiveGoodsFormValues) => await DefectiveGoodsService.createDefectiveGoods(data)
 	})
 }
 
 export const useUpdateDefectiveGoodsMutation = () => {
+	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
+	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
+		listenStorageChange: true
+	})
+
 	return useMutation({
-		meta: { invalidates: [Object.values(DefectiveGoodsQueryKey)] },
+		meta: {
+			invalidates: [
+				[DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)]
+			]
+		},
 		mutationFn: async (payload: { id: number; data: UpdateDefectiveGoodsFormValues }) =>
 			await DefectiveGoodsService.updateDefectiveGoods(payload.id, payload.data)
 	})
 }
 
 export const useDeleteDefectiveGoodsMutation = () => {
+	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
+	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
+		listenStorageChange: true
+	})
+
 	return useMutation({
-		meta: { invalidates: [Object.values(DefectiveGoodsQueryKey)] },
+		meta: {
+			invalidates: [
+				[DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)]
+			]
+		},
 		mutationFn: DefectiveGoodsService.deleteDefectiveGoods
 	})
 }
 
 export const useDeleteManyDefectiveGoodsMutation = () => {
+	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
+	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
+		listenStorageChange: true
+	})
+
 	return useMutation({
-		meta: { invalidates: [Object.values(DefectiveGoodsQueryKey)] },
+		meta: {
+			invalidates: [
+				[DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)]
+			]
+		},
 		mutationFn: DefectiveGoodsService.deleteManyDefectiveGoods
 	})
 }
@@ -124,9 +160,10 @@ export const useGetDefectiveGoodsOutboundReportQuery = () => {
 
 export const useUpdateDefectiveGoodsStockMutation = () => {
 	const { searchParams, removeParam } = useFilterQuery()
+	const params = omitBy(searchParams, (value) => value === undefined || value === null || value === '')
 
 	return useMutation({
-		meta: { invalidates: [Object.values(DefectiveGoodsQueryKey)] },
+		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC, params]] },
 		mutationFn: async (payload: InboundOutboundFormValues) =>
 			searchParams.action === StockFlow.INBOUND
 				? DefectiveGoodsService.updateInboundStatus(

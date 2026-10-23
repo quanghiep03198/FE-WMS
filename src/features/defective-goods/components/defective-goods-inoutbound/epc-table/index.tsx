@@ -235,7 +235,7 @@ const EpcTable: React.FC = () => {
 		getFacetedUniqueValues: getFacetedUniqueValues(),
 		filterFns: {
 			fuzzy: fuzzyFilter,
-			inDateRange: null
+			inDateRange: null!
 		}
 	})
 

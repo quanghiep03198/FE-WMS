@@ -118,7 +118,6 @@ const DefectiveGoodsForm: React.FC = () => {
 			setFormAction(CommonActions.UPDATE)
 			form.reset(e.payload)
 			editorRef.current.commands().setContent(e.payload.defective_description)
-			// setDefaultEditorContent(e.payload.defective_description)
 		}
 	})
 
@@ -161,8 +160,13 @@ const DefectiveGoodsForm: React.FC = () => {
 
 	useUpdateEffect(() => {
 		if (typeof editorRef.current?.commands !== 'function') return
-		if (useAvailableTemplate) editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
-		else if (editorRef.current) editorRef.current?.commands().setContent('')
+		if (useAvailableTemplate) {
+			form.setValue('defective_description', DefectDescriptionTemplate[i18n.language])
+			editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
+		} else {
+			form.setValue('defective_description', '')
+			editorRef.current?.commands().setContent('')
+		}
 	}, [i18n.language, useAvailableTemplate])
 
 	const handleEpcChange: React.KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
@@ -219,7 +223,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 
 		const payload = {
-			...data.data,
+			...data,
 			po: isNil(data.po) || isEmpty(data.po) ? 'PRELOAD' : data.po,
 			defective_description: gzipSync(data.defective_description, {
 				level: 6,
@@ -228,7 +232,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 
 		console.log({
-			...data.data,
+			...data,
 			po: isNil(data.po) || isEmpty(data.po) ? 'PRELOAD' : data.po,
 			defective_description: data.defective_description
 		})
@@ -260,8 +264,6 @@ const DefectiveGoodsForm: React.FC = () => {
 	const isError: boolean = isFailedToCreate || isFailedToUpdate
 	const shouldRequireFullInfo: boolean =
 		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
-
-	console.log(form.getValues('defective_description'))
 
 	return (
 		<FormProvider {...form}>

@@ -46,7 +46,7 @@ const InoutboundForm: React.FC = () => {
 			epcs: [],
 			...(searchParams.action === StockFlow.INBOUND && { storage_location: null }),
 			...(searchParams.action === StockFlow.OUTBOUND && { outbound_purpose: null })
-		},
+		} as unknown as InboundOutboundFormValues,
 		resetOptions: { keepErrors: false, keepDirty: false, keepValues: false }
 	})
 
@@ -65,7 +65,7 @@ const InoutboundForm: React.FC = () => {
 		form.reset()
 	}, [searchParams.action])
 
-	event$.useSubscription((e: { action: CommonActions; payload: string[] }) => {
+	event$.useSubscription((e) => {
 		if (e.action !== CommonActions.IMPORT) return
 		if (e.payload.length === 0) form.reset()
 		else form.setValue('epcs', e.payload)
@@ -171,7 +171,7 @@ const InoutboundForm: React.FC = () => {
 								{currentOutboundPurpose === DefectiveGoodsOutboundPurpose.SHIPPING && (
 									<PurchaseOrderFieldControl
 										errorMessageVariant='tooltip'
-										label={null}
+										label={undefined}
 										placeholder={t('ns_erp:fields.po')}
 									/>
 								)}
