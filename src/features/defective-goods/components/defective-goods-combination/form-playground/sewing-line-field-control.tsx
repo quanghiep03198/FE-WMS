@@ -1,4 +1,4 @@
-import type { SelectFieldControlProps } from '@components/forms/select';
+import type { SelectFieldControlProps } from '@components/forms/select'
 import { SelectFieldControl } from '@components/forms/select'
 import type { DefectiveGoodsCombinationFormValues } from '@features/defective-goods/schemas/defective-goods.schema'
 import { useGetSewingProductLineQuery } from '@features/department/hooks/use-department-request'
@@ -15,7 +15,7 @@ const SewingLineFieldControl: React.FC<
 	const datalist = useMemo(() => {
 		if (!Array.isArray(data)) return []
 		return data
-			.map(({ _id, name }) => ({ label: name[i18n.language], value: _id! }))
+			.map(({ name }) => ({ label: name[i18n.language], value: name[i18n.language] }))
 			.sort((a, b) => a.label.localeCompare(b.label, undefined, { numeric: true }))
 	}, [data, i18n.language])
 

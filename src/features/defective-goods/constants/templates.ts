@@ -11,7 +11,7 @@ export class DefectDescriptionTemplate {
          <li data-type="taskItem" data-checked="false">Bẩn, dính vết bẩn không lau được</li>
          <li data-type="taskItem" data-checked="false">Lỗi form dáng (lệch phom, méo, không cân)</li>
          <li data-type="taskItem" data-checked="false">Lỗi đế (móp méo, nứt, sứt mẻ)</li>
-         <li data-type="taskItem" data-checked="true">Khác: ...</li>
+         <li data-type="taskItem" data-checked="false">Khác: ...</li>
       </ul>
 
       <h3>2. Mô tả chi tiết lỗi</h3>
