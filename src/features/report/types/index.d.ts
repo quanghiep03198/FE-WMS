@@ -1,4 +1,5 @@
 import type { IDepartment } from '@features/department/types'
+import { IStorageLocation } from '@features/warehouse/types'
 
 export interface IInOutBoundReport {
 	mo_no: string
@@ -46,14 +47,6 @@ export interface IInboundHistory {
 	recalled_qty: number
 	missing_qty: number
 	progress: `${number}%`
-	// order_size_run: Array<{
-	// 	size_numcode: string
-	// 	qty: number
-	// }>
-	// inbound_history_by_size: Array<{
-	// 	size_numcode: string
-	// 	qty: number
-	// }>
 	daily_inbound_history: Array<{
 		mo_no: string
 		date: string
@@ -68,8 +61,8 @@ export interface IInboundHistory {
 		>
 		transaction_history: Array<{
 			time: string
-			assembly_line: string
-			storage_location: string
+			assembly_line?: IDepartment
+			storage_location?: IStorageLocation
 			size_ledger: Record<
 				string,
 				{

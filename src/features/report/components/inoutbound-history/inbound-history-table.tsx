@@ -341,10 +341,15 @@ const InboundHistoryTable: React.FC = () => {
 														align='left'
 														aria-invalid={!tx.assembly_line}
 														className='aria-disabled:text-muted-foreground aria-invalid:text-destructive aria-invalid:content-["-"]'>
-														{tx.assembly_line &&
-															t('ns_company:assembly_line', { name: tx.assembly_line })}
+														{isStockedIn && tx.assembly_line?.name
+															? tx.assembly_line?.name[i18n.language]
+															: '-'}
 													</TableCell>
-													<TableCell>{isStockedIn ? tx.storage_location : '-'}</TableCell>
+													<TableCell>
+														{isStockedIn && tx.storage_location?.name
+															? tx.storage_location?.name[i18n.language]
+															: '-'}
+													</TableCell>
 													<TableCell className='w-full p-0'>
 														<NestedTable>
 															{Object.entries(tx.size_ledger)
