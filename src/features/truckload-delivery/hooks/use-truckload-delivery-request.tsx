@@ -11,7 +11,6 @@ import { usePageQueryParams } from './use-page-query-params'
 
 export enum TruckloadDeliveryQueryKeys {
 	TRUCKLOAD_DELIVERY = 'TRUCKLOAD_DELIVERY',
-	TRUCKLOAD_DELIVERY_DETAIL = 'TRUCKLOAD_DELIVERY_DETAIL',
 	DISPATCH_PURCHASE_ORDER = 'DISPATCH_PURCHASE_ORDER'
 }
 
@@ -174,11 +173,11 @@ export const useUpsertPurchaseOrdersMutation = () => {
 }
 
 export const useUpdateDispatchOrderSignatureMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+	const { searchParams } = usePageQueryParams()
 
 	return useMutation({
-		mutationFn: TruckloadDeliveryService.updateDispatchOrderSignature,
-		onSuccess: () => invalidateQueries()
+		meta: { invalidates: [[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams]] },
+		mutationFn: TruckloadDeliveryService.updateDispatchOrderSignature
 	})
 }
 
@@ -187,7 +186,9 @@ export const useUpdateContainerConditionMutation = () => {
 	const { searchParams } = usePageQueryParams()
 
 	return useMutation({
-		meta: { invalidates: [[TruckloadDeliveryService, searchParams]] },
+		meta: {
+			invalidates: [[TruckloadDeliveryService, searchParams]]
+		},
 		mutationFn: async (payload: {
 			dispatch_order: TruckloadDeliveryDispatchOrder
 			punctured_container?: boolean
@@ -231,18 +232,5 @@ export const useUpdateContainerConditionMutation = () => {
 				)
 			}
 		}
-		// onSettled: invalidateQueries
 	})
-}
-
-const useInvalidateQueries = (...queryKeys: any[]) => {
-	const queryClient = useQueryClient()
-
-	return () => {
-		queryClient.invalidateQueries({
-			predicate: (query) =>
-				query.queryKey.some((key) => [...Object.values(TruckloadDeliveryQueryKeys), ...queryKeys].includes(key)),
-			refetchType: 'active'
-		})
-	}
 }
