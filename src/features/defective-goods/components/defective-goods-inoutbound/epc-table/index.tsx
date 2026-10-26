@@ -152,7 +152,7 @@ const EpcTable: React.FC = () => {
 					})
 				}
 			}),
-			columnHelper.accessor('size_code', {
+			columnHelper.accessor('size_numcode', {
 				header: 'Size',
 				enableColumnFilter: true,
 				enableSorting: true,

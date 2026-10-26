@@ -9,10 +9,10 @@ type SelectionMode = 'none' | 'some' | 'all' | 'all-except'
 
 type SelectionState = {
 	mode: SelectionMode
-	selectedIds: Set<number> // Specific selected IDs
-	excludedIds: Set<number> // Excluded IDs when mode = 'all-except'
+	selectedIds: Set<string> // Specific selected IDs
+	excludedIds: Set<string> // Excluded IDs when mode = 'all-except'
 	totalCount: number // Total records on server
-	pageItems: number[] // Current page item IDs
+	pageItems: string[] // Current page item IDs
 }
 
 type TListPanelContext = {
@@ -24,20 +24,20 @@ type TListPanelContext = {
 	selectionState: SelectionState
 
 	// Selection operations
-	updatePageItems: (items: number[], totalCount: number) => void
-	toggleItem: (id: number) => void
+	updatePageItems: (items: string[], totalCount: number) => void
+	toggleItem: (id: string) => void
 	toggleAll: () => void
-	isItemSelected: (id: number) => boolean
+	isItemSelected: (id: string) => boolean
 	getSelectedCount: () => number
 	clearSelection: () => void
 
 	// Computed selection info
-	getSelectedIds: () => number[]
-	getDeselectedIds: () => number[]
+	getSelectedIds: () => string[]
+	getDeselectedIds: () => string[]
 	getCheckboxState: () => CheckedState
 }
 
-const ListPanelContext = createContext<TListPanelContext>(null)
+const ListPanelContext = createContext<TListPanelContext>(null!)
 
 export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const [isAllCardsExpanded, setIsAllCardExpaned] = useLocalStorageState<boolean>('defectiveGoodsExpandAllCards', {
@@ -59,7 +59,7 @@ export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children 
 	})
 
 	// Update page items and total count when pagination changes
-	const updatePageItems = useCallback((items: number[], totalCount: number) => {
+	const updatePageItems = useCallback((items: string[], totalCount: number) => {
 		setSelectionState((prev) => ({
 			...prev,
 			pageItems: items,
@@ -69,7 +69,7 @@ export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children 
 
 	// Check if an item is selected based on current selection mode
 	const isItemSelected = useCallback(
-		(id: number): boolean => {
+		(id: string): boolean => {
 			const { mode, selectedIds, excludedIds } = selectionState
 
 			switch (mode) {
@@ -90,7 +90,7 @@ export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children 
 
 	// Toggle selection state of a single item
 	const toggleItem = useCallback(
-		(id: number) => {
+		(id: string) => {
 			setSelectionState((prev) => {
 				const isCurrentlySelected = isItemSelected(id)
 				const newState = { ...prev }
@@ -200,8 +200,8 @@ export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children 
 			const newState = {
 				...prev,
 				mode: 'none' as SelectionMode,
-				selectedIds: new Set<number>(),
-				excludedIds: new Set<number>()
+				selectedIds: new Set<string>(),
+				excludedIds: new Set<string>()
 			}
 			// Persist to localStorage
 			try {
@@ -255,7 +255,7 @@ export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children 
 	}, [selectionState.mode, selectionState.selectedIds, selectionState.excludedIds])
 
 	// Computed selection info
-	const getSelectedIds = useCallback((): number[] => {
+	const getSelectedIds = useCallback((): string[] => {
 		const { mode, selectedIds, excludedIds, pageItems } = selectionState
 
 		switch (mode) {
@@ -272,7 +272,7 @@ export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children 
 		}
 	}, [selectionState])
 
-	const getDeselectedIds = useCallback((): number[] => {
+	const getDeselectedIds = useCallback((): string[] => {
 		const { mode, excludedIds } = selectionState
 		return mode === 'all-except' ? Array.from(excludedIds) : []
 	}, [selectionState])

@@ -117,7 +117,7 @@ const DefectiveGoodsForm: React.FC = () => {
 			schemaRef.current = updateDefectiveGoodsSchema
 			setFormAction(CommonActions.UPDATE)
 			form.reset(e.payload)
-			editorRef.current.commands().setContent(e.payload.defective_description)
+			editorRef.current.commands().setContent(e.payload.defective_description ?? '')
 		}
 	})
 
@@ -146,14 +146,14 @@ const DefectiveGoodsForm: React.FC = () => {
 			cust_shoes_style: '',
 			color_sn: '',
 			...(shouldRequireFullInfo && { po: '', mo_no: '' }),
-			...(currentStrategy === 'manually' ? { sizes: [] } : { size_code: '' })
+			...(currentStrategy === 'manually' ? { sizes: [] } : { size_numcode: '' })
 		})
 	}, [formAction, currentCategory])
 
 	useEffect(() => {
 		if (formAction === CommonActions.CREATE) {
 			editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
-			form.setValue('ri_type', currentStrategy)
+			form.setValue('combination_strategy', currentStrategy)
 		}
 		if (formAction === CommonActions.UPDATE) setStrategy(null)
 	}, [formAction, currentStrategy])
@@ -217,9 +217,9 @@ const DefectiveGoodsForm: React.FC = () => {
 	}
 
 	const handleSubmitForm = async (data: CreateDefectiveGoodsFormValues) => {
-		if (data.ri_type === 'manually' && formAction === CommonActions.CREATE) {
+		if (data.combination_strategy === 'manually' && formAction === CommonActions.CREATE) {
 			delete data.epc
-			delete data.size_code
+			delete data.size_numcode
 		}
 
 		const payload = {
@@ -247,13 +247,13 @@ const DefectiveGoodsForm: React.FC = () => {
 		if (formAction === CommonActions.CREATE)
 			form.reset({
 				...form.getValues(),
-				...(data.ri_type === 'usb' && { epc: '' }),
-				...(data.ri_type === 'manually' && { sizes: [{}] })
+				...(data.combination_strategy === 'usb' && { epc: '' }),
+				...(data.combination_strategy === 'manually' && { sizes: [{}] })
 			})
 		if (formAction === CommonActions.UPDATE) {
 			handleCancel()
 		}
-		if (data.ri_type === 'uhf') event$.emit({ action: CommonActions.SAVE, payload: [] })
+		if (data.combination_strategy === 'uhf') event$.emit({ action: CommonActions.SAVE, payload: [] })
 	}
 
 	if (editorRef.current?.isEmpty?.() && form.formState.isSubmitted) {
@@ -421,7 +421,7 @@ const DefectiveGoodsForm: React.FC = () => {
 						<SizeFieldControl
 							disabled={isNil(formAction)}
 							loading={isLoading}
-							name={currentStrategy === 'manually' ? 'sizes' : 'size_code'}
+							name={currentStrategy === 'manually' ? 'sizes' : 'size_numcode'}
 							datalist={
 								Array.isArray(orderDetail?.sizes)
 									? orderDetail.sizes

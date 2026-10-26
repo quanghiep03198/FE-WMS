@@ -45,9 +45,11 @@ const UserActivityInfo: React.FC<UserActivityInfoProps> = ({ createdBy, createdA
 						<Icon name='FileCog' size={18} />
 
 						{t('ns_common:timestamps.last_updated', {
-							timestamp: formatRelative(new Date(lastUpdatedAt), new Date(), {
-								locale: dateLocale
-							}),
+							timestamp: lastUpdatedAt
+								? formatRelative(new Date(lastUpdatedAt), new Date(), {
+										locale: dateLocale
+									})
+								: null,
 							defaultValue: null
 						})}
 					</Typography>

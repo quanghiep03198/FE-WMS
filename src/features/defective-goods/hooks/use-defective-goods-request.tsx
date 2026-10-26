@@ -43,19 +43,21 @@ export const useGetDefectiveGoodsInventoryQuery = () => {
 	})
 }
 
+export const getDefectiveGoodsQueryOptions = (params: Record<string, any>) => ({
+	queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy(params, (item) => !!item)],
+	queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(pickBy(params, (item) => !!item)),
+	placeholderData: keepPreviousData,
+	staleTime: 1000 * 5, // 1 minute
+	select: (response) => response.metadata
+})
+
 export const useGetDefectiveGoodsQuery = () => {
 	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
 	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
 		listenStorageChange: true
 	})
 
-	return useQuery({
-		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)],
-		queryFn: async () =>
-			await DefectiveGoodsService.getDefectiveGoods(pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)),
-		placeholderData: keepPreviousData,
-		select: (response) => response.metadata
-	})
+	return useQuery(getDefectiveGoodsQueryOptions({ ...searchParams, ...searchTerms }))
 }
 
 export const useCreateDefectiveGoodsMutation = () => {
@@ -190,10 +192,7 @@ export const usePrefetchDefectiveGoodsQuery = () => {
 	return useCallback(
 		(page: number) => {
 			const params = pickBy({ ...searchTerms, page }, (item) => !!item)
-			queryClient.query({
-				queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, params],
-				queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(params)
-			})
+			queryClient.query(getDefectiveGoodsQueryOptions(params))
 		},
 		[searchTerms]
 	)

@@ -117,7 +117,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 										size='sm'
 										type='button'
 										variant='outline'
-										onClick={() => append({ size_code: null, qty: null })}>
+										onClick={() => append({ size_numcode: null, qty: null })}>
 										<Icon name='ListPlus' />
 										{t('ns_common:actions.add')}
 									</Button>
@@ -133,7 +133,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 											disabled={disabled}
 											labelField='label'
 											loading={loading}
-											name={`sizes.${index}.size_code`}
+											name={`sizes.${index}.size_numcode`}
 											type='text'
 											valueField='value'
 											placeholder={t('ns_common:form_placeholder.fill', {
@@ -164,7 +164,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 								type='button'
 								variant='outline'
 								onClick={() => {
-									append({ size_code: '', qty: 0 })
+									append({ size_numcode: '', qty: 0 })
 									scrollRef.current!.scrollTo({ top: scrollRef.current!.scrollHeight, behavior: 'smooth' })
 								}}>
 								<Icon name='ListPlus' />

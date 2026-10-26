@@ -1,7 +1,8 @@
 import type { IBaseEntity } from '@common/types/entities'
+import { IDepartment } from '@features/department/types'
 import type { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../constants/enums'
 
-export interface IDefectiveGoods extends IBaseEntity {
+export interface IDefectiveGoods extends Omit<Required<IBaseEntity>, 'created' | 'updated'> {
 	epc: string
 	brand_name: string
 	defective_category: DefectiveCategory
@@ -15,8 +16,8 @@ export interface IDefectiveGoods extends IBaseEntity {
 	defective_description: string
 	shoe_source: DefectiveGoodsSource
 	unit: 'pcs' | 'prs'
-	assembly_line: string | null
-	sewing_line: string | null
+	assembly_line: IDepartment | null
+	sewing_line: IDepartment | null
 	ri_cancel: boolean
 }
 

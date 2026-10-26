@@ -19,7 +19,7 @@ import { usePageContext } from '../../../contexts/page-context'
 type DetailTableItem = {
 	factory_shoes_style: string
 	color_sn: string
-	sizes: Array<{ size_code: string; qty: number }>
+	sizes: Array<{ size_numcode: string; qty: number }>
 }
 
 const EpcDetailTable: React.FC = () => {
@@ -164,11 +164,11 @@ const EpcDetailTable: React.FC = () => {
 									<TableCell align='left' className='p-0'>
 										<NestedTable>
 											{item.sizes.map((size) => (
-												<NestedColumn className='min-w-24 basis-24' key={size.size_code}>
+												<NestedColumn className='min-w-24 basis-24' key={size.size_numcode}>
 													<NestedCell>
-														{size.size_code === FALLBACK_VALUE
+														{size.size_numcode === FALLBACK_VALUE
 															? t('ns_common:titles.unknown')
-															: size.size_code}
+															: size.size_numcode}
 													</NestedCell>
 													<NestedCell>{size.qty}</NestedCell>
 												</NestedColumn>

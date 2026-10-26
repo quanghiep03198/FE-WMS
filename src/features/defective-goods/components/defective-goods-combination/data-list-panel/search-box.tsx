@@ -39,7 +39,7 @@ const DEFAULT_SEARCH_TERMS: Omit<DefectiveGoodQueryParams, 'page'> = {
 	cust_shoes_style: '',
 	factory_shoes_style: '',
 	color_sn: '',
-	size_code: '',
+	size_numcode: '',
 	epc: ''
 }
 
@@ -155,7 +155,7 @@ const SearchBox: React.FC = () => {
 									<PurchaseOrderFieldControl orientation={formFieldOrientation} />
 									<CommandNumberFieldControl orientation={formFieldOrientation} />
 									<ColorFieldControl orientation={formFieldOrientation} />
-									<SizeFieldControl name='size_code' orientation={formFieldOrientation} />
+									<SizeFieldControl name='size_numcode' orientation={formFieldOrientation} />
 									<SewingLineFieldControl orientation={formFieldOrientation} />
 									<AssemblyLineFieldControl orientation={formFieldOrientation} />
 								</Div>

@@ -31,19 +31,18 @@ import { useSwitchCombinationStrategy } from '../../../hooks/use-switch-combinat
 const InfoCard: React.FC<{
 	data: IDefectiveGoods
 }> = ({ data }) => {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 	const { isAllCardsExpanded, isTogglingExpand, isItemSelected, toggleItem } = useListPanelContext()
 	const [isOpen, setIsOpen] = useState<boolean>(isAllCardsExpanded)
 	const { event$ } = usePageContext()
-
-	const { hash, search } = useLocation()
+	const { hash, search } = useLocation({ structuralSharing: false })
 	const dateLocale = useDateLocale()
 	const { setStrategy } = useSwitchCombinationStrategy()
-	const navigate = useNavigate()
+	const navigate = useNavigate({ from: '/defective-goods-epc-combination' })
 
 	// Simplified selection handler using new optimized API
 	const handleSelect = useCallback(
-		(_checked: boolean, id: number) => {
+		(_checked: boolean, id: string) => {
 			// Use the new toggleItem method - much simpler!
 			toggleItem(id)
 		},
@@ -51,7 +50,7 @@ const InfoCard: React.FC<{
 	)
 
 	const handleUpdate = useCallback(() => {
-		navigate({ hash: String(data.id), search })
+		navigate({ hash: String(data._id), search })
 		const payload: IDefectiveGoods = {} as IDefectiveGoods
 
 		for (const prop in data) {
@@ -63,7 +62,10 @@ const InfoCard: React.FC<{
 				payload[prop] = data[prop]
 			}
 		}
-		event$.emit({ action: CommonActions.UPDATE, payload })
+		event$.emit({
+			action: CommonActions.UPDATE,
+			payload: { ...payload, assembly_line: data.assembly_line?._id ?? '', sewing_line: data.sewing_line?._id ?? '' }
+		})
 		setStrategy(null)
 	}, [data])
 
@@ -80,12 +82,14 @@ const InfoCard: React.FC<{
 		[DefectiveLocation.OTHER, t('ns_common:others.other')]
 	])
 
+	if (!data) return null
+
 	return (
 		<Card
 			className={cn(
 				'@container/card relative min-h-fit gap-4 overflow-hidden rounded-md border pt-4 pb-2 shadow-sm *:text-left *:text-sm',
 				isTogglingExpand && 'animate-out fade-out-50 duration-200',
-				hash === String(data.id) && 'bg-accent/50'
+				hash === String(data._id) && 'bg-accent/50'
 			)}>
 			<CardHeader className='px-4' onClick={() => setIsOpen(!isOpen)}>
 				<CardAction className='absolute top-3 right-3'>
@@ -118,7 +122,7 @@ const InfoCard: React.FC<{
 										className='text-destructive! hover:bg-destructive/20! gap-x-2'
 										onClick={(e) => {
 											e.stopPropagation()
-											event$.emit({ action: CommonActions.DELETE, payload: data.id })
+											event$.emit({ action: CommonActions.DELETE, payload: data._id! })
 										}}>
 										<Icon name='Trash2' /> {t('ns_common:actions.delete')}
 									</DropdownMenuItem>
@@ -130,8 +134,8 @@ const InfoCard: React.FC<{
 				<Div className='mb-3! flex items-center gap-x-1'>
 					<RoleBaseAccessControl authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]} mode='invisible'>
 						<Checkbox
-							checked={isItemSelected(data.id)}
-							onCheckedChange={() => handleSelect(false, data.id)}
+							checked={isItemSelected(data._id!)}
+							onCheckedChange={() => handleSelect(false, data._id!)}
 							onClick={(e) => e.stopPropagation()}
 						/>
 						<Separator className='mx-2 h-5 w-0.5' orientation='vertical' />
@@ -160,8 +164,12 @@ const InfoCard: React.FC<{
 				</CardTitle>
 				<CardDescription className='row-start-3 first-letter:uppercase'>
 					{t('ns_common:timestamps.created_at', {
-						timestamp: formatRelative(new Date(data.created), new Date(), { locale: dateLocale }),
-						defaultValue: formatRelative(new Date(data.created), new Date(), { locale: dateLocale })
+						timestamp: data.created_at
+							? formatRelative(new Date(data.created_at!), new Date(), { locale: dateLocale })
+							: null,
+						defaultValue: data?.created_at
+							? formatRelative(new Date(data.created_at), new Date(), { locale: dateLocale })
+							: null
 					})}
 				</CardDescription>
 			</CardHeader>
@@ -184,8 +192,8 @@ const InfoCard: React.FC<{
 							</DescriptionItem>
 							<DescriptionItem title={data.po}>
 								<Typography variant='small'>Size: </Typography>
-								<Typography title={data.size_code} variant='small'>
-									#{data.size_code}
+								<Typography title={data.size_numcode} variant='small'>
+									#{data.size_numcode}
 								</Typography>
 							</DescriptionItem>
 							{data.po && (
@@ -202,17 +210,13 @@ const InfoCard: React.FC<{
 									<Typography variant='small'>{data.mo_no}</Typography>
 								</DescriptionItem>
 							)}
-							<DescriptionItem title={data.sewing_line ?? '?'}>
+							<DescriptionItem title={data.sewing_line?.name?.[i18n.language] ?? '?'}>
 								<Typography variant='small'>{t('ns_erp:fields.sewing_line')} : </Typography>
-								<Typography className='uppercase' variant='small'>
-									{data.sewing_line ?? '?'}
-								</Typography>
+								<Typography variant='small'>{data.sewing_line?.name?.[i18n.language] ?? '?'}</Typography>
 							</DescriptionItem>
-							<DescriptionItem title={data.assembly_line ?? '?'}>
+							<DescriptionItem title={data.assembly_line?.name?.[i18n.language] ?? '?'}>
 								<Typography variant='small'>{t('ns_erp:fields.assembly_line')} : </Typography>
-								<Typography className='uppercase' variant='small'>
-									{data.assembly_line ?? '?'}
-								</Typography>
+								<Typography variant='small'>{data.assembly_line?.name?.[i18n.language] ?? '?'}</Typography>
 							</DescriptionItem>
 							<DescriptionItem title={defectLocation.get(data.defective_location) ?? '?'}>
 								<Typography variant='small'>{t('ns_erp:fields.defective_location')} : </Typography>
@@ -229,12 +233,12 @@ const InfoCard: React.FC<{
 										'?'}
 								</Typography>
 							</DescriptionItem>
-							<DescriptionItem title={data.ri_type ?? '?'}>
-								<Typography variant='small'>{t('ns_erp:fields.ri_type')} : </Typography>
+							<DescriptionItem title={data.combination_strategy ?? '?'}>
+								<Typography variant='small'>{t('ns_erp:fields.combination_strategy')} : </Typography>
 								<Typography variant='small'>
-									{data.ri_type === 'manually'
+									{data.combination_strategy === 'manually'
 										? capitalize(t('ns_common:titles.manually'))
-										: upperCase(data.ri_type)}
+										: upperCase(data.combination_strategy)}
 								</Typography>
 							</DescriptionItem>
 							<DescriptionItem title={data.unit ?? '?'}>

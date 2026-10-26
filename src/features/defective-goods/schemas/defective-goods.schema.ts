@@ -3,10 +3,10 @@ import { isEmpty, isNil } from 'lodash-es'
 import { array, enum as enums, number, object, string, type Infer } from 'zod'
 
 export const baseDefectiveGoodsSchema = object({
-	ri_type: enums(['uhf', 'usb', 'manually'], { message: 'ns_validation:required' }).nullish(),
 	epc: array(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
 		.or(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
 		.optional(),
+	combination_strategy: enums(['uhf', 'usb', 'manually'], { message: 'ns_validation:required' }).nullish(),
 	defective_category: enums(DefectiveCategory, { message: 'ns_validation:required' }),
 	po: string({ message: 'ns_validation:required' }).nullish(),
 	mo_no: string({ message: 'ns_validation:required' }).nullish(),
@@ -18,7 +18,7 @@ export const baseDefectiveGoodsSchema = object({
 		.trim()
 		.nonempty({ message: 'ns_validation:required' }),
 	color_sn: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
-	size_code: string({ message: 'ns_validation:required' }).trim().nullish(),
+	size_numcode: string({ message: 'ns_validation:required' }).trim().nullish(),
 	shoe_source: enums(DefectiveGoodsSource).optional(),
 	defective_location: enums(DefectiveLocation, { message: 'ns_validation:required' }),
 	defective_description: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
@@ -30,7 +30,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 	.extend({
 		sizes: array(
 			object({
-				size_code: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+				size_numcode: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 				qty: number({ message: 'ns_validation:required' }).min(1, { message: 'ns_validation:invalid_value' })
 			})
 		).nullish()
@@ -50,7 +50,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 			})
 	})
 	.superRefine((values, context) => {
-		switch (values?.ri_type) {
+		switch (values?.combination_strategy) {
 			case 'uhf': {
 				if (!Array.isArray(values.epc) || values.epc.length === 0)
 					context.addIssue({
@@ -59,9 +59,9 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 						message: 'EPCs are required when combination strategy is UHF',
 						fatal: true
 					})
-				if (isNil(values.size_code) || isEmpty(values.size_code.trim()))
+				if (isNil(values.size_numcode) || isEmpty(values.size_numcode.trim()))
 					context.addIssue({
-						path: ['size_code'],
+						path: ['size_numcode'],
 						code: 'custom',
 						message: 'ns_validation:required',
 						fatal: true
@@ -76,9 +76,9 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 						message: 'EPCs are required when combination strategy is USB',
 						fatal: true
 					})
-				if (isNil(values.size_code) || isEmpty(values.size_code.trim()))
+				if (isNil(values.size_numcode) || isEmpty(values.size_numcode.trim()))
 					context.addIssue({
-						path: ['size_code'],
+						path: ['size_numcode'],
 						code: 'custom',
 						message: 'ns_validation:required',
 						fatal: true
@@ -100,14 +100,14 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 		}
 	})
 	.superRefine((values, context) => {
-		if (Array.isArray(values?.sizes) && values.ri_type === 'manually')
+		if (Array.isArray(values?.sizes) && values.combination_strategy === 'manually')
 			values.sizes.forEach((item, index) => {
 				if (
 					Array.isArray(values?.sizes) &&
-					values.sizes.findIndex((otherItem) => otherItem.size_code === item.size_code) !== index
+					values.sizes.findIndex((otherItem) => otherItem.size_numcode === item.size_numcode) !== index
 				)
 					context.addIssue({
-						path: [`sizes.${index}.size_code`],
+						path: [`sizes.${index}.size_numcode`],
 						code: 'custom',
 						message: 'Do not select the same Size',
 						fatal: true

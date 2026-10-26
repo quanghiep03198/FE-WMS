@@ -15,7 +15,7 @@ const SewingLineFieldControl: React.FC<
 	const datalist = useMemo(() => {
 		if (!Array.isArray(data)) return []
 		return data
-			.map(({ name }) => ({ label: name[i18n.language], value: name[i18n.language] }))
+			.map(({ _id, name }) => ({ label: name[i18n.language], value: _id }))
 			.sort((a, b) => a.label.localeCompare(b.label, undefined, { numeric: true }))
 	}, [data, i18n.language])
 

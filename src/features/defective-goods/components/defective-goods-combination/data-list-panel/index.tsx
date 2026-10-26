@@ -1,16 +1,24 @@
 import { cn } from '@common/utils/cn'
 import { Div } from '@components/customs/div'
 import Pagination from '@components/customs/pagination'
-import type { Label } from '@components/ui'
 import { buttonVariants } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@components/ui/sheet'
+import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '@features/defective-goods/constants/storage-keys'
+import { type DefectiveGoodQueryParams } from '@features/defective-goods/schemas/defective-goods.schema'
+import { type IDefectiveGoods } from '@features/defective-goods/types'
 import useQueryParams from '@hooks/use-query-params'
+import { useQueryClient } from '@tanstack/react-query'
+import { useSessionStorageState } from 'ahooks'
 import { omit } from 'lodash-es'
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ListPanelProvider } from '../../../contexts/list-panel-context'
-import { useGetDefectiveGoodsQuery, usePrefetchDefectiveGoodsQuery } from '../../../hooks/use-defective-goods-request'
+import {
+	getDefectiveGoodsQueryOptions,
+	useGetDefectiveGoodsQuery,
+	usePrefetchDefectiveGoodsQuery
+} from '../../../hooks/use-defective-goods-request'
 import ActionButtonsGroup from './action-buttons-group'
 import DataList from './data-list'
 import DeleteConfirmDialog from './delete-confirm-dialog'
@@ -19,9 +27,30 @@ import SearchBox from './search-box'
 
 const DatalistPanel: React.FC = () => {
 	const { t } = useTranslation()
-	const { data, isLoading } = useGetDefectiveGoodsQuery()
+	const { data, isLoading, isPlaceholderData } = useGetDefectiveGoodsQuery()
+	const queryClient = useQueryClient()
 	const handlePrefetch = usePrefetchDefectiveGoodsQuery()
-	const { setParams } = useQueryParams<{ page: number }>()
+	const { searchParams, setParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
+	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
+		listenStorageChange: true
+	})
+
+	// Prefetch trang kế tiếp
+	useEffect(() => {
+		if (!isPlaceholderData || !data || !data.hasNextPage) return
+
+		const run = async () =>
+			await queryClient.query(
+				getDefectiveGoodsQueryOptions({ ...searchParams, ...searchTerms, page: data.page + 1 })
+			)
+
+		const id = 'requestIdleCallback' in window ? requestIdleCallback(run, { timeout: 120 }) : setTimeout(run, 0)
+
+		return () => {
+			if ('cancelIdleCallback' in window) cancelIdleCallback(id as number)
+			else clearTimeout(id as number)
+		}
+	}, [data?.page, isPlaceholderData, data?.hasNextPage])
 
 	return (
 		<Fragment>
@@ -44,7 +73,7 @@ const DatalistPanel: React.FC = () => {
 				</ListPanelProvider>
 				<Div className='place-content-center place-items-center'>
 					<Pagination
-						{...omit(data, ['data'])}
+						{...(omit(data, ['data']) as Omit<Pagination<unknown>, 'data'>)}
 						className='mx-auto w-full'
 						range={1}
 						onPageChange={(page) => setParams({ page })}
@@ -76,7 +105,7 @@ const DatalistPanel: React.FC = () => {
 					</ListPanelProvider>
 					<SheetFooter>
 						<Pagination
-							{...omit(data, ['data'])}
+							{...(omit(data, ['data']) as Omit<Pagination<unknown>, 'data'>)}
 							className='mx-auto w-full'
 							range={1}
 							onPageChange={(page) => setParams({ page })}
@@ -91,7 +120,7 @@ const DatalistPanel: React.FC = () => {
 	)
 }
 
-export const DataListPanelSheetTrigger: React.FC<React.ComponentProps<typeof Label>> = (props) => {
+export const DataListPanelSheetTrigger: React.FC<React.ComponentProps<'label'>> = (props) => {
 	const { t } = useTranslation()
 
 	return (

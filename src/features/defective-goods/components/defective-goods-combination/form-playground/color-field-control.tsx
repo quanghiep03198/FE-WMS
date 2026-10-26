@@ -14,7 +14,7 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 	const currentCategory = useWatch({ control: control, name: 'defective_category' })
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })
-	const currentStrategy = useWatch({ control: control, name: 'ri_type' })
+	const currentStrategy = useWatch({ control: control, name: 'combination_strategy' })
 
 	const shouldFilterAllSizes: boolean = currentCategory === DefectiveCategory.RESEARCH_DEVELOPMENT
 
@@ -51,7 +51,7 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 			onInput={(value) =>
 				reset({
 					...getValues(),
-					...(currentStrategy === 'manually' ? { sizes: [] } : { size_code: '' }),
+					...(currentStrategy === 'manually' ? { sizes: [] } : { size_numcode: '' }),
 					color_sn: value.toUpperCase()
 				})
 			}

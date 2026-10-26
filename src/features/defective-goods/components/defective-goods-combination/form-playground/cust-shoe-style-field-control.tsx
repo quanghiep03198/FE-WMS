@@ -36,7 +36,7 @@ const CustShoeStyleFieldControl: React.FC<
 			...getValues(),
 			...value,
 			color_sn: '',
-			size_code: ''
+			size_numcode: ''
 		})
 	}
 

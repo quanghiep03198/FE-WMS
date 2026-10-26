@@ -44,7 +44,7 @@ const CombinationStrategySelect: React.FC<{ disabled: boolean }> = ({ disabled }
 				value={currentStrategy}
 				onValueChange={(value) => setStrategy(value as 'usb' | 'uhf' | 'manually')}>
 				<SelectTrigger className='flex w-32 @2xl/combination-form:hidden'>
-					<SelectValue placeholder={capitalize(t('ns_erp:fields.ri_type'))} />
+					<SelectValue placeholder={capitalize(t('ns_erp:fields.combination_strategy'))} />
 				</SelectTrigger>
 				<SelectContent>
 					<SelectItem value='uhf'>
