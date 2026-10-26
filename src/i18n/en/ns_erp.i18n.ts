@@ -95,7 +95,7 @@ export default {
 		assembly_line: 'Assembly line',
 		factory_shoes_style: 'Factory shoes style',
 		recalled_qty: 'Recalled Quantity', // Recalled Quantity
-		ri_type: 'Combination type',
+		combination_strategy: 'Combination type',
 		shaping_dept_productivity: 'Shaping department productivity', // Shaping Department Productivity
 		assembly_line_code: 'Assembly department code',
 		assembly_dept_name: 'Assembly department name',

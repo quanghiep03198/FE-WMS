@@ -100,7 +100,7 @@ export default {
 		shoe_source: 'Nguồn giày',
 		sno_car_number: 'Số xe container',
 		container_number: 'Mã container',
-		ri_type: 'Kiểu phối',
+		combination_strategy: 'Kiểu phối',
 		sno_date: 'Ngày tạo đơn',
 		sno_no: 'Mã đơn hàng nhập/xuất',
 		sno_qty: 'Số lượng đóng thùng',
