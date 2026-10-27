@@ -143,7 +143,7 @@ export function AutoCompleteFieldControl<T extends FieldValues, D>(props: AutoCo
 							</FormLabel>
 						)}
 						<Div className='space-y-2'>
-							<Popover modal={false} open={open && props['aria-haspopup'] !== 'false'} onOpenChange={setOpen}>
+							<Popover modal={true} open={open && props['aria-haspopup'] !== 'false'} onOpenChange={setOpen}>
 								<FormControl>
 									<Tooltip
 										message={t(error?.message, { defaultValue: error?.message })}
