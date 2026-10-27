@@ -101,7 +101,9 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 				<Div
 					aria-disabled={disabled}
 					className='flex-1 space-y-4 rounded-md border border-dashed py-3 aria-disabled:opacity-50'>
-					<Div className={cn('px-3', fields.length > 0 && 'scroll-fade max-h-40')} ref={scrollRef}>
+					<Div
+						className={cn('px-3', fields.length > 0 && 'scroll-fade-y overflow-y-auto max-h-40')}
+						ref={scrollRef}>
 						{fields.length === 0 ? (
 							<Empty>
 								<EmptyHeader>
@@ -125,7 +127,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 							</Empty>
 						) : (
 							fields.map((field, index) => (
-								<Div className='mb-2 flex items-stretch gap-x-2' key={field.id}>
+								<Div className='mb-2 flex items-stretch gap-x-2  overflow-y-auto scroll-fade-y' key={field.id}>
 									<Div className='flex-1'>
 										<AutoCompleteFieldControl
 											{...props}

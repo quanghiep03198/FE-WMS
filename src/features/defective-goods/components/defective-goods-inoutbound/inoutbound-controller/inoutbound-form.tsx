@@ -23,6 +23,8 @@ import tw from 'tailwind-styled-components'
 import { DefectiveGoodsOutboundPurpose } from '@features/defective-goods/constants/enums'
 import { usePageContext } from '@features/defective-goods/contexts/page-context'
 import PurchaseOrderFieldControl from '@features/rfid-agent/components/playground/purchase-order-field-control'
+import { Check, LoaderCircle } from 'lucide'
+import { MorphIcon } from 'morphicons/react'
 import { useUpdateDefectiveGoodsStockMutation } from '../../../hooks/use-defective-goods-request'
 import { useFilterQuery } from '../../../hooks/use-filter-query'
 import {
@@ -71,21 +73,19 @@ const InoutboundForm: React.FC = () => {
 		else form.setValue('epcs', e.payload)
 	})
 
+	const quantityFieldRef = useRef<{ reset: () => void }>(null)
+
 	const { mutateAsync, isPending, isError } = useUpdateDefectiveGoodsStockMutation()
 
-	const handleFormSubmission = (data: InboundOutboundFormValues) => {
-		toast.promise(mutateAsync(data), {
-			loading: t('ns_common:notification.processing_request'),
-			success: () => {
-				event$.emit({ action: CommonActions.SAVE, payload: [] })
-				form.reset({
-					epcs: [],
-					...(searchParams.action === StockFlow.INBOUND && { storage_location: '' }),
-					...(searchParams.action === StockFlow.OUTBOUND && { outbound_purpose: '' })
-				})
-				return t('ns_common:notification.success')
-			},
-			error: t('ns_common:notification.error')
+	const handleFormSubmission = async (data: InboundOutboundFormValues) => {
+		await mutateAsync(data)
+		event$.emit({ action: CommonActions.SAVE, payload: [] })
+		// setParams(pick(searchParams, ['action']))
+		quantityFieldRef.current?.reset()
+		form.reset({
+			epcs: [],
+			...(searchParams.action === StockFlow.INBOUND && { storage_location: '' }),
+			...(searchParams.action === StockFlow.OUTBOUND && { outbound_purpose: '' })
 		})
 	}
 
@@ -140,7 +140,7 @@ const InoutboundForm: React.FC = () => {
 								? 'auto-cols-[1fr_1.5fr_1.5fr] @4xl:auto-cols-fr'
 								: 'auto-cols-fr'
 						)}>
-						<QuantityFiledControl />
+						<QuantityFiledControl ref={quantityFieldRef} />
 						{searchParams.action === StockFlow.OUTBOUND ? (
 							<Fragment>
 								<SelectFieldControl
@@ -201,7 +201,9 @@ const InoutboundForm: React.FC = () => {
 							</Button>
 						}>
 						<Button disabled={disabled} type='submit'>
-							<Icon name='Check' />
+							<span aria-busy={isPending} className='aria-busy:animate-spin'>
+								<MorphIcon icon={isPending ? LoaderCircle : Check} size={16} speed={2} spring='smooth' />
+							</span>
 							{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 						</Button>
 					</RoleBaseAccessControl>

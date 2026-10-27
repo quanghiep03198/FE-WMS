@@ -3,7 +3,7 @@ import { StockFlow } from '@features/finished-goods/constants/enums'
 import useQueryParams from '@hooks/use-query-params'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
-import { omitBy, pick, pickBy } from 'lodash-es'
+import { isEmpty, isNil, omitBy, pick, pickBy } from 'lodash-es'
 import { useCallback } from 'react'
 import { useReportPageQueryParams } from '../../report/hooks/use-report-page-query-params'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../constants/storage-keys'
@@ -162,7 +162,7 @@ export const useGetDefectiveGoodsOutboundReportQuery = () => {
 
 export const useUpdateDefectiveGoodsStockMutation = () => {
 	const { searchParams, removeParam } = useFilterQuery()
-	const params = omitBy(searchParams, (value) => value === undefined || value === null || value === '')
+	const params = omitBy(searchParams, (value) => isNil(value) || isEmpty(value))
 
 	return useMutation({
 		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC, params]] },
