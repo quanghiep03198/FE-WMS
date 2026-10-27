@@ -45,8 +45,8 @@ export default function useQueryParams<T = ReturnType<typeof useSearch>>(default
 	 * @param { string } key
 	 * @returns {Promise<void>}
 	 */
-	const removeParam = useCallback((key: string) => {
-		navigate({ search: (prev) => omit(prev, [key]) } as NavigateFnOptions)
+	const removeParam = useCallback((...key: string[]) => {
+		navigate({ search: (prev) => omit(prev, key) } as NavigateFnOptions)
 	}, [])
 
 	useLayoutEffect(() => {
