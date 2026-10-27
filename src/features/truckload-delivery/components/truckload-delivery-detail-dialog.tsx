@@ -79,6 +79,7 @@ const TruckloadDeliveryDetailDialog: React.FC<{ data: ITruckloadDelivery }> = ({
 							<MorphIcon
 								icon={coppiedText === data.dispatch_order ? CopyCheck : Copy}
 								size={16}
+								speed={2}
 								spring='smooth'
 							/>
 						</GhostButton>

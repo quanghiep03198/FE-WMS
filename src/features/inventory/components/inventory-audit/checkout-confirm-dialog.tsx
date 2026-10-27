@@ -29,7 +29,9 @@ const CheckoutInventoryAuditConfirmDialog: React.FC<{ isClosed: boolean; isPlace
 		<AlertDialog>
 			<AlertDialogTrigger asChild>
 				<Button disabled={isPending || isClosed || isPlaceholder}>
-					<MorphIcon icon={!isClosed ? LockOpen : Lock} size={16} spring='smooth' />
+					<span aria-busy={isPending} className='aria-busy:animate-spin'>
+						<MorphIcon icon={!isClosed ? LockOpen : Lock} size={16} speed={2} spring='smooth' />
+					</span>
 					{isPlaceholder
 						? t('inoutbound_actions.close_monthly_inventory', 'Close inventory')
 						: isClosed

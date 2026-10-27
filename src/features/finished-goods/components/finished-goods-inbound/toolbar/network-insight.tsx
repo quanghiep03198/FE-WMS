@@ -9,7 +9,7 @@ import { useState } from 'react'
 const NetworkInsight: React.FC<React.ComponentProps<'div'>> = () => {
 	const [isNetworkAvailable, setIsNetworkAvailable] = useState<boolean>(true)
 
-	useEventListener(NETWORK_CONNECTION_CHANGE, (e: CustomEvent<boolean>) => {
+	useEventListener<any>(NETWORK_CONNECTION_CHANGE, (e: CustomEvent<boolean>) => {
 		setIsNetworkAvailable(e.detail)
 	})
 
@@ -19,6 +19,7 @@ const NetworkInsight: React.FC<React.ComponentProps<'div'>> = () => {
 				className={!isNetworkAvailable ? 'stroke-muted-foreground' : 'stroke-foreground'}
 				icon={isNetworkAvailable ? Server : ServerCrash}
 				size={18}
+				speed={2}
 				spring='smooth'
 			/>
 

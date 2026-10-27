@@ -1,5 +1,4 @@
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
-import { cn } from '@common/utils/cn'
 import { Json } from '@common/utils/json'
 import { Div } from '@components/customs/div'
 import { StatusIndicator } from '@components/customs/status-indicator'
@@ -38,15 +37,15 @@ type SyncProcessState = {
 
 type SyncMessagePayload = {
 	id: string
-	factory: Factory
+	factory: FactoryCode
 }
 
 const SyncDataTrigger: React.FC = () => {
 	const { t } = useTranslation()
-	const [data, setData] = useState<WsResponseBody<SyncProcessState[]>>(null)
+	const [data, setData] = useState<WsResponseBody<SyncProcessState[]>>(null!)
 	const { io, isConnected } = useSocketContext('io', 'isConnected')
 
-	const [factory, setFactory] = useState<Factory>()
+	const [factory, setFactory] = useState<Nullish<Factory>>(null)
 
 	const handleSetData = (data: string) => setData(Json.parse(data))
 
@@ -90,7 +89,10 @@ const SyncDataTrigger: React.FC = () => {
 							disabled={!factory}
 							size='sm'
 							variant='ghost'
-							onClick={() => io.emit('sync_decker_data', { id: uuid(), factory } satisfies SyncMessagePayload)}>
+							onClick={() => {
+								if (!factory) return
+								io.emit('sync_decker_data', { id: uuid(), factory } satisfies SyncMessagePayload)
+							}}>
 							{t('ns_common:actions.trigger')}
 						</Button>
 						<DropdownMenu>
@@ -102,7 +104,9 @@ const SyncDataTrigger: React.FC = () => {
 							<DropdownMenuContent align='end' className='w-56'>
 								<DropdownMenuLabel>{t('ns_common:common_fields.factory_code')}</DropdownMenuLabel>
 								<DropdownMenuSeparator />
-								<DropdownMenuRadioGroup value={factory} onValueChange={(value) => setFactory(value as Factory)}>
+								<DropdownMenuRadioGroup
+									value={factory ?? ''}
+									onValueChange={(value) => setFactory(value as Factory)}>
 									{Object.entries(TRANSLATED_FACTORY).map(([value, label]) => (
 										<DropdownMenuRadioItem key={value} value={value}>
 											{t(`ns_common:${label}`)}
@@ -136,15 +140,15 @@ const SyncDataTrigger: React.FC = () => {
 										animationFillMode: 'both',
 										animationDelay: (index + 1) * 300 + 'ms'
 									}}>
-									<Div className='translate-y-1.5'>
+									<Div
+										aria-current={item.status === 'processing'}
+										className='translate-y-1.5 aria-current:animate-spin'>
 										<MorphIcon
 											icon={icon[item.status].icon}
 											size={18}
-											spring='bouncy'
+											speed={2}
+											spring='smooth'
 											stroke={icon[item.status].color}
-											className={cn({
-												'animate-spin': item.status === 'processing'
-											})}
 										/>
 									</Div>
 									<Typewriter
