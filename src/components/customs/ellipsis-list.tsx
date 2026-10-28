@@ -33,10 +33,10 @@ export default function EllipsisList<T>({ threshhold, data, template: ListItemTe
 										count: truncatedData.length,
 										defaultValue: `... and ${truncatedData.length}`
 									})}
-								</Typography>{' '}
+								</Typography>
 							</HoverCardTrigger>
 							<HoverCardContent align='end' className='p-0' side='bottom'>
-								<Div className='scrollfade-y flex max-h-40 flex-wrap items-start gap-2 p-4'>
+								<Div className='scroll-fade-y flex max-h-40 overflow-y-auto flex-wrap items-start gap-2 p-2'>
 									{truncatedData.map((item) => (
 										<ListItemTemplate data={item} key={uuid()} />
 									))}
