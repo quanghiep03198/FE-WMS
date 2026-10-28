@@ -239,7 +239,7 @@ const DefectiveGoodsForm: React.FC = () => {
 
 		const mutateAsync = async () =>
 			formAction === CommonActions.UPDATE
-				? await updateAsync({ id: +hash, data: payload })
+				? await updateAsync({ id: hash, data: payload })
 				: await createAsync(payload)
 
 		await mutateAsync()

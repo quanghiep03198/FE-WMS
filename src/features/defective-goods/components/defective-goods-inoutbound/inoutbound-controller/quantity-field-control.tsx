@@ -1,5 +1,3 @@
-'use no memo'
-
 import { Input } from '@components/ui/input'
 import { useDebounceEffect, useResetState } from 'ahooks'
 import { useImperativeHandle, useRef } from 'react'
@@ -11,7 +9,7 @@ const QuantityFiledControl: React.FC<{ ref: React.Ref<{ reset: () => void }> }> 
 	const { t } = useTranslation()
 	const { searchParams, setParams, removeParam } = useFilterQuery()
 	const [currentInoutboundMethod] = useInoutboundMethod()
-	const inputRef = useRef<HTMLInputElement>(null)
+	const inputRef = useRef<HTMLInputElement>(document.createElement('input'))
 	const [currentValue, setCurrentValue, resetCurrentValue] = useResetState<Nullish<number>>(searchParams.take)
 
 	useDebounceEffect(
@@ -23,7 +21,12 @@ const QuantityFiledControl: React.FC<{ ref: React.Ref<{ reset: () => void }> }> 
 		{ wait: 200 }
 	)
 
-	useImperativeHandle(ref, () => ({ reset: () => resetCurrentValue() }), [searchParams.take])
+	useImperativeHandle(ref, () => ({
+		reset: () => {
+			resetCurrentValue()
+			inputRef.current.value = ''
+		}
+	}))
 
 	if (currentInoutboundMethod !== 'manually') return null
 

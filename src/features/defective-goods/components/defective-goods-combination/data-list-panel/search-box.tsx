@@ -8,10 +8,11 @@ import { Icon } from '@components/ui/icon'
 import { Input } from '@components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
 import { Separator } from '@components/ui/separator'
+import { useSearchDefectiveGoods } from '@features/defective-goods/hooks/use-search-defective-goods'
 import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
 import useQueryParams from '@hooks/use-query-params'
 import { PopoverClose } from '@radix-ui/react-popover'
-import { useDebounceEffect, useResetState, useSessionStorageState, useSize } from 'ahooks'
+import { useDebounceEffect, useResetState, useSize } from 'ahooks'
 import { format, isAfter } from 'date-fns'
 import { isEmpty } from 'lodash-es'
 import { useRef } from 'react'
@@ -19,7 +20,6 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import PurchaseOrderFieldControl from '../../../../rfid-agent/components/playground/purchase-order-field-control'
 import type { DefectiveCategory } from '../../../constants/enums'
-import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../../../constants/storage-keys'
 import type { DefectiveGoodQueryParams } from '../../../schemas/defective-goods.schema'
 import AssemblyLineFieldControl from '../form-playground/assembly-line-field-control'
 import BrandFieldControl from '../form-playground/brand-field-control'
@@ -45,13 +45,7 @@ const DEFAULT_SEARCH_TERMS: Omit<DefectiveGoodQueryParams, 'page'> = {
 
 const SearchBox: React.FC = () => {
 	const { setParams } = useQueryParams<{ page: number }>()
-	const [searchTerms, setSearchTerms] = useSessionStorageState<Omit<DefectiveGoodQueryParams, 'page'>>(
-		PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY,
-		{
-			listenStorageChange: true,
-			defaultValue: DEFAULT_SEARCH_TERMS
-		}
-	)
+	const [searchTerms, setSearchTerms] = useSearchDefectiveGoods()
 	const [epcSearchTerm, setEpcSearchTerm, resetEpcSearchTerm] = useResetState<string>(searchTerms.epc ?? '')
 	const { t } = useTranslation()
 	const { data: productSpecification, isLoading } = useGetProductSpecsQuery()
@@ -76,7 +70,7 @@ const SearchBox: React.FC = () => {
 	const handleSearchSubmission = (data: DefectiveGoodQueryParams): void => {
 		setSearchTerms({
 			...data,
-			...(data.created && { created: format(new Date(data.created), 'yyyy-MM-dd') })
+			...(data.created_at && { created_at: format(new Date(data.created_at), 'yyyy-MM-dd') })
 		})
 		setParams({ page: 1 })
 	}
@@ -87,7 +81,8 @@ const SearchBox: React.FC = () => {
 		setSearchTerms(DEFAULT_SEARCH_TERMS)
 	}
 
-	const formFieldOrientation: 'horizontal' | 'vertical' = size?.width >= 480 ? 'horizontal' : 'vertical'
+	const formFieldOrientation: 'horizontal' | 'vertical' =
+		typeof size?.width === 'number' && size.width >= 480 ? 'horizontal' : 'vertical'
 	const isFilterDirty = Object.values(searchTerms).some((value) => !isEmpty(value))
 
 	return (
@@ -128,7 +123,7 @@ const SearchBox: React.FC = () => {
 						alignOffset={-8}
 						className='relative'
 						sideOffset={20}
-						style={{ width: size?.width + 16 }}>
+						style={{ width: size?.width ?? 0 + 16 }}>
 						<PopoverClose className='text-muted-foreground hover:text-foreground absolute top-4 right-4 transition-colors duration-200'>
 							<Icon name='X' />
 						</PopoverClose>

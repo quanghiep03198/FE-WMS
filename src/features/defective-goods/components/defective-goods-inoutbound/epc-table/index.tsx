@@ -43,7 +43,7 @@ const EpcTable: React.FC = () => {
 	const defectiveCategoryList = useDefectiveCategoryList()
 	// const { setScannedEpcs } = useReaderPlaygroundStore( 'setScannedEpcs')
 
-	const { data, isLoading } = useGetCanInoutboundEpcQuery()
+	const { data, isLoading, isPlaceholderData } = useGetCanInoutboundEpcQuery()
 
 	const columns = useMemo(
 		() => [
@@ -289,12 +289,17 @@ const EpcTable: React.FC = () => {
 					className='table-auto border-separate border-spacing-0 divide-y'
 					style={{ minWidth: table.getTotalSize() + 'px' }}>
 					{shouldMemoize ? <MemoizedDataTableHeader table={table} /> : <DataTableHeader table={table} />}
-					{isLoading ? (
+					{!isPlaceholderData && isLoading ? (
 						<DataTableLoading columns={table.getAllColumns()} />
 					) : rows.length === 0 ? (
 						<DataTableEmpty colSpan={totalColumns} />
 					) : (
-						<TableBody style={{ height: rowVirtualizer.getTotalSize() + 'px' }}>
+						<TableBody
+							style={{
+								height: rowVirtualizer.getTotalSize() + 'px',
+								opacity: isPlaceholderData ? 0.5 : 1,
+								transition: 'opacity 0.3s ease-in-out'
+							}}>
 							{/* Top padding */}
 							{before > 0 && (
 								<TableRow style={{ height: before }}>

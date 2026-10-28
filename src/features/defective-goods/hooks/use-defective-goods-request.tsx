@@ -19,6 +19,7 @@ import {
 } from '../schemas/defective-goods.schema'
 import type { IDefectiveGoods, IDefectiveGoodsInventory } from '../types'
 import { useFilterQuery } from './use-filter-query'
+import { useSearchDefectiveGoods } from './use-search-defective-goods'
 
 export enum DefectiveGoodsQueryKey {
 	DEFECTIVE_GOODS = 'DEFECTIVE_GOODS',
@@ -47,7 +48,7 @@ export const getDefectiveGoodsQueryOptions = (params: Record<string, any>) => ({
 	queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy(params, (item) => !!item)],
 	queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(pickBy(params, (item) => !!item)),
 	placeholderData: keepPreviousData,
-	staleTime: 1000 * 5, // 1 minute
+	staleTime: 5000, // 5s
 	select: (response) => response.metadata
 })
 
@@ -88,16 +89,14 @@ export const useUpdateDefectiveGoodsMutation = () => {
 				[DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)]
 			]
 		},
-		mutationFn: async (payload: { id: number; data: UpdateDefectiveGoodsFormValues }) =>
+		mutationFn: async (payload: { id: string; data: UpdateDefectiveGoodsFormValues }) =>
 			await DefectiveGoodsService.updateDefectiveGoods(payload.id, payload.data)
 	})
 }
 
 export const useDeleteDefectiveGoodsMutation = () => {
 	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
-	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
-		listenStorageChange: true
-	})
+	const [searchTerms] = useSearchDefectiveGoods()
 
 	return useMutation({
 		meta: {
@@ -111,9 +110,7 @@ export const useDeleteDefectiveGoodsMutation = () => {
 
 export const useDeleteManyDefectiveGoodsMutation = () => {
 	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
-	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
-		listenStorageChange: true
-	})
+	const [searchTerms] = useSearchDefectiveGoods()
 
 	return useMutation({
 		meta: {
@@ -134,6 +131,7 @@ export const useGetCanInoutboundEpcQuery = () => {
 		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC, params],
 		queryFn: async () => await DefectiveGoodsService.getCanInoutboundEpc(params),
 		enabled: !!searchParams.action,
+		placeholderData: keepPreviousData,
 		select: (response) => response.metadata
 	})
 }
@@ -165,7 +163,7 @@ export const useUpdateDefectiveGoodsStockMutation = () => {
 	const params = omitBy(searchParams, (value) => isNil(value) || isEmpty(value))
 
 	return useMutation({
-		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC, params]] },
+		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC, pick(params, 'action')]] },
 		mutationFn: async (payload: InboundOutboundFormValues) =>
 			searchParams.action === StockFlow.INBOUND
 				? DefectiveGoodsService.updateInboundStatus(

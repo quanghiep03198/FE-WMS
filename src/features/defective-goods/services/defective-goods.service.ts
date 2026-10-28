@@ -48,21 +48,21 @@ export class DefectiveGoodsService {
 		)
 	}
 
-	static async updateDefectiveGoods(id: number, payload: UpdateDefectiveGoodsFormValues) {
+	static async updateDefectiveGoods(id: string, payload: UpdateDefectiveGoodsFormValues) {
 		return await axiosInstance.patch(`/defective-goods/update/${id}`, payload)
 	}
 
-	static async deleteDefectiveGoods(id: number) {
+	static async deleteDefectiveGoods(id: string) {
 		return await axiosInstance.delete<void, ResponseBody<unknown>>(`/defective-goods/delete/${id}`)
 	}
 
 	static async deleteManyDefectiveGoods(
-		payload: { including_ids: number[] | 'all'; excluding_ids: number[] } & DefectiveGoodQueryParams
+		payload: { including_ids: string[] | 'all'; excluding_ids: string[] } & DefectiveGoodQueryParams
 	) {
 		return await axiosInstance.post<
 			unknown,
 			ResponseBody<unknown>,
-			{ including_ids: number[] | 'all'; excluding_ids: number[] } & DefectiveGoodQueryParams
+			{ including_ids: string[] | 'all'; excluding_ids: string[] } & DefectiveGoodQueryParams
 		>(`/defective-goods/delete`, payload)
 	}
 

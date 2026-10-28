@@ -3,26 +3,19 @@ import { Tooltip } from '@components/customs/tooltip'
 import type { ButtonProps } from '@components/ui/button'
 import { Button } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
-import { useSessionStorageState } from 'ahooks'
+import { useSearchDefectiveGoods } from '@features/defective-goods/hooks/use-search-defective-goods'
 import { isEmpty, isNil, pickBy } from 'lodash-es'
 import { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../../../constants/storage-keys'
 import { useListPanelContext } from '../../../contexts/list-panel-context'
 import { useDeleteManyDefectiveGoodsMutation } from '../../../hooks/use-defective-goods-request'
-import type { DefectiveGoodQueryParams } from '../../../schemas/defective-goods.schema'
 
 const DeleteButton: React.FC<ButtonProps> = () => {
 	const { t } = useTranslation()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const { selectionState, getSelectedIds, getDeselectedIds, getSelectedCount, clearSelection } = useListPanelContext()
-	const [searchTerms] = useSessionStorageState<Omit<DefectiveGoodQueryParams, 'page'>>(
-		PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY,
-		{
-			listenStorageChange: true
-		}
-	)
+	const [searchTerms] = useSearchDefectiveGoods()
 
 	const { mutateAsync: deleteAsync, isPending, isError, reset } = useDeleteManyDefectiveGoodsMutation()
 

@@ -1,7 +1,7 @@
 import { CommonActions } from '@common/constants/enums'
 import ConfirmDialog from '@components/customs/confirm-dialog'
 import { useResetState } from 'ahooks'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../../contexts/page-context'
 import { useDeleteDefectiveGoodsMutation } from '../../../hooks/use-defective-goods-request'
@@ -10,12 +10,11 @@ const DeleteConfirmDialog: React.FC = () => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
-	const [deleteId, setDeleteId, resetDeleteId] = useResetState<number | null>(null)
-	const toastIdRef = useRef<string | number | null>(null)
+	const [deleteId, setDeleteId, resetDeleteId] = useResetState<Nullish<string>>(null)
 	const { mutateAsync: deleteAsync, isPending, isError } = useDeleteDefectiveGoodsMutation()
 
 	event$.useSubscription(({ action, payload }) => {
-		const shouldDelete = action === CommonActions.DELETE && typeof payload === 'number'
+		const shouldDelete = action === CommonActions.DELETE && typeof payload === 'string'
 		if (shouldDelete) {
 			setConfirmDialogOpen(true)
 			setDeleteId(payload)
