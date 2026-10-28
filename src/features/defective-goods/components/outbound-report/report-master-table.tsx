@@ -226,7 +226,7 @@ const InboundReportMasterTable: React.FC = () => {
 			}}
 			renderSubComponent={
 				(({ row }) => {
-					return <SizeTable data={row.original?.size_data} />
+					return <SizeTable data={row.original?.size_ledger} />
 				}) satisfies RenderSubComponent<IDefectiveGoodsOutboundReport>
 			}
 			toolbarProps={{

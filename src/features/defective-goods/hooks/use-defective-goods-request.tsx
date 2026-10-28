@@ -37,7 +37,7 @@ export const useGetDefectiveGoodsInventoryQuery = () => {
 			return Array.isArray(response.metadata)
 				? response.metadata.map((item: IDefectiveGoodsInventory) => ({
 						...item,
-						total_qty: item.size_data.reduce((sum, size) => sum + size.qty, 0)
+						total_qty: item.size_ledger.reduce((sum, size) => sum + size.qty, 0)
 					}))
 				: []
 		}

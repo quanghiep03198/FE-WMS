@@ -2,7 +2,7 @@ import type { CommonActions } from '@common/constants/enums'
 import { useEventEmitter } from 'ahooks'
 import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'
-import { UpdateDefectiveGoodsFormValues } from '../schemas/defective-goods.schema'
+import type { UpdateDefectiveGoodsFormValues } from '../schemas/defective-goods.schema'
 
 type EventPayload =
 	| { action: CommonActions.UPDATE; payload: UpdateDefectiveGoodsFormValues }

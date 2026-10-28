@@ -1,5 +1,5 @@
 import type { IBaseEntity } from '@common/types/entities'
-import { IDepartment } from '@features/department/types'
+import type { IDepartment } from '@features/department/types'
 import type { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../constants/enums'
 
 export interface IDefectiveGoods extends Omit<Required<IBaseEntity>, 'created' | 'updated'> {
@@ -11,25 +11,24 @@ export interface IDefectiveGoods extends Omit<Required<IBaseEntity>, 'created' |
 	po?: string
 	storage_location: string
 	factory_shoes_style: string
-	size: string
+	size_numcode: string
 	defective_location: DefectiveLocation
 	defective_description: string
 	shoe_source: DefectiveGoodsSource
 	unit: 'pcs' | 'prs'
 	assembly_line: IDepartment | null
 	sewing_line: IDepartment | null
-	ri_cancel: boolean
 }
 
-type SizeData = Array<{ size_numcode: string; qty: number }>
+type SizeLedger = Array<{ size_numcode: string; qty: number }>
 
 export interface IDefectiveGoodsInventory extends Partial<IDefectiveGoods> {
-	size_data: SizeData
+	size_ledger: SizeLedger
 }
 
 export interface IDefectiveGoodsInboundReport extends Partial<IDefectiveGoods> {
-	size_data: SizeData
+	size_ledger: SizeLedger
 }
 export interface IDefectiveGoodsOutboundReport extends Partial<IDefectiveGoods> {
-	size_data: SizeData
+	size_ledger: SizeLedger
 }

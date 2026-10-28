@@ -1,5 +1,5 @@
 import type { IDepartment } from '@features/department/types'
-import { IStorageLocation } from '@features/warehouse/types'
+import type { IStorageLocation } from '@features/warehouse/types'
 
 export interface IInOutBoundReport {
 	mo_no: string

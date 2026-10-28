@@ -203,7 +203,7 @@ const InboundReportMasterTable: React.FC = () => {
 					return t(`ns_inoutbound:shoes_source.${value}`, { defaultValue: value })
 				}
 			}),
-			columnHelper.accessor('daily_inbound_qty', {
+			columnHelper.accessor('total_qty', {
 				header: t('ns_erp:fields.daily_inbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -236,12 +236,12 @@ const InboundReportMasterTable: React.FC = () => {
 			initialState={{
 				columnPinning: {
 					left: [ROW_EXPANSION_COLUMN_ID],
-					right: ['daily_inbound_qty']
+					right: ['total_qty']
 				}
 			}}
 			renderSubComponent={
 				(({ row }) => {
-					return <SizeTable data={row.original?.size_data} />
+					return <SizeTable data={row.original?.size_ledger} />
 				}) satisfies RenderSubComponent<IDefectiveGoodsInboundReport>
 			}
 			toolbarProps={{

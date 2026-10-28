@@ -173,8 +173,8 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ row }) => {
-					if (!Array.isArray(row.original.size_data)) return 0
-					return row.original.size_data.reduce((acc, curr) => acc + curr.qty, 0)
+					if (!Array.isArray(row.original.size_ledger)) return 0
+					return row.original.size_ledger.reduce((acc, curr) => acc + curr.qty, 0)
 				}
 			})
 		],
