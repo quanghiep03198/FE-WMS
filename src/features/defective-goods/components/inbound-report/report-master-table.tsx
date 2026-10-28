@@ -130,14 +130,18 @@ const InboundReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				filterFn: 'includesString',
-				cell: TableCellText
+				cell: ({ getValue, ...props }) => {
+					return <TableCellText {...props} getValue={() => getValue()?.name?.[i18n?.language]} />
+				}
 			}),
 			columnHelper.accessor('assembly_line', {
 				header: t('ns_erp:fields.assembly_line'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				filterFn: 'includesString',
-				cell: TableCellText
+				cell: ({ getValue, ...props }) => {
+					return <TableCellText {...props} getValue={() => getValue()?.name?.[i18n?.language]} />
+				}
 			}),
 			columnHelper.accessor('defective_category', {
 				header: t('ns_erp:fields.category'),
