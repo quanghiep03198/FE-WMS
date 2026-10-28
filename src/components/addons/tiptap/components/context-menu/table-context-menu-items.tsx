@@ -15,7 +15,7 @@ const TableContextMenuItems: React.FC<{ editor: Editor }> = ({ editor }) => {
 		)
 	}, [editor])
 
-	const canMergeCell = useMemo(() => editor.view.state.selection.ranges.length > 1, [editor])
+	const canMergeCell = useMemo(() => !editor.isDestroyed && editor.state.selection.ranges.length > 1, [editor])
 
 	return (
 		<Fragment>
@@ -50,7 +50,7 @@ const TableContextMenuItems: React.FC<{ editor: Editor }> = ({ editor }) => {
 				Xóa bảng
 			</ContextMenuItem>
 			{(canMergeCell || canSplitMergedCell) && <ContextMenuSeparator />}
-			{editor.view.state.selection.ranges.length > 1 && (
+			{canMergeCell && (
 				<ContextMenuItem className='gap-x-2' onClick={() => editor.commands.mergeCells()}>
 					<Icon name='FoldHorizontal' />
 					Hợp nhất ô
