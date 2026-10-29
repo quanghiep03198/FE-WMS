@@ -41,7 +41,7 @@ const CombinationStrategySelect: React.FC<{ disabled: boolean }> = ({ disabled }
 			</RadioGroup>
 			<Select
 				disabled={disabled}
-				value={currentStrategy}
+				value={typeof currentStrategy === 'string' ? currentStrategy : undefined}
 				onValueChange={(value) => setStrategy(value as 'usb' | 'uhf' | 'manually')}>
 				<SelectTrigger className='flex w-32 @2xl/combination-form:hidden'>
 					<SelectValue placeholder={capitalize(t('ns_erp:fields.combination_strategy'))} />

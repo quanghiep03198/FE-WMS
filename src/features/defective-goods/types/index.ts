@@ -18,7 +18,10 @@ export interface IDefectiveGoods extends Omit<Required<IBaseEntity>, 'created' |
 	unit: 'pcs' | 'prs'
 	assembly_line: IDepartment | null
 	sewing_line: IDepartment | null
+	combination_strategy: DefectiveGoodsCombinationStrategy
 }
+
+export type DefectiveGoodsCombinationStrategy = 'usb' | 'uhf' | 'manually'
 
 type SizeLedger = Array<{ size_numcode: string; qty: number }>
 

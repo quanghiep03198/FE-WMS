@@ -14,7 +14,7 @@ import useQueryParams from '@hooks/use-query-params'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useResetState, useSize } from 'ahooks'
 import { format, isAfter } from 'date-fns'
-import { isEmpty } from 'lodash-es'
+import { isEmpty, pickBy } from 'lodash-es'
 import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -46,7 +46,7 @@ const DEFAULT_SEARCH_TERMS: Omit<DefectiveGoodQueryParams, 'page'> = {
 const SearchBox: React.FC = () => {
 	const { setParams } = useQueryParams<{ page: number }>()
 	const [searchTerms, setSearchTerms] = useSearchDefectiveGoods()
-	const [epcSearchTerm, setEpcSearchTerm, resetEpcSearchTerm] = useResetState<string>(searchTerms.epc ?? '')
+	const [epcSearchTerm, setEpcSearchTerm, resetEpcSearchTerm] = useResetState<string>(searchTerms?.epc ?? '')
 	const { t } = useTranslation()
 	const { data: productSpecification, isLoading } = useGetProductSpecsQuery()
 	const form = useForm<DefectiveGoodQueryParams>({
@@ -68,10 +68,13 @@ const SearchBox: React.FC = () => {
 	)
 
 	const handleSearchSubmission = (data: DefectiveGoodQueryParams): void => {
-		setSearchTerms({
-			...data,
-			...(data.created_at && { created_at: format(new Date(data.created_at), 'yyyy-MM-dd') })
-		})
+		console.log(data)
+		setSearchTerms(
+			pickBy({
+				...data,
+				...(data.created_at && { created_at: format(new Date(data.created_at), 'yyyy-MM-dd') })
+			})
+		)
 		setParams({ page: 1 })
 	}
 
@@ -140,7 +143,7 @@ const SearchBox: React.FC = () => {
 									<DatePickerFieldControl
 										calendarProps={{ disabled: (value) => isAfter(value, new Date()) }}
 										label={t('ns_common:common_fields.created_at')}
-										name='created'
+										name='created_at'
 										orientation={formFieldOrientation}
 									/>
 									<CategoryFieldControl orientation={formFieldOrientation} />

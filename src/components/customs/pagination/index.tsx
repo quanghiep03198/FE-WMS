@@ -69,7 +69,6 @@ const Pagination: React.FC<PaginationProps> = ({
 	totalPages,
 	hasNextPage,
 	hasPrevPage,
-	nextPage,
 	range,
 	onPrefetch,
 	onPageChange,
@@ -129,82 +128,82 @@ const Pagination: React.FC<PaginationProps> = ({
 	)
 
 	// Continuous prefetch function - keeps prefetching while hovering
-	const startContinuousPrefetch = useCallback(
-		(direction: 'next' | 'prev', targetPage: number) => {
-			if (!onPrefetch) return
+	// const startContinuousPrefetch = useCallback(
+	// 	(direction: 'next' | 'prev', targetPage: number) => {
+	// 		if (!onPrefetch) return
 
-			// Stop any existing continuous prefetch
-			if (continuousIntervalRef.current) {
-				clearInterval(continuousIntervalRef.current)
-			}
+	// 		// Stop any existing continuous prefetch
+	// 		if (continuousIntervalRef.current) {
+	// 			clearInterval(continuousIntervalRef.current)
+	// 		}
 
-			setContinuousPrefetchState({
-				isActive: true,
-				currentOffset: 1,
-				direction
-			})
+	// 		setContinuousPrefetchState({
+	// 			isActive: true,
+	// 			currentOffset: 1,
+	// 			direction
+	// 		})
 
-			// Start with immediate prefetch of target page
-			debouncedPrefetch(targetPage, 50)
+	// 		// Start with immediate prefetch of target page
+	// 		debouncedPrefetch(targetPage, 50)
 
-			// Set up continuous prefetching with progressive delay
-			let currentOffset = 1
-			let currentDelay = continuousInterval
+	// 		// Set up continuous prefetching with progressive delay
+	// 		let currentOffset = 1
+	// 		let currentDelay = continuousInterval
 
-			continuousIntervalRef.current = setInterval(() => {
-				currentOffset += 1
+	// 		continuousIntervalRef.current = setInterval(() => {
+	// 			currentOffset += 1
 
-				// Stop if we've reached the maximum or page bounds
-				if (currentOffset > maxContinuousPrefetch) {
-					clearInterval(continuousIntervalRef.current!)
-					setContinuousPrefetchState((prev) => ({ ...prev, isActive: false }))
-					return
-				}
+	// 			// Stop if we've reached the maximum or page bounds
+	// 			if (currentOffset > maxContinuousPrefetch) {
+	// 				clearInterval(continuousIntervalRef.current!)
+	// 				setContinuousPrefetchState((prev) => ({ ...prev, isActive: false }))
+	// 				return
+	// 			}
 
-				const nextPageToPrefetch = direction === 'next' ? currentPage + currentOffset : currentPage - currentOffset
+	// 			const nextPageToPrefetch = direction === 'next' ? currentPage + currentOffset : currentPage - currentOffset
 
-				// Check bounds
-				if (nextPageToPrefetch < 1 || nextPageToPrefetch > totalPages) {
-					clearInterval(continuousIntervalRef.current!)
-					setContinuousPrefetchState((prev) => ({ ...prev, isActive: false }))
-					return
-				}
+	// 			// Check bounds
+	// 			if (nextPageToPrefetch < 1 || nextPageToPrefetch > totalPages) {
+	// 				clearInterval(continuousIntervalRef.current!)
+	// 				setContinuousPrefetchState((prev) => ({ ...prev, isActive: false }))
+	// 				return
+	// 			}
 
-				// Prefetch the next page in sequence
-				debouncedPrefetch(nextPageToPrefetch, 0) // No additional delay for continuous
+	// 			// Prefetch the next page in sequence
+	// 			debouncedPrefetch(nextPageToPrefetch, 0) // No additional delay for continuous
 
-				setContinuousPrefetchState((prev) => ({ ...prev, currentOffset }))
+	// 			setContinuousPrefetchState((prev) => ({ ...prev, currentOffset }))
 
-				// Progressively increase delay for later prefetches to reduce server load
-				currentDelay = Math.min(currentDelay * 1.2, 2000)
-			}, currentDelay)
-		},
-		[onPrefetch, debouncedPrefetch, currentPage, totalPages, maxContinuousPrefetch, continuousInterval]
-	)
+	// 			// Progressively increase delay for later prefetches to reduce server load
+	// 			currentDelay = Math.min(currentDelay * 1.2, 2000)
+	// 		}, currentDelay)
+	// 	},
+	// 	[onPrefetch, debouncedPrefetch, currentPage, totalPages, maxContinuousPrefetch, continuousInterval]
+	// )
 
-	// Stop continuous prefetch
-	const stopContinuousPrefetch = useCallback(() => {
-		if (continuousIntervalRef.current) {
-			clearInterval(continuousIntervalRef.current)
-			continuousIntervalRef.current = null
-		}
-		setContinuousPrefetchState({
-			isActive: false,
-			currentOffset: 1,
-			direction: null
-		})
-	}, [])
+	// // Stop continuous prefetch
+	// const stopContinuousPrefetch = useCallback(() => {
+	// 	if (continuousIntervalRef.current) {
+	// 		clearInterval(continuousIntervalRef.current)
+	// 		continuousIntervalRef.current = null
+	// 	}
+	// 	setContinuousPrefetchState({
+	// 		isActive: false,
+	// 		currentOffset: 1,
+	// 		direction: null
+	// 	})
+	// }, [])
 
 	// Smart prefetch for adjacent pages when hovering navigation buttons
-	const handleNavButtonHover = useCallback(
-		(targetPage: number, direction: 'next' | 'prev') => {
-			if (!onPrefetch) return
+	// const handleNavButtonHover = useCallback(
+	// 	(targetPage: number, direction: 'next' | 'prev') => {
+	// 		if (!onPrefetch) return
 
-			// Start continuous prefetching
-			startContinuousPrefetch(direction, targetPage)
-		},
-		[onPrefetch, startContinuousPrefetch]
-	)
+	// 		// Start continuous prefetching
+	// 		startContinuousPrefetch(direction, targetPage)
+	// 	},
+	// 	[onPrefetch, startContinuousPrefetch]
+	// )
 
 	// Clear timeout and intervals on unmount
 	useEffect(() => {
@@ -230,9 +229,7 @@ const Pagination: React.FC<PaginationProps> = ({
 				disabled={!hasPrevPage}
 				size='sm'
 				variant='ghost'
-				onClick={() => onPageChange(currentPage - 1)}
-				onMouseEnter={() => hasPrevPage && handleNavButtonHover(currentPage - 1, 'prev')}
-				onMouseLeave={stopContinuousPrefetch}>
+				onClick={() => onPageChange(currentPage - 1)}>
 				<Icon name='ChevronLeft' />
 				{t('ns_common:pagination.previous_page')}
 			</Button>
@@ -275,9 +272,7 @@ const Pagination: React.FC<PaginationProps> = ({
 				disabled={!hasNextPage}
 				size='sm'
 				variant='ghost'
-				onClick={() => onPageChange(currentPage + 1)}
-				onMouseEnter={() => hasNextPage && typeof nextPage === 'number' && handleNavButtonHover(nextPage, 'next')}
-				onMouseLeave={stopContinuousPrefetch}>
+				onClick={() => onPageChange(currentPage + 1)}>
 				{t('ns_common:pagination.next_page')}
 				<Icon name='ChevronRight' />
 			</Button>

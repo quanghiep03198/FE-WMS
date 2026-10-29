@@ -208,8 +208,8 @@ const EpcTable: React.FC = () => {
 	const [tableData, setTableData] = useState<IDefectiveGoods[]>([])
 
 	useDeepCompareEffect(() => {
-		if (isEqual(data, tableData)) return
-		const newData = Array.isArray(data) ? data : []
+		if (isEqual(data?.data, tableData)) return
+		const newData = Array.isArray(data?.data) ? data.data : []
 		setTableData(newData)
 		event$.emit({ action: CommonActions.IMPORT, payload: newData.map((item) => item.epc) })
 		// setScannedEpcs(newData.map((item) => item.epc))

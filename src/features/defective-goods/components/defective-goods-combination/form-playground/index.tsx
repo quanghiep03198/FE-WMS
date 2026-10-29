@@ -15,6 +15,8 @@ import { Icon } from '@components/ui/icon'
 import { Label } from '@components/ui/label'
 import { useGetManufacturingOrderQuery } from '@features/order/hooks/use-order-request'
 import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
+import { MobileReaderPlaygroundTrigger } from '@features/rfid-agent/components/playground/mobile-playground'
+import PurchaseOrderFieldControl from '@features/rfid-agent/components/playground/purchase-order-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import type { SingleCommands } from '@tiptap/core'
@@ -26,8 +28,6 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { gzipSync } from 'zlib'
-import { MobileReaderPlaygroundTrigger } from '../../../../rfid-agent/components/playground/mobile-playground'
-import PurchaseOrderFieldControl from '../../../../rfid-agent/components/playground/purchase-order-field-control'
 import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../../constants/enums'
 import { DefectDescriptionTemplate } from '../../../constants/templates'
 import { usePageContext } from '../../../contexts/page-context'
@@ -78,7 +78,12 @@ const DefectiveGoodsForm: React.FC = () => {
 	}>({
 		getHTML: () => '',
 		isEmpty: () => true,
-		commands: () => ({ setContent: (content: string) => {} }) as SingleCommands
+		commands: () =>
+			({
+				setContent: (content: string) => {
+					void content
+				}
+			}) as SingleCommands
 	})
 
 	const schemaRef = useRef<any>(createDefectiveGoodsSchema)
@@ -216,6 +221,8 @@ const DefectiveGoodsForm: React.FC = () => {
 		navigate({ search })
 	}
 
+	console.log(form.getErrors())
+
 	const handleSubmitForm = async (data: CreateDefectiveGoodsFormValues) => {
 		if (data.combination_strategy === 'manually' && formAction === CommonActions.CREATE) {
 			delete data.epc
@@ -340,7 +347,7 @@ const DefectiveGoodsForm: React.FC = () => {
 				{/* User activities timestamp */}
 				{formAction === CommonActions.UPDATE && (
 					<UserActivityInfo
-						createdAt={form.getValues('created')}
+						createdAt={form.getValues('created_at')}
 						createdBy={form.getValues('user_code_created')}
 						lastUpdatedAt={form.getValues('updated')}
 					/>

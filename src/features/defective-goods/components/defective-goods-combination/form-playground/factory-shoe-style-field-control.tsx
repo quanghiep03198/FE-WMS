@@ -1,6 +1,7 @@
 import type { AutoCompleteFieldControlProps } from '@components/forms/auto-complete'
 import { AutoCompleteFieldControl } from '@components/forms/auto-complete'
 import { useGetProductSpecsQuery } from '@features/product-specification/hooks/use-product-specs-request'
+import { pick } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -28,6 +29,7 @@ const FactoryShoeStyleFieldControl: React.FC<
 				if (!currentBrand) return true
 				return item.brand_name === currentBrand
 			})
+			.map((item) => pick(item, ['factory_shoes_style', 'cust_shoes_style']))
 			.toSorted((a, b) => b.factory_shoes_style.localeCompare(a.factory_shoes_style))
 	}, [productSpecification, currentBrand])
 

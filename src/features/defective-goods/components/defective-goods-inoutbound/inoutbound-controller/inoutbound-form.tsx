@@ -22,6 +22,7 @@ import tw from 'tailwind-styled-components'
 
 import { DefectiveGoodsOutboundPurpose } from '@features/defective-goods/constants/enums'
 import { usePageContext } from '@features/defective-goods/contexts/page-context'
+import { useInoutboundMethod } from '@features/defective-goods/hooks/use-select-inoutbound-method'
 import PurchaseOrderFieldControl from '@features/rfid-agent/components/playground/purchase-order-field-control'
 import { Check, LoaderCircle } from 'lucide'
 import { MorphIcon } from 'morphicons/react'
@@ -37,7 +38,7 @@ import QuantityFiledControl from './quantity-field-control'
 const InoutboundForm: React.FC = () => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-
+	const [combinationStrategy] = useInoutboundMethod()
 	const { searchParams, setParams } = useFilterQuery()
 	const schemaRef = useRef(
 		searchParams.action === StockFlow.INBOUND ? defectiveGoodsInboundFormValues : defectiveGoodsOutboundFormValues
@@ -78,9 +79,13 @@ const InoutboundForm: React.FC = () => {
 	const { mutateAsync, isPending, isError } = useUpdateDefectiveGoodsStockMutation()
 
 	const handleFormSubmission = async (data: InboundOutboundFormValues) => {
-		await mutateAsync(data)
+		await mutateAsync({
+			combination_strategy: combinationStrategy,
+			storage_location: data.storage_location,
+			outbound_purpose: data.outbound_purpose,
+			epcs: combinationStrategy === 'manually' ? [] : data.epcs
+		})
 		event$.emit({ action: CommonActions.SAVE, payload: [] })
-		// setParams(pick(searchParams, ['action']))
 		quantityFieldRef.current?.reset()
 		form.reset({
 			epcs: [],

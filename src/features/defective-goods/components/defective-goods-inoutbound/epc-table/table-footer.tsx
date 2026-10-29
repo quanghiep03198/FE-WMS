@@ -47,7 +47,7 @@ const DataTableFooter: React.FC<TableFooterProps> = ({ onResetColumnFilter }) =>
 				<Icon name='FunnelX' /> {t('ns_common:actions.clear_filter')}
 			</Button>
 			<Typography className='ml-auto text-right font-medium' role='cell'>
-				{`${t('ns_common:common_fields.total')}: ${Array.isArray(data) ? formatIntlNumber(data.length) : 0}`}
+				{`${t('ns_common:common_fields.total')}: ${formatIntlNumber(data?.totalDocs ?? 0)}`}
 			</Typography>
 		</Div>
 	)
