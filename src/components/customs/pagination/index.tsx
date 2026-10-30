@@ -25,12 +25,7 @@ type PaginationProps = Omit<Pagination<unknown>, 'data'> & {
  * @param range - The number of pages to show before and after the current page.
  * @return An array of page numbers to display in the pagination.
  */
-export const calculatePaginationRange = (
-	currentPage: number,
-	totalPages: number,
-	range: number | undefined
-): number[] => {
-	range = range ?? 2
+export const calculatePaginationRange = (currentPage: number, totalPages: number, range: number = 2): number[] => {
 	let start = Math.max(1, currentPage - range)
 	let end = Math.min(totalPages, currentPage + range)
 
@@ -69,15 +64,12 @@ const Pagination: React.FC<PaginationProps> = ({
 	totalPages,
 	hasNextPage,
 	hasPrevPage,
-	range,
+	range = 2,
 	onPrefetch,
 	onPageChange,
-	maxContinuousPrefetch = 5,
-	continuousInterval = 200,
 	className,
 	...props
 }) => {
-	// const { setParams } = useQueryParams<{ page: number }>()
 	const paginationRange = calculatePaginationRange(currentPage, totalPages, range)
 	const { t } = useTranslation()
 
@@ -97,6 +89,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
 	// Reset prefetch cache when currentPage changes
 	useEffect(() => {
+		if (currentPage > totalPages) onPageChange(totalPages)
 		prefetchedPagesRef.current.clear()
 		setContinuousPrefetchState({
 			isActive: false,
@@ -126,84 +119,6 @@ const Pagination: React.FC<PaginationProps> = ({
 		},
 		[onPrefetch, totalPages]
 	)
-
-	// Continuous prefetch function - keeps prefetching while hovering
-	// const startContinuousPrefetch = useCallback(
-	// 	(direction: 'next' | 'prev', targetPage: number) => {
-	// 		if (!onPrefetch) return
-
-	// 		// Stop any existing continuous prefetch
-	// 		if (continuousIntervalRef.current) {
-	// 			clearInterval(continuousIntervalRef.current)
-	// 		}
-
-	// 		setContinuousPrefetchState({
-	// 			isActive: true,
-	// 			currentOffset: 1,
-	// 			direction
-	// 		})
-
-	// 		// Start with immediate prefetch of target page
-	// 		debouncedPrefetch(targetPage, 50)
-
-	// 		// Set up continuous prefetching with progressive delay
-	// 		let currentOffset = 1
-	// 		let currentDelay = continuousInterval
-
-	// 		continuousIntervalRef.current = setInterval(() => {
-	// 			currentOffset += 1
-
-	// 			// Stop if we've reached the maximum or page bounds
-	// 			if (currentOffset > maxContinuousPrefetch) {
-	// 				clearInterval(continuousIntervalRef.current!)
-	// 				setContinuousPrefetchState((prev) => ({ ...prev, isActive: false }))
-	// 				return
-	// 			}
-
-	// 			const nextPageToPrefetch = direction === 'next' ? currentPage + currentOffset : currentPage - currentOffset
-
-	// 			// Check bounds
-	// 			if (nextPageToPrefetch < 1 || nextPageToPrefetch > totalPages) {
-	// 				clearInterval(continuousIntervalRef.current!)
-	// 				setContinuousPrefetchState((prev) => ({ ...prev, isActive: false }))
-	// 				return
-	// 			}
-
-	// 			// Prefetch the next page in sequence
-	// 			debouncedPrefetch(nextPageToPrefetch, 0) // No additional delay for continuous
-
-	// 			setContinuousPrefetchState((prev) => ({ ...prev, currentOffset }))
-
-	// 			// Progressively increase delay for later prefetches to reduce server load
-	// 			currentDelay = Math.min(currentDelay * 1.2, 2000)
-	// 		}, currentDelay)
-	// 	},
-	// 	[onPrefetch, debouncedPrefetch, currentPage, totalPages, maxContinuousPrefetch, continuousInterval]
-	// )
-
-	// // Stop continuous prefetch
-	// const stopContinuousPrefetch = useCallback(() => {
-	// 	if (continuousIntervalRef.current) {
-	// 		clearInterval(continuousIntervalRef.current)
-	// 		continuousIntervalRef.current = null
-	// 	}
-	// 	setContinuousPrefetchState({
-	// 		isActive: false,
-	// 		currentOffset: 1,
-	// 		direction: null
-	// 	})
-	// }, [])
-
-	// Smart prefetch for adjacent pages when hovering navigation buttons
-	// const handleNavButtonHover = useCallback(
-	// 	(targetPage: number, direction: 'next' | 'prev') => {
-	// 		if (!onPrefetch) return
-
-	// 		// Start continuous prefetching
-	// 		startContinuousPrefetch(direction, targetPage)
-	// 	},
-	// 	[onPrefetch, startContinuousPrefetch]
-	// )
 
 	// Clear timeout and intervals on unmount
 	useEffect(() => {
@@ -285,3 +200,86 @@ const PaginationElipsis = tw(EllipsisIcon)<
 >`translate-y-1 size-3`
 
 export default Pagination
+
+/**
+ ```tsx
+ 	// Continuous prefetch function - keeps prefetching while hovering
+	const startContinuousPrefetch = useCallback(
+		(direction: 'next' | 'prev', targetPage: number) => {
+			if (!onPrefetch) return
+
+			// Stop any existing continuous prefetch
+			if (continuousIntervalRef.current) {
+				clearInterval(continuousIntervalRef.current)
+			}
+
+			setContinuousPrefetchState({
+				isActive: true,
+				currentOffset: 1,
+				direction
+			})
+
+			// Start with immediate prefetch of target page
+			debouncedPrefetch(targetPage, 50)
+
+			// Set up continuous prefetching with progressive delay
+			let currentOffset = 1
+			let currentDelay = continuousInterval
+
+			continuousIntervalRef.current = setInterval(() => {
+				currentOffset += 1
+
+				// Stop if we've reached the maximum or page bounds
+				if (currentOffset > maxContinuousPrefetch) {
+					clearInterval(continuousIntervalRef.current!)
+					setContinuousPrefetchState((prev) => ({ ...prev, isActive: false }))
+					return
+				}
+
+				const nextPageToPrefetch = direction === 'next' ? currentPage + currentOffset : currentPage - currentOffset
+
+				// Check bounds
+				if (nextPageToPrefetch < 1 || nextPageToPrefetch > totalPages) {
+					clearInterval(continuousIntervalRef.current!)
+					setContinuousPrefetchState((prev) => ({ ...prev, isActive: false }))
+					return
+				}
+
+				// Prefetch the next page in sequence
+				debouncedPrefetch(nextPageToPrefetch, 0) // No additional delay for continuous
+
+				setContinuousPrefetchState((prev) => ({ ...prev, currentOffset }))
+
+				// Progressively increase delay for later prefetches to reduce server load
+				currentDelay = Math.min(currentDelay * 1.2, 2000)
+			}, currentDelay)
+		},
+		[onPrefetch, debouncedPrefetch, currentPage, totalPages, maxContinuousPrefetch, continuousInterval]
+	)
+
+	// Stop continuous prefetch
+	const stopContinuousPrefetch = useCallback(() => {
+		if (continuousIntervalRef.current) {
+			clearInterval(continuousIntervalRef.current)
+			continuousIntervalRef.current = null
+		}
+		setContinuousPrefetchState({
+			isActive: false,
+			currentOffset: 1,
+			direction: null
+		})
+	}, [])
+
+	// Smart prefetch for adjacent pages when hovering navigation buttons
+	const handleNavButtonHover = useCallback(
+		(targetPage: number, direction: 'next' | 'prev') => {
+			if (!onPrefetch) return
+
+			// Start continuous prefetching
+			startContinuousPrefetch(direction, targetPage)
+		},
+		[onPrefetch, startContinuousPrefetch]
+	)
+
+ ```
+ */
