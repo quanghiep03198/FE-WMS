@@ -48,7 +48,12 @@ export const editorExtensions = [
 			HTMLAttributes: {
 				class: 'text-blue-500 font-normal'
 			}
-		}
+		},
+		bulletList: false,
+		listItem: false,
+		listKeymap: false,
+		orderedList: false,
+		gapcursor: false
 	}),
 	ListKit.configure({
 		bulletList: {
