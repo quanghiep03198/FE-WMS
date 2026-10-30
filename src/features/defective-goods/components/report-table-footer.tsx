@@ -11,6 +11,8 @@ type ReportTableSummaryProps = { summaryData: Record<DefectiveCategory, number> 
 const ReportTableSummary: React.FC<ReportTableSummaryProps> = ({ summaryData }) => {
 	const { t } = useTranslation()
 
+	if (!summaryData) return null
+
 	return (
 		<Table className='table-fixed'>
 			<TableHeader>

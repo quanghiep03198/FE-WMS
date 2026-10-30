@@ -119,6 +119,10 @@ export const useDeleteManyDefectiveGoodsMutation = () => {
 			]
 		},
 		mutationFn: DefectiveGoodsService.deleteManyDefectiveGoods
+		// onSuccess: (data, variables)=>{
+		// 	if(variables.including_ids==='all' && )
+
+		// }
 	})
 }
 
