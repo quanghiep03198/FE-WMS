@@ -221,8 +221,6 @@ const DefectiveGoodsForm: React.FC = () => {
 		navigate({ search })
 	}
 
-	console.log(form.getErrors())
-
 	const handleSubmitForm = async (data: CreateDefectiveGoodsFormValues) => {
 		if (data.combination_strategy === 'manually' && formAction === CommonActions.CREATE) {
 			delete data.epc
@@ -237,12 +235,6 @@ const DefectiveGoodsForm: React.FC = () => {
 				chunkSize: 1024
 			}).toString('base64')
 		}
-
-		console.log({
-			...data,
-			po: isNil(data.po) || isEmpty(data.po) ? 'PRELOAD' : data.po,
-			defective_description: data.defective_description
-		})
 
 		const mutateAsync = async () =>
 			formAction === CommonActions.UPDATE

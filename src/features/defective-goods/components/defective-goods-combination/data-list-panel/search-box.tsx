@@ -68,7 +68,6 @@ const SearchBox: React.FC = () => {
 	)
 
 	const handleSearchSubmission = (data: DefectiveGoodQueryParams): void => {
-		console.log(data)
 		setSearchTerms(
 			pickBy({
 				...data,

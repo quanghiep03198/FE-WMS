@@ -17,9 +17,10 @@ const DataList: React.FC<DataListProps> = ({ isLoading, data }) => {
 		</Div>
 	) : Array.isArray(data?.data) && data?.totalDocs > 0 ? (
 		<Div className='space-y-4 overflow-y-scroll p-4 group-data-[state=open]:p-0'>
-			{data.data.map((item) => {
-				return <InfoCard data={item} key={item.id} />
-			})}
+			{Array.isArray(data?.data) &&
+				data.data.map((item) => {
+					return <InfoCard data={item} key={item.id} />
+				})}
 		</Div>
 	) : (
 		<EmptySection />
