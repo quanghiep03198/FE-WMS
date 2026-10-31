@@ -136,7 +136,7 @@ const Pagination: React.FC<PaginationProps> = ({
 		<Div
 			{...props}
 			as='nav'
-			className={cn('flex w-auto max-w-full items-center justify-center gap-x-0.5', className)}
+			className={cn('flex w-auto max-w-full items-stretch justify-center gap-x-0.5', className)}
 			role='navigation'>
 			<Button
 				aria-busy={continuousPrefetchState.isActive && continuousPrefetchState.direction === 'prev'}
@@ -149,18 +149,18 @@ const Pagination: React.FC<PaginationProps> = ({
 				{t('ns_common:pagination.previous_page')}
 			</Button>
 			<Button
-				className='size-8 text-sm'
+				className='size-8 text-xs'
 				size='icon'
 				variant={currentPage === 1 ? 'outline' : 'ghost'}
 				onClick={() => onPageChange(1)}
 				onMouseEnter={() => debouncedPrefetch(1)}>
 				1
 			</Button>
-			{paginationRange[0] - 1 > 1 && <PaginationElipsis />}
+			{paginationRange[0] - 1 > 1 && <PaginationElipsis className='self-center' />}
 			{paginationRange.map((pageIndex) => {
 				return (
 					<Button
-						className='size-8 text-sm'
+						className='size-8 text-xs'
 						key={pageIndex}
 						size='icon'
 						variant={pageIndex === currentPage ? 'outline' : 'ghost'}
@@ -170,10 +170,10 @@ const Pagination: React.FC<PaginationProps> = ({
 					</Button>
 				)
 			})}
-			{paginationRange[paginationRange.length - 1] + 1 < totalPages && <PaginationElipsis />}
+			{paginationRange[paginationRange.length - 1] + 1 < totalPages && <PaginationElipsis className='self-center' />}
 			{totalPages > 1 && (
 				<Button
-					className='size-8 text-sm'
+					className='size-8 text-xs'
 					size='icon'
 					variant={currentPage === totalPages ? 'outline' : 'ghost'}
 					onClick={() => onPageChange(totalPages)}
