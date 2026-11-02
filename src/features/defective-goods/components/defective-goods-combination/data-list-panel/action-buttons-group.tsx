@@ -35,11 +35,7 @@ const ActionButtonsGroup: React.FC = () => {
 				</Toggle>
 			</Tooltip>
 			<Separator className='h-4 w-0.5' orientation='vertical' />
-			<Tooltip
-				message={t('ns_common:actions.reload')}
-				triggerProps={{
-					asChild: true
-				}}>
+			<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 				<Button size='icon' variant='ghost' onClick={() => refetch()}>
 					<Icon name='RefreshCcw' />
 				</Button>

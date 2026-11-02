@@ -1,4 +1,5 @@
 import { UserRole } from '@common/constants/enums'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import { Div } from '@components/customs/div'
 import type Pagination from '@components/customs/pagination'
 import { Typography } from '@components/customs/typography'
@@ -49,8 +50,8 @@ const ItemSelectionCheckbox: React.FC<ItemSelectionCheckboxProps> = ({ data, tot
 			fallbackComponent={
 				<Typography color='muted' variant='small'>
 					{t('ns_common:table.total_rows', {
-						count: totalDocs,
-						defaultValue: `${selectedCount}/${totalDocs} selected`
+						totalRows: formatIntlNumber(totalDocs),
+						defaultValue: `${formatIntlNumber(selectedCount)}/${formatIntlNumber(totalDocs)} selected`
 					})}
 				</Typography>
 			}>

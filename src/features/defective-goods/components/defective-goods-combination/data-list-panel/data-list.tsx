@@ -19,7 +19,7 @@ const DataList: React.FC<DataListProps> = ({ isLoading, data }) => {
 		<Div className='space-y-4 overflow-y-scroll p-4 group-data-[state=open]:p-0'>
 			{Array.isArray(data?.data) &&
 				data.data.map((item) => {
-					return <InfoCard data={item} key={item.id} />
+					return <InfoCard data={item} key={item._id} />
 				})}
 		</Div>
 	) : (

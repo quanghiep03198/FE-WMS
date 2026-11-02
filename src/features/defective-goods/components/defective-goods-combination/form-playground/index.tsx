@@ -4,6 +4,7 @@ import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import Editor from '@components/addons/tiptap'
 import { Div } from '@components/customs/div'
+import { Typography } from '@components/customs/typography'
 import { InputFieldControl } from '@components/forms/input'
 import { SelectFieldControl } from '@components/forms/select'
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@components/guards/role-base-access-control'
@@ -63,28 +64,10 @@ const DefectiveGoodsForm: React.FC = () => {
 	const navigate = useNavigate({ from: '/defective-goods-epc-combination' })
 	const [formAction, setFormAction, resetFormAction] = useResetState<Nullish<CommonActions>>(null)
 	const [useAvailableTemplate, setUseAvailabelTemplate] = useLocalStorageState('useAvailableTemplate', {
-		defaultValue: true,
-		listenStorageChange: true
+		defaultValue: true
 	})
 	const { currentStrategy, setStrategy } = useSwitchCombinationStrategy()
 	const previousStrategy = usePrevious(currentStrategy)
-	// const [defaultEditorContent, setDefaultEditorContent] = useState<string>(() =>
-	// 	useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
-	// )
-	const editorRef = useRef<{
-		getHTML: () => string
-		isEmpty: () => boolean
-		commands: () => SingleCommands
-	}>({
-		getHTML: () => '',
-		isEmpty: () => true,
-		commands: () =>
-			({
-				setContent: (content: string) => {
-					void content
-				}
-			}) as SingleCommands
-	})
 
 	const schemaRef = useRef<any>(createDefectiveGoodsSchema)
 
@@ -92,8 +75,25 @@ const DefectiveGoodsForm: React.FC = () => {
 		resolver: zodResolver(schemaRef.current),
 		defaultValues: {
 			shoe_source: DefectiveGoodsSource.FINAL_INSPECTION,
-			defective_description: DefectDescriptionTemplate[i18n.language]
+			defective_description: useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : undefined
 		}
+	})
+
+	const editorRef = useRef<{
+		getHTML: () => string
+		isEmpty: () => boolean
+		commands: () => SingleCommands
+		clearContent: () => void
+	}>({
+		getHTML: () => form.getValues().defective_description ?? '',
+		isEmpty: () => !form.getValues().defective_description,
+		clearContent: () => void '',
+		commands: () =>
+			({
+				setContent: (content: string) => {
+					void content
+				}
+			}) as SingleCommands
 	})
 
 	// Watch form fields
@@ -133,6 +133,16 @@ const DefectiveGoodsForm: React.FC = () => {
 	})
 
 	useEffect(() => {
+		if (form.formState.submitCount === 0) return
+
+		if (editorRef.current?.isEmpty()) {
+			form.setError('defective_description', { type: 'required', message: t('ns_erp:errors.required') })
+		} else {
+			form.clearErrors('defective_description')
+		}
+	}, [form.formState.submitCount])
+
+	useEffect(() => {
 		if (!orderDetail) return
 		form.reset({
 			...form.getValues(),
@@ -143,35 +153,26 @@ const DefectiveGoodsForm: React.FC = () => {
 		})
 	}, [orderDetail])
 
-	useUpdateEffect(() => {
-		if (formAction !== CommonActions.CREATE) return
-		form.reset({
-			...form.getValues(),
-			factory_shoes_style: '',
-			cust_shoes_style: '',
-			color_sn: '',
-			...(shouldRequireFullInfo && { po: '', mo_no: '' }),
-			...(currentStrategy === 'manually' ? { sizes: [] } : { size_numcode: '' })
-		})
-	}, [formAction, currentCategory])
-
 	useEffect(() => {
 		if (formAction === CommonActions.CREATE) {
-			editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
+			form.reset({
+				...form.getValues(),
+				factory_shoes_style: '',
+				cust_shoes_style: '',
+				color_sn: '',
+				...(shouldRequireFullInfo && { po: '', mo_no: '' }),
+				...(currentStrategy === 'manually' ? { sizes: [] } : { size_numcode: '' })
+			})
 			form.setValue('combination_strategy', currentStrategy)
 		}
-		if (formAction === CommonActions.UPDATE) setStrategy(null)
+		if (formAction === CommonActions.UPDATE) {
+			setStrategy(null)
+		}
 	}, [formAction, currentStrategy])
 
 	useUpdateEffect(() => {
-		if (typeof editorRef.current?.commands !== 'function') return
-		if (useAvailableTemplate) {
-			form.setValue('defective_description', DefectDescriptionTemplate[i18n.language])
-			editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
-		} else {
-			form.setValue('defective_description', '')
-			editorRef.current?.commands().setContent('')
-		}
+		if (useAvailableTemplate) editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
+		else editorRef.current?.clearContent()
 	}, [i18n.language, useAvailableTemplate])
 
 	const handleEpcChange: React.KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
@@ -211,7 +212,8 @@ const DefectiveGoodsForm: React.FC = () => {
 			}
 		}
 		form.reset(currentFormValues)
-		if (editorRef.current) editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
+		if (useAvailableTemplate)
+			if (editorRef.current) editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
 	}
 
 	const handleCancel = () => {
@@ -222,6 +224,15 @@ const DefectiveGoodsForm: React.FC = () => {
 	}
 
 	const handleSubmitForm = async (data: CreateDefectiveGoodsFormValues) => {
+		data.defective_description = editorRef.current?.getHTML?.() ?? ''
+
+		if (!data.defective_description) {
+			form.setError('defective_description', { type: 'required', message: t('ns_validation:required') })
+			return
+		} else {
+			form.clearErrors('defective_description')
+		}
+
 		if (data.combination_strategy === 'manually' && formAction === CommonActions.CREATE) {
 			delete data.epc
 			delete data.size_numcode
@@ -253,10 +264,6 @@ const DefectiveGoodsForm: React.FC = () => {
 			handleCancel()
 		}
 		if (data.combination_strategy === 'uhf') event$.emit({ action: CommonActions.SAVE, payload: [] })
-	}
-
-	if (editorRef.current?.isEmpty?.() && form.formState.isSubmitted) {
-		form.setError('defective_description', { type: 'required', message: t('ns_common:errors.required') })
 	}
 
 	const isPending: boolean = isCreating || isUpdating
@@ -459,7 +466,7 @@ const DefectiveGoodsForm: React.FC = () => {
 						<ShoeSourceFieldControl disabled={isNil(formAction)} />
 					</Div>
 					<Div className='relative col-span-full'>
-						<Div className='absolute top-0 right-0 inline-flex items-center gap-x-3'>
+						<Div className='absolute -top-1 right-0 inline-flex items-center gap-x-3'>
 							<Label className='inline-flex items-center gap-x-2' htmlFor='toggle-use-desc-template'>
 								<Icon name='Sparkles' strokeWidth={1.5} />
 								{t('ns_common:editor.use_available_template')}
@@ -468,14 +475,18 @@ const DefectiveGoodsForm: React.FC = () => {
 								checked={useAvailableTemplate}
 								disabled={isNil(formAction)}
 								id='toggle-use-desc-template'
-								onCheckedChange={(checked) => {
-									setUseAvailabelTemplate(Boolean(checked))
-									if (!checked) editorRef.current?.commands?.()?.setContent?.('')
-								}}
+								onCheckedChange={(checked) => setUseAvailabelTemplate(Boolean(checked))}
 							/>
 						</Div>
-						<Field className='space-y-2'>
-							<Label htmlFor='defective-description'>{t('ns_erp:fields.defective_description')}</Label>
+						<Field
+							aria-invalid={!!form.getErrors('defective_description')}
+							className='gap-1 [&[aria-invalid=true]_div[aria-roledescription="editor"]]:border-destructive!'>
+							<Label
+								aria-invalid={!!form.getErrors('defective_description')}
+								className='aria-invalid:text-destructive'
+								htmlFor='defective-description'>
+								{t('ns_erp:fields.defective_description')}
+							</Label>
 							<Editor
 								id='defective-description'
 								ref={editorRef}
@@ -483,21 +494,17 @@ const DefectiveGoodsForm: React.FC = () => {
 									form.getValues('defective_description') ||
 									(useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : '')
 								}
-								onUpdate={({ value }) => {
-									form.setValue('defective_description', value || '')
-								}}
 							/>
-
-							{/* <FieldError errors={[form.getErrors('defective_description')]} /> */}
+							{form.getErrors('defective_description') && (
+								<Typography
+									className={cn(
+										'text-destructive inline-flex items-center gap-x-1 text-[0.8rem] font-medium'
+									)}>
+									<Icon name='TriangleAlert' />
+									{t(form.getErrors('defective_description').message)}
+								</Typography>
+							)}
 						</Field>
-						{/* <EditorFieldControl
-							className=''
-							defaultValue={defaultEditorContent}
-							disabled={!formAction}
-							errorMessage={t('ns_validation:required')}
-							label={t('ns_erp:fields.defective_description')}
-							name='defective_description'
-						/> */}
 					</Div>
 				</Div>
 				{/* Footer bar */}

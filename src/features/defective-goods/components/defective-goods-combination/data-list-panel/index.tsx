@@ -37,13 +37,13 @@ const DatalistPanel: React.FC = () => {
 
 	// Prefetch trang kế tiếp
 	useEffect(() => {
-		if (!isPlaceholderData || !data || !data.hasNextPage) return
+		if (isPlaceholderData || !data || !data.hasNextPage) return
 
-		const run = async () =>
+		const run = async () => {
 			await queryClient.query(
 				getDefectiveGoodsQueryOptions({ ...searchParams, ...searchTerms, page: data.page + 1 })
 			)
-
+		}
 		const id = 'requestIdleCallback' in window ? requestIdleCallback(run, { timeout: 120 }) : setTimeout(run, 0)
 
 		return () => {
