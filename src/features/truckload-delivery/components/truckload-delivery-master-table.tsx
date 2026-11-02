@@ -293,12 +293,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 
 	// Prefetch trang kế tiếp
 	useEffect(() => {
-		if (!isPlaceholderData || !data || !data.hasNextPage) return
+		if (isPlaceholderData || !data || !data.hasNextPage) return
 
 		const run = async () =>
 			await queryClient.query(getTruckloadDeliveryQueryOptions({ ...searchParams, page: data.page + 1 }))
 
-		const id = 'requestIdleCallback' in window ? requestIdleCallback(run, { timeout: 120 }) : setTimeout(run, 0)
+		const id = 'requestIdleCallback' in window ? requestIdleCallback(run, { timeout: 200 }) : setTimeout(run, 0)
 
 		return () => {
 			if ('cancelIdleCallback' in window) cancelIdleCallback(id as number)

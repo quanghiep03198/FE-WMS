@@ -93,7 +93,7 @@ export const PageContextProvider: React.FC<React.PropsWithChildren> = ({ childre
 	)
 
 	const [searchParams, setParams] = useSessionStorageState<PageQueryParams>(_STORAGE_PARAMS_KEY, {
-		defaultValue: { page: 1, limit: isMobile ? 10 : 15 } as PageQueryParams,
+		defaultValue: { page: 1, limit: isMobile ? 10 : 20 } as PageQueryParams,
 		listenStorageChange: true
 	})
 
