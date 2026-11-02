@@ -164,7 +164,7 @@ export default {
 		replace_image: 'Replace image',
 		replace_with_url: 'Replace with URL',
 		full_width: 'Full width',
-		add_image: 'Add image',
+		insert_image: 'Add image',
 		delete_image: 'Delete image',
 		choose_image_from_device: 'Choose image from device',
 		choose_from_url: 'Choose from URL',
@@ -270,6 +270,7 @@ export default {
 		preference_menu_label: 'Preference'
 	},
 	notification: {
+		coppied_to_clipboard: 'Copied to clipboard',
 		downloading: 'Downloading ...',
 		establish_connection: 'Establishing connection ...',
 		error: 'Something went wrong !',
@@ -325,7 +326,7 @@ export default {
 		selected_rows: '{{selectedRows}} row(s) selected',
 		sort_asc: 'Sort ascending',
 		sort_desc: 'Sort descending',
-		total_rows: '{{count}} records',
+		total_rows: '{{totalRows}} records',
 		toggle_columns: 'Toggle columns',
 		unpin: 'Unpin',
 		column_settings: 'Column settings'

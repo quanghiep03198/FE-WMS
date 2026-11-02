@@ -153,7 +153,7 @@ export default {
 			'Chèn 1 đường liên kết vào văn bản đã chọn. Bạn cũng có thể liên kết đến địa chỉ email hoặc số điện thoại.',
 		insert_link_placeholder: 'Dán 1 đường liên kết ...',
 		image: 'Hình ảnh',
-		add_image: 'Thêm hình ảnh',
+		insert_image: 'Chèn ảnh',
 		code_block: 'Khối mã',
 		text_color: 'Màu chữ',
 		highlight: 'Đánh dấu',
@@ -273,6 +273,7 @@ export default {
 		preference_menu_label: 'Tùy chỉnh'
 	},
 	notification: {
+		coppied_to_clipboard: 'Đã sao chép vào bộ nhớ tạm',
 		downloading: 'Đang tải xuống ...',
 		establishing_connection: 'Đang thiết lập kết nối ...',
 		error: 'Đã có lỗi xảy ra !',
@@ -335,7 +336,7 @@ export default {
 		selected_rows: 'Đã chọn {{selectedRows}} dòng',
 		sort_asc: 'Sắp xếp tăng dần',
 		sort_desc: 'Sắp xếp giảm dần',
-		total_rows: '{{count}} bản ghi',
+		total_rows: '{{totalRows}} bản ghi',
 		toggle_columns: 'Tùy chọn hiển thị cột',
 		unpin: 'Bỏ ghim',
 		column_settings: 'Thiết lập cột'

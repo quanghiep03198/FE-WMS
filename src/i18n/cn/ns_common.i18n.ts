@@ -163,7 +163,7 @@ export default {
 		paste_without_formatting: '粘贴为无格式文本',
 		edit_caption: '编辑说明文字',
 		full_width: '全宽',
-		add_image: '添加图片',
+		insert_image: '添加图片',
 		replace_image: '图片替换',
 		replace_with_url: '用 URL 替换',
 		delete_image: '删除图片',
@@ -272,6 +272,7 @@ export default {
 		preference_menu_label: '偏好设置'
 	},
 	notification: {
+		coppied_to_clipboard: '已复制到剪贴板',
 		downloading: '下载 ...',
 		establishing_connection: '建立连接 ...',
 		error: '失败 !',
@@ -328,7 +329,7 @@ export default {
 		rows_per_page: '展示',
 		search_in_column: '在栏目中搜索',
 		selected_rows: '已选择 {{selectedRows}} 行',
-		total_rows: '{{count}} 记录',
+		total_rows: '{{totalRows}} 记录',
 		unpin: '取消固定',
 		pin_left: '固定左侧',
 		pin_right: '固定右侧',
