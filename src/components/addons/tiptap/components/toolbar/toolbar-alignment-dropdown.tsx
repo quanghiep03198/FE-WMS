@@ -2,7 +2,7 @@ import { cn } from '@common/utils/cn'
 import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from '../../../../customs/tooltip'
-import { Button } from '../../../../ui/button'
+import { buttonVariants } from '../../../../ui/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -96,11 +96,11 @@ export const AlignmentDropdownMenu: React.FC = () => {
 
 	return (
 		<DropdownMenu>
-			<Tooltip message={t('ns_common:editor.alignment')}>
-				<DropdownMenuTrigger asChild>
-					<Button className='aspect-square h-8 w-8' size='icon' type='button' variant='ghost'>
-						<Icon name={alignmentState?.icon} />
-					</Button>
+			<Tooltip message={t('ns_common:editor.alignment')} triggerProps={{ asChild: true }}>
+				<DropdownMenuTrigger
+					className={buttonVariants({ size: 'icon', className: 'aspect-square h-8 w-8', variant: 'ghost' })}
+					type='button'>
+					<Icon name={alignmentState?.icon} />
 				</DropdownMenuTrigger>
 			</Tooltip>
 			<DropdownMenuContent>

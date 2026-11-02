@@ -23,6 +23,7 @@ export interface EditorProps {
 	onUpdate?: (state: { value: string; isEmpty: boolean }) => unknown
 	id?: string
 	ref?: React.RefObject<typeof EditorContent.prototype> | RefCallBack
+	className?: string
 	name?: string
 	defaultValue?: string
 	disabled?: boolean
@@ -46,12 +47,13 @@ export interface EditorProps {
  */
 
 const Editor: React.FC<EditorProps> = ({
+	className = '',
 	defaultValue = '',
+	disabled,
+	height = 350,
 	id = uniqueId(),
 	ref,
-	disabled,
 	name,
-	height = 350,
 	onUpdate
 }) => {
 	const { i18n } = useTranslation()
@@ -71,10 +73,10 @@ const Editor: React.FC<EditorProps> = ({
 			},
 			enableCoreExtensions: true,
 			editable: !disabled,
-			immediatelyRender: true,
-			onUpdate: ({ editor }) => {
-				if (typeof onUpdate === 'function') onUpdate({ value: editor.getHTML(), isEmpty: editor.isEmpty })
-			}
+			immediatelyRender: true
+			// onUpdate: ({ editor }) => {
+			// 	if (typeof onUpdate === 'function') onUpdate({ value: editor.getHTML(), isEmpty: editor.isEmpty })
+			// }
 		},
 		[disabled, i18n.language]
 	)
@@ -90,6 +92,7 @@ const Editor: React.FC<EditorProps> = ({
 		() => ({
 			getHTML: () => editor?.getHTML() ?? '',
 			isEmpty: () => editor?.isEmpty ?? true,
+			clearContent: () => editor?.commands?.clearContent?.(),
 			commands: () => editor?.commands
 		}),
 		[editor]
@@ -117,9 +120,11 @@ const Editor: React.FC<EditorProps> = ({
 
 	return (
 		<Div
+			aria-roledescription='editor'
 			className={cn(
 				'divide-border relative flex w-full max-w-full flex-col items-stretch divide-y overflow-clip rounded-lg border shadow-sm',
-				disabled && 'cursor-not-allowed opacity-50 [&>nav]:pointer-events-none'
+				disabled && 'cursor-not-allowed opacity-50 [&>nav]:pointer-events-none',
+				className
 			)}>
 			<EditorContextProvider editor={editor}>
 				<Toolbar />

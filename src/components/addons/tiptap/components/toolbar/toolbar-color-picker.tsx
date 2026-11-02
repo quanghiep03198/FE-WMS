@@ -19,7 +19,7 @@ import { Activity, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Div } from '../../../../customs/div'
 import { Tooltip } from '../../../../customs/tooltip'
-import { Button } from '../../../../ui/button'
+import { Button, buttonVariants } from '../../../../ui/button'
 import type { IconProps } from '../../../../ui/icon'
 import { Icon } from '../../../../ui/icon'
 import { Popover, PopoverContent, PopoverTrigger } from '../../../../ui/popover'
@@ -102,22 +102,22 @@ const ToolbarColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) =
 	return (
 		<Div className='relative'>
 			<Popover modal>
-				<Tooltip message={label}>
-					<PopoverTrigger asChild>
-						<Button
-							className='aspect-square h-8 w-8 flex-col gap-x-1.5'
-							size='icon'
-							type='button'
-							variant='ghost'>
-							<Icon name={icon} />
-							<Div
-								style={{ backgroundColor: currentColor }}
-								className={cn('mt-0.5 h-1.5 w-4/5 self-center rounded-l-full rounded-r-full border-[0.5px]', {
-									'bg-foreground!': !currentColor && type === 'textStyle',
-									'bg-transparent': !currentColor && type === 'highlight'
-								})}
-							/>
-						</Button>
+				<Tooltip message={label} triggerProps={{ asChild: true }}>
+					<PopoverTrigger
+						type='button'
+						className={buttonVariants({
+							size: 'icon',
+							className: 'aspect-square h-8 w-8 flex-col',
+							variant: 'ghost'
+						})}>
+						<Icon name={icon} />
+						<span
+							style={{ backgroundColor: currentColor }}
+							className={cn('mt-0.5 h-1.5 w-4/5 self-center rounded-l-full rounded-r-full border-[0.5px]', {
+								'bg-foreground!': !currentColor && type === 'textStyle',
+								'bg-transparent': !currentColor && type === 'highlight'
+							})}
+						/>
 					</PopoverTrigger>
 				</Tooltip>
 				<PopoverContent align='end' className='h-auto p-0'>

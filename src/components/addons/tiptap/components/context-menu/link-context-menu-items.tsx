@@ -3,25 +3,32 @@ import { Icon } from '@components/ui/icon'
 import useCopyToClipboard from '@hooks/use-copy-to-clipboard'
 import type { Editor } from '@tiptap/react'
 import { Fragment, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { url } from 'zod'
 
 const LinkContextMenuItems: React.FC<{ editor: Editor }> = ({ editor }) => {
 	const [copyToClipboard, { isCoppied }] = useCopyToClipboard()
-	const url = useMemo(
-		() => (window.getSelection().anchorNode.parentNode as HTMLAnchorElement).getAttribute('href'),
-		[window.getSelection]
-	)
+	const { t } = useTranslation()
+
+	const link = useMemo(() => {
+		return (window.getSelection()?.anchorNode?.parentNode as HTMLAnchorElement | null)?.getAttribute('href')
+	}, [window.getSelection])
 	const handleCopyLinkToClipboard = () => {
-		if (url) {
-			copyToClipboard(url)
-			if (isCoppied) toast.info('Đã sao chép vào bộ nhớ tạm')
+		if (link) {
+			copyToClipboard(link)
+			if (isCoppied) toast.info(t('ns_common.notification.coppied_to_clipboard'))
 		}
 	}
 
 	return (
 		<Fragment>
 			<ContextMenuSeparator />
-			<ContextMenuItem className='gap-x-2' onClick={() => window.open(url, '_blank')}>
+			<ContextMenuItem
+				className='gap-x-2'
+				onClick={() => {
+					if (link && url().safeParse(link).success) window.open(link, '_blank')
+				}}>
 				<Icon name='SquareArrowUpRight' />
 				Mở liên kết trong tab mới
 			</ContextMenuItem>

@@ -1,7 +1,7 @@
 import { Div } from '@components/customs/div'
 import { Tooltip } from '@components/customs/tooltip'
 import { InputFieldControl } from '@components/forms/input'
-import { Button } from '@components/ui/button'
+import { Button, buttonVariants } from '@components/ui/button'
 import { Form } from '@components/ui/form'
 import { Icon } from '@components/ui/icon'
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
@@ -66,11 +66,11 @@ const BubbleMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 			<Separator />
 			<Div className='flex items-center gap-x-px px-2'>
 				<Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-					<Tooltip message='Cập nhật'>
-						<PopoverTrigger asChild>
-							<Button className='h-8 w-8' size='icon' variant='ghost'>
-								<Icon name='Pencil' />
-							</Button>
+					<Tooltip message='Cập nhật' triggerProps={{ asChild: true }}>
+						<PopoverTrigger
+							className={buttonVariants({ variant: 'ghost', size: 'icon', className: 'h-8 w-8' })}
+							type='button'>
+							<Icon name='Pencil' />
 						</PopoverTrigger>
 					</Tooltip>
 					<PopoverContent
@@ -95,7 +95,7 @@ const BubbleMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 					</PopoverContent>
 				</Popover>
 
-				<Tooltip message='Copy'>
+				<Tooltip message='Copy' triggerProps={{ asChild: true }}>
 					<Button
 						className='aspect-square h-8 w-8'
 						size='icon'
@@ -105,7 +105,7 @@ const BubbleMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 						<Icon name='Copy' />
 					</Button>
 				</Tooltip>
-				<Tooltip message='Unlink'>
+				<Tooltip message='Unlink' triggerProps={{ asChild: true }}>
 					<Button
 						className='aspect-square h-8 w-8'
 						size='icon'

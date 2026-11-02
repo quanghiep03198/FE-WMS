@@ -2,7 +2,7 @@ import { type Level as HeadingLevel } from '@tiptap/extension-heading'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from '../../../../customs/tooltip'
-import { Button } from '../../../../ui/button'
+import { buttonVariants } from '../../../../ui/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -74,11 +74,11 @@ export const StyleDropdownMenu: React.FC = () => {
 
 	return (
 		<DropdownMenu>
-			<Tooltip message={t('ns_common:editor.typography')}>
-				<DropdownMenuTrigger asChild>
-					<Button className='h-8 min-w-32 gap-x-2' size='sm' type='button' variant='secondary'>
-						<Icon name={getCurrentStyle.icon} /> {getCurrentStyle.label}
-					</Button>
+			<Tooltip message={t('ns_common:editor.typography')} triggerProps={{ asChild: true }}>
+				<DropdownMenuTrigger
+					className={buttonVariants({ size: 'sm', className: 'h-8 min-w-32', variant: 'secondary' })}
+					type='button'>
+					<Icon name={getCurrentStyle.icon} /> {getCurrentStyle.label}
 				</DropdownMenuTrigger>
 			</Tooltip>
 			<DropdownMenuContent>

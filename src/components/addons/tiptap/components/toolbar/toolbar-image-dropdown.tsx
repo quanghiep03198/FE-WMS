@@ -2,7 +2,7 @@ import React, { Fragment, useId, useState } from 'react'
 import tw from 'tailwind-styled-components'
 import { Tooltip } from '../../../../customs/tooltip'
 import { InputFieldControl } from '../../../../forms/input'
-import { Button } from '../../../../ui/button'
+import { Button, buttonVariants } from '../../../../ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../../../../ui/dialog'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../../../ui/dropdown-menu'
 import { Form } from '../../../../ui/form'
@@ -31,11 +31,10 @@ const ImageDropdown: React.FC = () => {
 	return (
 		<Fragment>
 			<DropdownMenu>
-				<Tooltip message='Chèn ảnh'>
-					<DropdownMenuTrigger asChild>
-						<Button className='aspect-square h-8 w-8' size='icon' variant='ghost'>
-							<Icon name='ImagePlus' />
-						</Button>
+				<Tooltip message={t('ns_common:editor.insert_image')} triggerProps={{ asChild: true }}>
+					<DropdownMenuTrigger
+						className={buttonVariants({ size: 'icon', variant: 'ghost', className: 'aspect-square h-8 w-8' })}>
+						<Icon name='ImagePlus' />
 					</DropdownMenuTrigger>
 				</Tooltip>
 				<DropdownMenuContent align='end'>
@@ -60,12 +59,13 @@ const ImageDropdown: React.FC = () => {
 			<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 				<DialogTrigger className='hidden' id={dialogTriggerId} />
 				<DialogContent className='items-stretch'>
-					<DialogHeader className='text-left'>{t('ns_common:editor.add_image')}</DialogHeader>
+					<DialogHeader className='text-left'>{t('ns_common:editor.insert_image')}</DialogHeader>
 					<Form {...form}>
 						<FormDialog
 							onSubmit={(e) => {
 								e.stopPropagation()
 								form.handleSubmit((value) => {
+									if (!value.url) return
 									editor.commands.setImage({ src: value.url, alt: 'Image' })
 									form.reset()
 									setDialogOpen(false)

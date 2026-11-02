@@ -7,7 +7,7 @@ import { Div } from '../../../../customs/div'
 import { Tooltip } from '../../../../customs/tooltip'
 import { Typography } from '../../../../customs/typography'
 import { InputFieldControl } from '../../../../forms/input'
-import { Button } from '../../../../ui/button'
+import { Button, buttonVariants } from '../../../../ui/button'
 import { Form } from '../../../../ui/form'
 import { Icon } from '../../../../ui/icon'
 import { Popover, PopoverContent, PopoverTrigger } from '../../../../ui/popover'
@@ -41,11 +41,11 @@ export const LinkPopover: React.FC = () => {
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
-			<Tooltip message={t('ns_common:editor.link')}>
-				<PopoverTrigger asChild>
-					<Button className='aspect-square h-8 w-8' size='icon' variant='ghost'>
-						<Icon name='Link' />
-					</Button>
+			<Tooltip message={t('ns_common:editor.link')} triggerProps={{ asChild: true }}>
+				<PopoverTrigger
+					className={buttonVariants({ size: 'icon', variant: 'ghost', className: 'aspect-square h-8 w-8' })}
+					type='button'>
+					<Icon name='Link' />
 				</PopoverTrigger>
 			</Tooltip>
 			<PopoverContent className='w-80'>

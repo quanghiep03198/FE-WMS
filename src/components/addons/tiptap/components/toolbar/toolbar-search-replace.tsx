@@ -53,13 +53,7 @@ export function SearchAndReplaceToolbar() {
 	return (
 		<Popover modal={false} open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild disabled={!editor}>
-				<Button
-					className={cn('font-normal')}
-					size='sm'
-					variant='ghost'
-					onClick={() => {
-						setOpen(!open)
-					}}>
+				<Button className={cn('font-normal')} size='sm' variant='ghost' onClick={() => setOpen(!open)}>
 					<Icon name='Search' />
 					{t('ns_common:editor.search_and_replace')}
 				</Button>

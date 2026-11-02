@@ -1,7 +1,7 @@
 import { Div } from '@components/customs/div'
 import { Tooltip } from '@components/customs/tooltip'
 import { InputFieldControl } from '@components/forms/input'
-import { Button } from '@components/ui/button'
+import { Button, buttonVariants } from '@components/ui/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -17,12 +17,12 @@ import {
 } from '@components/ui/dropdown-menu'
 import { Form } from '@components/ui/form'
 import { Icon } from '@components/ui/icon'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { number, object, string, type infer as Infer } from 'zod'
+import type { Infer } from 'zod'
+import { number, object, string } from 'zod'
 import { useEditorContext } from '../../context/editor-context'
 
 const tablePresetSchema = object({
@@ -54,11 +54,11 @@ const TableDropdownMenu: React.FC = () => {
 
 	return (
 		<DropdownMenu>
-			<Tooltip message={t('ns_common:editor.table')}>
-				<DropdownMenuTrigger asChild>
-					<Button className='h-8 w-8' size='icon' type='button' variant='ghost'>
-						<Icon name='Table' />
-					</Button>
+			<Tooltip message={t('ns_common:editor.table')} triggerProps={{ asChild: true }}>
+				<DropdownMenuTrigger
+					className={buttonVariants({ size: 'icon', className: 'h-8 w-8', variant: 'ghost' })}
+					type='button'>
+					<Icon name='Table' />
 				</DropdownMenuTrigger>
 			</Tooltip>
 			<DropdownMenuContent align='end'>

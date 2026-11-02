@@ -12,7 +12,7 @@ const ImagePlaceholderToolbar: React.FC<ButtonProps> = ({ className, onClick, ch
 	const { t } = useTranslation()
 
 	return (
-		<Tooltip message={t('ns_common:editor.image')} triggerProps={{ asChild: true }}>
+		<Tooltip message={t('ns_common:editor.insert_image')} triggerProps={{ asChild: true }}>
 			<Button
 				className={cn('aspect-square size-8 p-0', editor?.isActive('image-placeholder') && 'bg-accent', className)}
 				size='icon'
