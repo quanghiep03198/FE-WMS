@@ -186,7 +186,7 @@ const StockTransactionHistoryTable: React.FC<StockTransactionHistoryTableProps> 
 					<TableFooter>
 						<TableRow className='[&_td]:bg-table-head sticky bottom-0 z-10 [&_td]:h-(--footer-height) [&_td]:border-x-0 [&_td]:border-t'>
 							<TableCell align='left' colSpan={6}>
-								{t('ns_common:table.total_rows', { count: filteredData?.length ?? 0, defaultValue: null })}
+								{t('ns_common:table.total_rows', { totalRows: filteredData?.length ?? 0, defaultValue: null })}
 							</TableCell>
 						</TableRow>
 					</TableFooter>
