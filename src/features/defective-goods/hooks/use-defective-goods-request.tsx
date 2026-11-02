@@ -1,7 +1,7 @@
 import { DefectiveGoodsService } from '@features/defective-goods/services/defective-goods.service'
 import { StockFlow } from '@features/finished-goods/constants/enums'
 import useQueryParams from '@hooks/use-query-params'
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
 import { isEmpty, isNil, omitBy, pick, pickBy } from 'lodash-es'
 import { useCallback } from 'react'
@@ -48,7 +48,6 @@ export const getDefectiveGoodsQueryOptions = (params: Record<string, any>) => ({
 	queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy(params, (item) => !!item)],
 	queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(pickBy(params, (item) => !!item)),
 	placeholderData: keepPreviousData,
-	staleTime: 5000, // 5s
 	select: (response) => response.metadata
 })
 
@@ -126,17 +125,40 @@ export const useDeleteManyDefectiveGoodsMutation = () => {
 	})
 }
 
+type TEpcPageParam = {
+	cursor?: string
+	direction: 'next' | 'prev'
+	page: number
+}
+
 export const useGetCanInoutboundEpcQuery = () => {
 	const { searchParams } = useFilterQuery()
 
 	const params = omitBy(searchParams, (value) => value === undefined || value === null || value === '')
 
-	return useQuery({
+	return useInfiniteQuery({
+		// Không đưa cursor vào queryKey: đổi filter -> key mới -> tự quay về trang đầu
 		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC, params],
-		queryFn: async () => await DefectiveGoodsService.getCanInoutboundEpc(params),
+		// pageParam đặt sau để ghi đè mọi `page` có sẵn trong params
+		queryFn: ({ pageParam }) => DefectiveGoodsService.getCanInoutboundEpc({ ...params, ...pageParam }),
 		enabled: !!searchParams.action,
-		placeholderData: keepPreviousData,
-		select: (response) => response.metadata
+		initialPageParam: { direction: 'next', page: 1 } as TEpcPageParam,
+		getNextPageParam: ({ metadata }): TEpcPageParam | undefined =>
+			metadata.hasNextPage && metadata.nextCursor
+				? { cursor: metadata.nextCursor, direction: 'next', page: metadata.nextPage ?? metadata.page + 1 }
+				: undefined, // undefined/null = hết dữ liệu, hasNextPage của query sẽ là false
+		getPreviousPageParam: ({ metadata }): TEpcPageParam | undefined =>
+			metadata.hasPrevPage && metadata.prevCursor
+				? {
+						cursor: metadata.prevCursor,
+						direction: 'prev',
+						page: metadata.prevPage ?? Math.max(metadata.page - 1, 1)
+					}
+				: undefined,
+		select: (data) => ({
+			items: data.pages.flatMap((page) => page.metadata.data),
+			totalDocs: data.pages.at(-1)?.metadata.totalDocs ?? 0
+		})
 	})
 }
 

@@ -1,10 +1,8 @@
-import { CommonActions } from '@common/constants/enums'
 import TableCellText from '@components/addons/tanstack-table/components/table-cell-text'
 import { fuzzyFilter } from '@components/addons/tanstack-table/utils/fuzzy-filter.util'
 import { Typography } from '@components/customs/typography'
 import { Table, TableBody, TableCell, TableRow } from '@components/ui/table'
 import { TRANSLATED_DEFECTIVE_CATEGORY } from '@features/defective-goods/constants/enums'
-import { usePageContext } from '@features/defective-goods/contexts/page-context'
 import { useDefectiveCategoryList } from '@features/defective-goods/hooks/use-defective-category-list'
 import { useGetCanInoutboundEpcQuery } from '@features/defective-goods/hooks/use-defective-goods-request'
 import { useFilterQuery } from '@features/defective-goods/hooks/use-filter-query'
@@ -21,11 +19,10 @@ import {
 	useReactTable
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useDeepCompareEffect, useMemoizedFn } from 'ahooks'
+import { useMemoizedFn } from 'ahooks'
 import { format, isValid } from 'date-fns'
 import { capitalize } from 'lodash-es'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import isEqual from 'react-fast-compare'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import DataTableEmpty from './table-empty'
@@ -34,16 +31,17 @@ import { DataTableHeader, MemoizedDataTableHeader } from './table-header'
 import DataTableLoading from './table-loading'
 import { DataTableRow, MemoizedDataTableRow } from './table-row'
 
+const FETCH_NEXT_PAGE_THRESHOLD = 5
+
 const EpcTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const { searchParams } = useFilterQuery()
-	const { event$ } = usePageContext()
 	const columnHelper = createColumnHelper<IDefectiveGoods>()
 	const defectiveCategoryList = useDefectiveCategoryList()
-	// const { setScannedEpcs } = useReaderPlaygroundStore( 'setScannedEpcs')
 
-	const { data, isLoading, isPlaceholderData } = useGetCanInoutboundEpcQuery()
+	const { data, isLoading, isPlaceholderData, isFetchingNextPage, hasNextPage, fetchNextPage } =
+		useGetCanInoutboundEpcQuery()
 
 	const columns = useMemo(
 		() => [
@@ -205,19 +203,9 @@ const EpcTable: React.FC = () => {
 		[i18n.language, searchParams.action]
 	)
 
-	const [tableData, setTableData] = useState<IDefectiveGoods[]>([])
-
-	useDeepCompareEffect(() => {
-		if (isEqual(data?.data, tableData)) return
-		const newData = Array.isArray(data?.data) ? data.data : []
-		setTableData(newData)
-		event$.emit({ action: CommonActions.IMPORT, payload: newData.map((item) => item.epc) })
-		// setScannedEpcs(newData.map((item) => item.epc))
-	}, [data, searchParams.action])
-
 	const table = useReactTable<IDefectiveGoods>({
 		columns,
-		data: tableData,
+		data: Array.isArray(data?.items) ? data.items.flatMap((page) => page.metadata.data) : [],
 		initialState: {
 			columnVisibility: {
 				inbound_date: searchParams.action === StockFlow.OUTBOUND
@@ -261,8 +249,30 @@ const EpcTable: React.FC = () => {
 		getScrollElement,
 		estimateSize,
 		scrollToFn,
-		overscan: 5
+		overscan: 5,
+		scrollEndThreshold: 120
 	})
+
+	const virtualItems = rowVirtualizer.getVirtualItems()
+	const lastVirtualIndex = virtualItems[virtualItems.length - 1]?.index
+
+	useEffect(() => {
+		if (rowVirtualizer.isAtEnd() && hasNextPage && !isFetchingNextPage && !isPlaceholderData) {
+			console.log('Fetching next page because scrolled to end')
+			// fetchNextPage()
+		}
+	}, [rowVirtualizer.isAtEnd()])
+
+	// useEffect(() => {
+	// 	if (lastVirtualIndex === undefined) return
+
+	// 	const isNearBottom = lastVirtualIndex >= rows.length - 1 - FETCH_NEXT_PAGE_THRESHOLD
+
+	// 	if (isNearBottom && hasNextPage && !isFetchingNextPage && !isPlaceholderData) {
+	// 		// fetchNextPage()
+	// 		console.log('Fetching next page because scrolled to near bottom')
+	// 	}
+	// }, [lastVirtualIndex, rows.length, hasNextPage, isFetchingNextPage, isPlaceholderData, fetchNextPage])
 
 	useEffect(() => {
 		table.setColumnVisibility({
@@ -318,6 +328,15 @@ const EpcTable: React.FC = () => {
 							{after > 0 && (
 								<TableRow style={{ height: after }}>
 									<TableCell colSpan={totalColumns} />
+								</TableRow>
+							)}
+							{isFetchingNextPage && (
+								<TableRow>
+									<TableCell className='py-2 text-center' colSpan={totalColumns}>
+										<Typography color='muted' variant='small'>
+											{t('ns_common:titles.loading')}
+										</Typography>
+									</TableCell>
 								</TableRow>
 							)}
 						</TableBody>
