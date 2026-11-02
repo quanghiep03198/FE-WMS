@@ -1,3 +1,4 @@
+import formatIntlNumber from '@common/utils/format-intl-number'
 import type { Row } from '@tanstack/react-table'
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +19,7 @@ const TableRowCount: React.FC<DataTableRowCountProps> = ({ enableRowSelection, m
 
 	const selectedRows = table.getFilteredSelectedRowModel()?.rows?.length
 	const totalRows = manualPagination ? manualTotalDocs : (table.getFilteredRowModel()?.rows?.length ?? 0)
-	const rowSelectionCount = String(selectedRows) + '/' + String(totalRows)
+	const rowSelectionCount = formatIntlNumber(selectedRows) + '/' + formatIntlNumber(totalRows)
 
 	return enableRowSelection ? (
 		<Typography className='text-sm font-medium sm:hidden'>
@@ -30,8 +31,8 @@ const TableRowCount: React.FC<DataTableRowCountProps> = ({ enableRowSelection, m
 	) : (
 		<Typography className='text-sm font-medium sm:hidden'>
 			{t('ns_common:table.total_rows', {
-				count: totalRows,
-				defaultValue: `${totalRows} rows`
+				totalRows: formatIntlNumber(totalRows),
+				defaultValue: `${formatIntlNumber(totalRows)} rows`
 			})}
 		</Typography>
 	)
