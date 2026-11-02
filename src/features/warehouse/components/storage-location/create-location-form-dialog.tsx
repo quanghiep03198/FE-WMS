@@ -1,5 +1,6 @@
 'use no memo'
 
+import formatIntlNumber from '@common/utils/format-intl-number'
 import { Tooltip } from '@components/customs/tooltip'
 import { InputFieldControl } from '@components/forms/input'
 import { Alert, AlertDescription, AlertTitle } from '@components/ui/alert'
@@ -47,7 +48,7 @@ const CreateLocationFormDialog: React.FC<{ data: IWarehouse }> = ({ data: wareho
 	const { append, remove, fields } = useFieldArray({ name: 'locations', control: form.control })
 
 	useEffect(() => {
-		if (warehouse) form.setValue('warehouse', warehouse._id)
+		if (warehouse && typeof warehouse._id !== 'undefined') form.setValue('warehouse', warehouse._id)
 	}, [warehouse])
 
 	useKeyPress('ctrl.d', (e) => {
@@ -156,7 +157,10 @@ const CreateLocationFormDialog: React.FC<{ data: IWarehouse }> = ({ data: wareho
 											</Tooltip>
 										</TableHead>
 										<TableHead align='left'>
-											{t('ns_common:table.total_rows', { count: fields.length })}
+											{t('ns_common:table.total_rows', {
+												totalRows: formatIntlNumber(fields.length),
+												defaultValue: `${formatIntlNumber(fields.length)} rows`
+											})}
 										</TableHead>
 									</TableRow>
 								</TableFooter>
