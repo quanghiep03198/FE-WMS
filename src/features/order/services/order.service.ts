@@ -1,4 +1,5 @@
 import axiosInstance from '@configs/axios.config'
+import { omitBy } from 'lodash-es'
 import type { IManufacturingOrder, IPurchaseOrder } from '../types'
 
 export interface IPurchaseOrderResult {
@@ -12,21 +13,19 @@ export interface IPurchaseOrderResult {
 }
 
 export class OrderService {
-	static async searchManufacturingOrder(params: { q: string }) {
+	static async searchManufacturingOrder(params: { q: Nullish<string> }) {
 		return await axiosInstance.get<unknown, ResponseBody<Record<'mo_no', string>[]>>(
 			'/order/manufacturing-order/search',
 			{
-				params
+				params: { q: (params.q ??= '') }
 			}
 		)
 	}
 
-	static async searchPurchaseOrder(params: { q: string; filter_all_brands: boolean }) {
+	static async searchPurchaseOrder(params: { q: Nullish<string>; filter_all_brands: boolean }) {
 		return await axiosInstance.get<unknown, ResponseBody<Array<IPurchaseOrderResult>>>(
 			'/order/purchase-order/search',
-			{
-				params
-			}
+			{ params: omitBy(params, (value) => typeof value !== 'string' && typeof value !== 'boolean') }
 		)
 	}
 

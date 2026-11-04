@@ -8,11 +8,11 @@ export enum OrderQueryKeys {
 	MANUFACTURING_ORDER_INFO = 'MANUFACTURING_ORDER_INFO'
 }
 
-export const useSearchManufacturingOrderQuery = (searchTerm: string, shouldFetch = true) => {
+export const useSearchManufacturingOrderQuery = (searchTerm: Nullish<string>, shouldFetch = true) => {
 	return useQuery({
 		queryKey: [OrderQueryKeys.SEARCH_MANUFACTURING_ORDER, searchTerm],
 		queryFn: async () => await OrderService.searchManufacturingOrder({ q: searchTerm }),
-		enabled: shouldFetch,
+		enabled: typeof searchTerm === 'string' && shouldFetch,
 		select: (response) => {
 			if (!Array.isArray(response.metadata)) return []
 			return response.metadata
@@ -20,7 +20,11 @@ export const useSearchManufacturingOrderQuery = (searchTerm: string, shouldFetch
 	})
 }
 
-export const useSearchPurchaseOrderQuery = (searchTerm: string, shouldFetch = true, shouldFilterAllBrands = false) => {
+export const useSearchPurchaseOrderQuery = (
+	searchTerm: Nullish<string>,
+	shouldFetch = true,
+	shouldFilterAllBrands = false
+) => {
 	return useQuery({
 		queryKey: [OrderQueryKeys.SEARCH_PURCHASE_ORDER, searchTerm, shouldFilterAllBrands],
 		queryFn: async () =>
@@ -28,7 +32,7 @@ export const useSearchPurchaseOrderQuery = (searchTerm: string, shouldFetch = tr
 				q: searchTerm,
 				filter_all_brands: shouldFilterAllBrands
 			}),
-		enabled: shouldFetch,
+		enabled: typeof searchTerm === 'string' && shouldFetch,
 		select: (response) => {
 			if (!Array.isArray(response.metadata)) return []
 			return response.metadata.map((item) => ({ ...item, disabled: Boolean(item?.is_completed) }))
