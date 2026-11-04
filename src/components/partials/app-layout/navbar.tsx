@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
 			role='menubar'>
 			<Div
 				as='nav'
-				className='xxl:border xxl:px-3 flex w-full basis-full items-center gap-x-2 rounded-md border-0 py-2'
+				className='bg-accent/25 xxl:border xxl:px-3 flex w-full basis-full items-center gap-x-2 rounded-md border-0 py-2'
 				role='menu'>
 				<NavSidebarToggler />
 				<Separator className='mx-2 h-5 w-1 sm:hidden md:hidden' orientation='vertical' />

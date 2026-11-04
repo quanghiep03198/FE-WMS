@@ -1,3 +1,5 @@
+'use no memo'
+
 import { cn } from '@common/utils/cn'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { isEmpty } from 'lodash-es'
@@ -24,7 +26,7 @@ export function Combobox<T extends Record<string, any>>({
 	datalist,
 	labelField,
 	valueField,
-	placeholder = 'Search ...',
+	placeholder,
 	value,
 	triggerProps,
 	contentProps,
@@ -35,6 +37,8 @@ export function Combobox<T extends Record<string, any>>({
 	const [currentValue, setCurrentValue] = useState(value)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { t } = useTranslation()
+
+	placeholder ??= t('ns_common:actions.search') + ' ...'
 
 	const options = useMemo(() => {
 		if (!Array.isArray(datalist)) {
@@ -56,9 +60,9 @@ export function Combobox<T extends Record<string, any>>({
 		const currentOption = datalist.find(
 			(option) => option[valueField] === value || option[valueField] === currentValue
 		)
-		if (!currentOption) return ''
+		if (!currentOption) return placeholder
 		return String(currentOption[labelField])
-	}, [datalist, value, valueField, currentValue])
+	}, [datalist, value, valueField, currentValue, labelField])
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -74,7 +78,7 @@ export function Combobox<T extends Record<string, any>>({
 						triggerProps?.className
 					)}
 					onClick={() => setOpen(true)}>
-					{currentValueText || placeholder}
+					{currentValueText}
 					<CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
 				</Button>
 			</PopoverTrigger>
@@ -88,9 +92,11 @@ export function Combobox<T extends Record<string, any>>({
 							setSearchTerm(String(e.currentTarget.value).toLocaleLowerCase())
 						}}
 					/>
-					<CommandEmpty>Không có kết quả phù hợp</CommandEmpty>
+					<CommandEmpty className='text-pretty text-muted-foreground text-sm text-center p-4'>
+						Không có kết quả phù hợp
+					</CommandEmpty>
 
-					<CommandList className='scrollbar max-h-80'>
+					<CommandList className='scrollbar-thin max-h-80'>
 						<CommandGroup>
 							{options.map((option) => (
 								<CommandItem

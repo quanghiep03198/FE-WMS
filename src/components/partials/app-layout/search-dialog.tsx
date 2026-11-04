@@ -23,9 +23,10 @@ import { debounce } from 'lodash-es'
 import React, { Fragment, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
+import type { FileRouteTypes } from '../../../route-tree.gen'
 
 const SearchDialog: React.FC = () => {
-	const { t } = useTranslation('ns_common')
+	const { t } = useTranslation()
 	const [searchTerm, setSearchTerm, resetSearchTerm] = useResetState<string>('')
 	const [open, setOpen] = React.useState<boolean>(false)
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
@@ -61,7 +62,7 @@ const SearchDialog: React.FC = () => {
 				message={t('ns_common:actions.search')}
 				triggerProps={{ asChild: true }}>
 				<Button
-					className='ml-auto basis-56 gap-x-2 px-2 sm:basis-auto'
+					className='ml-auto basis-56 gap-x-2 px-2 sm:basis-auto bg-background'
 					size={isSmallScreen ? 'icon' : 'default'}
 					variant={isSmallScreen ? 'ghost' : 'outline'}
 					onClick={() => setOpen(!open)}>
@@ -94,7 +95,7 @@ const SearchDialog: React.FC = () => {
 											.slice(0, 5)
 											.map((item, index) => (
 												<CommandItem asChild className='h-9 text-sm' key={index.toString()}>
-													<Link to={item.url} onClick={() => setOpen(false)}>
+													<Link to={item.url as FileRouteTypes['to']} onClick={() => setOpen(false)}>
 														{t(item.title, { defaultValue: item.title })}
 														{item.keybinding && (
 															<CommandShortcut>
@@ -128,7 +129,7 @@ const SearchDialog: React.FC = () => {
 											<CommandItem asChild={true} className='h-9 text-sm' key={index.toString()}>
 												<Link
 													className='flex items-center gap-x-2'
-													to={item.url}
+													to={item.url as FileRouteTypes['to']}
 													onClick={() => setOpen(false)}>
 													{t(item.title, { defaultValue: item.title })}
 													{item.keybinding && (
