@@ -1,6 +1,7 @@
 import { Div } from '@components/customs/div'
 import { Icon } from '@components/ui/icon'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
+import { CombinationStrategy } from '@features/defective-goods/constants/enums'
 import { capitalize } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +12,7 @@ const InoutboundStrategySelect: React.FC = () => {
 	const [inoutboundMethod, setInoutboundMethod] = useInoutboundMethod()
 
 	return (
-		<Select defaultValue='manually' value={inoutboundMethod} onValueChange={setInoutboundMethod}>
+		<Select defaultValue={CombinationStrategy.MANUALLY} value={inoutboundMethod} onValueChange={setInoutboundMethod}>
 			<SelectTrigger className='flex w-40 items-center'>
 				<SelectValue
 					placeholder={capitalize(
@@ -28,7 +29,7 @@ const InoutboundStrategySelect: React.FC = () => {
 						<Icon name='Router' /> RFID
 					</Div>
 				</SelectItem>
-				<SelectItem value='manually'>
+				<SelectItem value={CombinationStrategy.MANUALLY}>
 					<Div className='flex items-center gap-x-2'>
 						<Icon name='Keyboard' /> {t('ns_common:titles.manually')}
 					</Div>

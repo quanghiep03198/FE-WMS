@@ -44,7 +44,7 @@ const BrandFieldControl: React.FC<BrandFieldControl> = ({ disabled, ...props }) 
 					factory_shoes_style: '',
 					cust_shoes_style: '',
 					color_sn: '',
-					...(currentStrategy !== 'manually' ? { size_numcode: '' } : { sizes: [] })
+					...(currentStrategy !== CombinationStrategy.MANUALLY ? { size_numcode: '' } : { sizes: [] })
 				})
 			}}
 		/>

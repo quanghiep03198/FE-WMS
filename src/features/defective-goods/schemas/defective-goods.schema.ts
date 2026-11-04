@@ -1,13 +1,20 @@
-import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '@features/defective-goods/constants/enums'
+import {
+	CombinationStrategy,
+	DefectiveCategory,
+	DefectiveGoodsSource,
+	DefectiveLocation
+} from '@features/defective-goods/constants/enums'
 import { isEmpty, isNil } from 'lodash-es'
-import { array, enum as enums, number, object, string, type Infer } from 'zod'
+import { array, enum as enumeric, number, object, string, type Infer } from 'zod'
 
 export const baseDefectiveGoodsSchema = object({
 	epc: array(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
 		.or(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
 		.optional(),
-	combination_strategy: enums(['uhf', 'usb', 'manually'], { message: 'ns_validation:required' }).nullish(),
-	defective_category: enums(DefectiveCategory, { message: 'ns_validation:required' }),
+	combination_strategy: enumeric(CombinationStrategy, {
+		message: 'ns_validation:required'
+	}).nullish(),
+	defective_category: enumeric(DefectiveCategory, { message: 'ns_validation:required' }),
 	po: string({ message: 'ns_validation:required' }).nullish(),
 	mo_no: string({ message: 'ns_validation:required' }).nullish(),
 	brand_name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
@@ -19,8 +26,8 @@ export const baseDefectiveGoodsSchema = object({
 		.nonempty({ message: 'ns_validation:required' }),
 	color_sn: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	size_numcode: string({ message: 'ns_validation:required' }).trim().nullish(),
-	shoe_source: enums(DefectiveGoodsSource).optional(),
-	defective_location: enums(DefectiveLocation, { message: 'ns_validation:required' }),
+	shoe_source: enumeric(DefectiveGoodsSource).optional(),
+	defective_location: enumeric(DefectiveLocation, { message: 'ns_validation:required' }),
 	defective_description: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 	assembly_line: string({ message: 'ns_validation:required' }).trim().nullish(),
 	sewing_line: string({ message: 'ns_validation:required' }).trim().nullish()
@@ -51,7 +58,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 	})
 	.superRefine((values, context) => {
 		switch (values?.combination_strategy) {
-			case 'uhf': {
+			case CombinationStrategy.UHF: {
 				if (!Array.isArray(values.epc) || values.epc.length === 0)
 					context.addIssue({
 						path: ['epc'],
@@ -68,7 +75,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 					})
 				break
 			}
-			case 'usb': {
+			case CombinationStrategy.USB: {
 				if (typeof values.epc !== 'string' || values.epc.trim() === '')
 					context.addIssue({
 						path: ['epc'],
@@ -85,7 +92,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 					})
 				break
 			}
-			case 'manually': {
+			case CombinationStrategy.MANUALLY: {
 				if (!Array.isArray(values.sizes))
 					context.addIssue({
 						path: ['sizes'],
@@ -100,7 +107,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 		}
 	})
 	.superRefine((values, context) => {
-		if (Array.isArray(values?.sizes) && values.combination_strategy === 'manually')
+		if (Array.isArray(values?.sizes) && values.combination_strategy === CombinationStrategy.MANUALLY)
 			values.sizes.forEach((item, index) => {
 				if (
 					Array.isArray(values?.sizes) &&

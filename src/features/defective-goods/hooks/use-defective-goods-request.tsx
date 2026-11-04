@@ -118,10 +118,6 @@ export const useDeleteManyDefectiveGoodsMutation = () => {
 			]
 		},
 		mutationFn: DefectiveGoodsService.deleteManyDefectiveGoods
-		// onSuccess: (data, variables)=>{
-		// 	if(variables.including_ids==='all' && )
-
-		// }
 	})
 }
 
@@ -137,26 +133,19 @@ export const useGetCanInoutboundEpcQuery = () => {
 	const params = omitBy(searchParams, (value) => value === undefined || value === null || value === '')
 
 	return useInfiniteQuery({
-		// Không đưa cursor vào queryKey: đổi filter -> key mới -> tự quay về trang đầu
 		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC, params],
-		// pageParam đặt sau để ghi đè mọi `page` có sẵn trong params
-		queryFn: ({ pageParam }) => DefectiveGoodsService.getCanInoutboundEpc({ ...params, ...pageParam }),
+		queryFn: async ({ pageParam }) => {
+			return await DefectiveGoodsService.getCanInoutboundEpc({ ...params, ...pageParam })
+		},
 		enabled: !!searchParams.action,
 		initialPageParam: { direction: 'next', page: 1 } as TEpcPageParam,
-		getNextPageParam: ({ metadata }): TEpcPageParam | undefined =>
-			metadata.hasNextPage && metadata.nextCursor
+		getNextPageParam: ({ metadata }): TEpcPageParam | undefined => {
+			return metadata.hasNextPage && metadata.nextCursor
 				? { cursor: metadata.nextCursor, direction: 'next', page: metadata.nextPage ?? metadata.page + 1 }
-				: undefined, // undefined/null = hết dữ liệu, hasNextPage của query sẽ là false
-		getPreviousPageParam: ({ metadata }): TEpcPageParam | undefined =>
-			metadata.hasPrevPage && metadata.prevCursor
-				? {
-						cursor: metadata.prevCursor,
-						direction: 'prev',
-						page: metadata.prevPage ?? Math.max(metadata.page - 1, 1)
-					}
-				: undefined,
+				: undefined
+		},
 		select: (data) => ({
-			items: data.pages.flatMap((page) => page.metadata.data),
+			docs: data.pages.flatMap((page) => page.metadata.data),
 			totalDocs: data.pages.at(-1)?.metadata.totalDocs ?? 0
 		})
 	})
@@ -192,11 +181,13 @@ export const useUpdateDefectiveGoodsStockMutation = () => {
 		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC, pick(params, 'action')]] },
 		mutationFn: async (payload: InboundOutboundFormValues) =>
 			searchParams.action === StockFlow.INBOUND
-				? DefectiveGoodsService.updateInboundStatus(
-						payload as Exclude<InboundOutboundFormValues, DefectiveGoodsOutboundFormValues>
+				? DefectiveGoodsService.stockIn(
+						payload as Exclude<InboundOutboundFormValues, DefectiveGoodsOutboundFormValues>,
+						searchParams
 					)
-				: DefectiveGoodsService.updateOutboundStatus(
-						payload as Exclude<InboundOutboundFormValues, DefectiveGoodsInboundFormValues>
+				: DefectiveGoodsService.stockOut(
+						payload as Exclude<InboundOutboundFormValues, DefectiveGoodsInboundFormValues>,
+						searchParams
 					),
 		onSuccess: () => {
 			for (const key in searchParams) {

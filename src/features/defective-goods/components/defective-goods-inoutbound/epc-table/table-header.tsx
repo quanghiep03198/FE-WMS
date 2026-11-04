@@ -51,7 +51,7 @@ export const DataTableHeader: React.FC<{ table: Table<IDefectiveGoods> }> = ({ t
 									className='border-b-border bg-table-head text-table-head-foreground border-b'
 									key={header.id}
 									style={{ width: header.getSize(), padding: 0 }}>
-									<TableColumnFilter column={header.column} />
+									<TableColumnFilter column={header.column} table={table} />
 								</TableHead>
 							)
 						})}

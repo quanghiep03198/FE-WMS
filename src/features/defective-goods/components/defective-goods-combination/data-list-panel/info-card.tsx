@@ -23,7 +23,7 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { gunzipSync } from 'zlib'
-import { DefectiveLocation, TRANSLATED_DEFECTIVE_CATEGORY } from '../../../constants/enums'
+import { CombinationStrategy, DefectiveLocation, TRANSLATED_DEFECTIVE_CATEGORY } from '../../../constants/enums'
 import { useListPanelContext } from '../../../contexts/list-panel-context'
 import { usePageContext } from '../../../contexts/page-context'
 import { useSwitchCombinationStrategy } from '../../../hooks/use-switch-combination-strategy'
@@ -236,7 +236,7 @@ const InfoCard: React.FC<{
 							<DescriptionItem title={data.combination_strategy ?? '?'}>
 								<Typography variant='small'>{t('ns_erp:fields.combination_strategy')} : </Typography>
 								<Typography variant='small'>
-									{data.combination_strategy === 'manually'
+									{data.combination_strategy === CombinationStrategy.MANUALLY
 										? capitalize(t('ns_common:titles.manually'))
 										: upperCase(data.combination_strategy)}
 								</Typography>

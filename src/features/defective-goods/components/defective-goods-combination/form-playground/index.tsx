@@ -29,7 +29,12 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { gzipSync } from 'zlib'
-import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../../constants/enums'
+import {
+	CombinationStrategy,
+	DefectiveCategory,
+	DefectiveGoodsSource,
+	DefectiveLocation
+} from '../../../constants/enums'
 import { DefectDescriptionTemplate } from '../../../constants/templates'
 import { usePageContext } from '../../../contexts/page-context'
 import {
@@ -48,10 +53,10 @@ import BrandFieldControl from './brand-field-control'
 import CategoryFieldControl from './category-field-control'
 import ColorFieldControl from './color-field-control'
 import CombinationStrategySelect from './combination-strategy-select'
-import CommandNumberFieldControl from './command-number-field-control'
 import CustShoeStyleFieldControl from './cust-shoe-style-field-control'
 import FactoryShoeStyleFieldControl from './factory-shoe-style-field-control'
 import ListPanelToggle from './list-panel-toggle'
+import ManufacturingOrderFieldControl from './manufacturing-order-field-control'
 import SewingLineFieldControl from './sewing-line-field-control'
 import { ShoeSourceFieldControl } from './shoe-source-field-control'
 import SizeFieldControl from './size-field-control'
@@ -161,7 +166,7 @@ const DefectiveGoodsForm: React.FC = () => {
 				cust_shoes_style: '',
 				color_sn: '',
 				...(shouldRequireFullInfo && { po: '', mo_no: '' }),
-				...(currentStrategy === 'manually' ? { sizes: [] } : { size_numcode: '' })
+				...(currentStrategy === CombinationStrategy.MANUALLY ? { sizes: [] } : { size_numcode: '' })
 			})
 			form.setValue('combination_strategy', currentStrategy)
 		}
@@ -198,10 +203,10 @@ const DefectiveGoodsForm: React.FC = () => {
 					currentFormValues[key] = DefectDescriptionTemplate[i18n.language]
 					break
 				case 'epc':
-					if (currentStrategy === 'usb') currentFormValues[key] = ''
+					if (currentStrategy === CombinationStrategy.USB) currentFormValues[key] = ''
 					break
 				case 'sizes':
-					if (currentStrategy === 'manually') currentFormValues[key] = []
+					if (currentStrategy === CombinationStrategy.MANUALLY) currentFormValues[key] = []
 					break
 				case 'shoe_source':
 					currentFormValues[key] = DefectiveGoodsSource.FINAL_INSPECTION
@@ -233,7 +238,7 @@ const DefectiveGoodsForm: React.FC = () => {
 			form.clearErrors('defective_description')
 		}
 
-		if (data.combination_strategy === 'manually' && formAction === CommonActions.CREATE) {
+		if (data.combination_strategy === CombinationStrategy.MANUALLY && formAction === CommonActions.CREATE) {
 			delete data.epc
 			delete data.size_numcode
 		}
@@ -257,19 +262,22 @@ const DefectiveGoodsForm: React.FC = () => {
 		if (formAction === CommonActions.CREATE)
 			form.reset({
 				...form.getValues(),
-				...(data.combination_strategy === 'usb' && { epc: '' }),
-				...(data.combination_strategy === 'manually' && { sizes: [{}] })
+				...(data.combination_strategy === CombinationStrategy.USB && { epc: '' }),
+				...(data.combination_strategy === CombinationStrategy.MANUALLY && { sizes: [{}] })
 			})
 		if (formAction === CommonActions.UPDATE) {
 			handleCancel()
 		}
-		if (data.combination_strategy === 'uhf') event$.emit({ action: CommonActions.SAVE, payload: [] })
+		if (data.combination_strategy === CombinationStrategy.UHF)
+			event$.emit({ action: CommonActions.SAVE, payload: [] })
 	}
 
 	const isPending: boolean = isCreating || isUpdating
 	const isError: boolean = isFailedToCreate || isFailedToUpdate
 	const shouldRequireFullInfo: boolean =
 		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
+
+	console.log(form.getErrors())
 
 	return (
 		<FormProvider {...form}>
@@ -353,7 +361,7 @@ const DefectiveGoodsForm: React.FC = () => {
 				)}
 				{/* Form fields */}
 				<Div as='fieldset' className='grid flex-1 basis-full grid-cols-6 gap-x-2 gap-y-6 overflow-y-auto p-6'>
-					{(currentStrategy === 'usb' || formAction === CommonActions.UPDATE) && (
+					{(currentStrategy === CombinationStrategy.USB || formAction === CommonActions.UPDATE) && (
 						<Div className='col-span-full'>
 							<InputFieldControl
 								autoFocus
@@ -385,14 +393,14 @@ const DefectiveGoodsForm: React.FC = () => {
 								<PurchaseOrderFieldControl disabled={isNil(formAction)} />
 							</Div>
 							<Div className='col-span-3'>
-								<CommandNumberFieldControl disabled={isNil(formAction)} />
+								<ManufacturingOrderFieldControl disabled={isNil(formAction)} />
 							</Div>
 						</Fragment>
 					)}
 					<Div
 						className={cn(
 							'col-span-full',
-							currentStrategy === 'manually'
+							currentStrategy === CombinationStrategy.MANUALLY
 								? '@xl/combination-form:col-span-2'
 								: '@xl/combination-form:col-span-3'
 						)}>
@@ -401,7 +409,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					<Div
 						className={cn(
 							'col-span-full',
-							currentStrategy === 'manually'
+							currentStrategy === CombinationStrategy.MANUALLY
 								? '@xl/combination-form:col-span-2'
 								: '@xl/combination-form:col-span-3'
 						)}>
@@ -410,7 +418,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					<Div
 						className={cn(
 							'col-span-full',
-							currentStrategy === 'manually'
+							currentStrategy === CombinationStrategy.MANUALLY
 								? 'col-span-full @xl/combination-form:col-span-2'
 								: 'col-span-full @xl/combination-form:col-span-3'
 						)}>
@@ -422,12 +430,14 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 					<Div
 						className={cn(
-							currentStrategy === 'manually' ? 'col-span-full' : 'col-span-full @xl/combination-form:col-span-3'
+							currentStrategy === CombinationStrategy.MANUALLY
+								? 'col-span-full'
+								: 'col-span-full @xl/combination-form:col-span-3'
 						)}>
 						<SizeFieldControl
 							disabled={isNil(formAction)}
 							loading={isLoading}
-							name={currentStrategy === 'manually' ? 'sizes' : 'size_numcode'}
+							name={currentStrategy === CombinationStrategy.MANUALLY ? 'sizes' : 'size_numcode'}
 							datalist={
 								Array.isArray(orderDetail?.sizes)
 									? orderDetail.sizes

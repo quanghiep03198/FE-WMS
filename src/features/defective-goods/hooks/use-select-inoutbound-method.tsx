@@ -1,9 +1,10 @@
 import { useLocalStorageState } from 'ahooks'
-import { DefectiveGoodsCombinationStrategy } from '../types'
+import { CombinationStrategy } from '../constants/enums'
+import { type DefectiveGoodsCombinationStrategy } from '../types'
 
 export const useInoutboundMethod = () => {
 	return useLocalStorageState<DefectiveGoodsCombinationStrategy>('inoutboundMethod', {
-		defaultValue: 'manually',
+		defaultValue: CombinationStrategy.MANUALLY,
 		listenStorageChange: true
 	})
 }

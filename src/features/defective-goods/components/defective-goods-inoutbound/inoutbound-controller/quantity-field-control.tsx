@@ -1,4 +1,5 @@
 import { Input } from '@components/ui/input'
+import { CombinationStrategy } from '@features/defective-goods/constants/enums'
 import { useDebounceEffect, useResetState } from 'ahooks'
 import { useImperativeHandle, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,17 +22,22 @@ const QuantityFiledControl: React.FC<{ ref: React.Ref<{ reset: () => void }> }> 
 		{ wait: 200 }
 	)
 
-	useImperativeHandle(ref, () => ({
-		reset: () => {
-			resetCurrentValue()
-			inputRef.current.value = ''
-		}
-	}))
+	useImperativeHandle(
+		ref,
+		() => ({
+			reset: () => {
+				resetCurrentValue()
+				inputRef.current.value = ''
+			}
+		}),
+		[inputRef.current]
+	)
 
-	if (currentInoutboundMethod !== 'manually') return null
+	if (currentInoutboundMethod !== CombinationStrategy.MANUALLY) return null
 
 	return (
 		<Input
+			className='shadow-xs'
 			min={1}
 			name='qty'
 			placeholder={t('ns_common:common_fields.quantity')}

@@ -51,7 +51,7 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 			onInput={(value) =>
 				reset({
 					...getValues(),
-					...(currentStrategy === 'manually' ? { sizes: [] } : { size_numcode: '' }),
+					...(currentStrategy === CombinationStrategy.MANUALLY ? { sizes: [] } : { size_numcode: '' }),
 					color_sn: value.toUpperCase()
 				})
 			}

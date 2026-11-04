@@ -66,10 +66,14 @@ export class DefectiveGoodsService {
 		>(`/defective-goods/delete`, payload)
 	}
 
-	static async updateInboundStatus(payload: DefectiveGoodsInboundFormValues) {
+	static async stockIn(
+		payload: DefectiveGoodsInboundFormValues,
+		params: Partial<IDefectiveGoods> & { take?: number } = {}
+	) {
 		return await axiosInstance.patch<DefectiveGoodsInboundFormValues, ResponseBody<unknown>>(
 			'/defective-goods/inbound',
-			payload
+			payload,
+			{ params }
 		)
 	}
 
@@ -101,10 +105,14 @@ export class DefectiveGoodsService {
 		})
 	}
 
-	static async updateOutboundStatus(payload: DefectiveGoodsOutboundFormValues) {
+	static async stockOut(
+		payload: DefectiveGoodsOutboundFormValues,
+		params: Partial<IDefectiveGoods> & { take?: number } = {}
+	) {
 		return await axiosInstance.patch<DefectiveGoodsOutboundFormValues, ResponseBody<unknown>>(
 			'/defective-goods/outbound',
-			payload
+			payload,
+			{ params }
 		)
 	}
 

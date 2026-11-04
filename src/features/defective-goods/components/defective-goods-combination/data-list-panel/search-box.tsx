@@ -25,9 +25,9 @@ import AssemblyLineFieldControl from '../form-playground/assembly-line-field-con
 import BrandFieldControl from '../form-playground/brand-field-control'
 import CategoryFieldControl from '../form-playground/category-field-control'
 import ColorFieldControl from '../form-playground/color-field-control'
-import CommandNumberFieldControl from '../form-playground/command-number-field-control'
 import CustShoeStyleFieldControl from '../form-playground/cust-shoe-style-field-control'
 import FactoryShoeStyleFieldControl from '../form-playground/factory-shoe-style-field-control'
+import ManufacturingOrderFieldControl from '../form-playground/manufacturing-order-field-control'
 import SewingLineFieldControl from '../form-playground/sewing-line-field-control'
 import SizeFieldControl from '../form-playground/size-field-control'
 
@@ -150,7 +150,7 @@ const SearchBox: React.FC = () => {
 									<CustShoeStyleFieldControl orientation={formFieldOrientation} />
 									<FactoryShoeStyleFieldControl orientation={formFieldOrientation} />
 									<PurchaseOrderFieldControl orientation={formFieldOrientation} />
-									<CommandNumberFieldControl orientation={formFieldOrientation} />
+									<ManufacturingOrderFieldControl orientation={formFieldOrientation} />
 									<ColorFieldControl orientation={formFieldOrientation} />
 									<SizeFieldControl name='size_numcode' orientation={formFieldOrientation} />
 									<SewingLineFieldControl orientation={formFieldOrientation} />

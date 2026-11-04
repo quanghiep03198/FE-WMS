@@ -14,13 +14,13 @@ import { Separator } from '@components/ui/separator'
 import { StockFlow } from '@features/finished-goods/constants/enums'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateEffect } from 'ahooks'
-import { Fragment, useRef } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 
-import { DefectiveGoodsOutboundPurpose } from '@features/defective-goods/constants/enums'
+import { CombinationStrategy, DefectiveGoodsOutboundPurpose } from '@features/defective-goods/constants/enums'
 import { usePageContext } from '@features/defective-goods/contexts/page-context'
 import { useInoutboundMethod } from '@features/defective-goods/hooks/use-select-inoutbound-method'
 import PurchaseOrderFieldControl from '@features/rfid-agent/components/playground/purchase-order-field-control'
@@ -46,6 +46,7 @@ const InoutboundForm: React.FC = () => {
 	const form = useForm<InboundOutboundFormValues>({
 		resolver: zodResolver(schemaRef.current),
 		defaultValues: {
+			combination_strategy: combinationStrategy,
 			epcs: [],
 			...(searchParams.action === StockFlow.INBOUND && { storage_location: null }),
 			...(searchParams.action === StockFlow.OUTBOUND && { outbound_purpose: null })
@@ -57,10 +58,15 @@ const InoutboundForm: React.FC = () => {
 		control: form.control,
 		name: 'epcs'
 	})
+
 	const currentOutboundPurpose = useWatch({
 		control: form.control,
 		name: 'outbound_purpose'
 	})
+
+	useEffect(() => {
+		form.setValue('combination_strategy', combinationStrategy)
+	}, [combinationStrategy])
 
 	useUpdateEffect(() => {
 		schemaRef.current =
@@ -74,7 +80,7 @@ const InoutboundForm: React.FC = () => {
 		else form.setValue('epcs', e.payload)
 	})
 
-	const quantityFieldRef = useRef<{ reset: () => void }>(null)
+	const quantityFieldRef = useRef<{ reset: () => void }>({ reset: () => void 0 })
 
 	const { mutateAsync, isPending, isError } = useUpdateDefectiveGoodsStockMutation()
 
@@ -83,7 +89,7 @@ const InoutboundForm: React.FC = () => {
 			combination_strategy: combinationStrategy,
 			storage_location: data.storage_location,
 			outbound_purpose: data.outbound_purpose,
-			epcs: combinationStrategy === 'manually' ? [] : data.epcs
+			epcs: combinationStrategy === CombinationStrategy.MANUALLY ? [] : data.epcs
 		})
 		event$.emit({ action: CommonActions.SAVE, payload: [] })
 		quantityFieldRef.current?.reset()
@@ -94,7 +100,11 @@ const InoutboundForm: React.FC = () => {
 		})
 	}
 
-	const disabled = !Array.isArray(scannedEpcs) || scannedEpcs.length === 0 || isPending
+	const disabled =
+		(combinationStrategy === CombinationStrategy.MANUALLY && !searchParams.take) ||
+		(combinationStrategy !== CombinationStrategy.MANUALLY &&
+			(!Array.isArray(scannedEpcs) || scannedEpcs.length === 0)) ||
+		isPending
 
 	return (
 		<Div className='flex w-full flex-row items-center justify-between gap-x-3 @4xl:gap-x-6 @6xl:flex-1 @6xl:justify-end'>

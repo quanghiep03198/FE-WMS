@@ -1,17 +1,26 @@
 import type { FieldValues } from 'react-hook-form'
-import { array, object, string, type Infer } from 'zod'
-import { DefectiveGoodsOutboundPurpose } from '../constants/enums'
+import { array, enum as enumeric, object, string, type Infer } from 'zod'
+import { CombinationStrategy, DefectiveGoodsOutboundPurpose } from '../constants/enums'
 
 export const defectiveGoodsInboundFormValues = object({
-	epcs: array(string()).nonempty(),
+	combination_strategy: enumeric(CombinationStrategy),
+	epcs: array(string()),
 	storage_location: string({ message: 'ns_validation:required' })
 		.trim()
 		.nonempty({ message: 'ns_validation:required' })
 		.transform((value) => value.toUpperCase())
+}).superRefine((values, ctx) => {
+	if (values.combination_strategy !== CombinationStrategy.MANUALLY && values.epcs.length === 0)
+		ctx.addIssue({
+			path: ['epcs'],
+			code: 'custom',
+			message: 'ns_validation:required'
+		})
 })
 
 export const defectiveGoodsOutboundFormValues = object({
-	epcs: array(string()).nonempty(),
+	combination_strategy: enumeric(CombinationStrategy),
+	epcs: array(string()),
 	outbound_purpose: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 	po: string({ message: 'ns_validation:required' }).trim().optional() // optional field for outbound
 }).superRefine((values, ctx) => {
@@ -22,6 +31,12 @@ export const defectiveGoodsOutboundFormValues = object({
 			message: 'ns_validation:required'
 		})
 	}
+	if (values.combination_strategy !== CombinationStrategy.MANUALLY && values.epcs.length === 0)
+		ctx.addIssue({
+			path: ['epcs'],
+			code: 'custom',
+			message: 'ns_validation:required'
+		})
 })
 
 export type DefectiveGoodsInboundFormValues = Infer<typeof defectiveGoodsInboundFormValues> & FieldValues

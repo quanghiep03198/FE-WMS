@@ -27,6 +27,12 @@ export enum DefectiveGoodsOutboundPurpose {
 	DOWNGRADE = 'B_TO_C'
 }
 
+export enum CombinationStrategy {
+	MANUALLY = 'manually',
+	UHF = 'uhf',
+	USB = 'usb'
+}
+
 export const TRANSLATED_DEFECTIVE_CATEGORY: Record<DefectiveCategory, ResourceKeys['ns_inoutbound']> = {
 	[DefectiveCategory.B_GRADE]: 'shoes_category.b_grade',
 	[DefectiveCategory.C_GRADE]: 'shoes_category.c_grade',

@@ -21,7 +21,8 @@ export interface IDefectiveGoods extends Omit<Required<IBaseEntity>, 'created' |
 	combination_strategy: DefectiveGoodsCombinationStrategy
 }
 
-export type DefectiveGoodsCombinationStrategy = 'usb' | 'uhf' | 'manually'
+export type DefectiveGoodsCombinationStrategy =
+	CombinationStrategy.USB | CombinationStrategy.UHF | CombinationStrategy.MANUALLY
 
 type SizeLedger = Array<{ size_numcode: string; qty: number }>
 

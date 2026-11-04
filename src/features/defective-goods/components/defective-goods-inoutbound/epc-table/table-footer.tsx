@@ -1,3 +1,5 @@
+'use no memo'
+
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Div } from '@components/customs/div'
 import { Typography } from '@components/customs/typography'

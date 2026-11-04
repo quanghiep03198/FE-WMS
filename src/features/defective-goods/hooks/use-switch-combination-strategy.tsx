@@ -1,12 +1,13 @@
 import { useLocalStorageState } from 'ahooks'
-import { DefectiveGoodsCombinationStrategy } from '../types'
+import { CombinationStrategy } from '../constants/enums'
+import type { DefectiveGoodsCombinationStrategy } from '../types'
 
 export const useSwitchCombinationStrategy = () => {
 	const [currentStrategy, setStrategy] = useLocalStorageState<Nullish<DefectiveGoodsCombinationStrategy>>(
 		'epcCombinationStrategy',
 		{
 			listenStorageChange: true,
-			defaultValue: 'uhf'
+			defaultValue: CombinationStrategy.UHF
 		}
 	)
 

@@ -15,7 +15,7 @@ import { uniqBy } from 'lodash-es'
 import React, { useMemo, useRef } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { DefectiveCategory } from '../../../constants/enums'
+import { CombinationStrategy, DefectiveCategory } from '../../../constants/enums'
 import { useSwitchCombinationStrategy } from '../../../hooks/use-switch-combination-strategy'
 import type { DefAutoCompleteFieldControlProps } from './type'
 
@@ -94,7 +94,9 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 		shouldRequireFullInfo
 	])
 
-	if (name === 'sizes' && currentStrategy === 'manually' && !hash)
+	const useMultipleSizes = name === 'sizes' && currentStrategy === CombinationStrategy.MANUALLY && !hash
+
+	if (useMultipleSizes)
 		return (
 			<Div className='col-span-full space-y-2'>
 				<Label>Sizes</Label>

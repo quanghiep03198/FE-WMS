@@ -7,18 +7,18 @@ import type { FieldValues } from 'react-hook-form'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-type CommandNumberFieldControlProps = Partial<AutoCompleteFieldControlProps<FieldValues, Record<'mo_no', string>>>
+type ManufacturingOrderFieldControlProps = Partial<AutoCompleteFieldControlProps<FieldValues, Record<'mo_no', string>>>
 
-const CommandNumberFieldControl: React.FC<CommandNumberFieldControlProps> = (props) => {
+const ManufacturingOrderFieldControl: React.FC<ManufacturingOrderFieldControlProps> = (props) => {
 	const { control } = useFormContext()
 	const { t } = useTranslation()
 	const value = useWatch({ control, name: 'mo_no' })
 	const debouncedSearchTerm = useDebounce(value, { wait: 200 })
-	const { data, isLoading } = useSearchManufacturingOrderQuery(debouncedSearchTerm)
+	const { data, isLoading } = useSearchManufacturingOrderQuery(debouncedSearchTerm ?? '')
 
 	return (
 		<AutoCompleteFieldControl
-			datalist={data}
+			datalist={data ?? []}
 			label={t('ns_erp:fields.mo_no')}
 			labelField='mo_no'
 			loading={isLoading}
@@ -36,4 +36,4 @@ const CommandNumberFieldControl: React.FC<CommandNumberFieldControlProps> = (pro
 	)
 }
 
-export default CommandNumberFieldControl
+export default ManufacturingOrderFieldControl
