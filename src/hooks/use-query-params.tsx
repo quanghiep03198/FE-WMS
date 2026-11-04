@@ -21,13 +21,16 @@ type NavigateFnOptions = Parameter<UseNavigateResult<string>>
  * console.log(searchParams); // { filter: 'active' }
  * Note: This hook assumes that the component using it is wrapped within a `Router` context provided by `@tanstack/react-router`.
  */
-export default function useQueryParams<T = ReturnType<typeof useSearch>>(defaultParams?: T) {
-	const navigate = useNavigate()
-
-	const search = useSearch({
+export default function useQueryParams<T = ReturnType<typeof useSearch>>(
+	defaultParams?: T,
+	options: FirstParameter<typeof useSearch> = {
 		strict: false,
 		select: (search) => search
-	})
+	}
+) {
+	const navigate = useNavigate()
+
+	const search = useSearch(options)
 	/**
 	 * Set search params from URL
 	 * @param { Record<string, any> } params
