@@ -1,3 +1,4 @@
+import { Combobox } from '@components/ui/combobox'
 import type { Column } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
 import { pick } from 'lodash-es'
@@ -62,6 +63,8 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 			</Div>
 		)
 
+	console.log(filterVariant)
+
 	switch (filterVariant) {
 		case 'range': {
 			return <NumberRangeFilter column={column} />
@@ -114,6 +117,30 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 							'min-w-32 px-4 rounded-none border-none text-xs font-medium text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
 						tabIndex: 0,
 						style: { height: DEFAULT_ESTIMATE_SIZE }
+					}}
+				/>
+			)
+		}
+
+		case 'combobox': {
+			return (
+				<Combobox
+					labelField='label'
+					triggerProps={{ className: 'border-none shadow-none' }}
+					value={(columnFilterValue ?? '') as string}
+					valueField='value'
+					datalist={
+						Array.isArray(metaUniqueValues)
+							? metaUniqueValues
+							: getSortedUniqueValues()
+									.filter((value) => Boolean(value))
+									.map((value: any) => ({
+										label: value,
+										value: value
+									}))
+					}
+					onSelect={(value) => {
+						column.setFilterValue(value)
 					}}
 				/>
 			)
