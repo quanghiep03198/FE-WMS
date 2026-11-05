@@ -5,7 +5,7 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { Fragment } from 'react'
 
-type RootRouteContext = {
+export type RootRouteContext = {
 	queryClient: QueryClient
 	isAuthenticated: boolean
 }
