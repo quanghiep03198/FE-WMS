@@ -90,6 +90,10 @@ export declare global {
 
 	type ArrayElement<T> = T extends (infer U)[] ? U : never
 
+	type AnyObject = Record<string | symbol, any>
+
+	type ExtractObjectValue<T extends AnyObject> = T[keyof T]
+
 	type Nullish<T> = T | null | undefined
 
 	interface Set<T> {
