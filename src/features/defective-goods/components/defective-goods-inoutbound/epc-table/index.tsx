@@ -309,12 +309,7 @@ const EpcTable: React.FC = () => {
 		<DataTableContainer>
 			<DataTableScrollArea
 				ref={containerRef}
-				style={
-					{
-						'--row-height': `${estimateSize()}px`,
-						...computedColumnSizes
-					} as React.CSSProperties
-				}>
+				style={{ '--row-height': `${estimateSize()}px`, ...computedColumnSizes } as React.CSSProperties}>
 				<Table
 					className='table-auto border-separate border-spacing-0 divide-y'
 					style={{ minWidth: table.getTotalSize() + 'px' }}>
@@ -324,12 +319,7 @@ const EpcTable: React.FC = () => {
 					) : rows.length === 0 ? (
 						<DataTableEmpty colSpan={totalColumns} />
 					) : (
-						<TableBody
-							style={{
-								height: rowVirtualizer.getTotalSize() + 'px',
-								opacity: isPlaceholderData ? 0.5 : 1,
-								transition: 'opacity 0.3s ease-in-out'
-							}}>
+						<TableBody style={{ height: rowVirtualizer.getTotalSize() + 'px' }}>
 							{/* Top padding */}
 							{before > 0 && (
 								<TableRow style={{ height: before }}>

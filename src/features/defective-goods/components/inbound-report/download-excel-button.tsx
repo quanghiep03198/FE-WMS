@@ -24,7 +24,7 @@ const DownloadExcelButton: React.FC = () => {
 	const queryClient = useQueryClient()
 	const [isDownloading, setIsDownloading] = useState<boolean>(false)
 	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
-	const { searchParams } = useQueryParams()
+	const { searchParams } = useQueryParams<{ 'date:eq': string }>()
 
 	const queryData = queryClient.getQueryData<ResponseBody<IDefectiveGoodsInboundReport>>([
 		DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT,

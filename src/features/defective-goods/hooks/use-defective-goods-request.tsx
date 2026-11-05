@@ -146,7 +146,7 @@ export const useGetCanInoutboundEpcQuery = () => {
 		},
 		select: (data) => ({
 			docs: data.pages.flatMap((page) => page.metadata.data),
-			totalDocs: data.pages.at(-1)?.metadata.totalDocs ?? 0
+			totalDocs: data.pages.at(0)?.metadata.totalDocs ?? 0
 		})
 	})
 }

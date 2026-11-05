@@ -1,6 +1,11 @@
 import type { IBaseEntity } from '@common/types/entities'
 import type { IDepartment } from '@features/department/types'
-import type { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../constants/enums'
+import type {
+	CombinationStrategy,
+	DefectiveCategory,
+	DefectiveGoodsSource,
+	DefectiveLocation
+} from '../constants/enums'
 
 export interface IDefectiveGoods extends Omit<Required<IBaseEntity>, 'created' | 'updated'> {
 	epc: string
@@ -15,14 +20,13 @@ export interface IDefectiveGoods extends Omit<Required<IBaseEntity>, 'created' |
 	defective_location: DefectiveLocation
 	defective_description: string
 	shoe_source: DefectiveGoodsSource
-	unit: 'pcs' | 'prs'
-	assembly_line: IDepartment | null
-	sewing_line: IDepartment | null
-	combination_strategy: DefectiveGoodsCombinationStrategy
+	unit: DefectiveGoodsUnit
+	assembly_line: Nullish<IDepartment>
+	sewing_line: Nullish<IDepartment>
+	combination_strategy: CombinationStrategy
 }
 
-export type DefectiveGoodsCombinationStrategy =
-	CombinationStrategy.USB | CombinationStrategy.UHF | CombinationStrategy.MANUALLY
+export type DefectiveGoodsUnit = 'pcs' | 'prs'
 
 type SizeLedger = Array<{ size_numcode: string; qty: number }>
 

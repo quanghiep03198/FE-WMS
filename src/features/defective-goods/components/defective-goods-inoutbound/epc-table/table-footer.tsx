@@ -24,7 +24,7 @@ const DataTableFooter: React.FC<TableFooterProps> = ({ onResetColumnFilter }) =>
 
 	const handleClearFilters = () => {
 		for (const key in searchParams) {
-			if (key === 'action') continue
+			if (key === 'action' || key === 'take') continue
 			removeParam(key)
 		}
 		onResetColumnFilter()
