@@ -37,4 +37,20 @@ describe('useQueryParams', () => {
 		})
 		expect(navigateMock).toHaveBeenCalledWith({ search: expect.any(Function) })
 	})
+
+	it('should set param by key', () => {
+		const { result } = renderHook(() => useQueryParams())
+		act(() => {
+			result.current.setParam('foo', 'bar')
+		})
+		expect(navigateMock).toHaveBeenCalledWith({ search: expect.any(Function) })
+	})
+
+	it('should remove all params', () => {
+		const { result } = renderHook(() => useQueryParams())
+		act(() => {
+			result.current.removeAllParams()
+		})
+		expect(navigateMock).toHaveBeenCalledWith({ search: expect.any(Function) })
+	})
 })
