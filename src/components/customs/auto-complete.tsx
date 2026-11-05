@@ -24,6 +24,7 @@ type AutoCompleteProps<D extends object> = {
 			'div' extends keyof HTMLElementTagNameMap ? keyof HTMLElementTagNameMap : React.ElementType
 		>
 	>
+	contentProps?: React.ComponentProps<typeof PopoverContent>
 	onInput?: (value: string) => any
 	onSelect?: (value: string) => unknown
 } & React.ComponentProps<'input'>

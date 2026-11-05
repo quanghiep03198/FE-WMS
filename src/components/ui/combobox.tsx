@@ -3,13 +3,14 @@
 import { cn } from '@common/utils/cn'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { isEmpty } from 'lodash-es'
-import { useMemo, useState } from 'react'
+import { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from './button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from './command'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
 export type ComboboxProps<T extends Record<string, string>> = {
+	ref?: React.Ref<{ reset: () => void }>
 	placeholder?: string
 	datalist: Array<T>
 	value?: string
@@ -17,7 +18,6 @@ export type ComboboxProps<T extends Record<string, string>> = {
 	onInput?: (value: string) => void
 	triggerProps?: React.ComponentProps<typeof Button>
 	contentProps?: React.ComponentProps<typeof PopoverContent>
-} & {
 	labelField: keyof T
 	valueField: keyof T
 }
@@ -30,6 +30,7 @@ export function Combobox<T extends Record<string, any>>({
 	value,
 	triggerProps,
 	contentProps,
+	ref,
 	onSelect,
 	onInput
 }: ComboboxProps<T>) {
@@ -37,8 +38,13 @@ export function Combobox<T extends Record<string, any>>({
 	const [currentValue, setCurrentValue] = useState(value)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { t } = useTranslation()
+	const commandInputRef = useRef<HTMLInputElement>(null)
 
 	placeholder ??= t('ns_common:actions.search') + ' ...'
+
+	useEffect(() => {
+		setCurrentValue(value)
+	}, [value])
 
 	const options = useMemo(() => {
 		if (!Array.isArray(datalist)) {
@@ -64,6 +70,14 @@ export function Combobox<T extends Record<string, any>>({
 		return String(currentOption[labelField])
 	}, [datalist, value, valueField, currentValue, labelField])
 
+	useImperativeHandle(ref, () => ({
+		reset: () => {
+			setSearchTerm('')
+			setCurrentValue('')
+			if (commandInputRef.current) commandInputRef.current.value = ''
+		}
+	}))
+
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
@@ -87,6 +101,8 @@ export function Combobox<T extends Record<string, any>>({
 					<CommandInput
 						className='h-9'
 						placeholder={placeholder ?? `${t('ns_common:actions.search')} ...`}
+						ref={commandInputRef}
+						value={searchTerm}
 						onInput={(e) => {
 							if (typeof onInput === 'function') onInput(e.currentTarget.value)
 							setSearchTerm(String(e.currentTarget.value).toLocaleLowerCase())
