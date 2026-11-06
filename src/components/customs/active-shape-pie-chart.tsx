@@ -61,9 +61,7 @@ export function ActiveShapePieChart<T extends ActivePieDatum>({
 	)
 
 	return (
-		<ChartContainer
-			className='mx-auto aspect-square max-h-80 w-full'
-			config={{ pie: { color: 'var(--primary)' } }}>
+		<ChartContainer className='mx-auto aspect-square max-h-80 w-full' config={{ pie: { color: 'var(--primary)' } }}>
 			<ChartPlot
 				ariaLabel='Active pie chart'
 				definition={chartDefinition}
