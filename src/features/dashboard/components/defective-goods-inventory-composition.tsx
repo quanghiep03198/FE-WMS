@@ -1,15 +1,13 @@
-'use client'
-
-import { Label, Pie, PieChart, Sector } from 'recharts'
-import type { PieSectorDataItem } from 'recharts/types/polar/Pie'
-
 import { Div } from '@components/customs/div'
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@components/ui/chart'
+import { ChartContainer, ChartPlot } from '@components/ui/chart'
 import { Icon } from '@components/ui/icon'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 import { Skeleton } from '@components/ui/skeleton'
 import type { SelectProps } from '@radix-ui/react-select'
+import { defineChart } from '@tanstack/charts'
+import { focusGroupAngle, pie, polar, radialArc } from '@tanstack/charts/polar'
+import { tooltip } from '@tanstack/charts/tooltip'
 import { capitalize } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -28,11 +26,92 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 		if (!data) return []
 		return data.map((item) => ({ ...item, fill: `var(--color-${item.defective_category})` }))
 	}, [data])
+	const slices = useMemo(
+		() => pie(chartData, { value: 'qty', startAngle: Math.PI / 2, endAngle: (-Math.PI * 3) / 2 }),
+		[chartData]
+	)
 
 	const activeIndex = useMemo(() => {
 		if (!chartData || chartData.length === 0) return 0
-		return data.findIndex((item) => item.defective_category === activeCategory)
+		return chartData.findIndex((item) => item.defective_category === activeCategory)
 	}, [activeCategory, chartData])
+	const activeSlices = useMemo(
+		() => slices.filter((item) => item.defective_category === activeCategory),
+		[activeCategory, slices]
+	)
+	const unitLabel = capitalize(
+		activeCategory === DefectiveCategory.C_GRADE ? t('ns_common:unit.pcs') : t('ns_common:unit.prs')
+	)
+	const activeQty = chartData[activeIndex]?.qty ?? 0
+	const chartDefinition = useMemo(
+		() =>
+			defineChart({
+				marks: [
+					polar({
+						radiusRatio: 0.78,
+						scales: { angle: null, radius: null },
+						marks: [
+							radialArc(slices, {
+								id: 'category-slices',
+								key: 'defective_category',
+								innerRadius: 60,
+								cornerRadius: 6,
+								fill: (item) => item.fill,
+								stroke: 'var(--background)',
+								strokeWidth: 4
+							}),
+							radialArc(activeSlices, {
+								id: 'active-category',
+								key: 'defective_category',
+								innerRadius: 60,
+								cornerRadius: 6,
+								outerRadius: ({ radius }) => radius + 10,
+								fill: (item) => item.fill,
+								stroke: 'var(--background)',
+								strokeWidth: 4
+							}),
+							radialArc(activeSlices, {
+								id: 'active-category-ring',
+								key: 'defective_category',
+								innerRadius: ({ radius }) => radius + 12,
+								outerRadius: ({ radius }) => radius + 22,
+								cornerRadius: 4,
+								fill: (item) => item.fill,
+								stroke: 'var(--background)',
+								strokeWidth: 3
+							})
+						]
+					})
+				],
+				scales: { x: null, y: null },
+				margin: 0,
+				focus: focusGroupAngle,
+				svgAnimation: true,
+				tooltip: {
+					use: tooltip,
+					anchor: 'group-center',
+					placement: 'auto',
+					content: (points) => {
+						const point = points.find((candidate) => candidate.datum?.['defective_category'])
+						if (!point) return { rows: [] }
+						const category = point.datum['defective_category'] as DefectiveCategory
+						const label = chartConfig[category]?.label ?? category
+						return {
+							title: String(label),
+
+							rows: [
+								{
+									label: String(label),
+									value: Number(point.datum['qty']).toLocaleString(),
+									color: `var(--color-${category})`
+								}
+							]
+						}
+					}
+				}
+			}),
+		[activeSlices, slices, chartConfig]
+	)
 
 	const isEmpty = !Array.isArray(chartData) || chartData.every((item) => item.qty === 0)
 
@@ -56,7 +135,7 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 					)}
 				</CardAction>
 			</CardHeader>
-			<CardContent className='flex-1 pb-0'>
+			<CardContent className='flex-1 pb-0 flex flex-col gap-6'>
 				{isLoading ? (
 					<Skeleton className='mx-auto aspect-square max-h-64 rounded-full @xl/card:max-h-80' />
 				) : isEmpty ? (
@@ -65,50 +144,19 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 						{t('ns_common:table.no_data')}
 					</Div>
 				) : (
-					<ChartContainer className='mx-auto aspect-square max-h-64 @xl/card:max-h-80' config={chartConfig}>
-						<PieChart>
-							<ChartTooltip content={<ChartTooltipContent hideLabel />} cursor={false} />
-							<Pie
-								activeIndex={activeIndex}
-								data={chartData}
-								dataKey='qty'
-								innerRadius={64}
-								nameKey='defective_category'
-								strokeWidth={8}
-								activeShape={({ outerRadius = 0, ...props }: PieSectorDataItem) => (
-									<g>
-										<Sector {...props} outerRadius={outerRadius + 6} />
-										<Sector {...props} innerRadius={outerRadius + 8} outerRadius={outerRadius + 16} />
-									</g>
-								)}>
-								<Label
-									content={({ viewBox }) => {
-										if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-											return (
-												<text dominantBaseline='middle' textAnchor='middle' x={viewBox.cx} y={viewBox.cy}>
-													<tspan
-														className='fill-foreground text-3xl font-bold tabular-nums'
-														x={viewBox.cx}
-														y={viewBox.cy}>
-														{chartData[activeIndex]?.qty?.toLocaleString()}
-													</tspan>
-													<tspan
-														className='fill-muted-foreground'
-														x={viewBox.cx}
-														y={(viewBox.cy || 0) + 24}>
-														{capitalize(
-															activeCategory === DefectiveCategory.C_GRADE
-																? t('ns_common:unit.pcs')
-																: t('ns_common:unit.prs')
-														)}
-													</tspan>
-												</text>
-											)
-										}
-									}}
-								/>
-							</Pie>
-						</PieChart>
+					<ChartContainer
+						className='mx-auto relative aspect-square max-h-64 @xl/card:max-h-80'
+						config={chartConfig}>
+						<ChartPlot
+							ariaLabel={t('ns_dashboard:defective_goods_inventory_overview')}
+							className='self-center'
+							definition={chartDefinition}
+							height={256}
+						/>
+						<div className='pointer-events-none absolute inset-0 flex flex-col items-center justify-center'>
+							<span className='text-3xl font-bold tabular-nums'>{activeQty.toLocaleString()}</span>
+							<span className='text-muted-foreground'>{unitLabel}</span>
+						</div>
 					</ChartContainer>
 				)}
 				{isLoading ? (
@@ -144,7 +192,9 @@ const PieCateogrySelect: React.FC<SelectProps> = ({ value, onValueChange }) => {
 		<Select
 			defaultValue={DefectiveCategory.B_GRADE}
 			value={value}
-			onValueChange={(value) => onValueChange(value as DefectiveCategory)}>
+			onValueChange={(value) => {
+				if (typeof onValueChange === 'function') onValueChange(value)
+			}}>
 			<SelectTrigger className='mx-auto max-w-56 @xl/card:ml-auto @2xl/card:mr-0'>
 				<SelectValue placeholder='Select category' />
 			</SelectTrigger>

@@ -43,7 +43,7 @@ const DataTableFooter: React.FC<TableFooterProps> = ({ onResetColumnFilter }) =>
 				{t('ns_common:actions.reload')}
 			</Button>
 			<Button
-				disabled={Object.keys(omit(searchParams, ['action'])).length === 0}
+				disabled={Object.keys(omit(searchParams, ['action', 'take'])).length === 0}
 				variant='destructive'
 				onClick={handleClearFilters}>
 				<Icon name='FunnelX' /> {t('ns_common:actions.clear_filter')}

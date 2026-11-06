@@ -193,7 +193,6 @@ const FormItem: React.FC<FieldItemProps> = ({ index, name, label, icon, type }) 
 	const { setValue, resetField, watch } = useFormContext<TruckloadDeliveryFilterFormValues>()
 	const currentColumnValue = watch(`where.${index}.column`)
 	const currentOperator = watch(`where.${index}.operator`)
-	const currentValue = watch(`where.${index}.value`)
 
 	const operators: Array<{ label: string; value: FilterOperator }> = useMemo(() => {
 		const expressions: Array<{ label: string; value: FilterOperator; types: FieldItemProps['type'][] }> = [

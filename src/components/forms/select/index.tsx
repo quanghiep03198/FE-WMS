@@ -51,6 +51,7 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 			render={({ field }) => {
 				return (
 					<FormItem
+						aria-hidden={hidden}
 						aria-orientation={orientation}
 						className='space-y-2 aria-hidden:hidden aria-[orientation=horizontal]:grid aria-[orientation=horizontal]:grid-cols-[1fr_2fr] aria-[orientation=horizontal]:items-start aria-[orientation=horizontal]:gap-2 aria-[orientation=horizontal]:space-y-0'>
 						{label && (

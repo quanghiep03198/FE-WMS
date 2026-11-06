@@ -1,74 +1,82 @@
-import { useState } from 'react'
-import { Pie, PieChart, ResponsiveContainer, Sector } from 'recharts'
+import { ChartContainer, ChartPlot } from '@components/ui/chart'
+import { defineChart } from '@tanstack/charts'
+import { pie, polar, radialArc } from '@tanstack/charts/polar'
+import { tooltip } from '@tanstack/charts/tooltip'
+import { useMemo, useState } from 'react'
 
-export function ActiveShapePieChart<T>({ data, children }: { data: T[]; children?: React.ReactNode }) {
-	const [activeIndex, setActiveIndex] = useState(0)
-
-	return (
-		<ResponsiveContainer height='100%' width='100%'>
-			<PieChart height={320} width={320}>
-				<Pie
-					activeIndex={activeIndex}
-					activeShape={renderActiveShape}
-					data={data}
-					dataKey='value'
-					fill='var(--primary)'
-					innerRadius={64}
-					outerRadius={96}
-					stroke='var(--border)'
-					onMouseEnter={(_, index) => setActiveIndex(index)}
-				/>
-				{children}
-			</PieChart>
-		</ResponsiveContainer>
-	)
+type ActivePieDatum = {
+	name: string
+	value: number
+	fill?: string
 }
 
-export const renderActiveShape = (props) => {
-	const RADIAN = Math.PI / 180
-	const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props
-	const sin = Math.sin(-RADIAN * midAngle)
-	const cos = Math.cos(-RADIAN * midAngle)
-	const sx = cx + (outerRadius + 10) * cos
-	const sy = cy + (outerRadius + 10) * sin
-	const mx = cx + (outerRadius + 30) * cos
-	const my = cy + (outerRadius + 30) * sin
-	const ex = mx + (cos >= 0 ? 1 : -1) * 24
-	const ey = my
-	const textAnchor = cos >= 0 ? 'start' : 'end'
+export function ActiveShapePieChart<T extends ActivePieDatum>({
+	data,
+	children
+}: {
+	data: T[]
+	children?: React.ReactNode
+}) {
+	const [activeIndex, setActiveIndex] = useState(0)
+	const slices = useMemo(
+		() =>
+			pie(
+				data.map((item) => ({ ...item, fill: item.fill ?? 'var(--primary)' })),
+				{ value: (item) => item.value }
+			),
+		[data]
+	)
+	const activeSlice = slices[activeIndex]
+	const chartDefinition = useMemo(
+		() =>
+			defineChart({
+				marks: [
+					polar({
+						inset: 16,
+						marks: [
+							radialArc(slices, {
+								innerRadius: 64,
+								fill: (item) => item.fill,
+								stroke: 'var(--border)'
+							}),
+							...(activeSlice
+								? [
+										radialArc([activeSlice], {
+											innerRadius: 64,
+											outerRadius: ({ radius }) => radius + 6,
+											fill: (item) => item.fill,
+											stroke: 'var(--border)'
+										})
+									]
+								: [])
+						],
+						scales: { angle: null, radius: null }
+					})
+				],
+				scales: { x: null, y: null },
+				svgAnimation: { duration: 300, easing: 'ease-out' },
+				tooltip
+			}),
+		[activeSlice, slices]
+	)
 
 	return (
-		<g>
-			<text dy={8} fill={fill} textAnchor='middle' x={cx} y={cy}>
-				{payload.name}
-			</text>
-			<Sector
-				cx={cx}
-				cy={cy}
-				endAngle={endAngle}
-				fill={fill}
-				innerRadius={innerRadius}
-				outerRadius={outerRadius}
-				startAngle={startAngle}
+		<ChartContainer
+			className='mx-auto aspect-square max-h-80 w-full'
+			config={{ pie: { color: 'var(--primary)' } }}>
+			<ChartPlot
+				ariaLabel='Active pie chart'
+				definition={chartDefinition}
+				onFocusChange={(point) => {
+					if (point) setActiveIndex(point.datum.index)
+				}}
 			/>
-			<Sector
-				cx={cx}
-				cy={cy}
-				endAngle={endAngle}
-				fill={fill}
-				innerRadius={outerRadius + 6}
-				outerRadius={outerRadius + 10}
-				startAngle={startAngle}
-			/>
-			<path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} fill='none' stroke={fill} />
-			<circle cx={ex} cy={ey} fill={fill} r={2} stroke='none' />
-			<text textAnchor={textAnchor} x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey}>
-				{`PV ${value}`}
-			</text>
-			<text dy={18} fill='var(--foreground)' textAnchor={textAnchor} x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey}>
-				{`(Rate ${(percent * 100).toFixed(2)}%)`}
-			</text>
-		</g>
+			<div className='pointer-events-none absolute inset-0 flex flex-col items-center justify-center'>
+				<span className='font-medium'>{activeSlice?.name}</span>
+				<span>{activeSlice?.value.toLocaleString()}</span>
+			</div>
+			{children}
+		</ChartContainer>
 	)
 }
 

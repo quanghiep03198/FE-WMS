@@ -23,9 +23,12 @@ type ColumnFilterProps<TData, TValue> = {
 	column: Column<TData, TValue>
 }
 
-export function TableColumnFilter({ column }: ColumnFilterProps<IDefectiveGoods, ExtractObjectValue<IDefectiveGoods>>) {
+export function TableColumnFilter<Prop extends keyof IDefectiveGoods>({
+	table,
+	column
+}: ColumnFilterProps<IDefectiveGoods, ExtractObjectValue<IDefectiveGoods, Prop>>) {
 	const { t } = useTranslation()
-	const { searchParams, setParam, removeParam } = useFilterQuery()
+	const { searchParams, setParam, setParams, removeParam } = useFilterQuery()
 	const [searchManufacturingOrder, setSearchManufacturingOrder] = useState(searchParams.mo_no ?? '')
 	const [searchPurchaseOrder, setSearchPurchaseOrder] = useState(searchParams.po ?? '')
 
@@ -37,9 +40,16 @@ export function TableColumnFilter({ column }: ColumnFilterProps<IDefectiveGoods,
 		column.id === 'mo_no'
 	)
 	const { data: purchaseOrders } = useSearchPurchaseOrderQuery(debouncedSearchPurchaseOrder, column.id === 'po')
+
+	const manufacturingOrderFilter =
+		column.id === 'mo_no' ? (column.getFilterValue() ?? searchParams.mo_no ?? '') : undefined
+	const value =
+		column.id === 'mo_no' ? manufacturingOrderFilter : searchParams[column.id] || column.getFilterValue() || ''
+
 	const { data: manufacturingOrder, isFetching } = useGetManufacturingOrderQuery(
-		column.id === 'mo_no' ? (column.getFilterValue() as string) || searchParams.mo_no : undefined
+		column.id === 'mo_no' ? value : undefined
 	)
+
 	const comboboxRef = useRef<{ reset: () => void }>({ reset: () => void '' })
 
 	const getFacetedUniqueValues = () => {
@@ -62,24 +72,58 @@ export function TableColumnFilter({ column }: ColumnFilterProps<IDefectiveGoods,
 
 	useEffect(() => {
 		// mo_no is only synced to search params once its manufacturing order info has been loaded (see effect below)
-		if (column.id === 'mo_no' && column.getFilterValue()) return
+		if (column.id === 'mo_no') return
 		if (column.getFilterValue()) setParam(column.id, column.getFilterValue())
 		else {
 			removeParam(column.id)
-			if (column.id === 'mo_no') setSearchManufacturingOrder('')
 			if (column.id === 'po') setSearchPurchaseOrder('')
 		}
 	}, [column.getFilterValue()])
 
 	useEffect(() => {
-		const filterValue = column.getFilterValue()
-		if (column.id !== 'mo_no' || !filterValue || isFetching || !manufacturingOrder) return
-		if (manufacturingOrder.mo_no !== filterValue) return
-		setParam('mo_no', manufacturingOrder.mo_no)
-		setParam('brand_name', manufacturingOrder.brand_name)
-		setParam('factory_shoes_style', manufacturingOrder.factory_shoes_style)
-		setParam('color_sn', manufacturingOrder.color_sn)
-	}, [manufacturingOrder?.mo_no, isFetching, column.getFilterValue()])
+		if (column.id !== 'mo_no') return
+
+		const relatedColumns = ['brand_name', 'factory_shoes_style', 'color_sn'] as const
+		if (!manufacturingOrderFilter) {
+			for (const relatedColumn of relatedColumns) {
+				table.getColumn(relatedColumn)?.setFilterValue(undefined)
+			}
+			setSearchManufacturingOrder('')
+			if (searchParams.mo_no || relatedColumns.some((relatedColumn) => searchParams[relatedColumn])) {
+				removeParam('mo_no', ...relatedColumns)
+			}
+			return
+		}
+
+		if (isFetching || !manufacturingOrder || manufacturingOrder.mo_no !== manufacturingOrderFilter) return
+
+		for (const relatedColumn of relatedColumns) {
+			table.getColumn(relatedColumn)?.setFilterValue(manufacturingOrder[relatedColumn])
+		}
+
+		if (
+			searchParams.mo_no !== manufacturingOrder.mo_no ||
+			searchParams.brand_name !== manufacturingOrder.brand_name ||
+			searchParams.factory_shoes_style !== manufacturingOrder.factory_shoes_style ||
+			searchParams.color_sn !== manufacturingOrder.color_sn
+		) {
+			setParams({
+				mo_no: manufacturingOrder.mo_no,
+				brand_name: manufacturingOrder.brand_name,
+				factory_shoes_style: manufacturingOrder.factory_shoes_style,
+				color_sn: manufacturingOrder.color_sn
+			})
+		}
+	}, [
+		column.id,
+		manufacturingOrderFilter,
+		isFetching,
+		manufacturingOrder,
+		table,
+		searchParams,
+		removeParam,
+		setParams
+	])
 
 	// * Useful for server side filtering
 	const filterVariant = column.columnDef.meta?.filterVariant
@@ -102,11 +146,9 @@ export function TableColumnFilter({ column }: ColumnFilterProps<IDefectiveGoods,
 						.map((value: any) => ({ label: value, value: value }))
 	}, [column.id, metaUniqueValues, filteredManufacturingOrders, purchaseOrders, getSortedUniqueValues])
 
-	const value = searchParams[column.id] || column.getFilterValue() || ''
-
 	if (!column.columnDef.enableColumnFilter)
 		return (
-			<Div className='text-muted-foreground/50 flex h-full items-center justify-center px-2 text-xs font-medium select-none'>
+			<Div className='text-muted-foreground bg-table-head flex h-(--row-height) items-center justify-center px-2 text-xs font-medium select-none'>
 				<Icon name='Minus' />
 			</Div>
 		)
@@ -123,9 +165,7 @@ export function TableColumnFilter({ column }: ColumnFilterProps<IDefectiveGoods,
 					selectProps={{
 						defaultValue: '',
 						value,
-						onValueChange: (value) => {
-							column.setFilterValue(value)
-						}
+						onValueChange: column.setFilterValue
 					}}
 					selectTriggerProps={{
 						className:
@@ -146,12 +186,10 @@ export function TableColumnFilter({ column }: ColumnFilterProps<IDefectiveGoods,
 					triggerProps={{ className: 'border-none shadow-none' }}
 					value={value}
 					valueField='value'
+					onSelect={column.setFilterValue}
 					onInput={(value) => {
 						if (column.id === 'mo_no') setSearchManufacturingOrder(value)
 						if (column.id === 'po') setSearchPurchaseOrder(value)
-					}}
-					onSelect={(value) => {
-						column.setFilterValue(value)
 					}}
 				/>
 			)
@@ -168,9 +206,7 @@ export function TableColumnFilter({ column }: ColumnFilterProps<IDefectiveGoods,
 					shouldFilter={true}
 					value={value}
 					valueField='value'
-					onSelect={(value) => {
-						column.setFilterValue(value)
-					}}
+					onSelect={column.setFilterValue}
 				/>
 			)
 		}

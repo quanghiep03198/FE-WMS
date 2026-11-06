@@ -313,6 +313,25 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
+@keyframes chart-reveal-x {
+	from {
+		clip-path: inset(0 100% 0 0);
+	}
+	to {
+		clip-path: inset(0 -8px 0 0);
+	}
+}
+
+.chart-reveal-x {
+	animation: chart-reveal-x 900ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.chart-reveal-x {
+		animation: none;
+	}
+}
+
 @layer base {
 	*,
 	::after,

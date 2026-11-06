@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react'
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
 import { Div } from '@components/customs/div'
 import { Typography } from '@components/customs/typography'
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card'
 import type { ChartConfig } from '@components/ui/chart'
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@components/ui/chart'
+import { ChartContainer, ChartPlot } from '@components/ui/chart'
 import { Icon } from '@components/ui/icon'
 import { Label } from '@components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
@@ -13,6 +12,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@components/ui/skeleton'
 
 import { cn } from '@common/utils/cn'
+import { areaY, defineChart } from '@tanstack/charts'
+import { d3Curve } from '@tanstack/charts/d3/shape'
+import { scaleLinear } from '@tanstack/charts/scales/linear'
+import { scalePoint } from '@tanstack/charts/scales/point'
+import { tooltip } from '@tanstack/charts/tooltip'
+import { curveMonotoneX } from 'd3-shape'
 import { format, subDays, subMonths } from 'date-fns'
 import { capitalize } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
@@ -36,11 +41,11 @@ const chartConfig = {
 	}
 } satisfies ChartConfig
 
-export function AssemblyProductivityOverview() {
+const AssemblyProductivityOverview: React.FC = () => {
 	const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>('UGG')
 	const [activePeriod, setActivePeriod] = useState<string>(format(subMonths(new Date(), 3), 'yyyy-MM-dd'))
 	const { data, isLoading } = useGetDailyAssemblyProductivityQuery()
-	const { t, i18n } = useTranslation(['ns_dashboard'])
+	const { t, i18n } = useTranslation()
 
 	const total = useMemo(() => {
 		if (!Array.isArray(data)) return { UGG: 0, KOOLABURRA: 0, TEVA: 0 }
@@ -68,6 +73,71 @@ export function AssemblyProductivityOverview() {
 				return 'en-US'
 		}
 	}, [i18n.language])
+	// areaY stacks by default and requires one row per x position
+	const seriesData = useMemo(() => {
+		const volumeByDate = new Map<string, number>()
+		for (const item of chartData) {
+			volumeByDate.set(item.work_date, (volumeByDate.get(item.work_date) ?? 0) + item.volumn)
+		}
+		return Array.from(volumeByDate, ([work_date, volumn]) => ({ work_date, volumn })).sort((a, b) =>
+			a.work_date.localeCompare(b.work_date)
+		)
+	}, [chartData])
+
+	const chartDefinition = useMemo(
+		() =>
+			defineChart({
+				motion: true,
+				marks: [
+					areaY(seriesData, {
+						id: 'assembly-volumn-area',
+						key: (row) => row.work_date,
+						x: 'work_date',
+						y: 'volumn',
+						fill: `var(--color-${activeChart})`,
+						fillOpacity: 0.2,
+						stroke: `var(--color-${activeChart})`,
+						strokeWidth: 2,
+						curve: d3Curve(curveMonotoneX)
+					})
+				],
+				scales: {
+					x: {
+						scale: () => scalePoint<string>().padding(0.2),
+						axis: {
+							ticks: {
+								format: (value) =>
+									capitalize(
+										new Date(String(value)).toLocaleDateString(locale, {
+											month: 'short',
+											day: 'numeric'
+										})
+									)
+							}
+						}
+					},
+					y: { scale: scaleLinear, nice: true, grid: true }
+				},
+				svgAnimation: { duration: 500, easing: 'ease-out' },
+				tooltip: {
+					use: tooltip,
+					content: (points) => ({
+						title: capitalize(
+							new Date(String(points[0]?.xValue)).toLocaleDateString(locale, {
+								day: 'numeric',
+								month: 'short'
+							})
+						),
+						rows: points.map((point) => ({
+							label: chartConfig[activeChart].label,
+							value: Number(point.yValue ?? 0).toLocaleString(locale),
+							color: `var(--color-${activeChart})`
+						}))
+					})
+				}
+			}),
+		[activeChart, seriesData, locale]
+	)
 
 	return (
 		<Card className='@container/card'>
@@ -104,10 +174,10 @@ export function AssemblyProductivityOverview() {
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value={format(subMonths(new Date(), 3), 'yyyy-MM-dd')}>
-									{t('ns_dashboard:period_options.last_3_months' as any)}
+									{t('ns_dashboard:period_options.last_3_months')}
 								</SelectItem>
 								<SelectItem value={format(subDays(new Date(), 30), 'yyyy-MM-dd')}>
-									{t('ns_dashboard:period_options.last_30_days' as any)}
+									{t('ns_dashboard:period_options.last_30_days')}
 								</SelectItem>
 								<SelectItem value={format(subDays(new Date(), 7), 'yyyy-MM-dd')}>
 									{t('ns_dashboard:period_options.last_7_days')}
@@ -152,62 +222,12 @@ export function AssemblyProductivityOverview() {
 					</Div>
 				) : (
 					<ChartContainer className='xxl:h-80 aspect-auto h-72 w-full' config={chartConfig}>
-						<AreaChart
-							accessibilityLayer
-							data={chartData}
-							margin={{
-								left: 12,
-								right: 12
-							}}>
-							<CartesianGrid vertical={false} />
-							<XAxis
-								axisLine={false}
-								dataKey='work_date'
-								minTickGap={32}
-								tickLine={false}
-								tickMargin={8}
-								tickFormatter={(value) => {
-									const date = new Date(value)
-									return capitalize(
-										date.toLocaleDateString(locale, {
-											month: 'short',
-											day: 'numeric'
-										})
-									)
-								}}
-							/>
-							<ChartTooltip
-								content={
-									<ChartTooltipContent
-										className='w-37.5'
-										nameKey='brand_name'
-										labelFormatter={(value) => {
-											return capitalize(
-												new Date(value).toLocaleDateString(locale, {
-													month: 'short',
-													day: 'numeric',
-													year: 'numeric'
-												})
-											)
-										}}
-									/>
-								}
-							/>
-							<defs>
-								<linearGradient id={`fill-${activeChart}`} x1='0' x2='0' y1='0' y2='1'>
-									<stop offset='5%' stopColor={`var(--color-${activeChart})`} stopOpacity={0.8} />
-									<stop offset='95%' stopColor={`var(--color-${activeChart})`} stopOpacity={0.2} />
-								</linearGradient>
-							</defs>
-							<Area
-								dataKey='volumn'
-								fill={`url(#fill-${activeChart})`}
-								fillOpacity={0.6}
-								stackId='a'
-								stroke={`var(--color-${activeChart})`}
-								type='natural'
-							/>
-						</AreaChart>
+						<ChartPlot
+							reveal
+							ariaLabel={t('ns_dashboard:assembly_productivity_overview')}
+							definition={chartDefinition}
+							height={280}
+						/>
 					</ChartContainer>
 				)}
 			</CardContent>
@@ -217,3 +237,5 @@ export function AssemblyProductivityOverview() {
 
 const Tabs = tw.div`flex divide-x`
 const TabsTrigger = tw.button`flex flex-1 flex-col justify-center gap-1 px-6 py-4 text-left tabular-nums even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6`
+
+export default AssemblyProductivityOverview

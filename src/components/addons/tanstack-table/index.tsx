@@ -52,7 +52,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 	containerProps,
 	defaultFilterOpen = false,
 	expanded = {},
-	paginationProps = { variant: 'default', enableInputPageSize: true },
+	paginationProps = { variant: 'default' },
 	toolbarProps,
 	footerProps = { hidden: true } satisfies TableFooterProps,
 	manualExpanding = false,
@@ -84,6 +84,8 @@ const DataGrid: React.FC<DataTableProps> = ({
 	onRowSelectionChange,
 	...props
 }) => {
+	paginationProps.variant ??= 'default'
+
 	const originalData = useMemo(() => data ?? [], [data])
 
 	// * Table states declaration
@@ -125,7 +127,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 			columnFilters: [],
 			pagination: {
 				pageIndex: 0,
-				pageSize: 10
+				pageSize: 20
 			},
 			...initialState
 		},
@@ -299,7 +301,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 							manualTotalDocs={paginationProps?.totalDocs ?? 0}
 						/>
 					)}
-					{paginationProps.variant === 'numbered' && (
+					{paginationProps.variant === 'default' && (
 						<Separator className='mx-3 h-6 w-0.5' orientation='vertical' />
 					)}
 					<DataTablePagination
@@ -326,6 +328,6 @@ const DataTableWrapper = tw.div`
 	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:shadow-none!
 `
 const FooterGroup: React.FC<React.ComponentProps<'div'>> =
-	tw.div`flex items-center justify-between has-[nav[role=navigation][data-variant=numbered]]:justify-center sm:justify-center md:justify-center`
+	tw.div`flex items-center justify-between has-[nav[role=navigation][data-variant=default]]:justify-center sm:justify-center md:justify-center`
 
 export default DataGrid

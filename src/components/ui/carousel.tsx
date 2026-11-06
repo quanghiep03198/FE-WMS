@@ -105,7 +105,8 @@ const Carousel: React.FC<React.ComponentProps<'div'> & CarouselProps> = ({
 		api.on('select', onSelect)
 
 		return () => {
-			api?.off('select', onSelect)
+			api.off('reInit', onSelect)
+			api.off('select', onSelect)
 		}
 	}, [api, onSelect])
 

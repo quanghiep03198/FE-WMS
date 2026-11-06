@@ -252,14 +252,13 @@ export const InventoryReportMasterTable: React.FC = () => {
 				data={inventoryData}
 				enableColumnResizing={true}
 				enableExpanding={true}
+				enableRowSelection={true}
 				expanded={expanded}
 				footerProps={{ slot: () => <DataTableSummary data={inventoryData} isLoading={isLoading} /> }}
 				getRowCanExpand={() => true}
 				getRowId={(originalRow: IMonthlyInventoryAudit) => originalRow.mo_no}
-				initialState={{ pagination: { pageIndex: 0, pageSize: 15 } }}
 				loading={isLoading}
 				manualExpanding={true}
-				paginationProps={{ variant: 'numbered' }}
 				ref={dataTableRef as React.RefObject<Table<IMonthlyInventoryAudit>>}
 				renderSubComponent={renderSubComponents}
 				virtualizerOptions={{ enabled: false }}

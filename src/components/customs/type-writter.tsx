@@ -1,6 +1,6 @@
 import { cn } from '@common/utils/cn'
 import { useRafState, useUpdateEffect } from 'ahooks'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type TypewriterProps = {
@@ -9,6 +9,20 @@ type TypewriterProps = {
 	delay?: number
 	playState?: 'running' | 'paused'
 	className?: string
+}
+
+function startTyping(text: string, startIndex: number, typeSpeed: number, setDisplayedText: (text: string) => void) {
+	let currentIndex = startIndex
+	const interval = setInterval(() => {
+		if (currentIndex < text.length) {
+			setDisplayedText(text.slice(0, currentIndex + 1))
+			currentIndex++
+		} else {
+			clearInterval(interval)
+		}
+	}, typeSpeed)
+
+	return () => clearInterval(interval)
 }
 
 export const Typewriter = ({
@@ -20,39 +34,24 @@ export const Typewriter = ({
 }: TypewriterProps) => {
 	const { i18n } = useTranslation()
 	const [displayedText, setDisplayedText] = useRafState('')
-	const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
 	useEffect(() => {
 		if (playState === 'paused') return
-		/**
-		 * Each time htmlString changes,
-		 * only add new characters from the end of the currently displayed text.
-		 */
-		const startTyping = () => {
-			let currentIndex = displayedText.length
-			intervalRef.current = setInterval(() => {
-				if (currentIndex < text.length) {
-					// Only add new characters, do not reset old text
-					setDisplayedText(text.slice(0, currentIndex + 1))
-					currentIndex++
-				} else {
-					if (intervalRef.current) {
-						clearInterval(intervalRef.current)
-					}
-				}
-			}, typeSpeed)
+		let stopTyping: (() => void) | undefined
+		let timeout: ReturnType<typeof setTimeout> | undefined
+		const start = () => {
+			stopTyping = startTyping(text, displayedText.length, typeSpeed, setDisplayedText)
 		}
 
 		// If there is new text, start typing animation
 		if (text.length > displayedText.length) {
-			if (delay > 0) setTimeout(startTyping, delay)
-			else startTyping()
+			if (delay > 0) timeout = setTimeout(start, delay)
+			else start()
 		}
 		// If targetText decreases or resets, consider handling it自行處理
 		return () => {
-			if (intervalRef.current) {
-				clearInterval(intervalRef.current)
-			}
+			clearTimeout(timeout)
+			stopTyping?.()
 		}
 	}, [text, typeSpeed, playState, delay, i18n.language])
 

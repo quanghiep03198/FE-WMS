@@ -17,7 +17,7 @@ import { type PaginationBaseProps } from '../types'
 
 export type DataTablePaginationProps = {
 	table: Table<any>
-	variant?: 'default' | 'numbered'
+	variant?: 'default' | 'compact'
 	manualPagination?: boolean
 	enableInputPageSize?: boolean
 	controlledPaginationProps: Partial<Omit<Pagination<any>, 'data'>>
@@ -100,11 +100,6 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 		}
 	}
 
-	// useEffect(() => {
-	// 	if (typeof pageIndex !== 'number' && typeof pageSize !== 'number') return
-	// 	handlePrefetch({ page: pageIndex + 1, limit: pageSize })
-	// }, [canNextPage, pageIndex, pageSize])
-
 	const goToFirstPage = () => {
 		if (manualPagination && typeof onPaginationChange === 'function') {
 			onPaginationChange({ pageIndex: 1, pageSize })
@@ -125,7 +120,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 		if (pageIndex > pageCount) goToFirstPage()
 	}, [pageCount])
 
-	if (variant === 'numbered')
+	if (variant === 'default')
 		return (
 			<Pagination
 				data-variant={variant}
@@ -141,6 +136,9 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 					if (manualPagination && typeof onPaginationChange === 'function')
 						onPaginationChange?.({ pageIndex: page, pageSize })
 					else setPageIndex(page - 1)
+				}}
+				onPrefetch={(page) => {
+					if (typeof prefetch === 'function') prefetch({ page, limit: pageSize })
 				}}
 			/>
 		)

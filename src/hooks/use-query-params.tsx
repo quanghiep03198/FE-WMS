@@ -28,7 +28,7 @@ type SearchParamsObject = Record<string, unknown>
 export default function useQueryParams<T extends SearchParamsObject = SearchParamsObject>(
 	defaultParams?: Partial<T>,
 	options?: Omit<UseSearchOptions, 'select'> & {
-		select?: (search: T) => T | Partial<T> | ExtractObjectValue<T>
+		select?: (search: T) => T | Partial<T> | ExtractObjectValue<T, keyof T>
 	}
 ) {
 	const navigate = useNavigate()

@@ -14,18 +14,13 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import RoleBaseAccessControl from '@components/guards/role-base-access-control'
+import type { AxiosResponse } from 'axios'
 import { usePageContext } from '../contexts/page-context'
 
-type UpdateStatusHandler = (payload: { device_sn: string; is_active: RecordStatus }) =>
-	| (string & {
-			unwrap: () => Promise<ResponseBody<unknown>>
-	  })
-	| (number & {
-			unwrap: () => Promise<ResponseBody<unknown>>
-	  })
-	| {
-			unwrap: () => Promise<ResponseBody<unknown>>
-	  }
+type UpdateStatusHandler = (payload: {
+	device_sn: string
+	is_active: RecordStatus
+}) => Promise<AxiosResponse<any, Omit<any, '_id'>, AnyObject, any>>
 
 type DeleteHandler = () => void
 

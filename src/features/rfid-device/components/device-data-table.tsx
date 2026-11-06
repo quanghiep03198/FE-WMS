@@ -48,12 +48,8 @@ const DeviceDataTable: React.FC = () => {
 	const { mutateAsync: updateAsync } = useUpdateRFIDDeviceMutation()
 	const { mutateAsync: deleteAsync, isPending: isDeleting, isError: isFailedToDelete } = useDeleteRFIDDeviceMutation()
 
-	const handleUpdateDeviceStatus = useCallback((payload: { device_sn: string; is_active: RecordStatus }) => {
-		return toast.promise(updateAsync(payload), {
-			loading: t('ns_common:notification.processing_request'),
-			success: t('ns_common:notification.success'),
-			error: t('ns_common:notification.error')
-		})
+	const handleUpdateDeviceStatus = useCallback(async (payload: { device_sn: string; is_active: RecordStatus }) => {
+		return await updateAsync(payload)
 	}, [])
 
 	const handleDeleteDevices = useCallback(() => {
@@ -267,6 +263,7 @@ const DeviceDataTable: React.FC = () => {
 				data={data!}
 				enableColumnFilters={true}
 				enableColumnResizing={true}
+				enableRowSelection={true}
 				loading={isLoading}
 				ref={tableRef}
 				containerProps={{

@@ -37,7 +37,7 @@ export type TableFooterProps = Partial<{
 
 // #region Pagination prop types
 type PaginationBaseProps = {
-	variant?: 'default' | 'numbered'
+	variant?: 'default' | 'compact'
 	enableInputPageSize?: boolean
 	prefetch?: (params: Record<string, any>) => void
 } & Partial<Omit<Pagination<any>, 'data'>>

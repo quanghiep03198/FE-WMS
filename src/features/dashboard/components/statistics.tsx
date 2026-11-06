@@ -25,7 +25,7 @@ const PercentageBadge: React.FC<{ percentage: number | null }> = ({ percentage }
 )
 
 const Statistics: React.FC = () => {
-	const { t } = useTranslation(['ns_dashboard'])
+	const { t } = useTranslation()
 	const { data, isLoading } = useGetStatisticsQuery()
 
 	if (isLoading)
@@ -54,6 +54,8 @@ const Statistics: React.FC = () => {
 			</Div>
 		)
 
+	if (!data) return null
+
 	return (
 		<Div className='grid h-full w-full grid-cols-2 gap-4 @6xl/statistics:grid-cols-4 [&_div[data-slot=card-description]]:capitalize!'>
 			<Card className='@container/card'>
@@ -68,7 +70,7 @@ const Statistics: React.FC = () => {
 				</CardHeader>
 				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
 					<Typography className='line-clamp-1 flex gap-2 font-medium' variant='small'>
-						{t(getAnalysisSentence(data?.inbound_percentage_change), { ns: 'ns_dashboard', defaultValue: null })}{' '}
+						{t(...getAnalysisSentence(data?.inbound_percentage_change))}{' '}
 						<Icon name={getTrendingIcon(data?.inbound_percentage_change)} />
 					</Typography>
 					<Typography className='text-muted-foreground lowercase first-letter:uppercase' variant='small'>
@@ -94,7 +96,7 @@ const Statistics: React.FC = () => {
 				</CardHeader>
 				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
 					<Typography className='line-clamp-1 flex gap-2 font-medium' variant='small'>
-						{t(getAnalysisSentence(data?.outbound_percentage_change), { ns: 'ns_dashboard', defaultValue: null })}{' '}
+						{t(...getAnalysisSentence(data?.outbound_percentage_change))}{' '}
 						<Icon name={getTrendingIcon(data?.outbound_percentage_change)} />
 					</Typography>
 					<Typography className='text-muted-foreground lowercase first-letter:uppercase' variant='small'>
@@ -120,10 +122,7 @@ const Statistics: React.FC = () => {
 				</CardHeader>
 				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
 					<Typography className='line-clamp-1 flex gap-2 font-medium' variant='small'>
-						{t(getAnalysisSentence(data?.inventory_percentage_change), {
-							ns: 'ns_dashboard',
-							defaultValue: null
-						})}
+						{t(...getAnalysisSentence(data?.inventory_percentage_change))}
 						<Icon name={getTrendingIcon(data?.inventory_percentage_change)} />
 					</Typography>
 					<Typography className='text-muted-foreground lowercase first-letter:uppercase' variant='small'>
@@ -149,10 +148,7 @@ const Statistics: React.FC = () => {
 				</CardHeader>
 				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
 					<Typography className='line-clamp-1 flex gap-2 font-medium' variant='small'>
-						{t(getAnalysisSentence(data?.turnover_percentage_change), {
-							ns: 'ns_dashboard',
-							defaultValue: null
-						})}
+						{t(...getAnalysisSentence(data?.turnover_percentage_change))}
 						<Icon name={getTrendingIcon(data?.turnover_percentage_change)} />
 					</Typography>
 					<Typography className='text-muted-foreground lowercase first-letter:uppercase' variant='small'>

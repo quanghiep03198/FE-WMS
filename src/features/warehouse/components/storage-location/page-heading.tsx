@@ -6,10 +6,8 @@ import { Button, buttonVariants } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { usePageContext } from '../../contexts/old-page-context'
 
 const PageHeading: React.FC = () => {
-	const { dispatch } = usePageContext()
 	const { t } = useTranslation()
 
 	return (

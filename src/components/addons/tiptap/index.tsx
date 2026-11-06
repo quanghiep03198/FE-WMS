@@ -20,7 +20,7 @@ import { EditorContextProvider } from './context/editor-context'
 import { editorExtensions } from './extensions'
 
 export interface EditorProps {
-	onUpdate?: (state: { value: string; isEmpty: boolean }) => unknown
+	// onUpdate?: (state: { value: string; isEmpty: boolean }) => unknown
 	id?: string
 	ref?: React.RefObject<typeof EditorContent.prototype> | RefCallBack
 	className?: string
@@ -53,8 +53,7 @@ const Editor: React.FC<EditorProps> = ({
 	height = 350,
 	id = uniqueId(),
 	ref,
-	name,
-	onUpdate
+	name
 }) => {
 	const { i18n } = useTranslation()
 	const [contextMenuType, setContextMenuType] = useState<keyof HTMLElementTagNameMap | null>(null)
@@ -74,9 +73,6 @@ const Editor: React.FC<EditorProps> = ({
 			enableCoreExtensions: true,
 			editable: !disabled,
 			immediatelyRender: true
-			// onUpdate: ({ editor }) => {
-			// 	if (typeof onUpdate === 'function') onUpdate({ value: editor.getHTML(), isEmpty: editor.isEmpty })
-			// }
 		},
 		[disabled, i18n.language]
 	)

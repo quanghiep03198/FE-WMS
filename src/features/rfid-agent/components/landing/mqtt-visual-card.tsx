@@ -1,7 +1,6 @@
 import { cn } from '@common/utils/cn'
 import { Badge } from '@components/ui/badge'
 import { Icon } from '@components/ui/icon'
-import useTheme from '@hooks/use-theme'
 import { useEventListener } from 'ahooks'
 import React, { cloneElement, useRef, useState } from 'react'
 import { VisualCard } from './visual-card'
@@ -15,7 +14,6 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 	const containerRef = useRef(null)
 	const ref = useRef(null)
 	const [gradientPos, setGradientPos] = useState({ x: 0, y: 0 })
-	const { theme } = useTheme()
 
 	const handleGlow = (event: React.MouseEvent) => {
 		if (!ref.current || !containerRef.current) return null

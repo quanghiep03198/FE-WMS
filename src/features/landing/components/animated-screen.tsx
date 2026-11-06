@@ -5,15 +5,12 @@ import AppLogo from '@components/shared/app-logo'
 import { Badge } from '@components/ui/badge'
 import { Breadcrumb, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@components/ui/breadcrumb'
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
-import { ChartContainer, ChartLegend, ChartLegendContent } from '@components/ui/chart'
 import { Icon } from '@components/ui/icon'
 import { Separator } from '@components/ui/separator'
 import { HomeIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
-import { capitalize } from 'lodash-es'
 import React from 'react'
 import { createPortal } from 'react-dom'
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 const inoutboundOverviewData = [
 	{ month: 1, inbound_qty: 5000, outbound_qty: 6000 },
@@ -29,6 +26,8 @@ const inoutboundOverviewData = [
 	{ month: 11, inbound_qty: 4000, outbound_qty: 3000 },
 	{ month: 12, inbound_qty: 6000, outbound_qty: 2500 }
 ]
+
+const MAX_QTY = Math.max(...inoutboundOverviewData.flatMap((item) => [item.inbound_qty, item.outbound_qty]))
 
 const AnimatedScreen: React.FC = () => {
 	return (
@@ -218,42 +217,39 @@ const AnimatedScreen: React.FC = () => {
 								</CardDescription>
 							</CardHeader>
 							<CardContent className='relative w-full max-w-2xl'>
-								<ChartContainer
-									className='h-96 xl:h-80'
-									config={{
-										inbound_qty: {
-											label: 'Inbound Quantity',
-											color: 'var(--chart-1)'
-										},
-										outbound_qty: {
-											label: 'Outbound Quantity',
-											color: 'var(--chart-2)'
-										}
-									}}>
-									<BarChart
-										accessibilityLayer
-										data={inoutboundOverviewData.map((item) => ({
-											...item,
-											month: capitalize(format(new Date(new Date().getFullYear(), item.month - 1), 'MMM'))
-										}))}>
-										<CartesianGrid vertical={false} />
-										<XAxis axisLine={false} dataKey='month' tickLine={false} tickMargin={10} />
-										<YAxis stroke='var(--muted-foreground)' tickFormatter={formatIntlNumber} />
-										<Bar
-											dataKey='inbound_qty'
-											fill='var(--color-inbound_qty)'
-											isAnimationActive={false}
-											radius={3}
-										/>
-										<Bar
-											dataKey='outbound_qty'
-											fill='var(--color-outbound_qty)'
-											isAnimationActive={false}
-											radius={3}
-										/>
-										<ChartLegend content={<ChartLegendContent />} formatter={capitalize} />
-									</BarChart>
-								</ChartContainer>
+								<div className='flex h-96 flex-col gap-3 xl:h-80'>
+									<div className='border-border/60 flex flex-1 items-end gap-x-2 border-b'>
+										{inoutboundOverviewData.map((item) => (
+											<div className='flex h-full flex-1 flex-col justify-end gap-y-1' key={item.month}>
+												<div className='flex flex-1 items-end justify-center gap-x-0.5'>
+													<div
+														className='w-full max-w-4 rounded-t-sm bg-(--chart-1)'
+														style={{ height: `${(item.inbound_qty / MAX_QTY) * 100}%` }}
+													/>
+													<div
+														className='w-full max-w-4 rounded-t-sm bg-(--chart-2)'
+														style={{ height: `${(item.outbound_qty / MAX_QTY) * 100}%` }}
+													/>
+												</div>
+											</div>
+										))}
+									</div>
+									<div className='text-muted-foreground flex gap-x-2 text-[10px]'>
+										{inoutboundOverviewData.map((item) => (
+											<span className='flex-1 text-center' key={item.month}>
+												{format(new Date(new Date().getFullYear(), item.month - 1), 'MMM')}
+											</span>
+										))}
+									</div>
+									<div className='flex items-center justify-center gap-x-4 text-xs'>
+										<span className='flex items-center gap-x-1.5'>
+											<span className='size-2 rounded-[2px] bg-(--chart-1)' /> Inbound Quantity
+										</span>
+										<span className='flex items-center gap-x-1.5'>
+											<span className='size-2 rounded-[2px] bg-(--chart-2)' /> Outbound Quantity
+										</span>
+									</div>
+								</div>
 							</CardContent>
 						</Card>
 					</section>

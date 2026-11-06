@@ -48,11 +48,14 @@ export function getTrendingPercentageChange(
 	if (absPercent >= 20) {
 		return [
 			isIncrease ? 'comparison.significant_trend_up_by' : 'comparison.significant_trend_down_by',
-			{ percent: absPercent, unit: '%' }
+			{ ns: 'ns_dashboard', percent: absPercent, unit: '%' }
 		]
 	}
 
-	return [isIncrease ? 'comparison.slight_trend_up_by' : 'comparison.slight_trend_down_by', { percent: absPercent }]
+	return [
+		isIncrease ? 'comparison.slight_trend_up_by' : 'comparison.slight_trend_down_by',
+		{ ns: 'ns_dashboard', percent: absPercent }
+	]
 }
 
 /**
@@ -103,9 +106,9 @@ export function getIconColor(percentage: number | null): string {
  * @param percentageChange - The percentage change value
  * @returns i18n key for analysis sentence
  */
-export function getAnalysisSentence(percentageChange: number | null): ResourceKeys['ns_dashboard'] {
+export function getAnalysisSentence(percentageChange: number | null): [key: string, params: Record<string, any>] {
 	const trendKey = getTrendDescription(percentageChange)
-	return `comparison.${trendKey}` as ResourceKeys['ns_dashboard']
+	return [`comparison.${trendKey}` as ResourceKeys['ns_dashboard'], { ns: 'ns_dashboard' }]
 }
 
 /**

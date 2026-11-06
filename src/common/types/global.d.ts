@@ -92,7 +92,7 @@ export declare global {
 
 	type AnyObject = Record<string | symbol, any>
 
-	type ExtractObjectValue<T extends AnyObject> = T[keyof T]
+	type ExtractObjectValue<T extends AnyObject, K extends keyof T> = T[K]
 
 	type Nullish<T> = T | null | undefined
 

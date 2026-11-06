@@ -26,6 +26,7 @@ i18next
 		}
 	})
 
+// eslint-disable-next-line no-barrel-files/no-barrel-files
 export { i18next as i18n }
 
 /**

@@ -292,19 +292,25 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	}, [sorting])
 
 	// Prefetch trang kế tiếp
+	const prefetch = useCallback(
+		({ page, limit }: { page: number; limit: number }) => {
+			queryClient.query(getTruckloadDeliveryQueryOptions({ ...searchParams, page, limit }))
+		},
+		[searchParams]
+	)
+
 	useEffect(() => {
-		if (isPlaceholderData || !data || !data.hasNextPage) return
+		if (isPlaceholderData || !data?.hasNextPage) return
 
-		const run = async () =>
-			await queryClient.query(getTruckloadDeliveryQueryOptions({ ...searchParams, page: data.page + 1 }))
+		const { page, limit } = data
 
-		const id = 'requestIdleCallback' in window ? requestIdleCallback(run, { timeout: 200 }) : setTimeout(run, 0)
+		// debounce: người dùng bấm lướt nhanh thì không prefetch
+		const id = setTimeout(() => {
+			prefetch({ page: page + 1, limit })
+		}, 300)
 
-		return () => {
-			if ('cancelIdleCallback' in window) cancelIdleCallback(id as number)
-			else clearTimeout(id as number)
-		}
-	}, [data?.page, isPlaceholderData, data?.hasNextPage])
+		return () => clearTimeout(id)
+	}, [data?.page, data?.limit, data?.hasNextPage, isPlaceholderData])
 
 	return (
 		<DataTable
@@ -320,6 +326,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			manualFiltering={false}
 			manualPagination={true}
 			manualSorting={true}
+			paginationProps={{ ...omit(data, 'data'), prefetch: ({ page, limit }) => prefetch({ page, limit }) }}
 			sortDescFirst={true}
 			sorting={sorting}
 			toolbarProps={toolbarProps}
@@ -328,12 +335,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				'aria-busy': isPlaceholderData,
 				style: { height: 'calc(var(--outlet-wrapper-height) - 10rem)' },
 				className: 'aria-busy:opacity-80 aria-busy:pointer-events-none ease-in-out transition-opacity duration-200'
-			}}
-			paginationProps={{
-				...omit(data, 'data'),
-				enableInputPageSize: false,
-				variant: 'numbered'
-				// prefetch: handlePrefetch
 			}}
 			onPaginationChange={changePagination as OnChangeFn<PaginationState>}
 			onSortingChange={setSorting}

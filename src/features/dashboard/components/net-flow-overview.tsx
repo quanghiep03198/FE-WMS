@@ -1,12 +1,17 @@
-import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
-
+import formatIntlNumber from '@common/utils/format-intl-number'
 import { Div } from '@components/customs/div'
 import { Typography } from '@components/customs/typography'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@components/ui/chart'
+import { ChartContainer, ChartPlot } from '@components/ui/chart'
 import { Icon } from '@components/ui/icon'
 import { Skeleton } from '@components/ui/skeleton'
 import { useDateLocale } from '@hooks/use-date-locale'
+import { defineChart, lineY } from '@tanstack/charts'
+import { d3Curve } from '@tanstack/charts/d3/shape'
+import { scaleBand } from '@tanstack/charts/scales/band'
+import { scaleLinear } from '@tanstack/charts/scales/linear'
+import { tooltip } from '@tanstack/charts/tooltip'
+import { curveMonotoneX } from 'd3-shape'
 import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'
 import { useMemo } from 'react'
@@ -14,15 +19,78 @@ import { useTranslation } from 'react-i18next'
 import { getTrendingIcon, getTrendingPercentageChange } from '../helpers'
 import { useGetLastSixMonthsNetFlow } from '../hooks/use-statistic-request'
 
-export function NetFlowOverview() {
-	const { t } = useTranslation('ns_dashboard')
+const NetFlowOverview: React.FC = () => {
+	const { t, i18n } = useTranslation()
 	const { data, isLoading } = useGetLastSixMonthsNetFlow()
 	const dateLocale = useDateLocale()
 
+	const chartData = useMemo(
+		() =>
+			(data ?? []).map((period) => ({
+				...period,
+				month: capitalize(format(new Date(new Date().getFullYear(), period.month - 1), 'MMM'))
+			})),
+		[data]
+	)
+	const chartConfig = useMemo(
+		() => ({ net_flow: { label: t('ns_dashboard:statistic.net_flow'), color: 'var(--chart-1)' } }),
+		[i18n.language]
+	)
+	const chartDefinition = useMemo(
+		() =>
+			defineChart({
+				motion: true,
+				marks: [
+					lineY(chartData, {
+						id: 'net-flow-line',
+						key: (row) => row.month,
+						x: 'month',
+						y: 'net_flow',
+						stroke: 'var(--color-net_flow)',
+						strokeWidth: 2,
+						curve: d3Curve(curveMonotoneX),
+						lineCap: 'round',
+						lineJoin: 'round',
+						points: true
+					})
+				],
+				scales: {
+					x: {
+						scale: () => scaleBand<string>().paddingInner(0.2).paddingOuter(0.1),
+						axis: {
+							line: false,
+							ticks: {
+								size: 0,
+								padding: 10,
+								format: (value: string) => value.slice(0, 3)
+							}
+						}
+					},
+					y: { scale: scaleLinear, nice: true, grid: true }
+				},
+				focus: 'nearest-y',
+				svgAnimation: { duration: 500, easing: 'ease-out' },
+				tooltip: {
+					use: tooltip,
+					content: (points) => ({
+						title: String(points[0]?.xValue ?? ''),
+						rows: points.map((point) => ({
+							label: chartConfig.net_flow.label,
+							value: formatIntlNumber(Number(point.yValue ?? 0)),
+							color: 'var(--color-net_flow)'
+						}))
+					})
+				}
+			}),
+		[chartData, chartConfig]
+	)
+
 	const percentageChange = useMemo(() => {
 		if (!Array.isArray(data) || data.length === 0) return 0
+
 		const percent =
-			((data.at(-1).net_flow - data.at(data.length - 2).net_flow) / Math.abs(data.at(data.length - 2).net_flow)) *
+			((data[data.length - 1].net_flow - data[data.length - 2].net_flow) /
+				Math.abs(data[data.length - 2].net_flow)) *
 			100
 		return Number.parseFloat(percent.toFixed(2))
 	}, [data])
@@ -46,33 +114,8 @@ export function NetFlowOverview() {
 				) : (
 					<ChartContainer
 						className={isEmpty ? 'h-full max-w-full' : 'w-full @xs:h-72 @xl:h-80 @3xl:max-h-full @3xl:min-h-80'}
-						config={{
-							net_flow: {
-								label: t('ns_dashboard:statistic.net_flow'),
-								color: 'var(--chart-1)'
-							}
-						}}>
-						<LineChart
-							accessibilityLayer
-							data={data.map((period) => ({
-								...period,
-								month: capitalize(format(new Date(new Date().getFullYear(), period.month - 1), 'MMM'))
-							}))}
-							margin={{
-								top: 24,
-								bottom: 0,
-								left: 12,
-								right: 12
-							}}>
-							<CartesianGrid vertical={false} />
-							<XAxis axisLine={false} dataKey='month' minTickGap={32} tickLine={false} tickMargin={8} />
-							<ChartTooltip
-								useTranslate3d
-								content={<ChartTooltipContent className='min-w-48' />}
-								cursor={false}
-							/>
-							<Line dataKey='net_flow' stroke='var(--color-net_flow)' strokeWidth={2} type='natural' />
-						</LineChart>
+						config={chartConfig}>
+						<ChartPlot reveal ariaLabel={t('ns_dashboard:statistic.net_flow')} definition={chartDefinition} />
 					</ChartContainer>
 				)}
 			</CardContent>
@@ -94,7 +137,7 @@ export function NetFlowOverview() {
 							<Typography
 								className='text-muted-foreground flex items-center gap-2 leading-none capitalize'
 								color='muted'>
-								{format(new Date(new Date().getFullYear(), data.at(0).month - 1, 1), 'PPP', {
+								{format(new Date(new Date().getFullYear(), data[0].month - 1, 1), 'PPP', {
 									locale: dateLocale
 								})}
 								{' - '}
@@ -109,3 +152,5 @@ export function NetFlowOverview() {
 		</Card>
 	)
 }
+
+export default NetFlowOverview
