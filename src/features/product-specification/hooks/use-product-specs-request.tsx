@@ -11,6 +11,7 @@ export const useGetProductSpecsQuery = () => {
 		queryKey: [ProductSpecificationQueryKey.PRODUCT_SPECIFICATION],
 		queryFn: async () =>
 			await axiosInstance.get<void, ResponseBody<IProductSpecification[]>>('/product-specification'),
-		select: (response) => response.metadata
+		select: (response) => response.metadata,
+		meta: { persist: true }
 	})
 }

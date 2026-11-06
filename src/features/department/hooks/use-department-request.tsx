@@ -22,6 +22,7 @@ export function useGetDepartmentQuery(
 	return useQuery({
 		queryKey: [DepartmentQueryKeys.WAREHOUSE_DEPT],
 		queryFn: DepartmentService.getWarehouseDepartments,
+		meta: { persist: true },
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : []),
 		...options
 	})
@@ -31,7 +32,8 @@ export const useGetAssemblyLineQuery = () => {
 	return useQuery({
 		queryKey: [DepartmentQueryKeys.ASSEMBLY_DEPARTMENT],
 		queryFn: DepartmentService.getAssemblyLines,
-		select: (response) => response.metadata
+		select: (response) => response.metadata,
+		meta: { persist: true }
 	})
 }
 
@@ -39,6 +41,7 @@ export const useGetSewingProductLineQuery = () => {
 	return useQuery({
 		queryKey: [DepartmentQueryKeys.SEWING_DEPARTMENT],
 		queryFn: DepartmentService.getSewingDepartments,
-		select: (response) => response.metadata
+		select: (response) => response.metadata,
+		meta: { persist: true }
 	})
 }

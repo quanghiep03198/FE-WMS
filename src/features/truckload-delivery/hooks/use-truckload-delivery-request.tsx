@@ -27,6 +27,7 @@ export const getTruckloadDeliveryQueryOptions = (searchParams: PageQueryParams) 
 		staleTime: 30_000,
 		enabled: typeof searchParams.page === 'number' && typeof searchParams.limit === 'number',
 		placeholderData: keepPreviousData,
+		meta: { persist: true },
 		select: (response) => {
 			const data: ITruckloadDelivery[] = Array.isArray(response.metadata.data) ? response.metadata.data : []
 			return {

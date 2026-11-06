@@ -44,13 +44,13 @@ const DatalistPanel: React.FC = () => {
 				getDefectiveGoodsQueryOptions({ ...searchParams, ...searchTerms, page: data.page + 1 })
 			)
 		}
-		if ('requestIdleCallback' in window && 'cancelIdleCallback' in window) {
-			const id = requestIdleCallback(run, { timeout: 120 })
-			return () => cancelIdleCallback(id)
-		}
 
-		const id = setTimeout(run, 0)
-		return () => clearTimeout(id)
+		const id = 'requestIdleCallback' in window ? requestIdleCallback(run, { timeout: 120 }) : setTimeout(run, 0)
+
+		return () => {
+			if ('cancelIdleCallback' in window) cancelIdleCallback(id as number)
+			else clearTimeout(id as number)
+		}
 	}, [data?.page, isPlaceholderData, data?.hasNextPage])
 
 	return (

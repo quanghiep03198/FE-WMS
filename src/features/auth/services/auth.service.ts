@@ -1,6 +1,6 @@
 import axiosInstance from '@configs/axios.config'
 import type { LoginFormValues } from '@features/auth/schemas/login.schema'
-import { queryClient } from '@integrations/tanstack-query'
+import { asyncStoragePersister, queryClient } from '@integrations/tanstack-query'
 
 import type { IAuthState } from '@stores/auth.store'
 import { useAuthStore } from '@stores/auth.store'
@@ -26,6 +26,7 @@ export class AuthService {
 	}
 
 	static logout() {
+		asyncStoragePersister.removeClient() // * remove persisted client
 		useAuthStore.getState().resetCredentials() // * reset auth state
 		queryClient.removeQueries({ type: 'all', exact: false }) // * remove all triggered queries
 		queryClient.cancelQueries({ fetchStatus: 'fetching' }) // * cancel all running queries

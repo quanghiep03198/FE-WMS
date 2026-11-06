@@ -10,7 +10,8 @@ export const useGetRFIDDeviceQuery = () => {
 	return useQuery({
 		queryKey: [RFIDDeviceQueryKeys.WAREHOUSE_RFID_DEVICES],
 		queryFn: () => RFIDDeviceService.getWarehouseRFIDDevices(),
-		select: (response) => response.metadata
+		select: (response) => response.metadata,
+		meta: { persist: true }
 	})
 }
 

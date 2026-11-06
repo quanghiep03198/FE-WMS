@@ -8,6 +8,7 @@ enum AgentIPv4QueryKey {
 export const useGetAgentIPv4 = () => {
 	return useQuery({
 		queryKey: [AgentIPv4QueryKey.AgentIPv4],
-		queryFn: async () => await axiosInstance.get<void, Record<'protocol' | 'ip', string>>('/agent-ipv4')
+		queryFn: async () => await axiosInstance.get<void, Record<'protocol' | 'ip', string>>('/agent-ipv4'),
+		meta: { persist: true }
 	})
 }

@@ -302,14 +302,14 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	useEffect(() => {
 		if (isPlaceholderData || !data?.hasNextPage) return
 
-		const { page, limit } = data
+		const run = () => prefetch({ page: data.page + 1, limit: data.limit })
 
-		// debounce: người dùng bấm lướt nhanh thì không prefetch
-		const id = setTimeout(() => {
-			prefetch({ page: page + 1, limit })
-		}, 300)
+		const id = 'requestIdleCallback' in window ? requestIdleCallback(run, { timeout: 120 }) : setTimeout(run, 0)
 
-		return () => clearTimeout(id)
+		return () => {
+			if ('cancelIdleCallback' in window) cancelIdleCallback(id as number)
+			else clearTimeout(id as number)
+		}
 	}, [data?.page, data?.limit, data?.hasNextPage, isPlaceholderData])
 
 	return (

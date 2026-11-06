@@ -14,11 +14,13 @@ export const getUserProfileQuery = (enabled?: boolean, config?: AxiosRequestConf
 	return queryOptions({
 		queryKey: [AuthQueryKeys.PROFILE, config],
 		queryFn: async () => await UserService.profile(config),
-		refetchOnMount: 'always',
-		refetchOnReconnect: 'always',
 		networkMode: 'always',
 		enabled,
-		select: (response) => response.metadata
+		gcTime: 1000 * 60 * 24,
+		select: (response) => response.metadata,
+		meta: { persist: true }
+		// refetchOnMount: 'always',
+		// refetchOnReconnect: 'always',
 		// retry: ((failureCount, error) => {
 		// 	if (unexpectedErrorCodes.includes(error.code!)) return enabled
 		// 	return failureCount <= 2 && enabled
