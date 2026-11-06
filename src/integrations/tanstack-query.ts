@@ -1,5 +1,5 @@
 import { i18n } from '@i18n/index'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+// import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Sentry from '@sentry/react'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
@@ -7,9 +7,8 @@ import type { QueryKey } from '@tanstack/react-query'
 import { matchQuery, MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
 import type { AxiosResponse } from 'axios'
 import { AxiosError, HttpStatusCode, isAxiosError } from 'axios'
-import { compress, decompress } from 'lz-string'
+import { del, get, set } from 'idb-keyval'
 import { toast } from 'sonner'
-
 declare module '@tanstack/react-query' {
 	interface Register {
 		defaultError: AxiosError
@@ -20,14 +19,18 @@ declare module '@tanstack/react-query' {
 }
 
 export const asyncStoragePersister = createAsyncStoragePersister({
-	storage: AsyncStorage,
-	serialize: (data) => compress(JSON.stringify(data)),
-	deserialize: (data) => JSON.parse(decompress(data))
+	storage: {
+		getItem: (k) => get(k),
+		setItem: (k, v) => set(k, v),
+		removeItem: (k) => del(k)
+	},
+	throttleTime: 10_000
 })
 
 export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
+			gcTime: 1000 * 60 * 5,
 			staleTime: 1000 * 60 * 5,
 			networkMode: 'always',
 			refetchOnWindowFocus: false,
