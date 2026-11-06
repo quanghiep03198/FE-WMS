@@ -1,12 +1,9 @@
-import { Div } from '@components/customs/div'
-import { Typography } from '@components/customs/typography'
-import { Icon } from '@components/ui/icon'
+import Loading from '@components/shared/loading'
 import { useGetUserProfileQuery } from '@features/auth/hooks/use-profile-request'
 import { AuthService } from '@features/auth/services/auth.service'
 import useAuth from '@hooks/use-auth'
 import { useRouter } from '@tanstack/react-router'
-import { Fragment, useEffect } from 'react'
-import GridBackground from '../shared/grid-background'
+import { useEffect } from 'react'
 
 const AuthGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { isAuthenticated, setUserProfile } = useAuth()
@@ -22,20 +19,7 @@ const AuthGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 		if (data) setUserProfile(data)
 	}, [data, isError, isAuthenticated])
 
-	if (isLoading)
-		return (
-			<Fragment>
-				<title>Authenticating ...</title>
-
-				<Div className='relative inset-0 z-50 flex h-screen w-full items-center justify-center gap-x-2 antialiased'>
-					<Icon className='animate-[spin_1.5s_linear_infinite]' name='LoaderCircle' size={18} />
-					<Typography className='font-medium tracking-wide' variant='small'>
-						Authenticating
-					</Typography>
-					<GridBackground />
-				</Div>
-			</Fragment>
-		)
+	if (isLoading) return <Loading withContent={false} />
 
 	return children
 }
