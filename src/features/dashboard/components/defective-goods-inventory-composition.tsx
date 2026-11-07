@@ -1,10 +1,10 @@
 import { Div } from '@components/customs/div'
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
 import { ChartContainer, chartMarkRenderer, ChartPlot } from '@components/ui/chart'
-import { useAnimatedChartValues } from '@components/ui/use-animated-chart-values'
 import { Icon } from '@components/ui/icon'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 import { Skeleton } from '@components/ui/skeleton'
+import { useAnimatedChartValues } from '@hooks/use-animated-chart-values'
 import type { SelectProps } from '@radix-ui/react-select'
 import { defineChart } from '@tanstack/charts'
 import { focusGroupAngle, pie, polar, radialArc } from '@tanstack/charts/polar'
@@ -38,10 +38,11 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 	}, [data])
 	const { values: animatedData, visibility } = useAnimatedChartValues(data ? chartData : undefined, valueAccessors)
 	const slices = useMemo(
-		() => clipPieSweep(
-			pie(animatedData, { value: 'qty', startAngle: Math.PI / 2, endAngle: (-Math.PI * 3) / 2 }),
-			visibility
-		),
+		() =>
+			clipPieSweep(
+				pie(animatedData, { value: 'qty', startAngle: Math.PI / 2, endAngle: (-Math.PI * 3) / 2 }),
+				visibility
+			),
 		[animatedData, visibility]
 	)
 
@@ -118,7 +119,9 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 							rows: [
 								{
 									label: String(label),
-									value: (chartData.find((item) => item.defective_category === category)?.qty ?? 0).toLocaleString(),
+									value: (
+										chartData.find((item) => item.defective_category === category)?.qty ?? 0
+									).toLocaleString(),
 									color: `var(--color-${category})`
 								}
 							]

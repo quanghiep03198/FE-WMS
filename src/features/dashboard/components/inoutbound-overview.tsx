@@ -5,7 +5,7 @@ import { ChartContainer, ChartLegendContent, chartMarkRenderer, ChartPlot } from
 import { Icon } from '@components/ui/icon'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 import { Skeleton } from '@components/ui/skeleton'
-import { useAnimatedChartValues } from '@components/ui/use-animated-chart-values'
+import { useAnimatedChartValues } from '@hooks/use-animated-chart-values'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { barY, defineChart, group } from '@tanstack/charts'
 import { scaleBand } from '@tanstack/charts/scales/band'
