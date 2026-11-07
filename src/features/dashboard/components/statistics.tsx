@@ -5,7 +5,6 @@ import { Badge } from '@components/ui/badge'
 import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
 import { Icon } from '@components/ui/icon'
 import { Skeleton } from '@components/ui/skeleton'
-
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {

@@ -1,10 +1,11 @@
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Div } from '@components/customs/div'
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card'
-import { ChartContainer, ChartLegendContent, ChartPlot } from '@components/ui/chart'
+import { ChartContainer, ChartLegendContent, chartMarkRenderer, ChartPlot } from '@components/ui/chart'
 import { Icon } from '@components/ui/icon'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 import { Skeleton } from '@components/ui/skeleton'
+import { useAnimatedChartValues } from '@components/ui/use-animated-chart-values'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { barY, defineChart, group } from '@tanstack/charts'
 import { scaleBand } from '@tanstack/charts/scales/band'
@@ -15,6 +16,19 @@ import { capitalize } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetAnnualInoutboundOverviewQuery } from '../hooks/use-statistic-request'
+
+type InoutboundChartDatum = {
+	month: string
+	monthNumber: number
+	series: 'inbound_qty' | 'outbound_qty'
+	value: number
+}
+
+const valueAccessors = {
+	key: (row: InoutboundChartDatum) => `${row.monthNumber}:${row.series}`,
+	value: (row: InoutboundChartDatum) => row.value,
+	withValue: (row: InoutboundChartDatum, value: number): InoutboundChartDatum => ({ ...row, value })
+}
 
 const InoutboundOverview: React.FC = () => {
 	const { t, i18n } = useTranslation()
@@ -43,19 +57,29 @@ const InoutboundOverview: React.FC = () => {
 				)
 
 				return [
-					{ month, series: 'inbound_qty' as const, value: item.inbound_qty },
-					{ month, series: 'outbound_qty' as const, value: item.outbound_qty }
+					{ month, monthNumber: item.month, series: 'inbound_qty' as const, value: item.inbound_qty },
+					{ month, monthNumber: item.month, series: 'outbound_qty' as const, value: item.outbound_qty }
 				]
 			}),
 		[data, dateLocale]
+	)
+	const {
+		values: animatedData,
+		visibility,
+		extent
+	} = useAnimatedChartValues(data ? chartData : undefined, valueAccessors)
+	const actualValues = useMemo(
+		() => new Map(chartData.map((row) => [valueAccessors.key(row), row.value])),
+		[chartData]
 	)
 	const chartDefinition = useMemo(
 		() =>
 			defineChart({
 				marks: [
-					barY(chartData, {
+					barY(animatedData, {
 						id: 'inoutbound-bars',
-						key: (row) => `${row.month}:${row.series}`,
+						renderer: chartMarkRenderer,
+						key: valueAccessors.key,
 						x: 'month',
 						y: 'value',
 						z: 'series',
@@ -69,34 +93,53 @@ const InoutboundOverview: React.FC = () => {
 					})
 				],
 				scales: {
-					x: { scale: () => scaleBand<string>().padding(0.08) },
+					x: {
+						scale: () => scaleBand<string>().padding(0.08),
+						axis: { line: false }
+					},
 					y: {
-						scale: scaleLinear,
+						scale:
+							visibility < 1 && chartData.length
+								? scaleLinear().domain(
+										extent ?? [
+											Math.min(
+												0,
+												...chartData.map((item) => item.value),
+												...animatedData.map((item) => item.value)
+											),
+											Math.max(
+												1,
+												...chartData.map((item) => item.value),
+												...animatedData.map((item) => item.value)
+											)
+										]
+									)
+								: scaleLinear,
 						nice: true,
 						grid: true,
-						axis: { ticks: { format: formatIntlNumber }, motion: () => false }
+						line: false,
+						axis: { ticks: { format: formatIntlNumber } }
 					}
 				},
+				svgAnimation: false,
 				focus: 'group-x',
-				svgAnimation: { duration: 500, easing: 'ease-out' },
 				tooltip: {
 					use: tooltip,
-					className: '',
 					content: (points) => ({
 						title: String(points[0]?.xValue ?? ''),
 						rows: points.map((point) => ({
 							label: chartConfig[point.datum.series].label,
-							value: formatIntlNumber(point.datum.value),
+							value: formatIntlNumber(actualValues.get(valueAccessors.key(point.datum)) ?? 0),
 							color: `var(--color-${point.datum.series})`,
 							active: false
 						}))
 					})
 				}
 			}),
-		[chartData, chartConfig]
+		[animatedData, actualValues, chartConfig, chartData, visibility, extent]
 	)
 
-	const isEmpty = !Array.isArray(data) || data.every((item) => item.inbound_qty === 0 && item.outbound_qty === 0)
+	const isEmpty = chartData.every((item) => item.value === 0) && animatedData.every((item) => item.value === 0)
 
 	return (
 		<Div className='flex h-full flex-col items-stretch justify-end'>
@@ -142,6 +185,7 @@ const InoutboundOverview: React.FC = () => {
 							className='w-full @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-104'
 							config={chartConfig}>
 							<ChartPlot
+								valueAnimation
 								ariaLabel={t('ns_dashboard:inoutbound_overview')}
 								className='font-sans'
 								definition={chartDefinition}

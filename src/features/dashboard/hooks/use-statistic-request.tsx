@@ -21,6 +21,8 @@ export const useGetStatisticsQuery = () => {
 		queryFn: () => StatisticsService.getMonthlyInventoryComparison(),
 		refetchInterval: POLLING_INTERVAL,
 		enabled: isAuthenticated,
+		meta: { persist: true },
+		gcTime: POLLING_INTERVAL,
 		select: (response) => response.metadata
 	})
 }
@@ -33,6 +35,8 @@ export const useGetAnnualInoutboundOverviewQuery = (year: number) => {
 		queryFn: () => StatisticsService.getAnnualInoutboundOverview({ 'year:eq': year }),
 		refetchInterval: POLLING_INTERVAL,
 		enabled: isAuthenticated,
+		meta: { persist: true },
+		gcTime: POLLING_INTERVAL,
 		select: (response): IAnnuallyInOutboundStatistics[] => response.metadata ?? []
 	})
 }
@@ -45,6 +49,8 @@ export const useGetDailyAssemblyProductivityQuery = () => {
 		queryFn: () => StatisticsService.getAssemblyProductivity(),
 		refetchInterval: POLLING_INTERVAL,
 		enabled: isAuthenticated,
+		meta: { persist: true },
+		gcTime: POLLING_INTERVAL,
 		select: (response) => response.metadata
 	})
 }
@@ -57,6 +63,8 @@ export const useGetLastSixMonthsNetFlow = () => {
 		queryFn: () => StatisticsService.getLastSixMonthsNetFlow(),
 		refetchInterval: POLLING_INTERVAL,
 		enabled: isAuthenticated,
+		meta: { persist: true },
+		gcTime: POLLING_INTERVAL,
 		select: (response) => response.metadata
 	})
 }
@@ -69,6 +77,8 @@ export const useGetDefectiveGoodsInventoryCompositionQuery = () => {
 		queryFn: () => StatisticsService.getDefectiveGoodsInventoryComposition(),
 		refetchInterval: POLLING_INTERVAL,
 		enabled: isAuthenticated,
+		meta: { persist: true },
+		gcTime: POLLING_INTERVAL,
 		select: (response) => response.metadata
 	})
 }

@@ -4,7 +4,7 @@ import { Div } from '@components/customs/div'
 import { Typography } from '@components/customs/typography'
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card'
 import type { ChartConfig } from '@components/ui/chart'
-import { ChartContainer, ChartPlot } from '@components/ui/chart'
+import { ChartContainer, chartMarkRenderer, ChartPlot } from '@components/ui/chart'
 import { Icon } from '@components/ui/icon'
 import { Label } from '@components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group'
@@ -87,17 +87,17 @@ const AssemblyProductivityOverview: React.FC = () => {
 	const chartDefinition = useMemo(
 		() =>
 			defineChart({
-				motion: true,
 				marks: [
 					areaY(seriesData, {
 						id: 'assembly-volumn-area',
+						renderer: chartMarkRenderer,
 						key: (row) => row.work_date,
 						x: 'work_date',
 						y: 'volumn',
 						fill: `var(--color-${activeChart})`,
 						fillOpacity: 0.2,
 						stroke: `var(--color-${activeChart})`,
-						strokeWidth: 2,
+						strokeWidth: 1,
 						curve: d3Curve(curveMonotoneX)
 					})
 				],
@@ -105,6 +105,7 @@ const AssemblyProductivityOverview: React.FC = () => {
 					x: {
 						scale: () => scalePoint<string>().padding(0.2),
 						axis: {
+							line: false,
 							ticks: {
 								format: (value) =>
 									capitalize(
@@ -118,7 +119,7 @@ const AssemblyProductivityOverview: React.FC = () => {
 					},
 					y: { scale: scaleLinear, nice: true, grid: true }
 				},
-				svgAnimation: { duration: 500, easing: 'ease-out' },
+				svgAnimation: { duration: 500, easing: 'ease-out', respectReducedMotion: true, resize: false },
 				tooltip: {
 					use: tooltip,
 					content: (points) => ({
@@ -141,7 +142,7 @@ const AssemblyProductivityOverview: React.FC = () => {
 
 	return (
 		<Card className='@container/card'>
-			<CardHeader className='flex flex-col items-stretch divide-y border-b p-0! sm:flex-row'>
+			<CardHeader className='flex flex-col items-stretch divide-y border-b p-0! sm:flex-row gap-0'>
 				<Div className='flex items-center justify-between px-6 pb-3 sm:pb-0'>
 					<Div className='flex flex-1 flex-col justify-center gap-1'>
 						<CardTitle>{t('ns_dashboard:assembly_productivity_overview')}</CardTitle>

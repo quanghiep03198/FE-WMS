@@ -2,7 +2,7 @@ import formatIntlNumber from '@common/utils/format-intl-number'
 import { Div } from '@components/customs/div'
 import { Typography } from '@components/customs/typography'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
-import { ChartContainer, ChartPlot } from '@components/ui/chart'
+import { ChartContainer, chartMarkRenderer, ChartPlot } from '@components/ui/chart'
 import { Icon } from '@components/ui/icon'
 import { Skeleton } from '@components/ui/skeleton'
 import { useDateLocale } from '@hooks/use-date-locale'
@@ -28,7 +28,9 @@ const NetFlowOverview: React.FC = () => {
 		() =>
 			(data ?? []).map((period) => ({
 				...period,
-				month: capitalize(format(new Date(new Date().getFullYear(), period.month - 1), 'MMM'))
+				month: capitalize(
+					format(new Date(new Date().getFullYear(), period.month - 1), 'MMM', { locale: dateLocale })
+				)
 			})),
 		[data]
 	)
@@ -39,10 +41,10 @@ const NetFlowOverview: React.FC = () => {
 	const chartDefinition = useMemo(
 		() =>
 			defineChart({
-				motion: true,
 				marks: [
 					lineY(chartData, {
 						id: 'net-flow-line',
+						renderer: chartMarkRenderer,
 						key: (row) => row.month,
 						x: 'month',
 						y: 'net_flow',
@@ -58,18 +60,13 @@ const NetFlowOverview: React.FC = () => {
 					x: {
 						scale: () => scaleBand<string>().paddingInner(0.2).paddingOuter(0.1),
 						axis: {
-							line: false,
-							ticks: {
-								size: 0,
-								padding: 10,
-								format: (value: string) => value.slice(0, 3)
-							}
+							line: false
 						}
 					},
 					y: { scale: scaleLinear, nice: true, grid: true }
 				},
 				focus: 'nearest-y',
-				svgAnimation: { duration: 500, easing: 'ease-out' },
+				svgAnimation: { duration: 500, easing: 'ease-out', respectReducedMotion: true, resize: false },
 				tooltip: {
 					use: tooltip,
 					content: (points) => ({
