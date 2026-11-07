@@ -24,8 +24,6 @@ import { CombinationStrategy, DefectiveGoodsOutboundPurpose } from '@features/de
 import { usePageContext } from '@features/defective-goods/contexts/page-context'
 import { useInoutboundMethod } from '@features/defective-goods/hooks/use-select-inoutbound-method'
 import PurchaseOrderFieldControl from '@features/rfid-agent/components/playground/purchase-order-field-control'
-import { Check, LoaderCircle } from 'lucide'
-import { MorphIcon } from 'morphicons/react'
 import { useUpdateDefectiveGoodsStockMutation } from '../../../hooks/use-defective-goods-request'
 import { useFilterQuery } from '../../../hooks/use-filter-query'
 import {
@@ -89,12 +87,14 @@ const InoutboundForm: React.FC = () => {
 			combination_strategy: combinationStrategy,
 			storage_location: data.storage_location,
 			outbound_purpose: data.outbound_purpose,
-			epcs: combinationStrategy === CombinationStrategy.MANUALLY ? [] : data.epcs
+			epcs: combinationStrategy === CombinationStrategy.MANUALLY ? [] : data.epcs,
+			...(searchParams.action === StockFlow.OUTBOUND && { po: data.po })
 		})
 		event$.emit({ action: CommonActions.SAVE, payload: [] })
 		quantityFieldRef.current?.reset()
 		form.reset({
 			epcs: [],
+			combination_strategy: combinationStrategy,
 			...(searchParams.action === StockFlow.INBOUND && { storage_location: '' }),
 			...(searchParams.action === StockFlow.OUTBOUND && { outbound_purpose: '' })
 		})
@@ -105,6 +105,8 @@ const InoutboundForm: React.FC = () => {
 		(combinationStrategy !== CombinationStrategy.MANUALLY &&
 			(!Array.isArray(scannedEpcs) || scannedEpcs.length === 0)) ||
 		isPending
+
+	console.log(form.getErrors())
 
 	return (
 		<Div className='flex w-full flex-row items-center justify-between gap-x-3 @4xl:gap-x-6 @6xl:flex-1 @6xl:justify-end'>
@@ -216,9 +218,12 @@ const InoutboundForm: React.FC = () => {
 							</Button>
 						}>
 						<Button disabled={disabled} type='submit'>
-							<span aria-busy={isPending} className='aria-busy:animate-spin'>
-								<MorphIcon icon={isPending ? LoaderCircle : Check} size={16} speed={2} spring='smooth' />
-							</span>
+							<Icon
+								aria-busy={isPending}
+								className='aria-busy:animate-spin'
+								name={isPending ? 'LoaderCircle' : isError ? 'RotateCw' : 'Check'}
+							/>
+
 							{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 						</Button>
 					</RoleBaseAccessControl>

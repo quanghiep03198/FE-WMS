@@ -9,7 +9,11 @@ import SizeTable from '@components/shared/size-table'
 import { Button } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
 import ReportTableSummary from '@features/defective-goods/components/report-table-footer'
-import { DefectiveGoodsOutboundPurpose, TRANSLATED_DEFECTIVE_CATEGORY } from '@features/defective-goods/constants/enums'
+import {
+	DefectiveGoodsOutboundPurpose,
+	DefectiveGoodsSource,
+	TRANSLATED_DEFECTIVE_CATEGORY
+} from '@features/defective-goods/constants/enums'
 import { useDefectiveCategoryList } from '@features/defective-goods/hooks/use-defective-category-list'
 import { useGetDefectiveGoodsOutboundReportQuery } from '@features/defective-goods/hooks/use-defective-goods-request'
 import { useGetCategoriesQty } from '@features/defective-goods/hooks/use-get-category-qty'
@@ -122,14 +126,18 @@ const InboundReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				filterFn: 'includesString',
-				cell: TableCellText
+				cell: ({ getValue, ...props }) => {
+					return <TableCellText {...props} getValue={() => getValue()?.name?.[i18n?.language]} />
+				}
 			}),
 			columnHelper.accessor('assembly_line', {
 				header: t('ns_erp:fields.assembly_line'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				filterFn: 'includesString',
-				cell: TableCellText
+				cell: ({ getValue, ...props }) => {
+					return <TableCellText {...props} getValue={() => getValue()?.name?.[i18n?.language]} />
+				}
 			}),
 			columnHelper.accessor('defective_category', {
 				header: t('ns_erp:fields.category'),
@@ -155,7 +163,18 @@ const InboundReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				enableResizing: true,
 				filterFn: 'fuzzy',
-				cell: TableCellText
+				meta: {
+					filterVariant: 'select',
+					facetedUniqueValues: Object.values(DefectiveGoodsSource).map((source) => ({
+						label: t(`ns_inoutbound:shoes_source.${source}`, { defaultValue: source }),
+						value: source
+					}))
+				},
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (!value) return t('ns_common:titles.unknown')
+					return t(`ns_inoutbound:shoes_source.${value}`, { defaultValue: value })
+				}
 			}),
 			columnHelper.accessor('daily_outbound_qty', {
 				header: t('ns_erp:fields.daily_outbound_qty'),

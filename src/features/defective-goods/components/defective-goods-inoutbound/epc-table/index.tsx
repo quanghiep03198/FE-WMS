@@ -208,7 +208,7 @@ const EpcTable: React.FC = () => {
 			}),
 			...(searchParams.action === StockFlow.OUTBOUND
 				? [
-						columnHelper.accessor('inbound_date', {
+						columnHelper.accessor('inbound_at', {
 							header: t('ns_erp:fields.inbound_date'),
 							enableColumnFilter: false,
 							filterFn: 'fuzzy',

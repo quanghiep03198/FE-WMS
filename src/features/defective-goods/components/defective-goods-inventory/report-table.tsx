@@ -185,10 +185,10 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 		({ row }) => {
 			return (
 				<SizeTable
-					data={row.original.size_data}
+					data={row.original.size_ledger}
 					total={
-						Array.isArray(row.original.size_data)
-							? row.original.size_data.reduce((acc, curr) => acc + curr.qty, 0)
+						Array.isArray(row.original.size_ledger)
+							? row.original.size_ledger.reduce((acc, curr) => acc + curr.qty, 0)
 							: 0
 					}
 				/>
