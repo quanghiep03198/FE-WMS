@@ -63,8 +63,6 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 			</Div>
 		)
 
-	console.log(filterVariant)
-
 	switch (filterVariant) {
 		case 'range': {
 			return <NumberRangeFilter column={column} />
