@@ -1,7 +1,9 @@
 import type { ChartValue } from '@tanstack/charts'
+import { canvasChartRenderer } from '@tanstack/charts/canvas'
 import { motion } from '@tanstack/charts/motion'
 import type { ChartProps } from '@tanstack/charts/react/core'
 import { Chart as TanStackChart } from '@tanstack/charts/react/core'
+import { svgChartRenderer } from '@tanstack/charts/svg/renderer'
 import * as React from 'react'
 
 import { cn } from '@common/utils/cn'
@@ -12,6 +14,29 @@ const chartRenderer = motion({
 	resize: true,
 	transition: { type: 'spring', stiffness: 170, damping: 18, mass: 1 }
 })
+
+// Reuse tooltip motion without animating SVG geometry that is already interpolated by the caller.
+const valueChartRenderer: typeof svgChartRenderer = {
+	...svgChartRenderer,
+	id: 'svg-value-motion-tooltip',
+	capabilities: chartRenderer.capabilities,
+	mount(container, requestRender) {
+		const surface = svgChartRenderer.mount(container, requestRender)
+		return {
+			renderer: valueChartRenderer,
+			get element() {
+				return surface.element
+			},
+			supportsStateFocus: surface.supportsStateFocus,
+			render: surface.render,
+			clientToScene: surface.clientToScene,
+			paintFocus: surface.paintFocus,
+			destroy: surface.destroy
+		}
+	}
+}
+
+const chartMarkRenderer = canvasChartRenderer
 
 const THEMES = { light: '', dark: '.dark' } as const
 
@@ -77,7 +102,7 @@ const ChartContainer: React.FC<
 				data-chart={chartId}
 				ref={containerRef}
 				className={cn(
-					'text-foreground relative aspect-video w-full font-[inherit] text-xs [&_.ts-chart-surface_svg]:outline-none [&_svg]:font-[inherit] [&_svg_text]:fill-muted-foreground [&_svg_text]:text-[10px] [&_svg_text]:font-normal',
+					'chart-container text-foreground relative aspect-video w-full font-[inherit] text-xs [&_.ts-chart-surface_svg]:outline-none [&_svg]:font-[inherit] [&_svg_text]:fill-muted-foreground [&_svg_text]:text-[10px] [&_svg_text]:font-normal',
 					'[--ts-chart-tooltip-background:var(--popover)] [--ts-chart-tooltip-color:var(--popover-foreground)] [--ts-chart-tooltip-border:1px_solid_var(--border)] [--ts-chart-tooltip-font:inherit] [--ts-chart-tooltip-padding:0.6rem_0.75rem] [--ts-chart-tooltip-active-row-font-weight:400] [--ts-chart-tooltip-active-row-background:transparent] [--ts-chart-tooltip-active-row-shadow:none] [&_.ts-chart-tooltip__title]:mb-2! [&_.ts-chart-tooltip__rows]:flex [&_.ts-chart-tooltip__rows]:flex-col [&_.ts-chart-tooltip__rows]:gap-2 [&_.ts-chart-tooltip__row]:gap-x-3! [&_.ts-chart-tooltip__row]:font-normal!',
 					className
 				)}
@@ -92,16 +117,25 @@ ChartContainer.displayName = 'Chart'
 
 function ChartPlot<TDatum, TXValue extends ChartValue = ChartValue, TYValue extends ChartValue = ChartValue>({
 	reveal = false,
+	valueAnimation = false,
 	...props
 }: Omit<ChartProps<TDatum, TXValue, TYValue>, 'renderer'> & {
 	reserveHeight?: number
 	/** Reveals the plot from left to right instead of the default motion; replays when the definition changes */
 	reveal?: boolean
+	/** Use when mark values are interpolated by the caller. */
+	valueAnimation?: boolean
 }) {
 	const revealCount = React.useRef(0)
 	const revealKey = React.useMemo(() => ++revealCount.current, [props.definition])
 
-	const plot = <TanStackChart {...props} className={cn('h-full w-full', props.className)} renderer={chartRenderer} />
+	const plot = (
+		<TanStackChart
+			{...props}
+			className={cn('h-full w-full', valueAnimation && 'chart-value-animation', props.className)}
+			renderer={valueAnimation ? valueChartRenderer : chartRenderer}
+		/>
+	)
 
 	if (!reveal) return plot
 
@@ -176,4 +210,4 @@ const ChartLegendContent: React.FC<React.ComponentProps<'div'> & { hideIcon?: bo
 }
 ChartLegendContent.displayName = 'ChartLegend'
 
-export { ChartContainer, ChartLegendContent, ChartPlot, ChartStyle }
+export { ChartContainer, ChartLegendContent, chartMarkRenderer, ChartPlot, ChartStyle }

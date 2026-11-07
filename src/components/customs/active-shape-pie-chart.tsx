@@ -1,4 +1,4 @@
-import { ChartContainer, ChartPlot } from '@components/ui/chart'
+import { ChartContainer, chartMarkRenderer, ChartPlot } from '@components/ui/chart'
 import { defineChart } from '@tanstack/charts'
 import { pie, polar, radialArc } from '@tanstack/charts/polar'
 import { tooltip } from '@tanstack/charts/tooltip'
@@ -35,6 +35,7 @@ export function ActiveShapePieChart<T extends ActivePieDatum>({
 						inset: 16,
 						marks: [
 							radialArc(slices, {
+								renderer: chartMarkRenderer,
 								innerRadius: 64,
 								fill: (item) => item.fill,
 								stroke: 'var(--border)'
@@ -42,6 +43,7 @@ export function ActiveShapePieChart<T extends ActivePieDatum>({
 							...(activeSlice
 								? [
 										radialArc([activeSlice], {
+											renderer: chartMarkRenderer,
 											innerRadius: 64,
 											outerRadius: ({ radius }) => radius + 6,
 											fill: (item) => item.fill,
