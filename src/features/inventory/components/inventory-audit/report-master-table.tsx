@@ -169,7 +169,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 						)
 					return (
 						<EllipsisList
-							data={value.filter((item) => !!item).sort((a, b) => a.name.localeCompare(b.name))}
+							data={value.filter((item) => !!item).sort((a, b) => a.name?.localeCompare?.(b.name))}
 							threshhold={2}
 							template={({ data }) => (
 								<Badge className='whitespace-nowrap' variant='secondary'>
