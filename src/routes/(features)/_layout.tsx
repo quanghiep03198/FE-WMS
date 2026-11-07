@@ -78,5 +78,5 @@ const LayoutWrapper: React.FC<React.ComponentProps<'div'>> = tw.div`
 `
 
 const OutletWrapper: React.FC<React.ComponentProps<'main'>> = tw.main`
-	[view-transition-name:main-content] relative flex-1 basis-full py-(--outlet-padding) xxl:px-6 xxl:pt-0 xl:px-4 lg:px-4 md:px-2 sm:px-2
+	[view-transition-name:main-content] contain-content relative flex-1 basis-full py-(--outlet-padding) xxl:px-6 xxl:pt-0 xl:px-4 lg:px-4 md:px-2 sm:px-2
 `
