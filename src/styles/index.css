@@ -305,6 +305,14 @@
 	transition-behavior: allow-discrete;
 }
 
+@utility content-visibility-auto {
+	content-visibility: auto;
+}
+
+@utility content-visibility-hidden {
+	content-visibility: hidden;
+}
+
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
@@ -319,6 +327,21 @@
 	}
 	to {
 		clip-path: inset(0 -8px 0 0);
+	}
+}
+
+@keyframes chart-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.chart-container .ts-chart-host:not(.chart-value-animation) .ts-chart-canvas__scene {
+		animation: chart-fade-in 300ms ease-out both;
 	}
 }
 
