@@ -32,6 +32,10 @@ export const ImagePlaceholder = Node.create<ImagePlaceholderOptions>({
 
 	group: 'block',
 
+	addAttributes() {
+		return { uploadId: { default: null } }
+	},
+
 	parseHTML() {
 		return [{ tag: `div[data-type="${this.name}"]` }]
 	},
@@ -57,7 +61,7 @@ export const ImagePlaceholder = Node.create<ImagePlaceholderOptions>({
 })
 
 function ImagePlaceholderComponent(props: NodeViewProps) {
-	const { editor } = props
+	const { editor, deleteNode, getPos, node } = props
 	// const [isExpanded, setIsExpanded] = useState(false)
 	// const [activeTab, setActiveTab] = useState<'upload' | 'url'>('upload')
 	const [altText, setAltText] = useState('')
@@ -67,17 +71,17 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 
 	const { previewUrl, fileInputRef, handleFileChange, handleRemove } = useImageUpload({
 		onUpload: (imageUrl) => {
-			editor
-				.chain()
-				.focus()
-				.setImage({
-					src: imageUrl,
-					alt: altText || fileInputRef.current?.files?.[0]?.name
-				})
-				.run()
+			const pos = getPos()
+			if (typeof pos === 'number') {
+				editor.chain().focus().insertContentAt(
+					{ from: pos, to: pos + node.nodeSize },
+					{ type: 'figure', attrs: { src: imageUrl, alt: altText || fileInputRef.current?.files?.[0]?.name } }
+				).run()
+			}
 			handleRemove()
 			// setIsExpanded(false)
-		}
+		},
+		onError: deleteNode
 	})
 
 	// const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
@@ -131,6 +135,7 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 
 	return (
 		<NodeViewWrapper className='w-full'>
+			{node.attrs.uploadId && <Icon className='animate-spin' name='LoaderCircle' />}
 			{previewUrl && (
 				<Div className='relative'>
 					<img alt='Preview' className='mx-auto object-contain' src={previewUrl} />
@@ -144,7 +149,7 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 				</Div>
 			)}
 			<Input
-				accept='image/*'
+				accept='image/png,image/jpeg,image/webp,image/gif'
 				className='hidden'
 				id='image-upload'
 				ref={fileInputRef}

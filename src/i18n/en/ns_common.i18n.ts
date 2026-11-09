@@ -103,6 +103,9 @@ export default {
 		chosen_files: 'Chose {{qty}} files'
 	},
 	editor: {
+		loading: 'Loading editor...',
+		image_upload_failed: 'Image upload failed. Check the image format and size.',
+		wait_for_upload: 'Please wait for the editor and images to finish loading.',
 		alt_text: 'Alt text',
 
 		alignment: 'Alignment',

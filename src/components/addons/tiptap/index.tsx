@@ -3,13 +3,13 @@
 import { cn } from '@common/utils/cn'
 import { Div } from '@components/customs/div'
 import { ScrollArea } from '@components/ui/scroll-area'
-import { EditorContent, useEditor } from '@tiptap/react'
+import { EditorContent, useEditor, type Editor as TiptapEditor } from '@tiptap/react'
+import type { SingleCommands } from '@tiptap/core'
 import { useDeepCompareEffect } from 'ahooks'
 import { uniqueId } from 'lodash-es'
-import React, { useImperativeHandle, useState } from 'react'
-import isEqual from 'react-fast-compare'
-import type { RefCallBack } from 'react-hook-form'
+import React, { useCallback, useImperativeHandle, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from '../../ui/context-menu'
 import BubbleMenu from './components/bubble-menu'
 import CommonContextMenuItems from './components/context-menu/common-context-menu-items'
@@ -18,11 +18,22 @@ import TableContextMenuItems from './components/context-menu/table-context-menu-
 import Toolbar from './components/toolbar'
 import { EditorContextProvider } from './context/editor-context'
 import { editorExtensions } from './extensions'
+import { extractClipboardImages } from './utils/clipboard-images'
+import { uploadImage } from './utils/image-upload'
+
+export interface EditorHandle {
+	getHTML: () => string
+	isEmpty: () => boolean
+	isUploading: () => boolean
+	clearContent: () => void
+	commands: () => SingleCommands | undefined
+}
 
 export interface EditorProps {
-	// onUpdate?: (state: { value: string; isEmpty: boolean }) => unknown
+	onUpdate?: (state: { value: string; isEmpty: boolean }) => void
+	onUploadStateChange?: (uploading: boolean) => void
 	id?: string
-	ref?: React.RefObject<typeof EditorContent.prototype> | RefCallBack
+	ref?: React.Ref<EditorHandle>
 	className?: string
 	name?: string
 	defaultValue?: string
@@ -53,16 +64,96 @@ const Editor: React.FC<EditorProps> = ({
 	height = 350,
 	id = uniqueId(),
 	ref,
-	name
+	name,
+	onUpdate,
+	onUploadStateChange
 }) => {
-	const { i18n } = useTranslation()
+	const { i18n, t } = useTranslation()
 	const [contextMenuType, setContextMenuType] = useState<keyof HTMLElementTagNameMap | null>(null)
+	const uploadCount = useRef(0)
+	const uploadStateCallback = useRef(onUploadStateChange)
+	uploadStateCallback.current = onUploadStateChange
+	const trackedUpload = useCallback(async (file: File) => {
+		uploadCount.current += 1
+		uploadStateCallback.current?.(true)
+		try {
+			return await uploadImage(file)
+		} catch (error) {
+			console.error('Image upload failed', error)
+			toast.error(t('ns_common:editor.image_upload_failed'))
+			throw error
+		} finally {
+			uploadCount.current -= 1
+			uploadStateCallback.current?.(uploadCount.current > 0)
+		}
+	}, [t])
+
+	const insertFiles = (currentEditor: TiptapEditor, files: File[], position: number) => {
+		files.forEach((file, index) => {
+			const uploadId = `${Date.now()}-${index}-${Math.random()}`
+			const inserted = currentEditor.chain().insertContentAt(position, { type: 'image-placeholder', attrs: { uploadId } }).setMeta('addToHistory', false).run()
+			if (!inserted) {
+				toast.error(t('ns_common:editor.image_upload_failed'))
+				return
+			}
+			const findPlaceholder = () => {
+				let found: { pos: number; size: number } | undefined
+				currentEditor.state.doc.descendants((node, pos) => {
+					if (node.type.name === 'image-placeholder' && node.attrs.uploadId === uploadId) {
+						found = { pos, size: node.nodeSize }
+						return false
+					}
+				})
+				return found
+			}
+			void trackedUpload(file).then((src) => {
+				if (currentEditor.isDestroyed) return
+				const placeholder = findPlaceholder()
+				if (!placeholder) return
+				currentEditor.view.dispatch(currentEditor.state.tr.delete(placeholder.pos, placeholder.pos + placeholder.size).setMeta('addToHistory', false))
+				currentEditor.commands.insertContentAt(placeholder.pos, { type: 'figure', attrs: { src, alt: file.name } })
+			}).catch(() => {
+				if (currentEditor.isDestroyed) return
+				const placeholder = findPlaceholder()
+				if (placeholder) currentEditor.view.dispatch(currentEditor.state.tr.delete(placeholder.pos, placeholder.pos + placeholder.size).setMeta('addToHistory', false))
+			})
+		})
+	}
 
 	const editor = useEditor(
 		{
 			content: defaultValue,
 			extensions: editorExtensions,
 			editorProps: {
+				handlePaste: (view, event) => {
+					const files = Array.from(event.clipboardData?.files ?? [])
+					if (files.length) {
+						insertFiles(viewEditor(), files, view.state.selection.from)
+						return true
+					}
+					const html = event.clipboardData?.getData('text/html')
+					if (!html) return false
+					let embeddedImages: ReturnType<typeof extractClipboardImages>
+					try {
+						embeddedImages = extractClipboardImages(html)
+					} catch (error) {
+						console.error('Invalid pasted image data', error)
+						toast.error(t('ns_common:editor.image_upload_failed'))
+						return true
+					}
+					if (!embeddedImages) return false
+					const currentEditor = viewEditor()
+					if (embeddedImages.html.trim()) currentEditor.commands.insertContent(embeddedImages.html)
+					insertFiles(currentEditor, embeddedImages.files, currentEditor.state.selection.from)
+					return true
+				},
+				handleDrop: (view, event) => {
+					const files = Array.from(event.dataTransfer?.files ?? [])
+					if (!files.length) return false
+					const position = view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos ?? view.state.selection.from
+					insertFiles(viewEditor(), files, position)
+					return true
+				},
 				attributes: {
 					class: cn(
 						'p-4 rounded-lg max-w-full max-h-full overflow-auto scrollbar-none border-none outline-none focus:outline-none focus:border-none min-h-[50vh] text-foreground bg-background',
@@ -72,14 +163,19 @@ const Editor: React.FC<EditorProps> = ({
 			},
 			enableCoreExtensions: true,
 			editable: !disabled,
-			immediatelyRender: true
+			immediatelyRender: true,
+			onUpdate: ({ editor }) => onUpdate?.({ value: editor.getHTML(), isEmpty: editor.isEmpty })
 		},
 		[disabled, i18n.language]
 	)
+	function viewEditor() {
+		if (!editor) throw new Error('Editor is not ready')
+		return editor
+	}
 
 	useDeepCompareEffect(() => {
 		if (!editor || editor.isDestroyed || !defaultValue) return
-		if (isEqual(editor.getHTML(), defaultValue)) return // guard tránh loop
+		if (editor.getHTML() === defaultValue) return
 		editor.commands.setContent(defaultValue)
 	}, [defaultValue]) // editor không cần trong dep vì stable ref
 
@@ -88,6 +184,7 @@ const Editor: React.FC<EditorProps> = ({
 		() => ({
 			getHTML: () => editor?.getHTML() ?? '',
 			isEmpty: () => editor?.isEmpty ?? true,
+			isUploading: () => uploadCount.current > 0,
 			clearContent: () => editor?.commands?.clearContent?.(),
 			commands: () => editor?.commands
 		}),
@@ -122,7 +219,10 @@ const Editor: React.FC<EditorProps> = ({
 				disabled && 'cursor-not-allowed opacity-50 [&>nav]:pointer-events-none',
 				className
 			)}>
-			<EditorContextProvider editor={editor}>
+			<EditorContextProvider
+				editor={editor}
+				insertImages={(files) => insertFiles(editor, files, editor.state.selection.from)}
+				uploadImage={trackedUpload}>
 				<Toolbar />
 				<ContextMenu>
 					<ContextMenuTrigger onContextMenu={handleContextMenuOpen}>

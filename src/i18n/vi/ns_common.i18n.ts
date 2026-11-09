@@ -122,6 +122,9 @@ export default {
 		request_timeout: 'Thời gian yêu cầu đã hết hạn'
 	},
 	editor: {
+		loading: 'Đang tải trình soạn thảo...',
+		image_upload_failed: 'Không thể tải ảnh lên. Hãy kiểm tra định dạng và dung lượng ảnh.',
+		wait_for_upload: 'Vui lòng đợi trình soạn thảo và ảnh tải xong.',
 		alignment: 'Căn chỉnh và thụt lề',
 		typography: 'Kiểu',
 		placeholder: 'Nhập nội dung tại đây...',

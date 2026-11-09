@@ -4,6 +4,7 @@ import { AlignCenter, AlignLeft, AlignRight, Edit, ImageIcon, Maximize, MoreVert
 import { Fragment, useEffect, useRef, useState } from 'react'
 
 import { cn } from '@common/utils/cn'
+import { resolveImageUrl } from '@common/utils/image-url'
 import { Div } from '@components/customs/div'
 import { Typography } from '@components/customs/typography'
 import { Button } from '@components/ui/button'
@@ -22,6 +23,7 @@ import { Input } from '@components/ui/input'
 import { Label } from '@components/ui/label'
 import { Separator } from '@components/ui/separator'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { useImageUpload } from '../hooks/use-image-upload'
 
 export const ImageExtension = Image.extend({
@@ -73,6 +75,19 @@ export const ImageExtension = Image.extend({
 						width: img.getAttribute('width'),
 						height: img.getAttribute('height'),
 						caption: figcaption?.textContent || ''
+					}
+				}
+			},
+			{
+				tag: 'img[src]',
+				getAttrs: (node) => {
+					const image = node as HTMLImageElement
+					return {
+						src: image.getAttribute('src'),
+						alt: image.getAttribute('alt'),
+						title: image.getAttribute('title'),
+						width: image.getAttribute('width'),
+						height: image.getAttribute('height')
 					}
 				}
 			}
@@ -213,6 +228,16 @@ function TiptapImage(props: NodeViewProps) {
 
 	const handleImageUrlSubmit = () => {
 		if (imageUrl) {
+			try {
+				const parsed = new URL(imageUrl, window.location.origin)
+				if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+					toast.error(t('ns_common:editor.validations.invalid_url'))
+					return
+				}
+			} catch {
+				toast.error(t('ns_common:editor.validations.invalid_url'))
+				return
+			}
 			updateAttributes({
 				src: imageUrl,
 				alt: altText
@@ -253,7 +278,7 @@ function TiptapImage(props: NodeViewProps) {
 						alt={node.attrs.alt}
 						className='rounded-[inherit] object-center'
 						ref={imageRef}
-						src={node.attrs.src}
+						src={resolveImageUrl(node.attrs.src || '')}
 						title={node.attrs.title}
 						onLoad={(e) => {
 							const img = e.currentTarget
@@ -379,7 +404,7 @@ function TiptapImage(props: NodeViewProps) {
 										<Div className='space-y-4'>
 											<Div>
 												<Input
-													accept='image/*'
+													accept='image/png,image/jpeg,image/webp,image/gif'
 													className='hidden'
 													id='replace-image-upload'
 													ref={fileInputRef}

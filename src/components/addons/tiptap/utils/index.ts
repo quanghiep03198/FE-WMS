@@ -39,5 +39,5 @@ export function getUrlFromString(str: string) {
 }
 
 export function absoluteUrl(path: string) {
-	return `${process.env.NEXT_PUBLIC_APP_URL}${path}`
+	return new URL(path, window.location.origin).href
 }

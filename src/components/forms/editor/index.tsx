@@ -4,7 +4,7 @@ import type { BaseFieldControl } from '@common/types/hook-form'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@components/ui/form'
 import { useUpdateEffect } from 'ahooks'
 import { isEmpty } from 'lodash-es'
-import { lazy, useLayoutEffect, useState } from 'react'
+import { lazy, Suspense, useLayoutEffect, useState } from 'react'
 import type { FieldValues, Path, PathValue } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -57,7 +57,9 @@ export function EditorFieldControl<T extends FieldValues>({
 				<FormItem>
 					<FormLabel>{label}</FormLabel>
 					<FormControl>
-						<Editor defaultValue={defaultValue} disabled={disabled} name={name} onUpdate={setState} />
+						<Suspense fallback={<div aria-busy='true'>{t('ns_common:editor.loading')}</div>}>
+							<Editor defaultValue={defaultValue} disabled={disabled} name={name} onUpdate={setState} />
+						</Suspense>
 					</FormControl>
 					<FormMessage />
 				</FormItem>

@@ -103,6 +103,9 @@ export default {
 		chosen_files: '已选择 {{qty}} 个文件'
 	},
 	editor: {
+		loading: '正在加载编辑器...',
+		image_upload_failed: '图片上传失败，请检查图片格式和大小。',
+		wait_for_upload: '请等待编辑器和图片加载完成。',
 		alt_text: '替代文本',
 		alignment: '对齐方式',
 		add_caption: '添加说明文字 ...',

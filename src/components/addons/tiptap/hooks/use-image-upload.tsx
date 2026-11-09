@@ -1,20 +1,20 @@
-import compressBase64 from '@common/libs/compress-base64'
-import { convertBase64 } from '@common/utils/convert-base64'
-import { useWorkerFn } from '@hooks/use-worker-fn'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEditorContext } from '../context/editor-context'
 
 type UseImageUploadOptions = {
 	onUpload?: (url: string) => void
+	onError?: () => void
 }
 
-export function useImageUpload({ onUpload }: UseImageUploadOptions = {}) {
+export function useImageUpload({ onUpload, onError }: UseImageUploadOptions = {}) {
+	const { uploadImage } = useEditorContext()
 	const previewRef = useRef<string | null>(null)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const [fileName, setFileName] = useState<string | null>(null)
 	const [error, setError] = useState<string | null>(null)
 
-	const { execute: compress, isPending } = useWorkerFn(compressBase64)
+	const [isPending, setIsPending] = useState(false)
 
 	const handleThumbnailClick = useCallback(() => {
 		fileInputRef.current?.click()
@@ -28,24 +28,27 @@ export function useImageUpload({ onUpload }: UseImageUploadOptions = {}) {
 				const localUrl = URL.createObjectURL(file)
 				setPreviewUrl(localUrl)
 				previewRef.current = localUrl
+				setIsPending(true)
 				try {
-					const base64Url = await convertBase64(file)
-					const compressedBase64 = await compress(base64Url.toString(), { quality: 1 })
-					if (typeof onUpload === 'function') onUpload(compressedBase64)
+					const url = await uploadImage(file)
+					onUpload?.(url)
 				} catch (err) {
 					URL.revokeObjectURL(localUrl)
 					setPreviewUrl(null)
 					setFileName(null)
-					return console.error(err)
+					setError(err instanceof Error ? err.message : 'Image upload failed')
+					onError?.()
+				} finally {
+					setIsPending(false)
 				}
 			}
 		},
-		[onUpload]
+		[onUpload, onError, uploadImage]
 	)
 
 	const handleRemove = useCallback(() => {
-		if (previewUrl) {
-			URL.revokeObjectURL(previewUrl)
+		if (previewRef.current) {
+			URL.revokeObjectURL(previewRef.current)
 		}
 		setPreviewUrl(null)
 		setFileName(null)
@@ -54,7 +57,7 @@ export function useImageUpload({ onUpload }: UseImageUploadOptions = {}) {
 			fileInputRef.current.value = ''
 		}
 		setError(null)
-	}, [previewUrl])
+	}, [])
 
 	useEffect(() => {
 		return () => {

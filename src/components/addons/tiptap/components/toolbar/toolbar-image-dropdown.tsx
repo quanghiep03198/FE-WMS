@@ -1,4 +1,4 @@
-import React, { Fragment, useId, useState } from 'react'
+import React, { Fragment, useId, useRef, useState } from 'react'
 import tw from 'tailwind-styled-components'
 import { Tooltip } from '../../../../customs/tooltip'
 import { InputFieldControl } from '../../../../forms/input'
@@ -7,7 +7,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '../../../../
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../../../ui/dropdown-menu'
 import { Form } from '../../../../ui/form'
 import { Icon } from '../../../../ui/icon'
-import { Label } from '../../../../ui/label'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -16,11 +15,12 @@ import { object, url, type infer as Infer } from 'zod'
 import { useEditorContext } from '../../context/editor-context'
 
 const uploadSchema = object({
-	url: url('Invalid image URL').optional()
+	url: url('Invalid image URL').refine((value) => /^https?:\/\//i.test(value), 'Invalid image URL').optional()
 })
 
 const ImageDropdown: React.FC = () => {
-	const { editor } = useEditorContext()
+	const { editor, insertImages } = useEditorContext()
+	const fileInputRef = useRef<HTMLInputElement>(null)
 	const dialogTriggerId = useId()
 	const { t } = useTranslation()
 	const form = useForm<Infer<typeof uploadSchema>>({
@@ -30,6 +30,17 @@ const ImageDropdown: React.FC = () => {
 
 	return (
 		<Fragment>
+			<input
+				accept='image/png,image/jpeg,image/webp,image/gif'
+				className='hidden'
+				ref={fileInputRef}
+				type='file'
+				onChange={(event) => {
+					const files = Array.from(event.currentTarget.files ?? [])
+					if (files.length) insertImages(files)
+					event.currentTarget.value = ''
+				}}
+			/>
 			<DropdownMenu>
 				<Tooltip message={t('ns_common:editor.insert_image')} triggerProps={{ asChild: true }}>
 					<DropdownMenuTrigger
@@ -38,15 +49,8 @@ const ImageDropdown: React.FC = () => {
 					</DropdownMenuTrigger>
 				</Tooltip>
 				<DropdownMenuContent align='end'>
-					<DropdownMenuItem asChild>
-						<Label
-							className='flex items-center gap-x-2 font-normal'
-							htmlFor='image-upload'
-							onClick={() => {
-								editor?.chain().focus().insertImagePlaceholder().run()
-							}}>
-							<Icon name='Upload' /> {t('ns_common:editor.choose_image_from_device')}
-						</Label>
+					<DropdownMenuItem className='gap-x-2' onSelect={() => fileInputRef.current?.click()}>
+						<Icon name='Upload' /> {t('ns_common:editor.choose_image_from_device')}
 					</DropdownMenuItem>
 					<DropdownMenuItem asChild className='gap-x-2'>
 						<label htmlFor={dialogTriggerId}>
