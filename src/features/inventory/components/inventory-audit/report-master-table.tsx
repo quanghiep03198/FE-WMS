@@ -173,7 +173,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 							threshhold={2}
 							template={({ data }) => (
 								<Badge className='whitespace-nowrap' variant='secondary'>
-									{data.name.trim()}
+									{data.name?.trim?.()}
 								</Badge>
 							)}
 						/>
