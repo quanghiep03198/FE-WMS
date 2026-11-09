@@ -10,6 +10,8 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dev-dist
+dev-build
 *.local
 .npmrc
 
@@ -40,9 +42,6 @@ private
 # Storybook log
 *storybook.log
 storybook-static
-
-# PWA dev
-dev-dist
 
 # Vitest
 html
