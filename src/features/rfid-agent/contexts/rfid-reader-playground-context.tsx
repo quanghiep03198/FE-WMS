@@ -194,11 +194,11 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 		toast.info('Stopped controlling the RFID reader')
 	})
 
-	const handleMessage = useMemoizedFn((topic: string, message: Buffer) => {
+	const handleMessage = useMemoizedFn((topic: string, message: Uint8Array) => {
 		const client = clientRef.current
 		if (!client) return
 
-		const rawMessage = message.toString()
+		const rawMessage = new TextDecoder().decode(message)
 
 		switch (topic) {
 			case SubscribedTopics.REPLY_DATA: {

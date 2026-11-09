@@ -31,7 +31,8 @@ import { Slider } from '@components/ui/slider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffectOnce } from '@hooks/use-effect-once'
 import { useUpdateEffect } from 'ahooks'
-import { isEmpty, isEqual, isNil } from 'lodash-es'
+import equal from 'fast-deep-equal'
+import { isEmpty, isNil } from 'lodash-es'
 import { useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -197,7 +198,7 @@ const ReaderSettingSheet: React.FC = () => {
 								</Typography>
 							</Div>
 							<Button
-								disabled={isEqual(currentFormValues, readerSettings)}
+								disabled={equal(currentFormValues, readerSettings)}
 								size='sm'
 								type='button'
 								onClick={() => publishMessage(PublishedTopics.REQUEST_SETTINGS, { action: 'get' })}>
