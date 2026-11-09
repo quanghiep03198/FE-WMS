@@ -2,7 +2,8 @@
 
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
-import Editor from '@components/addons/tiptap'
+import { sanitizeDescription } from '@common/utils/sanitize-description'
+import type { EditorHandle } from '@components/addons/tiptap'
 import { Div } from '@components/customs/div'
 import { Typography } from '@components/customs/typography'
 import { InputFieldControl } from '@components/forms/input'
@@ -20,15 +21,13 @@ import { MobileReaderPlaygroundTrigger } from '@features/rfid-agent/components/p
 import PurchaseOrderFieldControl from '@features/rfid-agent/components/playground/purchase-order-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'
-import type { SingleCommands } from '@tiptap/core'
 import { useLocalStorageState, usePrevious, useResetState, useUpdateEffect } from 'ahooks'
 import { isEmpty, isNil } from 'lodash-es'
-import { Fragment, useCallback, useEffect, useRef } from 'react'
+import { Fragment, lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { gzipSync } from 'zlib'
 import {
 	CombinationStrategy,
 	DefectiveCategory,
@@ -63,6 +62,8 @@ import SizeFieldControl from './size-field-control'
 import ToggleFullscreen from './toggle-fullscreen'
 import UserActivityInfo from './user-activity-info'
 
+const Editor = lazy(() => import('@components/addons/tiptap'))
+
 const DefectiveGoodsForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const { hash, search } = useLocation({ structuralSharing: false })
@@ -84,22 +85,13 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 	})
 
-	const editorRef = useRef<{
-		getHTML: () => string
-		isEmpty: () => boolean
-		commands: () => SingleCommands
-		clearContent: () => void
-	}>({
-		getHTML: () => form.getValues().defective_description ?? '',
-		isEmpty: () => !form.getValues().defective_description,
-		clearContent: () => void '',
-		commands: () =>
-			({
-				setContent: (content: string) => {
-					void content
-				}
-			}) as SingleCommands
-	})
+	const editorRef = useRef<EditorHandle | null>(null)
+	const [editorReady, setEditorReady] = useState(false)
+	const [imageUploading, setImageUploading] = useState(false)
+	const setEditorRef = useCallback((editor: EditorHandle | null) => {
+		editorRef.current = editor
+		setEditorReady(!!editor?.commands())
+	}, [])
 
 	// Watch form fields
 	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no' })
@@ -127,7 +119,7 @@ const DefectiveGoodsForm: React.FC = () => {
 			schemaRef.current = updateDefectiveGoodsSchema
 			setFormAction(CommonActions.UPDATE)
 			form.reset(e.payload)
-			editorRef.current.commands().setContent(e.payload.defective_description ?? '')
+			editorRef.current?.commands()?.setContent(e.payload.defective_description ?? '')
 		}
 	})
 
@@ -176,7 +168,7 @@ const DefectiveGoodsForm: React.FC = () => {
 	}, [formAction, currentStrategy])
 
 	useUpdateEffect(() => {
-		if (useAvailableTemplate) editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
+		if (useAvailableTemplate) editorRef.current?.commands()?.setContent(DefectDescriptionTemplate[i18n.language])
 		else editorRef.current?.clearContent()
 	}, [i18n.language, useAvailableTemplate])
 
@@ -218,7 +210,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 		form.reset(currentFormValues)
 		if (useAvailableTemplate)
-			if (editorRef.current) editorRef.current.commands().setContent(DefectDescriptionTemplate[i18n.language])
+			if (editorRef.current) editorRef.current.commands()?.setContent(DefectDescriptionTemplate[i18n.language])
 	}
 
 	const handleCancel = () => {
@@ -229,6 +221,10 @@ const DefectiveGoodsForm: React.FC = () => {
 	}
 
 	const handleSubmitForm = async (data: CreateDefectiveGoodsFormValues) => {
+		if (!editorRef.current?.commands() || editorRef.current.isUploading()) {
+			toast.warning(t('ns_common:editor.wait_for_upload'))
+			return
+		}
 		data.defective_description = editorRef.current?.getHTML?.() ?? ''
 
 		if (!data.defective_description) {
@@ -245,11 +241,7 @@ const DefectiveGoodsForm: React.FC = () => {
 
 		const payload = {
 			...data,
-			po: isNil(data.po) || isEmpty(data.po) ? 'PRELOAD' : data.po,
-			defective_description: gzipSync(data.defective_description, {
-				level: 6,
-				chunkSize: 1024
-			}).toString('base64')
+			po: isNil(data.po) || isEmpty(data.po) ? 'PRELOAD' : data.po
 		}
 
 		const mutateAsync = async () =>
@@ -272,7 +264,7 @@ const DefectiveGoodsForm: React.FC = () => {
 			event$.emit({ action: CommonActions.SAVE, payload: [] })
 	}
 
-	const isPending: boolean = isCreating || isUpdating
+	const isPending: boolean = isCreating || isUpdating || imageUploading
 	const isError: boolean = isFailedToCreate || isFailedToUpdate
 	const shouldRequireFullInfo: boolean =
 		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
@@ -330,7 +322,7 @@ const DefectiveGoodsForm: React.FC = () => {
 									<Icon name='Undo2' /> {t('ns_common:actions.reset')}
 								</Button>
 								<Button
-									disabled={isPending}
+									disabled={isPending || !editorReady}
 									size='sm'
 									type='submit'
 									className={cn(
@@ -497,14 +489,26 @@ const DefectiveGoodsForm: React.FC = () => {
 								htmlFor='defective-description'>
 								{t('ns_erp:fields.defective_description')}
 							</Label>
-							<Editor
-								id='defective-description'
-								ref={editorRef}
-								defaultValue={
-									form.getValues('defective_description') ||
-									(useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : '')
-								}
-							/>
+							{isNil(formAction) ? (
+								<Div
+									className='prose prose-li:p-0 prose-p:text-sm prose-strong:text-inherit min-h-[50vh] max-w-full rounded-lg border p-4'
+									dangerouslySetInnerHTML={{
+										__html: sanitizeDescription(form.getValues('defective_description') || '')
+									}}
+								/>
+							) : (
+								<Suspense fallback={<Div aria-busy='true'>{t('ns_common:editor.loading')}</Div>}>
+									<Editor
+										id='defective-description'
+										ref={setEditorRef}
+										defaultValue={
+											form.getValues('defective_description') ||
+											(useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : '')
+										}
+										onUploadStateChange={setImageUploading}
+									/>
+								</Suspense>
+							)}
 							{form.getErrors('defective_description') && (
 								<Typography
 									className={cn(

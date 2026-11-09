@@ -16,13 +16,11 @@ import useCopyToClipboard from '@hooks/use-copy-to-clipboard'
 import { useDateLocale } from '@hooks/use-date-locale'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useUpdateEffect } from 'ahooks'
-import { Buffer } from 'buffer'
 import { formatRelative } from 'date-fns'
 import { capitalize, isNil, upperCase } from 'lodash-es'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { gunzipSync } from 'zlib'
 import { CombinationStrategy, DefectiveLocation, TRANSLATED_DEFECTIVE_CATEGORY } from '../../../constants/enums'
 import { useListPanelContext } from '../../../contexts/list-panel-context'
 import { usePageContext } from '../../../contexts/page-context'
@@ -54,9 +52,7 @@ const InfoCard: React.FC<{
 		const payload: IDefectiveGoods = {} as IDefectiveGoods
 
 		for (const prop in data) {
-			if (prop === 'defective_description') {
-				payload[prop] = gunzipSync(Buffer.from(data.defective_description, 'base64')).toString()
-			} else if (isNil(data[prop])) {
+			if (isNil(data[prop])) {
 				payload[prop] = ''
 			} else {
 				payload[prop] = data[prop]

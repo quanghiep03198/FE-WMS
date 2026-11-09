@@ -1,9 +1,8 @@
 import { CommonActions } from '@common/constants/enums'
+import { sanitizeDescription } from '@common/utils/sanitize-description'
 import { Div } from '@components/customs/div'
 import { Dialog, DialogContent } from '@components/ui/dialog'
-import { Buffer } from 'buffer'
 import React, { useState } from 'react'
-import { gunzipSync } from 'zlib'
 import { usePageContext } from '../../../contexts/page-context'
 
 const DetailDialog: React.FC = () => {
@@ -14,8 +13,7 @@ const DetailDialog: React.FC = () => {
 	event$.useSubscription((e) => {
 		if (e.action === CommonActions.READ && !!e.payload) {
 			setOpen(true)
-			const extractedData = gunzipSync(Buffer.from(e.payload as string, 'base64')).toString()
-			setTemplate(extractedData)
+			setTemplate(sanitizeDescription(e.payload as string))
 		}
 	})
 
