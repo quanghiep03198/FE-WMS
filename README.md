@@ -78,6 +78,34 @@ pnpm dev
 3. Start managing products, tracking inventory, and processing orders.
 4. View UI Components documentation by running `pnpm storybook`, open your browser then go to `http://localhost:6006`
 
+### Description images
+
+Descriptions are sent as HTML. Images selected, pasted, or dropped into the editor
+are resized to a maximum edge of 1600 pixels and uploaded as WebP (quality 0.8,
+maximum 5 MiB after compression). Canvas conversion uses the first frame of an
+animated GIF. Previously saved base64 images remain readable and are not migrated
+by the client.
+
+The API origin configured by `VITE_API_BASE_URL` or `VITE_API_BASE_CLF_URL` must
+provide `POST /uploads/images` and `GET /files/:id`. Development and preview
+proxy these paths to the origin of `VITE_API_BASE_URL`. In production, the API
+must allow credentialed cross-origin uploads when applicable, and image cookies
+must be valid for requests from the application.
+
+### Charts
+
+Dashboard charts use hybrid rendering: add `renderer: chartMarkRenderer` from
+`@components/ui/chart` to data marks, including marks inside `polar`. Axes and
+gridlines remain SVG; tooltips remain HTML. New marks must opt in explicitly.
+Canvas data updates normally use `svgAnimation` crossfades. The inbound/outbound
+and defective inventory charts instead interpolate keyed values on Canvas:
+their first data animates from zero and subsequent changes start at the current
+displayed values. `ChartPlot` uses `valueAnimation` to keep tooltip motion while
+disabling SVG geometry motion; leave `svgAnimation` unset on these definitions
+to avoid Canvas crossfades. `useAnimatedChartValues` ignores unchanged values and respects
+reduced motion. Profile charts with representative data before assuming Canvas
+is faster.
+
 ## Folder Structure
 
 ```

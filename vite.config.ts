@@ -9,7 +9,6 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, loadEnv, normalizePath } from 'vite'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { VitePWA as pwa, type VitePWAOptions } from 'vite-plugin-pwa'
 import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
 
@@ -19,6 +18,7 @@ import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
 export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
 	normalizePath(path.resolve(import.meta.dirname, './infrastructure'))
+	const apiOrigin = process.env.VITE_API_BASE_URL ? new URL(process.env.VITE_API_BASE_URL).origin : undefined
 
 	const resolveAlias = (directories: Array<string>, rootPath: string, prefix: string = '@') =>
 		directories.reduce(
@@ -31,13 +31,13 @@ export default defineConfig(({ mode }) => {
 		)
 
 	return {
-		// devtools: {
-		// 	apply: 'build',
-		// 	build: {
-		// 		withApp: true // generate DevTools output during `vite build`
-		// 		// outDir: 'custom-dir', // optional, defaults to Vite's build.outDir
-		// 	}
-		// },
+		define: { __SENTRY_DEBUG__: false },
+		devtools: {
+			apply: 'build',
+			build: {
+				withApp: true // generate DevTools output during `vite build`
+			}
+		},
 		resolve: {
 			tsconfigPaths: true,
 			alias: {
@@ -78,7 +78,6 @@ export default defineConfig(({ mode }) => {
 					}
 				]
 			}),
-			nodePolyfills(),
 			pwa({
 				registerType: 'autoUpdate',
 				disable: mode === 'development',
@@ -156,13 +155,6 @@ export default defineConfig(({ mode }) => {
 				}
 			})
 		],
-		oxc: {
-			inject: {
-				Buffer: ['vite-plugin-node-polyfills/shims/buffer', 'default']
-			},
-			include: ['buffer', 'zlib']
-		},
-
 		envDir: '.',
 		test: {
 			globals: true,
@@ -178,6 +170,14 @@ export default defineConfig(({ mode }) => {
 			port: 3000,
 			host: true,
 			proxy: {
+				'/uploads': {
+					target: apiOrigin,
+					changeOrigin: true
+				},
+				'/files': {
+					target: apiOrigin,
+					changeOrigin: true
+				},
 				'/api': {
 					target: process.env.VITE_API_BASE_URL,
 					changeOrigin: true,
@@ -209,6 +209,14 @@ export default defineConfig(({ mode }) => {
 				['X-XSS-Protection']: '1; mode=block'
 			},
 			proxy: {
+				'/uploads': {
+					target: apiOrigin,
+					changeOrigin: true
+				},
+				'/files': {
+					target: apiOrigin,
+					changeOrigin: true
+				},
 				'/api': {
 					target: process.env.VITE_API_BASE_URL,
 					changeOrigin: true,
