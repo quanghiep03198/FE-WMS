@@ -7,7 +7,7 @@ import { EditorContent, useEditor, type Editor as TiptapEditor } from '@tiptap/r
 import type { SingleCommands } from '@tiptap/core'
 import { useDeepCompareEffect } from 'ahooks'
 import { uniqueId } from 'lodash-es'
-import React, { useCallback, useImperativeHandle, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from '../../ui/context-menu'
@@ -68,7 +68,7 @@ const Editor: React.FC<EditorProps> = ({
 	onUpdate,
 	onUploadStateChange
 }) => {
-	const { i18n, t } = useTranslation()
+	const { t } = useTranslation()
 	const [contextMenuType, setContextMenuType] = useState<keyof HTMLElementTagNameMap | null>(null)
 	const uploadCount = useRef(0)
 	const uploadStateCallback = useRef(onUploadStateChange)
@@ -166,12 +166,17 @@ const Editor: React.FC<EditorProps> = ({
 			immediatelyRender: true,
 			onUpdate: ({ editor }) => onUpdate?.({ value: editor.getHTML(), isEmpty: editor.isEmpty })
 		},
-		[disabled, i18n.language]
+		[]
 	)
 	function viewEditor() {
 		if (!editor) throw new Error('Editor is not ready')
 		return editor
 	}
+
+	useEffect(() => {
+		if (!editor || editor.isDestroyed) return
+		editor.setEditable(!disabled, false)
+	}, [editor, disabled])
 
 	useDeepCompareEffect(() => {
 		if (!editor || editor.isDestroyed || !defaultValue) return
@@ -182,11 +187,13 @@ const Editor: React.FC<EditorProps> = ({
 	useImperativeHandle(
 		ref,
 		() => ({
-			getHTML: () => editor?.getHTML() ?? '',
-			isEmpty: () => editor?.isEmpty ?? true,
+			getHTML: () => (editor && !editor.isDestroyed ? editor.getHTML() : ''),
+			isEmpty: () => (editor && !editor.isDestroyed ? editor.isEmpty : true),
 			isUploading: () => uploadCount.current > 0,
-			clearContent: () => editor?.commands?.clearContent?.(),
-			commands: () => editor?.commands
+			clearContent: () => {
+				if (editor && !editor.isDestroyed) editor.commands.clearContent()
+			},
+			commands: () => (editor && !editor.isDestroyed ? editor.commands : undefined)
 		}),
 		[editor]
 	)

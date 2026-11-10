@@ -115,7 +115,7 @@ function TiptapImage(props: NodeViewProps) {
 	const [resizeInitialWidth, setResizeInitialWidth] = useState(0)
 	const [resizeInitialMouseX, setResizeInitialMouseX] = useState(0)
 	const [editingCaption, setEditingCaption] = useState(false)
-	const [caption, setCaption] = useState(node.attrs.caption || '')
+	const captionInputRef = useRef<HTMLInputElement | null>(null)
 	const [openedMore, setOpenedMore] = useState(false)
 	const [imageUrl, setImageUrl] = useState('')
 	const [altText, setAltText] = useState(node.attrs.alt || '')
@@ -210,18 +210,14 @@ function TiptapImage(props: NodeViewProps) {
 		setResizeInitialWidth(0)
 	}
 
-	function handleCaptionChange(e: React.ChangeEvent<HTMLInputElement>) {
-		const newCaption = e.target.value
-		setCaption(newCaption)
-	}
-
 	function handleCaptionBlur() {
-		updateAttributes({ caption })
+		updateAttributes({ caption: captionInputRef.current?.value ?? node.attrs.caption ?? '' })
 		setEditingCaption(false)
 	}
 
-	function handleCaptionKeyDown(e: React.KeyboardEvent) {
+	function handleCaptionKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
 		if (e.key === 'Enter') {
+			e.preventDefault()
 			handleCaptionBlur()
 		}
 	}
@@ -340,17 +336,18 @@ function TiptapImage(props: NodeViewProps) {
 					<Input
 						autoFocus
 						className='text-muted-foreground h-9 rounded-none border-0 py-0 text-center text-sm shadow-none focus:border-0 focus:ring-offset-0'
+						defaultValue={node.attrs.caption || ''}
+						key={node.attrs.caption}
 						placeholder={t('ns_common:editor.add_caption')}
-						value={caption}
+						ref={captionInputRef}
 						onBlur={handleCaptionBlur}
-						onChange={handleCaptionChange}
 						onKeyDown={handleCaptionKeyDown}
 					/>
 				) : (
 					<Div
 						className='text-muted-foreground h-9 cursor-text place-content-center place-items-center text-center text-sm'
 						onClick={() => editor?.isEditable && setEditingCaption(true)}>
-						{caption || 'Add a caption...'}
+						{node.attrs.caption || 'Add a caption...'}
 					</Div>
 				)}
 
