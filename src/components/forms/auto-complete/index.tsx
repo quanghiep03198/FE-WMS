@@ -56,6 +56,7 @@ export function AutoCompleteFieldControl<T extends FieldValues, D>(props: AutoCo
 		description,
 		disabled,
 		readOnly,
+		type = 'text',
 		orientation = 'vertical',
 		errorMessageVariant = 'inline',
 		estimateItemHeight = 32,
@@ -146,20 +147,24 @@ export function AutoCompleteFieldControl<T extends FieldValues, D>(props: AutoCo
 							<Popover modal={true} open={open && props['aria-haspopup'] !== 'false'} onOpenChange={setOpen}>
 								<FormControl>
 									<Tooltip
+										disabled={!error || errorMessageVariant === 'inline'}
 										message={t(error?.message, { defaultValue: error?.message })}
-										triggerProps={{ asChild: true, type: 'button', className: 'w-full' }}
 										contentProps={{
 											hidden: !error || errorMessageVariant === 'inline',
 											side: 'bottom',
 											align: 'start',
 											className: 'bg-destructive text:text-destructive-foreground',
 											['aria-invalid']: !!error
+										}}
+										triggerProps={{
+											asChild: true,
+											className: 'w-full',
+											type: 'button'
 										}}>
 										<PopoverTrigger
 											aria-disabled={disabled}
 											className='relative w-full aria-disabled:opacity-50'
-											type='button'
-											onClick={(e) => e.preventDefault()}>
+											type='button'>
 											<Input
 												aria-invalid={!!getFieldState(name).error}
 												autoComplete='off'
@@ -169,6 +174,7 @@ export function AutoCompleteFieldControl<T extends FieldValues, D>(props: AutoCo
 												placeholder={placeholder}
 												readOnly={readOnly}
 												ref={resolvedRef}
+												type={type}
 												value={field.value}
 												className={cn(
 													'peer aria-invalid:border-destructive aria-invalid:focus-within:border-destructive pr-9 transition-colors',

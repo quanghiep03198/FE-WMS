@@ -74,6 +74,7 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 									}
 								}}>
 								<Tooltip
+									disabled={!error || errorMessageVariant === 'inline'}
 									message={t(error?.message)}
 									triggerProps={{ type: 'button', className: 'w-full' }}
 									contentProps={{

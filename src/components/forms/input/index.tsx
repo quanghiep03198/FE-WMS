@@ -86,6 +86,7 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 							<Div className='space-y-2'>
 								<Div className='bg-background relative overflow-hidden'>
 									<Tooltip
+										disabled={!error || errorMessageVariant === 'inline'}
 										message={t(error?.message as ResourceKey) || ''}
 										triggerProps={{ type: 'button', className: 'w-full' }}
 										contentProps={{
