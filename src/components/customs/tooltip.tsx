@@ -4,6 +4,7 @@ import { TooltipContent, TooltipProvider, TooltipTrigger, Tooltip as TooltipWrap
 
 export type TooltipProps = {
 	message: string
+	disabled?: boolean
 	triggerProps?: Partial<React.ComponentProps<typeof TooltipTrigger>>
 	providerProps?: Partial<React.ComponentProps<typeof TooltipProvider>>
 	contentProps?: Partial<React.ComponentProps<typeof TooltipContent>>
@@ -12,10 +13,13 @@ export type TooltipProps = {
 export const Tooltip = ({
 	children,
 	message,
+	disabled = false,
 	triggerProps = { type: 'button', asChild: false },
 	providerProps = { delayDuration: 0 },
 	contentProps = { side: 'top' }
 }: TooltipProps) => {
+	if (disabled) return children
+
 	return (
 		<TooltipProvider {...providerProps}>
 			<TooltipWrapper>

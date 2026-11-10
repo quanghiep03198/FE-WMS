@@ -1,3 +1,4 @@
+import React from 'react'
 import { Tooltip } from '@components/customs/tooltip'
 import { render, screen, waitFor } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
@@ -28,5 +29,18 @@ describe('Tooltip', () => {
 
 		expect(getByRole('tooltip')).toBeVisible()
 		expect(getByRole('tooltip')).toHaveTextContent(message)
+	})
+
+	it('does not create a tooltip when disabled', async () => {
+		const { getByText, queryByRole } = render(
+			<Tooltip disabled message={message} triggerProps={{ asChild: true }}>
+				<button>Hover me</button>
+			</Tooltip>
+		)
+		const trigger = getByText('Hover me')
+
+		await userEvent.hover(trigger)
+
+		expect(queryByRole('tooltip')).not.toBeInTheDocument()
 	})
 })
