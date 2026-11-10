@@ -168,7 +168,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 	const { t } = useTranslation('ns_common')
 	const isMobile = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { open, openMobile, setOpenMobile } = useSidebar()
-	const location = useRouterState({ select: (s) => s.location })
+	const pathname = useRouterState({ select: (s) => s.location.pathname })
 	const ref = useRef<HTMLLIElement>(null)
 	const { user } = useAuth()
 
@@ -178,13 +178,13 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 			user.roles.some((role) => Array.isArray(authorizedRoles) && authorizedRoles.includes(role))) ||
 		authorizedRoles === '*'
 
-	const isActive = location.pathname.match(new RegExp(`^${url}$`))
+	const isActive = pathname.match(new RegExp(`^${url}$`))
 
 	useEffect(() => {
 		if (open && isActive && ref.current) {
 			ref.current.scrollIntoView({ behavior: 'auto', block: 'center' })
 		}
-	}, [open, location.pathname])
+	}, [open, pathname])
 
 	return (
 		<SidebarMenuItem
@@ -201,7 +201,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 				size='sm'
 				tooltip={t(title, { defaultValue: title })}>
 				<Link
-					search={isActive ? location.search : {}}
+					search={isActive ? (prev) => prev : {}}
 					to={url as FileRouteTypes['to']}
 					viewTransition={viewTransition}
 					activeProps={{
@@ -227,7 +227,7 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 	const ref = useRef<HTMLLIElement>(null)
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { open, openMobile, setOpenMobile } = useSidebar()
-	const location = useRouterState({ select: (s) => s.location })
+	const pathname = useRouterState({ select: (s) => s.location.pathname })
 	const { user } = useAuth()
 
 	const isAccessible =
@@ -236,13 +236,13 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 			user?.roles?.some((role) => Array.isArray(authorizedRoles) && authorizedRoles.includes(role))) ||
 		authorizedRoles === '*'
 
-	const isActive = location.pathname.match(new RegExp(`^${url}$`))
+	const isActive = pathname.match(new RegExp(`^${url}$`))
 
 	useEffect(() => {
 		if (open && isActive && ref.current) {
 			ref.current.scrollIntoView({ behavior: 'auto', block: 'center' })
 		}
-	}, [open, location.pathname])
+	}, [open, pathname])
 
 	return (
 		<SidebarMenuSubItem
@@ -256,7 +256,7 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 			<SidebarMenuSubButton asChild className='group-aria-disabled/menuitem:cursor-not-allowed' size='md'>
 				<Link
 					preload='intent'
-					search={isActive ? location.search : {}}
+					search={isActive ? (prev) => prev : {}}
 					to={url as FileRouteTypes['to']}
 					viewTransition={viewTransition}
 					activeProps={{
