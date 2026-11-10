@@ -1,6 +1,6 @@
 import type { UseNavigateResult } from '@tanstack/react-router'
 import { useNavigate, useSearch } from '@tanstack/react-router'
-import { useCallback, useLayoutEffect } from 'react'
+import { useCallback, useLayoutEffect, useRef } from 'react'
 
 type NavigateFnOptions = Parameter<UseNavigateResult<string>>
 type UseSearchOptions = NonNullable<FirstParameter<typeof useSearch>>
@@ -25,15 +25,19 @@ type SearchParamsObject = Record<string, unknown>
  * Note: This hook assumes that the component using it is wrapped within a `Router` context provided by `@tanstack/react-router`.
  */
 
-export default function useQueryParams<T extends SearchParamsObject = SearchParamsObject>(
+export default function useQueryParams<
+	T extends SearchParamsObject = SearchParamsObject,
+	TSelected = T
+>(
 	defaultParams?: Partial<T>,
 	options?: Omit<UseSearchOptions, 'select'> & {
-		select?: (search: T) => T | Partial<T> | ExtractObjectValue<T, keyof T>
+		select?: (search: T) => TSelected
 	}
 ) {
 	const navigate = useNavigate()
+	const defaultParamsRef = useRef(defaultParams)
 
-	const search = useSearch({ strict: false, ...options } as never) as unknown as T
+	const search = useSearch({ strict: false, ...options } as never) as unknown as TSelected
 	/**
 	 * Set search params from URL
 	 * @param { Partial<T> } params
@@ -42,10 +46,20 @@ export default function useQueryParams<T extends SearchParamsObject = SearchPara
 	const setParams = useCallback(
 		(params: Partial<T>, options: { overrideExisting: boolean } = { overrideExisting: false }) => {
 			navigate({
-				search: (prev) => ({
-					...(options.overrideExisting ? {} : (prev as T)),
-					...params
-				})
+				search: (prev) => {
+					const next = {
+						...(options.overrideExisting ? {} : (prev as T)),
+						...params
+					}
+					const current = prev as T
+					if (
+						Object.keys(next).length === Object.keys(current).length &&
+						Object.keys(next).every((key) => next[key] === current[key])
+					) {
+						return prev
+					}
+					return next
+				}
 			} as NavigateFnOptions)
 		},
 		[navigate]
@@ -59,7 +73,12 @@ export default function useQueryParams<T extends SearchParamsObject = SearchPara
 	 */
 	const setParam = useCallback(
 		<K extends keyof T>(key: K, value: T[K]) => {
-			navigate({ search: (prev) => ({ ...(prev as T), [key]: value }) } as NavigateFnOptions)
+			navigate({
+				search: (prev) => {
+					if ((prev as T)[key] === value) return prev
+					return { ...(prev as T), [key]: value }
+				}
+			} as NavigateFnOptions)
 		},
 		[navigate]
 	)
@@ -74,10 +93,12 @@ export default function useQueryParams<T extends SearchParamsObject = SearchPara
 			navigate({
 				search: (prev) => {
 					const next = { ...(prev as T) }
+					let changed = false
 					key.forEach((item) => {
+						if (item in next) changed = true
 						delete next[item]
 					})
-					return next
+					return changed ? next : prev
 				}
 			} as NavigateFnOptions)
 		},
@@ -85,17 +106,24 @@ export default function useQueryParams<T extends SearchParamsObject = SearchPara
 	)
 
 	const removeAllParams = useCallback(() => {
-		navigate({ search: () => ({}) } as unknown as NavigateFnOptions)
+		navigate({
+			search: (prev) => (Object.keys(prev).length ? {} : prev)
+		} as unknown as NavigateFnOptions)
 	}, [navigate])
 
 	useLayoutEffect(() => {
-		if (defaultParams)
-			navigate({
-				search: (prev) => {
-					return { ...defaultParams, ...prev }
-				}
-			} as NavigateFnOptions)
-	}, [])
+		const defaults = defaultParamsRef.current
+		if (!defaults) return
+		const defaultKeys = Object.keys(defaults)
+		if (!defaultKeys.length) return
+
+		navigate({
+			search: (prev) => {
+				if (defaultKeys.every((key) => key in prev)) return prev
+				return { ...defaults, ...prev }
+			}
+		} as NavigateFnOptions)
+	}, [navigate])
 
 	return {
 		searchParams: search,

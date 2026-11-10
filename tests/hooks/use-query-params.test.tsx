@@ -11,6 +11,7 @@ vi.mock('@tanstack/react-router', () => ({
 describe('useQueryParams', () => {
 	const navigateMock = vi.fn()
 	beforeEach(() => {
+		navigateMock.mockClear()
 		const _useNavigate = useNavigate as ReturnType<typeof vi.fn>
 		_useNavigate.mockReturnValue(navigateMock)
 	})
@@ -22,12 +23,33 @@ describe('useQueryParams', () => {
 		expect(navigateMock).toHaveBeenCalledWith({ search: expect.any(Function) })
 	})
 
+	it('should preserve current params when defaults are already present', () => {
+		renderHook(() => useQueryParams({ foo: 'default' }))
+
+		const searchUpdater = navigateMock.mock.calls[0]?.[0].search
+		const currentSearch = { foo: 'existing', other: 'value' }
+
+		expect(searchUpdater(currentSearch)).toBe(currentSearch)
+	})
+
 	it('should set params', () => {
 		const { result } = renderHook(() => useQueryParams())
 		act(() => {
 			result.current.setParams({ foo: 'bar' })
 		})
 		expect(navigateMock).toHaveBeenCalledWith({ search: expect.any(Function) })
+	})
+
+	it('should preserve current params when setting an unchanged value', () => {
+		const { result } = renderHook(() => useQueryParams<{ foo: string }>())
+		act(() => {
+			result.current.setParam('foo', 'existing')
+		})
+
+		const searchUpdater = navigateMock.mock.calls[0]?.[0].search
+		const currentSearch = { foo: 'existing' }
+
+		expect(searchUpdater(currentSearch)).toBe(currentSearch)
 	})
 
 	it('should remove param', () => {
