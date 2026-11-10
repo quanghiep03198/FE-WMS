@@ -14,7 +14,7 @@ import useQueryParams from '@hooks/use-query-params'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useResetState, useSize } from 'ahooks'
 import { format, isAfter } from 'date-fns'
-import { isEmpty, pickBy } from 'lodash-es'
+import { isEmpty, isNil, pickBy } from 'lodash-es'
 import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -62,18 +62,22 @@ const SearchBox: React.FC = () => {
 	useDebounceEffect(
 		() => {
 			setSearchTerms({ ...searchTerms, epc: epcSearchTerm })
+			setParams({ page: 1 })
 		},
 		[epcSearchTerm],
 		{ wait: 200 }
 	)
 
 	const handleSearchSubmission = (data: DefectiveGoodQueryParams): void => {
-		setSearchTerms(
-			pickBy({
+		const searchTerms = pickBy(
+			{
 				...data,
 				...(data.created_at && { created_at: format(new Date(data.created_at), 'yyyy-MM-dd') })
-			})
+			},
+			(value) => !isNil(value) && !isEmpty(value)
 		)
+
+		setSearchTerms(searchTerms)
 		setParams({ page: 1 })
 	}
 
@@ -81,6 +85,7 @@ const SearchBox: React.FC = () => {
 		form.reset(DEFAULT_SEARCH_TERMS)
 		resetEpcSearchTerm()
 		setSearchTerms(DEFAULT_SEARCH_TERMS)
+		setParams({ page: 1 })
 	}
 
 	const formFieldOrientation: 'horizontal' | 'vertical' =
@@ -170,6 +175,7 @@ const SearchBox: React.FC = () => {
 										form.reset(DEFAULT_SEARCH_TERMS)
 										resetEpcSearchTerm()
 										setSearchTerms(DEFAULT_SEARCH_TERMS)
+										setParams({ page: 1 })
 									}}>
 									<Icon name='Undo2' />
 									{t('ns_common:actions.reset')}

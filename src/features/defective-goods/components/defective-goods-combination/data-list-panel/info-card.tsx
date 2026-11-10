@@ -24,7 +24,6 @@ import tw from 'tailwind-styled-components'
 import { CombinationStrategy, DefectiveLocation, TRANSLATED_DEFECTIVE_CATEGORY } from '../../../constants/enums'
 import { useListPanelContext } from '../../../contexts/list-panel-context'
 import { usePageContext } from '../../../contexts/page-context'
-import { useSwitchCombinationStrategy } from '../../../hooks/use-switch-combination-strategy'
 
 const InfoCard: React.FC<{
 	data: IDefectiveGoods
@@ -33,9 +32,8 @@ const InfoCard: React.FC<{
 	const { isAllCardsExpanded, isTogglingExpand, isItemSelected, toggleItem } = useListPanelContext()
 	const [isOpen, setIsOpen] = useState<boolean>(isAllCardsExpanded)
 	const { event$ } = usePageContext()
-	const { hash, search } = useLocation({ structuralSharing: false })
+	const isActive = useLocation({ select: (state) => state.hash === String(data._id) })
 	const dateLocale = useDateLocale()
-	const { setStrategy } = useSwitchCombinationStrategy()
 	const navigate = useNavigate({ from: '/defective-goods-epc-combination' })
 
 	// Simplified selection handler using new optimized API
@@ -48,7 +46,7 @@ const InfoCard: React.FC<{
 	)
 
 	const handleUpdate = useCallback(() => {
-		navigate({ hash: String(data._id), search })
+		navigate({ hash: String(data._id), search: (prev) => prev })
 		const payload: IDefectiveGoods = {} as IDefectiveGoods
 
 		for (const prop in data) {
@@ -62,8 +60,7 @@ const InfoCard: React.FC<{
 			action: CommonActions.UPDATE,
 			payload: { ...payload, assembly_line: data.assembly_line?._id ?? '', sewing_line: data.sewing_line?._id ?? '' }
 		})
-		setStrategy(null)
-	}, [data])
+	}, [data, event$, navigate])
 
 	const [copyToClipboard, { isCoppied }] = useCopyToClipboard()
 
@@ -85,7 +82,7 @@ const InfoCard: React.FC<{
 			className={cn(
 				'@container/card relative min-h-fit gap-4 overflow-hidden rounded-md border pt-4 pb-2 shadow-sm *:text-left *:text-sm',
 				isTogglingExpand && 'animate-out fade-out-50 duration-200',
-				hash === String(data._id) && 'bg-accent/50'
+				isActive && 'bg-accent/50'
 			)}>
 			<CardHeader className='px-4' onClick={() => setIsOpen(!isOpen)}>
 				<CardAction className='absolute top-3 right-3'>

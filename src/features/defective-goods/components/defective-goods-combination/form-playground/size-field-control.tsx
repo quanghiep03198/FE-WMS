@@ -27,7 +27,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 	...props
 }) => {
 	const { t } = useTranslation()
-	const { hash } = useLocation()
+	const hash = useLocation({ select: (state) => state.hash })
 	const { control } = useFormContext()
 	const { fields, append, remove } = useFieldArray({ control, name })
 	const scrollRef = useRef<HTMLDivElement>(null)
@@ -64,26 +64,6 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 				.sort((a, b) => a?.value?.localeCompare(b?.value, undefined, { numeric: true })),
 			(item) => item.value
 		)
-		// const fallbackDataList = uniqBy(
-		// 	productSpecification.flatMap((item) => {
-		// 		return item.product_variants.flatMap((variant) => {
-		// 			return variant.sizes
-		// 					.map((size) => ({ label: size, value: size }))
-
-		// 		})
-		// 	}),
-		// 	(size) => size.value
-		// )
-		// if (shouldRequireFullInfo) return Array.isArray(datalist) ? datalist : fallbackDataList
-		// if (shouldFilterAllSizes) return fallbackDataList
-
-		// const brand = productSpecification.find((item) => item.brand_name === currentBrand)
-		// const variant = brand?.product_variants?.find((item) => item.factory_shoes_style === currentFactoryShoeStyle)
-		// const spec = variant?.specs?.find((item) => item.color_sn === currentColor)
-		// if (!Array.isArray(spec?.sizes)) return fallbackDataList
-		// return spec.sizes
-		// 	.sort((s1, s2) => s1?.localeCompare(s2, undefined, { numeric: true }))
-		// 	.map((size) => ({ label: size, value: size }))
 	}, [
 		datalist,
 		productSpecification,

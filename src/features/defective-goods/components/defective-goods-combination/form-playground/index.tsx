@@ -3,7 +3,7 @@
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import { sanitizeDescription } from '@common/utils/sanitize-description'
-import type { EditorHandle } from '@components/addons/tiptap'
+import Editor, { type EditorHandle } from '@components/addons/tiptap'
 import { Div } from '@components/customs/div'
 import { Typography } from '@components/customs/typography'
 import { InputFieldControl } from '@components/forms/input'
@@ -23,7 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useLocalStorageState, usePrevious, useResetState, useUpdateEffect } from 'ahooks'
 import { isEmpty, isNil } from 'lodash-es'
-import { Fragment, lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -62,12 +62,10 @@ import SizeFieldControl from './size-field-control'
 import ToggleFullscreen from './toggle-fullscreen'
 import UserActivityInfo from './user-activity-info'
 
-const Editor = lazy(() => import('@components/addons/tiptap'))
-
 const DefectiveGoodsForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const { hash, search } = useLocation({ structuralSharing: false })
-	const navigate = useNavigate({ from: '/defective-goods-epc-combination' })
+	const hash = useLocation({ select: (state) => state.hash })
+	const navigate = useNavigate()
 	const [formAction, setFormAction, resetFormAction] = useResetState<Nullish<CommonActions>>(null)
 	const [useAvailableTemplate, setUseAvailabelTemplate] = useLocalStorageState('useAvailableTemplate', {
 		defaultValue: true
@@ -86,11 +84,19 @@ const DefectiveGoodsForm: React.FC = () => {
 	})
 
 	const editorRef = useRef<EditorHandle | null>(null)
+	const initialEditorContent = useRef('')
+	const pendingEditorContent = useRef<string | null>(null)
+	const updateOrder = useRef<string | null | undefined>(undefined)
 	const [editorReady, setEditorReady] = useState(false)
 	const [imageUploading, setImageUploading] = useState(false)
 	const setEditorRef = useCallback((editor: EditorHandle | null) => {
 		editorRef.current = editor
-		setEditorReady(!!editor?.commands())
+		const commands = editor?.commands()
+		if (commands && pendingEditorContent.current !== null) {
+			commands.setContent(pendingEditorContent.current)
+			pendingEditorContent.current = null
+		}
+		setEditorReady(!!commands)
 	}, [])
 
 	// Watch form fields
@@ -117,9 +123,18 @@ const DefectiveGoodsForm: React.FC = () => {
 	event$.useSubscription((e) => {
 		if (e.action === CommonActions.UPDATE) {
 			schemaRef.current = updateDefectiveGoodsSchema
+			updateOrder.current = e.payload.mo_no ?? null
+			const description = e.payload.defective_description ?? ''
+			const commands = editorRef.current?.commands()
+			if (commands) {
+				commands.setContent(description)
+				pendingEditorContent.current = null
+			} else {
+				initialEditorContent.current = description
+				pendingEditorContent.current = editorRef.current ? description : null
+			}
 			setFormAction(CommonActions.UPDATE)
 			form.reset(e.payload)
-			editorRef.current?.commands()?.setContent(e.payload.defective_description ?? '')
 		}
 	})
 
@@ -141,6 +156,8 @@ const DefectiveGoodsForm: React.FC = () => {
 
 	useEffect(() => {
 		if (!orderDetail) return
+		if (updateOrder.current !== undefined && currentManufacturingOrder === updateOrder.current) return
+		updateOrder.current = undefined
 		form.reset({
 			...form.getValues(),
 			cust_shoes_style: orderDetail.cust_shoes_style,
@@ -148,7 +165,7 @@ const DefectiveGoodsForm: React.FC = () => {
 			brand_name: orderDetail.brand_name,
 			color_sn: orderDetail.color_sn
 		})
-	}, [orderDetail])
+	}, [orderDetail, currentManufacturingOrder])
 
 	useEffect(() => {
 		if (formAction === CommonActions.CREATE) {
@@ -162,7 +179,7 @@ const DefectiveGoodsForm: React.FC = () => {
 			})
 			form.setValue('combination_strategy', currentStrategy)
 		}
-		if (formAction === CommonActions.UPDATE) {
+		if (formAction === CommonActions.UPDATE && currentStrategy !== null) {
 			setStrategy(null)
 		}
 	}, [formAction, currentStrategy])
@@ -210,14 +227,16 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 		form.reset(currentFormValues)
 		if (useAvailableTemplate)
-			if (editorRef.current) editorRef.current.commands()?.setContent(DefectDescriptionTemplate[i18n.language])
+			if (editorReady) editorRef.current?.commands()?.setContent(DefectDescriptionTemplate[i18n.language])
 	}
 
 	const handleCancel = () => {
+		updateOrder.current = undefined
+		pendingEditorContent.current = null
 		resetFormAction()
 		handleResetForm()
 		if (!currentStrategy) setStrategy(previousStrategy)
-		navigate({ search })
+		if (hash) navigate({ to: '/defective-goods-epc-combination', hash: undefined, search: (prev) => prev })
 	}
 
 	const handleSubmitForm = async (data: CreateDefectiveGoodsFormValues) => {
@@ -269,8 +288,6 @@ const DefectiveGoodsForm: React.FC = () => {
 	const shouldRequireFullInfo: boolean =
 		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
 
-	console.log(form.getErrors())
-
 	return (
 		<FormProvider {...form}>
 			<Form data-action={formAction} onSubmit={form.handleSubmit(handleSubmitForm)}>
@@ -299,7 +316,12 @@ const DefectiveGoodsForm: React.FC = () => {
 								className='ml-auto'
 								size='sm'
 								type='button'
-								onClick={() => setFormAction(CommonActions.CREATE)}>
+								onClick={() => {
+									initialEditorContent.current =
+										form.getValues('defective_description') ??
+										(useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : '')
+									setFormAction(CommonActions.CREATE)
+								}}>
 								<Icon name='CircleFadingPlus' size={18} />
 								{t('ns_common:actions.add')}
 							</Button>
@@ -497,17 +519,12 @@ const DefectiveGoodsForm: React.FC = () => {
 									}}
 								/>
 							) : (
-								<Suspense fallback={<Div aria-busy='true'>{t('ns_common:editor.loading')}</Div>}>
-									<Editor
-										id='defective-description'
-										ref={setEditorRef}
-										defaultValue={
-											form.getValues('defective_description') ||
-											(useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : '')
-										}
-										onUploadStateChange={setImageUploading}
-									/>
-								</Suspense>
+								<Editor
+									defaultValue={initialEditorContent.current}
+									id='defective-description'
+									ref={setEditorRef}
+									onUploadStateChange={setImageUploading}
+								/>
 							)}
 							{form.getErrors('defective_description') && (
 								<Typography

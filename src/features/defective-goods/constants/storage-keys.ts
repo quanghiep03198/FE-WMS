@@ -1,1 +1,0 @@
-export const PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY = 'defectiveGoodsSearchTerms'

@@ -2,11 +2,9 @@ import { DefectiveGoodsService } from '@features/defective-goods/services/defect
 import { StockFlow } from '@features/finished-goods/constants/enums'
 import useQueryParams from '@hooks/use-query-params'
 import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useSessionStorageState } from 'ahooks'
 import { isEmpty, isNil, omitBy, pick, pickBy } from 'lodash-es'
 import { useCallback } from 'react'
 import { useReportPageQueryParams } from '../../report/hooks/use-report-page-query-params'
-import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../constants/storage-keys'
 import {
 	type DefectiveGoodsInboundFormValues,
 	type DefectiveGoodsOutboundFormValues,
@@ -14,7 +12,6 @@ import {
 } from '../schemas/defective-goods-inoutbound.schema'
 import {
 	type CreateDefectiveGoodsFormValues,
-	type DefectiveGoodQueryParams,
 	type UpdateDefectiveGoodsFormValues
 } from '../schemas/defective-goods.schema'
 import type { IDefectiveGoods, IDefectiveGoodsInventory } from '../types'
@@ -52,71 +49,40 @@ export const getDefectiveGoodsQueryOptions = (params: Record<string, any>) => ({
 })
 
 export const useGetDefectiveGoodsQuery = () => {
-	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
-	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
-		listenStorageChange: true
-	})
+	const { searchParams: page } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>, number>(
+		{ page: 1 },
+		{ select: (params) => params.page ?? 1 }
+	)
+	const [searchTerms] = useSearchDefectiveGoods()
 
-	return useQuery(getDefectiveGoodsQueryOptions({ ...searchParams, ...searchTerms }))
+	return useQuery(getDefectiveGoodsQueryOptions({ page, ...searchTerms }))
 }
 
 export const useCreateDefectiveGoodsMutation = () => {
-	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
-	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
-		listenStorageChange: true
-	})
-
 	return useMutation({
-		meta: {
-			invalidates: [
-				[DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)]
-			]
-		},
+		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS]] },
 		mutationFn: async (data: CreateDefectiveGoodsFormValues) => await DefectiveGoodsService.createDefectiveGoods(data)
 	})
 }
 
 export const useUpdateDefectiveGoodsMutation = () => {
-	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
-	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
-		listenStorageChange: true
-	})
-
 	return useMutation({
-		meta: {
-			invalidates: [
-				[DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)]
-			]
-		},
+		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS]] },
 		mutationFn: async (payload: { id: string; data: UpdateDefectiveGoodsFormValues }) =>
 			await DefectiveGoodsService.updateDefectiveGoods(payload.id, payload.data)
 	})
 }
 
 export const useDeleteDefectiveGoodsMutation = () => {
-	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
-	const [searchTerms] = useSearchDefectiveGoods()
-
 	return useMutation({
-		meta: {
-			invalidates: [
-				[DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)]
-			]
-		},
+		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS]] },
 		mutationFn: DefectiveGoodsService.deleteDefectiveGoods
 	})
 }
 
 export const useDeleteManyDefectiveGoodsMutation = () => {
-	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
-	const [searchTerms] = useSearchDefectiveGoods()
-
 	return useMutation({
-		meta: {
-			invalidates: [
-				[DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy({ ...searchParams, ...searchTerms }, (item) => !!item)]
-			]
-		},
+		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS]] },
 		mutationFn: DefectiveGoodsService.deleteManyDefectiveGoods
 	})
 }
@@ -199,9 +165,7 @@ export const useUpdateDefectiveGoodsStockMutation = () => {
 }
 
 export const usePrefetchDefectiveGoodsQuery = () => {
-	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
-		listenStorageChange: true
-	})
+	const [searchTerms] = useSearchDefectiveGoods()
 	const queryClient = useQueryClient()
 
 	return useCallback(

@@ -4,12 +4,10 @@ import Pagination from '@components/customs/pagination'
 import { buttonVariants } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@components/ui/sheet'
-import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '@features/defective-goods/constants/storage-keys'
-import { type DefectiveGoodQueryParams } from '@features/defective-goods/schemas/defective-goods.schema'
+import { useSearchDefectiveGoods } from '@features/defective-goods/hooks/use-search-defective-goods'
 import { type IDefectiveGoods } from '@features/defective-goods/types'
 import useQueryParams from '@hooks/use-query-params'
 import { useQueryClient } from '@tanstack/react-query'
-import { useSessionStorageState } from 'ahooks'
 import { omit } from 'lodash-es'
 import React, { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,28 +28,47 @@ const DatalistPanel: React.FC = () => {
 	const { data, isLoading, isPlaceholderData } = useGetDefectiveGoodsQuery()
 	const queryClient = useQueryClient()
 	const handlePrefetch = usePrefetchDefectiveGoodsQuery()
-	const { searchParams, setParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
-	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
-		listenStorageChange: true
-	})
+	const { searchParams: currentPage, setParam } = useQueryParams<
+		Pick<Pagination<IDefectiveGoods>, 'page'>,
+		number
+	>(
+		undefined,
+		{ select: (params) => params.page ?? 1 }
+	)
+	const [searchTerms] = useSearchDefectiveGoods()
+	const visibleData = isPlaceholderData ? undefined : data
+	const isMobileSelectionDisabled =
+		isLoading || isPlaceholderData || !Array.isArray(visibleData?.data) || visibleData.data.length === 0
+	const paginationProps = {
+		...(omit(data, ['data']) as Omit<Pagination<unknown>, 'data'>),
+		className: 'mx-auto w-full',
+		page: currentPage,
+		hasPrevPage: currentPage > 1,
+		hasNextPage: currentPage < (data?.totalPages ?? 0),
+		range: 1,
+		onPageChange: (page: number) => setParam('page', page),
+		onPrefetch: handlePrefetch
+	}
 
 	// Prefetch trang kế tiếp
 	useEffect(() => {
 		if (isPlaceholderData || !data || !data.hasNextPage) return
 
 		const run = async () => {
-			await queryClient.query(
-				getDefectiveGoodsQueryOptions({ ...searchParams, ...searchTerms, page: data.page + 1 })
-			)
+			await queryClient.query(getDefectiveGoodsQueryOptions({ ...searchTerms, page: data.page + 1 }))
 		}
 
-		const id = 'requestIdleCallback' in window ? requestIdleCallback(run, { timeout: 120 }) : setTimeout(run, 0)
-
-		return () => {
-			if ('cancelIdleCallback' in window) cancelIdleCallback(id as number)
-			else clearTimeout(id as number)
+		let cancelScheduledPrefetch: (() => void) | undefined
+		if (typeof window.requestIdleCallback === 'function') {
+			const id = window.requestIdleCallback(() => void run(), { timeout: 120 })
+			cancelScheduledPrefetch = () => window.cancelIdleCallback(id)
+		} else {
+			const id = setTimeout(() => void run(), 0)
+			cancelScheduledPrefetch = () => clearTimeout(id)
 		}
-	}, [data?.page, isPlaceholderData, data?.hasNextPage])
+
+		return cancelScheduledPrefetch
+	}, [data?.page, data?.hasNextPage, isPlaceholderData, queryClient, searchTerms])
 
 	return (
 		<Fragment>
@@ -63,23 +80,17 @@ const DatalistPanel: React.FC = () => {
 				<ListPanelProvider>
 					<Div className='flex w-full items-center justify-between px-4 py-2'>
 						<ItemSelectionCheckbox
-							data={data?.data ?? []}
-							disabled={isLoading || data?.totalDocs === 0}
+							data={visibleData?.data ?? []}
+							disabled={isLoading || isPlaceholderData || data?.totalDocs === 0}
 							limit={data?.limit ?? 0}
 							totalDocs={data?.totalDocs ?? 0}
 						/>
 						<ActionButtonsGroup />
 					</Div>
-					<DataList data={data} isLoading={isLoading} />
+					<DataList data={visibleData} isLoading={isLoading || isPlaceholderData} />
 				</ListPanelProvider>
 				<Div className='place-content-center place-items-center'>
-					<Pagination
-						{...(omit(data, ['data']) as Omit<Pagination<unknown>, 'data'>)}
-						className='mx-auto w-full'
-						range={1}
-						onPageChange={(page) => setParams({ page })}
-						onPrefetch={handlePrefetch}
-					/>
+					<Pagination {...paginationProps} />
 				</Div>
 			</Div>
 			{/* Combination history list panel sheet (Display on small screen). Display when viewport < 1440px */}
@@ -95,23 +106,17 @@ const DatalistPanel: React.FC = () => {
 					<ListPanelProvider>
 						<Div className='bg-table-head flex w-full items-center justify-between rounded-md px-3 py-2 shadow-sm'>
 							<ItemSelectionCheckbox
-								data={data?.data ?? []}
-								disabled={isLoading || !Array.isArray(data?.data) || data.data.length === 0}
+								data={visibleData?.data ?? []}
+								disabled={isMobileSelectionDisabled}
 								limit={data?.limit ?? 0}
 								totalDocs={data?.totalDocs ?? 0}
 							/>
 							<ActionButtonsGroup />
 						</Div>
-						<DataList data={data} isLoading={isLoading} />
+						<DataList data={visibleData} isLoading={isLoading || isPlaceholderData} />
 					</ListPanelProvider>
 					<SheetFooter>
-						<Pagination
-							{...(omit(data, ['data']) as Omit<Pagination<unknown>, 'data'>)}
-							className='mx-auto w-full'
-							range={1}
-							onPageChange={(page) => setParams({ page })}
-							onPrefetch={handlePrefetch}
-						/>
+						<Pagination {...paginationProps} />
 					</SheetFooter>
 				</SheetContent>
 			</Sheet>
@@ -140,4 +145,4 @@ export const DataListPanelSheetTrigger: React.FC<React.ComponentProps<'label'>> 
 	)
 }
 
-export default DatalistPanel
+export default React.memo(DatalistPanel)
