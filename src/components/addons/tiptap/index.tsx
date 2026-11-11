@@ -3,8 +3,8 @@
 import { cn } from '@common/utils/cn'
 import { Div } from '@components/customs/div'
 import { ScrollArea } from '@components/ui/scroll-area'
-import { EditorContent, useEditor, type Editor as TiptapEditor } from '@tiptap/react'
 import type { SingleCommands } from '@tiptap/core'
+import { EditorContent, useEditor, type Editor as TiptapEditor } from '@tiptap/react'
 import { useDeepCompareEffect } from 'ahooks'
 import { uniqueId } from 'lodash-es'
 import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
@@ -73,25 +73,32 @@ const Editor: React.FC<EditorProps> = ({
 	const uploadCount = useRef(0)
 	const uploadStateCallback = useRef(onUploadStateChange)
 	uploadStateCallback.current = onUploadStateChange
-	const trackedUpload = useCallback(async (file: File) => {
-		uploadCount.current += 1
-		uploadStateCallback.current?.(true)
-		try {
-			return await uploadImage(file)
-		} catch (error) {
-			console.error('Image upload failed', error)
-			toast.error(t('ns_common:editor.image_upload_failed'))
-			throw error
-		} finally {
-			uploadCount.current -= 1
-			uploadStateCallback.current?.(uploadCount.current > 0)
-		}
-	}, [t])
+	const trackedUpload = useCallback(
+		async (file: File) => {
+			uploadCount.current += 1
+			uploadStateCallback.current?.(true)
+			try {
+				return await uploadImage(file)
+			} catch (error) {
+				console.error('Image upload failed', error)
+				toast.error(t('ns_common:editor.image_upload_failed'))
+				throw error
+			} finally {
+				uploadCount.current -= 1
+				uploadStateCallback.current?.(uploadCount.current > 0)
+			}
+		},
+		[t]
+	)
 
 	const insertFiles = (currentEditor: TiptapEditor, files: File[], position: number) => {
 		files.forEach((file, index) => {
 			const uploadId = `${Date.now()}-${index}-${Math.random()}`
-			const inserted = currentEditor.chain().insertContentAt(position, { type: 'image-placeholder', attrs: { uploadId } }).setMeta('addToHistory', false).run()
+			const inserted = currentEditor
+				.chain()
+				.insertContentAt(position, { type: 'image-placeholder', attrs: { uploadId } })
+				.setMeta('addToHistory', false)
+				.run()
 			if (!inserted) {
 				toast.error(t('ns_common:editor.image_upload_failed'))
 				return
@@ -106,17 +113,31 @@ const Editor: React.FC<EditorProps> = ({
 				})
 				return found
 			}
-			void trackedUpload(file).then((src) => {
-				if (currentEditor.isDestroyed) return
-				const placeholder = findPlaceholder()
-				if (!placeholder) return
-				currentEditor.view.dispatch(currentEditor.state.tr.delete(placeholder.pos, placeholder.pos + placeholder.size).setMeta('addToHistory', false))
-				currentEditor.commands.insertContentAt(placeholder.pos, { type: 'figure', attrs: { src, alt: file.name } })
-			}).catch(() => {
-				if (currentEditor.isDestroyed) return
-				const placeholder = findPlaceholder()
-				if (placeholder) currentEditor.view.dispatch(currentEditor.state.tr.delete(placeholder.pos, placeholder.pos + placeholder.size).setMeta('addToHistory', false))
-			})
+			void trackedUpload(file)
+				.then((src) => {
+					if (currentEditor.isDestroyed) return
+					const placeholder = findPlaceholder()
+					if (!placeholder) return
+					currentEditor.view.dispatch(
+						currentEditor.state.tr
+							.delete(placeholder.pos, placeholder.pos + placeholder.size)
+							.setMeta('addToHistory', false)
+					)
+					currentEditor.commands.insertContentAt(placeholder.pos, {
+						type: 'figure',
+						attrs: { src, alt: file.name }
+					})
+				})
+				.catch(() => {
+					if (currentEditor.isDestroyed) return
+					const placeholder = findPlaceholder()
+					if (placeholder)
+						currentEditor.view.dispatch(
+							currentEditor.state.tr
+								.delete(placeholder.pos, placeholder.pos + placeholder.size)
+								.setMeta('addToHistory', false)
+						)
+				})
 		})
 	}
 
@@ -150,7 +171,8 @@ const Editor: React.FC<EditorProps> = ({
 				handleDrop: (view, event) => {
 					const files = Array.from(event.dataTransfer?.files ?? [])
 					if (!files.length) return false
-					const position = view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos ?? view.state.selection.from
+					const position =
+						view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos ?? view.state.selection.from
 					insertFiles(viewEditor(), files, position)
 					return true
 				},

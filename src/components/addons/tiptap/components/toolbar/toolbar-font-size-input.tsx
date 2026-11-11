@@ -59,7 +59,7 @@ const FontSizeInput: React.FC = () => {
 
 	return (
 		<Div
-			className='flex h-8 items-stretch overflow-hidden rounded-md border *:rounded-none *:p-0 [&_button]:aspect-square [&_button]:size-8! [&_button]:place-content-center'
+			className='flex h-8 min-w-fit items-stretch overflow-hidden rounded-md border *:rounded-none *:p-0 [&_button]:aspect-square [&_button]:size-8! [&_button]:place-content-center'
 			role='group'>
 			<Button
 				disabled={fontSize <= FONT_SIZE_MIN}

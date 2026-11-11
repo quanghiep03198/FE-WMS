@@ -56,7 +56,7 @@ const TableDropdownMenu: React.FC = () => {
 		<DropdownMenu>
 			<Tooltip message={t('ns_common:editor.table')} triggerProps={{ asChild: true }}>
 				<DropdownMenuTrigger
-					className={buttonVariants({ size: 'icon', className: 'h-8 w-8', variant: 'ghost' })}
+					className={buttonVariants({ size: 'icon', className: 'size-8', variant: 'ghost' })}
 					type='button'>
 					<Icon name='Table' />
 				</DropdownMenuTrigger>

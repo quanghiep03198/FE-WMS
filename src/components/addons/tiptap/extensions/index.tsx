@@ -1,3 +1,4 @@
+import { i18n } from '@i18n/index'
 import { type Extension } from '@tiptap/core'
 import { Color } from '@tiptap/extension-color'
 import Gapcursor from '@tiptap/extension-gapcursor'
@@ -17,7 +18,7 @@ export const editorExtensions = [
 	StarterKit.configure({
 		heading: {
 			levels: [1, 2, 3],
-			HTMLAttributes: { class: 'font-bold !text-foreground' }
+			HTMLAttributes: { class: 'font-bold text-foreground!' }
 		},
 		bold: {
 			HTMLAttributes: {
@@ -84,7 +85,7 @@ export const editorExtensions = [
 		}
 	}),
 	Placeholder.configure({
-		placeholder: 'Bắt đầu nhập nội dung ở đây...',
+		placeholder: i18n.t('ns_common:editor.placeholder'),
 		showOnlyWhenEditable: true,
 		emptyEditorClass:
 			'before:h-0 before:pl-1 before:place-self-center before:float-left text-muted-foreground font-normal text-sm before:pointer-event-none before:content-[attr(data-placeholder)] [&:not(p)]:before:hidden'

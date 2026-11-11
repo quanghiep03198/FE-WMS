@@ -11,19 +11,19 @@ import {
 	ColorPickerOutput,
 	ColorPickerSelection
 } from '@components/customs/color-picker'
+import { Div } from '@components/customs/div'
+import { Tooltip } from '@components/customs/tooltip'
+import { Button } from '@components/ui/button'
+import type { IconProps } from '@components/ui/icon'
+import { Icon } from '@components/ui/icon'
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
+import { Separator } from '@components/ui/separator'
 import useTheme from '@hooks/use-theme'
 import { useDebounceFn } from 'ahooks'
 import type { ColorLike } from 'color'
 import Color from 'color'
 import { Activity, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Div } from '../../../../customs/div'
-import { Tooltip } from '../../../../customs/tooltip'
-import { Button, buttonVariants } from '../../../../ui/button'
-import type { IconProps } from '../../../../ui/icon'
-import { Icon } from '../../../../ui/icon'
-import { Popover, PopoverContent, PopoverTrigger } from '../../../../ui/popover'
-import { Separator } from '../../../../ui/separator'
 import { PresetColors } from '../../constants'
 import { useEditorContext } from '../../context/editor-context'
 
@@ -104,16 +104,12 @@ const ToolbarColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) =
 			<Popover modal>
 				<Tooltip message={label} triggerProps={{ asChild: true }}>
 					<PopoverTrigger
-						type='button'
-						className={buttonVariants({
-							size: 'icon',
-							className: 'aspect-square h-8 w-8 flex-col',
-							variant: 'ghost'
-						})}>
+						className='flex flex-col gap-1 items-center justify-center size-8 p-0.5 aspect-square'
+						type='button'>
 						<Icon name={icon} />
 						<span
 							style={{ backgroundColor: currentColor }}
-							className={cn('mt-0.5 h-1.5 w-4/5 self-center rounded-l-full rounded-r-full border-[0.5px]', {
+							className={cn('h-1.5 w-full self-center rounded-l-full rounded-r-full border-[0.5px]', {
 								'bg-foreground!': !currentColor && type === 'textStyle',
 								'bg-transparent': !currentColor && type === 'highlight'
 							})}

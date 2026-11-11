@@ -37,11 +37,12 @@ const Toolbar: React.FC = () => {
 	})
 
 	return (
-		<Div as='nav' className='flex h-full items-center gap-x-1 flex-nowrap overflow-x-auto scrollbar-thin p-1.5'>
+		<Div
+			as='nav'
+			className='grid auto-cols-auto grid-flow-col h-full items-center gap-x-1  overflow-x-auto scrollbar-thin p-1.5'>
 			<SearchAndReplaceToolbar />
 
-			<Separator className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' orientation='vertical' />
-
+			<Separator className='h-6 w-0.5 min-w-0.5 mx-1' orientation='vertical' />
 			{/* Undo */}
 			<Tooltip message={t('ns_common:actions.undo')} triggerProps={{ asChild: true }}>
 				<Button
@@ -65,8 +66,7 @@ const Toolbar: React.FC = () => {
 				</Button>
 			</Tooltip>
 
-			<Separator className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' orientation='vertical' />
-
+			<Separator className='h-6 w-0.5 min-w-0.5 mx-1' orientation='vertical' />
 			{/* Change style */}
 			<StyleDropdownMenu />
 
@@ -75,8 +75,7 @@ const Toolbar: React.FC = () => {
 				<FontSizeInput />
 			</Tooltip>
 
-			<Separator className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' orientation='vertical' />
-
+			<Separator className='h-6 w-0.5 min-w-0.5 mx-1' orientation='vertical' />
 			<AlignmentDropdownMenu />
 
 			{/* Toggle bold */}
@@ -162,13 +161,13 @@ const Toolbar: React.FC = () => {
 				</Button>
 			</Tooltip>
 
-			<Separator className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' orientation='vertical' />
+			<Separator className='h-6 w-0.5 min-w-0.5 mx-1' orientation='vertical' />
 
 			{/* Text color and highlight */}
 			<ToolbarColorPicker icon='Baseline' label={t('ns_common:editor.text_color')} type='textStyle' />
 			<ToolbarColorPicker icon='Highlighter' label={t('ns_common:editor.highlight')} type='highlight' />
 
-			<Separator className='mx-3 h-6 w-0.5 min-w-0.5 basis-0.5' orientation='vertical' />
+			<Separator className='h-6 w-0.5 min-w-0.5 mx-1' orientation='vertical' />
 
 			{/* Toggle ordered list */}
 			<Tooltip message={t('ns_common:editor.ordered_list')} triggerProps={{ asChild: true }}>
