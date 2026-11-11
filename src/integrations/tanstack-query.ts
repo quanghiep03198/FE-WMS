@@ -14,6 +14,7 @@ declare module '@tanstack/react-query' {
 		defaultError: AxiosError
 		mutationMeta: {
 			invalidates?: Array<QueryKey>
+			suppressNotifications?: boolean
 		}
 	}
 }
@@ -41,8 +42,12 @@ export const queryClient = new QueryClient({
 		}
 	},
 	queryCache: new QueryCache({
-		onError: (error) => {
-			if (isAxiosError(error) && (error.code === AxiosError.ETIMEDOUT || error.code === AxiosError.ECONNABORTED)) {
+		onError: (error, query) => {
+			if (
+				query.meta?.suppressErrorToast !== true &&
+				isAxiosError(error) &&
+				(error.code === AxiosError.ETIMEDOUT || error.code === AxiosError.ECONNABORTED)
+			) {
 				toast.error(i18n.t('ns_common:errors.request_timeout'))
 			}
 		}
@@ -54,9 +59,10 @@ export const queryClient = new QueryClient({
 				predicate: (query) =>
 					mutation.meta?.invalidates?.some((queryKey) => matchQuery({ queryKey }, query)) ?? false
 			})
-			toast.success(i18n.t('ns_common:notification.success'))
+			if (!mutation.meta?.suppressNotifications) toast.success(i18n.t('ns_common:notification.success'))
 		},
-		onError: (error) => {
+		onError: (error, _variables, _context, mutation) => {
+			if (mutation.meta?.suppressNotifications) return
 			if (isAxiosError(error) && error.response?.status !== HttpStatusCode.InternalServerError) {
 				const response = error.response as AxiosResponse<ResponseBody<any>>
 				toast.error(response.data.message)
