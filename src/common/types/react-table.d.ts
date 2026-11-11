@@ -19,6 +19,8 @@ declare module '@tanstack/react-table' {
 	interface ColumnMeta {
 		facetedUniqueValues?: Array<Record<'label' | 'value', any>>
 		filterVariant?: ColumnFilterVariant
+		filterDebounce?: number
+		disableFacetedRangeLimits?: boolean
 		filterComponentProps?: FilterComponentProps[FilterComponentProps]
 		title?: string
 		hidden?: boolean

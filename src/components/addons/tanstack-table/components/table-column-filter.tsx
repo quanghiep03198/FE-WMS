@@ -168,6 +168,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 		default: {
 			return (
 				<DebouncedInput
+					debounce={column.columnDef.meta?.filterDebounce}
 					id={column.id}
 					placeholder={t('ns_common:table.search_in_column')}
 					value={(isAllFiltersCleared ? '' : (columnFilterValue as DebouncedInputProps['value'])) ?? ''}
