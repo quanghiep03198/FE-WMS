@@ -2,8 +2,7 @@
 
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
-import { sanitizeDescription } from '@common/utils/sanitize-description'
-import Editor, { type EditorHandle } from '@components/addons/tiptap'
+import { type EditorHandle } from '@components/addons/tiptap'
 import { Div } from '@components/customs/div'
 import { Typography } from '@components/customs/typography'
 import { InputFieldControl } from '@components/forms/input'
@@ -23,7 +22,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useLocalStorageState, usePrevious, useResetState, useUpdateEffect } from 'ahooks'
 import { isEmpty, isNil } from 'lodash-es'
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -61,6 +60,8 @@ import { ShoeSourceFieldControl } from './shoe-source-field-control'
 import SizeFieldControl from './size-field-control'
 import ToggleFullscreen from './toggle-fullscreen'
 import UserActivityInfo from './user-activity-info'
+
+const Editor = lazy(() => import('@components/addons/tiptap'))
 
 const DefectiveGoodsForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
@@ -187,7 +188,7 @@ const DefectiveGoodsForm: React.FC = () => {
 	useUpdateEffect(() => {
 		if (useAvailableTemplate) editorRef.current?.commands()?.setContent(DefectDescriptionTemplate[i18n.language])
 		else editorRef.current?.clearContent()
-	}, [i18n.language, useAvailableTemplate])
+	}, [i18n.language, useAvailableTemplate, editorReady])
 
 	const handleEpcChange: React.KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
 		if (e.key === 'Backspace') {
@@ -490,42 +491,43 @@ const DefectiveGoodsForm: React.FC = () => {
 						<ShoeSourceFieldControl disabled={isNil(formAction)} />
 					</Div>
 					<Div className='relative col-span-full'>
-						<Div className='absolute -top-1 right-0 inline-flex items-center gap-x-3'>
-							<Label className='inline-flex items-center gap-x-2' htmlFor='toggle-use-desc-template'>
-								<Icon name='Sparkles' strokeWidth={1.5} />
-								{t('ns_common:editor.use_available_template')}
-							</Label>
-							<Checkbox
-								checked={useAvailableTemplate}
-								disabled={isNil(formAction)}
-								id='toggle-use-desc-template'
-								onCheckedChange={(checked) => setUseAvailabelTemplate(Boolean(checked))}
-							/>
-						</Div>
 						<Field
 							aria-invalid={!!form.getErrors('defective_description')}
 							className='gap-1 [&[aria-invalid=true]_div[aria-roledescription="editor"]]:border-destructive!'>
-							<Label
-								aria-invalid={!!form.getErrors('defective_description')}
-								className='aria-invalid:text-destructive'
-								htmlFor='defective-description'>
-								{t('ns_erp:fields.defective_description')}
-							</Label>
-							{isNil(formAction) ? (
-								<Div
-									className='prose prose-li:p-0 prose-p:text-sm prose-strong:text-inherit min-h-[50vh] max-w-full rounded-lg border p-4'
-									dangerouslySetInnerHTML={{
-										__html: sanitizeDescription(form.getValues('defective_description') || '')
-									}}
+							<Div className='flex items-center gap-x-3'>
+								<Label
+									aria-invalid={!!form.getErrors('defective_description')}
+									className='aria-invalid:text-destructive'
+									htmlFor='defective-description'>
+									{t('ns_erp:fields.defective_description')}
+								</Label>
+								<Label
+									className='ml-auto inline-flex items-center justify-end gap-x-2'
+									htmlFor='toggle-use-desc-template'>
+									<Icon name='Sparkles' strokeWidth={1.5} />
+									{t('ns_common:editor.use_available_template')}
+								</Label>
+								<Checkbox
+									checked={useAvailableTemplate}
+									disabled={isNil(formAction)}
+									id='toggle-use-desc-template'
+									onCheckedChange={(checked) => setUseAvailabelTemplate(Boolean(checked))}
 								/>
-							) : (
+							</Div>
+
+							<Suspense
+								fallback={
+									<Div className='place-content-center place-items-center'>
+										<Icon className='animate-spin' name='LoaderCircle' />
+									</Div>
+								}>
 								<Editor
 									defaultValue={initialEditorContent.current}
 									id='defective-description'
 									ref={setEditorRef}
 									onUploadStateChange={setImageUploading}
 								/>
-							)}
+							</Suspense>
 							{form.getErrors('defective_description') && (
 								<Typography
 									className={cn(
