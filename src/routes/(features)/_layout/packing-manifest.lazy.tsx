@@ -4,6 +4,7 @@ import { PageAction, PageDescription, PageHeader, PageSeparator, PageTitle, Page
 import { useBreadcrumbContext } from '@contexts/breadcrumb-context'
 import ReportMasterTable from '@features/packing-manifest/components/data-table'
 import DownloadExcelButton from '@features/packing-manifest/components/download-excel-button'
+import { usePackingManifestList } from '@features/packing-manifest/hooks/use-packing-manifest-list'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -34,18 +35,26 @@ function Page() {
 					UserRole.FG_WAREHOUSE_STAFF,
 					UserRole.INDUSTRIAL_ENGINEERING_STAFF
 				]}>
-				<PageWrapper>
-					<PageHeader>
-						<PageTitle>{t('ns_packing:titles.packing_manifest')}</PageTitle>
-						<PageDescription>{t('ns_packing:descriptions.packing_manifest')}</PageDescription>
-						<PageAction>
-							<DownloadExcelButton />
-						</PageAction>
-					</PageHeader>
-					<PageSeparator />
-					<ReportMasterTable />
-				</PageWrapper>
+				<ManifestPageContent />
 			</RoleGuard>
 		</Fragment>
+	)
+}
+
+function ManifestPageContent() {
+	const { t } = useTranslation()
+	const list = usePackingManifestList()
+	return (
+		<PageWrapper>
+			<PageHeader>
+				<PageTitle>{t('ns_packing:titles.packing_manifest')}</PageTitle>
+				<PageDescription>{t('ns_packing:descriptions.packing_manifest')}</PageDescription>
+				<PageAction>
+					<DownloadExcelButton filters={list.filters} />
+				</PageAction>
+			</PageHeader>
+			<PageSeparator />
+			<ReportMasterTable list={list} />
+		</PageWrapper>
 	)
 }

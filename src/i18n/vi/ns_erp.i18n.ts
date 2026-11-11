@@ -76,6 +76,7 @@ export default {
 		progress: 'Tiến độ',
 		ie_signature: 'Chữ ký XNK',
 		punctured_container: 'Container bị thủng',
+		packing_standard: 'Quy cách đóng thùng',
 		seal_number: 'Số chì',
 		smelling_container: 'Container có mùi',
 		moist_container: 'Container bị ẩm',

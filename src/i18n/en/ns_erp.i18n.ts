@@ -75,6 +75,7 @@ export default {
 		po_size_qty: 'Purchase order quantity by size',
 		prod_color: 'Product color',
 		progress: 'Progress',
+		packing_standard: 'Packing standard',
 		punctured_container: 'Punctured container',
 		seal_number: 'Seal number',
 		smelling_container: 'Smelling container',

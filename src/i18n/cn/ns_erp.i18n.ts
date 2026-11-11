@@ -71,6 +71,7 @@ export default {
 		outbound_date: '出庫日期',
 		outbound_qty: '出庫數量',
 		packaging_code: '裝箱單號',
+		packing_standard: '包装规格',
 		po: '订单编号',
 		po_size_qty: '订单尺寸数量',
 		prod_color: '产品颜色',

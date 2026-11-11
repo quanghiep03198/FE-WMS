@@ -7,60 +7,17 @@ import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
 import { Input } from '@components/ui/input'
-import { PackingService } from '@features/packing-manifest/services/packing.service'
-import type { IPackingManifest } from '@features/packing-manifest/types'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import type { usePackingManifestList } from '@features/packing-manifest/hooks/use-packing-manifest-list'
+import type { PackingManifestRow } from '@features/packing-manifest/types'
 import { createColumnHelper } from '@tanstack/react-table'
 import React, { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-const ReportMasterTable: React.FC = () => {
+const columnHelper = createColumnHelper<PackingManifestRow>()
+
+const ReportMasterTable: React.FC<{ list: ReturnType<typeof usePackingManifestList> }> = ({ list }) => {
 	const { t, i18n } = useTranslation()
-	const { data, isLoading, refetch } = useQuery({
-		queryKey: ['PACKING_MANIFEST'],
-		queryFn: () => PackingService.getPackingManifest(),
-		select: (response) => response.metadata
-	})
-
-	const queryClient = useQueryClient()
-
-	const { mutateAsync, isPending, isError } = useMutation({
-		mutationFn: (payload: { po: string; size: string; actual_weight_in: number }) =>
-			PackingService.bulkUpdatePacking(payload),
-		onMutate: async (variables) => {
-			// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-			await queryClient.cancelQueries({ queryKey: ['PACKING_MANIFEST'] })
-
-			// Snapshot the previous value
-			const previousData = queryClient.getQueryData<ResponseBody<IPackingManifest[]>>(['PACKING_MANIFEST'])
-
-			// Optimistically update to the new value
-			queryClient.setQueryData<ResponseBody<IPackingManifest[]>>(['PACKING_MANIFEST'], (oldData) => {
-				if (!oldData) return oldData
-				return {
-					...oldData,
-					metadata: oldData.metadata.map((item) => {
-						if (item.po === variables.po && item.original_size_data === variables.size)
-							return { ...item, ...variables }
-						return item
-					})
-				}
-			})
-
-			// Return a context object with the snapshotted value
-			return { previousData }
-		},
-		onError: (_error, _variables, context) => {
-			if (context && context.previousData) {
-				queryClient.setQueryData<ResponseBody<IPackingManifest[]>>(['PACKING_MANIFEST'], context.previousData)
-			}
-		},
-		onSettled: () => {
-			queryClient.invalidateQueries({ predicate: ({ queryKey }) => queryKey.includes('PACKING_MANIFEST') })
-		}
-	})
-
-	const columnHelper = createColumnHelper<IPackingManifest>()
+	const { updateWeight, isUpdatingWeight, isUpdateError } = list
 
 	const columns = useMemo(
 		() => [
@@ -72,7 +29,7 @@ const ReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'includesString',
 				size: 200,
-				meta: { align: 'left' },
+				meta: { align: 'left', filterDebounce: 400 },
 				cell: TableCellText
 			}),
 			columnHelper.accessor('brand_name', {
@@ -83,10 +40,10 @@ const ReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'equalsString',
 				size: 200,
-				meta: { align: 'left', filterVariant: 'select' },
+				meta: { align: 'left', filterDebounce: 400 },
 				cell: TableCellText
 			}),
-			columnHelper.accessor('shoes_style', {
+			columnHelper.accessor('factory_shoes_style', {
 				header: t('ns_erp:fields.factory_shoes_style'),
 				enableSorting: true,
 				enableMultiSort: true,
@@ -94,10 +51,10 @@ const ReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'fuzzy',
 				size: 200,
-				meta: { align: 'left', filterVariant: 'select' },
+				meta: { align: 'left', filterDebounce: 400 },
 				cell: TableCellText
 			}),
-			columnHelper.accessor('color', {
+			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
 				enableSorting: true,
 				enableMultiSort: true,
@@ -105,11 +62,11 @@ const ReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'equalsString',
 				size: 200,
-				meta: { align: 'left', filterVariant: 'select' },
+				meta: { align: 'left', filterDebounce: 400 },
 				cell: TableCellText
 			}),
-			columnHelper.accessor('size_data', {
-				header: 'Size',
+			columnHelper.accessor('packing_standard', {
+				header: t('ns_erp:fields.packing_standard'),
 				enableSorting: true,
 				enableMultiSort: true,
 				enableColumnFilter: false,
@@ -117,7 +74,7 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				size: 200,
 				maxSize: 400,
-				meta: { align: 'left' },
+				meta: { align: 'left', filterDebounce: 400 },
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return typeof value === 'string' ? (
@@ -142,6 +99,7 @@ const ReportMasterTable: React.FC = () => {
 				enableColumnFilter: false,
 				enablePinning: false,
 				size: 120,
+				meta: { filterDebounce: 400 },
 				cell: ({ getValue }) => {
 					const factoryCode = getValue()
 					return t(TRANSLATED_FACTORY[factoryCode], {
@@ -158,8 +116,11 @@ const ReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'inNumberRange',
 				size: 200,
-				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
-				cell: ({ getValue }) => formatIntlNumber(getValue())
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number', disableFacetedRangeLimits: true },
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return value === null ? t('ns_common:titles.unknown') : formatIntlNumber(value)
+				}
 			}),
 			columnHelper.accessor('actual_avg_weight', {
 				header: t('ns_erp:fields.actual_avg_weight'),
@@ -169,20 +130,22 @@ const ReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'inNumberRange',
 				size: 200,
-				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number', disableFacetedRangeLimits: true },
 				cell: ({ getValue, row }) => {
 					const value = getValue()
 					return (
 						<Input
-							aria-busy={isPending}
-							aria-invalid={isError}
+							aria-busy={isUpdatingWeight}
+							aria-invalid={isUpdateError}
 							className='aria-invalid:border-destructive block rounded-none border-none bg-inherit text-right shadow-none aria-busy:opacity-50'
-							defaultValue={value}
+							defaultValue={value ?? ''}
+							disabled={!row.original.po}
+							key={`${row.original.po}-${row.original.original_size_data}-${value}`}
 							placeholder={t('ns_common:titles.unknown')}
 							type='number'
 							onBlur={(e) => {
-								if (e.currentTarget.value && Number.parseFloat(e.target.value) !== value)
-									mutateAsync({
+								if (row.original.po && e.currentTarget.value && Number.parseFloat(e.target.value) !== value)
+									updateWeight({
 										po: row.original.po,
 										size: row.original.original_size_data,
 										actual_weight_in: Number.parseFloat(e.currentTarget.value)
@@ -200,7 +163,7 @@ const ReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'inNumberRange',
 				size: 200,
-				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number', disableFacetedRangeLimits: true },
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('target_item_qty', {
@@ -211,8 +174,11 @@ const ReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'inNumberRange',
 				size: 200,
-				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
-				cell: ({ getValue }) => formatIntlNumber(getValue())
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number', disableFacetedRangeLimits: true },
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return value === null ? t('ns_common:titles.unknown') : formatIntlNumber(value)
+				}
 			}),
 			columnHelper.accessor('weighed_box_qty', {
 				header: t('ns_erp:fields.weighed_box_qty'),
@@ -222,7 +188,7 @@ const ReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'inNumberRange',
 				size: 200,
-				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number', disableFacetedRangeLimits: true },
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 
@@ -234,40 +200,63 @@ const ReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'inNumberRange',
 				size: 200,
-				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number', disableFacetedRangeLimits: true },
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			})
 		],
-		[i18n.language]
+		[t, i18n.language, isUpdatingWeight, isUpdateError, updateWeight]
 	)
 
+	const total = list.data?.total ?? 0
+	const totalPages = Math.max(1, Math.ceil(total / list.pagination.pageSize))
 	return (
-		<DataTable
-			columns={columns}
-			data={data}
-			enableMultiSort={true}
-			loading={isLoading}
-			containerProps={{
-				style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
-			}}
-			initialState={{
-				pagination: {
-					pageIndex: 0,
-					pageSize: 50
-				}
-			}}
-			toolbarProps={{
-				slotRight: () => {
-					return (
-						<Fragment>
-							<Button size='icon' variant='outline' onClick={() => refetch()}>
-								<Icon name='RefreshCcw' />
-							</Button>
-						</Fragment>
-					)
-				}
-			}}
-		/>
+		<>
+			{list.isError && <p role='alert'>{t('ns_packing:manifest.list_error')}</p>}
+			<DataTable
+				manualFiltering
+				manualPagination
+				manualSorting
+				columnFilters={list.columnFilters}
+				columns={columns}
+				data={list.data?.items}
+				enableGlobalFilter={false}
+				enableMultiSort={false}
+				loading={list.isLoading}
+				sorting={list.sorting}
+				containerProps={{
+					style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
+				}}
+				initialState={{
+					pagination: {
+						pageIndex: 0,
+						pageSize: 20
+					}
+				}}
+				paginationProps={{
+					variant: 'default',
+					page: list.pagination.page,
+					limit: list.pagination.pageSize,
+					totalDocs: total,
+					totalPages,
+					hasPrevPage: list.pagination.page > 1,
+					hasNextPage: !list.isPlaceholderData && list.pagination.page < totalPages
+				}}
+				toolbarProps={{
+					slotRight: () => {
+						return (
+							<Fragment>
+								<Button size='icon' variant='outline' onClick={() => list.refetch()}>
+									<Icon name='RefreshCcw' />
+								</Button>
+							</Fragment>
+						)
+					}
+				}}
+				onColumnFiltersChange={list.onColumnFiltersChange}
+				onPaginationChange={list.onPaginationChange}
+				onSortingChange={list.onSortingChange}
+			/>
+		</>
 	)
 }
 
