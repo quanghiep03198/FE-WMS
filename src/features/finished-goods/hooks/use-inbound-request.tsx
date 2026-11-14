@@ -88,9 +88,7 @@ export const useDeleteEpcMutation = () => {
 export const useDeleteScanningMoMutation = () => {
 	const { setSelectedOrder, setCurrentPage } = usePageContext('setSelectedOrder', 'setCurrentPage')
 
-	const mutationMeta = useMutationMeta()
-
-	mutationMeta.invalidates.push(
+	const mutationMeta = useMutationMeta(
 		[DeletedFinishedGoodsQueryKey.DELETED_EPCS],
 		[DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]
 	)
@@ -117,14 +115,12 @@ export const useUpdateStockVariationMutation = () => {
 		'setCurrentPage'
 	)
 
-	const mutationMeta = useMutationMeta()
+	const mutationMeta = useMutationMeta([StockTransactionQueryKey.STOCK_TRANSACTION, StockFlow.INBOUND])
 
 	const handler = {
 		[FinishedGoodsStockAction.IMPORT]: FinishedGoodsStockService.stockIn,
 		[FinishedGoodsStockAction.EXPORT]: FinishedGoodsStockService.recallFromStock
 	}
-
-	mutationMeta.invalidates.push([StockTransactionQueryKey.STOCK_TRANSACTION, StockFlow.INBOUND])
 
 	return useMutation({
 		meta: mutationMeta,
@@ -139,7 +135,7 @@ export const useUpdateStockVariationMutation = () => {
 	})
 }
 
-const useMutationMeta = (): Required<Register['mutationMeta']> => {
+const useMutationMeta = (...extendedKeys: unknown[][]): Required<Pick<Register['mutationMeta'], 'invalidates'>> => {
 	const { selectedDevice, currentPage, selectedOrder } = usePageContext(
 		'selectedDevice',
 		'currentPage',
@@ -154,7 +150,8 @@ const useMutationMeta = (): Required<Register['mutationMeta']> => {
 	return {
 		invalidates: [
 			[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice, params],
-			[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice]
+			[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice],
+			...extendedKeys
 		]
 	}
 }

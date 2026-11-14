@@ -28,10 +28,7 @@ const DatalistPanel: React.FC = () => {
 	const { data, isLoading, isPlaceholderData } = useGetDefectiveGoodsQuery()
 	const queryClient = useQueryClient()
 	const handlePrefetch = usePrefetchDefectiveGoodsQuery()
-	const { searchParams: currentPage, setParam } = useQueryParams<
-		Pick<Pagination<IDefectiveGoods>, 'page'>,
-		number
-	>(
+	const { searchParams: currentPage, setParam } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>, number>(
 		undefined,
 		{ select: (params) => params.page ?? 1 }
 	)
@@ -52,13 +49,16 @@ const DatalistPanel: React.FC = () => {
 
 	// Prefetch trang kế tiếp
 	useEffect(() => {
-		if (isPlaceholderData || !data || !data.hasNextPage) return
+		let cancelScheduledPrefetch: () => void = () => {
+			console.info('Prefetch cancelled')
+		}
+
+		if (isPlaceholderData || !data || !data.hasNextPage) cancelScheduledPrefetch?.()
 
 		const run = async () => {
 			await queryClient.query(getDefectiveGoodsQueryOptions({ ...searchTerms, page: data.page + 1 }))
 		}
 
-		let cancelScheduledPrefetch: (() => void) | undefined
 		if (typeof window.requestIdleCallback === 'function') {
 			const id = window.requestIdleCallback(() => void run(), { timeout: 120 })
 			cancelScheduledPrefetch = () => window.cancelIdleCallback(id)

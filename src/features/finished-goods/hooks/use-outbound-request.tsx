@@ -29,9 +29,7 @@ export const useGetScanningOutboundEpcQuery = () => {
 }
 
 export const useDeleteEpcMutation = () => {
-	const mutationMeta = useMutationMeta()
-
-	mutationMeta.invalidates.push(
+	const mutationMeta = useMutationMeta(
 		[DeletedFinishedGoodsQueryKey.DELETED_EPCS],
 		[DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]
 	)
@@ -44,9 +42,7 @@ export const useDeleteEpcMutation = () => {
 }
 
 export const useDeleteScanningMoMutation = () => {
-	const mutationMeta = useMutationMeta()
-
-	mutationMeta.invalidates.push(
+	const mutationMeta = useMutationMeta(
 		[DeletedFinishedGoodsQueryKey.DELETED_EPCS],
 		[DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]
 	)
@@ -63,9 +59,7 @@ export const useDeleteScanningMoMutation = () => {
 export const useStockOutMutation = () => {
 	const { t } = useTranslation()
 
-	const mutationMeta = useMutationMeta()
-
-	mutationMeta.invalidates.push([StockTransactionQueryKey.STOCK_TRANSACTION, StockFlow.OUTBOUND])
+	const mutationMeta = useMutationMeta([StockTransactionQueryKey.STOCK_TRANSACTION, StockFlow.OUTBOUND])
 
 	return useMutation({
 		meta: mutationMeta,
@@ -74,10 +68,10 @@ export const useStockOutMutation = () => {
 	})
 }
 
-const useMutationMeta = (): Required<Register['mutationMeta']> => {
+const useMutationMeta = (...extendedKeys: unknown[][]): Required<Pick<Register['mutationMeta'], 'invalidates'>> => {
 	const { currentPage } = usePageContext('currentPage')
 
 	return {
-		invalidates: [[FinishedGoodsOutboundQueryKeys.SCANNING_OUTBOUND_EPCS, { _page: currentPage }]]
+		invalidates: [[FinishedGoodsOutboundQueryKeys.SCANNING_OUTBOUND_EPCS, { _page: currentPage }], ...extendedKeys]
 	}
 }
