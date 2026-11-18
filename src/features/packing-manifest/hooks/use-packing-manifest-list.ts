@@ -25,11 +25,13 @@ export function usePackingManifestList() {
 		if (!query.data || query.isPlaceholderData || query.data.page !== params.page) return
 		if (params.page * params.pageSize >= query.data.total) return
 		const nextParams = { ...params, page: params.page + 1 }
-		void queryClient.fetchQuery({
-			queryKey: ['PACKING_MANIFEST', nextParams],
-			queryFn: () => PackingService.getPackingManifestPage(nextParams),
-			staleTime: 10_000
-		}).catch((error: unknown) => console.warn('Packing manifest prefetch failed:', error))
+		void queryClient
+			.query({
+				queryKey: ['PACKING_MANIFEST', nextParams],
+				queryFn: () => PackingService.getPackingManifestPage(nextParams),
+				staleTime: 10_000
+			})
+			.catch((error: unknown) => console.warn('Packing manifest prefetch failed:', error))
 	}, [params, query.data, query.isPlaceholderData, queryClient])
 	const update = useMutation({
 		mutationFn: (payload: { po: string; size: string; actual_weight_in: number }) =>
