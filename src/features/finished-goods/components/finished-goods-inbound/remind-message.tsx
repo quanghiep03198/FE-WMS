@@ -8,7 +8,7 @@ const RemindMessage: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='inline-flex items-center self-center'>
+		<Div className='flex justify-center items-center self-center'>
 			<Icon
 				className='animate-in zoom-in-0 slide-in-from-bottom-2 xxl:block mr-2 hidden duration-500'
 				name='BotMessageSquare'
