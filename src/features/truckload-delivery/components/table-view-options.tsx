@@ -1,7 +1,7 @@
 'use no memo'
 
 import { Tooltip } from '@components/customs/tooltip'
-import { Button } from '@components/ui/button'
+import { buttonVariants } from '@components/ui/button'
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -34,12 +34,13 @@ export function TableViewOptions({ table }: { table: Table<ITruckloadDelivery> }
 
 	return (
 		<DropdownMenu>
-			<Tooltip contentProps={{ hidden: !isMobile }} message={t('ns_common:table.column_settings')}>
-				<DropdownMenuTrigger asChild>
-					<Button variant='outline'>
-						<Icon name='Settings2' />
-						{t('ns_common:table.column_settings')}
-					</Button>
+			<Tooltip
+				contentProps={{ hidden: !isMobile }}
+				message={t('ns_common:table.column_settings')}
+				triggerProps={{ asChild: true }}>
+				<DropdownMenuTrigger className={buttonVariants({ variant: 'outline' })}>
+					<Icon name='Settings2' />
+					{t('ns_common:table.column_settings')}
 				</DropdownMenuTrigger>
 			</Tooltip>
 			<DropdownMenuContent align='end' className='w-60'>
