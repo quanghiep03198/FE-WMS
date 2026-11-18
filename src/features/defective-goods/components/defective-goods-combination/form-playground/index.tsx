@@ -514,10 +514,9 @@ const DefectiveGoodsForm: React.FC = () => {
 									onCheckedChange={(checked) => setUseAvailabelTemplate(Boolean(checked))}
 								/>
 							</Div>
-
 							<Suspense
 								fallback={
-									<Div className='place-content-center place-items-center'>
+									<Div className='flex justify-center items-center h-56'>
 										<Icon className='animate-spin' name='LoaderCircle' />
 									</Div>
 								}>
@@ -541,7 +540,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 				</Div>
 				{/* Footer bar */}
-				<Div className='bg-background flex max-h-full min-h-(--bar-height) items-center justify-between gap-x-2 px-4'>
+				<Div className='bg-background flex max-h-full min-h-(--bar-height) max-h-(--bar-height) basis-(--bar-height) items-center justify-between gap-x-2 px-4'>
 					<MobileReaderPlaygroundTrigger />
 					<ToggleFullscreen />
 					<CombinationStrategySelect disabled={formAction === CommonActions.UPDATE} />
@@ -552,7 +551,7 @@ const DefectiveGoodsForm: React.FC = () => {
 }
 
 const Form = tw.form`
-	h-full overflow-y-auto scrollbar-track-accent/50 grid divide-y divide-border @container/combination-form
+	flex flex-col justify-start item-stretch h-full overflow-y-auto scrollbar-track-accent/50 divide-y divide-border @container/combination-form
 	data-[action=CREATE]:grid-rows-[var(--bar-height)_auto_var(--bar-height)] 
 	data-[action=UPDATE]:grid-rows-[var(--bar-height)_auto_auto_var(--bar-height)] 
 `
