@@ -45,7 +45,7 @@ const PRERENDERED_ITEMS = 5
 const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
 
-const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = ({ listBoxFooterRef }) => {
+const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<Nullish<HTMLDivElement>> }> = ({ listBoxFooterRef }) => {
 	const { t } = useTranslation()
 	const isLargeScreen = useMediaQuery('(min-width: 920px)')
 	const [isExpanded, setIsExpanded] = useSessionStorageState<boolean>('rfid:inbound:epc_list_expanded', {
@@ -81,7 +81,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 	)
 
 	// * Abort controller to control fetch event source
-	const abortControllerRef = useRef<AbortController>(new AbortController())
+	const abortControllerRef = useRef<AbortController | null>(null)
 
 	// * Alert for invalid EPCs
 	const [hasInvalidEpcAlert, setHasInvalidEpcAlert] = useState<boolean>(false)
@@ -102,8 +102,14 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
-		if (retryCountRef.current > 3 || !selectedDevice) return
-		abortControllerRef.current = new AbortController()
+		if (
+			retryCountRef.current > 3 ||
+			!selectedDevice ||
+			(abortControllerRef.current && !abortControllerRef.current.signal.aborted)
+		)
+			return
+		const controller = new AbortController()
+		abortControllerRef.current = controller
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
 			await fetchEventSource(AppConfigs.BASE_API_URL + `/rfid/inbound/sse`, {
@@ -113,7 +119,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 					[RequestHeaders.FACTORY_CODE]: env<FactoryCode>('VITE_APP_TENANT'),
 					[RequestHeaders.RFID_READER_ID]: selectedDevice
 				},
-				signal: abortControllerRef.current.signal,
+				signal: controller.signal,
 				openWhenHidden: true,
 				async onopen(response) {
 					if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
@@ -124,7 +130,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 						retryCountRef.current = 0
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
-						await AuthService.refreshToken(abortControllerRef.current?.signal).catch((error) => {
+						await AuthService.refreshToken(controller.signal).catch((error) => {
 							setScanningStatus(DEFAULT_PROPS.scanningStatus)
 							throw new FatalError(error)
 						})
@@ -157,7 +163,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 					const isRetriable = error instanceof RetriableError
 					if (!isRetriable) {
 						setScanningStatus('disconnected')
-						if (!abortControllerRef.current.signal.aborted) abortControllerRef.current.abort()
+						if (!controller.signal.aborted) controller.abort()
 						toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
 						throw error //! error is fatal, rethrow the error inside the callback to stop the entire
 					}
@@ -175,16 +181,21 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 				}
 			})
 		} catch {
-			toast(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
-			setScanningStatus('disconnected')
+			if (abortControllerRef.current === controller) {
+				toast(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
+				setScanningStatus('disconnected')
+			}
 		} finally {
-			if (scanningStatus !== 'disconnected') toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
+			if (abortControllerRef.current === controller) {
+				abortControllerRef.current = null
+				if (scanningStatus !== 'disconnected') toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
+			}
 		}
 	}
 
 	// * Triggered when scanning status changes
 	useUpdateEffect(() => {
-		const cancelFetchSSE = () => abortControllerRef.current.abort()
+		const cancelFetchSSE = () => abortControllerRef.current?.abort()
 
 		switch (scanningStatus) {
 			case undefined: {
@@ -275,7 +286,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 
 	useUnmount(() => {
 		setScanningStatus('disconnected')
-		abortControllerRef.current.abort()
+		abortControllerRef.current?.abort()
 	})
 
 	const scrollToFn = useScrollToFn(containerRef)

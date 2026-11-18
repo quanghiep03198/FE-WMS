@@ -176,7 +176,7 @@ const InboundReportMasterTable: React.FC = () => {
 					return t(`ns_inoutbound:shoes_source.${value}`, { defaultValue: value })
 				}
 			}),
-			columnHelper.accessor('daily_outbound_qty', {
+			columnHelper.accessor('total_qty', {
 				header: t('ns_erp:fields.daily_outbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,

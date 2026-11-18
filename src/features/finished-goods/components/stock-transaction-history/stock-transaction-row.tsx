@@ -81,7 +81,7 @@ const StockTransactionRow: React.FC<StockTransactionRowProps<StockFlow>> = ({ da
 			style={{ height: size }}>
 			<TableCell
 				align='left'
-				className='group-aria-disabled/row:line-through before:text-muted-foreground uppercase before:mr-1 before:content-["#"]'>
+				className='group-aria-disabled/row:line-through font-jetbrains before:text-muted-foreground uppercase before:mr-1 before:content-["#"]'>
 				{data.id}
 			</TableCell>
 			<TableCell align='left'>

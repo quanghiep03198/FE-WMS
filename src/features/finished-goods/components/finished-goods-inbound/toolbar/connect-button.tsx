@@ -27,7 +27,7 @@ const ConnectButton: React.FC = () => {
 	)
 	const previousStatus = usePrevious(scanningStatus)
 
-	const scanningButtonProps = useMemo<TScanningButtonProps>(() => {
+	const scanningButtonProps = useMemo<Nullish<TScanningButtonProps>>(() => {
 		if (typeof scanningStatus === 'undefined' || scanningStatus === 'disconnected' || scanningStatus === 'connecting')
 			return { children: t('ns_common:actions.connect'), variant: 'default', icon: 'PlugZap' }
 		if (scanningStatus === 'connected')
@@ -74,6 +74,8 @@ const ConnectButton: React.FC = () => {
 				)
 		}
 	})
+
+	if (!scanningButtonProps) return null
 
 	return (
 		<Button disabled={!selectedDevice} variant={scanningButtonProps.variant} onClick={handleToggleScanning}>

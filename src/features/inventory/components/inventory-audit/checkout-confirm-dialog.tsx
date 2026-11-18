@@ -33,10 +33,10 @@ const CheckoutInventoryAuditConfirmDialog: React.FC<{ isClosed: boolean; isPlace
 						<MorphIcon icon={!isClosed ? LockOpen : Lock} size={16} speed={2} spring='smooth' />
 					</span>
 					{isPlaceholder
-						? t('inoutbound_actions.close_monthly_inventory', 'Close inventory')
+						? t('ns_inoutbound:inoutbound_actions.close_monthly_inventory', 'Close inventory')
 						: isClosed
 							? t('ns_common:status.confirmed')
-							: t('inoutbound_actions.close_monthly_inventory', 'Close inventory')}
+							: t('ns_inoutbound:inoutbound_actions.close_monthly_inventory', 'Close inventory')}
 				</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent>

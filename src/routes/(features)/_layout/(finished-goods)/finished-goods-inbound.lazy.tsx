@@ -45,19 +45,26 @@ function Page() {
 						<AlreadyScannedEpcsAlert />
 						<PageComposition.Container>
 							<PageComposition.Wrapper>
-								<div className='hidden @[920px]/page-container:block'>
+								<div className='order-3 @[920px]/page-container:order-none'>
 									<EpcListBox />
 								</div>
-								<div className='flex flex-col gap-6'>
-									<Toolbar />
-									<ScannedEpcCounter />
-									<div className='block @[920px]/page-container:hidden'>
-										<EpcListBox />
+								<div className='contents @[920px]/page-container:flex @[920px]/page-container:flex-col @[920px]/page-container:gap-6'>
+									<div className='order-1'>
+										<Toolbar />
 									</div>
-									<RemindMessage />
-									<InoutboundForm />
+									<div className='order-2'>
+										<ScannedEpcCounter />
+									</div>
+									<div className='order-4'>
+										<RemindMessage />
+									</div>
+									<div className='order-5'>
+										<InoutboundForm />
+									</div>
 								</div>
-								<SideToolbar />
+								<div className='order-last @[920px]/page-container:order-none'>
+									<SideToolbar />
+								</div>
 							</PageComposition.Wrapper>
 						</PageComposition.Container>
 					</PageProvider>
