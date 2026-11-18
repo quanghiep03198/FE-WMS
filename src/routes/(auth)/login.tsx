@@ -1,13 +1,13 @@
 import { UserRole } from '@common/constants/enums'
-import { Div } from '@components/customs/div'
-import AppLogo from '@components/shared/app-logo'
 import GridBackground from '@components/shared/grid-background'
 import Loading from '@components/shared/loading'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@components/ui/card'
 import LoginForm from '@features/auth/components/login/login-form'
+import type { MascotAction, MascotActionType, MascotFocusTarget } from '@features/auth/components/login/login-mascot'
+import LoginMascot from '@features/auth/components/login/login-mascot'
 import useAuth from '@hooks/use-auth'
-import { createFileRoute, Link, Navigate, redirect } from '@tanstack/react-router'
-import { Fragment } from 'react'
+import { createFileRoute, Navigate, redirect } from '@tanstack/react-router'
+import { Fragment, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Container,
@@ -31,6 +31,15 @@ export const Route = createFileRoute('/(auth)/login')({
 function LoginPage() {
 	const { isAuthenticated, user } = useAuth()
 	const { t } = useTranslation()
+	const [mascotFocusTarget, setMascotFocusTarget] = useState<MascotFocusTarget>('none')
+	const [passwordVisible, setPasswordVisible] = useState(false)
+	const [usernameProgress, setUsernameProgress] = useState(0)
+	const [mascotAction, setMascotAction] = useState<MascotAction | null>(null)
+	const nextMascotActionId = useRef(0)
+
+	const handleMascotAction = (type: MascotActionType) => {
+		setMascotAction({ type, id: ++nextMascotActionId.current })
+	}
 
 	if (isAuthenticated) {
 		const redirectRoute: FileRouteTypes['to'] =
@@ -50,26 +59,27 @@ function LoginPage() {
 			<Container>
 				<ThemeSelector />
 				<HomeNavigator />
-				<Card className='bg-accent/25 relative z-10 mx-auto grid w-full max-w-7xl auto-rows-max gap-y-0 overflow-clip rounded-lg border p-0 shadow-2xl md:max-w-xl lg:max-w-lg xl:grid-cols-[1.5fr_1fr]'>
-					<Div className='row-span-3 hidden overflow-clip p-0 xl:block' onContextMenu={(e) => e.preventDefault()}>
-						<video
-							autoPlay
-							loop
-							muted
-							className='h-full w-full border-none object-cover object-center outline-none!'
-							src='/wms-trailer.mp4'
+				<Card className='max-w-xl w-full z-10 border-none shadow-none'>
+					<CardHeader>
+						<LoginMascot
+							action={mascotAction}
+							focusTarget={mascotFocusTarget}
+							passwordVisible={passwordVisible}
+							usernameProgress={usernameProgress}
 						/>
-					</Div>
-					<CardHeader className='py-6 xl:col-start-2'>
-						<Link className='group mx-auto mb-6 sm:zoom-[0.8]' data-state='expanded' to='/'>
-							<AppLogo />
-						</Link>
-						<CardTitle className='text-center text-2xl whitespace-nowrap'>{t('ns_auth:texts.title')}</CardTitle>
+						<CardTitle className=' mt-6 text-center text-2xl whitespace-nowrap'>
+							{t('ns_auth:texts.title')}
+						</CardTitle>
 					</CardHeader>
-					<CardContent className='xl:col-start-2 xl:basis-2/5'>
-						<LoginForm />
+					<CardContent>
+						<LoginForm
+							onMascotAction={handleMascotAction}
+							onMascotFocusChange={setMascotFocusTarget}
+							onMascotPasswordVisibilityChange={setPasswordVisible}
+							onUsernameProgressChange={setUsernameProgress}
+						/>
 					</CardContent>
-					<CardFooter className='py-10 xl:col-start-2 xl:basis-2/5'>
+					<CardFooter>
 						<LanguageSelector />
 					</CardFooter>
 				</Card>

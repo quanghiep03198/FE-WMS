@@ -416,9 +416,9 @@ const featuresLayoutwarehouseStorageLocationsWarehouseIdLazyRoute =
 export interface FileRoutesByFullPath {
   '/authorization': typeof authAuthorizationRoute
   '/login': typeof authLoginRoute
+  '/': typeof publicIndexRoute
   '/rfid-agent': typeof publicRfidAgentRoute
   '/rfid-agent-documentation': typeof publicRfidAgentDocumentationRoute
-  '/': typeof publicIndexRoute
   '/truckload-delivery': typeof featuresLayoutTruckloadDeliveryRoute
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
   '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckLazyRoute
@@ -448,9 +448,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/authorization': typeof authAuthorizationRoute
   '/login': typeof authLoginRoute
+  '/': typeof publicIndexRoute
   '/rfid-agent': typeof publicRfidAgentRoute
   '/rfid-agent-documentation': typeof publicRfidAgentDocumentationRoute
-  '/': typeof publicIndexRoute
   '/truckload-delivery': typeof featuresLayoutTruckloadDeliveryRoute
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
   '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckLazyRoute
@@ -516,9 +516,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/authorization'
     | '/login'
+    | '/'
     | '/rfid-agent'
     | '/rfid-agent-documentation'
-    | '/'
     | '/truckload-delivery'
     | '/preferences'
     | '/cargo-weight-check'
@@ -548,9 +548,9 @@ export interface FileRouteTypes {
   to:
     | '/authorization'
     | '/login'
+    | '/'
     | '/rfid-agent'
     | '/rfid-agent-documentation'
-    | '/'
     | '/truckload-delivery'
     | '/preferences'
     | '/cargo-weight-check'
@@ -640,7 +640,7 @@ declare module '@tanstack/react-router' {
     '/(features)/_layout': {
       id: '/(features)/_layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof featuresLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }

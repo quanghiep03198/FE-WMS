@@ -1,6 +1,7 @@
 'use no memo'
 
 import { cn } from '@common/utils/cn'
+import { useUpdateEffect } from 'ahooks'
 import type { ResourceKey } from 'i18next'
 import { Eye, EyeOff } from 'lucide'
 import { MorphIcon } from 'morphicons/react'
@@ -15,7 +16,10 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Input } from '../../ui/input'
 import { Toggle } from '../../ui/toggle'
 
-export type InputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & React.ComponentProps<'input'>
+export type InputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> &
+	React.ComponentProps<'input'> & {
+		onToggleShowPassword?: (pressed: boolean) => void
+	}
 
 export function InputFieldControl<T extends FieldValues>(props: InputFieldControlProps<T>) {
 	const { control, getFieldState, getValues, watch } = useFormContext()
@@ -32,6 +36,7 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 		errorMessageVariant = 'inline',
 		defaultValue = getValues(name),
 		ref,
+		onToggleShowPassword,
 		...restProps
 	} = props
 
@@ -47,6 +52,10 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 	useEffect(() => {
 		setValue(currentValue)
 	}, [currentValue])
+
+	useUpdateEffect(() => {
+		if (localRef.current) localRef.current.focus()
+	}, [currentType])
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement>,
@@ -105,12 +114,13 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 											value={value}
 											className={cn(
 												className,
-												'aria-invalid:border-destructive aria-invalid:focus-within:border-destructive disabled:opacity-50',
+												'aria-invalid:border-destructive aria-invalid:focus-within:border-destructive disabled:opacity-50 shadow-xs',
 												type === 'password' && 'placeholder:font-pass placeholder:tracking-wider',
 												orientation === 'horizontal' && 'mb-2 block'
 											)}
 											ref={(e) => {
 												field.ref(e)
+												localRef.current = e
 												if (typeof resolvedRef === 'function') {
 													resolvedRef(e)
 												}
@@ -126,7 +136,9 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 										<Toggle
 											className='absolute top-1/2 right-1 z-20 size-8 -translate-y-1/2 bg-transparent p-0 focus-within:ring-0 focus-within:outline-none hover:bg-transparent data-[state=on]:bg-transparent'
 											type='button'
-											onPressedChange={(pressed) => setCurrentType(pressed ? 'text' : 'password')}>
+											onPressedChange={(pressed) => {
+												setCurrentType(pressed ? 'text' : 'password')
+											}}>
 											<MorphIcon
 												icon={currentType === 'password' ? Eye : EyeOff}
 												size={16}

@@ -15,14 +15,27 @@ import useAuth from '@hooks/use-auth'
 import { useMutation } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import type { LoginFormValues } from '../../schemas/login.schema'
 import { loginSchema } from '../../schemas/login.schema'
+import type { MascotActionType, MascotFocusTarget } from './login-mascot'
 
-const LoginForm: React.FC = () => {
+type LoginFormProps = {
+	onMascotAction?: (action: MascotActionType) => void
+	onMascotFocusChange?: (target: MascotFocusTarget) => void
+	onMascotPasswordVisibilityChange?: (visible: boolean) => void
+	onUsernameProgressChange?: (progress: number) => void
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({
+	onMascotAction,
+	onMascotFocusChange,
+	onMascotPasswordVisibilityChange,
+	onUsernameProgressChange
+}) => {
 	const { t } = useTranslation()
 	const { setUserProfile, setAccessToken } = useAuth()
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
@@ -51,6 +64,10 @@ const LoginForm: React.FC = () => {
 	})
 
 	const username = useWatch({ name: 'username', control: form.control })
+	const passwordInputRef = useRef<HTMLInputElement>(null)
+	const setPasswordInputRef = useCallback((input: HTMLInputElement | null) => {
+		passwordInputRef.current = input
+	}, [])
 
 	useEffect(() => {
 		if (shouldPersistAccount) {
@@ -61,29 +78,54 @@ const LoginForm: React.FC = () => {
 		}
 	}, [username, shouldPersistAccount])
 
+	useEffect(() => {
+		const passwordInput = passwordInputRef.current
+		if (!passwordInput) return
+
+		const observer = new MutationObserver(() => onMascotPasswordVisibilityChange?.(passwordInput.type === 'text'))
+		observer.observe(passwordInput, { attributes: true, attributeFilter: ['type'] })
+		return () => observer.disconnect()
+	}, [onMascotPasswordVisibilityChange])
+
+	const handleSubmit = form.handleSubmit(
+		(data) => {
+			onMascotAction?.('nod')
+			return login(data)
+		},
+		() => onMascotAction?.('shake')
+	)
+
 	return (
 		<FormProvider {...form}>
-			<Form onSubmit={form.handleSubmit((data) => login(data))}>
+			<Form onSubmit={handleSubmit}>
 				<InputFieldControl
 					autoComplete='username'
 					defaultValue={persistedAccount}
 					label={t('ns_auth:fields.username')}
 					name='username'
 					placeholder={t('ns_auth:fields.username')}
+					onBlur={() => onMascotFocusChange?.('none')}
+					onFocus={() => onMascotFocusChange?.('username')}
+					onInput={(event) =>
+						onUsernameProgressChange?.(Math.min((event.currentTarget.selectionStart ?? 0) / 80, 1))
+					}
 				/>
 				<InputFieldControl
 					autoComplete='current-password'
 					label={t('ns_auth:fields.password')}
 					name='password'
 					placeholder='********'
+					ref={setPasswordInputRef}
 					type='password'
+					onBlur={() => onMascotFocusChange?.('none')}
+					onFocus={() => onMascotFocusChange?.('password')}
 				/>
 
 				<FormItem>
 					<FormLabel>{t('ns_common:common_fields.factory_code')}</FormLabel>
 					<Input
 						readOnly
-						className='cursor-auto'
+						className='cursor-auto shadow-xs'
 						value={t(TRANSLATED_FACTORY[env('VITE_APP_TENANT')], { ns: 'ns_common' })}
 					/>
 				</FormItem>
