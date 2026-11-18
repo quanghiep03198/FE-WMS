@@ -118,9 +118,7 @@ const NavSidebar: React.FC = () => {
 					<SidebarGroupLabel>{t('navigation.integration_menu_label')}</SidebarGroupLabel>
 					<SidebarMenu aria-label='Administration' role='menu'>
 						{navigationConfig.integrations.map((item) => {
-							return (
-								<SidebarMenuLink indice='none' key={uuid()} {...item} viewTransition={{ types: ['fade'] }} />
-							)
+							return <SidebarMenuLink indice='none' key={uuid()} {...item} />
 						})}
 					</SidebarMenu>
 				</SidebarGroup>
@@ -131,14 +129,7 @@ const NavSidebar: React.FC = () => {
 							<SidebarGroupLabel>{t('navigation.administration_menu_label')}</SidebarGroupLabel>
 							<SidebarMenu aria-label='Administration' role='menu'>
 								{navigationConfig.administration.map((item) => {
-									return (
-										<SidebarMenuLink
-											indice='none'
-											key={uuid()}
-											viewTransition={{ types: ['fade'] }}
-											{...item}
-										/>
-									)
+									return <SidebarMenuLink indice='none' key={uuid()} {...item} />
 								})}
 							</SidebarMenu>
 						</SidebarGroup>
