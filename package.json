@@ -208,6 +208,7 @@
     "globals": "^15.15.0",
     "husky": "^9.1.7",
     "jsdom": "^26.0.0",
+    "playwright": "^1.65.1",
     "postcss": "^8.5.2",
     "prettier": "^3.9.5",
     "prettier-plugin-organize-imports": "^4.3.0",
