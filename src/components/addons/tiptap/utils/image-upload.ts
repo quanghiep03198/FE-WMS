@@ -1,5 +1,5 @@
-import axiosInstance from '@configs/axios.config'
 import { AppConfigs } from '@configs/app.config'
+import axiosInstance from '@configs/axios.config'
 
 const imageTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/gif']
 const maxImageSize = 5 * 1024 * 1024
@@ -18,10 +18,14 @@ export async function uploadImage(file: File): Promise<string> {
 		if (!context) throw new Error('Canvas is unavailable')
 		context.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
 		blob = await new Promise<Blob>((resolve, reject) => {
-			canvas.toBlob((result) => {
-				if (result && result.type === 'image/webp') resolve(result)
-				else reject(new Error('WebP encoding failed'))
-			}, 'image/webp', 0.8)
+			canvas.toBlob(
+				(result) => {
+					if (result && result.type === 'image/webp') resolve(result)
+					else reject(new Error('WebP encoding failed'))
+				},
+				'image/webp',
+				0.8
+			)
 		})
 	} finally {
 		bitmap.close()
@@ -30,12 +34,19 @@ export async function uploadImage(file: File): Promise<string> {
 	if (blob.size > maxImageSize) throw new Error('Image exceeds 5 MB after compression')
 	const form = new FormData()
 	form.append('file', blob, `${file.name.replace(/\.[^.]+$/, '')}.webp`)
-	const baseURL = import.meta.env.DEV ? window.location.origin : new URL(AppConfigs.BASE_API_URL, window.location.origin).origin
+	const baseURL = import.meta.env.DEV
+		? window.location.origin
+		: new URL(AppConfigs.BASE_API_URL, window.location.origin).origin
 	const response = await axiosInstance.post<unknown, { id: string; url: string }>('/uploads/images', form, {
 		baseURL,
 		headers: { 'Content-Type': 'multipart/form-data' }
 	})
-	if (!response || typeof response.id !== 'string' || typeof response.url !== 'string' || !/^\/files\/[^/?#]+$/.test(response.url)) {
+	if (
+		!response ||
+		typeof response.id !== 'string' ||
+		typeof response.url !== 'string' ||
+		!/^\/files\/[^/?#]+$/.test(response.url)
+	) {
 		throw new Error('Invalid image upload response')
 	}
 	return response.url

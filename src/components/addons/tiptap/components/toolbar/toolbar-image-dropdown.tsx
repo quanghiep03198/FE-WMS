@@ -15,7 +15,9 @@ import { object, url, type infer as Infer } from 'zod'
 import { useEditorContext } from '../../context/editor-context'
 
 const uploadSchema = object({
-	url: url('Invalid image URL').refine((value) => /^https?:\/\//i.test(value), 'Invalid image URL').optional()
+	url: url('Invalid image URL')
+		.refine((value) => /^https?:\/\//i.test(value), 'Invalid image URL')
+		.optional()
 })
 
 const ImageDropdown: React.FC = () => {

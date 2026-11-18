@@ -25,10 +25,7 @@ type SearchParamsObject = Record<string, unknown>
  * Note: This hook assumes that the component using it is wrapped within a `Router` context provided by `@tanstack/react-router`.
  */
 
-export default function useQueryParams<
-	T extends SearchParamsObject = SearchParamsObject,
-	TSelected = T
->(
+export default function useQueryParams<T extends SearchParamsObject = SearchParamsObject, TSelected = T>(
 	defaultParams?: Partial<T>,
 	options?: Omit<UseSearchOptions, 'select'> & {
 		select?: (search: T) => TSelected

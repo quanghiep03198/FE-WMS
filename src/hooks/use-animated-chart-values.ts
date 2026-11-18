@@ -31,12 +31,23 @@ export function useAnimatedChartValues<T>(
 
 		if (previousTarget && previousTarget.length === data.length) {
 			const previousValues = new Map(previousTarget.map((datum) => [accessors.key(datum), accessors.value(datum)]))
-			if (data.every((datum) => previousValues.has(accessors.key(datum)) &&
-				Object.is(previousValues.get(accessors.key(datum)), accessors.value(datum)))) {
-				const currentValues = new Map(displayedRef.current.values.map((datum) => [accessors.key(datum), accessors.value(datum)]))
-				const isSettled = currentValues.size === data.length &&
-					data.every((datum) => currentValues.has(accessors.key(datum)) &&
-						Object.is(currentValues.get(accessors.key(datum)), accessors.value(datum)))
+			if (
+				data.every(
+					(datum) =>
+						previousValues.has(accessors.key(datum)) &&
+						Object.is(previousValues.get(accessors.key(datum)), accessors.value(datum))
+				)
+			) {
+				const currentValues = new Map(
+					displayedRef.current.values.map((datum) => [accessors.key(datum), accessors.value(datum)])
+				)
+				const isSettled =
+					currentValues.size === data.length &&
+					data.every(
+						(datum) =>
+							currentValues.has(accessors.key(datum)) &&
+							Object.is(currentValues.get(accessors.key(datum)), accessors.value(datum))
+					)
 				if (isSettled && !animationRef.current && !isEqual(displayedRef.current.values, data)) {
 					publish({ ...displayedRef.current, values: data })
 				}
@@ -53,7 +64,9 @@ export function useAnimatedChartValues<T>(
 		const previous = new Map(displayedRef.current.values.map((datum) => [accessors.key(datum), datum]))
 		const nextKeys = new Set(data.map(accessors.key))
 		const rows = [...data, ...displayedRef.current.values.filter((datum) => !nextKeys.has(accessors.key(datum)))]
-		const start = rows.map((datum) => accessors.value(previous.get(accessors.key(datum)) ?? accessors.withValue(datum, 0)))
+		const start = rows.map((datum) =>
+			accessors.value(previous.get(accessors.key(datum)) ?? accessors.withValue(datum, 0))
+		)
 		const end = rows.map((datum) => (nextKeys.has(accessors.key(datum)) ? accessors.value(datum) : 0))
 		const startVisibility = displayedRef.current.visibility
 		const endVisibility = data.some((datum) => accessors.value(datum) !== 0) ? 1 : 0
@@ -82,7 +95,9 @@ export function useAnimatedChartValues<T>(
 				publish({ values: targetRef.current ?? data, visibility: endVisibility })
 			} else {
 				publish({
-					values: rows.map((datum, index) => accessors.withValue(datum, start[index] + (end[index] - start[index]) * eased)),
+					values: rows.map((datum, index) =>
+						accessors.withValue(datum, start[index] + (end[index] - start[index]) * eased)
+					),
 					visibility: startVisibility + (endVisibility - startVisibility) * eased,
 					extent
 				})
@@ -99,12 +114,15 @@ export function useAnimatedChartValues<T>(
 		animationRef.current = { frame: window.requestAnimationFrame(tick), media, reduceMotion }
 	}, [data, accessors, duration])
 
-	useEffect(() => () => {
-		if (!animationRef.current) return
-		window.cancelAnimationFrame(animationRef.current.frame)
-		animationRef.current.media.removeEventListener('change', animationRef.current.reduceMotion)
-		animationRef.current = null
-	}, [])
+	useEffect(
+		() => () => {
+			if (!animationRef.current) return
+			window.cancelAnimationFrame(animationRef.current.frame)
+			animationRef.current.media.removeEventListener('change', animationRef.current.reduceMotion)
+			animationRef.current = null
+		},
+		[]
+	)
 
 	return displayed
 }

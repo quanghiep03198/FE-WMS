@@ -73,10 +73,14 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 		onUpload: (imageUrl) => {
 			const pos = getPos()
 			if (typeof pos === 'number') {
-				editor.chain().focus().insertContentAt(
-					{ from: pos, to: pos + node.nodeSize },
-					{ type: 'figure', attrs: { src: imageUrl, alt: altText || fileInputRef.current?.files?.[0]?.name } }
-				).run()
+				editor
+					.chain()
+					.focus()
+					.insertContentAt(
+						{ from: pos, to: pos + node.nodeSize },
+						{ type: 'figure', attrs: { src: imageUrl, alt: altText || fileInputRef.current?.files?.[0]?.name } }
+					)
+					.run()
 			}
 			handleRemove()
 			// setIsExpanded(false)

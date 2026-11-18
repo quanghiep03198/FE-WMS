@@ -9,7 +9,12 @@ type EditorContextType = {
 
 export const EditorContext = createContext<EditorContextType | null>(null)
 
-export const EditorContextProvider: React.FC<EditorContextType & React.PropsWithChildren> = ({ editor, uploadImage, insertImages, children }) => {
+export const EditorContextProvider: React.FC<EditorContextType & React.PropsWithChildren> = ({
+	editor,
+	uploadImage,
+	insertImages,
+	children
+}) => {
 	return <EditorContext.Provider value={{ editor, uploadImage, insertImages }}>{children}</EditorContext.Provider>
 }
 
