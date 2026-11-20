@@ -104,7 +104,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 			? initialState.pagination
 			: {
 					pageIndex: 0,
-					pageSize: 50
+					pageSize: 25
 				}
 	)
 
