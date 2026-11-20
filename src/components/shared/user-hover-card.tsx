@@ -8,6 +8,8 @@ import { format } from 'date-fns'
 import { t } from 'i18next'
 
 const UserHoverCard: React.FC<{ user: IUser }> = ({ user }) => {
+	if (!user) return null
+
 	return (
 		<HoverCard>
 			<HoverCardTrigger className={buttonVariants({ variant: 'link', className: 'p-0! h-fit!' })}>
