@@ -56,14 +56,7 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 				enableColumnFilter: true,
 				meta: { title: t('ns_erp:fields.po') }
 			}),
-			// columnHelper.accessor('last', {
-			// 	header: t('ns_erp:fields.outbound_date'),
-			// 	cell: (info) => format(info.getValue(), 'yyyy-MM-dd'),
-			// 	size: 160,
-			// 	enableSorting: true,
-			// 	enableGlobalFilter: false,
-			// 	meta: { title: t('ns_erp:fields.outbound_date') }
-			// }),
+
 			columnHelper.accessor('last_outbound_date', {
 				header: t('ns_erp:fields.last_outbound_time'),
 				cell: (info) => {
@@ -89,7 +82,7 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 				enableGlobalFilter: false,
 				meta: { title: t('ns_erp:fields.order_qty'), align: 'right', filterVariant: 'range' }
 			}),
-			columnHelper.accessor('outbound_qty', {
+			columnHelper.accessor('shipped_out_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
 				size: 160,
 				enableSorting: true,
@@ -124,7 +117,7 @@ const DataTableFooter: React.FC<{ rows: Row<IOutboundEstimation>[] }> = memo(({ 
 					{formatIntlNumber(rows?.reduce((acc, curr) => acc + curr.original.order_qty, 0) ?? 0)}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>
-					{formatIntlNumber(rows?.reduce((acc, curr) => acc + curr.original.outbound_qty, 0) ?? 0)}
+					{formatIntlNumber(rows?.reduce((acc, curr) => acc + curr.original.shipped_out_qty, 0) ?? 0)}
 				</TableCell>
 			</TableRow>
 		</TableFooter>

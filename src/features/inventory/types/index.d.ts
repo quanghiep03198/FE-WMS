@@ -52,7 +52,7 @@ export interface IOutboundEstimation extends IBaseInventory {
 	po: string
 	order_qty: number
 	last_outbound_date: Date
-	outbound_qty: number
+	shipped_out_qty: number
 	last_outbound_date: Date
 }
 

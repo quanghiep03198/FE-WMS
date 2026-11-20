@@ -78,7 +78,6 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, searchParams],
 		exact: true,
 		type: 'active',
-		fetchStatus: 'fetching',
 		stale: false
 	})
 

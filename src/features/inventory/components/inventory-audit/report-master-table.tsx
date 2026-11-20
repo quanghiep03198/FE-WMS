@@ -277,7 +277,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 							}
 						/>
 					),
-					slotRight: () => <DataTableSlotRight downloadable={Array.isArray(data) && data?.length > 0} />
+					slotRight: () => (
+						<DataTableSlotRight downloadable={Array.isArray(data?.values) && data.values.length > 0} />
+					)
 				}}
 			/>
 		</Div>
