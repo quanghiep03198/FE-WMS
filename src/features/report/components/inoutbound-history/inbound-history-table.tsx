@@ -6,8 +6,10 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } 
 import { Icon } from '@components/ui/icon'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@components/ui/table'
 import type { IInboundHistory } from '@features/report/types'
+import { useDateLocale } from '@hooks/use-date-locale'
 import { useResetState } from 'ahooks'
-import { isNil, sortBy } from 'lodash-es'
+import { format } from 'date-fns'
+import { capitalize, isNil, sortBy } from 'lodash-es'
 import { Fragment, useId, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +18,7 @@ import EmptyHistory from './empty-history'
 
 const InboundHistoryTable: React.FC = () => {
 	const { data, isLoading } = useGetInboundHistoryQuery()
+	const dateLocale = useDateLocale()
 	const [selectedRow, setSelectedRow, resetSelectedRow] = useResetState<ArrayElement<
 		IInboundHistory['daily_inbound_history']
 	> | null>(null)
@@ -146,7 +149,7 @@ const InboundHistoryTable: React.FC = () => {
 								</span>
 							</TableHead>
 							<TableHead align='left' className='sticky! right-0 z-10' colSpan={1}>
-								<span>{t('ns_erp:fields.progress')}</span>
+								<span>{t('ns_common:common_fields.total')}</span>
 							</TableHead>
 						</TableRow>
 					</TableHeader>
@@ -187,7 +190,9 @@ const InboundHistoryTable: React.FC = () => {
 										<TableCell className='p-0' colSpan={8}>
 											<NestedTable>
 												{Object.entries(item.size_ledger)
-													.toSorted((a, b) => Number.parseFloat(a[0]) - Number.parseFloat(b[0]))
+													.toSorted(([size1], [size2]) =>
+														size1.localeCompare(size2, 'en-US', { numeric: true })
+													)
 													.map(([size, variation]) => (
 														<NestedColumn className='*:h-9' key={size}>
 															<NestedCellHead>{size}</NestedCellHead>
@@ -280,9 +285,13 @@ const InboundHistoryTable: React.FC = () => {
 					}}>
 					<DialogTrigger className='hidden' id={dialogTriggerId} />
 					<DialogContent className='max-w-8xl'>
-						<DialogTitle>{t('ns_inoutbound:titles.inbound_history')}</DialogTitle>
+						<DialogTitle>
+							{t('ns_inoutbound:titles.inbound_history')}{' '}
+							<span className='underline'>#{selectedRow?.mo_no}</span>
+						</DialogTitle>
 						<DialogDescription>
-							{selectedRow?.mo_no} ({selectedRow?.date})
+							{selectedRow?.date &&
+								capitalize(format(new Date(selectedRow?.date ?? ''), 'PPP', { locale: dateLocale }))}
 						</DialogDescription>
 						<Div className='scrollbar-track-accent/20 @container h-full max-h-125 scrollbar-thin overflow-y-scroll text-sm'>
 							<Table className='w-full table-fixed' style={{ '--col-width': '160px' } as React.CSSProperties}>
@@ -346,9 +355,7 @@ const InboundHistoryTable: React.FC = () => {
 															: '-'}
 													</TableCell>
 													<TableCell>
-														{isStockedIn && tx.storage_location?.name
-															? tx.storage_location?.name[i18n.language]
-															: '-'}
+														{isStockedIn && tx.storage_location?.name ? tx.storage_location.name : '-'}
 													</TableCell>
 													<TableCell className='w-full p-0'>
 														<NestedTable>

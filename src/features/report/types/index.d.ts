@@ -53,6 +53,7 @@ export interface IInboundHistory {
 		size_ledger: Record<
 			string,
 			{
+				instock_qty: number
 				stocked_in_qty: number
 				total_recall_tx: number
 				total_return_tx: number
