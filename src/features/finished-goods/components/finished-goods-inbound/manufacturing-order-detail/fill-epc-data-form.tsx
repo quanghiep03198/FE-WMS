@@ -24,7 +24,7 @@ import { Label } from '@components/ui/label'
 import { Separator } from '@components/ui/separator'
 import { useUpsertEpcsMatchMutation } from '@features/finished-goods/hooks/use-finished-goods-mo-request'
 import {
-	useGetManufacturingOrderQuery,
+	useGetRawManufacturingOrderQuery,
 	useSearchManufacturingOrderQuery
 } from '@features/order/hooks/use-order-request'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -61,7 +61,7 @@ const DEFAULT_FORM_VALUES: UpsertEpcFormValues = {
 const FillEpcDataFormDialog: React.FC<any> = () => {
 	const { t } = useTranslation()
 	const [searchTerm, setSearchTerm, resetSearchTerm] = useResetState<string>('')
-	const [availableSizes, setAvailableSizes] = useState([])
+	const [availableSizes, setAvailableSizes] = useState<Array<{ size_numcode: string; size_qty: number }>>([])
 	const [isConfirmed, setIsConfirmed, resetConfirmation] = useResetState<CheckedState>(false)
 	const { fillEpcDataDialogOpen, setFillEpcDataDialogOpen } = useOrderDetailContext(
 		'fillEpcDataDialogOpen',
@@ -78,7 +78,7 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no_actual' })
 
 	const { data: commandNumbers } = useSearchManufacturingOrderQuery(searchTerm)
-	const { data: orderDetail } = useGetManufacturingOrderQuery(currentManufacturingOrder)
+	const { data: orderDetail } = useGetRawManufacturingOrderQuery(currentManufacturingOrder)
 	const { mutateAsync } = useUpsertEpcsMatchMutation()
 
 	useEffect(() => {

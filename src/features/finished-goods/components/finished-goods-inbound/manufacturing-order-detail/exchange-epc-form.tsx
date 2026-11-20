@@ -20,12 +20,11 @@ import { Icon } from '@components/ui/icon'
 import { useUpsertEpcsMatchMutation } from '@features/finished-goods/hooks/use-finished-goods-mo-request'
 import { type ExchangeEpcFormValue, exchangeEpcSchema } from '@features/finished-goods/schemas/exchange-epc.schema'
 import {
-	useGetManufacturingOrderQuery,
+	useGetRawManufacturingOrderQuery,
 	useSearchManufacturingOrderQuery
 } from '@features/order/hooks/use-order-request'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { CheckedState } from '@radix-ui/react-checkbox'
-import { useSocketContext } from '@stores/socket.store'
 import { usePrevious } from 'ahooks'
 import { debounce, uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -66,8 +65,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	const previousQuantity = usePrevious(quantity)
 	const { data: availableCommandNumbers, refetch: fetchExchangableOrder } =
 		useSearchManufacturingOrderQuery(searchTerm)
-	const { data: orderDetail } = useGetManufacturingOrderQuery(actualOrder)
-	const { io } = useSocketContext('io')
+	const { data: orderDetail } = useGetRawManufacturingOrderQuery(actualOrder)
 
 	const exchangableOrders = useMemo(() => {
 		return uniqBy(

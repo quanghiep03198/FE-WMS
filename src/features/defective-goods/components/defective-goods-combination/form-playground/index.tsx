@@ -540,7 +540,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 				</Div>
 				{/* Footer bar */}
-				<Div className='bg-background flex max-h-full min-h-(--bar-height) max-h-(--bar-height) basis-(--bar-height) items-center justify-between gap-x-2 px-4'>
+				<Div className='bg-background flex min-h-(--bar-height) max-h-(--bar-height) basis-(--bar-height) items-center justify-between gap-x-2 px-4'>
 					<MobileReaderPlaygroundTrigger />
 					<ToggleFullscreen />
 					<CombinationStrategySelect disabled={formAction === CommonActions.UPDATE} />

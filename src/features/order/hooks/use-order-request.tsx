@@ -4,8 +4,9 @@ import { useQuery } from '@tanstack/react-query'
 export enum OrderQueryKeys {
 	SEARCH_MANUFACTURING_ORDER = 'SEARCH_MANUFACTURING_ORDER',
 	SEARCH_PURCHASE_ORDER = 'SEARCH_PURCHASE_ORDER',
-	PURCHASE_ORDER_INFO = 'PURCHASE_ORDER_INFO',
-	MANUFACTURING_ORDER_INFO = 'MANUFACTURING_ORDER_INFO'
+	PURCHASE_ORDER = 'PURCHASE_ORDER',
+	MANUFACTURING_ORDER = 'MANUFACTURING_ORDER',
+	RAW_MANUFACTURING_ORDER = 'RAW_MANUFACTURING_ORDER'
 }
 
 export const useSearchManufacturingOrderQuery = (searchTerm: Nullish<string>, shouldFetch = true) => {
@@ -42,8 +43,18 @@ export const useSearchPurchaseOrderQuery = (
 
 export const useGetManufacturingOrderQuery = (manufacturingOrder: Nullish<string>) => {
 	return useQuery({
-		queryKey: [OrderQueryKeys.MANUFACTURING_ORDER_INFO, manufacturingOrder],
+		queryKey: [OrderQueryKeys.MANUFACTURING_ORDER, manufacturingOrder],
 		queryFn: async () => await OrderService.getOneManufacturingOrder(manufacturingOrder!),
+		enabled: !!manufacturingOrder,
+		refetchOnMount: true,
+		select: (response) => response.metadata
+	})
+}
+
+export const useGetRawManufacturingOrderQuery = (manufacturingOrder: Nullish<string>) => {
+	return useQuery({
+		queryKey: [OrderQueryKeys.RAW_MANUFACTURING_ORDER, manufacturingOrder],
+		queryFn: async () => await OrderService.getOneRawManufacturingOrder(manufacturingOrder!),
 		enabled: !!manufacturingOrder,
 		refetchOnMount: true,
 		select: (response) => response.metadata

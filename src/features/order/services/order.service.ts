@@ -36,6 +36,13 @@ export class OrderService {
 		>(`/order/manufacturing-order/${manufacturingOrder}`)
 	}
 
+	static async getOneRawManufacturingOrder(manufacturingOrder: string) {
+		return await axiosInstance.get<
+			unknown,
+			ResponseBody<IManufacturingOrder & { sizes: Array<{ size_numcode: string; size_qty: number }> }>
+		>(`/order/manufacturing-order/raw/${manufacturingOrder}`)
+	}
+
 	static async getOnePurchaseOrder(purchaseOrder: string) {
 		return await axiosInstance.get<unknown, ResponseBody<IPurchaseOrder>>(`/order/purchase-order/${purchaseOrder}`)
 	}
