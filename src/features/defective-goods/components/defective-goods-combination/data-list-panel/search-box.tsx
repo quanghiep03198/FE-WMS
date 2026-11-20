@@ -48,7 +48,7 @@ const SearchBox: React.FC = () => {
 	const [searchTerms, setSearchTerms] = useSearchDefectiveGoods()
 	const [epcSearchTerm, setEpcSearchTerm, resetEpcSearchTerm] = useResetState<string>(searchTerms?.epc ?? '')
 	const { t } = useTranslation()
-	const { data: productSpecification, isLoading } = useGetProductSpecsQuery()
+	const { isLoading } = useGetProductSpecsQuery()
 	const form = useForm<DefectiveGoodQueryParams>({
 		defaultValues: searchTerms
 	})
@@ -120,20 +120,21 @@ const SearchBox: React.FC = () => {
 					isFilterDirty ? 'animate-in fade-in-0' : 'animate-out fade-out-0 hidden'
 				)}
 			/>
-			<FormProvider {...{ ...form, productSpecification }}>
-				<Popover>
-					<PopoverTrigger className='text-muted-foreground aria-expanded:text-active hover:text-foreground aria-expanded:hover:text-active aspect-square transition-colors duration-200'>
-						<Icon name='ListFilter' />
-					</PopoverTrigger>
-					<PopoverContent
-						align='end'
-						alignOffset={-8}
-						className='relative'
-						sideOffset={20}
-						style={{ width: size?.width ?? 0 + 16 }}>
-						<PopoverClose className='text-muted-foreground hover:text-foreground absolute top-4 right-4 transition-colors duration-200'>
-							<Icon name='X' />
-						</PopoverClose>
+
+			<Popover>
+				<PopoverTrigger className='text-muted-foreground aria-expanded:text-active hover:text-foreground aria-expanded:hover:text-active aspect-square transition-colors duration-200'>
+					<Icon name='ListFilter' />
+				</PopoverTrigger>
+				<PopoverContent
+					align='end'
+					alignOffset={-8}
+					className='relative'
+					sideOffset={20}
+					style={{ width: size?.width ?? 0 + 16 }}>
+					<PopoverClose className='text-muted-foreground hover:text-foreground absolute top-4 right-4 transition-colors duration-200'>
+						<Icon name='X' />
+					</PopoverClose>
+					<FormProvider {...form}>
 						<form
 							className={cn('space-y-6', isLoading && 'opacity-50')}
 							onSubmit={form.handleSubmit(handleSearchSubmission)}>
@@ -141,7 +142,7 @@ const SearchBox: React.FC = () => {
 								<legend className='text-base font-semibold'>{t('ns_common:titles.advanced_search')}</legend>
 								<Div
 									className={cn(
-										'scroll-fade grid max-h-96 scrollbar-none overflow-y-auto',
+										'pr-1 scrollbar-thin grid max-h-96 overflow-y-auto',
 										formFieldOrientation === 'horizontal' ? 'gap-y-3' : 'gap-y-6'
 									)}>
 									<DatePickerFieldControl
@@ -182,9 +183,9 @@ const SearchBox: React.FC = () => {
 								</Button>
 							</fieldset>
 						</form>
-					</PopoverContent>
-				</Popover>
-			</FormProvider>
+					</FormProvider>
+				</PopoverContent>
+			</Popover>
 		</Div>
 	)
 }
