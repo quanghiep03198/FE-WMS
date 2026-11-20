@@ -9,8 +9,6 @@ export enum AuthQueryKeys {
 }
 
 export const getUserProfileQuery = (enabled?: boolean, config?: AxiosRequestConfig) => {
-	// const unexpectedErrorCodes = [AxiosError.ERR_NETWORK, AxiosError.ETIMEDOUT, AxiosError.ECONNABORTED]
-
 	return queryOptions({
 		queryKey: [AuthQueryKeys.PROFILE, config],
 		queryFn: async () => await UserService.profile(config),
@@ -19,12 +17,6 @@ export const getUserProfileQuery = (enabled?: boolean, config?: AxiosRequestConf
 		gcTime: 1000 * 60 * 24,
 		select: (response) => response.metadata,
 		meta: { persist: true }
-		// refetchOnMount: 'always',
-		// refetchOnReconnect: 'always',
-		// retry: ((failureCount, error) => {
-		// 	if (unexpectedErrorCodes.includes(error.code!)) return enabled
-		// 	return failureCount <= 2 && enabled
-		// } )as Exclude<RetryValue>
 	})
 }
 
