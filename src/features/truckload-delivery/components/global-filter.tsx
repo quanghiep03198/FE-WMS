@@ -166,7 +166,7 @@ const GlobalFilter: React.FC = () => {
 					<Form onSubmit={form.handleSubmit(handleSubmit)}>
 						<FieldSet>
 							<FieldLegend>{t('ns_common:titles.advanced_search')}</FieldLegend>
-							<Field>
+							<Field className='max-h-96 overflow-y-auto pr-1 scrollbar-thin'>
 								{fields.map((field, index) => (
 									<FormItem key={index} {...{ ...field, index }} />
 								))}
