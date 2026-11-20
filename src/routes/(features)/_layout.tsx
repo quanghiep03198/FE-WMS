@@ -21,16 +21,6 @@ export const Route = createFileRoute('/(features)/_layout')({
 })
 
 function Layout() {
-	// const [font] = useLocalStorageState<string>('font', {
-	// 	defaultValue: '*:font-sans!',
-	// 	listenStorageChange: true
-	// })
-
-	// useEffectOnce(() => {
-	// 	if (document.body.classList.contains(font)) document.body.classList.remove(font)
-	// 	document.body.classList.add(font)
-	// })
-
 	return (
 		<Fragment>
 			<UnsupportedScreen />
