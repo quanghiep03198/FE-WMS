@@ -11,6 +11,6 @@ export type TableContextStore = {
 	event$: EventEmitter<Record<string, unknown>>
 }
 
-export const TableContext = createContext<StoreApi<TableContextStore>>(null)
+export const TableContext = createContext<StoreApi<TableContextStore>>(null!)
 
 export const useTableContext = createStoreSelector(TableContext)
