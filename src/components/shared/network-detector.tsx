@@ -13,7 +13,7 @@ import { Icon } from '../ui/icon'
 export const NETWORK_CONNECTION_CHANGE = 'NETWORK_CONNECTION_CHANGE' as const
 
 export default function NetworkDetector() {
-	const toastRef = useRef<string | number | null>(null)
+	const toastRef = useRef<string | number | undefined>(undefined)
 	const statusRef = useRef<'success' | 'error'>(null)
 
 	useInterval(
