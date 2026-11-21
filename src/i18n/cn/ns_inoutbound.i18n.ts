@@ -14,6 +14,7 @@ export default {
 	description: {
 		add_outbound_size: '添加尺码和数量以执行出库操作',
 		archived_restoration: '恢复已存档的数据. 仅在必要时使用.',
+		close_monthly_inventory: '您确定要关闭月度库存吗？关闭后, 您将无法更改本月的库存信息.',
 		container_condition_assessment: '请评估以下集装箱状况（如有）',
 		container_number_field: 'BIC 集装箱代码格式，包括国家代码和所有者代码',
 		create_truckload_delivery: '创建卡车装运信息以从工厂出货',
@@ -163,6 +164,7 @@ export default {
 	},
 	titles: {
 		archived_restoration: '已存档数据恢复',
+		close_monthly_inventory: '确认关闭月度库存吗?',
 		container_condition_assessment: '集装箱状况评估',
 		combination_history: '配标历史',
 		create_truckload_delivery: '创建卡车装运',

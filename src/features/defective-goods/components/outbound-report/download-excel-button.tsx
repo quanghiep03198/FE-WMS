@@ -34,7 +34,7 @@ export const useDownloadReport = () => {
 			)
 			toast.success(t('ns_common:notification.success'), { id: TOAST_ID })
 		} catch {
-			toast.error('ns_common:notification.error', { id: TOAST_ID })
+			toast.error(t('ns_common:notification.error'), { id: TOAST_ID })
 		}
 	})
 }

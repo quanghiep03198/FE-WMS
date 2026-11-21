@@ -50,7 +50,7 @@ export enum PublishedTopics {
 	REQUEST_SETTINGS = 'request/settings'
 }
 
-const ReaderPlaygroundContext = createContext<StoreApi<ReaderPlaygroundContextStore>>(null)
+const ReaderPlaygroundContext = createContext<StoreApi<ReaderPlaygroundContextStore>>(null!)
 
 const BUFFER_RATE_MS = 1000 / 60 // ~16ms — flush buffer at 60fps
 const PING_INTERVAL_MS = 1000
@@ -191,7 +191,7 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 	const handleDisconnect = useMemoizedFn(() => {
 		stopPingInterval()
 		stopBufferInterval()
-		toast.info('Stopped controlling the RFID reader')
+		toast.info(t('ns_common:status.disconnected'))
 	})
 
 	const handleMessage = useMemoizedFn((topic: string, message: Uint8Array) => {

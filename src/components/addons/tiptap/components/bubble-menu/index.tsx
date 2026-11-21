@@ -13,6 +13,7 @@ import type { Editor } from '@tiptap/react'
 import { BubbleMenu as TiptapBubbleMenu } from '@tiptap/react/menus'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { object, url, type infer as Infer } from 'zod'
 
@@ -29,6 +30,7 @@ const BubbleMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 		defaultValues: { href: editor.getAttributes('link').href }
 	})
 	const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
+	const { t } = useTranslation()
 
 	useEffect(() => {
 		form.reset({ href: editor.getAttributes('link').href })
@@ -43,7 +45,7 @@ const BubbleMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 		const value = form.getValues('href')
 		if (value) {
 			copyToClipboard(value)
-			toast.info('Đã sao chép vào bộ nhớ tạm')
+			toast.info(t('ns_common:notification.copied_to_clipboard'))
 		}
 	}
 

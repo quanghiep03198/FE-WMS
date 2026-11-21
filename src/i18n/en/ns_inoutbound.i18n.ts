@@ -14,6 +14,8 @@ export default {
 	description: {
 		add_outbound_size: 'Add size and quantity for this order to perform the outbound process.',
 		archived_restoration: 'Restore archived data. Use only when necessary.',
+		close_monthly_inventory:
+			'Are you sure you want to close the monthly inventory? After closing, you will not be able to change the inventory information for this month.',
 		container_condition_assessment:
 			'Please select all that apply regarding the condition of the container (if exists)',
 		container_number_field: 'BIC container code format including the country code and owner code.',
@@ -181,6 +183,7 @@ export default {
 		archived_restoration: 'Archived restoration',
 		combination_history: 'Combination history',
 		container_condition_assessment: 'Container condition assessment',
+		close_monthly_inventory: 'Confirm to close the monthly inventory?',
 		create_truckload_delivery: 'Create truckload delivery',
 		current_stock_transaction: 'Current stock transaction',
 		daily_inbound_report: 'Daily inbound report',
