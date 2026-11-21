@@ -20,8 +20,8 @@ const RadioGroupItem: React.FC<React.ComponentProps<typeof RadioGroupPrimitive.I
 				className
 			)}
 			{...props}>
-			<RadioGroupPrimitive.Indicator className='flex items-center justify-center'>
-				<Circle className='fill-primary h-2.5 w-2.5' />
+			<RadioGroupPrimitive.Indicator className='flex items-center justify-center aspect-square size-2 mx-auto bg-primary rounded-full'>
+				<Circle className='fill-primary size-2' />
 			</RadioGroupPrimitive.Indicator>
 		</RadioGroupPrimitive.Item>
 	)
