@@ -316,7 +316,7 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 			)
 			toast.success(t('ns_common:notification.success'), { id })
 		} catch {
-			toast.error('ns_common:notification.error', { id })
+			toast.error(t('ns_common:notification.error'), { id })
 		} finally {
 			setIsDownloading(false)
 		}
