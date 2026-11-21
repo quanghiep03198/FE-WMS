@@ -46,7 +46,7 @@ const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 		}
 	})()
 
-	const headerTitle = header.column.getCanSort()
+	const sortingTitle = header.column.getCanSort()
 		? getNextSortingOrder() === 'asc'
 			? t('ns_common:table.sort_asc')
 			: getNextSortingOrder() === 'desc'
@@ -54,12 +54,13 @@ const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 				: t('ns_common:table.clear_sort')
 		: undefined
 
+	const headerTitle = columnDef.meta?.title ?? (typeof columnDef.header === 'string' ? columnDef.header : undefined)
+
 	if (header.colSpan > 1) return <>{flexRender(columnDef.header, header.getContext())}</>
 
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger
-				title={headerTitle}
 				className={cn(
 					'flex h-max w-full cursor-auto grid-cols-[14px_auto] items-center px-4 py-2 text-left text-sm capitalize select-none has-[[role=button]]:w-full has-[[role=button]]:justify-center has-[[role=checkbox]]:w-full has-[[role=checkbox]]:justify-center!',
 					{
@@ -81,13 +82,15 @@ const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 					rerender()
 				}}>
 				{columnDef.enableSorting && (
-					<Icon
-						className='h-(--icon-size) max-w-(--icon-size) min-w-(--icon-size)'
-						name={currentSortingState}
-						size={14}
-					/>
+					<span title={sortingTitle}>
+						<Icon
+							className='h-(--icon-size) max-w-(--icon-size) min-w-(--icon-size)'
+							name={currentSortingState}
+							size={14}
+						/>
+					</span>
 				)}
-				<Typography as='small' className='line-clamp-1 text-left text-inherit' variant='small'>
+				<Typography as='small' className='line-clamp-1 text-left text-inherit' title={headerTitle} variant='small'>
 					{flexRender(columnDef.header, header.getContext())}
 				</Typography>
 			</ContextMenuTrigger>
