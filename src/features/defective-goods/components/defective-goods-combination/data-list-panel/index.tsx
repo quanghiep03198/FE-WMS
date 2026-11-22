@@ -53,9 +53,8 @@ const DatalistPanel: React.FC = () => {
 			console.info('Prefetch cancelled')
 		}
 
-		if (isPlaceholderData || !data || !data.hasNextPage) cancelScheduledPrefetch?.()
-
 		const run = async () => {
+			if (isPlaceholderData || !data || !data.hasNextPage) return
 			await queryClient.query(getDefectiveGoodsQueryOptions({ ...searchTerms, page: data.page + 1 }))
 		}
 

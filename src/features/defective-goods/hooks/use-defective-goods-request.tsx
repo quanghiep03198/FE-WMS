@@ -1,7 +1,14 @@
 import { DefectiveGoodsService } from '@features/defective-goods/services/defective-goods.service'
 import { StockFlow } from '@features/finished-goods/constants/enums'
 import useQueryParams from '@hooks/use-query-params'
-import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+	keepPreviousData,
+	useInfiniteQuery,
+	useMutation,
+	useQuery,
+	useQueryClient,
+	UseQueryOptions
+} from '@tanstack/react-query'
 import { isEmpty, isNil, omitBy, pick, pickBy } from 'lodash-es'
 import { useCallback } from 'react'
 import { useReportPageQueryParams } from '../../report/hooks/use-report-page-query-params'
@@ -26,6 +33,16 @@ export enum DefectiveGoodsQueryKey {
 	DEFECTIVE_GOODS_OUTBOUND_REPORT = 'DEFECTIVE_GOODS_OUTBOUND_REPORT'
 }
 
+const useGetParams = () => {
+	const { searchParams: page } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>, number>(
+		{ page: 1 },
+		{ select: (params) => params.page ?? 1 }
+	)
+	const [searchTerms] = useSearchDefectiveGoods()
+
+	return pickBy({ page, ...searchTerms }, (item) => !!item)
+}
+
 export const useGetDefectiveGoodsInventoryQuery = () => {
 	return useQuery({
 		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INVENTORY],
@@ -41,49 +58,68 @@ export const useGetDefectiveGoodsInventoryQuery = () => {
 	})
 }
 
-export const getDefectiveGoodsQueryOptions = (params: Record<string, any>) => ({
+export const getDefectiveGoodsQueryOptions = (
+	params: Record<string, any>
+): UseQueryOptions<
+	ResponseBody<Pagination<IDefectiveGoods>>,
+	Error,
+	ResponseBody<Pagination<IDefectiveGoods>>['metadata']
+> => ({
 	queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy(params, (item) => !!item)],
 	queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(pickBy(params, (item) => !!item)),
 	placeholderData: keepPreviousData,
+	staleTime: 5000,
 	select: (response) => response.metadata
 })
 
 export const useGetDefectiveGoodsQuery = () => {
-	const { searchParams: page } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>, number>(
-		{ page: 1 },
-		{ select: (params) => params.page ?? 1 }
-	)
-	const [searchTerms] = useSearchDefectiveGoods()
+	const params = useGetParams()
 
-	return useQuery(getDefectiveGoodsQueryOptions({ page, ...searchTerms }))
+	return useQuery(getDefectiveGoodsQueryOptions(params))
 }
 
 export const useCreateDefectiveGoodsMutation = () => {
+	const params = useGetParams()
+
 	return useMutation({
-		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS]] },
+		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS, params]] },
 		mutationFn: async (data: CreateDefectiveGoodsFormValues) => await DefectiveGoodsService.createDefectiveGoods(data)
 	})
 }
 
 export const useUpdateDefectiveGoodsMutation = () => {
+	const params = useGetParams()
+
 	return useMutation({
-		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS]] },
+		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS, params]] },
 		mutationFn: async (payload: { id: string; data: UpdateDefectiveGoodsFormValues }) =>
 			await DefectiveGoodsService.updateDefectiveGoods(payload.id, payload.data)
 	})
 }
 
 export const useDeleteDefectiveGoodsMutation = () => {
+	const queryClient = useQueryClient()
+
 	return useMutation({
-		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS]] },
-		mutationFn: DefectiveGoodsService.deleteDefectiveGoods
+		mutationFn: DefectiveGoodsService.deleteDefectiveGoods,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				predicate: (query) => query.queryKey.some((key) => key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS)
+			})
+		}
 	})
 }
 
 export const useDeleteManyDefectiveGoodsMutation = () => {
+	const queryClient = useQueryClient()
+
 	return useMutation({
-		meta: { invalidates: [[DefectiveGoodsQueryKey.DEFECTIVE_GOODS]] },
-		mutationFn: DefectiveGoodsService.deleteManyDefectiveGoods
+		mutationFn: DefectiveGoodsService.deleteManyDefectiveGoods,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				predicate: (query) => query.queryKey.some((key) => key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS)
+			})
+		}
 	})
 }
 
