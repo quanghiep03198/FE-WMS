@@ -1,14 +1,8 @@
 import { DefectiveGoodsService } from '@features/defective-goods/services/defective-goods.service'
 import { StockFlow } from '@features/finished-goods/constants/enums'
 import useQueryParams from '@hooks/use-query-params'
-import {
-	keepPreviousData,
-	useInfiniteQuery,
-	useMutation,
-	useQuery,
-	useQueryClient,
-	UseQueryOptions
-} from '@tanstack/react-query'
+import type { UseQueryOptions } from '@tanstack/react-query'
+import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { isEmpty, isNil, omitBy, pick, pickBy } from 'lodash-es'
 import { useCallback } from 'react'
 import { useReportPageQueryParams } from '../../report/hooks/use-report-page-query-params'
