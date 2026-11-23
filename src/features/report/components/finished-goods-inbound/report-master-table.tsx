@@ -127,7 +127,7 @@ const InboundReportMasterTable: React.FC = () => {
 					return (
 						<EllipsisList
 							data={getValue().map((name) => name[i18n.language])}
-							threshhold={3}
+							threshhold={2}
 							template={({ data }) => (
 								<Badge className='max-h-fit font-normal whitespace-nowrap' variant='outline'>
 									{data}
