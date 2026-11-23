@@ -338,7 +338,7 @@ const LoginMascot: React.FC<LoginMascotProps> = ({ action, focusTarget, password
 		redrawRef.current?.()
 	}, [focusTarget, passwordVisible, usernameProgress, action?.id])
 
-	return <canvas aria-hidden='true' className='mx-auto -mb-8 block size-28 max-sm:size-24' ref={canvasRef} />
+	return <canvas aria-hidden='true' className='mx-auto -mb-8 block size-24 max-sm:size-20' ref={canvasRef} />
 }
 
 export default LoginMascot

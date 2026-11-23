@@ -107,7 +107,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 					onBlur={() => onMascotFocusChange?.('none')}
 					onFocus={() => onMascotFocusChange?.('username')}
 					onInput={(event) =>
-						onUsernameProgressChange?.(Math.min((event.currentTarget.selectionStart ?? 0) / 80, 1))
+						onUsernameProgressChange?.(Math.min((event.currentTarget.selectionStart ?? 0) / 64, 1))
 					}
 				/>
 				<InputFieldControl
