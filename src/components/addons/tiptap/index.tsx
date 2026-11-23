@@ -6,8 +6,7 @@ import { ScrollArea } from '@components/ui/scroll-area'
 import type { SingleCommands } from '@tiptap/core'
 import { EditorContent, useEditor, type Editor as TiptapEditor } from '@tiptap/react'
 import { useDeepCompareEffect } from 'ahooks'
-import { uniqueId } from 'lodash-es'
-import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useId, useImperativeHandle, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from '../../ui/context-menu'
@@ -62,17 +61,19 @@ const Editor: React.FC<EditorProps> = ({
 	defaultValue = '',
 	disabled,
 	height = 350,
-	id = uniqueId(),
+	id,
 	ref,
 	name,
 	onUpdate,
 	onUploadStateChange
 }) => {
 	const { t } = useTranslation()
+	const editorId = useId()
 	const [contextMenuType, setContextMenuType] = useState<keyof HTMLElementTagNameMap | null>(null)
 	const uploadCount = useRef(0)
 	const uploadStateCallback = useRef(onUploadStateChange)
 	uploadStateCallback.current = onUploadStateChange
+
 	const trackedUpload = useCallback(
 		async (file: File) => {
 			uploadCount.current += 1
@@ -261,7 +262,7 @@ const Editor: React.FC<EditorProps> = ({
 								controls={true}
 								disabled={disabled}
 								editor={editor}
-								id={id}
+								id={id ?? editorId}
 								name={name}
 							/>
 						</ScrollArea>
