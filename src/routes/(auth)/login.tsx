@@ -86,7 +86,7 @@ function LoginPage() {
 						<img
 							className='h-full w-full border-none object-cover object-center outline-none!'
 							loading='eager'
-							src='/warehouse.png'
+							src='/warehouse.webp'
 						/>
 					</Div>
 					<CardHeader className='py-6 xl:col-start-2'>
