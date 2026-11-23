@@ -6,7 +6,7 @@ import { Icon } from '@components/ui/icon'
 import { TableCell, TableFooter, TableRow } from '@components/ui/table'
 import { StockFlow } from '@features/finished-goods/constants/enums'
 import type { IOutboundEstimation } from '@features/inventory/types'
-import type { ColumnDef, Row } from '@tanstack/react-table'
+import type { Row } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { memo, useMemo } from 'react'
@@ -21,7 +21,7 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<IOutboundEstimation>()
 
-	const columns = useMemo<ColumnDef<IOutboundEstimation>[]>(() => {
+	const columns = useMemo(() => {
 		return [
 			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
@@ -56,7 +56,23 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 				enableColumnFilter: true,
 				meta: { title: t('ns_erp:fields.po') }
 			}),
-
+			columnHelper.accessor('xf_date', {
+				header: t('ns_erp:fields.outbound_date'),
+				cell: (info) => {
+					const value = info.getValue()
+					return value ? (
+						format(new Date(value), 'yyyy-MM-dd')
+					) : (
+						<Div className='place-items-center'>
+							<Icon className='stroke-muted-foreground' name='CalendarOff' />
+						</Div>
+					)
+				},
+				size: 160,
+				enableSorting: true,
+				enableGlobalFilter: false,
+				meta: { title: t('ns_erp:fields.outbound_date'), align: 'center' }
+			}),
 			columnHelper.accessor('last_outbound_date', {
 				header: t('ns_erp:fields.last_outbound_time'),
 				cell: (info) => {
