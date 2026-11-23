@@ -66,7 +66,7 @@ export default defineConfig(({ mode }) => {
 			devtools({ removeDevtoolsOnBuild: true, consolePiping: { enabled: mode === 'development' } }),
 			tanstackRouter({
 				target: 'react',
-				autoCodeSplitting: false
+				autoCodeSplitting: true
 			}),
 			react(),
 			babel({ presets: [reactCompilerPreset()] }),
@@ -226,8 +226,6 @@ export default defineConfig(({ mode }) => {
 		},
 		build: {
 			emptyOutDir: true,
-			sourcemap: true,
-			cssCodeSplit: true,
 			reportCompressedSize: false,
 			chunkSizeWarningLimit: 500,
 			assetsInlineLimit: 4096, // Inline files < 4KB
