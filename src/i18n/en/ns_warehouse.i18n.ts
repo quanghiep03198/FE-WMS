@@ -9,11 +9,11 @@ export default {
 		original_storage_location: 'Original storage location',
 		original_warehouse: 'Original warehouse',
 		storage_capacity: 'Storage capacity',
-		total_storage_capacity: 'Total storage capacity',
-		total_number_of_storage: 'Total storage locations',
 		storage_name: 'Storage name',
 		storage_num: 'Storage code',
 		storage_position: 'Storage position',
+		total_number_of_storage: 'Total storage locations',
+		total_storage_capacity: 'Total storage capacity',
 		transfered_warehouse: 'Transfered warehouse',
 		type_storage: 'Storage type',
 		type_warehouse: 'Warehouse type',
@@ -21,11 +21,12 @@ export default {
 		warehouse_num: 'Warehouse code'
 	},
 	form: {
-		add_warehouse_title: 'Add new warehouse',
-		update_warehouse_title: 'Update warehouse',
 		add_storage_location_title: 'Add new storage locations',
+		add_warehouse_title: 'Add new warehouse',
+		storage_location_note: 'The storage location name must be unique and cannot duplicate other locations.',
+
 		update_storage_location_title: 'Update storage location',
-		storage_location_note: 'The storage location name must be unique and cannot duplicate other locations.'
+		update_warehouse_title: 'Update warehouse'
 	},
 	headings: {
 		storage_list_description: 'Manage storage location information',
@@ -44,16 +45,18 @@ export default {
 		main_area: 'Main area',
 		outbound_staging_area: 'Outbound staging area'
 	},
+	tenancy_warehouse: {
+		'201.202': 'LianShun 2 Finished Product Warehouse',
+		'5.1': 'Cambodia Finished Product Warehouse',
+
+		'80.2': 'LianYing Finished Product Warehouse'
+	},
+
 	warehouse_types: {
 		finished_production_warehouse: 'Finished production warehouse',
 		half_finished_production: 'Half-finished production warehouse',
 		material_warehouse: 'Material warehouse',
 		production_warehouse: 'Production warehouse',
 		scrap_production_warehouse: 'Scrap production warehouse'
-	},
-	tenancy_warehouse: {
-		'80.2': 'LianYing Finished Product Warehouse',
-		'201.202': 'LianShun 2 Finished Product Warehouse',
-		'5.1': 'Cambodia Finished Product Warehouse'
 	}
 } as const

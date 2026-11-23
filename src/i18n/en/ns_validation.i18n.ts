@@ -1,11 +1,11 @@
 export default {
 	duplicate: 'Value is duplicated',
-	required: 'This field is required',
-	min_length: 'Required at least {{min}} characters',
-	nonnegative: 'Value must be non-nagative',
-	invalid_value: 'Invalid value',
-	not_match: 'Value does not match',
 	invalid_ipv4: 'Invalid IPv4 address',
-	too_long: 'Value is too long',
-	missing_signature: 'Please provide a signature'
+	invalid_value: 'Invalid value',
+	min_length: 'Required at least {{min}} characters',
+	missing_signature: 'Please provide a signature',
+
+	nonnegative: 'Value must be non-nagative',
+	required: 'This field is required',
+	too_long: 'Value is too long'
 }

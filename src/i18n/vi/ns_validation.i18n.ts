@@ -1,11 +1,11 @@
 export default {
 	duplicate: 'Giá trị bị trùng',
-	required: 'Vui lòng nhập dữ liệu',
-	min_length: 'Yêu cầu tối thiểu {{ min }} ký tự',
-	nonnegative: 'Giá trị không được là số âm',
-	invalid_value: 'Giá trị không hợp lệ',
-	not_match: 'Giá trị không khớp',
-	too_long: 'Giá trị quá dài',
 	invalid_ipv4: 'Địa chỉ IPv4 không hợp lệ',
-	missing_signature: 'Vui lòng cung cấp chữ ký'
+	invalid_value: 'Giá trị không hợp lệ',
+	min_length: 'Yêu cầu tối thiểu {{ min }} ký tự',
+	missing_signature: 'Vui lòng cung cấp chữ ký',
+
+	nonnegative: 'Giá trị không được là số âm',
+	required: 'Vui lòng nhập dữ liệu',
+	too_long: 'Giá trị quá dài'
 }

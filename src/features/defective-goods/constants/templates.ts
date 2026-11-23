@@ -72,4 +72,28 @@ export class DefectDescriptionTemplate {
       <h3>3. 示意图片</h3>
       <p class="my-1"><span style="color: rgb(163, 163, 163);">(插入示意图片)</span></p>
    `
+
+	static readonly [Languages.KHMER] = /* template */ `
+      <h3>1. ប្រភេទកំហុសដែលបានរកឃើញ</h3>
+      <ul data-type="taskList">
+         <li data-type="taskItem" data-checked="false">ស្នាមឆ្កូតលើផ្ទៃស្បែក/ក្រណាត់</li>
+         <li data-type="taskItem" data-checked="false">កាវរបក / កាវបែក</li>
+         <li data-type="taskItem" data-checked="false">ពណ៌ខុស / ពណ៌ស្រអាប់</li>
+         <li data-type="taskItem" data-checked="false">បញ្ហាដេរ (ដេរខុសទីតាំង ខ្សែដេររលុង ឬមានខ្សែសល់)</li>
+         <li data-type="taskItem" data-checked="false">កខ្វក់ ឬមានស្នាមប្រឡាក់ដែលមិនអាចសម្អាតបាន</li>
+         <li data-type="taskItem" data-checked="false">បញ្ហារាង (ខុសទម្រង់ ខូចទ្រង់ទ្រាយ ឬមិនស្មើគ្នា)</li>
+         <li data-type="taskItem" data-checked="false">បញ្ហាបាតស្បែកជើង (ប៉ោង ប្រេះ ឬបែកចំណិត)</li>
+         <li data-type="taskItem" data-checked="false">ផ្សេងៗ៖ ...</li>
+      </ul>
+
+      <h3>2. ការពិពណ៌នាលម្អិតអំពីកំហុស</h3>
+      <ul data-type="bulletList">
+         <li data-type="listItem">..............................................................................................................</li>
+         <li data-type="listItem">..............................................................................................................</li>
+         <li data-type="listItem">..............................................................................................................</li>
+      </ul>
+
+      <h3>3. រូបភាពបង្ហាញ</h3>
+      <p class="my-1"><span style="color: rgb(163, 163, 163);">(បញ្ចូលរូបភាពបង្ហាញ)</span></p>
+   `
 }

@@ -4,26 +4,22 @@ export default {
 	actions: {
 		go_to_dashboard: 'Đi đến màn hình chính'
 	},
-	titles: {
-		page_title: 'Quản lý Người dùng & Phân quyền',
-		create_user: 'Thêm người dùng mới',
-		update_user: 'Cập nhật thông tin'
-	},
 	descriptions: {
-		page_description: 'Quản lý thông tin tài khoản và thiết lập vai trò để kiểm soát quyền truy cập hệ thống.',
 		create_user: 'Điền thông tin bên dưới để tạo tài khoản mới.',
-		update_user: 'Cập nhật thông tin và quyền hạn của người dùng hiện tại',
-		role_helper_text: 'Vai trò sẽ quyết định các tính năng người dùng có thể sử dụng.'
+		page_description: 'Quản lý thông tin tài khoản và thiết lập vai trò để kiểm soát quyền truy cập hệ thống.',
+		role_helper_text: 'Vai trò sẽ quyết định các tính năng người dùng có thể sử dụng.',
+
+		update_user: 'Cập nhật thông tin và quyền hạn của người dùng hiện tại'
 	},
 	fields: {
+		display_name: 'Tên hiển thị',
 		email: 'Email',
 		employee_code: 'Mã nhân viên',
-		display_name: 'Tên hiển thị',
-		password: 'Mật khẩu',
-		role: 'Vai trò',
+		is_online: 'Trạng thái hoạt động',
 		joined_system_date: 'Ngày tham gia hệ thống',
 		last_login_at: 'Lần đăng nhập cuối',
-		is_online: 'Trạng thái hoạt động',
+		password: 'Mật khẩu',
+		role: 'Vai trò',
 		username: 'Tài khoản'
 	},
 	labels: {
@@ -32,8 +28,8 @@ export default {
 		remember_account: 'Ghi nhớ tài khoản'
 	},
 	notification: {
-		authenticate_success: 'Đã xác thực tài khoản',
 		authenticate_failed: 'Xác thực tài khoản thất bại',
+		authenticate_success: 'Đã xác thực tài khoản',
 		current_password_incorrect: 'Mật khẩu hiện tại không chính xác',
 		login_failed: 'Đăng nhập thất bại',
 		login_success: 'Đăng nhập thành công',
@@ -57,12 +53,13 @@ export default {
 	},
 	roles: {
 		[UserRole.ADMIN]: 'Quản trị viên',
-		[UserRole.MANAGER]: 'Quản lý',
-		[UserRole.FG_WAREHOUSE_STAFF]: 'Nhân viên KTP',
 		[UserRole.DG_WAREHOUSE_STAFF]: 'Nhân viên kho B',
+		[UserRole.FG_WAREHOUSE_STAFF]: 'Nhân viên KTP',
 		[UserRole.IE_STAFF]: 'Nhân viên XNK',
-		[UserRole.SECURITY_GUARD]: 'Bảo vệ',
-		[UserRole.INDUSTRIAL_ENGINEERING_STAFF]: 'Nhân viên IE'
+		[UserRole.INDUSTRIAL_ENGINEERING_STAFF]: 'Nhân viên IE',
+
+		[UserRole.MANAGER]: 'Quản lý',
+		[UserRole.SECURITY_GUARD]: 'Bảo vệ'
 	},
 	steps: {
 		select_department: 'Chọn đơn vị công tác',
@@ -70,9 +67,15 @@ export default {
 	},
 	texts: {
 		description: 'Nhập tài khoản, mật khẩu và chọn bộ phận đang công tác để truy cập vào hệ thống',
-		title: 'Đăng nhập vào hệ thống',
 		qr_code_verification: 'Xác thực mã QR',
-		qr_code_verification_description: 'Quét mã QR trên thẻ nhân viên của bạn để xác thực tài khoản.'
+		qr_code_verification_description: 'Quét mã QR trên thẻ nhân viên của bạn để xác thực tài khoản.',
+
+		title: 'Đăng nhập vào hệ thống'
+	},
+	titles: {
+		create_user: 'Thêm người dùng mới',
+		page_title: 'Quản lý Người dùng & Phân quyền',
+		update_user: 'Cập nhật thông tin'
 	},
 	validation: {
 		password_incorrect: 'Mật khẩu hiện tại không đúng',

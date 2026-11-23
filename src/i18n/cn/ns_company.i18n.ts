@@ -1,8 +1,8 @@
 export default {
 	assembly_line: '成型{{name}}',
-	factory: '廠別',
 	company_code: '廠別',
 	department: '部門',
+	factory: '廠別',
 	fields: {
 		GL1: '联盈',
 		GL2: '联舜一厂',

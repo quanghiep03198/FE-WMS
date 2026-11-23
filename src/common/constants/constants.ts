@@ -8,7 +8,8 @@ export const FALLBACK_VALUE = 'Unknown'
 export const LOCALES: LocaleOptions = [
 	{ value: Languages.VIETNAMESE, label: 'Vietnamese' },
 	{ value: Languages.ENGLISH, label: 'English' },
-	{ value: Languages.CHINESE, label: 'Chinese' }
+	{ value: Languages.CHINESE, label: 'Chinese' },
+	{ value: Languages.KHMER, label: 'Khmer' }
 ]
 
 export const TRANSLATED_FACTORY: Readonly<

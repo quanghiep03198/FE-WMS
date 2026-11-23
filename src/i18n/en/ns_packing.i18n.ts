@@ -1,28 +1,33 @@
 export default {
+	descriptions: {
+		daily_weighing_report:
+			'Information on inspected and weighed shipments recorded in the electronic weighing system',
+
+		packing_manifest: 'Details of shipments packed and ready for dispatch'
+	},
+
 	manifest: {
+		create_error: 'Could not start the export.',
+		done: 'Export complete',
+		download: 'Download Excel',
+		expired: 'This export has expired. Please create another.',
+		failed: 'Export failed',
+		list_error: 'Could not load the packing manifest.',
+
 		pending: 'Queued for export',
 		processing: 'Preparing Excel',
-		done: 'Export complete',
-		ready: 'The Excel file is ready. Starting the download.',
-		retry_download: 'Download',
-		failed: 'Export failed',
-		expired: 'This export has expired. Please create another.',
 		progress: 'Export progress',
-		download: 'Download Excel',
-		too_many: 'An export is already running. Please wait for it to finish.',
-		create_error: 'Could not start the export.',
-		status_error: 'Could not check the export status.',
+		ready: 'The Excel file is ready. Starting the download.',
 		retry: 'Retry',
-		list_error: 'Could not load the packing manifest.'
+		retry_download: 'Download',
+		status_error: 'Could not check the export status.',
+		too_many: 'An export is already running. Please wait for it to finish.'
 	},
 	titles: {
-		packing_manifest: 'Packing Manifest',
 		daily_weighing_report: 'Daily Weighing Report',
 		file_daily_weighing_report: 'Packing Weight Report {{factory}} - {{date}}',
-		file_packing_manifest: 'Packing Manifest {{factory}}'
-	},
-	descriptions: {
-		packing_manifest: 'Details of shipments packed and ready for dispatch',
-		daily_weighing_report: 'Information on inspected and weighed shipments recorded in the electronic weighing system'
+		file_packing_manifest: 'Packing Manifest {{factory}}',
+
+		packing_manifest: 'Packing Manifest'
 	}
 }

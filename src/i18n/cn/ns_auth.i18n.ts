@@ -4,26 +4,22 @@ export default {
 	actions: {
 		go_to_dashboard: '转回主页'
 	},
-	titles: {
-		page_title: '用户与权限管理',
-		create_user: '创建用户',
-		update_user: '更新用户'
-	},
 	descriptions: {
-		page_description: '管理用户基本信息并分配角色以控制系统访问权限.',
 		access_management: '管理用户和系统访问权限',
 		create_user: '创建一个新用户以允许他们访问系统',
+		page_description: '管理用户基本信息并分配角色以控制系统访问权限.',
 		update_user: '更新现有用户的信息和权限'
 	},
 	fields: {
-		email: 'Email',
 		display_name: '显示名称',
-		password: '密码',
-		username: '用户名',
+		email: 'Email',
 		employee_code: '员工编号',
-		last_login_at: '最后登录时间',
 		joined_system_date: '加入系统时间',
-		role: '角色'
+		last_login_at: '最后登录时间',
+		password: '密码',
+		role: '角色',
+
+		username: '用户名'
 	},
 	labels: {
 		forgot_password: '忘记密码?',
@@ -31,8 +27,8 @@ export default {
 		remember_account: '记住我'
 	},
 	notification: {
-		authenticate_success: '确认登录成功',
 		authenticate_failed: '确认登录失败',
+		authenticate_success: '确认登录成功',
 		current_password_incorrect: '当前密码不正确',
 		login_failed: '登入失败',
 		login_success: '登入成功',
@@ -56,12 +52,13 @@ export default {
 	},
 	roles: {
 		[UserRole.ADMIN]: '系统管理员',
-		[UserRole.MANAGER]: '经理',
-		[UserRole.FG_WAREHOUSE_STAFF]: '成品仓库员工',
 		[UserRole.DG_WAREHOUSE_STAFF]: 'B级鞋仓库员工',
+		[UserRole.FG_WAREHOUSE_STAFF]: '成品仓库员工',
 		[UserRole.IE_STAFF]: '进出口员工',
-		[UserRole.SECURITY_GUARD]: '保卫',
-		[UserRole.INDUSTRIAL_ENGINEERING_STAFF]: 'IE员工'
+		[UserRole.INDUSTRIAL_ENGINEERING_STAFF]: 'IE员工',
+
+		[UserRole.MANAGER]: '经理',
+		[UserRole.SECURITY_GUARD]: '保卫'
 	},
 	steps: {
 		select_department: '选择部门',
@@ -69,9 +66,15 @@ export default {
 	},
 	texts: {
 		description: '进入用户和密码跟选择部门与可以登入系统',
-		title: '登入系统',
 		qr_code_verification: 'QR 码确认',
-		qr_code_verification_description: '扫描您员工卡上的 QR 码以确认您的帐户.'
+		qr_code_verification_description: '扫描您员工卡上的 QR 码以确认您的帐户.',
+
+		title: '登入系统'
+	},
+	titles: {
+		create_user: '创建用户',
+		page_title: '用户与权限管理',
+		update_user: '更新用户'
 	},
 	validation: {
 		password_incorrect: '目前密碼不正確',

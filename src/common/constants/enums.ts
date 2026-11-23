@@ -61,7 +61,8 @@ export enum RequestHeaders {
 export enum Languages {
 	VIETNAMESE = 'vi',
 	ENGLISH = 'en',
-	CHINESE = 'cn'
+	CHINESE = 'cn',
+	KHMER = 'km'
 }
 
 export enum PresetBreakPoints {

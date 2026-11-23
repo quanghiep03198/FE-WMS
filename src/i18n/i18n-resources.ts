@@ -40,6 +40,20 @@ import cn_ns_validation from './cn/ns_validation.i18n'
 import cn_ns_warehouse from './cn/ns_warehouse.i18n'
 // #endregion
 
+// #region Khmer dictionary
+import km_ns_auth from './km/ns_auth.i18n'
+import km_ns_common from './km/ns_common.i18n'
+import km_ns_company from './km/ns_company.i18n'
+import km_ns_dashboard from './km/ns_dashboard.i18n'
+import km_ns_erp from './km/ns_erp.i18n'
+import km_ns_inoutbound from './km/ns_inoutbound.i18n'
+import km_ns_packing from './km/ns_packing.i18n'
+import km_ns_preference from './km/ns_preference.i18n'
+import km_ns_rfid from './km/ns_rfid.i18n'
+import km_ns_validation from './km/ns_validation.i18n'
+import km_ns_warehouse from './km/ns_warehouse.i18n'
+// #endregion
+
 export const resources = {
 	vi: {
 		ns_auth: vi_ns_auth,
@@ -80,6 +94,19 @@ export const resources = {
 		ns_rfid: cn_ns_rfid,
 		ns_validation: cn_ns_validation,
 		ns_warehouse: cn_ns_warehouse
+	},
+	km: {
+		ns_auth: km_ns_auth,
+		ns_common: km_ns_common,
+		ns_company: km_ns_company,
+		ns_dashboard: km_ns_dashboard,
+		ns_erp: km_ns_erp,
+		ns_inoutbound: km_ns_inoutbound,
+		ns_packing: km_ns_packing,
+		ns_preference: km_ns_preference,
+		ns_rfid: km_ns_rfid,
+		ns_validation: km_ns_validation,
+		ns_warehouse: km_ns_warehouse
 	}
 }
 

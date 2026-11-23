@@ -3,24 +3,20 @@ import { UserRole } from '@common/constants/enums'
 export default {
 	actions: { go_to_dashboard: 'Go to dashboard' },
 	descriptions: {
-		page_description: 'Manage user profiles and assign roles to control system access permissions.',
 		create_user: 'Fill in the details below to create a new account.',
+		page_description: 'Manage user profiles and assign roles to control system access permissions.',
 		update_user: 'Update existing user information and permissions'
 	},
-	titles: {
-		page_title: 'User & Access Management',
-		create_user: 'Create New User',
-		update_user: 'Update Information'
-	},
 	fields: {
-		email: 'Email',
 		display_name: 'Display name',
-		password: 'Password',
-		username: 'User name',
-		joined_system_date: 'Joined system date',
+		email: 'Email',
 		employee_code: 'Employee code',
+		joined_system_date: 'Joined system date',
 		last_login_at: 'Last login',
-		role: 'Role'
+		password: 'Password',
+		role: 'Role',
+
+		username: 'User name'
 	},
 	labels: {
 		forgot_password: 'Forgot your password?',
@@ -28,8 +24,8 @@ export default {
 		remember_account: 'Remember me'
 	},
 	notification: {
-		authenticate_success: 'Verified your account',
 		authenticate_failed: 'Failed to verify your account',
+		authenticate_success: 'Verified your account',
 		current_password_incorrect: 'Current password is incorrect',
 		login_failed: 'Failed to log in',
 		login_success: 'Logged in succesfully',
@@ -53,19 +49,26 @@ export default {
 	},
 	roles: {
 		[UserRole.ADMIN]: 'Administrator',
-		[UserRole.MANAGER]: 'Manager',
-		[UserRole.FG_WAREHOUSE_STAFF]: 'Finished Goods Warehouse Staff',
 		[UserRole.DG_WAREHOUSE_STAFF]: 'Defective Goods Warehouse Staff',
+		[UserRole.FG_WAREHOUSE_STAFF]: 'Finished Goods Warehouse Staff',
 		[UserRole.IE_STAFF]: 'Import-Export Staff',
-		[UserRole.SECURITY_GUARD]: 'Security Guard',
-		[UserRole.INDUSTRIAL_ENGINEERING_STAFF]: 'IE Staff'
+		[UserRole.INDUSTRIAL_ENGINEERING_STAFF]: 'IE Staff',
+
+		[UserRole.MANAGER]: 'Manager',
+		[UserRole.SECURITY_GUARD]: 'Security Guard'
 	},
 	steps: { select_department: 'Select department', verify_account: 'Verify your account' },
 	texts: {
 		description: 'Enter account, password then select department access to the system',
-		title: 'Sign in to your account',
 		qr_code_verification: 'QR Code Verification',
-		qr_code_verification_description: 'Scan the QR code on your employee card to verify your account.'
+		qr_code_verification_description: 'Scan the QR code on your employee card to verify your account.',
+
+		title: 'Sign in to your account'
+	},
+	titles: {
+		create_user: 'Create New User',
+		page_title: 'User & Access Management',
+		update_user: 'Update Information'
 	},
 	validation: {
 		password_incorrect: 'Current password is incorrect',
