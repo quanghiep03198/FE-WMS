@@ -255,7 +255,7 @@ const Table = tw.div`flex flex-col relative`
 const TableHeader = tw.div`sticky top-0 z-10 bg-accent text-accent-foreground`
 const TableRow = tw.div`grid grid-cols-[2.5rem_1fr_1fr_2.5rem] items-start gap-x-2 *:first:px-3`
 const TableHead = tw.div`py-2 h-9 font-medium bg-accent`
-const TableBody = tw.div`max-h-[40vh] scroll-fade flex-1`
+const TableBody = tw.div`max-h-[40vh] scrollbar-thin flex-1 overflow-y-auto`
 const TableCell = tw.div`py-2 min-h-9 has-[input]:px-0`
 const TableFooter = tw.div`rounded-md border border-dashed place-content-center place-items-center p-6 mt-6 flex flex-col justify-center items-center space-y-6`
 
