@@ -66,7 +66,7 @@ export const queryClient = new QueryClient({
 			if (isAxiosError(error) && error.response?.status !== HttpStatusCode.InternalServerError) {
 				const response = error.response as AxiosResponse<ResponseBody<any>>
 				toast.error(response.data.message)
-			} else toast.error(i18n.t('ns_common:notification.unknown_error'))
+			} else toast.error(i18n.t('ns_common:notification.error'))
 		}
 	})
 })
