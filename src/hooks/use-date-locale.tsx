@@ -1,4 +1,4 @@
-import { enUS, vi, zhCN } from 'date-fns/locale'
+import { enUS, km, vi, zhCN } from 'date-fns/locale'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -13,6 +13,8 @@ export const useDateLocale = () => {
 				return zhCN
 			case 'en':
 				return enUS
+			case 'km':
+				return km
 			default:
 				return enUS
 		}
