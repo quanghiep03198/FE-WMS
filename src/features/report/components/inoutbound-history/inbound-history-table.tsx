@@ -2,6 +2,7 @@ import { coalesce } from '@common/utils/common'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import { Div } from '@components/customs/div'
 import { NestedCell, NestedCellHead, NestedColumn, NestedTable } from '@components/shared/horizontal-nested-table'
+import { Badge } from '@components/ui/badge'
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@components/ui/dialog'
 import { Icon } from '@components/ui/icon'
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@components/ui/table'
@@ -287,7 +288,9 @@ const InboundHistoryTable: React.FC = () => {
 					<DialogContent className='max-w-8xl'>
 						<DialogTitle>
 							{t('ns_inoutbound:titles.inbound_history')}{' '}
-							<span className='underline'>#{selectedRow?.mo_no}</span>
+							<span className='before:content-["#"] before:mr-0.5 before:text-muted-foreground'>
+								{selectedRow?.mo_no}
+							</span>
 						</DialogTitle>
 						<DialogDescription>
 							{selectedRow?.date &&
@@ -302,6 +305,12 @@ const InboundHistoryTable: React.FC = () => {
 											className='whitespace-nowrap'
 											style={{ width: 'var(--col-width)' }}>
 											{t('ns_common:common_fields.created_at')}
+										</TableHead>
+										<TableHead
+											align='left'
+											className='whitespace-nowrap'
+											style={{ width: 'var(--col-width)' }}>
+											{t('ns_common:common_fields.status')}
 										</TableHead>
 										<TableHead
 											align='left'
@@ -340,11 +349,25 @@ const InboundHistoryTable: React.FC = () => {
 											)
 											const isStockedIn = totalQty > 0
 											return (
-												<TableRow aria-disabled={tx.voided} key={tx.time}>
+												<TableRow key={tx.time}>
 													<TableCell
 														className='sticky left-0 z-10 w-fit'
 														style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
 														{tx.time}
+													</TableCell>
+													<TableCell
+														className='sticky left-0 z-10 w-fit'
+														style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
+														<Badge variant='outline'>
+															<Icon
+																name={tx.voided ? 'X' : 'CircleCheckBig'}
+																size={14}
+																stroke={tx.voided ? 'var(--destructive)' : 'var(--success)'}
+															/>
+															{tx.voided
+																? t('ns_common:status.voided')
+																: t('ns_common:status.confirmed')}
+														</Badge>
 													</TableCell>
 													<TableCell
 														align='left'
