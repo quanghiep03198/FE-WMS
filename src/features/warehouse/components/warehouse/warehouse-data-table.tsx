@@ -109,6 +109,18 @@ const WarehouseDataTable: React.FC = () => {
 				sortingFn: fuzzySort,
 				cell: ({ getValue }) => String(getValue()).toUpperCase()
 			}),
+			columnHelper.accessor('total_storage_location', {
+				id: 'total_storage_location',
+				header: t('ns_warehouse:fields.total_number_of_storage'),
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true,
+				enableSorting: true,
+				filterFn: 'inNumberRange',
+				sortingFn: fuzzySort,
+				meta: { filterVariant: 'range' },
+				cell: ({ getValue }) => formatIntlNumber(getValue())
+			}),
 			columnHelper.accessor('capacity', {
 				id: 'capacity',
 				header: t('ns_warehouse:fields.storage_capacity'),
