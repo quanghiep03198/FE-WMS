@@ -61,3 +61,23 @@ export const useUpdateUserStatusMutation = () => {
 }
 
 export const useDeleteUserMutation = () => {}
+
+export const useResetUserPasswordMutation = (onPasswordReset: (password: string) => void) => {
+	const { t } = useTranslation()
+
+	return useMutation({
+		gcTime: 0,
+		retry: false,
+		mutationFn: async (id: string) => {
+			const { metadata } = await UserService.resetPassword(id)
+			if (typeof metadata?.password !== 'string' || metadata.password.length === 0) {
+				throw new Error('Invalid password reset response')
+			}
+			// Keep the password out of the mutation cache.
+			onPasswordReset(metadata.password)
+		},
+		onError: () => {
+			toast.error(t('ns_common:notification.error'))
+		}
+	})
+}

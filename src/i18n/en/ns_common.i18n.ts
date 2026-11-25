@@ -324,7 +324,8 @@ export default {
 		pending: 'Pending',
 		processing: 'Processing ...',
 		request_change: 'Request Change',
-		running: 'Running'
+		running: 'Running',
+		voided: 'Voided'
 	},
 	table: {
 		add_row: 'Add row',

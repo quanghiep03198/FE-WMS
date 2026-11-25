@@ -327,7 +327,8 @@ export default {
 		pending: 'Chờ xử lý',
 		processing: 'Đang xử lý',
 		request_change: 'Yêu cầu thay đổi',
-		running: 'Đang hoạt động'
+		running: 'Đang hoạt động',
+		voided: 'Đã hủy'
 	},
 	table: {
 		add_row: 'Thêm hàng',

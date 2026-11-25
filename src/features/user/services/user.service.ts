@@ -33,4 +33,8 @@ export class UserService {
 	static async updatePassword(payload: UpdatePasswordFormValues) {
 		return await axiosInstance.patch(`/user/change-password`, payload)
 	}
+
+	static async resetPassword(id: string) {
+		return await axiosInstance.patch<void, ResponseBody<{ password: string }>>(`/user/reset-password/${id}`)
+	}
 }

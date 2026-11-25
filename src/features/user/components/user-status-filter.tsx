@@ -30,32 +30,34 @@ const UserStatusFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 
 	const { data } = table.options
 
-	const currentFilterValue = table.getColumn('deleted').getFilterValue()
+	const currentFilterValue = table.getColumn('deleted')?.getFilterValue()
 
 	const dropdownOptions: DropdownOption[] = useMemo(
 		() =>
-			[
-				{
-					label: String(t('ns_common:status.active')),
-					value: RecordStatus.ACTIVE,
-					icon: 'CircleCheckBig'
-				},
-				{
-					label: String(t('ns_common:status.deactivated')),
-					value: RecordStatus.INACTIVE,
-					icon: 'CircleMinus'
-				}
-			].map((item: DropdownOption) => ({
+			(
+				[
+					{
+						label: String(t('ns_common:status.active')),
+						value: RecordStatus.ACTIVE,
+						icon: 'CircleCheckBig'
+					},
+					{
+						label: String(t('ns_common:status.deactivated')),
+						value: RecordStatus.INACTIVE,
+						icon: 'CircleMinus'
+					}
+				] satisfies Omit<DropdownOption, 'count'>[]
+			).map((item) => ({
 				...item,
 				count: data.filter((user) =>
-					user.deleted ? item.value === RecordStatus.ACTIVE : item.value === RecordStatus.INACTIVE
+					user.deleted === true ? item.value === RecordStatus.INACTIVE : item.value === RecordStatus.ACTIVE
 				).length
 			})),
 		[data, i18n.language]
 	)
 
 	const handleValueChange = (value: RecordStatus) => {
-		table.getColumn('is_active').setFilterValue(value === RecordStatus.ACTIVE)
+		table.getColumn('deleted')?.setFilterValue?.(value === RecordStatus.INACTIVE)
 		// setParams({ ...searchParams, status: value as TruckloadDeliveryStatus })
 	}
 
@@ -65,9 +67,9 @@ const UserStatusFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 				<Icon name='CirclePlus' /> {t('ns_common:common_fields.status')}
 				{typeof currentFilterValue === 'boolean' && (
 					<Div className='inline-flex items-center md:hidden'>
-						<Separator className='mx-2 h-4' orientation='vertical' />{' '}
+						<Separator className='mx-2 h-4' orientation='vertical' />
 						<Badge className='mx-1 rounded-sm px-1.5 font-normal' variant='secondary'>
-							{currentFilterValue ? t('ns_common:status.active') : t('ns_common:status.deactivated')}
+							{!currentFilterValue ? t('ns_common:status.active') : t('ns_common:status.deactivated')}
 						</Badge>
 					</Div>
 				)}
@@ -75,7 +77,11 @@ const UserStatusFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 			<DropdownMenuContent align='end' className='w-64'>
 				<DropdownMenuRadioGroup
 					value={
-						isNil(currentFilterValue) ? null : currentFilterValue ? RecordStatus.ACTIVE : RecordStatus.INACTIVE
+						isNil(currentFilterValue)
+							? undefined
+							: !currentFilterValue
+								? RecordStatus.ACTIVE
+								: RecordStatus.INACTIVE
 					}
 					onValueChange={handleValueChange}>
 					{dropdownOptions.map((option) => (
@@ -97,8 +103,8 @@ const UserStatusFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
 					className='justify-center gap-x-2'
-					disabled={!table.getColumn('deleted').getFilterValue()}
-					onClick={() => table.getColumn('deleted').setFilterValue(null)}>
+					disabled={typeof table.getColumn('deleted')?.getFilterValue() !== 'boolean'}
+					onClick={() => table.getColumn('deleted')?.setFilterValue(null)}>
 					<Icon name='X' />
 					{t('ns_common:actions.clear_filter')}
 				</DropdownMenuItem>

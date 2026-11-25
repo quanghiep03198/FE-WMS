@@ -46,6 +46,12 @@ const UserTable: React.FC = () => {
 					</Div>
 				)
 			}),
+			columnHelper.display({
+				id: 'password',
+				header: t('ns_auth:fields.password'),
+				enableHiding: true,
+				cell: () => '******'
+			}),
 			columnHelper.accessor('display_name', {
 				header: t('ns_auth:fields.display_name'),
 				enableSorting: true,

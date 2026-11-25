@@ -2,12 +2,15 @@ import { UserRole } from '@common/constants/enums'
 
 export default {
 	actions: {
-		go_to_dashboard: '转回主页'
+		go_to_dashboard: '转回主页',
+		reset_password: '重置密码'
 	},
 	descriptions: {
 		access_management: '管理用户和系统访问权限',
+		confirm_reset_password: '确认重置账户 <strong>{{username}}</strong> 的密码？',
 		create_user: '创建一个新用户以允许他们访问系统',
 		page_description: '管理用户基本信息并分配角色以控制系统访问权限.',
+		password_reset: '{{username}} 的新密码。请在关闭此对话框前复制。',
 		update_user: '更新现有用户的信息和权限'
 	},
 	fields: {
@@ -34,6 +37,8 @@ export default {
 		login_success: '登入成功',
 		logout_failed: '登出失败',
 		logout_success: '登出',
+		password_copied: '密码已复制',
+		password_copy_failed: '无法复制密码',
 		session_expired: '您的会话已过期，请重新登录',
 		viewonly: '您目前处于"仅限查看"模式. 编辑权限受限.'
 	},
@@ -74,6 +79,7 @@ export default {
 	titles: {
 		create_user: '创建用户',
 		page_title: '用户与权限管理',
+		password_reset: '密码已重置',
 		update_user: '更新用户'
 	},
 	validation: {

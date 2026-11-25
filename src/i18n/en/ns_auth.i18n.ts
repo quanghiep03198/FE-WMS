@@ -1,10 +1,12 @@
 import { UserRole } from '@common/constants/enums'
 
 export default {
-	actions: { go_to_dashboard: 'Go to dashboard' },
+	actions: { go_to_dashboard: 'Go to dashboard', reset_password: 'Reset password' },
 	descriptions: {
+		confirm_reset_password: 'Reset the password for account <strong>{{username}}</strong>?',
 		create_user: 'Fill in the details below to create a new account.',
 		page_description: 'Manage user profiles and assign roles to control system access permissions.',
+		password_reset: 'New password for {{username}}. Copy it before closing this dialog.',
 		update_user: 'Update existing user information and permissions'
 	},
 	fields: {
@@ -31,6 +33,8 @@ export default {
 		login_success: 'Logged in succesfully',
 		logout_failed: 'Failed to log out',
 		logout_success: 'Logged out',
+		password_copied: 'Password copied',
+		password_copy_failed: 'Could not copy password',
 		session_expired: 'Your session has expired, please log in again',
 		viewonly: 'You are currently in view-only mode. Editing access is restricted.'
 	},
@@ -68,6 +72,7 @@ export default {
 	titles: {
 		create_user: 'Create New User',
 		page_title: 'User & Access Management',
+		password_reset: 'Password reset',
 		update_user: 'Update Information'
 	},
 	validation: {

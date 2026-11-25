@@ -1,10 +1,12 @@
 import { UserRole } from '@common/constants/enums'
 
 export default {
-	actions: { go_to_dashboard: 'ទៅកាន់ផ្ទាំងគ្រប់គ្រង' },
+	actions: { go_to_dashboard: 'ទៅកាន់ផ្ទាំងគ្រប់គ្រង', reset_password: 'កំណត់ពាក្យសម្ងាត់ឡើងវិញ' },
 	descriptions: {
+		confirm_reset_password: 'បញ្ជាក់ការកំណត់ពាក្យសម្ងាត់ឡើងវិញសម្រាប់គណនី <strong>{{username}}</strong>?',
 		create_user: 'បំពេញព័ត៌មានខាងក្រោម ដើម្បីបង្កើតគណនីថ្មី។',
 		page_description: 'គ្រប់គ្រងប្រវត្តិរូបអ្នកប្រើ និងកំណត់តួនាទី ដើម្បីគ្រប់គ្រងសិទ្ធិចូលប្រើប្រព័ន្ធ។',
+		password_reset: 'ពាក្យសម្ងាត់ថ្មីសម្រាប់ {{username}}។ សូមចម្លងមុនពេលបិទប្រអប់នេះ។',
 		update_user: 'ធ្វើបច្ចុប្បន្នភាពព័ត៌មាន និងសិទ្ធិរបស់អ្នកប្រើដែលមានស្រាប់។'
 	},
 	fields: {
@@ -30,6 +32,8 @@ export default {
 		login_success: 'បានចូលដោយជោគជ័យ',
 		logout_failed: 'មិនអាចចាកចេញបានទេ',
 		logout_success: 'បានចាកចេញ',
+		password_copied: 'បានចម្លងពាក្យសម្ងាត់',
+		password_copy_failed: 'មិនអាចចម្លងពាក្យសម្ងាត់បានទេ',
 		session_expired: 'សម័យប្រើប្រាស់របស់អ្នកបានផុតកំណត់ សូមចូលម្តងទៀត',
 		viewonly: 'បច្ចុប្បន្នអ្នកកំពុងប្រើទម្រង់មើលតែប៉ុណ្ណោះ។ មិនអាចកែប្រែបានទេ។'
 	},
@@ -65,6 +69,7 @@ export default {
 	titles: {
 		create_user: 'បង្កើតអ្នកប្រើថ្មី',
 		page_title: 'ការគ្រប់គ្រងអ្នកប្រើ និងសិទ្ធិចូលប្រើ',
+		password_reset: 'បានកំណត់ពាក្យសម្ងាត់ឡើងវិញ',
 		update_user: 'ធ្វើបច្ចុប្បន្នភាពព័ត៌មាន'
 	},
 	validation: {

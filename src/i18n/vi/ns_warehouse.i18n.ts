@@ -1,7 +1,6 @@
 export default {
 	fields: {
 		allocation_warehouse: 'Kho phân bổ',
-
 		area: 'Diện tích (m²)',
 		is_default: 'Đánh dấu là mặc định',
 		is_disable: 'Đã hủy',

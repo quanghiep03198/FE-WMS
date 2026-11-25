@@ -311,7 +311,8 @@ export default {
 		pending: 'កំពុងរង់ចាំ',
 		processing: 'កំពុងដំណើរការ...',
 		request_change: 'ស្នើសុំការផ្លាស់ប្តូរ',
-		running: 'កំពុងដំណើរការ'
+		running: 'កំពុងដំណើរការ',
+		voided: 'បានលុប'
 	},
 	table: {
 		add_row: 'បន្ថែមជួរដេក',

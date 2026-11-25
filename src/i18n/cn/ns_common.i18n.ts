@@ -320,7 +320,8 @@ export default {
 		pending: '待处理',
 		processing: '处理中 ...',
 		request_change: '请求更改',
-		running: '运行中'
+		running: '运行中',
+		voided: '已作废'
 	},
 	table: {
 		add_row: '添加行',

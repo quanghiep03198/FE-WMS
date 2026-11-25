@@ -2,11 +2,14 @@ import { UserRole } from '@common/constants/enums'
 
 export default {
 	actions: {
-		go_to_dashboard: 'Đi đến màn hình chính'
+		go_to_dashboard: 'Đi đến màn hình chính',
+		reset_password: 'Đặt lại mật khẩu'
 	},
 	descriptions: {
+		confirm_reset_password: 'Xác nhận đặt lại mật khẩu cho tài khoản <strong>{{username}}</strong>?',
 		create_user: 'Điền thông tin bên dưới để tạo tài khoản mới.',
 		page_description: 'Quản lý thông tin tài khoản và thiết lập vai trò để kiểm soát quyền truy cập hệ thống.',
+		password_reset: 'Mật khẩu mới của {{username}}. Hãy sao chép trước khi đóng hộp thoại.',
 		role_helper_text: 'Vai trò sẽ quyết định các tính năng người dùng có thể sử dụng.',
 
 		update_user: 'Cập nhật thông tin và quyền hạn của người dùng hiện tại'
@@ -35,6 +38,8 @@ export default {
 		login_success: 'Đăng nhập thành công',
 		logout_failed: 'Đăng xuất thất bại',
 		logout_success: 'Đã đăng xuất',
+		password_copied: 'Đã sao chép mật khẩu',
+		password_copy_failed: 'Không thể sao chép mật khẩu',
 		session_expired: 'Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại',
 		viewonly: 'Bạn hiện đang ở chế độ chỉ xem. Quyền chỉnh sửa đã bị hạn chế.'
 	},
@@ -75,6 +80,7 @@ export default {
 	titles: {
 		create_user: 'Thêm người dùng mới',
 		page_title: 'Quản lý Người dùng & Phân quyền',
+		password_reset: 'Đã đặt lại mật khẩu',
 		update_user: 'Cập nhật thông tin'
 	},
 	validation: {
