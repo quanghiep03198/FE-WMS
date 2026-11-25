@@ -294,14 +294,14 @@ const BeamAnimated: React.FC = () => {
 			</div>
 			<div
 				className={cn(
-					'xxl:size-32 xxl:blur-[80px] absolute top-1/2 left-4 z-[-1] size-20 -translate-y-1/2 rounded-full bg-(--yellow) opacity-0 blur-3xl will-change-[opacity] sm:size-18 sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24',
+					'xxl:size-32 xxl:blur-[80px] absolute top-1/2 left-[7%] z-[-1] size-20 -translate-y-1/2 rounded-full bg-(--yellow) opacity-0 blur-3xl will-change-[opacity] sm:size-18 sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24',
 					'transition-opacity delay-700 duration-500 ease-out',
 					isAnimated ? VISIBLE_GLOW_CLASS : HIDDEN_GLOW_CLASS
 				)}
 			/>
 			<div
 				className={cn(
-					'xxl:size-32 xxl:blur-[80px] absolute top-1/2 right-5 z-[-1] size-20 -translate-y-1/2 rounded-full bg-(--green) opacity-0 blur-3xl will-change-[opacity] sm:size-18 sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24',
+					'xxl:size-32 xxl:blur-[80px] absolute top-1/2 right-[7%] z-[-1] size-20 -translate-y-1/2 rounded-full bg-(--green) opacity-0 blur-3xl will-change-[opacity] sm:size-18 sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24',
 					'transition-opacity delay-700 duration-500 ease-out',
 					isAnimated ? VISIBLE_GLOW_CLASS : HIDDEN_GLOW_CLASS
 				)}

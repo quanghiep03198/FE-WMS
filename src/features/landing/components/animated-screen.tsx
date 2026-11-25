@@ -61,7 +61,7 @@ const AnimatedScreen: React.FC = () => {
 					'lg:transform-[perspective(1920px)_translateX(-5%)_translateY(-10%)_rotateX(45deg)_rotateY(-15deg)_rotateZ(-45deg)] lg:zoom-[0.6]',
 					'md:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)] md:zoom-[0.8]',
 					'sm:transform-[perspective(1920px)_translateX(-10%)_translateY(-30%)_rotateX(45deg)_rotateY(-35deg)_rotateZ(-60deg)] sm:zoom-[0.5]',
-					'after:from-background after:via-background/80 md:after:to-background/50 lg:after:via-background via-25% to-50% after:absolute after:inset-0 after:z-10 after:h-[calc(100%+4px)] after:w-[200%] after:-translate-y-px after:bg-linear-to-l after:to-transparent md:via-65% lg:after:via-60% lg:after:to-80%'
+					'after:from-background after:via-background/90 md:after:to-background/75 lg:after:via-background via-25% to-50% after:absolute after:inset-0 after:z-10 after:h-[calc(100%+4px)] after:w-[200%] after:-translate-y-px after:bg-linear-to-l after:to-transparent md:via-65% lg:after:via-60% lg:after:to-80%'
 				)}
 				style={{
 					overflow: 'visible',
@@ -163,7 +163,7 @@ const AnimatedScreen: React.FC = () => {
 							<CardHeader>
 								<CardDescription>Inbound Quantity</CardDescription>
 								<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
-									{formatIntlNumber(61204)}
+									{formatIntlNumber(162024)}
 								</CardTitle>
 								<CardAction>
 									<Badge variant='outline'>
@@ -185,7 +185,7 @@ const AnimatedScreen: React.FC = () => {
 							<CardHeader>
 								<CardDescription>Outbound Quantity</CardDescription>
 								<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
-									{formatIntlNumber(3198)}
+									{formatIntlNumber(192024)}
 								</CardTitle>
 								<CardAction>
 									<Badge variant='outline'>
