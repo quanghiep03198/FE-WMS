@@ -1,19 +1,19 @@
 type TAvatarGenOptions = {
 	name: string
 	format?: 'svg' | 'png'
-	variant?: 'initials' | 'glass' | 'landscape'
+	variant?: 'initials' | 'glass' | 'landscape' | 'planets'
 	animation?: boolean
 }
 
-export default function generateAvatar({ name, variant = 'initials' }: TAvatarGenOptions) {
+export default function generateAvatar({ name, variant = 'planets' }: TAvatarGenOptions) {
 	const BASE_AVATAR_URL = 'https://api.dicebear.com'
 	const avatarURL = new URL(`/10.x/${variant}/svg`, BASE_AVATAR_URL)
 
-	const backgroundColors = ['6b705c', 'a5a58d', 'b98b73', '7c9082', '8e9aaf', '9c6b58']
-	const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)]
-
 	avatarURL.searchParams.set('seed', name)
-	avatarURL.searchParams.set('backgroundColor', randomColor)
+	avatarURL.searchParams.set('backgroundColor', '262626')
+	avatarURL.searchParams.set('backgroundColorFill', 'linear')
+	avatarURL.searchParams.set('textColor', 'e5e5e5')
+	avatarURL.searchParams.set('lettersVariant', 'single')
 
 	return avatarURL.toString()
 }
