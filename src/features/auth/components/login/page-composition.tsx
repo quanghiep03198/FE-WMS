@@ -53,11 +53,13 @@ const FormHeading: React.FC = () => {
 }
 
 const LanguageSelector: React.FC = () => {
+	const { t } = useTranslation()
+
 	return (
 		<Div className='flex w-full items-center justify-center gap-x-2'>
 			<Label className='inline-flex items-center gap-x-2'>
 				<Icon name='Globe' strokeWidth={1} />
-				Language
+				{t('ns_common:settings.language')}
 			</Label>
 			<Div className='basis-32'>
 				<LanguageSelect />

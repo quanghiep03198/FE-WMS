@@ -99,6 +99,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 		<FormProvider {...form}>
 			<Form onSubmit={handleSubmit}>
 				<InputFieldControl
+					aria-invalid={!!form.formState.errors.username}
 					autoComplete='username'
 					defaultValue={persistedAccount}
 					label={t('ns_auth:fields.username')}
@@ -111,6 +112,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 					}
 				/>
 				<InputFieldControl
+					aria-invalid={!!form.formState.errors.password}
 					autoComplete='current-password'
 					label={t('ns_auth:fields.password')}
 					name='password'
