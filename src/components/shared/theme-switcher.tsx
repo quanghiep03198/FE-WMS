@@ -42,6 +42,7 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
 	const handleSelectTheme = (theme: Theme) => {
 		setTheme(theme)
 		requestAnimationFrame(() => {
+			if (!activeRef.current || !firstButtonRef.current) return
 			activeRef.current.style.transform = (() => {
 				switch (theme) {
 					case Theme.SYSTEM:
