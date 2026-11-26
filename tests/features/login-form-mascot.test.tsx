@@ -42,7 +42,8 @@ vi.mock('@tanstack/react-router', () => ({
 	)
 }))
 
-vi.mock('ahooks', () => ({
+vi.mock('ahooks', async (importOriginal) => ({
+	...(await importOriginal<typeof import('ahooks')>()),
 	useLocalStorageState: () => ['', vi.fn()]
 }))
 
@@ -109,6 +110,38 @@ describe('login form mascot cues', () => {
 
 		await waitFor(() => expect(onMascotAction).toHaveBeenCalledWith('shake'))
 		expect(mocks.login).not.toHaveBeenCalled()
+	})
+
+	it('shows and clears validation messages and invalid styling for each field', async () => {
+		render(<LoginForm />)
+		const user = userEvent.setup()
+		const username = screen.getByLabelText('ns_auth:fields.username')
+		const password = screen.getByLabelText('ns_auth:fields.password')
+
+		await user.click(screen.getByRole('button', { name: 'ns_common:actions.login' }))
+
+		expect(await screen.findByText('ns_auth:validation.require_account')).toHaveClass('text-destructive')
+		expect(screen.getByText('ns_auth:validation.require_password')).toHaveClass('text-destructive')
+		expect(username).toHaveAttribute('aria-invalid', 'true')
+		expect(password).toHaveAttribute('aria-invalid', 'true')
+		expect(username).toHaveClass('aria-invalid:border-destructive')
+		expect(password).toHaveClass('aria-invalid:border-destructive')
+		expect(screen.getByText('ns_auth:fields.username')).toHaveClass('text-destructive')
+		expect(screen.getByText('ns_auth:fields.password')).toHaveClass('text-destructive')
+
+		await user.type(password, 'secret')
+		await waitFor(() => expect(screen.queryByText('ns_auth:validation.require_password')).not.toBeInTheDocument())
+		expect(password).toHaveAttribute('aria-invalid', 'false')
+		expect(username).toHaveAttribute('aria-invalid', 'true')
+
+		await user.type(username, 'operator')
+		await waitFor(() => expect(screen.queryByText('ns_auth:validation.require_account')).not.toBeInTheDocument())
+		expect(username).toHaveAttribute('aria-invalid', 'false')
+
+		await user.clear(password)
+		expect(await screen.findByText('ns_auth:validation.require_password')).toHaveClass('text-destructive')
+		expect(password).toHaveAttribute('aria-invalid', 'true')
+		expect(username).toHaveAttribute('aria-invalid', 'false')
 	})
 
 	it('nods on valid submission and keeps the existing login mutation', async () => {
