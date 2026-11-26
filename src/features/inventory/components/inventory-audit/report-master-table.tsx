@@ -273,7 +273,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 						<CheckoutInventoryAuditConfirmDialog
 							isPlaceholder={isPlaceholder}
 							isClosed={
-								Array.isArray(data) && data.every((item) => item.inventory_closure_status === 'completed')
+								Array.isArray(data?.values) &&
+								data.values.every((item) => item.inventory_closure_status === 'completed')
 							}
 						/>
 					),
