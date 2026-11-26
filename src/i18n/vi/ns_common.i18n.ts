@@ -50,6 +50,7 @@ export default {
 		restore: 'Khôi phục',
 		retry: 'Thử lại',
 		revert_changes: 'Hủy thay đổi',
+		rollback: 'Hoàn tác',
 		save: 'Lưu',
 		save_changes: 'Lưu thay đổi',
 		search: 'Tìm kiếm',
