@@ -186,7 +186,7 @@ export default {
 		file_shaping_department_productivity_report: 'Báo biểu sản lượng thành hình {{factory}} - {{date}}',
 		file_truckload_delivery_report: 'Báo cáo xuất hàng KTP theo xe - {{factory}}',
 		inbound_history: 'Lịch sử nhập kho',
-		inoutbound_history_lookup: 'Tìm kiếm lịch sử nhập/xuất kho',
+		inoutbound_history_lookup: 'Lịch sử nhập/xuất kho',
 		monthly_inventory_report: 'Báo biểu tồn kho hàng tháng',
 		order_sizing_list: 'Danh sách Size theo đơn',
 		outbound_history: 'Lịch sử xuất kho',
