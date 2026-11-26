@@ -1,7 +1,6 @@
 import { Button } from '@components/ui/button'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@components/ui/empty'
 import { Icon } from '@components/ui/icon'
-import type { StockFlow } from '@features/finished-goods/constants/enums'
 import useQueryParams from '@hooks/use-query-params'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -9,7 +8,7 @@ import PlaceHolderItems from '../../../../components/shared/placeholder-items'
 
 const EmptySearchResult: React.FC = () => {
 	const { t } = useTranslation()
-	const { removeParam } = useQueryParams<{ order?: string; type: StockFlow }>()
+	const { removeParam } = useQueryParams<{ po?: string }>()
 
 	return (
 		<Empty className='mx-auto max-h-fit w-full border border-dashed'>

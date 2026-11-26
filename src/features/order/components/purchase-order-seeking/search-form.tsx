@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useSearchPoHistory } from '../../hooks/use-search-po-history'
+import { useSearchPurchaseOrderHistory } from '../../hooks/use-search-po-history'
 import { OrderSearchFieldControl } from './order-search-field-control'
 
 const SearchForm: React.FC = () => {
@@ -20,7 +20,7 @@ const SearchForm: React.FC = () => {
 		}
 	})
 
-	const [recentlySearch, setRecentlySearch] = useSearchPoHistory()
+	const [recentlySearch, setRecentlySearch] = useSearchPurchaseOrderHistory()
 
 	useEffect(() => {
 		if (!searchParams.po) form.reset()

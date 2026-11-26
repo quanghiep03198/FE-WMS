@@ -16,7 +16,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 	const { setValue } = useFormContext()
 
 	return (
-		<Div className='place-content-center place-items-center space-y-4'>
+		<Div className='place-content-center place-items-center space-y-4 mt-6'>
 			<Div className='flex items-center justify-center'>
 				<Icon
 					className='animate-in zoom-in-0 slide-in-from-bottom-2 mr-2 duration-500'

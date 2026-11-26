@@ -2,18 +2,20 @@ import { Div } from '@components/customs/div'
 import { Typography } from '@components/customs/typography'
 import { Badge } from '@components/ui/badge'
 import { Icon } from '@components/ui/icon'
+import useScrollOnDrag from '@hooks/use-scroll-ondrag'
 import React, { useRef } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { GhostButton } from '../../../../components/shared/ghost-button'
-import { useSearchPoHistory } from '../../hooks/use-search-po-history'
+import { useSearchPurchaseOrderHistory } from '../../hooks/use-search-po-history'
 
 const SearchHistory: React.FC = () => {
 	const { setValue } = useFormContext()
-	const [recentlySearch, setRecentlySearch] = useSearchPoHistory()
+	const [recentlySearch, setRecentlySearch] = useSearchPurchaseOrderHistory()
 	const { t } = useTranslation()
 
 	const scrollRef = useRef<HTMLDivElement>(null)
+	const { events } = useScrollOnDrag(scrollRef)
 
 	// Handle scroll
 	const scrollLeft = () => {
@@ -51,13 +53,13 @@ const SearchHistory: React.FC = () => {
 					<GhostButton type='button' onClick={scrollLeft}>
 						<Icon name='ChevronLeft' />
 					</GhostButton>
-					<div
-						className='scroll-fade-x xxl:max-w-lg flex max-w-sm snap-mandatory scrollbar-none items-center gap-x-2 scroll-smooth px-1 md:max-w-xs'
-
+					<Div
+						{...events}
+						className='scroll-fade-x cursor-grab overflow-x-auto xxl:max-w-lg flex max-w-sm snap-mandatory scrollbar-none items-center gap-x-2 px-1 md:max-w-xs'
 						ref={scrollRef}>
 						{recentlySearch.map((term) => (
 							<Badge
-								className='min-w-28 cursor-pointer justify-between overflow-hidden'
+								className='min-w-28 cursor-pointer justify-between overflow-hidden select-none'
 								key={term}
 								variant='outline'
 								onClick={() => setValue('po', term)}>
@@ -71,7 +73,7 @@ const SearchHistory: React.FC = () => {
 								</GhostButton>
 							</Badge>
 						))}
-					</div>
+					</Div>
 					<GhostButton type='button' onClick={scrollRight}>
 						<Icon name='ChevronRight' />
 					</GhostButton>

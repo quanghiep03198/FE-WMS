@@ -1,7 +1,7 @@
 import { useLocalStorageState } from 'ahooks'
 
-export const useSearchPoHistory = () => {
-	return useLocalStorageState('recentPurchaseOrderSearchTerms', {
+export const useSearchPurchaseOrderHistory = () => {
+	return useLocalStorageState<string[]>('recentPurchaseOrderSearchTerms', {
 		listenStorageChange: true,
 		defaultValue: []
 	})

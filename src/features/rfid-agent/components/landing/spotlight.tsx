@@ -55,7 +55,7 @@ export default function Spotlight({ className, fill }: SpotlightProps) {
 				className={cn(
 					'animate-spotlight transition-width pointer-events-none absolute z-1 h-[200%] opacity-0 sm:w-[200%] md:w-[150%] lg:w-[150%] xl:w-[120%]',
 					{
-						'animate-spotlight-off': scroll?.top > 10
+						'animate-spotlight-off': typeof scroll?.top === 'number' && scroll.top > 10
 					},
 					className
 				)}>
