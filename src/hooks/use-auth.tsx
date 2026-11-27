@@ -13,7 +13,10 @@ export default function useAuth() {
 	const queryClient = useQueryClient()
 
 	const { mutateAsync: logout } = useMutation({
-		meta: { invalidates: [/* DO NOT INVALIDATE ANY QUERIES, it will trigger unnecessary refetches */] },
+		meta: {
+			invalidates: [/* DO NOT INVALIDATE ANY QUERIES, it will trigger unnecessary refetches */],
+			suppressNotifications: true
+		},
 		mutationFn: AuthService.revokeToken,
 		onSettled: async () => {
 			await queryClient.cancelQueries() // * cancel all running queries

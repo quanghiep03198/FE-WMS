@@ -12,8 +12,8 @@ const AuthGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 
 	useEffect(() => {
 		if (isError || !isAuthenticated) {
-			AuthService.logout()
 			router.navigate({ to: '/login' })
+			AuthService.logout()
 			return
 		}
 		if (data) setUserProfile(data)
