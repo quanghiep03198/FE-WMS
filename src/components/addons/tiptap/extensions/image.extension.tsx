@@ -1,7 +1,7 @@
 import Image from '@tiptap/extension-image'
 import { mergeAttributes, type NodeViewProps, NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react'
 import { AlignCenter, AlignLeft, AlignRight, Edit, ImageIcon, Maximize, MoreVertical, Trash } from 'lucide-react'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useId, useRef, useState } from 'react'
 
 import { cn } from '@common/utils/cn'
 import { resolveImageUrl } from '@common/utils/image-url'
@@ -119,6 +119,7 @@ function TiptapImage(props: NodeViewProps) {
 	const [openedMore, setOpenedMore] = useState(false)
 	const [imageUrl, setImageUrl] = useState('')
 	const [altText, setAltText] = useState(node.attrs.alt || '')
+	const uploadInputId = useId()
 	const { t } = useTranslation()
 
 	const { fileInputRef, handleFileChange, handleRemove, isPending, error } = useImageUpload({
@@ -268,6 +269,16 @@ function TiptapImage(props: NodeViewProps) {
 				node.attrs.align === 'center' && 'left-1/2 -translate-x-1/2',
 				node.attrs.align === 'right' && 'left-full -translate-x-full'
 			)}>
+			{editor?.isEditable && (
+				<Input
+					accept='image/png,image/jpeg,image/webp,image/gif'
+					className='hidden'
+					id={uploadInputId}
+					ref={fileInputRef}
+					type='file'
+					onChange={handleFileChange}
+				/>
+			)}
 			<Div className={cn('group relative rounded-md')}>
 				<figure className={cn('relative m-0')}>
 					<img
@@ -400,17 +411,9 @@ function TiptapImage(props: NodeViewProps) {
 									<DropdownMenuSubContent className='w-fit min-w-72 p-4'>
 										<Div className='space-y-4'>
 											<Div>
-												<Input
-													accept='image/png,image/jpeg,image/webp,image/gif'
-													className='hidden'
-													id='replace-image-upload'
-													ref={fileInputRef}
-													type='file'
-													onChange={handleFileChange}
-												/>
 												<label
 													className='hover:bg-accent flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-4'
-													htmlFor='replace-image-upload'>
+													htmlFor={uploadInputId}>
 													{isPending ? (
 														<Icon className='h-4 w-4 animate-spin' name='LoaderCircle' />
 													) : (
