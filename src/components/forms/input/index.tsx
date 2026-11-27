@@ -36,7 +36,6 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 		errorMessageVariant = 'inline',
 		defaultValue = getValues(name),
 		ref,
-		onToggleShowPassword,
 		...restProps
 	} = props
 
