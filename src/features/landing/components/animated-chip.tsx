@@ -283,11 +283,11 @@ const AnimatedChip: React.FC = () => {
 				<div className='relative grid h-full w-full flex-1 place-content-center'>
 					<div
 						className={cn(
-							'bg-primary text-primary-foreground flex aspect-square size-20 flex-col items-center justify-center gap-y-6 rounded-lg p-4 delay-1000 select-none sm:size-12 sm:gap-y-2 sm:rounded-sm sm:p-2 sm:text-lg md:p-4',
+							'bg-primary text-primary-foreground flex aspect-square size-18 flex-col items-center justify-center gap-y-6 xl:gap-y-4 rounded-lg p-4 xl:p-2 delay-1000 select-none sm:size-12 sm:gap-y-2 sm:rounded-sm sm:p-2 sm:text-lg md:p-4',
 							'animate-in slide-in-from-bottom-0 delay-[1350ms] duration-300 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)] will-change-transform',
 							isAnimated ? ACTIVE_WMS_CARD_CLASS : INACTIVE_WMS_CARD_CLASS
 						)}>
-						<span className='font-jetbrains h-6 text-center text-2xl font-semibold tracking-wider transition-none duration-0 sm:text-sm md:text-2xl xl:text-2xl'>
+						<span className='font-jetbrains h-6 text-center text-xl font-semibold tracking-wider transition-none duration-0 sm:text-sm md:text-2xl xl:text-xl'>
 							WMS
 						</span>
 						<Separator className='bg-primary-foreground h-1 w-full sm:h-0.5 md:h-1 lg:h-1' />

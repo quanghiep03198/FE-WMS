@@ -1,12 +1,9 @@
-'use client'
-
 import { cn } from '@common/utils/cn'
 import RealtimeCursors from '@components/motions/realtime-cursor'
 import type { IconProps } from '@components/ui/icon'
 import { Icon } from '@components/ui/icon'
 import useTheme from '@hooks/use-theme'
-import { Wifi, WifiOff } from 'lucide'
-import { MorphIcon } from 'morphicons/react'
+import { format } from 'date-fns'
 import {
 	useEffect,
 	useLayoutEffect,
@@ -21,7 +18,7 @@ import {
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
 
-export type MagicBentoVisual = 'analytics' | 'dashboard' | 'collaboration' | 'automation' | 'integration' | 'network'
+export type MagicBentoVisual = 'analytics' | 'dashboard' | 'collaboration' | 'automation' | 'integration' | 'i18n'
 
 export interface MagicBentoItem {
 	id?: string | number
@@ -188,9 +185,9 @@ const HUB_CLASS = 'magic-bento__hub relative mx-auto min-h-0 w-full max-w-[240px
 const HUB_LINKS_CLASS =
 	'magic-bento__hub-links absolute inset-0 h-full w-full overflow-visible [&_line]:[stroke:var(--border)] [&_line]:[stroke-width:1] [&_line]:[vector-effect:non-scaling-stroke]'
 const HUB_NODE_CLASS =
-	"magic-bento__hub-node absolute top-[var(--y)] left-[var(--x)] -mt-[calc(var(--size)*0.5)] -ml-[calc(var(--size)*0.5)] box-border grid h-[var(--size)] w-[var(--size)] place-items-center rounded-[calc(var(--size)*0.3)] text-foreground bg-secondary shadow-sm [--size:min(var(--s),30cqh)] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:content-[''] after:[box-shadow:inset_0_0_0_1px_var(--border),inset_0_1px_0_var(--background)]"
+	"magic-bento__hub-node absolute top-[var(--y)] left-[var(--x)] -mt-[calc(var(--size)*0.5)] -ml-[calc(var(--size)*0.5)] box-border grid h-[var(--size)] w-[var(--size)] place-items-center rounded-[calc(var(--size)*0.2)] text-foreground bg-secondary shadow-sm [--size:min(var(--s),30cqh)] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:content-[''] after:[box-shadow:inset_0_0_0_1px_var(--border),inset_0_1px_0_var(--background)]"
 const PACKET_CLASS =
-	'magic-bento__packet absolute top-[var(--y)] left-[var(--x)] -mt-[2px] -ml-[2px] h-1 w-1 rounded-full opacity-0 [background:rgb(var(--mb-accent-rgb))]'
+	'magic-bento__packet absolute top-[var(--y)] left-[var(--x)] -mt-[2px] -ml-[2px] h-1 w-1 rounded-full drop-shadow-[0_0_4px_rgb(var(--mb-accent-rgb))] opacity-0 [background:rgb(var(--mb-accent-rgb))]'
 
 const SCRIM_STYLE: CSSProperties = {
 	background:
@@ -294,9 +291,15 @@ const DEFAULT_ITEMS: MagicBentoItem[] = [
 		colSpan: 2,
 		rowSpan: 2
 	},
-	{ title: 'Automation', description: 'Streamline workflows', visual: 'automation', colSpan: 2, rowSpan: 2 },
-	{ title: 'Integration', description: 'Sync with other systems', visual: 'integration' },
-	{ title: 'Offline data', description: 'Access without internet', visual: 'network' }
+	{
+		title: 'Smart workflow',
+		description: 'Optimize processes intelligently',
+		visual: 'automation',
+		colSpan: 2,
+		rowSpan: 2
+	},
+	{ title: 'Integration', description: 'Link with i-MES & ERP', visual: 'integration' },
+	{ title: 'Multi-language', description: '4 languages supported', visual: 'i18n' }
 ]
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
@@ -323,7 +326,7 @@ const inkFor = (rgb: number[]) => {
 	return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.55 ? '#121016' : '#ffffff'
 }
 
-const CHART = Array.from({ length: 12 }, () => Math.random())
+const CHART = [0.2, 0.4, 0.5, 0.2, 0.3, 0.6, 0.6, 0.8, 0.3, 0.9, 0.5, 0.7]
 
 const curve = (values: number[], width: number, height: number) => {
 	const top = 6
@@ -438,7 +441,7 @@ const AnalyticsVisual = () => {
 		chart.dataset.scrub = ''
 		line.style.transform = `translateX(${x.toFixed(1)}px)`
 		dot.style.transform = `translateY(${y.toFixed(1)}px)`
-		label.textContent = `${value.toFixed(1)}k`
+		label.textContent = `${value.toFixed(1)}`
 		note.textContent = `Oct ${Math.round(position) + 1}`
 	}
 
@@ -452,7 +455,7 @@ const AnalyticsVisual = () => {
 		<div className={CHART_CLASS} ref={chartRef} onPointerDown={scrub} onPointerLeave={rest} onPointerMove={scrub}>
 			<div className={FIGURE_CLASS}>
 				<span className={FIGURE_VALUE_CLASS} ref={valueRef}>
-					{CHART[CHART.length - 1].toFixed(1)}k
+					{CHART[CHART.length - 1].toFixed(1)}
 				</span>
 				<span className={FIGURE_NOTE_CLASS} ref={noteRef}>
 					+18%
@@ -494,22 +497,19 @@ const DashboardVisual = () => (
 	</div>
 )
 
-const STEPS = [
-	{ label: 'Quality scan', time: '36s' },
-	{ label: 'Build for production', time: '12s' },
-	{ label: 'Test', time: '48s' },
-	{ label: 'Deploy', time: '9s' }
-]
+const STEPS = ['RFID scan', 'Update stock', 'Generate reports', 'Synchronize to ERP']
 
 const AutomationVisual = () => (
 	<div className={FLOW_CLASS} style={vars({ '--n': STEPS.length })}>
 		<div className={FLOW_TRIGGER_CLASS}>
 			<span className={FLOW_GLYPH_CLASS}>
-				<Icon name='GitBranch' size={15} strokeWidth={1.8} />
+				<Icon name='Workflow' />
 			</span>
 			<span className={FLOW_COPY_CLASS}>
-				<span className={FLOW_NAME_CLASS}>Rebase to main</span>
-				<span className={FLOW_HASH_CLASS}>{crypto.randomUUID().slice(0, 7)}</span>
+				<span className={FLOW_NAME_CLASS}>Warehouse workflow</span>
+				<span className={FLOW_HASH_CLASS}>
+					SI-{format(new Date(), 'yyMMdd')}-001 / XF-{format(new Date(), 'yyMMdd')}-001
+				</span>
 			</span>
 		</div>
 		<ol className={STEPS_CLASS}>
@@ -517,7 +517,7 @@ const AutomationVisual = () => (
 				<span className={RAIL_FILL_CLASS} />
 			</span>
 			{STEPS.map((step, index) => (
-				<li className={STEP_CLASS} key={step.label} style={vars({ '--i': index })}>
+				<li className={STEP_CLASS} key={step} style={vars({ '--i': index })}>
 					<span className={STATUS_CLASS}>
 						<span className={PENDING_CLASS} />
 						<span className={SPINNER_CLASS} />
@@ -525,8 +525,8 @@ const AutomationVisual = () => (
 							<Icon name='Check' size={11} strokeWidth={2.6} />
 						</span>
 					</span>
-					{step.label}
-					<span className={STEP_TIME_CLASS}>{step.time}</span>
+					{step}
+					<span className={STEP_TIME_CLASS}>Done</span>
 				</li>
 			))}
 		</ol>
@@ -534,7 +534,7 @@ const AutomationVisual = () => (
 )
 
 const APPS: Array<{ icon: IconProps['name']; x: string; y: string }> = [
-	{ icon: 'Barcode', x: '17%', y: '24%' },
+	{ icon: 'ScanBarcode', x: '17%', y: '24%' },
 	{ icon: 'Files', x: '83%', y: '24%' },
 	{ icon: 'Warehouse', x: '17%', y: '78%' },
 	{ icon: 'ChartColumn', x: '83%', y: '78%' }
@@ -558,31 +558,31 @@ const IntegrationVisual = () => (
 			<span
 				className={HUB_NODE_CLASS}
 				key={app.x + app.y}
-				style={vars({ '--x': app.x, '--y': app.y, '--s': '26px', '--i': index + 1 })}>
-				<Icon name={app.icon} size={14} strokeWidth={1.8} />
+				style={vars({ '--x': app.x, '--y': app.y, '--s': '32px', '--i': index + 1 })}>
+				<Icon name={app.icon} strokeWidth={1.5} />
 			</span>
 		))}
 		<span
 			className={cn(HUB_NODE_CLASS, 'group')}
 			data-state='collapsed'
-			style={vars({ '--x': '50%', '--y': '51%', '--s': '34px', '--i': 0 })}>
-			<Icon name='LayoutGrid' />
+			style={vars({ '--x': '50%', '--y': '51%', '--s': '44px', '--i': 0 })}>
+			<Icon name='Blocks' />
 		</span>
 	</div>
 )
 
-const NetworkVisual = () => {
-	const [isFocused, setIsFocused] = useState(false)
+const MultiLanguageVisual = () => {
+	const { theme } = useTheme()
 	return (
-		<div
-			className='grid place-items-center w-full h-full'
-			onMouseEnter={() => setIsFocused(true)}
-			onMouseLeave={() => setIsFocused(false)}>
-			<MorphIcon
-				icon={isFocused ? WifiOff : Wifi}
-				size={40}
-				stroke={!isFocused ? 'var(--success)' : 'var(--muted-foreground)'}
-				strokeWidth={1.25}
+		<div className='grid place-items-center w-full h-full relative group'>
+			<ul className='mask-b-from-50% mask-b-to-90% absolute inset-x-0 top-0 font-normal text-sm border rounded-md [&>li]:px-4 [&>li]:py-1 [&>li]:rounded-md p-1'>
+				<li className='first:bg-accent first:text-accent-foreground'>English</li>
+				<li>Vietnamese</li>
+				<li>Chinese</li>
+			</ul>
+			<img
+				className='absolute right-2 top-4'
+				src={theme === 'dark' ? '/realtime-cursor-dark.svg' : '/realtime-cursor-light.svg'}
 			/>
 		</div>
 	)
@@ -594,7 +594,7 @@ const VISUALS: Record<string, () => ReactNode> = {
 	collaboration: RealtimeCursors,
 	automation: AutomationVisual,
 	integration: IntegrationVisual,
-	network: NetworkVisual
+	i18n: MultiLanguageVisual
 }
 
 const REPLAY = new Set([

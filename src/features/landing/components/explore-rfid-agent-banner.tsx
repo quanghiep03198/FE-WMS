@@ -10,7 +10,7 @@ export function ExploreRfidAgentBanner() {
 	return (
 		<Div
 			className={
-				'bg-accent text-accent-foreground animate-in fade-in-20 slide-in-from-top-full sticky top-0 z-50 p-2 shadow-lg duration-500 sm:h-20 md:h-10 lg:h-10 xl:h-10'
+				'bg-accent text-accent-foreground animate-in fade-in-20 slide-in-from-top-full sticky top-0 z-50 p-2 shadow-lg duration-500 transition-transform sm:h-20 md:h-10 lg:h-10 xl:h-10'
 			}>
 			<Div className='xxl:max-w-8xl mx-auto flex h-full max-w-7xl items-center justify-center'>
 				<Typography className='inline-flex flex-wrap items-center gap-x-2 sm:flex-col'>

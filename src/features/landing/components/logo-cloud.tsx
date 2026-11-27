@@ -3,7 +3,6 @@ import { Typography, typographyVariants } from '@components/customs/typography'
 import type { LogoItem } from '@components/motions/logo-loop'
 import LogoLoop from '@components/motions/logo-loop'
 import SplitText from '@components/motions/split-text'
-import { Icon } from '@components/ui/icon'
 import useTheme from '@hooks/use-theme'
 import { useInViewport } from 'ahooks'
 import { useMemo, useRef } from 'react'
@@ -60,7 +59,7 @@ const LogoCloud: React.FC = () => {
 				src: '/sql-server.svg',
 				alt: 'MSSQL',
 				href: 'https://www.microsoft.com/en-us/sql-server',
-				title: 'MSSQL'
+				title: 'SQL Server'
 			},
 			{
 				src: '/redis.svg',
@@ -99,7 +98,7 @@ const LogoCloud: React.FC = () => {
 	return (
 		<Div
 			as='section'
-			className='from-accent/40 animate-in fade-in-0 slide-in-from-bottom-4 relative w-full bg-linear-to-t to-transparent to-30% duration-700 sm:px-2'
+			className='from-accent/40 animate-in fade-in-0 slide-in-from-bottom-4 relative w-full bg-linear-to-t to-transparent to-30% duration-700 sm:px-2 py-10'
 			id='logo-cloud'
 			ref={ref}
 			style={{
@@ -107,16 +106,8 @@ const LogoCloud: React.FC = () => {
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}>
 			<Div className='xxl:max-w-8xl mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 text-center'>
-				<Div className='border-foreground/20 inline-grid size-56 translate-y-12 place-items-center rounded-full border mask-[linear-gradient(to_bottom,var(--background)_50%,var(--background)_50%,transparent)]'>
-					<Div className='border-foreground/35 inline-grid size-40 place-items-center rounded-full border-[1.5px]'>
-						<Div className='border-foreground/50 relative inline-grid size-24 place-items-center rounded-full border'>
-							<Icon className='z-20' name='Codesandbox' size={60} strokeWidth={1}></Icon>
-							{/* /> */}
-						</Div>
-					</Div>
-				</Div>
 				<SplitText
-					className={typographyVariants({ variant: 'h1', className: 'mt-4 mb-2' })}
+					className={typographyVariants({ variant: 'h1', className: 'mt-4 mb-6' })}
 					delay={50}
 					duration={0.5}
 					effect='blur'
@@ -132,7 +123,6 @@ const LogoCloud: React.FC = () => {
 					threshold={0.1}
 					trigger={inViewport ? 'load' : undefined}
 				/>
-
 				<Typography className='text-pretty xl:text-lg'>
 					We use the latest and most reliable technologies to build i-WMS, ensuring a robust and scalable solution.
 				</Typography>
