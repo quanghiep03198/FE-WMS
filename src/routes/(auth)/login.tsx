@@ -1,6 +1,6 @@
 import { UserRole } from '@common/constants/enums'
 import { Div } from '@components/customs/div'
-import Threads from '@components/motions/threads'
+import ShapeGrid from '@components/motions/shape-grid'
 import AppLogo from '@components/shared/app-logo'
 import GridBackground from '@components/shared/grid-background'
 import Loading from '@components/shared/loading'
@@ -68,11 +68,14 @@ function LoginPage() {
 							to='/'>
 							<AppLogo />
 						</Link>
-						<Threads
-							color={theme === 'dark' ? '#fafafa' : '#525252'}
-							enableMouseInteraction={true}
+						<ShapeGrid
 							fade={0.5}
-							taper={0.9}
+							fillOpacity={0.5}
+							hoverFillColor={theme === 'dark' ? '#fafafa' : '#171717'}
+							lineColor={theme === 'dark' ? '#262626' : '#e5e5e5'}
+							tiltX={45}
+							tiltY={-30}
+							twinkle={0.25}
 						/>
 					</Div>
 					<CardHeader className='py-6 xl:col-start-2'>
