@@ -1,9 +1,12 @@
+import { PresetBreakPoints } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import env from '@common/utils/env'
 import { Div } from '@components/customs/div'
-import { Typography } from '@components/customs/typography'
+import { Typography, typographyVariants } from '@components/customs/typography'
+import SplitText from '@components/motions/split-text'
 import { Button, buttonVariants } from '@components/ui/button'
 import { Icon } from '@components/ui/icon'
+import useMediaQuery from '@hooks/use-media-query'
 import { Link } from '@tanstack/react-router'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
@@ -14,8 +17,9 @@ import AnimatedScreen from './animated-screen'
 const CTASection: React.FC = () => {
 	const pageContext = usePageContext()
 	const ref = useRef<HTMLElement>(null)
+	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 
-	const [isSectionInViewPort] = useInViewport(ref, {
+	const [inViewport] = useInViewport(ref, {
 		root: () => pageContext?.contentScrollRef?.current,
 		threshold: 0.5
 	})
@@ -29,9 +33,9 @@ const CTASection: React.FC = () => {
 
 	return (
 		<Div
-			aria-current={isSectionInViewPort}
+			aria-current={inViewport}
 			as='section'
-			className='group/cta animate-in fade-in-0 slide-in-from-bottom-4 paused aria-current:running xxl:mt-32 xxl:max-w-8xl xxl:p-0 @container/cta relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 duration-700 sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0'
+			className='group/cta animate-in fade-in-0 slide-in-from-bottom-4 paused aria-current:running xxl:mt-32 xxl:max-w-8xl xxl:p-0 @container/cta relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0'
 			id='cta'
 			ref={ref}>
 			<Div className='col-span-2 col-start-1 row-span-1 row-start-1 mb-4 flex justify-center @7xl/cta:col-span-1 @7xl/cta:justify-start'>
@@ -46,11 +50,31 @@ const CTASection: React.FC = () => {
 					<Icon className='ml-auto' name='ArrowRight' />
 				</Button>
 			</Div>
-			<Typography
+			<SplitText
+				delay={50}
+				duration={0.5}
+				effect='blur'
+				hoverEffect='none'
+				loop={false}
+				mask={false}
+				rootMargin='-100px'
+				splitType='chars'
+				staggerFrom='start'
+				tag='h1'
+				text={`Simplify Warehouse Management with i-WMS`}
+				textAlign={isLargeScreen ? 'left' : 'center'}
+				trigger={inViewport ? 'view' : undefined}
+				className={typographyVariants({
+					variant: 'h1',
+					className:
+						'col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-center text-pretty lg:col-span-2 lg:max-w-full @7xl/cta:max-w-xl @7xl/cta:text-left'
+				})}
+			/>
+			{/* <Typography
 				className='col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-center text-pretty duration-700 lg:col-span-2 lg:max-w-full @7xl/cta:max-w-xl @7xl/cta:text-left'
 				variant='h1'>
 				Simplify Warehouse Management with <span className='text-(--primary-alt)'>i-WMS</span>
-			</Typography>
+			</Typography> */}
 			<Typography
 				className='col-start-1 row-span-1 row-start-3 mx-auto mb-6 max-w-4xl text-center leading-relaxed tracking-wide text-pretty lg:col-span-2 lg:max-w-full lg:self-start xl:max-w-6xl xl:text-lg @7xl/cta:text-left'
 				variant='p'>

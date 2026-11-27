@@ -16,9 +16,9 @@ type TNavigationLink = {
 type TPageContext = {
 	activeMenu: string
 	handleMenuClick: (index: number) => void
-	menuRef: RefObject<HTMLDivElement[]>
-	parentScrollRef: RefObject<HTMLDivElement>
-	contentScrollRef: RefObject<HTMLDivElement>
+	menuRef: RefObject<Nullish<HTMLDivElement>[]>
+	parentScrollRef: RefObject<Nullish<HTMLDivElement>>
+	contentScrollRef: RefObject<Nullish<HTMLDivElement>>
 }
 
 export const navigationConfig: TNavigationLink[] = [
@@ -49,7 +49,13 @@ export const navigationConfig: TNavigationLink[] = [
 	}
 ]
 
-const PageContext = createContext<TPageContext>(null)
+const PageContext = createContext<TPageContext>({
+	activeMenu: '',
+	handleMenuClick: () => {},
+	menuRef: { current: [] },
+	parentScrollRef: { current: null },
+	contentScrollRef: { current: null }
+})
 
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const [activeMenu, setActiveMenu] = useState(navigationConfig[0]?.href)

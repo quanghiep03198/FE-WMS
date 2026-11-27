@@ -1,6 +1,9 @@
+import { PresetBreakPoints } from '@common/constants/enums'
 import { Div } from '@components/customs/div'
-import { Typography } from '@components/customs/typography'
+import { Typography, typographyVariants } from '@components/customs/typography'
+import SplitText from '@components/motions/split-text'
 import { Icon } from '@components/ui/icon'
+import useMediaQuery from '@hooks/use-media-query'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
 import { usePageContext } from '../contexts/page-context'
@@ -11,7 +14,9 @@ const CTA2Section: React.FC = () => {
 	const pageContext = usePageContext()
 	const topSectionRef = useRef<HTMLDivElement>(null)
 	const bottomSectionRef = useRef<HTMLDivElement>(null)
-	const [isSectionInViewPort] = useInViewport(topSectionRef, {
+	const isLargeScreen = useMediaQuery(PresetBreakPoints.LARGE)
+	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
+	const [inViewport] = useInViewport(topSectionRef, {
 		root: () => pageContext?.contentScrollRef?.current,
 		threshold: 0.75
 	})
@@ -23,15 +28,29 @@ const CTA2Section: React.FC = () => {
 				ref={topSectionRef}
 				style={{
 					animationFillMode: 'both',
-					animationPlayState: isSectionInViewPort ? 'running' : 'paused'
+					animationPlayState: inViewport ? 'running' : 'paused'
 				}}>
 				<Div className='flex flex-col gap-y-6 sm:gap-y-3 sm:text-center md:text-center'>
 					<Typography className='font-jetbrains text-(--primary-alt)' variant='small'>
 						EDGE DEPLOYMENT
 					</Typography>
-					<Typography className='text-pretty' variant='h1'>
-						High Availability at our factories across Asia
-					</Typography>
+					<SplitText
+						className={typographyVariants({ variant: 'h1' })}
+						delay={50}
+						duration={0.5}
+						effect='blur'
+						hoverEffect='none'
+						loop={false}
+						mask={false}
+						rootMargin='-100px'
+						splitType='chars'
+						staggerFrom='start'
+						tag='h1'
+						text='High Availability at our factories across Asia'
+						textAlign={isLargeScreen || isExtraLargeScreen ? 'left' : 'center'}
+						threshold={0.1}
+						trigger={inViewport ? 'load' : undefined}
+					/>
 					<Typography className='leading-relaxed xl:text-lg' variant='p'>
 						Our app is designed to provide exceptional reliability and performance at factories throughout Asia.
 						Ensure seamless operations and robust connectivity where it is needed most—empower your facilities
@@ -47,7 +66,7 @@ const CTA2Section: React.FC = () => {
 				ref={bottomSectionRef}
 				style={{
 					animationFillMode: 'both',
-					animationPlayState: isSectionInViewPort ? 'running' : 'paused'
+					animationPlayState: inViewport ? 'running' : 'paused'
 				}}>
 				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 *:first:basis-1/6 sm:flex-row'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>

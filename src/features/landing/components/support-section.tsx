@@ -1,5 +1,6 @@
 import { Div } from '@components/customs/div'
-import { Typography } from '@components/customs/typography'
+import { Typography, typographyVariants } from '@components/customs/typography'
+import SplitText from '@components/motions/split-text'
 import FeedbackFormTrigger from '@components/shared/feedback-form-trigger'
 import GridBackground from '@components/shared/grid-background'
 import { Icon } from '@components/ui/icon'
@@ -28,7 +29,24 @@ const SupportSection: React.FunctionComponent = () => {
 			<GridBackground className='absolute inset-0 z-[-1] mask-[radial-gradient(50%_100%_at_top_center,white,transparent)]' />
 			<Div className='mx-auto my-20 w-full max-w-3xl gap-10 space-y-8 pb-10 xl:space-y-12'>
 				<Div className='relative space-y-3 overflow-hidden text-center'>
-					<Typography variant='h1'>Contact support</Typography>
+					<SplitText
+						className={typographyVariants({ variant: 'h1' })}
+						delay={50}
+						duration={0.5}
+						effect='blur'
+						hoverEffect='none'
+						loop={false}
+						mask={false}
+						rootMargin='-100px'
+						splitType='chars'
+						staggerFrom='start'
+						tag='h1'
+						text='Contact support'
+						textAlign='center'
+						threshold={0.1}
+						trigger={inViewport ? 'load' : undefined}
+					/>
+
 					<Typography className='text-pretty xl:text-lg' variant='p'>
 						If you encounter any issues while using the application, don&apos;t hesitate to reach out for
 						assistance.

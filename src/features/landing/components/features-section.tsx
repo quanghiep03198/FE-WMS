@@ -1,47 +1,23 @@
+import { PresetBreakPoints } from '@common/constants/enums'
 import { Div } from '@components/customs/div'
-import { Typography } from '@components/customs/typography'
+import { Typography, typographyVariants } from '@components/customs/typography'
+import SplitText from '@components/motions/split-text'
 import { Badge } from '@components/ui/badge'
-import type { IconProps } from '@components/ui/icon'
-import { Icon } from '@components/ui/icon'
+import useMediaQuery from '@hooks/use-media-query'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
-import tw from 'tailwind-styled-components'
 import { usePageContext } from '../contexts/page-context'
-import BeamAnimated from './animated-chip'
+import AnimatedChip from './animated-chip'
+import FeaturesBento from './features-bento'
 
 const FeaturesSection: React.FunctionComponent = () => {
 	const pageContext = usePageContext()
 	const ref = useRef<HTMLDivElement>(null)
+	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 	const [inViewport] = useInViewport(ref, {
 		root: () => pageContext?.contentScrollRef?.current,
 		threshold: 0.25
 	})
-
-	const features: Array<{ icon: React.ComponentProps<typeof Icon>['name']; name: string; description: string }> = [
-		{
-			icon: 'Warehouse',
-			name: 'Inventory Tracking and Control',
-			description:
-				'i-WMS can help warehouse managers keep track of inventory levels, locations, and movement within the warehouse, ensuring optimal stock levels and minimizing stockouts.'
-		},
-		{
-			icon: 'ScanBarcode',
-			name: 'Barcode and RFID Integration',
-			description:
-				'Enhance inventory tracking with barcode scanning and RFID integration for better visibility, faster scanning, and precise data capture, ensuring effective inventory management.'
-		},
-		{
-			icon: 'FileText',
-			name: 'Reporting and Analytics',
-			description:
-				'i-WMS provides customizable reports and real-time analytics, enabling managers to monitor performance, identify bottlenecks, and make data-driven decisions to enhance warehouse operations.'
-		},
-		{
-			icon: 'Languages',
-			name: 'Multi-Language Support',
-			description: /* template */ `i-WMS supports multiple languages including <b>English</b>, <b>Vietnamese</b> and <b>Chinese</b>, allowing users to interact with the system in their preferred language.`
-		}
-	]
 
 	return (
 		<Div
@@ -53,20 +29,34 @@ const FeaturesSection: React.FunctionComponent = () => {
 				animationFillMode: 'forwards',
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}>
-			<Div className='space-y-1.5 text-center sm:mb-4 sm:text-xl xl:text-left'>
+			<Div className='space-y-1.5 text-center sm:mb-4 sm:text-xl xl:text-left flex flex-col'>
 				<Typography
 					className='w-full text-base! font-medium text-(--primary-alt) sm:text-sm sm:font-normal'
 					variant='small'>
 					No more paperwork
 				</Typography>
-				<Typography className='text-pretty' variant='h1'>
-					Comprehensive solutions for <br className='hidden lg:block' /> Warehouse Management
-				</Typography>
+				<SplitText
+					className={typographyVariants({ variant: 'h1' })}
+					delay={50}
+					duration={0.5}
+					effect='blur'
+					hoverEffect='none'
+					loop={false}
+					mask={false}
+					rootMargin='-100px'
+					splitType='chars'
+					staggerFrom='start'
+					tag='h1'
+					text='Comprehensive solutions for Warehouse Management'
+					textAlign={isLargeScreen ? 'left' : 'center'}
+					threshold={0.1}
+					trigger={inViewport ? 'load' : undefined}
+				/>
 			</Div>
-			<Div className='grid items-center gap-10 xl:grid-cols-2'>
+			<Div className='grid items-center gap-10 xl:grid-cols-[1fr_1.25fr]'>
 				<Div className='space-y-8 sm:space-y-6 xl:space-y-10'>
 					<Div className='xl:-translate-x-12'>
-						<BeamAnimated />
+						<AnimatedChip />
 					</Div>
 					<Div className='flex flex-col space-y-3 text-center xl:text-left'>
 						<Typography variant='h4'>Outstanding Features</Typography>
@@ -99,7 +89,8 @@ const FeaturesSection: React.FunctionComponent = () => {
 						</Badge>
 					</Div>
 				</Div>
-				<Div className='grid w-full items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2'>
+				<FeaturesBento />
+				{/* <Div className='grid w-full items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2'>
 					{features.map((feature, index) => (
 						// className={cn(
 						// 	'duration-500 before:absolute before:inset-0 before:z-0 before:-translate-y-px before:bg-[conic-gradient(from_120deg_at_50%_50%,var(--accent)_0deg,var(--accent)_175deg,var(--primary-alt)_190deg,var(--accent)_220deg,var(--accent)_1turn)] before:opacity-0 before:transition-opacity before:duration-500 before:content-[""] hover:before:opacity-100 hover:before:animate-in hover:before:fade-in-0 hover:before:slide-in-from-left-10 xl:before:bg-[conic-gradient(from_130deg_at_50%_50%,var(--accent)_0deg,var(--accent)_175deg,var(--primary-alt)_190deg,var(--accent)_217deg,var(--accent)_1turn)]',
@@ -107,14 +98,13 @@ const FeaturesSection: React.FunctionComponent = () => {
 						// 	'hover:after:bg-linear-to-tr hover:after:from-background hover:after:from-30% hover:after:to-accent/60'
 						// )}
 						<EffectCard key={index.toString()}>
-							<EffectCardIconWrapper className='z-20'>
-								<EffectCardIcon
-									className='group-hover/card:stroke-success'
-									name={feature.icon}
-									size={24}
-									strokeWidth={1.5}
-								/>
-							</EffectCardIconWrapper>
+							<EffectCardIcon
+								className='group-hover/card:stroke-success'
+								name={feature.icon}
+								size={24}
+								strokeWidth={1.5}
+							/>
+
 							<EffectCardContent className='z-20'>
 								<Typography className='font-medium'>{feature.name}</Typography>
 								<Typography
@@ -127,20 +117,10 @@ const FeaturesSection: React.FunctionComponent = () => {
 							</EffectCardContent>
 						</EffectCard>
 					))}
-				</Div>
+				</Div> */}
 			</Div>
 		</Div>
 	)
 }
-
-const EffectCard = tw.div`
-	group/card relative overflow-hidden h-full border p-6 transition-colors bg-background
-	flex flex-col justify-start gap-4 rounded-md 
-	sm:p-4 sm:flex-row 
-	hover:bg-linear-to-tr hover:from-background hover:from-30% hover:to-accent/60
-`
-const EffectCardIconWrapper = tw.div`inline-flex aspect-square size-12 mb-2 min-w-12 items-center justify-center rounded-md bg-secondary`
-const EffectCardContent = tw.div`z-10 flex flex-col space-y-1.5`
-const EffectCardIcon = tw(Icon)<IconProps>`group-hover/card:stroke-(--primary-alt) duration-200 transition-colors`
 
 export default FeaturesSection

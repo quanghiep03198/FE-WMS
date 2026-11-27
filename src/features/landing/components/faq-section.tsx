@@ -2,7 +2,8 @@ import generateAvatar from '@common/utils/generate-avatar'
 import ChatBubble from '@components/customs/chat-bubble'
 import { Div } from '@components/customs/div'
 import { Typewriter } from '@components/customs/type-writter'
-import { Typography } from '@components/customs/typography'
+import { Typography, typographyVariants } from '@components/customs/typography'
+import SplitText from '@components/motions/split-text'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@components/ui/accordion'
 import { Avatar, AvatarImage } from '@components/ui/avatar'
 import { Icon } from '@components/ui/icon'
@@ -53,6 +54,7 @@ const FAQsSection: React.FunctionComponent = () => {
 	})
 
 	useLayoutEffect(() => {
+		if (!chatBoxRef.current) return
 		chatBoxRef.current.scrollTo({ top: 0 })
 	}, [])
 
@@ -68,7 +70,24 @@ const FAQsSection: React.FunctionComponent = () => {
 				as='section'
 				className='xxl:basis-2/3 w-full space-y-10 sm:space-y-8 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3'
 				id='faqs'>
-				<Typography variant='h1'>Frequently asked questions</Typography>
+				<SplitText
+					className={typographyVariants({ variant: 'h1' })}
+					delay={50}
+					duration={0.5}
+					effect='blur'
+					hoverEffect='none'
+					loop={false}
+					mask={false}
+					rootMargin='-100px'
+					splitType='chars'
+					staggerFrom='start'
+					tag='h1'
+					text='Frequently asked questions'
+					textAlign='left'
+					threshold={0.1}
+					trigger={containerInViewPort ? 'load' : undefined}
+				/>
+
 				<Accordion type='multiple'>
 					{faqs.map((faq, index) => (
 						<AccordionItem key={index} value={index.toString()}>

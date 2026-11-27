@@ -2,14 +2,15 @@
 
 import { cn } from '@common/utils/cn'
 import { Separator } from '@components/ui/separator'
+import useTheme from '@hooks/use-theme'
 import { useInViewport } from 'ahooks'
 import React, { useEffect, useRef, useState } from 'react'
 import { usePageContext } from '../contexts/page-context'
 
 const ACTIVE_STANDALONE_CUBE_CLASS =
-	'translate-y-0 [&_path:first-child]:fill-(--green) [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
+	'translate-y-0 [&_path:first-child]:fill-(--primary-alt) [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
 const ACTIVE_CLUSTERED_CUBE_CLASS =
-	'translate-y-0 [&_path:nth-child(odd)]:fill-(--yellow) [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
+	'translate-y-0 [&_path:nth-child(odd)]:fill-(--accent-alt) [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
 const INACTIVE_CUBE_CLASS = '-translate-y-10 [&_path:nth-child(odd)]:fill-muted'
 const ACTIVE_WMS_CARD_CLASS = '-translate-6 border-2 opacity-100 shadow-[24px_24px_16px_#0a0a0a98] running'
 const INACTIVE_WMS_CARD_CLASS = '-translate-1 opacity-50 shadow-none paused'
@@ -18,19 +19,20 @@ const HIDDEN_GLOW_CLASS = 'opacity-0'
 
 const getClusteredConnectionColor = (renderCount: number) => {
 	if (renderCount === 1) return 'url(#right-to-left)'
-	if (renderCount > 1) return 'var(--green)'
+	if (renderCount > 1) return 'var(--primary-alt)'
 	return 'var(--border)'
 }
 
 const getStandaloneConnectionColor = (renderCount: number) => {
-	if (renderCount > 1) return 'var(--yellow)'
+	if (renderCount > 1) return 'var(--accent-alt)'
 	if (renderCount === 1) return 'url(#left-to-right)'
 	return 'var(--muted)'
 }
 
-const BeamAnimated: React.FC = () => {
+const AnimatedChip: React.FC = () => {
 	const containerRef = useRef<HTMLDivElement>(null)
 	const svgRef = useRef<SVGSVGElement>(null)
+	const { theme } = useTheme()
 
 	const pageContext = usePageContext()
 	const [renderCount, setRenderCount] = useState<number>(0)
@@ -55,8 +57,8 @@ const BeamAnimated: React.FC = () => {
 			ref={containerRef}
 			style={
 				{
-					'--green': '#22c55e',
-					'--yellow': '#eab308'
+					'--primary-alt': theme === 'dark' ? '#3b82f6' : '#22c55e',
+					'--accent-alt': theme === 'dark' ? '#a855f7' : '#ef4444'
 				} as React.CSSProperties
 			}>
 			<svg
@@ -81,7 +83,7 @@ const BeamAnimated: React.FC = () => {
 								to={0}
 							/>
 						</stop>
-						<stop offset={1} stopColor='var(--green)'>
+						<stop offset={1} stopColor='var(--primary-alt)'>
 							<animate
 								attributeName='offset'
 								begin={1}
@@ -95,7 +97,7 @@ const BeamAnimated: React.FC = () => {
 						</stop>
 					</linearGradient>
 					<linearGradient id='left-to-right' offset={0}>
-						<stop begin={1.5} offset={0} stopColor='var(--yellow)'>
+						<stop begin={1.5} offset={0} stopColor='var(--accent-alt)'>
 							<animate
 								attributeName='offset'
 								begin={1}
@@ -272,7 +274,7 @@ const BeamAnimated: React.FC = () => {
 					'sm:left-[calc(50%+6px)] sm:zoom-[0.85] @xs:max-w-24 @sm:max-w-28!',
 					'md:left-[calc(50%+0.5rem)] md:min-w-52! @[520px]:zoom-[0.85] @[620px]:zoom-[1]',
 					'lg:left-[calc(50%+1rem)] lg:min-w-52!',
-					'xxl:min-w-54! xl:left-[calc(50%+1rem)] xl:min-w-48!'
+					'xxl:min-w-44! xl:left-[calc(50%+1rem)] xl:min-w-40!'
 				)}
 				style={{
 					transform: 'translate(-50%,-50%) rotateX(50deg) rotateY(-5deg) rotateZ(44deg)',
@@ -281,7 +283,7 @@ const BeamAnimated: React.FC = () => {
 				<div className='relative grid h-full w-full flex-1 place-content-center'>
 					<div
 						className={cn(
-							'bg-primary text-primary-foreground flex aspect-square size-24 flex-col items-center justify-center gap-y-6 rounded-lg p-4 delay-1000 select-none sm:size-12 sm:gap-y-2 sm:rounded-sm sm:p-2 sm:text-lg md:p-4',
+							'bg-primary text-primary-foreground flex aspect-square size-20 flex-col items-center justify-center gap-y-6 rounded-lg p-4 delay-1000 select-none sm:size-12 sm:gap-y-2 sm:rounded-sm sm:p-2 sm:text-lg md:p-4',
 							'animate-in slide-in-from-bottom-0 delay-[1350ms] duration-300 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)] will-change-transform',
 							isAnimated ? ACTIVE_WMS_CARD_CLASS : INACTIVE_WMS_CARD_CLASS
 						)}>
@@ -294,14 +296,14 @@ const BeamAnimated: React.FC = () => {
 			</div>
 			<div
 				className={cn(
-					'xxl:size-32 xxl:blur-[80px] absolute top-1/2 left-[7%] z-[-1] size-20 -translate-y-1/2 rounded-full bg-(--yellow) opacity-0 blur-3xl will-change-[opacity] sm:size-18 sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24',
+					'xxl:size-32 xxl:blur-[80px] absolute top-1/2 left-[7%] z-[-1] size-20 -translate-y-1/2 rounded-full bg-(--accent-alt) opacity-0 blur-3xl will-change-[opacity] sm:size-18 sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24',
 					'transition-opacity delay-700 duration-500 ease-out',
 					isAnimated ? VISIBLE_GLOW_CLASS : HIDDEN_GLOW_CLASS
 				)}
 			/>
 			<div
 				className={cn(
-					'xxl:size-32 xxl:blur-[80px] absolute top-1/2 right-[7%] z-[-1] size-20 -translate-y-1/2 rounded-full bg-(--green) opacity-0 blur-3xl will-change-[opacity] sm:size-18 sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24',
+					'xxl:size-32 xxl:blur-[80px] absolute top-1/2 right-[7%] z-[-1] size-20 -translate-y-1/2 rounded-full bg-(--primary-alt) opacity-0 blur-3xl will-change-[opacity] sm:size-18 sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24',
 					'transition-opacity delay-700 duration-500 ease-out',
 					isAnimated ? VISIBLE_GLOW_CLASS : HIDDEN_GLOW_CLASS
 				)}
@@ -310,4 +312,4 @@ const BeamAnimated: React.FC = () => {
 	)
 }
 
-export default BeamAnimated
+export default AnimatedChip
