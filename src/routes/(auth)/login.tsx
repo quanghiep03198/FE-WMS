@@ -58,8 +58,6 @@ function LoginPage() {
 			<meta content='Warehouse management system authentication' name='description' />
 
 			<Container>
-				{/* <ThemeSelector />
-				<HomeNavigator /> */}
 				<Card className=' z-10 mx-auto grid gap-0 w-full max-w-6xl auto-rows-max gap-y-0 overflow-clip rounded-lg border p-0 shadow-2xl md:max-w-xl lg:max-w-lg xl:grid-cols-[1.5fr_1fr]'>
 					<Div
 						className='relative row-span-3 hidden overflow-clip xl:block'
@@ -77,7 +75,6 @@ function LoginPage() {
 							taper={0.9}
 						/>
 					</Div>
-
 					<CardHeader className='py-6 xl:col-start-2'>
 						<LoginMascot
 							action={mascotAction}
