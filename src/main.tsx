@@ -45,5 +45,9 @@ createRoot(container, {
 	}
 }).render(<App />)
 
+window.addEventListener('vite:preloadError', () => {
+	window.location.reload()
+})
+
 // Reporting Web Vitals
 reportWebVitals()

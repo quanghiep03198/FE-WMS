@@ -7,8 +7,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { devtools } from '@tanstack/devtools-vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
-import path from 'path'
-import { defineConfig, loadEnv, normalizePath } from 'vite'
+import { defineConfig, loadEnv, ProxyOptions } from 'vite'
 import { VitePWA as pwa, type VitePWAOptions } from 'vite-plugin-pwa'
 import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
 
@@ -17,18 +16,36 @@ import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
  */
 export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
-	normalizePath(path.resolve(import.meta.dirname, './infrastructure'))
 	const apiOrigin = process.env.VITE_API_BASE_URL ? new URL(process.env.VITE_API_BASE_URL).origin : undefined
 
-	const resolveAlias = (directories: Array<string>, rootPath: string, prefix: string = '@') =>
-		directories.reduce(
-			(acc, dir) => {
-				const alias = `${prefix}${dir}`
-				acc[alias] = path.resolve(import.meta.dirname, path.join(rootPath, dir))
-				return acc
-			},
-			{} as Record<string, string>
-		)
+	const headers: HeadersInit = {
+		['Cache-Control']: 'public, max-age=0, must-revalidate',
+		['Content-Security-Policy']:
+			"script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
+		['Cross-Origin-Resource-Policy']: 'cross-origin',
+		['Referrer-Policy']: 'strict-origin-when-cross-origin',
+		['Strict-Transport-Security']: 'max-age=63072000; includeSubDomains; preload',
+		['Service-Worker-Allowed']: '/',
+		['X-Content-Type-Options']: 'nosniff',
+		['X-Frame-Options']: 'DENY',
+		['X-XSS-Protection']: '1; mode=block'
+	}
+
+	const proxy: Record<string, string | ProxyOptions> = {
+		'/uploads': {
+			target: apiOrigin,
+			changeOrigin: true
+		},
+		'/files': {
+			target: apiOrigin,
+			changeOrigin: true
+		},
+		'/api': {
+			target: process.env.VITE_API_BASE_URL,
+			changeOrigin: true,
+			rewrite: (path) => path.replace(/^\/api/, '')
+		}
+	}
 
 	return {
 		define: { __SENTRY_DEBUG__: false },
@@ -39,27 +56,7 @@ export default defineConfig(({ mode }) => {
 			}
 		},
 		resolve: {
-			tsconfigPaths: true,
-			alias: {
-				...resolveAlias(
-					[
-						'assets',
-						'common',
-						'components',
-						'configs',
-						'contexts',
-						'features',
-						'hooks',
-						'i18n',
-						'integrations',
-						'providers',
-						'routes',
-						'stores',
-						'styles'
-					],
-					'./src'
-				)
-			}
+			tsconfigPaths: true
 		},
 		plugins: [
 			tailwindcss(),
@@ -86,7 +83,14 @@ export default defineConfig(({ mode }) => {
 				manifest: false,
 				workbox: {
 					navigateFallback: '/index.html',
-					navigateFallbackDenylist: [/^\/api\//, /^\/sw\.js$/, /^\/workbox-.*\.js$/, /\.(wasm|map)$/],
+					navigateFallbackDenylist: [
+						/^\/api\//,
+						/^\/uploads\//,
+						/^\/files\//,
+						/^\/sw\.js$/,
+						/^\/workbox-.*\.js$/,
+						/\.(wasm|map)$/
+					],
 					globPatterns: ['**/*.{html,css,js,ico,png,jpg,svg,webp,woff2}'],
 					maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 3 MiB
 					skipWaiting: true,
@@ -131,6 +135,15 @@ export default defineConfig(({ mode }) => {
 							urlPattern: ({ url }) => url.pathname.startsWith('/api'),
 							handler: 'NetworkFirst',
 							options: { cacheName: 'wms-api-cache' }
+						},
+						{
+							urlPattern: ({ url }) =>
+								url.pathname.startsWith('/uploads/') || url.pathname.startsWith('/files/'),
+							handler: 'NetworkFirst',
+							options: {
+								cacheName: 'uploads-cache',
+								expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 }
+							}
 						}
 					],
 					cleanupOutdatedCaches: true,
@@ -169,60 +182,14 @@ export default defineConfig(({ mode }) => {
 		server: {
 			port: 3000,
 			host: true,
-			proxy: {
-				'/uploads': {
-					target: apiOrigin,
-					changeOrigin: true
-				},
-				'/files': {
-					target: apiOrigin,
-					changeOrigin: true
-				},
-				'/api': {
-					target: process.env.VITE_API_BASE_URL,
-					changeOrigin: true,
-					rewrite: (path) => path.replace(/^\/api/, '')
-				}
-			},
-			headers: {
-				['Cache-Control']: 'public, max-age=0, must-revalidate',
-				['Content-Security-Policy']:
-					"script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
-				['Strict-Transport-Security']: 'max-age=63072000; includeSubDomains; preload',
-				['Cross-Origin-Resource-Policy']: 'cross-origin',
-				['X-Content-Type-Options']: 'nosniff',
-				['X-Frame-Options']: 'DENY',
-				['X-XSS-Protection']: '1; mode=block'
-			}
+			proxy,
+			headers
 		},
 		preview: {
-			port: mode === 'test' ? 5000 : 4000,
+			port: mode === 'staging' ? 5000 : 4000,
 			host: true,
-			headers: {
-				['Cache-Control']: 'public, max-age=0, must-revalidate',
-				['Content-Security-Policy']:
-					"script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
-				['Strict-Transport-Security']: 'max-age=63072000; includeSubDomains; preload',
-				['Cross-Origin-Resource-Policy']: 'cross-origin',
-				['X-Content-Type-Options']: 'nosniff',
-				['X-Frame-Options']: 'DENY',
-				['X-XSS-Protection']: '1; mode=block'
-			},
-			proxy: {
-				'/uploads': {
-					target: apiOrigin,
-					changeOrigin: true
-				},
-				'/files': {
-					target: apiOrigin,
-					changeOrigin: true
-				},
-				'/api': {
-					target: process.env.VITE_API_BASE_URL,
-					changeOrigin: true,
-					rewrite: (path) => path.replace(/^\/api/, '')
-				}
-			}
+			proxy,
+			headers
 		},
 		build: {
 			emptyOutDir: true,
